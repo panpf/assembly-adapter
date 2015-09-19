@@ -2,7 +2,7 @@ package me.xiaopan.assemblyadaptersample.bean;
 
 import java.util.List;
 
-import me.xiaopan.assemblyexpandableadapter.AssemblyGroup;
+import me.xiaopan.assemblyadapter.AssemblyGroup;
 
 public class GameGroup implements AssemblyGroup {
     public String title;

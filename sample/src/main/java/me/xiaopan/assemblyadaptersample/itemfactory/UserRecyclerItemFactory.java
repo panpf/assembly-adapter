@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.User;
-import me.xiaopan.assemblyrecycleradapter.AssemblyRecyclerItem;
-import me.xiaopan.assemblyrecycleradapter.AssemblyRecyclerItemFactory;
+import me.xiaopan.assemblyadapter.AssemblyRecyclerItem;
+import me.xiaopan.assemblyadapter.AssemblyRecyclerItemFactory;
 
 public class UserRecyclerItemFactory extends AssemblyRecyclerItemFactory<UserRecyclerItemFactory.UserRecyclerItem> {
 

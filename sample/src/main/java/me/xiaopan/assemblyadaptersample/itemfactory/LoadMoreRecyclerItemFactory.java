@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyrecycleradapter.AbstractLoadMoreRecyclerItemFactory;
+import me.xiaopan.assemblyadapter.AbstractLoadMoreRecyclerItemFactory;
 
 public class LoadMoreRecyclerItemFactory extends AbstractLoadMoreRecyclerItemFactory {
 

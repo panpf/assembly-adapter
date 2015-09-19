@@ -1,4 +1,4 @@
-package me.xiaopan.assemblyrecycleradapter;
+package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.UserGroup;
-import me.xiaopan.assemblyexpandableadapter.AssemblyGroupItem;
-import me.xiaopan.assemblyexpandableadapter.AssemblyGroupItemFactory;
+import me.xiaopan.assemblyadapter.AssemblyGroupItem;
+import me.xiaopan.assemblyadapter.AssemblyGroupItemFactory;
 
 public class UserGroupItemFactory extends AssemblyGroupItemFactory<UserGroupItemFactory.UserGroupItem>{
 

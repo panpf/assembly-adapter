@@ -1,8 +1,8 @@
-package me.xiaopan.assemblyrecycleradapter;
+package me.xiaopan.assemblyadapter;
 
 import android.view.ViewGroup;
 
-public abstract class AssemblyRecyclerItemFactory<ITEM extends AssemblyRecyclerItem>{
+public abstract class AssemblyGroupItemFactory<ITEM extends AssemblyGroupItem>{
     private int itemType;
     private Class<?> beanClass;
 

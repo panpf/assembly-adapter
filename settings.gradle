@@ -1,1 +1,1 @@
-include ':sample', ':assemblyadapter', ':assemblyrecycleradapter', ':assemblyexpandableadapter'
+include ':sample', ':assemblyadapter'

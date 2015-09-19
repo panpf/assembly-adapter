@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
-import me.xiaopan.assemblyexpandableadapter.AssemblyChildItem;
-import me.xiaopan.assemblyexpandableadapter.AssemblyChildItemFactory;
+import me.xiaopan.assemblyadapter.AssemblyChildItem;
+import me.xiaopan.assemblyadapter.AssemblyChildItemFactory;
 
 public class GameChildItemFactory extends AssemblyChildItemFactory<GameChildItemFactory.GameChildItem> {
 

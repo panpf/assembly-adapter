@@ -22,8 +22,8 @@ import me.xiaopan.assemblyadaptersample.itemfactory.GameChildItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreGroupItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserGroupItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserChildItemFactory;
-import me.xiaopan.assemblyexpandableadapter.AbstractLoadMoreGroupItemFactory;
-import me.xiaopan.assemblyexpandableadapter.AssemblyExpandableAdapter;
+import me.xiaopan.assemblyadapter.AbstractLoadMoreGroupItemFactory;
+import me.xiaopan.assemblyadapter.AssemblyExpandableAdapter;
 
 public class ExpandableListViewFragment extends Fragment implements AbstractLoadMoreGroupItemFactory.EventListener {
     private int nextStart;

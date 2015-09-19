@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyexpandableadapter.AbstractLoadMoreGroupItemFactory;
+import me.xiaopan.assemblyadapter.AbstractLoadMoreGroupItemFactory;
 
 public class LoadMoreGroupItemFactory extends AbstractLoadMoreGroupItemFactory {
 

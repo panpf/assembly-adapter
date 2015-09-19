@@ -1,14 +1,14 @@
-package me.xiaopan.assemblyexpandableadapter;
+package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
 import android.view.View;
 
-public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItemFactory<AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem> {
+public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecyclerItemFactory<AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem> {
     private AdapterCallback adapterCallback;
     public boolean loadMoreRunning;
     private EventListener eventListener;
 
-    public AbstractLoadMoreGroupItemFactory(EventListener eventListener) {
+    public AbstractLoadMoreRecyclerItemFactory(EventListener eventListener) {
         this.eventListener = eventListener;
     }
 
@@ -31,8 +31,8 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
         void loadMoreFailed();
 	}
 
-    public abstract static class AbstractLoadMoreGroupItem extends AssemblyGroupItem<String, AbstractLoadMoreGroupItemFactory>{
-        protected AbstractLoadMoreGroupItem(View convertView, AbstractLoadMoreGroupItemFactory baseFactory) {
+    public abstract static class AbstractLoadMoreRecyclerItem extends AssemblyRecyclerItem<String, AbstractLoadMoreRecyclerItemFactory> {
+        protected AbstractLoadMoreRecyclerItem(View convertView, AbstractLoadMoreRecyclerItemFactory baseFactory) {
             super(convertView, baseFactory);
         }
 
@@ -49,14 +49,14 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
                 public void onClick(View v) {
                     if (getItemFactory().eventListener != null) {
                         getItemFactory().loadMoreRunning = false;
-                        setData(getGroupPosition(), isExpanded(), getData());
+                        setData(getLayoutPosition(), getData());
                     }
                 }
             });
         }
 
         @Override
-        public void onSetData(int groupPosition, boolean isExpanded, String s) {
+        public void onSetData(int position, String s) {
             showLoading();
             if (getItemFactory().eventListener != null && !getItemFactory().loadMoreRunning) {
                 getItemFactory().adapterCallback.loading();

@@ -1,4 +1,4 @@
-package me.xiaopan.assemblyexpandableadapter;
+package me.xiaopan.assemblyadapter;
 
 import android.view.ViewGroup;
 

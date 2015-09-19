@@ -19,8 +19,8 @@ import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserRecyclerItemFactory;
-import me.xiaopan.assemblyrecycleradapter.AbstractLoadMoreRecyclerItemFactory;
-import me.xiaopan.assemblyrecycleradapter.AssemblyRecyclerAdapter;
+import me.xiaopan.assemblyadapter.AbstractLoadMoreRecyclerItemFactory;
+import me.xiaopan.assemblyadapter.AssemblyRecyclerAdapter;
 
 public class RecyclerViewFragment extends Fragment implements AbstractLoadMoreRecyclerItemFactory.EventListener {
     private int nextStart;

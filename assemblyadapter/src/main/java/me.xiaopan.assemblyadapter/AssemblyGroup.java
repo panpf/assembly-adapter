@@ -1,4 +1,4 @@
-package me.xiaopan.assemblyexpandableadapter;
+package me.xiaopan.assemblyadapter;
 
 public interface AssemblyGroup {
     int getChildCount();

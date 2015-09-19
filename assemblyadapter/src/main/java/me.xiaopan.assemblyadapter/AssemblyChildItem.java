@@ -1,4 +1,4 @@
-package me.xiaopan.assemblyexpandableadapter;
+package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
 import android.view.View;
