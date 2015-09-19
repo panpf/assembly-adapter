@@ -15,13 +15,18 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 	private List<AssemblyItemFactory> itemFactoryList;
 	private AbstractLoadMoreListItemFactory loadMoreListItemFactory;
 	private AbstractLoadMoreListItemFactory.AbstractLoadMoreListItem loadMoreListItem;
+	private boolean itemFactoryLocked;  // 锁定之后就不能再添加ItemFactory了
+	private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加ItemFactory了
 
 	public AssemblyAdapter(List<?> dataList) {
 		this.dataList = dataList;
 	}
 
 	public void addItemFactory(AssemblyItemFactory assemblyItemFactory){
-		if(loadMoreListItemFactory != null){
+		if (itemFactoryLocked) {
+			throw new IllegalStateException("item factory list locked");
+		}
+		if (setEnableLoadMore) {
 			throw new IllegalStateException("Call a enableLoadMore () method can be not call again after addItemFactory () method");
 		}
 
@@ -51,11 +56,11 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 	}
 
 	public void enableLoadMore(AbstractLoadMoreListItemFactory loadMoreListItemFactory) {
-		if(itemFactoryList == null || itemFactoryList.size() == 0){
-			throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
-		}
-
 		if(loadMoreListItemFactory != null){
+			if(itemFactoryList == null || itemFactoryList.size() == 0){
+				throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
+			}
+			setEnableLoadMore = true;
 			this.loadMoreListItemFactory = loadMoreListItemFactory;
 			this.loadMoreListItemFactory.setAdapterCallback(this);
 			this.loadMoreListItemFactory.setItemType(itemFactoryList.size());
@@ -118,7 +123,8 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 		if(itemFactoryList == null || itemFactoryList.size() == 0){
 			throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
 		}
-		return itemFactoryList.size() + (loadMoreListItemFactory !=null?1:0);
+		itemFactoryLocked = true;
+		return itemFactoryList.size() + 1;
 	}
 
 	@Override
@@ -127,6 +133,7 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 			throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
 		}
 
+		itemFactoryLocked = true;
 		if(loadMoreListItemFactory != null && position == getCount()-1){
 			return loadMoreListItemFactory.getItemType();
 		}

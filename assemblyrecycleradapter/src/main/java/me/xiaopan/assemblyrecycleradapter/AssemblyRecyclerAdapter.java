@@ -14,13 +14,18 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
     private List<AssemblyRecyclerItemFactory> itemFactoryList;
     private AbstractLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory;
     private AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem loadMoreRecyclerItem;
+    private boolean itemFactoryLocked;  // 锁定之后就不能再添加ItemFactory了
+    private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加ItemFactory了
 
     public AssemblyRecyclerAdapter(List<?> dataList) {
         this.dataList = dataList;
     }
 
     public void addItemFactory(AssemblyRecyclerItemFactory itemFactory){
-        if(loadMoreRecyclerItemFactory != null){
+        if (itemFactoryLocked) {
+            throw new IllegalStateException("item factory list locked");
+        }
+        if (setEnableLoadMore) {
             throw new IllegalStateException("Call a enableLoadMore () method can be not call again after addItemFactory () method");
         }
 
@@ -50,11 +55,11 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
     }
 
     public void enableLoadMore(AbstractLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory) {
-        if(itemFactoryList == null || itemFactoryList.size() == 0){
-            throw new IllegalStateException("You need to configure AssemblyRecyclerItem use addItemFactory method");
-        }
-
         if(loadMoreRecyclerItemFactory != null){
+            if(itemFactoryList == null || itemFactoryList.size() == 0){
+                throw new IllegalStateException("You need to configure AssemblyRecyclerItem use addItemFactory method");
+            }
+            setEnableLoadMore = true;
             this.loadMoreRecyclerItemFactory = loadMoreRecyclerItemFactory;
             this.loadMoreRecyclerItemFactory.setAdapterCallback(this);
             this.loadMoreRecyclerItemFactory.setItemType(itemFactoryList.size());
@@ -108,6 +113,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
             throw new IllegalStateException("You need to configure AssemblyRecyclerItem use addItemFactory method");
         }
 
+        itemFactoryLocked = true;
         if(loadMoreRecyclerItemFactory != null && position == getItemCount()-1){
             return loadMoreRecyclerItemFactory.getItemType();
         }

@@ -16,13 +16,19 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     private List<AssemblyChildItemFactory> childItemFactoryList;
     private AbstractLoadMoreGroupItemFactory loadMoreGroupItemFactory;
     private AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem loadMoreGroupItem;
+    private boolean groupItemFactoryLocked;  // 锁定之后就不能再添加GroupItemFactory了
+    private boolean childItemFactoryLocked;  // 锁定之后就不能再添加ChildItemFactory了
+    private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加GroupItemFactory了
 
     public AssemblyExpandableAdapter(List<Object> dataList) {
         this.dataList = dataList;
     }
 
     public void addGroupItemFactory(AssemblyGroupItemFactory groupItemFactory) {
-        if (loadMoreGroupItemFactory != null) {
+        if (groupItemFactoryLocked) {
+            throw new IllegalStateException("group item factory list locked");
+        }
+        if (setEnableLoadMore) {
             throw new IllegalStateException("Call a enableLoadMore () method can be not call again after addGroupItemFactory () method");
         }
 
@@ -34,6 +40,10 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     public void addChildItemFactory(AssemblyChildItemFactory childItemFactory) {
+        if (childItemFactoryLocked) {
+            throw new IllegalStateException("child item factory list locked");
+        }
+
         if (childItemFactoryList == null) {
             childItemFactoryList = new LinkedList<AssemblyChildItemFactory>();
         }
@@ -60,11 +70,11 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     public void enableLoadMore(AbstractLoadMoreGroupItemFactory loadMoreGroupItemFactory) {
-        if (groupItemFactoryList == null || groupItemFactoryList.size() == 0) {
-            throw new IllegalStateException("You need to configure AssemblyGroupItemFactory use addGroupItemFactory method");
-        }
-
         if (loadMoreGroupItemFactory != null) {
+            if (groupItemFactoryList == null || groupItemFactoryList.size() == 0) {
+                throw new IllegalStateException("You need to configure AssemblyGroupItemFactory use addGroupItemFactory method");
+            }
+            setEnableLoadMore = true;
             this.loadMoreGroupItemFactory = loadMoreGroupItemFactory;
             this.loadMoreGroupItemFactory.setAdapterCallback(this);
             this.loadMoreGroupItemFactory.setItemType(groupItemFactoryList.size());
@@ -162,7 +172,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         if (groupItemFactoryList == null || groupItemFactoryList.size() == 0) {
             throw new IllegalStateException("You need to configure AssemblyGroupItemFactory use addGroupItemFactory method");
         }
-        return groupItemFactoryList.size() + (loadMoreGroupItemFactory != null ? 1 : 0);
+        groupItemFactoryLocked = true;
+        return groupItemFactoryList.size() + 1;
     }
 
     @Override
@@ -170,6 +181,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         if (childItemFactoryList == null || childItemFactoryList.size() == 0) {
             throw new IllegalStateException("You need to configure AssemblyChildItemFactory use addChildItemFactory method");
         }
+        childItemFactoryLocked = true;
         return childItemFactoryList.size();
     }
 
@@ -179,6 +191,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
             throw new IllegalStateException("You need to configure AssemblyGroupItemFactory use addGroupItemFactory method");
         }
 
+        groupItemFactoryLocked = true;
         if(loadMoreGroupItemFactory != null && groupPosition == getGroupCount()-1){
             return loadMoreGroupItemFactory.getItemType();
         }
@@ -200,6 +213,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
             throw new IllegalStateException("You need to configure AssemblyChildItemFactory use addChildItemFactory method");
         }
 
+        childItemFactoryLocked = true;
         Object childObject = getChild(groupPosition, childPosition);
         for (AssemblyChildItemFactory childItemFactory : childItemFactoryList) {
             if (childItemFactory.isAssignableFrom(childObject)) {
