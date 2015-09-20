@@ -86,7 +86,7 @@ android {
 ```
 
 ###3. 使用AssemblyAdapter
-``这里只讲解AssemblyAdapter的用法，有关AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码``
+``这里只讲解AssemblyAdapter的用法，AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码``
 
 首先创建你的AssemblyItemFactory，如下所示：
 ```java
@@ -181,6 +181,18 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 ListView listView = ...;
 List<Object> dataList = ...;
 dataList.add(new User(...));
+
+AssemblyAdapter adapter = new AssemblyAdapter(dataList);
+adapter.addItemFactory(new UserListItemFactory(getBaseContext()));
+listView.setAdapter(adapter);
+```
+
+**一次使用多个AssemblyItemFactory，就像这样**
+
+```java
+ListView listView = ...;
+List<Object> dataList = ...;
+dataList.add(new User(...));
 dataList.add(new Game(...));
 
 AssemblyAdapter adapter = new AssemblyAdapter(dataList);
@@ -189,18 +201,8 @@ adapter.addItemFactory(new GameListItemFactory(getBaseContext()));
 listView.setAdapter(adapter);
 ```
 
-**一次使用多个AssemblyItemFactory，就像这样**
-```java
-ListView listView = ...;
-List<Object> dataList = ...;
-dataList.add(new User(...));
-
-AssemblyAdapter adapter = new AssemblyAdapter(dataList);
-adapter.addItemFactory(new UserListItemFactory(getBaseContext()));
-listView.setAdapter(adapter);
-```
-
 **使用加载更多功能**
+
 首先你需要创建一个继承自AbstractLoadMoreListItemFactory的ItemFactory，AbstractLoadMoreListItemFactory已经将逻辑部分的代码写好了，你只需关心界面即可，如下：
 ```java
 public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
@@ -263,7 +265,7 @@ adapter.enableLoadMore(new LoadMoreListItemFactory(new AbstractLoadMoreListItemF
 >* 如果加载失败了你需要调用adapterCallback.loadMoreFailed()方法，调用此方法后会自动调用LoadMoreListItem的showErrorRetry()方法显示失败提示，并且点击错误提示可以重新触发onLoadMore()方法
 >* 如果没有更多数据可以加载了你就调用adapterCallback.disableLoadMore()方法关闭加载更多功能
 
-**有关AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码**
+**AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码**
 
 ##License
 ```java
