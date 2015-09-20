@@ -88,7 +88,14 @@ android {
 ###3. 使用AssemblyAdapter
 ``这里只讲解AssemblyAdapter的用法，AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码``
 
-首先创建你的AssemblyItemFactory，如下所示：
+AssemblyAdapter分为三部分：
+>* AssemblyAdapter：封装了Adapter部分需要的所有处理
+>* AssemblyItemFactory：负责匹配Bean、创建AssemblyItem以及管理扩展参数
+>* AssemblyItem：负责创建convertView、设置并处理事件、设置数据
+
+AssemblyAdapter最大的特点如其名字所表达的意思是可以组装的，你可以调用其addItemFactory(AssemblyItemFactory)方法添加多个AssemblyItemFactory，而每一个AssemblyItemFactory就代表一种ItemType，这样就轻松实现了ItemType。因而AssemblyAdapter的数据列表的类型是Object的。
+
+首先创建你的AssemblyItemFactory和AssemblyItem，如下所示：
 ```java
 public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory.UserListItem> {
     private EventListener eventListener;
@@ -168,7 +175,7 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
     }
 }
 ```
-在创建AssemblyItemFactory的时候需要注意以下几点：
+在创建AssemblyItemFactory和AssemblyItem的时候需要注意以下几点：
 >* AssemblyItemFactory和AssemblyItem的泛型是互相指定的，一定要好好配置，不可省略
 >* AssemblyItemFactory.getBeanClass()返回的Class是用来匹配数据源中的Bean的，因此要跟你传给AssemblyAdapter的数据源中包含的Bean类型一致
 >* AssemblyItemFactory.createAssemblyItem(ViewGroup)方法返回的类型跟你在AssemblyItemFactory上配置的泛型一样
@@ -265,7 +272,7 @@ adapter.enableLoadMore(new LoadMoreListItemFactory(new AbstractLoadMoreListItemF
 >* 如果加载失败了你需要调用adapterCallback.loadMoreFailed()方法，调用此方法后会自动调用LoadMoreListItem的showErrorRetry()方法显示失败提示，并且点击错误提示可以重新触发onLoadMore()方法
 >* 如果没有更多数据可以加载了你就调用adapterCallback.disableLoadMore()方法关闭加载更多功能
 
-**AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码**
+除此之外还有AssemblyExpandableAdapter和AssemblyRecyclerAdapter分别用在ExpandableListView和RecyclerView，其用法和和AssemblyAdapter完全一样，只是ItemFactory和Item所继承的类不一样而已，详情请参考其[sample](https://github.com/xiaopansky/AssemblyAdapter/tree/master/sample)源码
 
 ##License
 ```java
