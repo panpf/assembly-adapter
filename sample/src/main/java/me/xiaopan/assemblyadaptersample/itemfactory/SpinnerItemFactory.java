@@ -10,9 +10,10 @@ import me.xiaopan.assemblyadapter.AssemblyItem;
 import me.xiaopan.assemblyadapter.AssemblyItemFactory;
 
 public class SpinnerItemFactory extends AssemblyItemFactory<SpinnerItemFactory.SpinnerItem>{
+
     @Override
-    public Class<?> getBeanClass() {
-        return String.class;
+    public boolean isTarget(Object itemObject) {
+        return itemObject instanceof String;
     }
 
     @Override

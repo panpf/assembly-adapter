@@ -17,8 +17,8 @@ public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecycl
     }
 
     @Override
-    public Class<?> getBeanClass() {
-        return String.class;
+    public boolean isTarget(Object itemObject) {
+        return false;
     }
 
     public interface EventListener {

@@ -151,7 +151,7 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 
 		Object itemObject = getItem(position);
 		for(AssemblyItemFactory itemFactory : itemFactoryList){
-			if(itemFactory.isAssignableFrom(itemObject)){
+			if(itemFactory.isTarget(itemObject)){
 				return itemFactory.getItemType();
 			}
 		}
@@ -185,7 +185,7 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 
 		Object itemObject = getItem(position);
 		for(AssemblyItemFactory itemFactory : itemFactoryList){
-			if(!itemFactory.isAssignableFrom(itemObject)){
+			if(!itemFactory.isTarget(itemObject)){
 				continue;
 			}
 

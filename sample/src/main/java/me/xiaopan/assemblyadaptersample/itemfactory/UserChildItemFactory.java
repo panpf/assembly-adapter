@@ -22,8 +22,8 @@ public class UserChildItemFactory extends AssemblyChildItemFactory<UserChildItem
     }
 
     @Override
-    public Class<?> getBeanClass() {
-        return User.class;
+    public boolean isTarget(Object itemObject) {
+        return itemObject instanceof User;
     }
 
     @Override

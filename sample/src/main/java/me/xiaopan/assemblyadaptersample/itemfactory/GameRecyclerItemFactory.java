@@ -22,8 +22,8 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
     }
 
     @Override
-    public Class<?> getBeanClass() {
-        return Game.class;
+    public boolean isTarget(Object itemObject) {
+        return itemObject instanceof Game;
     }
 
     @Override

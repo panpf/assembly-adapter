@@ -17,8 +17,8 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
     }
 
     @Override
-    public Class<?> getBeanClass() {
-        return String.class;
+    public boolean isTarget(Object itemObject) {
+        return false;
     }
 
     public interface EventListener {

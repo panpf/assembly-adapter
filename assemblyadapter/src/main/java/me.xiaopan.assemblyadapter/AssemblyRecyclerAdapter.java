@@ -131,7 +131,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
 
         Object itemObject = getItem(position);
         for(AssemblyRecyclerItemFactory itemFactory : itemFactoryList){
-            if(itemFactory.isAssignableFrom(itemObject)){
+            if(itemFactory.isTarget(itemObject)){
                 return itemFactory.getItemType();
             }
         }

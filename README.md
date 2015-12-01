@@ -98,8 +98,8 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
     }
 
     @Override
-    public Class<?> getBeanClass() {
-        return User.class;
+    public boolean isTarget(Object itemObject) {
+        return object instanceof User;
     }
 
     @Override
@@ -170,7 +170,7 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 ```
 在创建AssemblyItemFactory的时候需要注意以下几点：
 >* AssemblyItemFactory和AssemblyItem的泛型是互相指定的，一定要好好配置，不可省略
->* AssemblyItemFactory.getBeanClass()返回的Class是用来匹配数据源中的Bean的，因此要跟你传给AssemblyAdapter的数据源中包含的Bean类型一致
+>* AssemblyItemFactory.isTarget()方法是用来匹配数据源中的Bean的
 >* AssemblyItemFactory.createAssemblyItem(ViewGroup)方法返回的类型跟你在AssemblyItemFactory上配置的泛型一样
 >* AssemblyItem的onFindViews(View)和onConfigViews(Context)只会在创建AssemblyItem的调用一次，而onSetData()则会在每次getView()的时候都调用
 >* 你可以通过getPosition()和getData()方法直接获取当前Item所对应的位置和数据对象，因此你在处理onClick的时候不需要再通过setTag来传递数据了，直接调方法获取即可。getData()返回的对象类型和你在AssemblyItem第一个泛型配置的一样，因此你也不需要再转换类型了

@@ -22,8 +22,8 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
     }
 
     @Override
-    public Class<?> getBeanClass() {
-        return Game.class;
+    public boolean isTarget(Object itemObject) {
+        return itemObject instanceof Game;
     }
 
     @Override

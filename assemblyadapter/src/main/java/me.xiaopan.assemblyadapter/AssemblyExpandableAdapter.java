@@ -210,7 +210,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
         Object groupObject = getGroup(groupPosition);
         for (AssemblyGroupItemFactory groupItemFactory : groupItemFactoryList) {
-            if (groupItemFactory.isAssignableFrom(groupObject)) {
+            if (groupItemFactory.isTarget(groupObject)) {
                 return groupItemFactory.getItemType();
             }
         }
@@ -228,7 +228,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         childItemFactoryLocked = true;
         Object childObject = getChild(groupPosition, childPosition);
         for (AssemblyChildItemFactory childItemFactory : childItemFactoryList) {
-            if (childItemFactory.isAssignableFrom(childObject)) {
+            if (childItemFactory.isTarget(childObject)) {
                 return childItemFactory.getItemType();
             }
         }
@@ -272,7 +272,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
         Object groupObject = getGroup(groupPosition);
         for (AssemblyGroupItemFactory groupItemFactory : groupItemFactoryList) {
-            if (!groupItemFactory.isAssignableFrom(groupObject)) {
+            if (!groupItemFactory.isTarget(groupObject)) {
                 continue;
             }
 
@@ -302,7 +302,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
         Object childObject = getChild(groupPosition, childPosition);
         for (AssemblyChildItemFactory childItemFactory : childItemFactoryList) {
-            if (!childItemFactory.isAssignableFrom(childObject)) {
+            if (!childItemFactory.isTarget(childObject)) {
                 continue;
             }
 

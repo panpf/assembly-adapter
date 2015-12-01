@@ -14,8 +14,8 @@ import me.xiaopan.assemblyadapter.AssemblyGroupItemFactory;
 public class GameGroupItemFactory extends AssemblyGroupItemFactory<GameGroupItemFactory.GameGroupItem>{
 
     @Override
-    public Class<?> getBeanClass() {
-        return GameGroup.class;
+    public boolean isTarget(Object itemObject) {
+        return itemObject instanceof GameGroup;
     }
 
     @Override
