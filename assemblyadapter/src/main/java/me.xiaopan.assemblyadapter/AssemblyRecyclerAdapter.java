@@ -41,6 +41,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
         if(itemFactoryList == null){
             itemFactoryList = new LinkedList<AssemblyRecyclerItemFactory>();
         }
+        itemFactory.setAdapter(this);
         itemFactory.setItemType(itemFactoryList.size());
         itemFactoryList.add(itemFactory);
     }
@@ -71,6 +72,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
             setEnableLoadMore = true;
             this.loadMoreRecyclerItemFactory = loadMoreRecyclerItemFactory;
             this.loadMoreRecyclerItemFactory.setAdapterCallback(this);
+            this.loadMoreRecyclerItemFactory.setAdapter(this);
             this.loadMoreRecyclerItemFactory.setItemType(itemFactoryList.size());
             notifyDataSetChanged();
         }

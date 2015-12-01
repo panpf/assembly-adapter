@@ -44,6 +44,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         if (groupItemFactoryList == null) {
             groupItemFactoryList = new LinkedList<AssemblyGroupItemFactory>();
         }
+        groupItemFactory.setAdapter(this);
         groupItemFactory.setItemType(groupItemFactoryList.size());
         groupItemFactoryList.add(groupItemFactory);
     }
@@ -56,6 +57,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         if (childItemFactoryList == null) {
             childItemFactoryList = new LinkedList<AssemblyChildItemFactory>();
         }
+        childItemFactory.setAdapter(this);
         childItemFactory.setItemType(childItemFactoryList.size());
         childItemFactoryList.add(childItemFactory);
     }
@@ -86,6 +88,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
             setEnableLoadMore = true;
             this.loadMoreGroupItemFactory = loadMoreGroupItemFactory;
             this.loadMoreGroupItemFactory.setAdapterCallback(this);
+            this.loadMoreGroupItemFactory.setAdapter(this);
             this.loadMoreGroupItemFactory.setItemType(groupItemFactoryList.size());
             notifyDataSetChanged();
         }

@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 public abstract class AssemblyGroupItemFactory<ITEM extends AssemblyGroupItem>{
     private int itemType;
     private Class<?> beanClass;
+    private AssemblyExpandableAdapter adapter;
 
     public int getItemType() {
         return itemType;
@@ -12,6 +13,14 @@ public abstract class AssemblyGroupItemFactory<ITEM extends AssemblyGroupItem>{
 
     public void setItemType(int itemType) {
         this.itemType = itemType;
+    }
+
+    public AssemblyExpandableAdapter getAdapter() {
+        return adapter;
+    }
+
+    public void setAdapter(AssemblyExpandableAdapter adapter) {
+        this.adapter = adapter;
     }
 
     public boolean isAssignableFrom(Object itemObject){

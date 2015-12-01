@@ -42,6 +42,7 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 		if(itemFactoryList == null){
 			itemFactoryList = new LinkedList<AssemblyItemFactory>();
 		}
+		assemblyItemFactory.setAdapter(this);
 		assemblyItemFactory.setItemType(itemFactoryList.size());
 		itemFactoryList.add(assemblyItemFactory);
 	}
@@ -72,6 +73,7 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 			setEnableLoadMore = true;
 			this.loadMoreListItemFactory = loadMoreListItemFactory;
 			this.loadMoreListItemFactory.setAdapterCallback(this);
+			this.loadMoreListItemFactory.setAdapter(this);
 			this.loadMoreListItemFactory.setItemType(itemFactoryList.size());
 			notifyDataSetChanged();
 		}
