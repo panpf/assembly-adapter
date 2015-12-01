@@ -28,13 +28,13 @@ English（From Baidu translate）
 
 ```groovy
 dependencies{
-	compile 'me.xiaopan:assemblyadapter:1.0.0'
+	compile 'me.xiaopan:assemblyadapter:1.1.0'
 }
 ```
 
 ``离线模式（Offline work）``
 
-首先到[releases](https://github.com/xiaopansky/AssemblyAdapter/releases)页面下载最新版的aar包（`这里以assemblyadapter-1.0.0.aar为例，具体请以你下载到的文件名称为准`），并放到你module的libs目录下
+首先到[releases](https://github.com/xiaopansky/AssemblyAdapter/releases)页面下载最新版的aar包（`这里以assemblyadapter-1.1.0.aar为例，具体请以你下载到的文件名称为准`），并放到你module的libs目录下
 
 然后在你module的build.gradle文件中添加以下代码：
 ```groovy
@@ -45,16 +45,16 @@ repositories{
 }
 
 dependencies{
-    compile(name:'assemblyadapter-1.0.0', ext:'aar')
+    compile(name:'assemblyadapter-1.1.0', ext:'aar')
 }
 ```
 最后同步一下Gradle即可
 
 #####使用Eclipse（Use Eclipse）
-1. 首先到[releases](https://github.com/xiaopansky/AssemblyAdapter/releases)页面下载最新版的aar包（`这里以assemblyadapter-1.0.0.aar为例，具体请以你下载到的文件名称为准`）
+1. 首先到[releases](https://github.com/xiaopansky/AssemblyAdapter/releases)页面下载最新版的aar包（`这里以assemblyadapter-1.1.0.aar为例，具体请以你下载到的文件名称为准`）
 2. 然后改后缀名为zip并解压
-2. 接下来将classes.jar文件重命名为assemblyadapter-1.0.0.jar
-3. 最后将assemblyadapter-1.0.0.jar拷贝到你的项目的libs目录下
+2. 接下来将classes.jar文件重命名为assemblyadapter-1.1.0.jar
+3. 最后将assemblyadapter-1.1.0.jar拷贝到你的项目的libs目录下
 
 ####2. 配置最低版本（Configure min sdk version）
 AssemblyAdapter最低兼容API v7
@@ -170,13 +170,25 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 ```
 在创建AssemblyItemFactory的时候需要注意以下几点：
 >* AssemblyItemFactory和AssemblyItem的泛型是互相指定的，一定要好好配置，不可省略
->* AssemblyItemFactory.isTarget()方法是用来匹配数据源中的Bean的
->* AssemblyItemFactory.createAssemblyItem(ViewGroup)方法返回的类型跟你在AssemblyItemFactory上配置的泛型一样
->* AssemblyItem的onFindViews(View)和onConfigViews(Context)只会在创建AssemblyItem的调用一次，而onSetData()则会在每次getView()的时候都调用
+>* AssemblyItemFactory.isTarget()方法是用来匹配数据源中的数据的，只有返回true才会使用当前Factory
+>* AssemblyItemFactory.createAssemblyItem(ViewGroup)方法用来创建AssembleItem，返回的类型必须跟你在AssemblyItemFactory上配置的泛型一样
+>* AssemblyItem的onFindViews(View)和onConfigViews(Context)方法分别用来初始化View和配置View，只会在创建AssemblyItem的时候调用一次
+>* AssembleItem.onSetData()方法是用来设置数据的，在每次getView()的时候都会调用
 >* 你可以通过getPosition()和getData()方法直接获取当前Item所对应的位置和数据对象，因此你在处理onClick的时候不需要再通过setTag来传递数据了，直接调方法获取即可。getData()返回的对象类型和你在AssemblyItem第一个泛型配置的一样，因此你也不需要再转换类型了
 >* 你可以像示例那样将所有需要处理的事件通过接口剥离出去，然后写一个专门的处理类，这样逻辑比较清晰
 
 然后new一个AssemblyAdapter直接通过其addItemFactory方法使用你自定义的UserListItemFactory即可，如下：
+```java
+ListView listView = ...;
+List<Object> dataList = ...;
+dataList.add(new User(...));
+
+AssemblyAdapter adapter = new AssemblyAdapter(dataList);
+adapter.addItemFactory(new UserListItemFactory(getBaseContext()));
+listView.setAdapter(adapter);
+```
+
+**一次使用多个AssemblyItemFactory，就像这样**
 ```java
 ListView listView = ...;
 List<Object> dataList = ...;
@@ -186,17 +198,6 @@ dataList.add(new Game(...));
 AssemblyAdapter adapter = new AssemblyAdapter(dataList);
 adapter.addItemFactory(new UserListItemFactory(getBaseContext()));
 adapter.addItemFactory(new GameListItemFactory(getBaseContext()));
-listView.setAdapter(adapter);
-```
-
-**一次使用多个AssemblyItemFactory，就像这样**
-```java
-ListView listView = ...;
-List<Object> dataList = ...;
-dataList.add(new User(...));
-
-AssemblyAdapter adapter = new AssemblyAdapter(dataList);
-adapter.addItemFactory(new UserListItemFactory(getBaseContext()));
 listView.setAdapter(adapter);
 ```
 
@@ -217,6 +218,7 @@ public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
     public static class LoadMoreListItem extends AbstractLoadMoreListItem {
         private View loadingView;
         private View errorView;
+        private View endView;
 
         protected LoadMoreListItem(ViewGroup parent, AbstractLoadMoreListItemFactory baseFactory) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_load_more, parent, false), baseFactory);
@@ -226,23 +228,33 @@ public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
         protected void onFindViews(View convertView) {
             loadingView = convertView.findViewById(R.id.text_loadMoreListItem_loading);
             errorView = convertView.findViewById(R.id.text_loadMoreListItem_error);
-        }
-
-        @Override
-        public void showErrorRetry() {
-            loadingView.setVisibility(View.GONE);
-            errorView.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void showLoading() {
-            loadingView.setVisibility(View.VISIBLE);
-            errorView.setVisibility(View.GONE);
+            endView = convertView.findViewById(R.id.text_loadMoreListItem_end);
         }
 
         @Override
         public View getErrorRetryView() {
             return errorView;
+        }
+
+        @Override
+        public void showLoading() {
+            loadingView.setVisibility(View.VISIBLE);
+            errorView.setVisibility(View.INVISIBLE);
+            endView.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void showErrorRetry() {
+            loadingView.setVisibility(View.INVISIBLE);
+            errorView.setVisibility(View.VISIBLE);
+            endView.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void showEnd() {
+            loadingView.setVisibility(View.INVISIBLE);
+            errorView.setVisibility(View.INVISIBLE);
+            endView.setVisibility(View.VISIBLE);
         }
     }
 }
@@ -250,18 +262,18 @@ public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
 然后调用enableLoadMore(AbstractLoadMoreListItemFactory)方法开启，如下：
 ```java
 AssemblyAdapter adapter = ...;
-adapter.enableLoadMore(new LoadMoreListItemFactory(new AbstractLoadMoreListItemFactory.EventListener(){
+adapter.enableLoadMore(new LoadMoreListItemFactory(new OnLoadMoreListener(){
 	@Override
-    public void onLoadMore(AbstractLoadMoreListItemFactory.AdapterCallback adapterCallback) {
-        // ... 访问网络加载更多数据，最后调用adapterCallback或adapter的loadMoreFinished()方法结束加载
-		adapterCallback.loadMoreFinished();
+    public void onLoadMore(AssemblyAdapter adapter) {
+        // ... 访问网络加载更多数据，最后调用adapter的loadMoreFinished()方法结束加载
+		adapter.loadMoreFinished();
     }
 }));
 ```
 注意：
->* 加载完成了你需要调用adapterCallback.loadMoreFinished()方法结束加载
->* 如果加载失败了你需要调用adapterCallback.loadMoreFailed()方法，调用此方法后会自动调用LoadMoreListItem的showErrorRetry()方法显示失败提示，并且点击错误提示可以重新触发onLoadMore()方法
->* 如果没有更多数据可以加载了你就调用adapterCallback.disableLoadMore()方法关闭加载更多功能
+>* 加载完成了你需要调用adapter.loadMoreFinished()方法结束加载
+>* 如果加载失败了你需要调用adapter.loadMoreFailed()方法，调用此方法后会自动调用LoadMoreListItem的showErrorRetry()方法显示失败提示，并且点击错误提示可以重新触发onLoadMore()方法
+>* 如果没有更多数据可以加载了你就调用adapter.loadMoreEnd()设置结束，loadMoreEnd()方法会自动调用LoadMoreListItem的showEnd()方法显示结束提示，或者调用adapter.disableLoadMore()方法关闭加载更多功能
 
 **有关AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码**
 
