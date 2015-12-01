@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreListItemFactory.AdapterCallback {
+public class AssemblyAdapter extends BaseAdapter{
 	private static final String TAG = "AssemblyAdapter";
 
 	private List dataList;
@@ -65,6 +65,10 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 		notifyDataSetChanged();
 	}
 
+	/**
+	 * 开启加载更多功能
+	 * @param loadMoreListItemFactory 加载更多ItemFactory
+	 */
 	public void enableLoadMore(AbstractLoadMoreListItemFactory loadMoreListItemFactory) {
 		if(loadMoreListItemFactory != null){
 			if(itemFactoryList == null || itemFactoryList.size() == 0){
@@ -72,42 +76,57 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 			}
 			setEnableLoadMore = true;
 			this.loadMoreListItemFactory = loadMoreListItemFactory;
-			this.loadMoreListItemFactory.setAdapterCallback(this);
+			this.loadMoreListItemFactory.loadMoreRunning = false;
+			this.loadMoreListItemFactory.end = false;
 			this.loadMoreListItemFactory.setAdapter(this);
 			this.loadMoreListItemFactory.setItemType(itemFactoryList.size());
 			notifyDataSetChanged();
 		}
 	}
 
+	/**
+	 * 关闭加载更多功能
+	 */
 	public void disableLoadMore() {
 		if(loadMoreListItemFactory != null){
 			loadMoreListItemFactory.loadMoreRunning = false;
+			loadMoreListItemFactory.end = false;
 			loadMoreListItemFactory = null;
 			notifyDataSetChanged();
 		}
 	}
 
-	@Override
-	public void loading() {
-		if(loadMoreListItemFactory != null){
-			loadMoreListItemFactory.loadMoreRunning = true;
-		}
-	}
-
-	@Override
+	/**
+	 * 加载更多完成，当你一次请求完成后需要调用此方法
+	 */
 	public void loadMoreFinished(){
 		if(loadMoreListItemFactory != null){
 			loadMoreListItemFactory.loadMoreRunning = false;
 		}
 	}
 
-	@Override
+	/**
+	 * 加载更过失败，请求失败的时候需要调用此方法，会显示错误提示，并可点击重新加载
+	 */
 	public void loadMoreFailed(){
 		if(loadMoreListItemFactory != null){
 			loadMoreListItemFactory.loadMoreRunning = false;
 		}
 		if(loadMoreListItem != null){
 			loadMoreListItem.showErrorRetry();
+		}
+	}
+
+	/**
+	 * 加载更多结束，当没有更多内容的时候你需要调用此方法
+	 */
+	public void loadMoreEnd(){
+		if(loadMoreListItemFactory != null){
+			loadMoreListItemFactory.loadMoreRunning = false;
+			loadMoreListItemFactory.end = true;
+		}
+		if(loadMoreListItem != null){
+			loadMoreListItem.showEnd();
 		}
 	}
 

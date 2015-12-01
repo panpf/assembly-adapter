@@ -5,8 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 public abstract class AssemblyRecyclerItem<BEAN, ITEM_FACTORY extends AssemblyRecyclerItemFactory> extends RecyclerView.ViewHolder{
-    private ITEM_FACTORY itemFactory;
-    private BEAN data;
+    protected ITEM_FACTORY itemFactory;
+    protected BEAN data;
 
     protected AssemblyRecyclerItem(View convertView, ITEM_FACTORY itemFactory) {
         super(convertView);

@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.View;
 
 public abstract class AssemblyGroupItem<BEAN, ITEM_FACTORY extends AssemblyGroupItemFactory> {
-    private View convertView;
-    private ITEM_FACTORY itemFactory;
-    private int groupPosition;
-    private boolean isExpanded;
-    private BEAN data;
+    protected View convertView;
+    protected ITEM_FACTORY itemFactory;
+    protected int groupPosition;
+    protected boolean isExpanded;
+    protected BEAN data;
 
     protected AssemblyGroupItem(View convertView, ITEM_FACTORY itemFactory) {
         if(convertView == null){

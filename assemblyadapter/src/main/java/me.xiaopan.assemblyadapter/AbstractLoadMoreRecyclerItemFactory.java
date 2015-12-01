@@ -4,16 +4,12 @@ import android.content.Context;
 import android.view.View;
 
 public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecyclerItemFactory<AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem> {
-    private AdapterCallback adapterCallback;
-    public boolean loadMoreRunning;
-    private EventListener eventListener;
+    boolean loadMoreRunning;
+    boolean end;
+    private OnRecyclerLoadMoreListener eventListener;
 
-    public AbstractLoadMoreRecyclerItemFactory(EventListener eventListener) {
+    public AbstractLoadMoreRecyclerItemFactory(OnRecyclerLoadMoreListener eventListener) {
         this.eventListener = eventListener;
-    }
-
-    public void setAdapterCallback(AdapterCallback adapterCallback) {
-        this.adapterCallback = adapterCallback;
     }
 
     @Override
@@ -21,26 +17,18 @@ public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecycl
         return false;
     }
 
-    public interface EventListener {
-		void onLoadMore(AdapterCallback adapterCallback);
-	}
-
-    public interface AdapterCallback{
-        void loading();
-        void loadMoreFinished();
-        void loadMoreFailed();
-	}
-
     public abstract static class AbstractLoadMoreRecyclerItem extends AssemblyRecyclerItem<String, AbstractLoadMoreRecyclerItemFactory> {
         protected AbstractLoadMoreRecyclerItem(View convertView, AbstractLoadMoreRecyclerItemFactory baseFactory) {
             super(convertView, baseFactory);
         }
 
-        public abstract void showErrorRetry();
+        public abstract View getErrorRetryView();
 
         public abstract void showLoading();
 
-        public abstract View getErrorRetryView();
+        public abstract void showErrorRetry();
+
+        public abstract void showEnd();
 
         @Override
         public void onConfigViews(Context context) {
@@ -57,10 +45,14 @@ public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecycl
 
         @Override
         public void onSetData(int position, String s) {
-            showLoading();
-            if (getItemFactory().eventListener != null && !getItemFactory().loadMoreRunning) {
-                getItemFactory().adapterCallback.loading();
-                getItemFactory().eventListener.onLoadMore(getItemFactory().adapterCallback);
+            if(itemFactory.end){
+                showEnd();
+            }else{
+                showLoading();
+                if (itemFactory.eventListener != null && !itemFactory.loadMoreRunning) {
+                    itemFactory.loadMoreRunning = true;
+                    itemFactory.eventListener.onLoadMore(itemFactory.adapter);
+                }
             }
         }
     }

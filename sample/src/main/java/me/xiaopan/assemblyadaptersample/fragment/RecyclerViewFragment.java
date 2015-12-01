@@ -13,16 +13,16 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.xiaopan.assemblyadapter.OnRecyclerLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserRecyclerItemFactory;
-import me.xiaopan.assemblyadapter.AbstractLoadMoreRecyclerItemFactory;
 import me.xiaopan.assemblyadapter.AssemblyRecyclerAdapter;
 
-public class RecyclerViewFragment extends Fragment implements AbstractLoadMoreRecyclerItemFactory.EventListener {
+public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMoreListener {
     private int nextStart;
     private int size = 20;
 
@@ -107,7 +107,7 @@ public class RecyclerViewFragment extends Fragment implements AbstractLoadMoreRe
                 }else{
                     adapter.loadMoreFinished();
                     if(nextStart == 100){
-                        adapter.disableLoadMore();
+                        adapter.loadMoreEnd();
                     }
                     adapter.append(objects);
                 }
@@ -116,7 +116,7 @@ public class RecyclerViewFragment extends Fragment implements AbstractLoadMoreRe
     }
 
     @Override
-    public void onLoadMore(AbstractLoadMoreRecyclerItemFactory.AdapterCallback adapterCallback) {
+    public void onLoadMore(AssemblyRecyclerAdapter adapter) {
         loadData();
     }
 }

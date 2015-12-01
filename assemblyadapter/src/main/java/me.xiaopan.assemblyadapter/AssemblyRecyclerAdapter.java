@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements AbstractLoadMoreRecyclerItemFactory.AdapterCallback {
+public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     private static final String TAG = "AssemblyRecyclerAdapter";
 
     private List dataList;
@@ -64,6 +64,10 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
         notifyDataSetChanged();
     }
 
+    /**
+     * 开启加载更多功能
+     * @param loadMoreRecyclerItemFactory 加载更多ItemFactory
+     */
     public void enableLoadMore(AbstractLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory) {
         if(loadMoreRecyclerItemFactory != null){
             if(itemFactoryList == null || itemFactoryList.size() == 0){
@@ -71,42 +75,57 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
             }
             setEnableLoadMore = true;
             this.loadMoreRecyclerItemFactory = loadMoreRecyclerItemFactory;
-            this.loadMoreRecyclerItemFactory.setAdapterCallback(this);
+            this.loadMoreRecyclerItemFactory.loadMoreRunning = false;
+            this.loadMoreRecyclerItemFactory.end = false;
             this.loadMoreRecyclerItemFactory.setAdapter(this);
             this.loadMoreRecyclerItemFactory.setItemType(itemFactoryList.size());
             notifyDataSetChanged();
         }
     }
 
+    /**
+     * 关闭加载更多功能
+     */
     public void disableLoadMore() {
         if(loadMoreRecyclerItemFactory != null){
             loadMoreRecyclerItemFactory.loadMoreRunning = false;
+            loadMoreRecyclerItemFactory.end = false;
             loadMoreRecyclerItemFactory = null;
             notifyDataSetChanged();
         }
     }
 
-    @Override
-    public void loading() {
-        if(loadMoreRecyclerItemFactory != null){
-            loadMoreRecyclerItemFactory.loadMoreRunning = true;
-        }
-    }
-
-    @Override
+    /**
+     * 加载更多完成，当你一次请求完成后需要调用此方法
+     */
     public void loadMoreFinished(){
         if(loadMoreRecyclerItemFactory != null){
             loadMoreRecyclerItemFactory.loadMoreRunning = false;
         }
     }
 
-    @Override
+    /**
+     * 加载更过失败，请求失败的时候需要调用此方法，会显示错误提示，并可点击重新加载
+     */
     public void loadMoreFailed(){
         if(loadMoreRecyclerItemFactory != null){
             loadMoreRecyclerItemFactory.loadMoreRunning = false;
         }
         if(loadMoreRecyclerItem != null){
             loadMoreRecyclerItem.showErrorRetry();
+        }
+    }
+
+    /**
+     * 加载更多结束，当没有更多内容的时候你需要调用此方法
+     */
+    public void loadMoreEnd(){
+        if(loadMoreRecyclerItemFactory != null){
+            loadMoreRecyclerItemFactory.loadMoreRunning = false;
+            loadMoreRecyclerItemFactory.end = true;
+        }
+        if(loadMoreRecyclerItem != null){
+            loadMoreRecyclerItem.showEnd();
         }
     }
 

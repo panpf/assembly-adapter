@@ -4,10 +4,10 @@ import android.content.Context;
 import android.view.View;
 
 public abstract class AssemblyItem<BEAN, ITEM_FACTORY extends AssemblyItemFactory> {
-    private View convertView;
-    private ITEM_FACTORY itemFactory;
-    private int position;
-    private BEAN data;
+    protected View convertView;
+    protected ITEM_FACTORY itemFactory;
+    protected int position;
+    protected BEAN data;
 
     protected AssemblyItem(View convertView, ITEM_FACTORY itemFactory) {
         if(convertView == null){

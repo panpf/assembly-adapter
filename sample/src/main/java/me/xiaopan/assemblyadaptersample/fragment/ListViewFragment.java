@@ -12,8 +12,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.xiaopan.assemblyadapter.AbstractLoadMoreListItemFactory;
 import me.xiaopan.assemblyadapter.AssemblyAdapter;
+import me.xiaopan.assemblyadapter.OnLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadaptersample.bean.User;
@@ -21,7 +21,7 @@ import me.xiaopan.assemblyadaptersample.itemfactory.GameListItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreListItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserListItemFactory;
 
-public class ListViewFragment extends Fragment implements AbstractLoadMoreListItemFactory.EventListener {
+public class ListViewFragment extends Fragment implements OnLoadMoreListener {
     private int nextStart;
     private int size = 20;
 
@@ -105,7 +105,7 @@ public class ListViewFragment extends Fragment implements AbstractLoadMoreListIt
                 }else{
                     adapter.loadMoreFinished();
                     if(nextStart == 100){
-                        adapter.disableLoadMore();
+                        adapter.loadMoreEnd();
                     }
                     adapter.append(objects);
                 }
@@ -114,7 +114,7 @@ public class ListViewFragment extends Fragment implements AbstractLoadMoreListIt
     }
 
     @Override
-    public void onLoadMore(AbstractLoadMoreListItemFactory.AdapterCallback adapterCallback) {
+    public void onLoadMore(AssemblyAdapter adapter) {
         loadData();
     }
 }

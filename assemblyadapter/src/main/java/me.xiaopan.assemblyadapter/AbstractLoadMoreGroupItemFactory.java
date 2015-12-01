@@ -4,16 +4,12 @@ import android.content.Context;
 import android.view.View;
 
 public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItemFactory<AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem> {
-    private AdapterCallback adapterCallback;
-    public boolean loadMoreRunning;
-    private EventListener eventListener;
+    boolean loadMoreRunning;
+    boolean end;
+    private OnGroupLoadMoreListener eventListener;
 
-    public AbstractLoadMoreGroupItemFactory(EventListener eventListener) {
+    public AbstractLoadMoreGroupItemFactory(OnGroupLoadMoreListener eventListener) {
         this.eventListener = eventListener;
-    }
-
-    public void setAdapterCallback(AdapterCallback adapterCallback) {
-        this.adapterCallback = adapterCallback;
     }
 
     @Override
@@ -21,26 +17,18 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
         return false;
     }
 
-    public interface EventListener {
-		void onLoadMore(AdapterCallback adapterCallback);
-	}
-
-    public interface AdapterCallback{
-        void loading();
-        void loadMoreFinished();
-        void loadMoreFailed();
-	}
-
     public abstract static class AbstractLoadMoreGroupItem extends AssemblyGroupItem<String, AbstractLoadMoreGroupItemFactory>{
         protected AbstractLoadMoreGroupItem(View convertView, AbstractLoadMoreGroupItemFactory baseFactory) {
             super(convertView, baseFactory);
         }
 
-        public abstract void showErrorRetry();
+        public abstract View getErrorRetryView();
 
         public abstract void showLoading();
 
-        public abstract View getErrorRetryView();
+        public abstract void showErrorRetry();
+
+        public abstract void showEnd();
 
         @Override
         public void onConfigViews(Context context) {
@@ -49,7 +37,7 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
                 public void onClick(View v) {
                     if (getItemFactory().eventListener != null) {
                         getItemFactory().loadMoreRunning = false;
-                        setData(getGroupPosition(), isExpanded(), getData());
+                        setData(groupPosition, isExpanded, data);
                     }
                 }
             });
@@ -57,10 +45,14 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
 
         @Override
         public void onSetData(int groupPosition, boolean isExpanded, String s) {
-            showLoading();
-            if (getItemFactory().eventListener != null && !getItemFactory().loadMoreRunning) {
-                getItemFactory().adapterCallback.loading();
-                getItemFactory().eventListener.onLoadMore(getItemFactory().adapterCallback);
+            if(itemFactory.end){
+                showEnd();
+            }else{
+                showLoading();
+                if (itemFactory.eventListener != null && !itemFactory.loadMoreRunning) {
+                    itemFactory.loadMoreRunning = true;
+                    itemFactory.eventListener.onLoadMore(itemFactory.adapter);
+                }
             }
         }
     }

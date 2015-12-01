@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AssemblyExpandableAdapter extends BaseExpandableListAdapter implements AbstractLoadMoreGroupItemFactory.AdapterCallback {
+public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
     private static final String TAG = "AssemblyExpandAdapter";
 
     private List dataList;
@@ -80,6 +80,10 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         notifyDataSetChanged();
     }
 
+    /**
+     * 开启加载更多功能
+     * @param loadMoreGroupItemFactory 加载更多ItemFactory
+     */
     public void enableLoadMore(AbstractLoadMoreGroupItemFactory loadMoreGroupItemFactory) {
         if (loadMoreGroupItemFactory != null) {
             if (groupItemFactoryList == null || groupItemFactoryList.size() == 0) {
@@ -87,42 +91,57 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
             }
             setEnableLoadMore = true;
             this.loadMoreGroupItemFactory = loadMoreGroupItemFactory;
-            this.loadMoreGroupItemFactory.setAdapterCallback(this);
+            this.loadMoreGroupItemFactory.loadMoreRunning = false;
+            this.loadMoreGroupItemFactory.end = false;
             this.loadMoreGroupItemFactory.setAdapter(this);
             this.loadMoreGroupItemFactory.setItemType(groupItemFactoryList.size());
             notifyDataSetChanged();
         }
     }
 
+    /**
+     * 关闭加载更多功能
+     */
     public void disableLoadMore() {
         if(loadMoreGroupItemFactory != null){
             loadMoreGroupItemFactory.loadMoreRunning = false;
+            loadMoreGroupItemFactory.end = false;
             loadMoreGroupItemFactory = null;
             notifyDataSetChanged();
         }
     }
 
-    @Override
-    public void loading() {
-        if(loadMoreGroupItemFactory != null){
-            loadMoreGroupItemFactory.loadMoreRunning = true;
-        }
-    }
-
-    @Override
+    /**
+     * 加载更多完成，当你一次请求完成后需要调用此方法
+     */
     public void loadMoreFinished() {
         if(loadMoreGroupItemFactory != null){
             loadMoreGroupItemFactory.loadMoreRunning = false;
         }
     }
 
-    @Override
+    /**
+     * 加载更过失败，请求失败的时候需要调用此方法，会显示错误提示，并可点击重新加载
+     */
     public void loadMoreFailed() {
         if(loadMoreGroupItemFactory != null){
             loadMoreGroupItemFactory.loadMoreRunning = false;
         }
         if (loadMoreGroupItem != null) {
             loadMoreGroupItem.showErrorRetry();
+        }
+    }
+
+    /**
+     * 加载更多结束，当没有更多内容的时候你需要调用此方法
+     */
+    public void loadMoreEnd(){
+        if(loadMoreGroupItemFactory != null){
+            loadMoreGroupItemFactory.loadMoreRunning = false;
+            loadMoreGroupItemFactory.end = true;
+        }
+        if(loadMoreGroupItem != null){
+            loadMoreGroupItem.showEnd();
         }
     }
 
