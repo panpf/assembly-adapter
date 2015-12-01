@@ -105,7 +105,7 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 		if(dataList == null || dataList.size() == 0){
 			return 0;
 		}
-		return dataList.size() + (loadMoreListItemFactory !=null ? 1 : 0);
+		return dataList.size() + (loadMoreListItemFactory != null ? 1 : 0);
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 			throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
 		}
 		itemFactoryLocked = true;
-		return itemFactoryList.size() + 1;
+		return itemFactoryList.size() + (loadMoreListItemFactory != null ? 1 : 0);
 	}
 
 	@Override

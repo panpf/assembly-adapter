@@ -104,7 +104,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
         if(dataList == null || dataList.size() == 0){
             return 0;
         }
-        return dataList.size() + (loadMoreRecyclerItemFactory !=null ? 1 : 0);
+        return dataList.size() + (loadMoreRecyclerItemFactory != null ? 1 : 0);
     }
 
     @Override

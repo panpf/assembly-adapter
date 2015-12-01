@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppThemeCompat" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/AppThemeCompat.ActionBarV14</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppThemeCompat.ActionBarV14" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:titleTextStyle">@style/AppThemeCompat.ActionBarV14.Title</item>
+        <item name="android:subtitleTextStyle">@style/AppThemeCompat.ActionBarV14.SubTitle</item>
+    </style>
+
+    <style name="AppThemeCompat.ActionBarV14.Title" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="AppThemeCompat.ActionBarV14.SubTitle" parent="android:TextAppearance.Holo.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+</resources>

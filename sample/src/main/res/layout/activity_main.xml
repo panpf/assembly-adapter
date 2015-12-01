@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        app:slidingBlock="@drawable/shape_sliding_block">
+        app:slidingBlock="@drawable/shape_sliding_block"
+        android:background="@color/colorPrimary">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -20,6 +21,7 @@
                 android:layout_marginRight="24dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:textColor="@color/selector_tab"
                 android:text="LIST"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -28,6 +30,7 @@
                 android:layout_marginRight="24dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:textColor="@color/selector_tab"
                 android:text="RECYCLE"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -36,7 +39,17 @@
                 android:layout_marginRight="24dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:textColor="@color/selector_tab"
                 android:text="EXPANDABLE"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/selector_tab"
+                android:text="SPINNER"/>
         </LinearLayout>
     </me.xiaopan.psts.PagerSlidingTabStrip>
 
