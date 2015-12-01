@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,8 +19,15 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Abs
     private boolean itemFactoryLocked;  // 锁定之后就不能再添加ItemFactory了
     private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加ItemFactory了
 
-    public AssemblyRecyclerAdapter(List<?> dataList) {
+    public AssemblyRecyclerAdapter(List dataList) {
         this.dataList = dataList;
+    }
+
+    public AssemblyRecyclerAdapter(Object... dataArray) {
+        if(dataArray != null && dataArray.length > 0){
+            this.dataList = new ArrayList(dataArray.length);
+            Collections.addAll(dataList, dataArray);
+        }
     }
 
     public void addItemFactory(AssemblyRecyclerItemFactory itemFactory){

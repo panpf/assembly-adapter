@@ -5,13 +5,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AssemblyExpandableAdapter extends BaseExpandableListAdapter implements AbstractLoadMoreGroupItemFactory.AdapterCallback {
     private static final String TAG = "AssemblyExpandAdapter";
 
-    private List<Object> dataList;
+    private List dataList;
     private List<AssemblyGroupItemFactory> groupItemFactoryList;
     private List<AssemblyChildItemFactory> childItemFactoryList;
     private AbstractLoadMoreGroupItemFactory loadMoreGroupItemFactory;
@@ -20,8 +22,15 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     private boolean childItemFactoryLocked;  // 锁定之后就不能再添加ChildItemFactory了
     private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加GroupItemFactory了
 
-    public AssemblyExpandableAdapter(List<Object> dataList) {
+    public AssemblyExpandableAdapter(List dataList) {
         this.dataList = dataList;
+    }
+
+    public AssemblyExpandableAdapter(Object... dataArray) {
+        if(dataArray != null && dataArray.length > 0){
+            this.dataList = new ArrayList(dataArray.length);
+            Collections.addAll(dataList, dataArray);
+        }
     }
 
     public void addGroupItemFactory(AssemblyGroupItemFactory groupItemFactory) {
@@ -51,7 +60,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         childItemFactoryList.add(childItemFactory);
     }
 
-    public List<Object> getDataList() {
+    public List getDataList() {
         return dataList;
     }
 

@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,8 +20,15 @@ public class AssemblyAdapter extends BaseAdapter implements AbstractLoadMoreList
 	private boolean itemFactoryLocked;  // 锁定之后就不能再添加ItemFactory了
 	private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加ItemFactory了
 
-	public AssemblyAdapter(List<?> dataList) {
+	public AssemblyAdapter(List dataList) {
 		this.dataList = dataList;
+	}
+
+	public AssemblyAdapter(Object... dataArray) {
+		if(dataArray != null && dataArray.length > 0){
+			this.dataList = new ArrayList(dataArray.length);
+			Collections.addAll(dataList, dataArray);
+		}
 	}
 
 	public void addItemFactory(AssemblyItemFactory assemblyItemFactory){
