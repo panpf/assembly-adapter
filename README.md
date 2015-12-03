@@ -16,7 +16,7 @@ English（From Baidu translate）
 >* You don't need to write a new Adapter again, just for each layout AssemblyItemFactory write a item can, and follow the AssemblyItemFactory structure of the code logic will never clear
 >* You can use more than one AssemblyItemFactory, each AssemblyItemFactory on behalf of a kind of itemType
 >* Comes with more features, you just need to implement a dedicated to load more of the tail
->Supports BaseAdapter, BaseExpandableListAdapter, and RecyclerView.Adapter, has covered all the Android development of Adapter
+>* Supports BaseAdapter, BaseExpandableListAdapter, and RecyclerView.Adapter, has covered all the Android development of Adapter
 >* There is no need to worry about performance issues without using any reflection related code
 >* AssemblyItemFactory is very good and can meet any of your needs.
 
