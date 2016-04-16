@@ -24,6 +24,7 @@ public class AssemblyAdapter extends BaseAdapter{
 		this.dataList = dataList;
 	}
 
+	@SuppressWarnings("unused")
 	public AssemblyAdapter(Object... dataArray) {
 		if(dataArray != null && dataArray.length > 0){
 			this.dataList = new ArrayList(dataArray.length);
@@ -47,8 +48,19 @@ public class AssemblyAdapter extends BaseAdapter{
 		itemFactoryList.add(assemblyItemFactory);
 	}
 
+	@SuppressWarnings("unused")
 	public List getDataList() {
 		return dataList;
+	}
+
+	@SuppressWarnings("unused")
+	public void setDataList(List dataList) {
+		this.dataList = dataList;
+	}
+
+	@SuppressWarnings("unused")
+	public List<AssemblyItemFactory> getItemFactoryList() {
+		return itemFactoryList;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -87,6 +99,7 @@ public class AssemblyAdapter extends BaseAdapter{
 	/**
 	 * 关闭加载更多功能
 	 */
+	@SuppressWarnings("unused")
 	public void disableLoadMore() {
 		if(loadMoreListItemFactory != null){
 			loadMoreListItemFactory.loadMoreRunning = false;
@@ -108,6 +121,7 @@ public class AssemblyAdapter extends BaseAdapter{
 	/**
 	 * 加载更过失败，请求失败的时候需要调用此方法，会显示错误提示，并可点击重新加载
 	 */
+	@SuppressWarnings("unused")
 	public void loadMoreFailed(){
 		if(loadMoreListItemFactory != null){
 			loadMoreListItemFactory.loadMoreRunning = false;
@@ -118,15 +132,21 @@ public class AssemblyAdapter extends BaseAdapter{
 	}
 
 	/**
-	 * 加载更多结束，当没有更多内容的时候你需要调用此方法
+	 * 设置加载更多是否结束，当没有更多内容的时候你需要调用此方法，然后会显示结束的文案并且不再加载更多
+	 * @param end 加载更多是否结束
 	 */
-	public void loadMoreEnd(){
+	@SuppressWarnings("unused")
+	public void setLoadMoreEnd(boolean end){
 		if(loadMoreListItemFactory != null){
 			loadMoreListItemFactory.loadMoreRunning = false;
-			loadMoreListItemFactory.end = true;
+			loadMoreListItemFactory.end = end;
 		}
 		if(loadMoreListItem != null){
-			loadMoreListItem.showEnd();
+			if(end){
+				loadMoreListItem.showEnd();
+			}else{
+				loadMoreListItem.showLoading();
+			}
 		}
 	}
 

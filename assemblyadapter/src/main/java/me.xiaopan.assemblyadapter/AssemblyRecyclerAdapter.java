@@ -23,6 +23,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
         this.dataList = dataList;
     }
 
+    @SuppressWarnings("unused")
     public AssemblyRecyclerAdapter(Object... dataArray) {
         if(dataArray != null && dataArray.length > 0){
             this.dataList = new ArrayList(dataArray.length);
@@ -46,8 +47,19 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
         itemFactoryList.add(itemFactory);
     }
 
+    @SuppressWarnings("unused")
     public List getDataList() {
         return dataList;
+    }
+
+    @SuppressWarnings("unused")
+    public void setDataList(List dataList) {
+        this.dataList = dataList;
+    }
+
+    @SuppressWarnings("unused")
+    public List<AssemblyRecyclerItemFactory> getItemFactoryList() {
+        return itemFactoryList;
     }
 
     @SuppressWarnings("unchecked")
@@ -86,6 +98,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     /**
      * 关闭加载更多功能
      */
+    @SuppressWarnings("unused")
     public void disableLoadMore() {
         if(loadMoreRecyclerItemFactory != null){
             loadMoreRecyclerItemFactory.loadMoreRunning = false;
@@ -107,6 +120,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     /**
      * 加载更过失败，请求失败的时候需要调用此方法，会显示错误提示，并可点击重新加载
      */
+    @SuppressWarnings("unused")
     public void loadMoreFailed(){
         if(loadMoreRecyclerItemFactory != null){
             loadMoreRecyclerItemFactory.loadMoreRunning = false;
@@ -117,15 +131,21 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     }
 
     /**
-     * 加载更多结束，当没有更多内容的时候你需要调用此方法
+     * 设置加载更多是否结束，当没有更多内容的时候你需要调用此方法，然后会显示结束的文案并且不再加载更多
+     * @param end 加载更多是否结束
      */
-    public void loadMoreEnd(){
+    @SuppressWarnings("unused")
+    public void setLoadMoreEnd(boolean end){
         if(loadMoreRecyclerItemFactory != null){
             loadMoreRecyclerItemFactory.loadMoreRunning = false;
-            loadMoreRecyclerItemFactory.end = true;
+            loadMoreRecyclerItemFactory.end = end;
         }
         if(loadMoreRecyclerItem != null){
-            loadMoreRecyclerItem.showEnd();
+            if(end){
+                loadMoreRecyclerItem.showEnd();
+            }else{
+                loadMoreRecyclerItem.showLoading();
+            }
         }
     }
 
