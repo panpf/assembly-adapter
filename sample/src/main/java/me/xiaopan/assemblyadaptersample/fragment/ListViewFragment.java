@@ -31,7 +31,7 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_list_view, container,false);
+        return inflater.inflate(R.layout.fragment_list_view, container, false);
     }
 
     @Override
@@ -40,15 +40,15 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
 
         listView = (ListView) view.findViewById(R.id.list_listViewFragment_content);
 
-        if(adapter != null){
+        if (adapter != null) {
             listView.setAdapter(adapter);
-        }else{
+        } else {
             loadData();
         }
     }
 
-    private void loadData(){
-        new AsyncTask<String, String, List<Object>>(){
+    private void loadData() {
+        new AsyncTask<String, String, List<Object>>() {
 
             @Override
             protected List<Object> doInBackground(String... params) {
@@ -56,28 +56,28 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
                 List<Object> dataList = new ArrayList<Object>(size);
                 boolean userStatus = true;
                 boolean gameStatus = true;
-                while (index < size){
-                    if(index % 2 == 0){
+                while (index < size) {
+                    if (index % 2 == 0) {
                         User user = new User();
                         user.headResId = R.mipmap.ic_launcher;
-                        user.name = "王大卫"+(index+nextStart+1);
-                        user.sex = userStatus?"男":"女";
-                        user.age = ""+(index+nextStart+1);
+                        user.name = "王大卫" + (index + nextStart + 1);
+                        user.sex = userStatus ? "男" : "女";
+                        user.age = "" + (index + nextStart + 1);
                         user.job = "实施工程师";
-                        user.monthly = ""+9000+index+nextStart+1;
+                        user.monthly = "" + 9000 + index + nextStart + 1;
                         dataList.add(user);
                         userStatus = !userStatus;
-                    }else{
+                    } else {
                         Game game = new Game();
                         game.iconResId = R.mipmap.ic_launcher;
-                        game.name = "英雄联盟"+(index+nextStart+1);
-                        game.like = gameStatus?"不喜欢":"喜欢";
+                        game.name = "英雄联盟" + (index + nextStart + 1);
+                        game.like = gameStatus ? "不喜欢" : "喜欢";
                         dataList.add(game);
                         gameStatus = !gameStatus;
                     }
                     index++;
                 }
-                if(nextStart != 0){
+                if (nextStart != 0) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -89,24 +89,22 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
 
             @Override
             protected void onPostExecute(List<Object> objects) {
-                if(getActivity() == null){
+                if (getActivity() == null) {
                     return;
                 }
 
                 nextStart += size;
-                if(adapter == null){
+                if (adapter == null) {
                     adapter = new AssemblyAdapter(objects);
                     adapter.addItemFactory(new UserListItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameListItemFactory(getActivity().getBaseContext()));
-                    if(nextStart < 100){
+                    if (nextStart < 100) {
                         adapter.enableLoadMore(new LoadMoreListItemFactory(ListViewFragment.this));
                     }
                     listView.setAdapter(adapter);
-                }else{
+                } else {
                     adapter.loadMoreFinished();
-                    if(nextStart == 100){
-                        adapter.loadMoreEnd();
-                    }
+                    adapter.setLoadMoreEnd(nextStart == 100);
                     adapter.append(objects);
                 }
             }
