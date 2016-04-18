@@ -27,7 +27,7 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
 
     @Override
     public GameRecyclerItem createAssemblyItem(ViewGroup parent) {
-        return new GameRecyclerItem(inflateView(R.layout.list_item_game, parent), this);
+        return new GameRecyclerItem(inflateView(R.layout.list_item_game, parent));
     }
 
     public interface EventListener{
@@ -59,13 +59,13 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
         }
     }
 
-    public static class GameRecyclerItem extends AssemblyRecyclerItem<Game, GameRecyclerItemFactory> {
+    public class GameRecyclerItem extends AssemblyRecyclerItem<Game> {
         private ImageView iconImageView;
         private TextView nameTextView;
         private TextView likeTextView;
 
-        protected GameRecyclerItem(View convertView, GameRecyclerItemFactory factory) {
-            super(convertView, factory);
+        protected GameRecyclerItem(View convertView) {
+            super(convertView);
         }
 
         @Override
@@ -80,19 +80,19 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
             iconImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickIcon(getLayoutPosition(), getData());
+                    eventListener.onClickIcon(getLayoutPosition(), getData());
                 }
             });
             nameTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickName(getLayoutPosition(), getData());
+                    eventListener.onClickName(getLayoutPosition(), getData());
                 }
             });
             likeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickLike(getLayoutPosition(), getData());
+                    eventListener.onClickLike(getLayoutPosition(), getData());
                 }
             });
         }

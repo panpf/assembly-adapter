@@ -4,12 +4,20 @@ import android.content.Context;
 import android.view.View;
 
 public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactory<AbstractLoadMoreListItemFactory.AbstractLoadMoreListItem> {
-    boolean loadMoreRunning;
-    boolean end;
+    private boolean loadMoreRunning;
+    private boolean end;
     private OnLoadMoreListener eventListener;
 
     public AbstractLoadMoreListItemFactory(OnLoadMoreListener eventListener) {
         this.eventListener = eventListener;
+    }
+
+    public void setEnd(boolean end) {
+        this.end = end;
+    }
+
+    public void setLoadMoreRunning(boolean loadMoreRunning) {
+        this.loadMoreRunning = loadMoreRunning;
     }
 
     @Override
@@ -17,9 +25,9 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
         return false;
     }
 
-    public abstract static class AbstractLoadMoreListItem extends AssemblyItem<String, AbstractLoadMoreListItemFactory>{
-        protected AbstractLoadMoreListItem(View convertView, AbstractLoadMoreListItemFactory baseFactory) {
-            super(convertView, baseFactory);
+    public abstract class AbstractLoadMoreListItem extends AssemblyItem<String>{
+        protected AbstractLoadMoreListItem(View convertView) {
+            super(convertView);
         }
 
         public abstract View getErrorRetryView();
@@ -35,8 +43,8 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
             getErrorRetryView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getItemFactory().eventListener != null) {
-                        getItemFactory().loadMoreRunning = false;
+                    if (eventListener != null) {
+                        loadMoreRunning = false;
                         setData(getPosition(), getData());
                     }
                 }
@@ -45,13 +53,13 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
 
         @Override
         public void onSetData(int position, String s) {
-            if(itemFactory.end){
+            if(end){
                 showEnd();
             }else{
                 showLoading();
-                if (itemFactory.eventListener != null && !itemFactory.loadMoreRunning) {
-                    itemFactory.loadMoreRunning = true;
-                    itemFactory.eventListener.onLoadMore(itemFactory.adapter);
+                if (eventListener != null && !loadMoreRunning) {
+                    loadMoreRunning = true;
+                    eventListener.onLoadMore(adapter);
                 }
             }
         }

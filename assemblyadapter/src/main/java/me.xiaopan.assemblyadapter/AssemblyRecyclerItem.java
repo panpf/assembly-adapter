@@ -4,16 +4,11 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public abstract class AssemblyRecyclerItem<BEAN, ITEM_FACTORY extends AssemblyRecyclerItemFactory> extends RecyclerView.ViewHolder{
-    protected ITEM_FACTORY itemFactory;
+public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder{
     protected BEAN data;
 
-    protected AssemblyRecyclerItem(View convertView, ITEM_FACTORY itemFactory) {
+    protected AssemblyRecyclerItem(View convertView) {
         super(convertView);
-        if(itemFactory == null){
-            throw new IllegalArgumentException("param itemFactory is null");
-        }
-        this.itemFactory = itemFactory;
         onFindViews(convertView);
         onConfigViews(convertView.getContext());
     }
@@ -31,10 +26,6 @@ public abstract class AssemblyRecyclerItem<BEAN, ITEM_FACTORY extends AssemblyRe
 
     public final View getConvertView(){
         return itemView;
-    }
-
-    public ITEM_FACTORY getItemFactory() {
-        return itemFactory;
     }
 
     public BEAN getData() {

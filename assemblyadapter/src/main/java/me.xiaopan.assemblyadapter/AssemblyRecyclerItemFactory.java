@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class AssemblyRecyclerItemFactory<ITEM extends AssemblyRecyclerItem>{
-    protected int itemType;
-    protected AssemblyRecyclerAdapter adapter;
+    private int itemType;
+    private AssemblyRecyclerAdapter adapter;
 
     public int getItemType() {
         return itemType;

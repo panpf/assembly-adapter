@@ -15,16 +15,16 @@ public class LoadMoreRecyclerItemFactory extends AbstractLoadMoreRecyclerItemFac
 
     @Override
     public AbstractLoadMoreRecyclerItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreRecyclerItem(inflateView(R.layout.list_item_load_more, parent), this);
+        return new LoadMoreRecyclerItem(inflateView(R.layout.list_item_load_more, parent));
     }
 
-    public static class LoadMoreRecyclerItem extends AbstractLoadMoreRecyclerItem {
+    public class LoadMoreRecyclerItem extends AbstractLoadMoreRecyclerItem {
         private View loadingView;
         private View errorView;
         private View endView;
 
-        protected LoadMoreRecyclerItem(View convertView, AbstractLoadMoreRecyclerItemFactory baseFactory) {
-            super(convertView, baseFactory);
+        protected LoadMoreRecyclerItem(View convertView) {
+            super(convertView);
         }
 
         @Override

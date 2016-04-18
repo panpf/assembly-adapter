@@ -17,14 +17,14 @@ public class SpinnerItemFactory extends AssemblyItemFactory<SpinnerItemFactory.S
 
     @Override
     public SpinnerItem createAssemblyItem(ViewGroup parent) {
-        return new SpinnerItem(inflateView(android.R.layout.simple_list_item_1, parent), this);
+        return new SpinnerItem(inflateView(android.R.layout.simple_list_item_1, parent));
     }
 
-    public static class SpinnerItem extends AssemblyItem<String, SpinnerItemFactory>{
+    public static class SpinnerItem extends AssemblyItem<String>{
         TextView textView;
 
-        protected SpinnerItem(View convertView, SpinnerItemFactory itemFactory) {
-            super(convertView, itemFactory);
+        protected SpinnerItem(View convertView) {
+            super(convertView);
         }
 
         @Override

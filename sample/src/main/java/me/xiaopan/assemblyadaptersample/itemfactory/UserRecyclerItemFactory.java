@@ -27,7 +27,7 @@ public class UserRecyclerItemFactory extends AssemblyRecyclerItemFactory<UserRec
 
     @Override
     public UserRecyclerItem createAssemblyItem(ViewGroup parent) {
-        return new UserRecyclerItem(inflateView(R.layout.list_item_user, parent), this);
+        return new UserRecyclerItem(inflateView(R.layout.list_item_user, parent));
     }
 
     public interface EventListener{
@@ -77,15 +77,15 @@ public class UserRecyclerItemFactory extends AssemblyRecyclerItemFactory<UserRec
         }
     }
 
-    public static class UserRecyclerItem extends AssemblyRecyclerItem<User, UserRecyclerItemFactory> {
+    public class UserRecyclerItem extends AssemblyRecyclerItem<User> {
         private ImageView headImageView;
         private TextView nameTextView;
         private TextView sexTextView;
         private TextView ageTextView;
         private TextView jobTextView;
 
-        protected UserRecyclerItem(View convertView, UserRecyclerItemFactory factory) {
-            super(convertView, factory);
+        protected UserRecyclerItem(View convertView) {
+            super(convertView);
         }
 
         @Override
@@ -102,31 +102,31 @@ public class UserRecyclerItemFactory extends AssemblyRecyclerItemFactory<UserRec
             headImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickHead(getLayoutPosition(), getData());
+                    eventListener.onClickHead(getLayoutPosition(), getData());
                 }
             });
             nameTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickName(getLayoutPosition(), getData());
+                    eventListener.onClickName(getLayoutPosition(), getData());
                 }
             });
             sexTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickSex(getLayoutPosition(), getData());
+                    eventListener.onClickSex(getLayoutPosition(), getData());
                 }
             });
             ageTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickAge(getLayoutPosition(), getData());
+                    eventListener.onClickAge(getLayoutPosition(), getData());
                 }
             });
             jobTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickJob(getLayoutPosition(), getData());
+                    eventListener.onClickJob(getLayoutPosition(), getData());
                 }
             });
         }

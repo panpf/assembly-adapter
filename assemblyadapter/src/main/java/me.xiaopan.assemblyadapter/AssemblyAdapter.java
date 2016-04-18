@@ -88,8 +88,8 @@ public class AssemblyAdapter extends BaseAdapter{
 			}
 			setEnableLoadMore = true;
 			this.loadMoreListItemFactory = loadMoreListItemFactory;
-			this.loadMoreListItemFactory.loadMoreRunning = false;
-			this.loadMoreListItemFactory.end = false;
+			this.loadMoreListItemFactory.setLoadMoreRunning(false);
+			this.loadMoreListItemFactory.setEnd(false);
 			this.loadMoreListItemFactory.setAdapter(this);
 			this.loadMoreListItemFactory.setItemType(itemFactoryList.size());
 			notifyDataSetChanged();
@@ -102,8 +102,8 @@ public class AssemblyAdapter extends BaseAdapter{
 	@SuppressWarnings("unused")
 	public void disableLoadMore() {
 		if(loadMoreListItemFactory != null){
-			loadMoreListItemFactory.loadMoreRunning = false;
-			loadMoreListItemFactory.end = false;
+			loadMoreListItemFactory.setLoadMoreRunning(false);
+			loadMoreListItemFactory.setEnd(false);
 			loadMoreListItemFactory = null;
 			notifyDataSetChanged();
 		}
@@ -114,7 +114,7 @@ public class AssemblyAdapter extends BaseAdapter{
 	 */
 	public void loadMoreFinished(){
 		if(loadMoreListItemFactory != null){
-			loadMoreListItemFactory.loadMoreRunning = false;
+			loadMoreListItemFactory.setLoadMoreRunning(false);
 		}
 	}
 
@@ -124,7 +124,7 @@ public class AssemblyAdapter extends BaseAdapter{
 	@SuppressWarnings("unused")
 	public void loadMoreFailed(){
 		if(loadMoreListItemFactory != null){
-			loadMoreListItemFactory.loadMoreRunning = false;
+			loadMoreListItemFactory.setLoadMoreRunning(false);
 		}
 		if(loadMoreListItem != null){
 			loadMoreListItem.showErrorRetry();
@@ -138,8 +138,8 @@ public class AssemblyAdapter extends BaseAdapter{
 	@SuppressWarnings("unused")
 	public void setLoadMoreEnd(boolean end){
 		if(loadMoreListItemFactory != null){
-			loadMoreListItemFactory.loadMoreRunning = false;
-			loadMoreListItemFactory.end = end;
+			loadMoreListItemFactory.setLoadMoreRunning(false);
+			loadMoreListItemFactory.setEnd(end);
 		}
 		if(loadMoreListItem != null){
 			if(end){

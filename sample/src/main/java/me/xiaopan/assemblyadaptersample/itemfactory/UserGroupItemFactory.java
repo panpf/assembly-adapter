@@ -19,14 +19,14 @@ public class UserGroupItemFactory extends AssemblyGroupItemFactory<UserGroupItem
 
     @Override
     public UserGroupItem createAssemblyItem(ViewGroup parent) {
-        return new UserGroupItem(inflateView(R.layout.list_group_user, parent), this);
+        return new UserGroupItem(inflateView(R.layout.list_group_user, parent));
     }
 
-    public static class UserGroupItem extends AssemblyGroupItem<UserGroup, UserGroupItemFactory> {
+    public class UserGroupItem extends AssemblyGroupItem<UserGroup> {
         private TextView titleTextView;
 
-        protected UserGroupItem(View convertView, UserGroupItemFactory itemFactory) {
-            super(convertView, itemFactory);
+        protected UserGroupItem(View convertView) {
+            super(convertView);
         }
 
         @Override

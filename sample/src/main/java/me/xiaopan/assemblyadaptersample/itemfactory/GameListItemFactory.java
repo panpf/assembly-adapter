@@ -27,7 +27,7 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
 
     @Override
     public GameListItem createAssemblyItem(ViewGroup parent) {
-        return new GameListItem(inflateView(R.layout.list_item_game, parent), this);
+        return new GameListItem(inflateView(R.layout.list_item_game, parent));
     }
 
     public interface EventListener{
@@ -59,13 +59,13 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
         }
     }
 
-    public static class GameListItem extends AssemblyItem<Game, GameListItemFactory> {
+    public class GameListItem extends AssemblyItem<Game> {
         private ImageView iconImageView;
         private TextView nameTextView;
         private TextView likeTextView;
 
-        protected GameListItem(View convertView, GameListItemFactory factory) {
-            super(convertView, factory);
+        protected GameListItem(View convertView) {
+            super(convertView);
         }
 
         @Override
@@ -80,19 +80,19 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
             iconImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickIcon(getPosition(), getData());
+                    eventListener.onClickIcon(getPosition(), getData());
                 }
             });
             nameTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickName(getPosition(), getData());
+                    eventListener.onClickName(getPosition(), getData());
                 }
             });
             likeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickLike(getPosition(), getData());
+                    eventListener.onClickLike(getPosition(), getData());
                 }
             });
         }

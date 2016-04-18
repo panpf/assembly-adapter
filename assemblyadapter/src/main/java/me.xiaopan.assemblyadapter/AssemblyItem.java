@@ -3,21 +3,16 @@ package me.xiaopan.assemblyadapter;
 import android.content.Context;
 import android.view.View;
 
-public abstract class AssemblyItem<BEAN, ITEM_FACTORY extends AssemblyItemFactory> {
-    protected View convertView;
-    protected ITEM_FACTORY itemFactory;
-    protected int position;
-    protected BEAN data;
+public abstract class AssemblyItem<BEAN> {
+    private View convertView;
+    private int position;
+    private BEAN data;
 
-    protected AssemblyItem(View convertView, ITEM_FACTORY itemFactory) {
+    protected AssemblyItem(View convertView) {
         if(convertView == null){
             throw new IllegalArgumentException("param convertView is null");
         }
-        if(itemFactory == null){
-            throw new IllegalArgumentException("param itemFactory is null");
-        }
         this.convertView = convertView;
-        this.itemFactory = itemFactory;
         this.convertView.setTag(this);
         onFindViews(convertView);
         onConfigViews(convertView.getContext());
@@ -37,10 +32,6 @@ public abstract class AssemblyItem<BEAN, ITEM_FACTORY extends AssemblyItemFactor
 
     public final View getConvertView(){
         return this.convertView;
-    }
-
-    public ITEM_FACTORY getItemFactory() {
-        return itemFactory;
     }
 
     public BEAN getData() {

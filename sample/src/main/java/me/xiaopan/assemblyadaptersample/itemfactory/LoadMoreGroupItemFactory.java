@@ -15,16 +15,16 @@ public class LoadMoreGroupItemFactory extends AbstractLoadMoreGroupItemFactory {
 
     @Override
     public AbstractLoadMoreGroupItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreGroupItem(inflateView(R.layout.list_item_load_more, parent), this);
+        return new LoadMoreGroupItem(inflateView(R.layout.list_item_load_more, parent));
     }
 
-    public static class LoadMoreGroupItem extends AbstractLoadMoreGroupItem {
+    public class LoadMoreGroupItem extends AbstractLoadMoreGroupItem {
         private View loadingView;
         private View errorView;
         private View endView;
 
-        protected LoadMoreGroupItem(View convertView, AbstractLoadMoreGroupItemFactory baseFactory) {
-            super(convertView, baseFactory);
+        protected LoadMoreGroupItem(View convertView) {
+            super(convertView);
         }
 
         @Override

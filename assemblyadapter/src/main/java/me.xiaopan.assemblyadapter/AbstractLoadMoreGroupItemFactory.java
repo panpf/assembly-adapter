@@ -4,12 +4,20 @@ import android.content.Context;
 import android.view.View;
 
 public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItemFactory<AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem> {
-    boolean loadMoreRunning;
-    boolean end;
+    private boolean loadMoreRunning;
+    private boolean end;
     private OnGroupLoadMoreListener eventListener;
 
     public AbstractLoadMoreGroupItemFactory(OnGroupLoadMoreListener eventListener) {
         this.eventListener = eventListener;
+    }
+
+    public void setEnd(boolean end) {
+        this.end = end;
+    }
+
+    public void setLoadMoreRunning(boolean loadMoreRunning) {
+        this.loadMoreRunning = loadMoreRunning;
     }
 
     @Override
@@ -17,9 +25,9 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
         return false;
     }
 
-    public abstract static class AbstractLoadMoreGroupItem extends AssemblyGroupItem<String, AbstractLoadMoreGroupItemFactory>{
-        protected AbstractLoadMoreGroupItem(View convertView, AbstractLoadMoreGroupItemFactory baseFactory) {
-            super(convertView, baseFactory);
+    public abstract class AbstractLoadMoreGroupItem extends AssemblyGroupItem<String>{
+        protected AbstractLoadMoreGroupItem(View convertView) {
+            super(convertView);
         }
 
         public abstract View getErrorRetryView();
@@ -35,8 +43,8 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
             getErrorRetryView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getItemFactory().eventListener != null) {
-                        getItemFactory().loadMoreRunning = false;
+                    if (eventListener != null) {
+                        loadMoreRunning = false;
                         setData(groupPosition, isExpanded, data);
                     }
                 }
@@ -45,13 +53,13 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
 
         @Override
         public void onSetData(int groupPosition, boolean isExpanded, String s) {
-            if(itemFactory.end){
+            if(end){
                 showEnd();
             }else{
                 showLoading();
-                if (itemFactory.eventListener != null && !itemFactory.loadMoreRunning) {
-                    itemFactory.loadMoreRunning = true;
-                    itemFactory.eventListener.onLoadMore(itemFactory.adapter);
+                if (eventListener != null && !loadMoreRunning) {
+                    loadMoreRunning = true;
+                    eventListener.onLoadMore(adapter);
                 }
             }
         }

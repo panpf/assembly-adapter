@@ -87,8 +87,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
             }
             setEnableLoadMore = true;
             this.loadMoreRecyclerItemFactory = loadMoreRecyclerItemFactory;
-            this.loadMoreRecyclerItemFactory.loadMoreRunning = false;
-            this.loadMoreRecyclerItemFactory.end = false;
+            this.loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
+            this.loadMoreRecyclerItemFactory.setEnd(false);
             this.loadMoreRecyclerItemFactory.setAdapter(this);
             this.loadMoreRecyclerItemFactory.setItemType(itemFactoryList.size());
             notifyDataSetChanged();
@@ -101,8 +101,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     @SuppressWarnings("unused")
     public void disableLoadMore() {
         if(loadMoreRecyclerItemFactory != null){
-            loadMoreRecyclerItemFactory.loadMoreRunning = false;
-            loadMoreRecyclerItemFactory.end = false;
+            loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
+            loadMoreRecyclerItemFactory.setEnd(false);
             loadMoreRecyclerItemFactory = null;
             notifyDataSetChanged();
         }
@@ -113,7 +113,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
      */
     public void loadMoreFinished(){
         if(loadMoreRecyclerItemFactory != null){
-            loadMoreRecyclerItemFactory.loadMoreRunning = false;
+            loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
         }
     }
 
@@ -123,7 +123,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     @SuppressWarnings("unused")
     public void loadMoreFailed(){
         if(loadMoreRecyclerItemFactory != null){
-            loadMoreRecyclerItemFactory.loadMoreRunning = false;
+            loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
         }
         if(loadMoreRecyclerItem != null){
             loadMoreRecyclerItem.showErrorRetry();
@@ -137,8 +137,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     @SuppressWarnings("unused")
     public void setLoadMoreEnd(boolean end){
         if(loadMoreRecyclerItemFactory != null){
-            loadMoreRecyclerItemFactory.loadMoreRunning = false;
-            loadMoreRecyclerItemFactory.end = end;
+            loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
+            loadMoreRecyclerItemFactory.setEnd(end);
         }
         if(loadMoreRecyclerItem != null){
             if(end){

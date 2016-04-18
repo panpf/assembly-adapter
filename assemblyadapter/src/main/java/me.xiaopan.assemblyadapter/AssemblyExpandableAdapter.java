@@ -108,8 +108,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
             }
             setEnableLoadMore = true;
             this.loadMoreGroupItemFactory = loadMoreGroupItemFactory;
-            this.loadMoreGroupItemFactory.loadMoreRunning = false;
-            this.loadMoreGroupItemFactory.end = false;
+            this.loadMoreGroupItemFactory.setLoadMoreRunning(false);
+            this.loadMoreGroupItemFactory.setEnd(false);
             this.loadMoreGroupItemFactory.setAdapter(this);
             this.loadMoreGroupItemFactory.setItemType(groupItemFactoryList.size());
             notifyDataSetChanged();
@@ -122,8 +122,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
     @SuppressWarnings("unused")
     public void disableLoadMore() {
         if(loadMoreGroupItemFactory != null){
-            loadMoreGroupItemFactory.loadMoreRunning = false;
-            loadMoreGroupItemFactory.end = false;
+            loadMoreGroupItemFactory.setLoadMoreRunning(false);
+            loadMoreGroupItemFactory.setEnd(false);
             loadMoreGroupItemFactory = null;
             notifyDataSetChanged();
         }
@@ -134,7 +134,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
      */
     public void loadMoreFinished() {
         if(loadMoreGroupItemFactory != null){
-            loadMoreGroupItemFactory.loadMoreRunning = false;
+            loadMoreGroupItemFactory.setLoadMoreRunning(false);
         }
     }
 
@@ -144,7 +144,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
     @SuppressWarnings("unused")
     public void loadMoreFailed() {
         if(loadMoreGroupItemFactory != null){
-            loadMoreGroupItemFactory.loadMoreRunning = false;
+            loadMoreGroupItemFactory.setLoadMoreRunning(false);
         }
         if (loadMoreGroupItem != null) {
             loadMoreGroupItem.showErrorRetry();
@@ -158,8 +158,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
     @SuppressWarnings("unused")
     public void setLoadMoreEnd(boolean end){
         if(loadMoreGroupItemFactory != null){
-            loadMoreGroupItemFactory.loadMoreRunning = false;
-            loadMoreGroupItemFactory.end = end;
+            loadMoreGroupItemFactory.setLoadMoreRunning(false);
+            loadMoreGroupItemFactory.setEnd(end);
         }
         if(loadMoreGroupItem != null){
             if(end){

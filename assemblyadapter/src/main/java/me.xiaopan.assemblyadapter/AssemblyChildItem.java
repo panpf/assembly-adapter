@@ -3,23 +3,18 @@ package me.xiaopan.assemblyadapter;
 import android.content.Context;
 import android.view.View;
 
-public abstract class AssemblyChildItem<BEAN, ITEM_FACTORY extends AssemblyChildItemFactory> {
+public abstract class AssemblyChildItem<BEAN> {
     private View convertView;
-    private ITEM_FACTORY itemFactory;
     private int groupPosition;
     private int childPosition;
     private boolean isLastChild;
     private BEAN data;
 
-    protected AssemblyChildItem(View convertView, ITEM_FACTORY itemFactory) {
+    protected AssemblyChildItem(View convertView) {
         if(convertView == null){
             throw new IllegalArgumentException("param convertView is null");
         }
-        if(itemFactory == null){
-            throw new IllegalArgumentException("param itemFactory is null");
-        }
         this.convertView = convertView;
-        this.itemFactory = itemFactory;
         this.convertView.setTag(this);
         onFindViews(convertView);
         onConfigViews(convertView.getContext());
@@ -43,10 +38,6 @@ public abstract class AssemblyChildItem<BEAN, ITEM_FACTORY extends AssemblyChild
         return this.convertView;
     }
 
-    public ITEM_FACTORY getItemFactory() {
-        return itemFactory;
-    }
-
     public int getChildPosition() {
         return childPosition;
     }
@@ -55,10 +46,12 @@ public abstract class AssemblyChildItem<BEAN, ITEM_FACTORY extends AssemblyChild
         return data;
     }
 
+    @SuppressWarnings("unused")
     public int getGroupPosition() {
         return groupPosition;
     }
 
+    @SuppressWarnings("unused")
     public boolean isLastChild() {
         return isLastChild;
     }
