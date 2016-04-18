@@ -111,7 +111,7 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 
     @Override
     public UserListItem createAssemblyItem(ViewGroup parent) {
-        return new UserListItem(parent, this);
+        return new UserListItem(inflateView(R.layout.list_item_user, parent), this);
     }
 
     public static class UserListItem extends AssemblyItem<User, UserListItemFactory> {
@@ -121,8 +121,8 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
         private TextView ageTextView;
         private TextView jobTextView;
 
-        protected UserListItem(ViewGroup parent, UserListItemFactory factory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_user, parent, false), factory);
+        protected UserListItem(View convertView, UserListItemFactory factory) {
+            super(convertView, factory);
         }
 
         @Override
@@ -221,7 +221,7 @@ public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
 
     @Override
     public AbstractLoadMoreListItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreListItem(parent, this);
+        return new LoadMoreListItem(inflateView(R.layout.list_item_load_more, parent), this);
     }
 
     public static class LoadMoreListItem extends AbstractLoadMoreListItem {
@@ -229,8 +229,8 @@ public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
         private View errorView;
         private View endView;
 
-        protected LoadMoreListItem(ViewGroup parent, AbstractLoadMoreListItemFactory baseFactory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_load_more, parent, false), baseFactory);
+        protected LoadMoreListItem(View convertView, AbstractLoadMoreListItemFactory baseFactory) {
+            super(convertView, baseFactory);
         }
 
         @Override

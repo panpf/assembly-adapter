@@ -1,15 +1,14 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyadaptersample.bean.GameGroup;
 import me.xiaopan.assemblyadapter.AssemblyGroupItem;
 import me.xiaopan.assemblyadapter.AssemblyGroupItemFactory;
+import me.xiaopan.assemblyadaptersample.R;
+import me.xiaopan.assemblyadaptersample.bean.GameGroup;
 
 public class GameGroupItemFactory extends AssemblyGroupItemFactory<GameGroupItemFactory.GameGroupItem>{
 
@@ -20,14 +19,14 @@ public class GameGroupItemFactory extends AssemblyGroupItemFactory<GameGroupItem
 
     @Override
     public GameGroupItem createAssemblyItem(ViewGroup parent) {
-        return new GameGroupItem(parent, this);
+        return new GameGroupItem(inflateView(R.layout.list_group_game, parent), this);
     }
 
     public static class GameGroupItem extends AssemblyGroupItem<GameGroup, GameGroupItemFactory> {
         private TextView titleTextView;
 
-        protected GameGroupItem(ViewGroup parent, GameGroupItemFactory itemFactory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_group_game, parent, false), itemFactory);
+        protected GameGroupItem(View convertView, GameGroupItemFactory itemFactory) {
+            super(convertView, itemFactory);
         }
 
         @Override

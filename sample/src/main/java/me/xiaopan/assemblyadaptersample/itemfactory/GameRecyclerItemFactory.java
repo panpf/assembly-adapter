@@ -1,17 +1,16 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItem;
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItemFactory;
+import me.xiaopan.assemblyadaptersample.R;
+import me.xiaopan.assemblyadaptersample.bean.Game;
 
 public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRecyclerItemFactory.GameRecyclerItem> {
 
@@ -28,7 +27,7 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
 
     @Override
     public GameRecyclerItem createAssemblyItem(ViewGroup parent) {
-        return new GameRecyclerItem(parent, this);
+        return new GameRecyclerItem(inflateView(R.layout.list_item_game, parent), this);
     }
 
     public interface EventListener{
@@ -65,8 +64,8 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
         private TextView nameTextView;
         private TextView likeTextView;
 
-        protected GameRecyclerItem(ViewGroup parent, GameRecyclerItemFactory factory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_game, parent, false), factory);
+        protected GameRecyclerItem(View convertView, GameRecyclerItemFactory factory) {
+            super(convertView, factory);
         }
 
         @Override

@@ -1,15 +1,14 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyadaptersample.bean.UserGroup;
 import me.xiaopan.assemblyadapter.AssemblyGroupItem;
 import me.xiaopan.assemblyadapter.AssemblyGroupItemFactory;
+import me.xiaopan.assemblyadaptersample.R;
+import me.xiaopan.assemblyadaptersample.bean.UserGroup;
 
 public class UserGroupItemFactory extends AssemblyGroupItemFactory<UserGroupItemFactory.UserGroupItem>{
 
@@ -20,14 +19,14 @@ public class UserGroupItemFactory extends AssemblyGroupItemFactory<UserGroupItem
 
     @Override
     public UserGroupItem createAssemblyItem(ViewGroup parent) {
-        return new UserGroupItem(parent, this);
+        return new UserGroupItem(inflateView(R.layout.list_group_user, parent), this);
     }
 
     public static class UserGroupItem extends AssemblyGroupItem<UserGroup, UserGroupItemFactory> {
         private TextView titleTextView;
 
-        protected UserGroupItem(ViewGroup parent, UserGroupItemFactory itemFactory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_group_user, parent, false), itemFactory);
+        protected UserGroupItem(View convertView, UserGroupItemFactory itemFactory) {
+            super(convertView, itemFactory);
         }
 
         @Override

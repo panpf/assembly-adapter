@@ -1,12 +1,11 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import me.xiaopan.assemblyadapter.AbstractLoadMoreGroupItemFactory;
 import me.xiaopan.assemblyadapter.OnGroupLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyadapter.AbstractLoadMoreGroupItemFactory;
 
 public class LoadMoreGroupItemFactory extends AbstractLoadMoreGroupItemFactory {
 
@@ -16,7 +15,7 @@ public class LoadMoreGroupItemFactory extends AbstractLoadMoreGroupItemFactory {
 
     @Override
     public AbstractLoadMoreGroupItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreGroupItem(parent, this);
+        return new LoadMoreGroupItem(inflateView(R.layout.list_item_load_more, parent), this);
     }
 
     public static class LoadMoreGroupItem extends AbstractLoadMoreGroupItem {
@@ -24,8 +23,8 @@ public class LoadMoreGroupItemFactory extends AbstractLoadMoreGroupItemFactory {
         private View errorView;
         private View endView;
 
-        protected LoadMoreGroupItem(ViewGroup parent, AbstractLoadMoreGroupItemFactory baseFactory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_load_more, parent, false), baseFactory);
+        protected LoadMoreGroupItem(View convertView, AbstractLoadMoreGroupItemFactory baseFactory) {
+            super(convertView, baseFactory);
         }
 
         @Override

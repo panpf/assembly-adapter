@@ -1,7 +1,6 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,7 +27,7 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
 
     @Override
     public GameListItem createAssemblyItem(ViewGroup parent) {
-        return new GameListItem(parent, this);
+        return new GameListItem(inflateView(R.layout.list_item_game, parent), this);
     }
 
     public interface EventListener{
@@ -65,8 +64,8 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
         private TextView nameTextView;
         private TextView likeTextView;
 
-        protected GameListItem(ViewGroup parent, GameListItemFactory factory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_game, parent, false), factory);
+        protected GameListItem(View convertView, GameListItemFactory factory) {
+            super(convertView, factory);
         }
 
         @Override

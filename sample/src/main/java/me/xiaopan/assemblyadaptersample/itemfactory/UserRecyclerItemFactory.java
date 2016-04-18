@@ -1,17 +1,16 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItem;
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItemFactory;
+import me.xiaopan.assemblyadaptersample.R;
+import me.xiaopan.assemblyadaptersample.bean.User;
 
 public class UserRecyclerItemFactory extends AssemblyRecyclerItemFactory<UserRecyclerItemFactory.UserRecyclerItem> {
 
@@ -28,7 +27,7 @@ public class UserRecyclerItemFactory extends AssemblyRecyclerItemFactory<UserRec
 
     @Override
     public UserRecyclerItem createAssemblyItem(ViewGroup parent) {
-        return new UserRecyclerItem(parent, this);
+        return new UserRecyclerItem(inflateView(R.layout.list_item_user, parent), this);
     }
 
     public interface EventListener{
@@ -85,8 +84,8 @@ public class UserRecyclerItemFactory extends AssemblyRecyclerItemFactory<UserRec
         private TextView ageTextView;
         private TextView jobTextView;
 
-        protected UserRecyclerItem(ViewGroup parent, UserRecyclerItemFactory factory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_user, parent, false), factory);
+        protected UserRecyclerItem(View convertView, UserRecyclerItemFactory factory) {
+            super(convertView, factory);
         }
 
         @Override

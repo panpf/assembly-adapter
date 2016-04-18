@@ -1,12 +1,11 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import me.xiaopan.assemblyadapter.AbstractLoadMoreRecyclerItemFactory;
 import me.xiaopan.assemblyadapter.OnRecyclerLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyadapter.AbstractLoadMoreRecyclerItemFactory;
 
 public class LoadMoreRecyclerItemFactory extends AbstractLoadMoreRecyclerItemFactory {
 
@@ -16,7 +15,7 @@ public class LoadMoreRecyclerItemFactory extends AbstractLoadMoreRecyclerItemFac
 
     @Override
     public AbstractLoadMoreRecyclerItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreRecyclerItem(parent, this);
+        return new LoadMoreRecyclerItem(inflateView(R.layout.list_item_load_more, parent), this);
     }
 
     public static class LoadMoreRecyclerItem extends AbstractLoadMoreRecyclerItem {
@@ -24,8 +23,8 @@ public class LoadMoreRecyclerItemFactory extends AbstractLoadMoreRecyclerItemFac
         private View errorView;
         private View endView;
 
-        protected LoadMoreRecyclerItem(ViewGroup parent, AbstractLoadMoreRecyclerItemFactory baseFactory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_load_more, parent, false), baseFactory);
+        protected LoadMoreRecyclerItem(View convertView, AbstractLoadMoreRecyclerItemFactory baseFactory) {
+            super(convertView, baseFactory);
         }
 
         @Override

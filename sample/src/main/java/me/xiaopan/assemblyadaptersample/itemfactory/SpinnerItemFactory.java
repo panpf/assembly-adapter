@@ -1,7 +1,6 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,7 +17,7 @@ public class SpinnerItemFactory extends AssemblyItemFactory<SpinnerItemFactory.S
 
     @Override
     public SpinnerItem createAssemblyItem(ViewGroup parent) {
-        return new SpinnerItem(LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false), this);
+        return new SpinnerItem(inflateView(android.R.layout.simple_list_item_1, parent), this);
     }
 
     public static class SpinnerItem extends AssemblyItem<String, SpinnerItemFactory>{

@@ -1,7 +1,6 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,7 +27,7 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 
     @Override
     public UserListItem createAssemblyItem(ViewGroup parent) {
-        return new UserListItem(parent, this);
+        return new UserListItem(inflateView(R.layout.list_item_user, parent), this);
     }
 
     public static class UserListItem extends AssemblyItem<User, UserListItemFactory> {
@@ -38,8 +37,8 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
         private TextView ageTextView;
         private TextView jobTextView;
 
-        protected UserListItem(ViewGroup parent, UserListItemFactory factory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_user, parent, false), factory);
+        protected UserListItem(View convertView, UserListItemFactory factory) {
+            super(convertView, factory);
         }
 
         @Override

@@ -1,17 +1,16 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import me.xiaopan.assemblyadaptersample.R;
-import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadapter.AssemblyChildItem;
 import me.xiaopan.assemblyadapter.AssemblyChildItemFactory;
+import me.xiaopan.assemblyadaptersample.R;
+import me.xiaopan.assemblyadaptersample.bean.User;
 
 public class UserChildItemFactory extends AssemblyChildItemFactory<UserChildItemFactory.UserChildItem> {
 
@@ -28,7 +27,7 @@ public class UserChildItemFactory extends AssemblyChildItemFactory<UserChildItem
 
     @Override
     public UserChildItem createAssemblyItem(ViewGroup parent) {
-        return new UserChildItem(parent, this);
+        return new UserChildItem(inflateView(R.layout.list_item_user, parent), this);
     }
 
     public interface EventListener{
@@ -85,8 +84,8 @@ public class UserChildItemFactory extends AssemblyChildItemFactory<UserChildItem
         private TextView ageTextView;
         private TextView jobTextView;
 
-        protected UserChildItem(ViewGroup parent, UserChildItemFactory factory) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_user, parent, false), factory);
+        protected UserChildItem(View convertView, UserChildItemFactory factory) {
+            super(convertView, factory);
         }
 
         @Override
