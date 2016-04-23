@@ -28,64 +28,13 @@ English（From Baidu translate）
 
 ```groovy
 dependencies{
-	compile 'me.xiaopan:assemblyadapter:1.1.0'
+	compile 'me.xiaopan:assemblyadapter:2.0.0'
 }
 ```
 
-``离线模式（Offline work）``
+最低兼容版本为API 7
 
-首先到[releases](https://github.com/xiaopansky/AssemblyAdapter/releases)页面下载最新版的aar包（`这里以assemblyadapter-1.1.0.aar为例，具体请以你下载到的文件名称为准`），并放到你module的libs目录下
-
-然后在你module的build.gradle文件中添加以下代码：
-```groovy
-repositories{
-    flatDir(){
-        dirs 'libs'
-    }
-}
-
-dependencies{
-    compile(name:'assemblyadapter-1.1.0', ext:'aar')
-}
-```
-最后同步一下Gradle即可
-
-#####使用Eclipse（Use Eclipse）
-1. 首先到[releases](https://github.com/xiaopansky/AssemblyAdapter/releases)页面下载最新版的aar包（`这里以assemblyadapter-1.1.0.aar为例，具体请以你下载到的文件名称为准`）
-2. 然后改后缀名为zip并解压
-2. 接下来将classes.jar文件重命名为assemblyadapter-1.1.0.jar
-3. 最后将assemblyadapter-1.1.0.jar拷贝到你的项目的libs目录下
-
-####2. 配置最低版本（Configure min sdk version）
-AssemblyAdapter最低兼容API v7
-
-#####使用Gradle（Use Gradle）
-在app/build.gradle文件文件中配置最低版本为7
-```groovy
-android {
-	...
-
-    defaultConfig {
-        minSdkVersion 7
-        ...
-    }
-}
-```
-
-#####使用Eclipse（Use Eclipse）
-在AndroidManifest.xml文件中配置最低版本为7
-```xml
-<manifest
-	...
-	>
-    <uses-sdk android:minSdkVersion="7"/>
-    <application>
-    ...
-    </application>
-</manifest>
-```
-
-###3. 使用AssemblyAdapter
+###2. 使用AssemblyAdapter
 ``这里只讲解AssemblyAdapter的用法，AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码``
 
 AssemblyAdapter分为三部分：
@@ -231,7 +180,7 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 >* AssemblyItemFactory和AssemblyItem的泛型是互相指定的，一定要好好配置，不可省略
 >* AssemblyItemFactory.isTarget()方法是用来匹配数据源中的数据的，只有返回true才会使用当前Factory
 >* AssemblyItemFactory.createAssemblyItem(ViewGroup)方法用来创建AssembleItem，返回的类型必须跟你在AssemblyItemFactory上配置的泛型一样
->* AssemblyItem的onFindViews(View)和onConfigViews(Context)方法分别用来初始化View和配置View，只会在创建AssemblyItem的时候调用一次
+>* AssemblyItem的onFindViews(View)和onConfigViews(Context)方法分别用来初始化View和配置View，只会在创建AssemblyItem的时候调用一次，另外在onFindViews方法中你可以直接使用内置的findViewById方法获取View
 >* AssembleItem.onSetData()方法是用来设置数据的，在每次getView()的时候都会调用
 >* 你可以通过getPosition()和getData()方法直接获取当前Item所对应的位置和数据对象，因此你在处理onClick的时候不需要再通过setTag来传递数据了，直接调方法获取即可。getData()返回的对象类型和你在AssemblyItem第一个泛型配置的一样，因此你也不需要再转换类型了
 >* 你可以像示例那样将所有需要处理的事件通过接口剥离出去，然后写一个专门的处理类，这样逻辑比较清晰
@@ -334,7 +283,7 @@ adapter.enableLoadMore(new LoadMoreListItemFactory(new OnLoadMoreListener(){
 注意：
 >* 加载完成了你需要调用adapter.loadMoreFinished()方法结束加载
 >* 如果加载失败了你需要调用adapter.loadMoreFailed()方法，调用此方法后会自动调用LoadMoreListItem的showErrorRetry()方法显示失败提示，并且点击错误提示可以重新触发onLoadMore()方法
->* 如果没有更多数据可以加载了你就调用adapter.loadMoreEnd()设置结束，loadMoreEnd()方法会自动调用LoadMoreListItem的showEnd()方法显示结束提示，或者调用adapter.disableLoadMore()方法关闭加载更多功能
+>* 如果没有更多数据可以加载了你就调用adapter.setLoadMoreEnd(true)设置结束，setLoadMoreEnd方法会自动调用LoadMoreListItem的showEnd()方法显示结束提示，或者调用adapter.disableLoadMore()方法关闭加载更多功能
 
 除此之外还有AssemblyExpandableAdapter和AssemblyRecyclerAdapter分别用在ExpandableListView和RecyclerView，其用法和和AssemblyAdapter完全一样，只是ItemFactory和Item所继承的类不一样而已，详情请参考其[sample](https://github.com/xiaopansky/AssemblyAdapter/tree/master/sample)源码
 
