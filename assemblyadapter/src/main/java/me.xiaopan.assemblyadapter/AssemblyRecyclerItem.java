@@ -2,12 +2,18 @@ package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder{
-    protected BEAN data;
+    private BEAN data;
 
-    protected AssemblyRecyclerItem(View convertView) {
+    public AssemblyRecyclerItem(int itemLayoutId, ViewGroup parent) {
+        this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
+    }
+
+    public AssemblyRecyclerItem(View convertView) {
         super(convertView);
         onFindViews(convertView);
         onConfigViews(convertView.getContext());
@@ -18,13 +24,21 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
         onSetData(position, bean);
     }
 
-    protected abstract void onFindViews(View convertView);
+    public View findViewById(int id){
+        return itemView.findViewById(id);
+    }
+
+    public View findViewWithTag(Object tag){
+        return itemView.findViewWithTag(tag);
+    }
+
+    protected abstract void onFindViews(View itemView);
 
     protected abstract void onConfigViews(Context context);
 
     protected abstract void onSetData(int position, BEAN bean);
 
-    public final View getConvertView(){
+    public final View getItemView(){
         return itemView;
     }
 

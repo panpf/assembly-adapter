@@ -98,6 +98,7 @@ AssemblyAdapter最大的特点如其名字所表达的意思是可以组装的�
 首先创建你的AssemblyItemFactory和AssemblyItem，如下所示：
 ```java
 public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory.UserListItem> {
+
     private EventListener eventListener;
 
     public UserListItemFactory(Context context) {
@@ -106,49 +107,70 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 
     @Override
     public boolean isTarget(Object itemObject) {
-        return object instanceof User;
+        return itemObject instanceof User;
     }
 
     @Override
     public UserListItem createAssemblyItem(ViewGroup parent) {
-        return new UserListItem(inflateView(R.layout.list_item_user, parent), this);
+        return new UserListItem(R.layout.list_item_user, parent);
     }
 
-    public static class UserListItem extends AssemblyItem<User, UserListItemFactory> {
+    public class UserListItem extends AssemblyItem<User> {
         private ImageView headImageView;
         private TextView nameTextView;
         private TextView sexTextView;
         private TextView ageTextView;
         private TextView jobTextView;
 
-        protected UserListItem(View convertView, UserListItemFactory factory) {
-            super(convertView, factory);
+        public UserListItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-	        // ... 在这里各种findViewById
-            headImageView = (ImageView) convertView.findViewById(R.id.image_userListItem_head);
-            nameTextView = (TextView) convertView.findViewById(R.id.text_userListItem_name);
-            sexTextView = (TextView) convertView.findViewById(R.id.text_userListItem_sex);
-            ageTextView = (TextView) convertView.findViewById(R.id.text_userListItem_age);
-            jobTextView = (TextView) convertView.findViewById(R.id.text_userListItem_job);
+        protected void onFindViews(View itemView) {
+            headImageView = (ImageView) findViewById(R.id.image_userListItem_head);
+            nameTextView = (TextView) findViewById(R.id.text_userListItem_name);
+            sexTextView = (TextView) findViewById(R.id.text_userListItem_sex);
+            ageTextView = (TextView) findViewById(R.id.text_userListItem_age);
+            jobTextView = (TextView) findViewById(R.id.text_userListItem_job);
         }
 
         @Override
         protected void onConfigViews(Context context) {
-            // ... 你可以在这里注册一些点击事件并根据需要设置View的大小
             headImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getItemFactory().eventListener.onClickHead(getPosition(), getData());
+                    eventListener.onClickHead(getPosition(), getData());
+                }
+            });
+            nameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eventListener.onClickName(getPosition(), getData());
+                }
+            });
+            sexTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eventListener.onClickSex(getPosition(), getData());
+                }
+            });
+            ageTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eventListener.onClickAge(getPosition(), getData());
+                }
+            });
+            jobTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eventListener.onClickJob(getPosition(), getData());
                 }
             });
         }
 
         @Override
         protected void onSetData(int position, User user) {
-	        // ... 在这里填充数据
             headImageView.setImageResource(user.headResId);
             nameTextView.setText(user.name);
             sexTextView.setText(user.sex);
@@ -159,6 +181,10 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 
     public interface EventListener{
         void onClickHead(int position, User user);
+        void onClickName(int position, User user);
+        void onClickSex(int position, User user);
+        void onClickAge(int position, User user);
+        void onClickJob(int position, User user);
     }
 
     private static class EventProcessor implements EventListener {
@@ -171,6 +197,32 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
         @Override
         public void onClickHead(int position, User user) {
             Toast.makeText(context, "别摸我头，讨厌啦！", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onClickName(int position, User user) {
+            Toast.makeText(context, "我就叫"+user.name+"，咋地不服啊！", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onClickSex(int position, User user) {
+            Toast.makeText(context, "我还就是"+user.sex+"个的了，有本事你捅我啊！", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onClickAge(int position, User user) {
+            String message;
+            if(user.sex.contains("男") || user.sex.contains("先生")){
+                message = "哥今年"+user.age+"岁了，该找媳妇了！";
+            }else{
+                message = "姐今年"+user.age+"岁了，该找人嫁了！";
+            }
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onClickJob(int position, User user) {
+            Toast.makeText(context, "我是名光荣的"+user.job, Toast.LENGTH_SHORT).show();
         }
     }
 }
@@ -215,29 +267,29 @@ listView.setAdapter(adapter);
 ```java
 public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
 
-    public LoadMoreListItemFactory(EventListener eventListener) {
+    public LoadMoreListItemFactory(OnLoadMoreListener eventListener) {
         super(eventListener);
     }
 
     @Override
     public AbstractLoadMoreListItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreListItem(inflateView(R.layout.list_item_load_more, parent), this);
+        return new LoadMoreListItem(R.layout.list_item_load_more, parent);
     }
 
-    public static class LoadMoreListItem extends AbstractLoadMoreListItem {
+    public class LoadMoreListItem extends AbstractLoadMoreListItem {
         private View loadingView;
         private View errorView;
         private View endView;
 
-        protected LoadMoreListItem(View convertView, AbstractLoadMoreListItemFactory baseFactory) {
-            super(convertView, baseFactory);
+        public LoadMoreListItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-            loadingView = convertView.findViewById(R.id.text_loadMoreListItem_loading);
-            errorView = convertView.findViewById(R.id.text_loadMoreListItem_error);
-            endView = convertView.findViewById(R.id.text_loadMoreListItem_end);
+        protected void onFindViews(View itemView) {
+            loadingView = findViewById(R.id.text_loadMoreListItem_loading);
+            errorView = findViewById(R.id.text_loadMoreListItem_error);
+            endView = findViewById(R.id.text_loadMoreListItem_end);
         }
 
         @Override

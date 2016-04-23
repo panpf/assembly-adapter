@@ -15,7 +15,7 @@ public class LoadMoreRecyclerItemFactory extends AbstractLoadMoreRecyclerItemFac
 
     @Override
     public AbstractLoadMoreRecyclerItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreRecyclerItem(inflateView(R.layout.list_item_load_more, parent));
+        return new LoadMoreRecyclerItem(R.layout.list_item_load_more, parent);
     }
 
     public class LoadMoreRecyclerItem extends AbstractLoadMoreRecyclerItem {
@@ -23,15 +23,15 @@ public class LoadMoreRecyclerItemFactory extends AbstractLoadMoreRecyclerItemFac
         private View errorView;
         private View endView;
 
-        protected LoadMoreRecyclerItem(View convertView) {
-            super(convertView);
+        public LoadMoreRecyclerItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-            loadingView = convertView.findViewById(R.id.text_loadMoreListItem_loading);
-            errorView = convertView.findViewById(R.id.text_loadMoreListItem_error);
-            endView = convertView.findViewById(R.id.text_loadMoreListItem_end);
+        protected void onFindViews(View itemView) {
+            loadingView = itemView.findViewById(R.id.text_loadMoreListItem_loading);
+            errorView = itemView.findViewById(R.id.text_loadMoreListItem_error);
+            endView = itemView.findViewById(R.id.text_loadMoreListItem_end);
         }
 
         @Override

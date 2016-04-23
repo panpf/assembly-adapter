@@ -214,7 +214,7 @@ public class AssemblyAdapter extends BaseAdapter{
 					Log.e(TAG, "getView() - Create AssemblyItem failed. position="+position+", ItemFactory="+loadMoreListItemFactory.getClass().getName());
 					return null;
 				}
-				convertView = assemblyItem.getConvertView();
+				convertView = assemblyItem.getItemView();
 			}
 
 			this.loadMoreListItem = (AbstractLoadMoreListItemFactory.AbstractLoadMoreListItem) convertView.getTag();
@@ -234,7 +234,7 @@ public class AssemblyAdapter extends BaseAdapter{
 					Log.e(TAG, "getView() - Create AssemblyItem failed. position="+position+", ItemFactory"+itemFactory.getClass().getName());
 					return null;
 				}
-				convertView = assemblyItem.getConvertView();
+				convertView = assemblyItem.getItemView();
 			}
 
 			((AssemblyItem) convertView.getTag()).setData(position, itemObject);

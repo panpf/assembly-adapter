@@ -1,23 +1,29 @@
 package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 public abstract class AssemblyChildItem<BEAN> {
-    private View convertView;
+    private View itemView;
     private int groupPosition;
     private int childPosition;
     private boolean isLastChild;
     private BEAN data;
 
-    protected AssemblyChildItem(View convertView) {
-        if(convertView == null){
-            throw new IllegalArgumentException("param convertView is null");
+    public AssemblyChildItem(int itemLayoutId, ViewGroup parent) {
+        this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
+    }
+
+    public AssemblyChildItem(View itemView) {
+        if(itemView == null){
+            throw new IllegalArgumentException("itemView may not be null");
         }
-        this.convertView = convertView;
-        this.convertView.setTag(this);
-        onFindViews(convertView);
-        onConfigViews(convertView.getContext());
+        this.itemView = itemView;
+        this.itemView.setTag(this);
+        onFindViews(itemView);
+        onConfigViews(itemView.getContext());
     }
 
     public void setData(int groupPosition, int childPosition, boolean isLastChild, BEAN bean){
@@ -28,14 +34,22 @@ public abstract class AssemblyChildItem<BEAN> {
         onSetData(groupPosition, childPosition, isLastChild, bean);
     }
 
-    protected abstract void onFindViews(View convertView);
+    public View findViewById(int id){
+        return itemView.findViewById(id);
+    }
+
+    public View findViewWithTag(Object tag){
+        return itemView.findViewWithTag(tag);
+    }
+
+    protected abstract void onFindViews(View itemView);
 
     protected abstract void onConfigViews(Context context);
 
     protected abstract void onSetData(int groupPosition, int childPosition, boolean isLastChild, BEAN bean);
 
-    public final View getConvertView(){
-        return this.convertView;
+    public final View getItemView(){
+        return this.itemView;
     }
 
     public int getChildPosition() {

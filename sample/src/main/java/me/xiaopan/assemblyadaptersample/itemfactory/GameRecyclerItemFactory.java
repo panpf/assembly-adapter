@@ -27,7 +27,7 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
 
     @Override
     public GameRecyclerItem createAssemblyItem(ViewGroup parent) {
-        return new GameRecyclerItem(inflateView(R.layout.list_item_game, parent));
+        return new GameRecyclerItem(R.layout.list_item_game, parent);
     }
 
     public interface EventListener{
@@ -64,15 +64,15 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
         private TextView nameTextView;
         private TextView likeTextView;
 
-        protected GameRecyclerItem(View convertView) {
-            super(convertView);
+        public GameRecyclerItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-            iconImageView = (ImageView) convertView.findViewById(R.id.image_gameListItem_icon);
-            nameTextView = (TextView) convertView.findViewById(R.id.text_gameListItem_name);
-            likeTextView = (TextView) convertView.findViewById(R.id.text_gameListItem_like);
+        protected void onFindViews(View itemView) {
+            iconImageView = (ImageView) itemView.findViewById(R.id.image_gameListItem_icon);
+            nameTextView = (TextView) itemView.findViewById(R.id.text_gameListItem_name);
+            likeTextView = (TextView) itemView.findViewById(R.id.text_gameListItem_like);
         }
 
         @Override

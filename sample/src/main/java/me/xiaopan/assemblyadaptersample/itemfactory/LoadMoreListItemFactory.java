@@ -15,7 +15,7 @@ public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
 
     @Override
     public AbstractLoadMoreListItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreListItem(inflateView(R.layout.list_item_load_more, parent));
+        return new LoadMoreListItem(R.layout.list_item_load_more, parent);
     }
 
     public class LoadMoreListItem extends AbstractLoadMoreListItem {
@@ -23,15 +23,15 @@ public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
         private View errorView;
         private View endView;
 
-        protected LoadMoreListItem(View convertView) {
-            super(convertView);
+        public LoadMoreListItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-            loadingView = convertView.findViewById(R.id.text_loadMoreListItem_loading);
-            errorView = convertView.findViewById(R.id.text_loadMoreListItem_error);
-            endView = convertView.findViewById(R.id.text_loadMoreListItem_end);
+        protected void onFindViews(View itemView) {
+            loadingView = findViewById(R.id.text_loadMoreListItem_loading);
+            errorView = findViewById(R.id.text_loadMoreListItem_error);
+            endView = findViewById(R.id.text_loadMoreListItem_end);
         }
 
         @Override

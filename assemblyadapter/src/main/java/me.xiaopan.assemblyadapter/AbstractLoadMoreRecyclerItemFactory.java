@@ -2,6 +2,7 @@ package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 
 public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecyclerItemFactory<AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem> {
     private boolean loadMoreRunning;
@@ -26,7 +27,11 @@ public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecycl
     }
 
     public abstract class AbstractLoadMoreRecyclerItem extends AssemblyRecyclerItem<String> {
-        protected AbstractLoadMoreRecyclerItem(View convertView) {
+        public AbstractLoadMoreRecyclerItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
+        }
+
+        public AbstractLoadMoreRecyclerItem(View convertView) {
             super(convertView);
         }
 

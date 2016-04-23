@@ -2,6 +2,7 @@ package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 
 public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactory<AbstractLoadMoreListItemFactory.AbstractLoadMoreListItem> {
     private boolean loadMoreRunning;
@@ -26,7 +27,11 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
     }
 
     public abstract class AbstractLoadMoreListItem extends AssemblyItem<String>{
-        protected AbstractLoadMoreListItem(View convertView) {
+        public AbstractLoadMoreListItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
+        }
+
+        public AbstractLoadMoreListItem(View convertView) {
             super(convertView);
         }
 

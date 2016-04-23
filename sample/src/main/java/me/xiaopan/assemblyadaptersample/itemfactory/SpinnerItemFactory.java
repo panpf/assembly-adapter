@@ -17,19 +17,19 @@ public class SpinnerItemFactory extends AssemblyItemFactory<SpinnerItemFactory.S
 
     @Override
     public SpinnerItem createAssemblyItem(ViewGroup parent) {
-        return new SpinnerItem(inflateView(android.R.layout.simple_list_item_1, parent));
+        return new SpinnerItem(android.R.layout.simple_list_item_1, parent);
     }
 
     public static class SpinnerItem extends AssemblyItem<String>{
         TextView textView;
 
-        protected SpinnerItem(View convertView) {
-            super(convertView);
+        public SpinnerItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-            textView = (TextView) convertView.findViewById(android.R.id.text1);
+        protected void onFindViews(View itemView) {
+            textView = (TextView) findViewById(android.R.id.text1);
         }
 
         @Override

@@ -2,6 +2,7 @@ package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 
 public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItemFactory<AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem> {
     private boolean loadMoreRunning;
@@ -26,7 +27,11 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
     }
 
     public abstract class AbstractLoadMoreGroupItem extends AssemblyGroupItem<String>{
-        protected AbstractLoadMoreGroupItem(View convertView) {
+        public AbstractLoadMoreGroupItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
+        }
+
+        public AbstractLoadMoreGroupItem(View convertView) {
             super(convertView);
         }
 
@@ -45,7 +50,7 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
                 public void onClick(View v) {
                     if (eventListener != null) {
                         loadMoreRunning = false;
-                        setData(groupPosition, isExpanded, data);
+                        setData(getGroupPosition(), isExpanded(), getData());
                     }
                 }
             });

@@ -1,21 +1,27 @@
 package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 public abstract class AssemblyItem<BEAN> {
-    private View convertView;
+    private View itemView;
     private int position;
     private BEAN data;
 
-    protected AssemblyItem(View convertView) {
-        if(convertView == null){
-            throw new IllegalArgumentException("param convertView is null");
+    public AssemblyItem(int itemLayoutId, ViewGroup parent) {
+        this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
+    }
+
+    public AssemblyItem(View itemView) {
+        if(itemView == null){
+            throw new IllegalArgumentException("itemView may not be null");
         }
-        this.convertView = convertView;
-        this.convertView.setTag(this);
-        onFindViews(convertView);
-        onConfigViews(convertView.getContext());
+        this.itemView = itemView;
+        this.itemView.setTag(this);
+        onFindViews(itemView);
+        onConfigViews(itemView.getContext());
     }
 
     public void setData(int position, BEAN bean){
@@ -24,14 +30,22 @@ public abstract class AssemblyItem<BEAN> {
         onSetData(position, bean);
     }
 
-    protected abstract void onFindViews(View convertView);
+    public View findViewById(int id){
+        return itemView.findViewById(id);
+    }
+
+    public View findViewWithTag(Object tag){
+        return itemView.findViewWithTag(tag);
+    }
+
+    protected abstract void onFindViews(View itemView);
 
     protected abstract void onConfigViews(Context context);
 
     protected abstract void onSetData(int position, BEAN bean);
 
-    public final View getConvertView(){
-        return this.convertView;
+    public final View getItemView(){
+        return this.itemView;
     }
 
     public BEAN getData() {

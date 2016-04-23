@@ -19,19 +19,19 @@ public class GameGroupItemFactory extends AssemblyGroupItemFactory<GameGroupItem
 
     @Override
     public GameGroupItem createAssemblyItem(ViewGroup parent) {
-        return new GameGroupItem(inflateView(R.layout.list_group_game, parent));
+        return new GameGroupItem(R.layout.list_group_game, parent);
     }
 
     public static class GameGroupItem extends AssemblyGroupItem<GameGroup> {
         private TextView titleTextView;
 
-        protected GameGroupItem(View convertView) {
-            super(convertView);
+        public GameGroupItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-            titleTextView = (TextView) convertView.findViewById(R.id.text_gameListGroup_name);
+        protected void onFindViews(View itemView) {
+            titleTextView = (TextView) findViewById(R.id.text_gameListGroup_name);
         }
 
         @Override

@@ -1,22 +1,28 @@
 package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 public abstract class AssemblyGroupItem<BEAN> {
-    protected View convertView;
-    protected int groupPosition;
-    protected boolean isExpanded;
-    protected BEAN data;
+    private View itemView;
+    private int groupPosition;
+    private boolean isExpanded;
+    private BEAN data;
 
-    protected AssemblyGroupItem(View convertView) {
-        if(convertView == null){
-            throw new IllegalArgumentException("param convertView is null");
+    public AssemblyGroupItem(int itemLayoutId, ViewGroup parent) {
+        this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
+    }
+
+    public AssemblyGroupItem(View itemView) {
+        if(itemView == null){
+            throw new IllegalArgumentException("itemView may not be null");
         }
-        this.convertView = convertView;
-        this.convertView.setTag(this);
-        onFindViews(convertView);
-        onConfigViews(convertView.getContext());
+        this.itemView = itemView;
+        this.itemView.setTag(this);
+        onFindViews(itemView);
+        onConfigViews(itemView.getContext());
     }
 
     public void setData(int groupPosition, boolean isExpanded, BEAN bean){
@@ -26,14 +32,22 @@ public abstract class AssemblyGroupItem<BEAN> {
         onSetData(groupPosition, isExpanded, bean);
     }
 
-    protected abstract void onFindViews(View convertView);
+    public View findViewById(int id){
+        return itemView.findViewById(id);
+    }
+
+    public View findViewWithTag(Object tag){
+        return itemView.findViewWithTag(tag);
+    }
+
+    protected abstract void onFindViews(View itemView);
 
     protected abstract void onConfigViews(Context context);
 
     protected abstract void onSetData(int groupPosition, boolean isExpanded, BEAN bean);
 
-    public final View getConvertView(){
-        return this.convertView;
+    public final View getItemView(){
+        return this.itemView;
     }
 
     public BEAN getData() {

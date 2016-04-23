@@ -27,7 +27,7 @@ public class UserChildItemFactory extends AssemblyChildItemFactory<UserChildItem
 
     @Override
     public UserChildItem createAssemblyItem(ViewGroup parent) {
-        return new UserChildItem(inflateView(R.layout.list_item_user, parent));
+        return new UserChildItem(R.layout.list_item_user, parent);
     }
 
     public interface EventListener{
@@ -84,17 +84,17 @@ public class UserChildItemFactory extends AssemblyChildItemFactory<UserChildItem
         private TextView ageTextView;
         private TextView jobTextView;
 
-        protected UserChildItem(View convertView) {
-            super(convertView);
+        public UserChildItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-            headImageView = (ImageView) convertView.findViewById(R.id.image_userListItem_head);
-            nameTextView = (TextView) convertView.findViewById(R.id.text_userListItem_name);
-            sexTextView = (TextView) convertView.findViewById(R.id.text_userListItem_sex);
-            ageTextView = (TextView) convertView.findViewById(R.id.text_userListItem_age);
-            jobTextView = (TextView) convertView.findViewById(R.id.text_userListItem_job);
+        protected void onFindViews(View itemView) {
+            headImageView = (ImageView) findViewById(R.id.image_userListItem_head);
+            nameTextView = (TextView) findViewById(R.id.text_userListItem_name);
+            sexTextView = (TextView) findViewById(R.id.text_userListItem_sex);
+            ageTextView = (TextView) findViewById(R.id.text_userListItem_age);
+            jobTextView = (TextView) findViewById(R.id.text_userListItem_job);
         }
 
         @Override

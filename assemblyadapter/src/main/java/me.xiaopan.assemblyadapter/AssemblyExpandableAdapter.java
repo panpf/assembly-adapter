@@ -306,7 +306,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
                     Log.e(TAG, "getView() - Create AssemblyGroupItem failed. groupPosition="+groupPosition+", GroupItemFactory="+loadMoreGroupItemFactory.getClass().getName());
                     return null;
                 }
-                convertView = assemblyItem.getConvertView();
+                convertView = assemblyItem.getItemView();
             }
 
             this.loadMoreGroupItem = (AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem) convertView.getTag();
@@ -326,7 +326,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
                     Log.e(TAG, "getGroupView() - Create AssemblyGroupItem failed. groupPosition=" + groupPosition + ", GroupItemFactory" + groupItemFactory.getClass().getName());
                     return null;
                 }
-                convertView = groupItem.getConvertView();
+                convertView = groupItem.getItemView();
             }
 
             ((AssemblyGroupItem) convertView.getTag()).setData(groupPosition, isExpanded, groupObject);
@@ -356,7 +356,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
                     Log.e(TAG, "getChildView() - Create AssemblyChildItem failed. groupPosition=" + groupPosition + ", childPosition=" + childPosition + ", ChildItemFactory" + childItemFactory.getClass().getName());
                     return null;
                 }
-                convertView = childItem.getConvertView();
+                convertView = childItem.getItemView();
             }
 
             ((AssemblyChildItem) convertView.getTag()).setData(groupPosition, childPosition, isLastChild, childObject);

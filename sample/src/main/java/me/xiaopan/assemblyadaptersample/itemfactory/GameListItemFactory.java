@@ -27,7 +27,7 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
 
     @Override
     public GameListItem createAssemblyItem(ViewGroup parent) {
-        return new GameListItem(inflateView(R.layout.list_item_game, parent));
+        return new GameListItem(R.layout.list_item_game, parent);
     }
 
     public interface EventListener{
@@ -64,15 +64,15 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
         private TextView nameTextView;
         private TextView likeTextView;
 
-        protected GameListItem(View convertView) {
-            super(convertView);
+        public GameListItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        protected void onFindViews(View convertView) {
-            iconImageView = (ImageView) convertView.findViewById(R.id.image_gameListItem_icon);
-            nameTextView = (TextView) convertView.findViewById(R.id.text_gameListItem_name);
-            likeTextView = (TextView) convertView.findViewById(R.id.text_gameListItem_like);
+        protected void onFindViews(View itemView) {
+            iconImageView = (ImageView) findViewById(R.id.image_gameListItem_icon);
+            nameTextView = (TextView) findViewById(R.id.text_gameListItem_name);
+            likeTextView = (TextView) findViewById(R.id.text_gameListItem_like);
         }
 
         @Override

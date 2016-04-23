@@ -1,7 +1,5 @@
 package me.xiaopan.assemblyadapter;
 
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class AssemblyItemFactory<ITEM extends AssemblyItem>{
@@ -27,8 +25,4 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem>{
     public abstract boolean isTarget(Object itemObject);
 
     public abstract ITEM createAssemblyItem(ViewGroup parent);
-
-    public View inflateView(int itemLayoutId, ViewGroup parent){
-        return LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false);
-    }
 }
