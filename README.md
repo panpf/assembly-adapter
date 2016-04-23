@@ -32,7 +32,7 @@ dependencies{
 }
 ```
 
-最低兼容版本为API 7
+最低兼容API 7
 
 ###2. 使用AssemblyAdapter
 ``这里只讲解AssemblyAdapter的用法，AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码``
