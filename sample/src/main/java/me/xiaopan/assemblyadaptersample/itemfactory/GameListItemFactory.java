@@ -69,7 +69,7 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
         }
 
         @Override
-        protected void onFindViews(View itemView) {
+        protected void onFindViews() {
             iconImageView = (ImageView) findViewById(R.id.image_gameListItem_icon);
             nameTextView = (TextView) findViewById(R.id.text_gameListItem_name);
             likeTextView = (TextView) findViewById(R.id.text_gameListItem_like);

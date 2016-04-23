@@ -89,7 +89,7 @@ public class UserChildItemFactory extends AssemblyChildItemFactory<UserChildItem
         }
 
         @Override
-        protected void onFindViews(View itemView) {
+        protected void onFindViews() {
             headImageView = (ImageView) findViewById(R.id.image_userListItem_head);
             nameTextView = (TextView) findViewById(R.id.text_userListItem_name);
             sexTextView = (TextView) findViewById(R.id.text_userListItem_sex);

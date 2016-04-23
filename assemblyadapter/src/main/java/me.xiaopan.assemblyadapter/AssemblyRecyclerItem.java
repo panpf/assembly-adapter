@@ -13,10 +13,10 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
     }
 
-    public AssemblyRecyclerItem(View convertView) {
-        super(convertView);
-        onFindViews(convertView);
-        onConfigViews(convertView.getContext());
+    public AssemblyRecyclerItem(View itemView) {
+        super(itemView);
+        onFindViews();
+        onConfigViews(itemView.getContext());
     }
 
     public void setData(int position, BEAN bean) {
@@ -32,7 +32,7 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
         return itemView.findViewWithTag(tag);
     }
 
-    protected abstract void onFindViews(View itemView);
+    protected abstract void onFindViews();
 
     protected abstract void onConfigViews(Context context);
 

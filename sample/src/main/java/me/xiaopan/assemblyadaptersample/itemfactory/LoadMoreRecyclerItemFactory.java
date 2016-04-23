@@ -28,7 +28,7 @@ public class LoadMoreRecyclerItemFactory extends AbstractLoadMoreRecyclerItemFac
         }
 
         @Override
-        protected void onFindViews(View itemView) {
+        protected void onFindViews() {
             loadingView = itemView.findViewById(R.id.text_loadMoreListItem_loading);
             errorView = itemView.findViewById(R.id.text_loadMoreListItem_error);
             endView = itemView.findViewById(R.id.text_loadMoreListItem_end);

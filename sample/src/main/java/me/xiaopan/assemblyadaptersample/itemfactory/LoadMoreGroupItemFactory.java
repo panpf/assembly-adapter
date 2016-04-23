@@ -28,7 +28,7 @@ public class LoadMoreGroupItemFactory extends AbstractLoadMoreGroupItemFactory {
         }
 
         @Override
-        protected void onFindViews(View itemView) {
+        protected void onFindViews() {
             loadingView = findViewById(R.id.text_loadMoreListItem_loading);
             errorView = findViewById(R.id.text_loadMoreListItem_error);
             endView = findViewById(R.id.text_loadMoreListItem_end);

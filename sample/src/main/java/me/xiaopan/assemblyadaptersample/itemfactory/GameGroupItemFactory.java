@@ -1,7 +1,6 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -30,7 +29,7 @@ public class GameGroupItemFactory extends AssemblyGroupItemFactory<GameGroupItem
         }
 
         @Override
-        protected void onFindViews(View itemView) {
+        protected void onFindViews() {
             titleTextView = (TextView) findViewById(R.id.text_gameListGroup_name);
         }
 

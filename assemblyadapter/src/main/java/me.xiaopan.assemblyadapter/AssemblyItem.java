@@ -20,7 +20,7 @@ public abstract class AssemblyItem<BEAN> {
         }
         this.itemView = itemView;
         this.itemView.setTag(this);
-        onFindViews(itemView);
+        onFindViews();
         onConfigViews(itemView.getContext());
     }
 
@@ -38,7 +38,7 @@ public abstract class AssemblyItem<BEAN> {
         return itemView.findViewWithTag(tag);
     }
 
-    protected abstract void onFindViews(View itemView);
+    protected abstract void onFindViews();
 
     protected abstract void onConfigViews(Context context);
 
