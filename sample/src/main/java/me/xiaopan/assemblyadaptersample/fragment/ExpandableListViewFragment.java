@@ -136,7 +136,7 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
                 } else {
                     adapter.loadMoreFinished();
                     adapter.setLoadMoreEnd(nextStart == 100);
-                    adapter.append(objects);
+                    adapter.addAll(objects);
                 }
             }
         }.execute("");

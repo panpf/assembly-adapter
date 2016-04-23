@@ -107,7 +107,7 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
                 } else {
                     adapter.loadMoreFinished();
                     adapter.setLoadMoreEnd(nextStart == 100);
-                    adapter.append(objects);
+                    adapter.addAll(objects);
                 }
             }
         }.execute("");

@@ -105,7 +105,7 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
                 } else {
                     adapter.loadMoreFinished();
                     adapter.setLoadMoreEnd(nextStart == 100);
-                    adapter.append(objects);
+                    adapter.addAll(objects);
                 }
             }
         }.execute("");

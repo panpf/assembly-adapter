@@ -5,13 +5,16 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     private static final String TAG = "AssemblyRecyclerAdapter";
 
+    private final Object mLock = new Object();
     private List dataList;
     private List<AssemblyRecyclerItemFactory> itemFactoryList;
     private AbstractLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory;
@@ -48,6 +51,11 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     @SuppressWarnings("unused")
+    public List<AssemblyRecyclerItemFactory> getItemFactoryList() {
+        return itemFactoryList;
+    }
+
+    @SuppressWarnings("unused")
     public List getDataList() {
         return dataList;
     }
@@ -55,23 +63,82 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     @SuppressWarnings("unused")
     public void setDataList(List dataList) {
         this.dataList = dataList;
+        notifyDataSetChanged();
     }
 
     @SuppressWarnings("unused")
-    public List<AssemblyRecyclerItemFactory> getItemFactoryList() {
-        return itemFactoryList;
-    }
-
-    @SuppressWarnings("unchecked")
-    public void append(List dataList) {
-        if (dataList == null || dataList.size() == 0) {
+    public void addAll(Collection collection) {
+        if(collection == null || collection.size() == 0){
             return;
         }
+        synchronized (mLock) {
+            if (dataList == null) {
+                dataList = new ArrayList(collection.size());
+            }
+            //noinspection unchecked
+            dataList.addAll(collection);
+        }
+        notifyDataSetChanged();
+    }
 
-        if (this.dataList == null) {
-            this.dataList = dataList;
-        } else {
-            this.dataList.addAll(dataList);
+    @SuppressWarnings("unused")
+    public void addAll(Object ... items) {
+        if(items == null || items.length == 0){
+            return;
+        }
+        synchronized (mLock) {
+            if (dataList == null) {
+                dataList = new ArrayList(items.length);
+            }
+            Collections.addAll(dataList, items);
+        }
+        notifyDataSetChanged();
+    }
+
+    @SuppressWarnings("unused")
+    public void insert(Object object, int index) {
+        if(object == null){
+            return;
+        }
+        synchronized (mLock) {
+            if (dataList == null) {
+                dataList = new ArrayList();
+            }
+            //noinspection unchecked
+            dataList.add(index, object);
+        }
+        notifyDataSetChanged();
+    }
+
+    @SuppressWarnings("unused")
+    public void remove(Object object) {
+        if(object == null){
+            return;
+        }
+        synchronized (mLock) {
+            if (dataList != null) {
+                dataList.remove(object);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    @SuppressWarnings("unused")
+    public void clear() {
+        synchronized (mLock) {
+            if (dataList != null) {
+                dataList.clear();
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    @SuppressWarnings("unused")
+    public void sort(Comparator comparator) {
+        synchronized (mLock) {
+            if (dataList != null) {
+                Collections.sort(dataList, comparator);
+            }
         }
         notifyDataSetChanged();
     }
