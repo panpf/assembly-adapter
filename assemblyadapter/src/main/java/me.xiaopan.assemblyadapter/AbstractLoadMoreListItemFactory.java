@@ -26,7 +26,7 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
         return false;
     }
 
-    public abstract class AbstractLoadMoreListItem extends AssemblyItem<String>{
+    public abstract class AbstractLoadMoreListItem extends AssemblyItem<String> {
         public AbstractLoadMoreListItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
@@ -58,9 +58,9 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
 
         @Override
         public void onSetData(int position, String s) {
-            if(end){
+            if (end) {
                 showEnd();
-            }else{
+            } else {
                 showLoading();
                 if (eventListener != null && !loadMoreRunning) {
                     loadMoreRunning = true;

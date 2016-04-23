@@ -16,7 +16,7 @@ public abstract class AssemblyGroupItem<BEAN> {
     }
 
     public AssemblyGroupItem(View itemView) {
-        if(itemView == null){
+        if (itemView == null) {
             throw new IllegalArgumentException("itemView may not be null");
         }
         this.itemView = itemView;
@@ -25,18 +25,18 @@ public abstract class AssemblyGroupItem<BEAN> {
         onConfigViews(itemView.getContext());
     }
 
-    public void setData(int groupPosition, boolean isExpanded, BEAN bean){
+    public void setData(int groupPosition, boolean isExpanded, BEAN bean) {
         this.groupPosition = groupPosition;
         this.isExpanded = isExpanded;
         this.data = bean;
         onSetData(groupPosition, isExpanded, bean);
     }
 
-    public View findViewById(int id){
+    public View findViewById(int id) {
         return itemView.findViewById(id);
     }
 
-    public View findViewWithTag(Object tag){
+    public View findViewWithTag(Object tag) {
         return itemView.findViewWithTag(tag);
     }
 
@@ -46,7 +46,7 @@ public abstract class AssemblyGroupItem<BEAN> {
 
     protected abstract void onSetData(int groupPosition, boolean isExpanded, BEAN bean);
 
-    public final View getItemView(){
+    public final View getItemView() {
         return this.itemView;
     }
 

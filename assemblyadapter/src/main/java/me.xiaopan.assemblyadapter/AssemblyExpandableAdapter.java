@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
+public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "AssemblyExpandAdapter";
 
     private List dataList;
@@ -28,7 +28,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
 
     @SuppressWarnings("unused")
     public AssemblyExpandableAdapter(Object... dataArray) {
-        if(dataArray != null && dataArray.length > 0){
+        if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
             Collections.addAll(dataList, dataArray);
         }
@@ -99,6 +99,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
 
     /**
      * 开启加载更多功能
+     *
      * @param loadMoreGroupItemFactory 加载更多ItemFactory
      */
     public void enableLoadMore(AbstractLoadMoreGroupItemFactory loadMoreGroupItemFactory) {
@@ -121,7 +122,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
      */
     @SuppressWarnings("unused")
     public void disableLoadMore() {
-        if(loadMoreGroupItemFactory != null){
+        if (loadMoreGroupItemFactory != null) {
             loadMoreGroupItemFactory.setLoadMoreRunning(false);
             loadMoreGroupItemFactory.setEnd(false);
             loadMoreGroupItemFactory = null;
@@ -133,7 +134,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
      * 加载更多完成，当你一次请求完成后需要调用此方法
      */
     public void loadMoreFinished() {
-        if(loadMoreGroupItemFactory != null){
+        if (loadMoreGroupItemFactory != null) {
             loadMoreGroupItemFactory.setLoadMoreRunning(false);
         }
     }
@@ -143,7 +144,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
      */
     @SuppressWarnings("unused")
     public void loadMoreFailed() {
-        if(loadMoreGroupItemFactory != null){
+        if (loadMoreGroupItemFactory != null) {
             loadMoreGroupItemFactory.setLoadMoreRunning(false);
         }
         if (loadMoreGroupItem != null) {
@@ -153,18 +154,19 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
 
     /**
      * 设置加载更多是否结束，当没有更多内容的时候你需要调用此方法，然后会显示结束的文案并且不再加载更多
+     *
      * @param end 加载更多是否结束
      */
     @SuppressWarnings("unused")
-    public void setLoadMoreEnd(boolean end){
-        if(loadMoreGroupItemFactory != null){
+    public void setLoadMoreEnd(boolean end) {
+        if (loadMoreGroupItemFactory != null) {
             loadMoreGroupItemFactory.setLoadMoreRunning(false);
             loadMoreGroupItemFactory.setEnd(end);
         }
-        if(loadMoreGroupItem != null){
-            if(end){
+        if (loadMoreGroupItem != null) {
+            if (end) {
                 loadMoreGroupItem.showEnd();
-            }else{
+            } else {
                 loadMoreGroupItem.showLoading();
             }
         }
@@ -248,7 +250,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
         }
 
         groupItemFactoryLocked = true;
-        if(loadMoreGroupItemFactory != null && groupPosition == getGroupCount()-1){
+        if (loadMoreGroupItemFactory != null && groupPosition == getGroupCount() - 1) {
             return loadMoreGroupItemFactory.getItemType();
         }
 
@@ -299,11 +301,11 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter{
         }
 
         // groupPosition是最后一位，说明是加载更多尾巴
-        if(loadMoreGroupItemFactory != null && groupPosition == getGroupCount()-1){
-            if(convertView == null){
+        if (loadMoreGroupItemFactory != null && groupPosition == getGroupCount() - 1) {
+            if (convertView == null) {
                 AssemblyGroupItem assemblyItem = loadMoreGroupItemFactory.createAssemblyItem(parent);
-                if(assemblyItem == null){
-                    Log.e(TAG, "getView() - Create AssemblyGroupItem failed. groupPosition="+groupPosition+", GroupItemFactory="+loadMoreGroupItemFactory.getClass().getName());
+                if (assemblyItem == null) {
+                    Log.e(TAG, "getView() - Create AssemblyGroupItem failed. groupPosition=" + groupPosition + ", GroupItemFactory=" + loadMoreGroupItemFactory.getClass().getName());
                     return null;
                 }
                 convertView = assemblyItem.getItemView();

@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder{
+public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder {
     private BEAN data;
 
     public AssemblyRecyclerItem(int itemLayoutId, ViewGroup parent) {
@@ -19,16 +19,16 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
         onConfigViews(convertView.getContext());
     }
 
-    public void setData(int position, BEAN bean){
+    public void setData(int position, BEAN bean) {
         this.data = bean;
         onSetData(position, bean);
     }
 
-    public View findViewById(int id){
+    public View findViewById(int id) {
         return itemView.findViewById(id);
     }
 
-    public View findViewWithTag(Object tag){
+    public View findViewWithTag(Object tag) {
         return itemView.findViewWithTag(tag);
     }
 
@@ -38,7 +38,7 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
 
     protected abstract void onSetData(int position, BEAN bean);
 
-    public final View getItemView(){
+    public final View getItemView() {
         return itemView;
     }
 

@@ -26,7 +26,7 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
         return false;
     }
 
-    public abstract class AbstractLoadMoreGroupItem extends AssemblyGroupItem<String>{
+    public abstract class AbstractLoadMoreGroupItem extends AssemblyGroupItem<String> {
         public AbstractLoadMoreGroupItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
@@ -58,9 +58,9 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
 
         @Override
         public void onSetData(int groupPosition, boolean isExpanded, String s) {
-            if(end){
+            if (end) {
                 showEnd();
-            }else{
+            } else {
                 showLoading();
                 if (eventListener != null && !loadMoreRunning) {
                     loadMoreRunning = true;

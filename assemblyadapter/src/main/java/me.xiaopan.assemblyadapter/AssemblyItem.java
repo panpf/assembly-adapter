@@ -15,7 +15,7 @@ public abstract class AssemblyItem<BEAN> {
     }
 
     public AssemblyItem(View itemView) {
-        if(itemView == null){
+        if (itemView == null) {
             throw new IllegalArgumentException("itemView may not be null");
         }
         this.itemView = itemView;
@@ -24,17 +24,17 @@ public abstract class AssemblyItem<BEAN> {
         onConfigViews(itemView.getContext());
     }
 
-    public void setData(int position, BEAN bean){
+    public void setData(int position, BEAN bean) {
         this.position = position;
         this.data = bean;
         onSetData(position, bean);
     }
 
-    public View findViewById(int id){
+    public View findViewById(int id) {
         return itemView.findViewById(id);
     }
 
-    public View findViewWithTag(Object tag){
+    public View findViewWithTag(Object tag) {
         return itemView.findViewWithTag(tag);
     }
 
@@ -44,7 +44,7 @@ public abstract class AssemblyItem<BEAN> {
 
     protected abstract void onSetData(int position, BEAN bean);
 
-    public final View getItemView(){
+    public final View getItemView() {
         return this.itemView;
     }
 

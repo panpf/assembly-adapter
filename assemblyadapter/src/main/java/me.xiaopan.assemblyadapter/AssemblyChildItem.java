@@ -17,7 +17,7 @@ public abstract class AssemblyChildItem<BEAN> {
     }
 
     public AssemblyChildItem(View itemView) {
-        if(itemView == null){
+        if (itemView == null) {
             throw new IllegalArgumentException("itemView may not be null");
         }
         this.itemView = itemView;
@@ -26,7 +26,7 @@ public abstract class AssemblyChildItem<BEAN> {
         onConfigViews(itemView.getContext());
     }
 
-    public void setData(int groupPosition, int childPosition, boolean isLastChild, BEAN bean){
+    public void setData(int groupPosition, int childPosition, boolean isLastChild, BEAN bean) {
         this.groupPosition = groupPosition;
         this.childPosition = childPosition;
         this.isLastChild = isLastChild;
@@ -34,11 +34,11 @@ public abstract class AssemblyChildItem<BEAN> {
         onSetData(groupPosition, childPosition, isLastChild, bean);
     }
 
-    public View findViewById(int id){
+    public View findViewById(int id) {
         return itemView.findViewById(id);
     }
 
-    public View findViewWithTag(Object tag){
+    public View findViewWithTag(Object tag) {
         return itemView.findViewWithTag(tag);
     }
 
@@ -48,7 +48,7 @@ public abstract class AssemblyChildItem<BEAN> {
 
     protected abstract void onSetData(int groupPosition, int childPosition, boolean isLastChild, BEAN bean);
 
-    public final View getItemView(){
+    public final View getItemView() {
         return this.itemView;
     }
 

@@ -2,7 +2,7 @@ package me.xiaopan.assemblyadapter;
 
 import android.view.ViewGroup;
 
-public abstract class AssemblyChildItemFactory<ITEM extends AssemblyChildItem>{
+public abstract class AssemblyChildItemFactory<ITEM extends AssemblyChildItem> {
     private int itemType;
     private AssemblyExpandableAdapter adapter;
 

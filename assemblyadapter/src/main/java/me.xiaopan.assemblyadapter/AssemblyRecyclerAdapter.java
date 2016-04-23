@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
+public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     private static final String TAG = "AssemblyRecyclerAdapter";
 
     private List dataList;
@@ -25,13 +25,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
 
     @SuppressWarnings("unused")
     public AssemblyRecyclerAdapter(Object... dataArray) {
-        if(dataArray != null && dataArray.length > 0){
+        if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
             Collections.addAll(dataList, dataArray);
         }
     }
 
-    public void addItemFactory(AssemblyRecyclerItemFactory itemFactory){
+    public void addItemFactory(AssemblyRecyclerItemFactory itemFactory) {
         if (itemFactoryLocked) {
             throw new IllegalStateException("item factory list locked");
         }
@@ -39,7 +39,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
             throw new IllegalStateException("Call a enableLoadMore () method can be not call again after addItemFactory () method");
         }
 
-        if(itemFactoryList == null){
+        if (itemFactoryList == null) {
             itemFactoryList = new LinkedList<AssemblyRecyclerItemFactory>();
         }
         itemFactory.setAdapter(this);
@@ -63,14 +63,14 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     }
 
     @SuppressWarnings("unchecked")
-    public void append(List dataList){
-        if(dataList == null || dataList.size() == 0){
+    public void append(List dataList) {
+        if (dataList == null || dataList.size() == 0) {
             return;
         }
 
-        if(this.dataList == null){
+        if (this.dataList == null) {
             this.dataList = dataList;
-        }else{
+        } else {
             this.dataList.addAll(dataList);
         }
         notifyDataSetChanged();
@@ -78,11 +78,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
 
     /**
      * 开启加载更多功能
+     *
      * @param loadMoreRecyclerItemFactory 加载更多ItemFactory
      */
     public void enableLoadMore(AbstractLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory) {
-        if(loadMoreRecyclerItemFactory != null){
-            if(itemFactoryList == null || itemFactoryList.size() == 0){
+        if (loadMoreRecyclerItemFactory != null) {
+            if (itemFactoryList == null || itemFactoryList.size() == 0) {
                 throw new IllegalStateException("You need to configure AssemblyRecyclerItem use addItemFactory method");
             }
             setEnableLoadMore = true;
@@ -100,7 +101,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
      */
     @SuppressWarnings("unused")
     public void disableLoadMore() {
-        if(loadMoreRecyclerItemFactory != null){
+        if (loadMoreRecyclerItemFactory != null) {
             loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
             loadMoreRecyclerItemFactory.setEnd(false);
             loadMoreRecyclerItemFactory = null;
@@ -111,8 +112,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
     /**
      * 加载更多完成，当你一次请求完成后需要调用此方法
      */
-    public void loadMoreFinished(){
-        if(loadMoreRecyclerItemFactory != null){
+    public void loadMoreFinished() {
+        if (loadMoreRecyclerItemFactory != null) {
             loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
         }
     }
@@ -121,29 +122,30 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
      * 加载更过失败，请求失败的时候需要调用此方法，会显示错误提示，并可点击重新加载
      */
     @SuppressWarnings("unused")
-    public void loadMoreFailed(){
-        if(loadMoreRecyclerItemFactory != null){
+    public void loadMoreFailed() {
+        if (loadMoreRecyclerItemFactory != null) {
             loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
         }
-        if(loadMoreRecyclerItem != null){
+        if (loadMoreRecyclerItem != null) {
             loadMoreRecyclerItem.showErrorRetry();
         }
     }
 
     /**
      * 设置加载更多是否结束，当没有更多内容的时候你需要调用此方法，然后会显示结束的文案并且不再加载更多
+     *
      * @param end 加载更多是否结束
      */
     @SuppressWarnings("unused")
-    public void setLoadMoreEnd(boolean end){
-        if(loadMoreRecyclerItemFactory != null){
+    public void setLoadMoreEnd(boolean end) {
+        if (loadMoreRecyclerItemFactory != null) {
             loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
             loadMoreRecyclerItemFactory.setEnd(end);
         }
-        if(loadMoreRecyclerItem != null){
-            if(end){
+        if (loadMoreRecyclerItem != null) {
+            if (end) {
                 loadMoreRecyclerItem.showEnd();
-            }else{
+            } else {
                 loadMoreRecyclerItem.showLoading();
             }
         }
@@ -151,7 +153,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
-        if(dataList == null || dataList.size() == 0){
+        if (dataList == null || dataList.size() == 0) {
             return 0;
         }
         return dataList.size() + (loadMoreRecyclerItemFactory != null ? 1 : 0);
@@ -159,23 +161,23 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemViewType(int position) {
-        if(itemFactoryList == null || itemFactoryList.size() == 0) {
+        if (itemFactoryList == null || itemFactoryList.size() == 0) {
             throw new IllegalStateException("You need to configure AssemblyRecyclerItem use addItemFactory method");
         }
 
         itemFactoryLocked = true;
-        if(loadMoreRecyclerItemFactory != null && position == getItemCount()-1){
+        if (loadMoreRecyclerItemFactory != null && position == getItemCount() - 1) {
             return loadMoreRecyclerItemFactory.getItemType();
         }
 
         Object itemObject = getItem(position);
-        for(AssemblyRecyclerItemFactory itemFactory : itemFactoryList){
-            if(itemFactory.isTarget(itemObject)){
+        for (AssemblyRecyclerItemFactory itemFactory : itemFactoryList) {
+            if (itemFactory.isTarget(itemObject)) {
                 return itemFactory.getItemType();
             }
         }
 
-        Log.e(TAG, "getItemViewType() - Didn't find suitable AssemblyRecyclerItemFactory. position="+position+", itemObject="+(itemObject!=null?itemObject.getClass().getName():"null"));
+        Log.e(TAG, "getItemViewType() - Didn't find suitable AssemblyRecyclerItemFactory. position=" + position + ", itemObject=" + (itemObject != null ? itemObject.getClass().getName() : "null"));
         return -1;
     }
 
@@ -190,40 +192,40 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter{
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(itemFactoryList == null || itemFactoryList.size() == 0){
+        if (itemFactoryList == null || itemFactoryList.size() == 0) {
             throw new IllegalStateException("You need to configure AssemblyRecyclerItem use addItemFactory method");
         }
 
-        if(loadMoreRecyclerItemFactory != null && viewType == loadMoreRecyclerItemFactory.getItemType()){
+        if (loadMoreRecyclerItemFactory != null && viewType == loadMoreRecyclerItemFactory.getItemType()) {
             AssemblyRecyclerItem recyclerItem = loadMoreRecyclerItemFactory.createAssemblyItem(parent);
-            if(recyclerItem == null){
-                Log.e(TAG, "onCreateViewHolder() - Create AssemblyRecyclerItem failed. ItemFactory="+ loadMoreRecyclerItemFactory.getClass().getName());
+            if (recyclerItem == null) {
+                Log.e(TAG, "onCreateViewHolder() - Create AssemblyRecyclerItem failed. ItemFactory=" + loadMoreRecyclerItemFactory.getClass().getName());
                 return null;
             }
             return recyclerItem;
         }
 
-        for(AssemblyRecyclerItemFactory itemFactory : itemFactoryList){
-            if(itemFactory.getItemType() != viewType){
+        for (AssemblyRecyclerItemFactory itemFactory : itemFactoryList) {
+            if (itemFactory.getItemType() != viewType) {
                 continue;
             }
 
             AssemblyRecyclerItem recyclerItem = itemFactory.createAssemblyItem(parent);
-            if(recyclerItem == null){
-                Log.e(TAG, "onCreateViewHolder() - Create AssemblyRecyclerItem failed. ItemFactory="+itemFactory.getClass().getName());
+            if (recyclerItem == null) {
+                Log.e(TAG, "onCreateViewHolder() - Create AssemblyRecyclerItem failed. ItemFactory=" + itemFactory.getClass().getName());
             }
             return recyclerItem;
         }
 
-        Log.e(TAG, "onCreateViewHolder() - Didn't find suitable AssemblyRecyclerItemFactory. viewType="+viewType);
+        Log.e(TAG, "onCreateViewHolder() - Didn't find suitable AssemblyRecyclerItemFactory. viewType=" + viewType);
         return null;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if(viewHolder instanceof AssemblyRecyclerItem){
-            if(viewHolder instanceof AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem){
+        if (viewHolder instanceof AssemblyRecyclerItem) {
+            if (viewHolder instanceof AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem) {
                 this.loadMoreRecyclerItem = (AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem) viewHolder;
             }
             ((AssemblyRecyclerItem) viewHolder).setData(position, getItem(position));
