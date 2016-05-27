@@ -177,16 +177,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 加载更多完成，当你一次请求完成后需要调用此方法
-     */
-    public void loadMoreFinished() {
-        if (loadMoreRecyclerItemFactory != null) {
-            loadMoreRecyclerItemFactory.setLoadMoreRunning(false);
-        }
-    }
-
-    /**
-     * 加载更过失败，请求失败的时候需要调用此方法，会显示错误提示，并可点击重新加载
+     * 加载更多失败，请求失败的时候需要调用此方法，会显示错误提示，并可点击重新加载
      */
     @SuppressWarnings("unused")
     public void loadMoreFailed() {
@@ -199,7 +190,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 设置加载更多是否结束，当没有更多内容的时候你需要调用此方法，然后会显示结束的文案并且不再加载更多
+     * 加载更多完成后设置加载更多是否结束，为true时会显示结束的文案并且不再加载更多
      *
      * @param end 加载更多是否结束
      */
