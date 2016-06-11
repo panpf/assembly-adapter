@@ -30,9 +30,11 @@ public class GameChildItemFactory extends AssemblyChildItemFactory<GameChildItem
         return new GameChildItem(R.layout.list_item_game, parent);
     }
 
-    public interface EventListener{
+    public interface EventListener {
         void onClickIcon(int position, Game user);
+
         void onClickName(int position, Game user);
+
         void onClickLike(int position, Game user);
     }
 
@@ -50,12 +52,12 @@ public class GameChildItemFactory extends AssemblyChildItemFactory<GameChildItem
 
         @Override
         public void onClickName(int position, Game game) {
-            Toast.makeText(context, "原来你叫"+game.name+"啊！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "原来你叫" + game.name + "啊！", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onClickLike(int position, Game game) {
-            Toast.makeText(context, "我也"+game.like+"这游戏！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "我也" + game.like + "这游戏！", Toast.LENGTH_SHORT).show();
         }
     }
 
