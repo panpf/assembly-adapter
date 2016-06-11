@@ -18,8 +18,8 @@ public class AssemblyAdapter extends BaseAdapter {
     private final Object mLock = new Object();
     private List dataList;
     private List<AssemblyItemFactory> itemFactoryList;
-    private AbstractLoadMoreListItemFactory loadMoreListItemFactory;
-    private AbstractLoadMoreListItemFactory.AbstractLoadMoreListItem loadMoreListItem;
+    private AssemblyLoadMoreItemFactory loadMoreItemFactory;
+    private AssemblyLoadMoreItemFactory.AssemblyLoadMoreItem loadMoreItem;
     private boolean itemFactoryLocked;  // 锁定之后就不能再添加ItemFactory了
     private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加ItemFactory了
 
@@ -150,17 +150,17 @@ public class AssemblyAdapter extends BaseAdapter {
      *
      * @param loadMoreListItemFactory 加载更多ItemFactory
      */
-    public void enableLoadMore(AbstractLoadMoreListItemFactory loadMoreListItemFactory) {
+    public void enableLoadMore(AssemblyLoadMoreItemFactory loadMoreListItemFactory) {
         if (loadMoreListItemFactory != null) {
             if (itemFactoryList == null || itemFactoryList.size() == 0) {
                 throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
             }
             setEnableLoadMore = true;
-            this.loadMoreListItemFactory = loadMoreListItemFactory;
-            this.loadMoreListItemFactory.setLoadMoreRunning(false);
-            this.loadMoreListItemFactory.setEnd(false);
-            this.loadMoreListItemFactory.setAdapter(this);
-            this.loadMoreListItemFactory.setItemType(itemFactoryList.size());
+            this.loadMoreItemFactory = loadMoreListItemFactory;
+            this.loadMoreItemFactory.setLoadMoreRunning(false);
+            this.loadMoreItemFactory.setEnd(false);
+            this.loadMoreItemFactory.setAdapter(this);
+            this.loadMoreItemFactory.setItemType(itemFactoryList.size());
             notifyDataSetChanged();
         }
     }
@@ -170,10 +170,10 @@ public class AssemblyAdapter extends BaseAdapter {
      */
     @SuppressWarnings("unused")
     public void disableLoadMore() {
-        if (loadMoreListItemFactory != null) {
-            loadMoreListItemFactory.setLoadMoreRunning(false);
-            loadMoreListItemFactory.setEnd(false);
-            loadMoreListItemFactory = null;
+        if (loadMoreItemFactory != null) {
+            loadMoreItemFactory.setLoadMoreRunning(false);
+            loadMoreItemFactory.setEnd(false);
+            loadMoreItemFactory = null;
             notifyDataSetChanged();
         }
     }
@@ -183,11 +183,11 @@ public class AssemblyAdapter extends BaseAdapter {
      */
     @SuppressWarnings("unused")
     public void loadMoreFailed() {
-        if (loadMoreListItemFactory != null) {
-            loadMoreListItemFactory.setLoadMoreRunning(false);
+        if (loadMoreItemFactory != null) {
+            loadMoreItemFactory.setLoadMoreRunning(false);
         }
-        if (loadMoreListItem != null) {
-            loadMoreListItem.showErrorRetry();
+        if (loadMoreItem != null) {
+            loadMoreItem.showErrorRetry();
         }
     }
 
@@ -198,15 +198,15 @@ public class AssemblyAdapter extends BaseAdapter {
      */
     @SuppressWarnings("unused")
     public void setLoadMoreEnd(boolean end) {
-        if (loadMoreListItemFactory != null) {
-            loadMoreListItemFactory.setLoadMoreRunning(false);
-            loadMoreListItemFactory.setEnd(end);
+        if (loadMoreItemFactory != null) {
+            loadMoreItemFactory.setLoadMoreRunning(false);
+            loadMoreItemFactory.setEnd(end);
         }
-        if (loadMoreListItem != null) {
+        if (loadMoreItem != null) {
             if (end) {
-                loadMoreListItem.showEnd();
+                loadMoreItem.showEnd();
             } else {
-                loadMoreListItem.showLoading();
+                loadMoreItem.showLoading();
             }
         }
     }
@@ -216,7 +216,7 @@ public class AssemblyAdapter extends BaseAdapter {
         if (dataList == null || dataList.size() == 0) {
             return 0;
         }
-        return dataList.size() + (loadMoreListItemFactory != null ? 1 : 0);
+        return dataList.size() + (loadMoreItemFactory != null ? 1 : 0);
     }
 
     @Override
@@ -235,7 +235,7 @@ public class AssemblyAdapter extends BaseAdapter {
             throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
         }
         itemFactoryLocked = true;
-        return itemFactoryList.size() + (loadMoreListItemFactory != null ? 1 : 0);
+        return itemFactoryList.size() + (loadMoreItemFactory != null ? 1 : 0);
     }
 
     @Override
@@ -245,8 +245,8 @@ public class AssemblyAdapter extends BaseAdapter {
         }
 
         itemFactoryLocked = true;
-        if (loadMoreListItemFactory != null && position == getCount() - 1) {
-            return loadMoreListItemFactory.getItemType();
+        if (loadMoreItemFactory != null && position == getCount() - 1) {
+            return loadMoreItemFactory.getItemType();
         }
 
         Object itemObject = getItem(position);
@@ -268,18 +268,18 @@ public class AssemblyAdapter extends BaseAdapter {
         }
 
         // position是最后一位，说明是加载更多尾巴
-        if (loadMoreListItemFactory != null && position == getCount() - 1) {
+        if (loadMoreItemFactory != null && position == getCount() - 1) {
             if (convertView == null) {
-                AssemblyItem assemblyItem = loadMoreListItemFactory.createAssemblyItem(parent);
+                AssemblyItem assemblyItem = loadMoreItemFactory.createAssemblyItem(parent);
                 if (assemblyItem == null) {
-                    Log.e(TAG, "getView() - Create AssemblyItem failed. position=" + position + ", ItemFactory=" + loadMoreListItemFactory.getClass().getName());
+                    Log.e(TAG, "getView() - Create AssemblyItem failed. position=" + position + ", ItemFactory=" + loadMoreItemFactory.getClass().getName());
                     return null;
                 }
                 convertView = assemblyItem.getItemView();
             }
 
-            this.loadMoreListItem = (AbstractLoadMoreListItemFactory.AbstractLoadMoreListItem) convertView.getTag();
-            this.loadMoreListItem.setData(position, null);
+            this.loadMoreItem = (AssemblyLoadMoreItemFactory.AssemblyLoadMoreItem) convertView.getTag();
+            this.loadMoreItem.setData(position, null);
             return convertView;
         }
 

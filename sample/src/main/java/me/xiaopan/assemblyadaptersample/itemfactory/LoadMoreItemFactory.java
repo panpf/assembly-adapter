@@ -3,27 +3,27 @@ package me.xiaopan.assemblyadaptersample.itemfactory;
 import android.view.View;
 import android.view.ViewGroup;
 
-import me.xiaopan.assemblyadapter.AbstractLoadMoreListItemFactory;
+import me.xiaopan.assemblyadapter.AssemblyLoadMoreItemFactory;
 import me.xiaopan.assemblyadapter.OnLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
 
-public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
+public class LoadMoreItemFactory extends AssemblyLoadMoreItemFactory {
 
-    public LoadMoreListItemFactory(OnLoadMoreListener eventListener) {
+    public LoadMoreItemFactory(OnLoadMoreListener eventListener) {
         super(eventListener);
     }
 
     @Override
-    public AbstractLoadMoreListItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreListItem(R.layout.list_item_load_more, parent);
+    public AssemblyLoadMoreItem createAssemblyItem(ViewGroup parent) {
+        return new LoadMoreItem(R.layout.list_item_load_more, parent);
     }
 
-    public class LoadMoreListItem extends AbstractLoadMoreListItem {
+    public class LoadMoreItem extends AssemblyLoadMoreItem {
         private View loadingView;
         private View errorView;
         private View endView;
 
-        public LoadMoreListItem(int itemLayoutId, ViewGroup parent) {
+        public LoadMoreItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
 

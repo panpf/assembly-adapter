@@ -4,12 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItemFactory<AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem> {
+public abstract class AssemblyLoadMoreItemFactory extends AssemblyItemFactory<AssemblyLoadMoreItemFactory.AssemblyLoadMoreItem> {
     private boolean loadMoreRunning;
     private boolean end;
-    private OnGroupLoadMoreListener eventListener;
+    private OnLoadMoreListener eventListener;
 
-    public AbstractLoadMoreGroupItemFactory(OnGroupLoadMoreListener eventListener) {
+    public AssemblyLoadMoreItemFactory(OnLoadMoreListener eventListener) {
         this.eventListener = eventListener;
     }
 
@@ -26,12 +26,13 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
         return false;
     }
 
-    public abstract class AbstractLoadMoreGroupItem extends AssemblyGroupItem<String> {
-        public AbstractLoadMoreGroupItem(int itemLayoutId, ViewGroup parent) {
+    public abstract class AssemblyLoadMoreItem extends AssemblyItem<String> {
+        public AssemblyLoadMoreItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
 
-        public AbstractLoadMoreGroupItem(View convertView) {
+        @SuppressWarnings("unused")
+        public AssemblyLoadMoreItem(View convertView) {
             super(convertView);
         }
 
@@ -50,14 +51,14 @@ public abstract class AbstractLoadMoreGroupItemFactory extends AssemblyGroupItem
                 public void onClick(View v) {
                     if (eventListener != null) {
                         loadMoreRunning = false;
-                        setData(getGroupPosition(), isExpanded(), getData());
+                        setData(getPosition(), getData());
                     }
                 }
             });
         }
 
         @Override
-        public void onSetData(int groupPosition, boolean isExpanded, String s) {
+        public void onSetData(int position, String s) {
             if (end) {
                 showEnd();
             } else {

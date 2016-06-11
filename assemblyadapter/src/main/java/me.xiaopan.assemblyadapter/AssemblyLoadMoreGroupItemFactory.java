@@ -4,12 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecyclerItemFactory<AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem> {
+public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItemFactory<AssemblyLoadMoreGroupItemFactory.AssemblyLoadMoreGroupItem> {
     private boolean loadMoreRunning;
     private boolean end;
-    private OnRecyclerLoadMoreListener eventListener;
+    private OnGroupLoadMoreListener eventListener;
 
-    public AbstractLoadMoreRecyclerItemFactory(OnRecyclerLoadMoreListener eventListener) {
+    public AssemblyLoadMoreGroupItemFactory(OnGroupLoadMoreListener eventListener) {
         this.eventListener = eventListener;
     }
 
@@ -26,12 +26,13 @@ public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecycl
         return false;
     }
 
-    public abstract class AbstractLoadMoreRecyclerItem extends AssemblyRecyclerItem<String> {
-        public AbstractLoadMoreRecyclerItem(int itemLayoutId, ViewGroup parent) {
+    public abstract class AssemblyLoadMoreGroupItem extends AssemblyGroupItem<String> {
+        public AssemblyLoadMoreGroupItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
 
-        public AbstractLoadMoreRecyclerItem(View convertView) {
+        @SuppressWarnings("unused")
+        public AssemblyLoadMoreGroupItem(View convertView) {
             super(convertView);
         }
 
@@ -50,21 +51,21 @@ public abstract class AbstractLoadMoreRecyclerItemFactory extends AssemblyRecycl
                 public void onClick(View v) {
                     if (eventListener != null) {
                         loadMoreRunning = false;
-                        setData(getLayoutPosition(), getData());
+                        setData(getGroupPosition(), isExpanded(), getData());
                     }
                 }
             });
         }
 
         @Override
-        public void onSetData(int position, String s) {
+        public void onSetData(int groupPosition, boolean isExpanded, String s) {
             if (end) {
                 showEnd();
             } else {
                 showLoading();
                 if (eventListener != null && !loadMoreRunning) {
                     loadMoreRunning = true;
-                    eventListener.onLoadMore(getAdapter());
+                    eventListener.onLoadMore(adapter);
                 }
             }
         }

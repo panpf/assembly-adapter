@@ -17,8 +17,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     private final Object mLock = new Object();
     private List dataList;
     private List<AssemblyRecyclerItemFactory> itemFactoryList;
-    private AbstractLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory;
-    private AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem loadMoreRecyclerItem;
+    private AssemblyLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory;
+    private AssemblyLoadMoreRecyclerItemFactory.AssemblyLoadMoreRecyclerItem loadMoreRecyclerItem;
     private boolean itemFactoryLocked;  // 锁定之后就不能再添加ItemFactory了
     private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加ItemFactory了
 
@@ -148,7 +148,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      *
      * @param loadMoreRecyclerItemFactory 加载更多ItemFactory
      */
-    public void enableLoadMore(AbstractLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory) {
+    public void enableLoadMore(AssemblyLoadMoreRecyclerItemFactory loadMoreRecyclerItemFactory) {
         if (loadMoreRecyclerItemFactory != null) {
             if (itemFactoryList == null || itemFactoryList.size() == 0) {
                 throw new IllegalStateException("You need to configure AssemblyRecyclerItem use addItemFactory method");
@@ -283,8 +283,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     @SuppressWarnings("unchecked")
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof AssemblyRecyclerItem) {
-            if (viewHolder instanceof AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem) {
-                this.loadMoreRecyclerItem = (AbstractLoadMoreRecyclerItemFactory.AbstractLoadMoreRecyclerItem) viewHolder;
+            if (viewHolder instanceof AssemblyLoadMoreRecyclerItemFactory.AssemblyLoadMoreRecyclerItem) {
+                this.loadMoreRecyclerItem = (AssemblyLoadMoreRecyclerItemFactory.AssemblyLoadMoreRecyclerItem) viewHolder;
             }
             ((AssemblyRecyclerItem) viewHolder).setData(position, getItem(position));
         }

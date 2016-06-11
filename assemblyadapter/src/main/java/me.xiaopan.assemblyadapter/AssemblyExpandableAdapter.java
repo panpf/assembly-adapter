@@ -19,8 +19,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     private List dataList;
     private List<AssemblyGroupItemFactory> groupItemFactoryList;
     private List<AssemblyChildItemFactory> childItemFactoryList;
-    private AbstractLoadMoreGroupItemFactory loadMoreGroupItemFactory;
-    private AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem loadMoreGroupItem;
+    private AssemblyLoadMoreGroupItemFactory loadMoreGroupItemFactory;
+    private AssemblyLoadMoreGroupItemFactory.AssemblyLoadMoreGroupItem loadMoreGroupItem;
     private boolean groupItemFactoryLocked;  // 锁定之后就不能再添加GroupItemFactory了
     private boolean childItemFactoryLocked;  // 锁定之后就不能再添加ChildItemFactory了
     private boolean setEnableLoadMore;  // 已经设置过开启加载功能后就不能再添加GroupItemFactory了
@@ -169,7 +169,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      *
      * @param loadMoreGroupItemFactory 加载更多ItemFactory
      */
-    public void enableLoadMore(AbstractLoadMoreGroupItemFactory loadMoreGroupItemFactory) {
+    public void enableLoadMore(AssemblyLoadMoreGroupItemFactory loadMoreGroupItemFactory) {
         if (loadMoreGroupItemFactory != null) {
             if (groupItemFactoryList == null || groupItemFactoryList.size() == 0) {
                 throw new IllegalStateException("You need to configure AssemblyGroupItemFactory use addGroupItemFactory method");
@@ -369,7 +369,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
                 convertView = assemblyItem.getItemView();
             }
 
-            this.loadMoreGroupItem = (AbstractLoadMoreGroupItemFactory.AbstractLoadMoreGroupItem) convertView.getTag();
+            this.loadMoreGroupItem = (AssemblyLoadMoreGroupItemFactory.AssemblyLoadMoreGroupItem) convertView.getTag();
             this.loadMoreGroupItem.setData(groupPosition, isExpanded, null);
             return convertView;
         }

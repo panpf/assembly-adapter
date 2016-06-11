@@ -4,12 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactory<AbstractLoadMoreListItemFactory.AbstractLoadMoreListItem> {
+public abstract class AssemblyLoadMoreRecyclerItemFactory extends AssemblyRecyclerItemFactory<AssemblyLoadMoreRecyclerItemFactory.AssemblyLoadMoreRecyclerItem> {
     private boolean loadMoreRunning;
     private boolean end;
-    private OnLoadMoreListener eventListener;
+    private OnRecyclerLoadMoreListener eventListener;
 
-    public AbstractLoadMoreListItemFactory(OnLoadMoreListener eventListener) {
+    public AssemblyLoadMoreRecyclerItemFactory(OnRecyclerLoadMoreListener eventListener) {
         this.eventListener = eventListener;
     }
 
@@ -26,12 +26,13 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
         return false;
     }
 
-    public abstract class AbstractLoadMoreListItem extends AssemblyItem<String> {
-        public AbstractLoadMoreListItem(int itemLayoutId, ViewGroup parent) {
+    public abstract class AssemblyLoadMoreRecyclerItem extends AssemblyRecyclerItem<String> {
+        public AssemblyLoadMoreRecyclerItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
 
-        public AbstractLoadMoreListItem(View convertView) {
+        @SuppressWarnings("unused")
+        public AssemblyLoadMoreRecyclerItem(View convertView) {
             super(convertView);
         }
 
@@ -50,7 +51,7 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
                 public void onClick(View v) {
                     if (eventListener != null) {
                         loadMoreRunning = false;
-                        setData(getPosition(), getData());
+                        setData(getLayoutPosition(), getData());
                     }
                 }
             });
@@ -64,7 +65,7 @@ public abstract class AbstractLoadMoreListItemFactory extends AssemblyItemFactor
                 showLoading();
                 if (eventListener != null && !loadMoreRunning) {
                     loadMoreRunning = true;
-                    eventListener.onLoadMore(adapter);
+                    eventListener.onLoadMore(getAdapter());
                 }
             }
         }

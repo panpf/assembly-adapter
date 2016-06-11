@@ -18,7 +18,7 @@ import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameListItemFactory;
-import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreListItemFactory;
+import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserListItemFactory;
 
 public class ListViewFragment extends Fragment implements OnLoadMoreListener {
@@ -99,7 +99,7 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
                     adapter.addItemFactory(new UserListItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameListItemFactory(getActivity().getBaseContext()));
                     if (nextStart < 100) {
-                        adapter.enableLoadMore(new LoadMoreListItemFactory(ListViewFragment.this));
+                        adapter.enableLoadMore(new LoadMoreItemFactory(ListViewFragment.this));
                     }
                     listView.setAdapter(adapter);
                 } else {

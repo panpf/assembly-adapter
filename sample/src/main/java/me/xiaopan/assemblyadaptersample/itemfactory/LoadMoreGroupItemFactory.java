@@ -3,22 +3,22 @@ package me.xiaopan.assemblyadaptersample.itemfactory;
 import android.view.View;
 import android.view.ViewGroup;
 
-import me.xiaopan.assemblyadapter.AbstractLoadMoreGroupItemFactory;
+import me.xiaopan.assemblyadapter.AssemblyLoadMoreGroupItemFactory;
 import me.xiaopan.assemblyadapter.OnGroupLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
 
-public class LoadMoreGroupItemFactory extends AbstractLoadMoreGroupItemFactory {
+public class LoadMoreGroupItemFactory extends AssemblyLoadMoreGroupItemFactory {
 
     public LoadMoreGroupItemFactory(OnGroupLoadMoreListener eventListener) {
         super(eventListener);
     }
 
     @Override
-    public AbstractLoadMoreGroupItem createAssemblyItem(ViewGroup parent) {
+    public AssemblyLoadMoreGroupItem createAssemblyItem(ViewGroup parent) {
         return new LoadMoreGroupItem(R.layout.list_item_load_more, parent);
     }
 
-    public class LoadMoreGroupItem extends AbstractLoadMoreGroupItem {
+    public class LoadMoreGroupItem extends AssemblyLoadMoreGroupItem {
         private View loadingView;
         private View errorView;
         private View endView;
