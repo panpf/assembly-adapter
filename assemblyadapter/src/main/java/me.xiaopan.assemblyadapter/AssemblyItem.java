@@ -9,6 +9,7 @@ public abstract class AssemblyItem<BEAN> {
     private View itemView;
     private int position;
     private BEAN data;
+    private ContentSetter setter;
 
     public AssemblyItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
@@ -34,6 +35,7 @@ public abstract class AssemblyItem<BEAN> {
         return itemView.findViewById(id);
     }
 
+    @SuppressWarnings("unused")
     public View findViewWithTag(Object tag) {
         return itemView.findViewWithTag(tag);
     }
@@ -54,5 +56,12 @@ public abstract class AssemblyItem<BEAN> {
 
     public int getPosition() {
         return position;
+    }
+
+    public ContentSetter getSetter() {
+        if (setter == null) {
+            setter = new ContentSetter(itemView);
+        }
+        return setter;
     }
 }

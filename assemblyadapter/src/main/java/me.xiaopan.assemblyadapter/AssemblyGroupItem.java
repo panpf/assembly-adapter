@@ -10,6 +10,7 @@ public abstract class AssemblyGroupItem<BEAN> {
     private int groupPosition;
     private boolean isExpanded;
     private BEAN data;
+    private ContentSetter setter;
 
     public AssemblyGroupItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
@@ -36,6 +37,7 @@ public abstract class AssemblyGroupItem<BEAN> {
         return itemView.findViewById(id);
     }
 
+    @SuppressWarnings("unused")
     public View findViewWithTag(Object tag) {
         return itemView.findViewWithTag(tag);
     }
@@ -62,5 +64,13 @@ public abstract class AssemblyGroupItem<BEAN> {
     @SuppressWarnings("unused")
     public boolean isExpanded() {
         return isExpanded;
+    }
+
+    @SuppressWarnings("unused")
+    public ContentSetter getSetter() {
+        if (setter == null) {
+            setter = new ContentSetter(itemView);
+        }
+        return setter;
     }
 }

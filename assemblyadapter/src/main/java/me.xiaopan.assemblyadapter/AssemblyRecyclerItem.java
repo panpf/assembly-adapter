@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder {
     private BEAN data;
+    private ContentSetter setter;
 
     public AssemblyRecyclerItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
@@ -28,6 +29,7 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
         return itemView.findViewById(id);
     }
 
+    @SuppressWarnings("unused")
     public View findViewWithTag(Object tag) {
         return itemView.findViewWithTag(tag);
     }
@@ -38,11 +40,20 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
 
     protected abstract void onSetData(int position, BEAN bean);
 
+    @SuppressWarnings("unused")
     public final View getItemView() {
         return itemView;
     }
 
     public BEAN getData() {
         return data;
+    }
+
+    @SuppressWarnings("unused")
+    public ContentSetter getSetter() {
+        if (setter == null) {
+            setter = new ContentSetter(itemView);
+        }
+        return setter;
     }
 }

@@ -11,6 +11,7 @@ public abstract class AssemblyChildItem<BEAN> {
     private int childPosition;
     private boolean isLastChild;
     private BEAN data;
+    private ContentSetter setter;
 
     public AssemblyChildItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
@@ -38,6 +39,7 @@ public abstract class AssemblyChildItem<BEAN> {
         return itemView.findViewById(id);
     }
 
+    @SuppressWarnings("unused")
     public View findViewWithTag(Object tag) {
         return itemView.findViewWithTag(tag);
     }
@@ -68,5 +70,13 @@ public abstract class AssemblyChildItem<BEAN> {
     @SuppressWarnings("unused")
     public boolean isLastChild() {
         return isLastChild;
+    }
+
+    @SuppressWarnings("unused")
+    public ContentSetter getSetter() {
+        if (setter == null) {
+            setter = new ContentSetter(itemView);
+        }
+        return setter;
     }
 }
