@@ -8,3 +8,6 @@
                 .setText(R.id.text_gameListItem_like, game.like);
     }
     ```
+>* ``修改``. AbstractLoadMoreGroupItemFactory重命名为AssemblyLoadMoreGroupItemFactory
+>* ``修改``. AbstractLoadMoreListItemFactory重命名为AssemblyLoadMoreItemFactory
+>* ``修改``. AbstractLoadMoreRecyclerItemFactory重命名为AssemblyLoadMoreRecyclerItemFactory
