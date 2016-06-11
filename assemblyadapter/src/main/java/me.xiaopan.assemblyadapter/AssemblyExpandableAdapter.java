@@ -30,7 +30,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     }
 
     @SuppressWarnings("unused")
-    public AssemblyExpandableAdapter(Object... dataArray) {
+    public AssemblyExpandableAdapter(Object[] dataArray) {
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
             Collections.addAll(dataList, dataArray);

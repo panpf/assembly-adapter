@@ -29,7 +29,7 @@ public class AssemblyAdapter extends BaseAdapter {
     }
 
     @SuppressWarnings("unused")
-    public AssemblyAdapter(Object... dataArray) {
+    public AssemblyAdapter(Object[] dataArray) {
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
             Collections.addAll(dataList, dataArray);

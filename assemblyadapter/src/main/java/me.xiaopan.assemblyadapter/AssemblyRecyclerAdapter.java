@@ -27,7 +27,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     @SuppressWarnings("unused")
-    public AssemblyRecyclerAdapter(Object... dataArray) {
+    public AssemblyRecyclerAdapter(Object[] dataArray) {
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
             Collections.addAll(dataList, dataArray);
