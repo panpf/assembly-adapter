@@ -27,8 +27,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     private int childTypeIndex = 0;
     private boolean groupItemFactoryLocked;
     private boolean childItemFactoryLocked;
-    private ArrayList<FixedItemInfo> headerItemList;
-    private ArrayList<FixedItemInfo> footerItemList;
+    private ArrayList<FixedGroupItemInfo> headerItemList;
+    private ArrayList<FixedGroupItemInfo> footerItemList;
     private ArrayList<AssemblyGroupItemFactory> groupItemFactoryList;
     private ArrayList<AssemblyChildItemFactory> childItemFactoryList;
     private SparseArray<Object> groupItemFactoryArray;
@@ -55,7 +55,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     @SuppressLint("LongLogTag")
     @SuppressWarnings("unused")
-    public FixedItemInfo addHeaderItem(AssemblyGroupItemFactory headerFactory, Object data) {
+    public FixedGroupItemInfo addHeaderItem(AssemblyGroupItemFactory headerFactory, Object data) {
         if (headerFactory == null || groupItemFactoryLocked) {
             Log.w(TAG, "headerFactory is nll or locked");
             return null;
@@ -63,7 +63,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
 
         headerFactory.setAdapter(this);
         headerFactory.setItemType(groupTypeIndex++);
-        FixedItemInfo headerItemInfo = new FixedItemInfo(headerFactory, data);
+        FixedGroupItemInfo headerItemInfo = new FixedGroupItemInfo(headerFactory, data);
 
         if (groupItemFactoryArray == null) {
             groupItemFactoryArray = new SparseArray<Object>();
@@ -71,7 +71,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         groupItemFactoryArray.put(headerFactory.getItemType(), headerItemInfo);
 
         if (headerItemList == null) {
-            headerItemList = new ArrayList<FixedItemInfo>(2);
+            headerItemList = new ArrayList<FixedGroupItemInfo>(2);
         }
         headerItemList.add(headerItemInfo);
 
@@ -127,7 +127,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     @SuppressLint("LongLogTag")
     @SuppressWarnings("unused")
-    public FixedItemInfo addFooterItem(AssemblyGroupItemFactory footerFactory, Object data) {
+    public FixedGroupItemInfo addFooterItem(AssemblyGroupItemFactory footerFactory, Object data) {
         if (footerFactory == null || groupItemFactoryLocked) {
             Log.w(TAG, "footerFactory is nll or locked");
             return null;
@@ -135,7 +135,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
 
         footerFactory.setAdapter(this);
         footerFactory.setItemType(groupTypeIndex++);
-        FixedItemInfo footerItemInfo = new FixedItemInfo(footerFactory, data);
+        FixedGroupItemInfo footerItemInfo = new FixedGroupItemInfo(footerFactory, data);
 
         if (groupItemFactoryArray == null) {
             groupItemFactoryArray = new SparseArray<Object>();
@@ -143,7 +143,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         groupItemFactoryArray.put(footerFactory.getItemType(), footerItemInfo);
 
         if (footerItemList == null) {
-            footerItemList = new ArrayList<FixedItemInfo>(2);
+            footerItemList = new ArrayList<FixedGroupItemInfo>(2);
         }
         footerItemList.add(footerItemInfo);
 
@@ -322,10 +322,10 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      * 删除一个HeaderItem
      */
     @SuppressWarnings("unused")
-    public void removeHeaderItem(FixedItemInfo headerItemInfo) {
+    public void removeHeaderItem(FixedGroupItemInfo headerItemInfo) {
         if (headerItemList != null && headerItemInfo != null) {
-            Iterator<FixedItemInfo> iterator = headerItemList.iterator();
-            FixedItemInfo fixedItemInfo;
+            Iterator<FixedGroupItemInfo> iterator = headerItemList.iterator();
+            FixedGroupItemInfo fixedItemInfo;
             while (iterator.hasNext()) {
                 fixedItemInfo = iterator.next();
                 if (fixedItemInfo == headerItemInfo) {
@@ -341,10 +341,10 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      * 删除一个FooterItem
      */
     @SuppressWarnings("unused")
-    public void removeFooterItem(FixedItemInfo footerItemInfo) {
+    public void removeFooterItem(FixedGroupItemInfo footerItemInfo) {
         if (footerItemList != null && footerItemInfo != null) {
-            Iterator<FixedItemInfo> iterator = footerItemList.iterator();
-            FixedItemInfo fixedItemInfo;
+            Iterator<FixedGroupItemInfo> iterator = footerItemList.iterator();
+            FixedGroupItemInfo fixedItemInfo;
             while (iterator.hasNext()) {
                 fixedItemInfo = iterator.next();
                 if (fixedItemInfo == footerItemInfo) {
@@ -360,7 +360,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      * 获取Header列表
      */
     @SuppressWarnings("unused")
-    public List<FixedItemInfo> getHeaderItemList() {
+    public List<FixedGroupItemInfo> getHeaderItemList() {
         return headerItemList;
     }
 
@@ -384,7 +384,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      * 获取Footer列表
      */
     @SuppressWarnings("unused")
-    public List<FixedItemInfo> getFooterItemList() {
+    public List<FixedGroupItemInfo> getFooterItemList() {
         return footerItemList;
     }
 
@@ -514,7 +514,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         if (groupPosition >= headerStartPosition && groupPosition <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = groupPosition;
-            return headerItemList.get(positionInHeaderList).data;
+            return headerItemList.get(positionInHeaderList).getData();
         }
 
         // 数据
@@ -532,7 +532,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (groupPosition >= footerStartPosition && groupPosition <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = groupPosition - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).data;
+            return footerItemList.get(positionInFooterList).getData();
         }
 
         // 加载更多尾巴
@@ -599,7 +599,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         if (groupPosition >= headerStartPosition && groupPosition <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = groupPosition;
-            return headerItemList.get(positionInHeaderList).itemFactory.getItemType();
+            return headerItemList.get(positionInHeaderList).getItemFactory().getItemType();
         }
 
         // 数据
@@ -629,7 +629,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (groupPosition >= footerStartPosition && groupPosition <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = groupPosition - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).itemFactory.getItemType();
+            return footerItemList.get(positionInFooterList).getItemFactory().getItemType();
         }
 
         // 加载更多尾巴
@@ -710,9 +710,9 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         }
 
         // 头或尾巴
-        if (item instanceof FixedItemInfo) {
-            FixedItemInfo fixedItemInfo = (FixedItemInfo) item;
-            return fixedItemInfo.itemFactory.createAssemblyItem(parent);
+        if (item instanceof FixedGroupItemInfo) {
+            FixedGroupItemInfo fixedItemInfo = (FixedGroupItemInfo) item;
+            return fixedItemInfo.getItemFactory().createAssemblyItem(parent);
         }
 
         throw new IllegalStateException("unknown groupViewType: " + viewType + ", " +
@@ -762,15 +762,5 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         boolean hasStableIds();
 
         boolean isChildSelectable(int groupPosition, int childPosition);
-    }
-
-    public static class FixedItemInfo {
-        private AssemblyGroupItemFactory itemFactory;
-        private Object data;
-
-        public FixedItemInfo(AssemblyGroupItemFactory itemFactory, Object data) {
-            this.data = data;
-            this.itemFactory = itemFactory;
-        }
     }
 }

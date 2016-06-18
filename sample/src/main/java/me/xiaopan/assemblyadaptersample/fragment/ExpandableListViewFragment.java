@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.xiaopan.assemblyadapter.AssemblyExpandableAdapter;
+import me.xiaopan.assemblyadapter.FixedGroupItemInfo;
 import me.xiaopan.assemblyadapter.OnGroupLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
@@ -33,8 +34,8 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
 
     private AssemblyExpandableAdapter adapter;
     private ExpandableListView listView;
-    private AssemblyExpandableAdapter.FixedItemInfo headerItemInfo;
-    private AssemblyExpandableAdapter.FixedItemInfo footerItemInfo;
+    private FixedGroupItemInfo headerItemInfo;
+    private FixedGroupItemInfo footerItemInfo;
 
     @Nullable
     @Override

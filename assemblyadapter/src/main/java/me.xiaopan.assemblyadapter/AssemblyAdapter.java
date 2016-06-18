@@ -463,7 +463,7 @@ public class AssemblyAdapter extends BaseAdapter {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            return headerItemList.get(positionInHeaderList).data;
+            return headerItemList.get(positionInHeaderList).getData();
         }
 
         // 数据
@@ -481,7 +481,7 @@ public class AssemblyAdapter extends BaseAdapter {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).data;
+            return footerItemList.get(positionInFooterList).getData();
         }
 
         // 加载更多尾巴
@@ -517,7 +517,7 @@ public class AssemblyAdapter extends BaseAdapter {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            return headerItemList.get(positionInHeaderList).itemFactory.getItemType();
+            return headerItemList.get(positionInHeaderList).getItemFactory().getItemType();
         }
 
         // 数据
@@ -547,7 +547,7 @@ public class AssemblyAdapter extends BaseAdapter {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).itemFactory.getItemType();
+            return footerItemList.get(positionInFooterList).getItemFactory().getItemType();
         }
 
         // 加载更多尾巴
@@ -589,7 +589,7 @@ public class AssemblyAdapter extends BaseAdapter {
         // 头或尾巴
         if (item instanceof FixedItemInfo) {
             FixedItemInfo fixedItemInfo = (FixedItemInfo) item;
-            return fixedItemInfo.itemFactory.createAssemblyItem(parent);
+            return fixedItemInfo.getItemFactory().createAssemblyItem(parent);
         }
 
         throw new IllegalStateException("unknown viewType: " + viewType + ", " +
@@ -599,15 +599,5 @@ public class AssemblyAdapter extends BaseAdapter {
     @SuppressWarnings("unchecked")
     public void bindItem(AssemblyItem assemblyItem, int position) {
         assemblyItem.setData(position, getItem(position));
-    }
-
-    public static class FixedItemInfo {
-        private AssemblyItemFactory itemFactory;
-        private Object data;
-
-        public FixedItemInfo(AssemblyItemFactory itemFactory, Object data) {
-            this.data = data;
-            this.itemFactory = itemFactory;
-        }
     }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 
 import me.xiaopan.assemblyadapter.AssemblyRecyclerAdapter;
 import me.xiaopan.assemblyadapter.OnRecyclerLoadMoreListener;
+import me.xiaopan.assemblyadapter.FixedRecyclerItemInfo;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadaptersample.bean.User;
@@ -29,7 +30,7 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
 
     private AssemblyRecyclerAdapter adapter;
     private RecyclerView recyclerView;
-    private AssemblyRecyclerAdapter.FixedItemInfo headerItemInfo;
+    private FixedRecyclerItemInfo headerItemInfo;
 
     @Nullable
     @Override

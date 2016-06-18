@@ -22,8 +22,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
     private int itemTypeIndex = 0;
     private boolean itemFactoryLocked;
-    private ArrayList<FixedItemInfo> headerItemList;
-    private ArrayList<FixedItemInfo> footerItemList;
+    private ArrayList<FixedRecyclerItemInfo> headerItemList;
+    private ArrayList<FixedRecyclerItemInfo> footerItemList;
     private ArrayList<AssemblyRecyclerItemFactory> itemFactoryList;
     private SparseArray<Object> itemFactoryArray;
 
@@ -47,7 +47,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      * 添加一个将按添加顺序显示在列表头部的AssemblyRecyclerItemFactory
      */
     @SuppressWarnings("unused")
-    public FixedItemInfo addHeaderItem(AssemblyRecyclerItemFactory headerFactory, Object data) {
+    public FixedRecyclerItemInfo addHeaderItem(AssemblyRecyclerItemFactory headerFactory, Object data) {
         if (headerFactory == null || itemFactoryLocked) {
             Log.w(TAG, "headerFactory is nll or locked");
             return null;
@@ -55,7 +55,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
         headerFactory.setAdapter(this);
         headerFactory.setItemType(itemTypeIndex++);
-        FixedItemInfo headerItemInfo = new FixedItemInfo(headerFactory, data);
+        FixedRecyclerItemInfo headerItemInfo = new FixedRecyclerItemInfo(headerFactory, data);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
@@ -63,7 +63,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         itemFactoryArray.put(headerFactory.getItemType(), headerItemInfo);
 
         if (headerItemList == null) {
-            headerItemList = new ArrayList<FixedItemInfo>(2);
+            headerItemList = new ArrayList<FixedRecyclerItemInfo>(2);
         }
         headerItemList.add(headerItemInfo);
 
@@ -97,7 +97,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      * 添加一个将按添加顺序显示在列表尾部的AssemblyRecyclerItemFactory
      */
     @SuppressWarnings("unused")
-    public FixedItemInfo addFooterItem(AssemblyRecyclerItemFactory footerFactory, Object data) {
+    public FixedRecyclerItemInfo addFooterItem(AssemblyRecyclerItemFactory footerFactory, Object data) {
         if (footerFactory == null || itemFactoryLocked) {
             Log.w(TAG, "footerFactory is nll or locked");
             return null;
@@ -105,7 +105,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
         footerFactory.setAdapter(this);
         footerFactory.setItemType(itemTypeIndex++);
-        FixedItemInfo footerItemInfo = new FixedItemInfo(footerFactory, data);
+        FixedRecyclerItemInfo footerItemInfo = new FixedRecyclerItemInfo(footerFactory, data);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
@@ -113,7 +113,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         itemFactoryArray.put(footerFactory.getItemType(), footerItemInfo);
 
         if (footerItemList == null) {
-            footerItemList = new ArrayList<FixedItemInfo>(2);
+            footerItemList = new ArrayList<FixedRecyclerItemInfo>(2);
         }
         footerItemList.add(footerItemInfo);
 
@@ -292,10 +292,10 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      * 删除一个HeaderItem
      */
     @SuppressWarnings("unused")
-    public void removeHeaderItem(FixedItemInfo headerItemInfo) {
+    public void removeHeaderItem(FixedRecyclerItemInfo headerItemInfo) {
         if (headerItemList != null && headerItemInfo != null) {
-            Iterator<FixedItemInfo> iterator = headerItemList.iterator();
-            FixedItemInfo fixedItemInfo;
+            Iterator<FixedRecyclerItemInfo> iterator = headerItemList.iterator();
+            FixedRecyclerItemInfo fixedItemInfo;
             while (iterator.hasNext()) {
                 fixedItemInfo = iterator.next();
                 if (fixedItemInfo == headerItemInfo) {
@@ -311,10 +311,10 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      * 删除一个FooterItem
      */
     @SuppressWarnings("unused")
-    public void removeFooterItem(FixedItemInfo footerItemInfo) {
+    public void removeFooterItem(FixedRecyclerItemInfo footerItemInfo) {
         if (footerItemList != null && footerItemInfo != null) {
-            Iterator<FixedItemInfo> iterator = footerItemList.iterator();
-            FixedItemInfo fixedItemInfo;
+            Iterator<FixedRecyclerItemInfo> iterator = footerItemList.iterator();
+            FixedRecyclerItemInfo fixedItemInfo;
             while (iterator.hasNext()) {
                 fixedItemInfo = iterator.next();
                 if (fixedItemInfo == footerItemInfo) {
@@ -330,7 +330,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      * 获取Header列表
      */
     @SuppressWarnings("unused")
-    public List<FixedItemInfo> getHeaderItemList() {
+    public List<FixedRecyclerItemInfo> getHeaderItemList() {
         return headerItemList;
     }
 
@@ -346,7 +346,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      * 获取Footer列表
      */
     @SuppressWarnings("unused")
-    public List<FixedItemInfo> getFooterItemList() {
+    public List<FixedRecyclerItemInfo> getFooterItemList() {
         return footerItemList;
     }
 
@@ -460,7 +460,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            return headerItemList.get(positionInHeaderList).data;
+            return headerItemList.get(positionInHeaderList).getData();
         }
 
         // 数据
@@ -478,7 +478,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).data;
+            return footerItemList.get(positionInFooterList).getData();
         }
 
         // 加载更多尾巴
@@ -508,7 +508,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            return headerItemList.get(positionInHeaderList).itemFactory.getItemType();
+            return headerItemList.get(positionInHeaderList).getItemFactory().getItemType();
         }
 
         // 数据
@@ -538,7 +538,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).itemFactory.getItemType();
+            return footerItemList.get(positionInFooterList).getItemFactory().getItemType();
         }
 
         // 加载更多尾巴
@@ -564,9 +564,9 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         }
 
         // 头或尾巴
-        if (item instanceof FixedItemInfo) {
-            FixedItemInfo fixedItemInfo = (FixedItemInfo) item;
-            return fixedItemInfo.itemFactory.createAssemblyItem(parent);
+        if (item instanceof FixedRecyclerItemInfo) {
+            FixedRecyclerItemInfo fixedItemInfo = (FixedRecyclerItemInfo) item;
+            return fixedItemInfo.getItemFactory().createAssemblyItem(parent);
         }
 
         throw new IllegalStateException("unknown viewType: " + viewType + ", " +
@@ -581,13 +581,4 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public static class FixedItemInfo {
-        private AssemblyRecyclerItemFactory itemFactory;
-        private Object data;
-
-        public FixedItemInfo(AssemblyRecyclerItemFactory itemFactory, Object data) {
-            this.data = data;
-            this.itemFactory = itemFactory;
-        }
-    }
 }

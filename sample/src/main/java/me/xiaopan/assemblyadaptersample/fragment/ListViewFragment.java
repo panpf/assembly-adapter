@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.xiaopan.assemblyadapter.AssemblyAdapter;
+import me.xiaopan.assemblyadapter.FixedItemInfo;
 import me.xiaopan.assemblyadapter.OnLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
@@ -28,7 +29,7 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
 
     private AssemblyAdapter adapter;
     private ListView listView;
-    private AssemblyAdapter.FixedItemInfo footerItemInfo;
+    private FixedItemInfo footerItemInfo;
 
     @Nullable
     @Override
