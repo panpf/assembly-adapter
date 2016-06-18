@@ -438,7 +438,7 @@ public class AssemblyAdapter extends BaseAdapter {
             return 0;
         }
 
-        return -1;
+        throw new IllegalArgumentException("illegal position: " + position);
     }
 
     @Override
