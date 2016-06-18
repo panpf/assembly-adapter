@@ -65,7 +65,7 @@ public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItem
                 showLoading();
                 if (eventListener != null && !loadMoreRunning) {
                     loadMoreRunning = true;
-                    eventListener.onLoadMore(adapter);
+                    eventListener.onLoadMore(getAdapter());
                 }
             }
         }

@@ -3,8 +3,8 @@ package me.xiaopan.assemblyadapter;
 import android.view.ViewGroup;
 
 public abstract class AssemblyGroupItemFactory<ITEM extends AssemblyGroupItem> {
-    protected int itemType;
-    protected AssemblyExpandableAdapter adapter;
+    private int itemType;
+    private AssemblyExpandableAdapter adapter;
 
     public int getItemType() {
         return itemType;
