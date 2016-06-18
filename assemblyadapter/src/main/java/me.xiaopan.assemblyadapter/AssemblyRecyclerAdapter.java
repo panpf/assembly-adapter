@@ -24,7 +24,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     private boolean itemFactoryLocked;
     private ArrayList<FixedItemInfo> headerItemList;
     private ArrayList<FixedItemInfo> footerItemList;
-    private List<AssemblyRecyclerItemFactory> itemFactoryList;
+    private ArrayList<AssemblyRecyclerItemFactory> itemFactoryList;
     private SparseArray<Object> itemFactoryArray;
 
     private boolean disableLoadMore;
@@ -517,17 +517,19 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object itemObject = dataList.get(positionInDataList);
+            Object dataObject = dataList.get(positionInDataList);
 
             AssemblyRecyclerItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
                 itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(itemObject)) {
+                if (itemFactory.isTarget(dataObject)) {
                     return itemFactory.getItemType();
                 }
             }
 
-            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. positionInDataList=" + positionInDataList + ", itemObject=" + (itemObject != null ? itemObject.getClass().getName() : "null"));
+            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. " +
+                    "positionInDataList=" + positionInDataList + ", " +
+                    "dataObject=" + (dataObject != null ? dataObject.getClass().getName() : "null"));
         }
 
         // 尾巴

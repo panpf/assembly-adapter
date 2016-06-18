@@ -29,8 +29,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     private boolean childItemFactoryLocked;
     private ArrayList<FixedItemInfo> headerItemList;
     private ArrayList<FixedItemInfo> footerItemList;
-    private List<AssemblyGroupItemFactory> groupItemFactoryList;
-    private List<AssemblyChildItemFactory> childItemFactoryList;
+    private ArrayList<AssemblyGroupItemFactory> groupItemFactoryList;
+    private ArrayList<AssemblyChildItemFactory> childItemFactoryList;
     private SparseArray<Object> groupItemFactoryArray;
     private SparseArray<Object> childItemFactoryArray;
 
@@ -561,14 +561,16 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     @SuppressLint("LongLogTag")
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        Object groupObject = getGroup(groupPosition);
-        if (groupObject == null) {
+        Object groupDataObject = getGroup(groupPosition);
+        if (groupDataObject == null) {
             return null;
         }
-        if (!(groupObject instanceof AssemblyGroup)) {
-            throw new IllegalArgumentException("group object must implements AssemblyGroup interface. groupPosition=" + groupPosition + ", groupObject=" + groupObject.getClass().getName());
+        if (!(groupDataObject instanceof AssemblyGroup)) {
+            throw new IllegalArgumentException("group object must implements AssemblyGroup interface. " +
+                    "groupPosition=" + groupPosition + ", " +
+                    "groupDataObject=" + groupDataObject.getClass().getName());
         }
-        return ((AssemblyGroup) groupObject).getChild(childPosition);
+        return ((AssemblyGroup) groupDataObject).getChild(childPosition);
     }
 
     @Override
@@ -606,17 +608,19 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (groupPosition >= dataStartPosition && groupPosition <= dataEndPosition && dataCount > 0) {
             int positionInDataList = groupPosition - headerItemCount;
-            Object itemObject = dataList.get(positionInDataList);
+            Object groupDataObject = dataList.get(positionInDataList);
 
             AssemblyGroupItemFactory itemFactory;
             for (int w = 0, size = groupItemFactoryList.size(); w < size; w++) {
                 itemFactory = groupItemFactoryList.get(w);
-                if (itemFactory.isTarget(itemObject)) {
+                if (itemFactory.isTarget(groupDataObject)) {
                     return itemFactory.getItemType();
                 }
             }
 
-            throw new IllegalStateException("Didn't find suitable AssemblyGroupItemFactory. positionInDataList=" + positionInDataList + ", itemObject=" + (itemObject != null ? itemObject.getClass().getName() : "null"));
+            throw new IllegalStateException("Didn't find suitable AssemblyGroupItemFactory. " +
+                    "positionInDataList=" + positionInDataList + ", " +
+                    "groupDataObject=" + (groupDataObject != null ? groupDataObject.getClass().getName() : "null"));
         }
 
         // 尾巴
@@ -650,17 +654,20 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         }
         childItemFactoryLocked = true;
 
-        Object childObject = getChild(groupPosition, childPosition);
+        Object childDataObject = getChild(groupPosition, childPosition);
 
         AssemblyChildItemFactory childItemFactory;
         for (int w = 0, size = childItemFactoryList.size(); w < size; w++) {
             childItemFactory = childItemFactoryList.get(w);
-            if (childItemFactory.isTarget(childObject)) {
+            if (childItemFactory.isTarget(childDataObject)) {
                 return childItemFactory.getItemType();
             }
         }
 
-        throw new IllegalStateException("Didn't find suitable AssemblyChildItemFactory. groupPosition=" + groupPosition + ", childPosition=" + childPosition + ", childObject=" + (childObject != null ? childObject.getClass().getName() : "null"));
+        throw new IllegalStateException("Didn't find suitable AssemblyChildItemFactory. " +
+                "groupPosition=" + groupPosition + ", " +
+                "childPosition=" + childPosition + ", " +
+                "childDataObject=" + (childDataObject != null ? childDataObject.getClass().getName() : "null"));
     }
 
     @Override

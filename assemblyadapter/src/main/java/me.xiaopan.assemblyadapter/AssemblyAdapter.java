@@ -526,17 +526,19 @@ public class AssemblyAdapter extends BaseAdapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object itemObject = dataList.get(positionInDataList);
+            Object dataObject = dataList.get(positionInDataList);
 
             AssemblyItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
                 itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(itemObject)) {
+                if (itemFactory.isTarget(dataObject)) {
                     return itemFactory.getItemType();
                 }
             }
 
-            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. positionInDataList=" + positionInDataList + ", itemObject=" + (itemObject != null ? itemObject.getClass().getName() : "null"));
+            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. " +
+                    "positionInDataList=" + positionInDataList + ", " +
+                    "dataObject=" + (dataObject != null ? dataObject.getClass().getName() : "null"));
         }
 
         // 尾巴
