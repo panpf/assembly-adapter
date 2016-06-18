@@ -1,6 +1,7 @@
 package me.xiaopan.assemblyadapter;
 
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -24,7 +25,8 @@ public class AssemblyAdapter extends BaseAdapter {
     private boolean itemFactoryLocked;
     private ArrayList<FixedItemInfo> headerItemList;
     private ArrayList<FixedItemInfo> footerItemList;
-    private ArrayList<AssemblyItemFactory> itemFactoryList;
+    private ArrayList<AssemblyItemFactory> itemFactoryList = new ArrayList<AssemblyItemFactory>(5);
+    private SparseArray<Object> itemFactoryArray = new SparseArray<Object>();
 
     private boolean disableLoadMore;
     private AssemblyLoadMoreItem loadMoreItem;
@@ -56,10 +58,12 @@ public class AssemblyAdapter extends BaseAdapter {
         headerFactory.setAdapter(this);
         headerFactory.setItemType(itemTypeIndex++);
 
+        FixedItemInfo headerItemInfo = new FixedItemInfo(headerFactory, data);
+        itemFactoryArray.put(headerFactory.getItemType(), headerItemInfo);
+
         if (headerItemList == null) {
             headerItemList = new ArrayList<FixedItemInfo>(2);
         }
-        FixedItemInfo headerItemInfo = new FixedItemInfo(headerFactory, data);
         headerItemList.add(headerItemInfo);
         return headerItemInfo;
     }
@@ -76,9 +80,8 @@ public class AssemblyAdapter extends BaseAdapter {
         itemFactory.setAdapter(this);
         itemFactory.setItemType(itemTypeIndex++);
 
-        if (itemFactoryList == null) {
-            itemFactoryList = new ArrayList<AssemblyItemFactory>(5);
-        }
+        itemFactoryArray.put(itemFactory.getItemType(), itemFactory);
+
         itemFactoryList.add(itemFactory);
     }
 
@@ -95,10 +98,12 @@ public class AssemblyAdapter extends BaseAdapter {
         footerFactory.setAdapter(this);
         footerFactory.setItemType(itemTypeIndex++);
 
+        FixedItemInfo footerItemInfo = new FixedItemInfo(footerFactory, data);
+        itemFactoryArray.put(footerFactory.getItemType(), footerItemInfo);
+
         if (footerItemList == null) {
             footerItemList = new ArrayList<FixedItemInfo>(2);
         }
-        FixedItemInfo footerItemInfo = new FixedItemInfo(footerFactory, data);
         footerItemList.add(footerItemInfo);
         return footerItemInfo;
     }
@@ -121,6 +126,8 @@ public class AssemblyAdapter extends BaseAdapter {
             loadMoreItemFactory.setItemType(itemTypeIndex++);
         }
         loadMoreItemFactory.setLoadMoreRunning(false);
+
+        itemFactoryArray.put(loadMoreItemFactory.getItemType(), loadMoreItemFactory);
 
         this.loadMoreItemFactory = loadMoreItemFactory;
     }
@@ -490,100 +497,52 @@ public class AssemblyAdapter extends BaseAdapter {
             return loadMoreItemFactory.getItemType();
         }
 
-        return super.getItemViewType(position);
+        throw new IllegalStateException("not found match viewType, position: " + position);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public View getView(final int position, View convertView, ViewGroup parent) {
-        if (getItemFactoryCount() <= 0) {
-            throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
+        AssemblyItem assemblyItem;
+        if (convertView == null) {
+            assemblyItem = createItem(parent, getItemViewType(position));
+            convertView = assemblyItem.getItemView();
+            convertView.setTag(assemblyItem);
+        } else {
+            assemblyItem = (AssemblyItem) convertView.getTag();
         }
-        itemFactoryLocked = true;
+        bindItem(assemblyItem, position);
 
-        // 头
-        int headerItemCount = getHeaderItemCount();
-        int headerStartPosition = 0;
-        int headerEndPosition = headerItemCount - 1;
-        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            //noinspection UnnecessaryLocalVariable
-            int positionInHeaderList = position;
-            FixedItemInfo fixedItemInfo = headerItemList.get(positionInHeaderList);
+        return convertView;
+    }
 
-            if (convertView == null) {
-                AssemblyItem assemblyItem = fixedItemInfo.itemFactory.createAssemblyItem(parent);
-                convertView = assemblyItem.getItemView();
+    private AssemblyItem createItem(ViewGroup parent, int viewType) {
+        Object item = itemFactoryArray.get(viewType);
+
+        // Item或加载更多尾巴
+        if (item instanceof AssemblyItemFactory) {
+            AssemblyItemFactory itemFactory = (AssemblyItemFactory) item;
+            AssemblyItem assemblyItem = itemFactory.createAssemblyItem(parent);
+            if (assemblyItem instanceof AssemblyLoadMoreItem) {
+                this.loadMoreItem = (AssemblyLoadMoreItem) assemblyItem;
             }
-
-            AssemblyItem assemblyItem = (AssemblyItem) convertView.getTag();
-            assemblyItem.setPositionInAdapter(position);
-            assemblyItem.setData(positionInHeaderList, fixedItemInfo.data);
-            return convertView;
+            return assemblyItem;
         }
 
-        // 数据
-        int dataCount = getDataCount();
-        int dataStartPosition = headerEndPosition + 1;
-        int dataEndPosition = headerEndPosition + dataCount;
-        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
-            int positionInDataList = position - headerItemCount;
-            Object itemObject = dataList.get(positionInDataList);
-
-            AssemblyItemFactory itemFactory;
-            for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
-                itemFactory = itemFactoryList.get(w);
-                if (!itemFactory.isTarget(itemObject)) {
-                    continue;
-                }
-
-                if (convertView == null) {
-                    AssemblyItem assemblyItem = itemFactory.createAssemblyItem(parent);
-                    convertView = assemblyItem.getItemView();
-                }
-
-                AssemblyItem assemblyItem = (AssemblyItem) convertView.getTag();
-                assemblyItem.setPositionInAdapter(position);
-                assemblyItem.setData(positionInDataList, itemObject);
-                return convertView;
-            }
-
-            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. position=" + positionInDataList + ", itemObject=" + (itemObject != null ? itemObject.getClass().getName() : "null"));
+        // 头或尾巴
+        if (item instanceof FixedItemInfo) {
+            FixedItemInfo fixedItemInfo = (FixedItemInfo) item;
+            return fixedItemInfo.itemFactory.createAssemblyItem(parent);
         }
 
-        // 尾巴
-        int footerItemCount = getFooterItemCount();
-        int footerStartPosition = dataEndPosition + 1;
-        int footerEndPosition = dataEndPosition + footerItemCount;
-        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
-            int positionInFooterList = position - headerItemCount - dataCount;
-            FixedItemInfo fixedItemInfo = footerItemList.get(positionInFooterList);
+        throw new IllegalStateException("unknown viewType: " + viewType + ", " +
+                "itemFactory: " + (item != null ? item.getClass().getName() : "null"));
+    }
 
-            if (convertView == null) {
-                AssemblyItem assemblyItem = fixedItemInfo.itemFactory.createAssemblyItem(parent);
-                convertView = assemblyItem.getItemView();
-            }
-
-            AssemblyItem assemblyItem = (AssemblyItem) convertView.getTag();
-            assemblyItem.setPositionInAdapter(position);
-            assemblyItem.setData(positionInFooterList, fixedItemInfo.data);
-            return convertView;
-        }
-
-        // 加载更多尾巴
-        if (dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
-            if (convertView == null) {
-                AssemblyItem assemblyItem = loadMoreItemFactory.createAssemblyItem(parent);
-                convertView = assemblyItem.getItemView();
-            }
-
-            int positionInLoadMore = 0;
-            loadMoreItem = (AssemblyLoadMoreItemFactory.AssemblyLoadMoreItem) convertView.getTag();
-            loadMoreItem.setPositionInAdapter(position);
-            loadMoreItem.setData(positionInLoadMore, null);
-            return convertView;
-        }
-
-        throw new IllegalStateException("weird position is" + position);
+    @SuppressWarnings("unchecked")
+    public void bindItem(AssemblyItem assemblyItem, int position) {
+        assemblyItem.setPositionInAdapter(position);
+        assemblyItem.setData(position, getItem(position));
     }
 
     public static class FixedItemInfo {

@@ -21,7 +21,6 @@ public abstract class AssemblyItem<BEAN> {
             throw new IllegalArgumentException("itemView may not be null");
         }
         this.itemView = itemView;
-        this.itemView.setTag(this);
         onFindViews();
         onConfigViews(itemView.getContext());
     }
