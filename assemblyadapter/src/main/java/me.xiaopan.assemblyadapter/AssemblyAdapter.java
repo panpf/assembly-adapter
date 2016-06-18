@@ -25,8 +25,8 @@ public class AssemblyAdapter extends BaseAdapter {
     private boolean itemFactoryLocked;
     private ArrayList<FixedItemInfo> headerItemList;
     private ArrayList<FixedItemInfo> footerItemList;
-    private ArrayList<AssemblyItemFactory> itemFactoryList = new ArrayList<AssemblyItemFactory>(5);
-    private SparseArray<Object> itemFactoryArray = new SparseArray<Object>();
+    private ArrayList<AssemblyItemFactory> itemFactoryList;
+    private SparseArray<Object> itemFactoryArray;
 
     private boolean disableLoadMore;
     private AssemblyLoadMoreItem loadMoreItem;
@@ -57,14 +57,18 @@ public class AssemblyAdapter extends BaseAdapter {
 
         headerFactory.setAdapter(this);
         headerFactory.setItemType(itemTypeIndex++);
-
         FixedItemInfo headerItemInfo = new FixedItemInfo(headerFactory, data);
+
+        if (itemFactoryArray == null) {
+            itemFactoryArray = new SparseArray<Object>();
+        }
         itemFactoryArray.put(headerFactory.getItemType(), headerItemInfo);
 
         if (headerItemList == null) {
             headerItemList = new ArrayList<FixedItemInfo>(2);
         }
         headerItemList.add(headerItemInfo);
+
         return headerItemInfo;
     }
 
@@ -80,8 +84,14 @@ public class AssemblyAdapter extends BaseAdapter {
         itemFactory.setAdapter(this);
         itemFactory.setItemType(itemTypeIndex++);
 
+        if (itemFactoryArray == null) {
+            itemFactoryArray = new SparseArray<Object>();
+        }
         itemFactoryArray.put(itemFactory.getItemType(), itemFactory);
 
+        if (itemFactoryList == null) {
+            itemFactoryList = new ArrayList<AssemblyItemFactory>(5);
+        }
         itemFactoryList.add(itemFactory);
     }
 
@@ -97,14 +107,18 @@ public class AssemblyAdapter extends BaseAdapter {
 
         footerFactory.setAdapter(this);
         footerFactory.setItemType(itemTypeIndex++);
-
         FixedItemInfo footerItemInfo = new FixedItemInfo(footerFactory, data);
+
+        if (itemFactoryArray == null) {
+            itemFactoryArray = new SparseArray<Object>();
+        }
         itemFactoryArray.put(footerFactory.getItemType(), footerItemInfo);
 
         if (footerItemList == null) {
             footerItemList = new ArrayList<FixedItemInfo>(2);
         }
         footerItemList.add(footerItemInfo);
+
         return footerItemInfo;
     }
 
@@ -112,24 +126,27 @@ public class AssemblyAdapter extends BaseAdapter {
      * 设置一个将显示在列表最后（在Footer的后面）的加载更多尾巴
      */
     @SuppressWarnings("unused")
-    public void setLoadMoreItemFactory(AssemblyLoadMoreItemFactory loadMoreItemFactory) {
-        if (loadMoreItemFactory == null || itemFactoryLocked) {
+    public void setLoadMoreItemFactory(AssemblyLoadMoreItemFactory newLoadMoreItemFactory) {
+        if (newLoadMoreItemFactory == null || itemFactoryLocked) {
             Log.w(TAG, "loadMoreItemFactory is null or locked");
             return;
         }
 
-        loadMoreItemFactory.setEnd(false);
-        loadMoreItemFactory.setAdapter(this);
-        if (this.loadMoreItemFactory != null) {
-            loadMoreItemFactory.setItemType(this.loadMoreItemFactory.getItemType());
+        newLoadMoreItemFactory.setEnd(false);
+        newLoadMoreItemFactory.setAdapter(this);
+        if (loadMoreItemFactory != null) {
+            newLoadMoreItemFactory.setItemType(loadMoreItemFactory.getItemType());
         } else {
-            loadMoreItemFactory.setItemType(itemTypeIndex++);
+            newLoadMoreItemFactory.setItemType(itemTypeIndex++);
         }
-        loadMoreItemFactory.setLoadMoreRunning(false);
+        newLoadMoreItemFactory.setLoadMoreRunning(false);
 
-        itemFactoryArray.put(loadMoreItemFactory.getItemType(), loadMoreItemFactory);
+        if (itemFactoryArray == null) {
+            itemFactoryArray = new SparseArray<Object>();
+        }
+        itemFactoryArray.put(newLoadMoreItemFactory.getItemType(), newLoadMoreItemFactory);
 
-        this.loadMoreItemFactory = loadMoreItemFactory;
+        loadMoreItemFactory = newLoadMoreItemFactory;
     }
 
     /**
@@ -335,6 +352,9 @@ public class AssemblyAdapter extends BaseAdapter {
         return footerItemList;
     }
 
+    /**
+     * 获取数据列表
+     */
     @SuppressWarnings("unused")
     public List getDataList() {
         return dataList;
@@ -382,6 +402,43 @@ public class AssemblyAdapter extends BaseAdapter {
      */
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
+    }
+
+    /**
+     * 获取在各自区域的位置
+     */
+    @SuppressWarnings("unused")
+    public int getPositionInPart(int position) {
+        // 头
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            return position;
+        }
+
+        // 数据
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            return position - headerItemCount;
+        }
+
+        // 尾巴
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            return position - headerItemCount - dataCount;
+        }
+
+        // 加载更多尾巴
+        if (dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
+            return 0;
+        }
+
+        return -1;
     }
 
     @Override
@@ -443,7 +500,6 @@ public class AssemblyAdapter extends BaseAdapter {
     @Override
     public int getViewTypeCount() {
         itemFactoryLocked = true;
-
         return itemTypeIndex > 0 ? itemTypeIndex : super.getViewTypeCount();
     }
 
@@ -480,7 +536,7 @@ public class AssemblyAdapter extends BaseAdapter {
                 }
             }
 
-            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. position=" + positionInDataList + ", itemObject=" + (itemObject != null ? itemObject.getClass().getName() : "null"));
+            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. positionInDataList=" + positionInDataList + ", itemObject=" + (itemObject != null ? itemObject.getClass().getName() : "null"));
         }
 
         // 尾巴
@@ -512,7 +568,6 @@ public class AssemblyAdapter extends BaseAdapter {
             assemblyItem = (AssemblyItem) convertView.getTag();
         }
         bindItem(assemblyItem, position);
-
         return convertView;
     }
 
@@ -541,7 +596,6 @@ public class AssemblyAdapter extends BaseAdapter {
 
     @SuppressWarnings("unchecked")
     public void bindItem(AssemblyItem assemblyItem, int position) {
-        assemblyItem.setPositionInAdapter(position);
         assemblyItem.setData(position, getItem(position));
     }
 

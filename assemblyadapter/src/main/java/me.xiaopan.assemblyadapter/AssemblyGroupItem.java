@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 public abstract class AssemblyGroupItem<BEAN> {
     private View itemView;
-    private int groupPosition;
+    private int position;
     private boolean isExpanded;
     private BEAN data;
     private ContentSetter setter;
@@ -27,10 +27,10 @@ public abstract class AssemblyGroupItem<BEAN> {
     }
 
     public void setData(int groupPosition, boolean isExpanded, BEAN bean) {
-        this.groupPosition = groupPosition;
+        this.position = groupPosition;
         this.isExpanded = isExpanded;
         this.data = bean;
-        onSetData(groupPosition, isExpanded, bean);
+        onSetData(groupPosition, bean);
     }
 
     public View findViewById(int id) {
@@ -46,7 +46,7 @@ public abstract class AssemblyGroupItem<BEAN> {
 
     protected abstract void onConfigViews(Context context);
 
-    protected abstract void onSetData(int groupPosition, boolean isExpanded, BEAN bean);
+    protected abstract void onSetData(int position, BEAN bean);
 
     public final View getItemView() {
         return this.itemView;
@@ -57,8 +57,8 @@ public abstract class AssemblyGroupItem<BEAN> {
     }
 
     @SuppressWarnings("unused")
-    public int getGroupPosition() {
-        return groupPosition;
+    public int getPosition() {
+        return position;
     }
 
     @SuppressWarnings("unused")

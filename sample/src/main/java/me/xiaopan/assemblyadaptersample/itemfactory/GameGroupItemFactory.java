@@ -39,8 +39,8 @@ public class GameGroupItemFactory extends AssemblyGroupItemFactory<GameGroupItem
         }
 
         @Override
-        protected void onSetData(int groupPosition, boolean isExpanded, GameGroup gameGroup) {
-            if(isExpanded){
+        protected void onSetData(int position, GameGroup gameGroup) {
+            if(isExpanded()){
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_collapse, 0);
             }else{
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_expand, 0);

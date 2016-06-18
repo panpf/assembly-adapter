@@ -1,7 +1,6 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -40,8 +39,8 @@ public class UserGroupItemFactory extends AssemblyGroupItemFactory<UserGroupItem
         }
 
         @Override
-        protected void onSetData(int groupPosition, boolean isExpanded, UserGroup userGroup) {
-            if(isExpanded){
+        protected void onSetData(int position, UserGroup userGroup) {
+            if(isExpanded()){
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_collapse, 0, 0, 0);
             }else{
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_expand, 0, 0, 0);

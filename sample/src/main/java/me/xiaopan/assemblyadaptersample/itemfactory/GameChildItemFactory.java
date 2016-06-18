@@ -82,25 +82,25 @@ public class GameChildItemFactory extends AssemblyChildItemFactory<GameChildItem
             iconImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickIcon(getChildPosition(), getData());
+                    eventListener.onClickIcon(getPosition(), getData());
                 }
             });
             nameTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickName(getChildPosition(), getData());
+                    eventListener.onClickName(getPosition(), getData());
                 }
             });
             likeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickLike(getChildPosition(), getData());
+                    eventListener.onClickLike(getPosition(), getData());
                 }
             });
         }
 
         @Override
-        protected void onSetData(int groupPosition, int childPosition, boolean isLastChild, Game game) {
+        protected void onSetData(int position, Game game) {
             iconImageView.setImageResource(game.iconResId);
             nameTextView.setText(game.name);
             likeTextView.setText(game.like);

@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 
 public abstract class AssemblyChildItem<BEAN> {
     private View itemView;
+    private int position;
     private int groupPosition;
-    private int childPosition;
     private boolean isLastChild;
     private BEAN data;
     private ContentSetter setter;
@@ -29,10 +29,10 @@ public abstract class AssemblyChildItem<BEAN> {
 
     public void setData(int groupPosition, int childPosition, boolean isLastChild, BEAN bean) {
         this.groupPosition = groupPosition;
-        this.childPosition = childPosition;
+        this.position = childPosition;
         this.isLastChild = isLastChild;
         this.data = bean;
-        onSetData(groupPosition, childPosition, isLastChild, bean);
+        onSetData(childPosition, bean);
     }
 
     public View findViewById(int id) {
@@ -48,14 +48,14 @@ public abstract class AssemblyChildItem<BEAN> {
 
     protected abstract void onConfigViews(Context context);
 
-    protected abstract void onSetData(int groupPosition, int childPosition, boolean isLastChild, BEAN bean);
+    protected abstract void onSetData(int position, BEAN bean);
 
     public final View getItemView() {
         return this.itemView;
     }
 
-    public int getChildPosition() {
-        return childPosition;
+    public int getPosition() {
+        return position;
     }
 
     public BEAN getData() {

@@ -102,37 +102,37 @@ public class UserChildItemFactory extends AssemblyChildItemFactory<UserChildItem
             headImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickHead(getChildPosition(), getData());
+                    eventListener.onClickHead(getPosition(), getData());
                 }
             });
             nameTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickName(getChildPosition(), getData());
+                    eventListener.onClickName(getPosition(), getData());
                 }
             });
             sexTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickSex(getChildPosition(), getData());
+                    eventListener.onClickSex(getPosition(), getData());
                 }
             });
             ageTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickAge(getChildPosition(), getData());
+                    eventListener.onClickAge(getPosition(), getData());
                 }
             });
             jobTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickJob(getChildPosition(), getData());
+                    eventListener.onClickJob(getPosition(), getData());
                 }
             });
         }
 
         @Override
-        protected void onSetData(int groupPosition, int childPosition, boolean isLastChild, User user) {
+        protected void onSetData(int position, User user) {
             headImageView.setImageResource(user.headResId);
             nameTextView.setText(user.name);
             sexTextView.setText(user.sex);

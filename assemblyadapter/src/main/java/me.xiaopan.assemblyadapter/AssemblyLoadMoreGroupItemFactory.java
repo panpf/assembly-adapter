@@ -51,14 +51,14 @@ public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItem
                 public void onClick(View v) {
                     if (eventListener != null) {
                         loadMoreRunning = false;
-                        setData(getGroupPosition(), isExpanded(), getData());
+                        setData(getPosition(), isExpanded(), getData());
                     }
                 }
             });
         }
 
         @Override
-        public void onSetData(int groupPosition, boolean isExpanded, String s) {
+        public void onSetData(int position, String s) {
             if (end) {
                 showEnd();
             } else {

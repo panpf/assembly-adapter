@@ -21,6 +21,7 @@ import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadaptersample.bean.UserGroup;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameChildItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameGroupItemFactory;
+import me.xiaopan.assemblyadaptersample.itemfactory.LikeFooterGroupItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreGroupItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserChildItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserGroupItemFactory;
@@ -32,6 +33,8 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
 
     private AssemblyExpandableAdapter adapter;
     private ExpandableListView listView;
+    private AssemblyExpandableAdapter.FixedItemInfo headerItemInfo;
+    private AssemblyExpandableAdapter.FixedItemInfo footerItemInfo;
 
     @Nullable
     @Override
@@ -125,18 +128,26 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
                 nextStart += groupSize;
                 if (adapter == null) {
                     adapter = new AssemblyExpandableAdapter(objects);
+
+                    headerItemInfo = adapter.addHeaderItem(new LikeFooterGroupItemFactory(), "我是小额头呀！");
                     adapter.addGroupItemFactory(new GameGroupItemFactory());
                     adapter.addGroupItemFactory(new UserGroupItemFactory());
                     adapter.addChildItemFactory(new GameChildItemFactory(getActivity().getBaseContext()));
                     adapter.addChildItemFactory(new UserChildItemFactory(getActivity().getBaseContext()));
-                    if (nextStart < 100) {
-                        adapter.enableLoadMore(new LoadMoreGroupItemFactory(ExpandableListViewFragment.this));
-                    }
+                    adapter.setLoadMoreItemFactory(new LoadMoreGroupItemFactory(ExpandableListViewFragment.this));
+                    footerItemInfo = adapter.addFooterItem(new LikeFooterGroupItemFactory(), "我是小尾巴呀！");
+
                     listView.setAdapter(adapter);
                 } else {
                     adapter.addAll(objects);
-                    adapter.setLoadMoreEnd(nextStart == 100);
                 }
+
+                boolean loadMoreEnd = nextStart >= 100;
+                if (loadMoreEnd) {
+                    adapter.removeHeaderItem(headerItemInfo);
+                    adapter.removeFooterItem(footerItemInfo);
+                }
+                adapter.setLoadMoreEnd(loadMoreEnd);
             }
         }.execute("");
     }

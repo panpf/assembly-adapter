@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 public abstract class AssemblyItem<BEAN> {
     private View itemView;
     private int position;
-    private int positionInAdapter;
     private BEAN data;
     private ContentSetter setter;
 
@@ -23,10 +22,6 @@ public abstract class AssemblyItem<BEAN> {
         this.itemView = itemView;
         onFindViews();
         onConfigViews(itemView.getContext());
-    }
-
-    void setPositionInAdapter(int positionInAdapter) {
-        this.positionInAdapter = positionInAdapter;
     }
 
     public void setData(int position, BEAN bean) {
@@ -60,11 +55,6 @@ public abstract class AssemblyItem<BEAN> {
 
     public int getPosition() {
         return position;
-    }
-
-    @SuppressWarnings("unused")
-    public int getPositionInAdapter() {
-        return positionInAdapter;
     }
 
     public ContentSetter getSetter() {
