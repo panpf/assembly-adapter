@@ -19,6 +19,7 @@ import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameRecyclerItemFactory;
+import me.xiaopan.assemblyadaptersample.itemfactory.LikeFooterRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserRecyclerItemFactory;
 
@@ -28,6 +29,7 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
 
     private AssemblyRecyclerAdapter adapter;
     private RecyclerView recyclerView;
+    private AssemblyRecyclerAdapter.FixedItemInfo headerItemInfo;
 
     @Nullable
     @Override
@@ -98,16 +100,23 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
                 nextStart += size;
                 if (adapter == null) {
                     adapter = new AssemblyRecyclerAdapter(objects);
+
+                    headerItemInfo = adapter.addHeaderItem(new LikeFooterRecyclerItemFactory(), "我是小额头呀！");
                     adapter.addItemFactory(new UserRecyclerItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameRecyclerItemFactory(getActivity().getBaseContext()));
-                    if (nextStart < 100) {
-                        adapter.enableLoadMore(new LoadMoreRecyclerItemFactory(RecyclerViewFragment.this));
-                    }
+                    adapter.addFooterItem(new LikeFooterRecyclerItemFactory(), "我是小尾巴呀！");
+                    adapter.setLoadMoreItemFactory(new LoadMoreRecyclerItemFactory(RecyclerViewFragment.this));
+
                     recyclerView.setAdapter(adapter);
                 } else {
                     adapter.addAll(objects);
-                    adapter.setLoadMoreEnd(nextStart == 100);
                 }
+
+                boolean loadMoreEnd = nextStart >= 100;
+                if(loadMoreEnd){
+                    adapter.removeHeaderItem(headerItemInfo);
+                }
+                adapter.setDisableLoadMore(loadMoreEnd);
             }
         }.execute("");
     }

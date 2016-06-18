@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder {
     private BEAN data;
+    private int positionInAdapter;
     private ContentSetter setter;
 
     public AssemblyRecyclerItem(int itemLayoutId, ViewGroup parent) {
@@ -18,6 +19,10 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
         super(itemView);
         onFindViews();
         onConfigViews(itemView.getContext());
+    }
+
+    void setPositionInAdapter(int positionInAdapter) {
+        this.positionInAdapter = positionInAdapter;
     }
 
     public void setData(int position, BEAN bean) {
@@ -47,6 +52,11 @@ public abstract class AssemblyRecyclerItem<BEAN> extends RecyclerView.ViewHolder
 
     public BEAN getData() {
         return data;
+    }
+
+    @SuppressWarnings("unused")
+    public int getPositionInAdapter() {
+        return positionInAdapter;
     }
 
     @SuppressWarnings("unused")
