@@ -124,7 +124,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      * 设置一个将显示在列表最后（在Footer的后面）的加载更多尾巴
      */
     @SuppressWarnings("unused")
-    public void setLoadMoreItemFactory(AssemblyLoadMoreRecyclerItemFactory newLoadMoreItemFactory) {
+    public void setLoadMoreItem(AssemblyLoadMoreRecyclerItemFactory newLoadMoreItemFactory) {
         if (newLoadMoreItemFactory == null || itemFactoryLocked) {
             Log.w(TAG, "newLoadMoreItemFactory is null or locked");
             return;

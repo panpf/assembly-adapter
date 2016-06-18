@@ -126,7 +126,7 @@ public class AssemblyAdapter extends BaseAdapter {
      * 设置一个将显示在列表最后（在Footer的后面）的加载更多尾巴
      */
     @SuppressWarnings("unused")
-    public void setLoadMoreItemFactory(AssemblyLoadMoreItemFactory newLoadMoreItemFactory) {
+    public void setLoadMoreItem(AssemblyLoadMoreItemFactory newLoadMoreItemFactory) {
         if (newLoadMoreItemFactory == null || itemFactoryLocked) {
             Log.w(TAG, "loadMoreItemFactory is null or locked");
             return;

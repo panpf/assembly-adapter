@@ -154,7 +154,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      * 设置一个将显示在列表最后（在Footer的后面）的加载更多尾巴
      */
     @SuppressLint("LongLogTag")
-    public void setLoadMoreItemFactory(AssemblyLoadMoreGroupItemFactory newLoadMoreItemFactory) {
+    public void setLoadMoreItem(AssemblyLoadMoreGroupItemFactory newLoadMoreItemFactory) {
         if (newLoadMoreItemFactory == null || groupItemFactoryLocked) {
             Log.w(TAG, "loadMoreItemFactory is null or locked");
             return;

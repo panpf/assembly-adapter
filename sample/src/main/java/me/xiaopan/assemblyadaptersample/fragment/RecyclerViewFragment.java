@@ -105,7 +105,7 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
                     adapter.addItemFactory(new UserRecyclerItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameRecyclerItemFactory(getActivity().getBaseContext()));
                     adapter.addFooterItem(new LikeFooterRecyclerItemFactory(), "我是小尾巴呀！");
-                    adapter.setLoadMoreItemFactory(new LoadMoreRecyclerItemFactory(RecyclerViewFragment.this));
+                    adapter.setLoadMoreItem(new LoadMoreRecyclerItemFactory(RecyclerViewFragment.this));
 
                     recyclerView.setAdapter(adapter);
                 } else {

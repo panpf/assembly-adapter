@@ -134,7 +134,7 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
                     adapter.addGroupItemFactory(new UserGroupItemFactory());
                     adapter.addChildItemFactory(new GameChildItemFactory(getActivity().getBaseContext()));
                     adapter.addChildItemFactory(new UserChildItemFactory(getActivity().getBaseContext()));
-                    adapter.setLoadMoreItemFactory(new LoadMoreGroupItemFactory(ExpandableListViewFragment.this));
+                    adapter.setLoadMoreItem(new LoadMoreGroupItemFactory(ExpandableListViewFragment.this));
                     footerItemInfo = adapter.addFooterItem(new LikeFooterGroupItemFactory(), "我是小尾巴呀！");
 
                     listView.setAdapter(adapter);

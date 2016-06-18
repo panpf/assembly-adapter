@@ -103,7 +103,7 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
                     adapter.addItemFactory(new UserListItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameListItemFactory(getActivity().getBaseContext()));
                     footerItemInfo = adapter.addFooterItem(new LikeFooterItemFactory(), "我是小尾巴呀！");
-                    adapter.setLoadMoreItemFactory(new LoadMoreItemFactory(ListViewFragment.this));
+                    adapter.setLoadMoreItem(new LoadMoreItemFactory(ListViewFragment.this));
 
                     listView.setAdapter(adapter);
                 } else {
