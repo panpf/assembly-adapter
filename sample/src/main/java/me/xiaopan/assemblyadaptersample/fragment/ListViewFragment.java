@@ -28,6 +28,7 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
 
     private AssemblyAdapter adapter;
     private ListView listView;
+    private AssemblyAdapter.FixedItemInfo footerItemInfo;
 
     @Nullable
     @Override
@@ -98,19 +99,23 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = new AssemblyAdapter(objects);
 
-                    adapter.addHeaderFactory(new LikeFooterItemFactory(), "我是小额头呀！");
+                    adapter.addHeaderItem(new LikeFooterItemFactory(), "我是小额头呀！");
                     adapter.addItemFactory(new UserListItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameListItemFactory(getActivity().getBaseContext()));
-                    adapter.addFooterFactory(new LikeFooterItemFactory(), "我是小尾巴呀！");
+                    footerItemInfo = adapter.addFooterItem(new LikeFooterItemFactory(), "我是小尾巴呀！");
 
                     adapter.setLoadMoreItemFactory(new LoadMoreItemFactory(ListViewFragment.this));
-                    adapter.setLoadMoreEnd(nextStart >= 100);
 
                     listView.setAdapter(adapter);
                 } else {
                     adapter.addAll(objects);
-                    adapter.setLoadMoreEnd(nextStart == 100);
                 }
+
+                boolean loadMoreEnd = nextStart >= 100;
+                if(loadMoreEnd){
+                    adapter.removeFooterItem(footerItemInfo);
+                }
+                adapter.setDisableLoadMore(loadMoreEnd);
             }
         }.execute("");
     }

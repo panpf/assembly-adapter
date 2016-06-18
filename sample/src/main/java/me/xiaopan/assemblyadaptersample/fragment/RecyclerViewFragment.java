@@ -40,7 +40,7 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list_recyclerViewFragment_content);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (adapter != null) {
             recyclerView.setAdapter(adapter);
