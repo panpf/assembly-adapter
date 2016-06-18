@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion '23.0.2'
 
     defaultConfig {
         minSdkVersion 7
-        targetSdkVersion 23
-        versionCode 200
-        versionName "2.0.0"
+        targetSdkVersion 22
+        versionCode 201
+        versionName "2.1.0 beta1"
     }
     buildTypes {
         release {
@@ -23,7 +23,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
 }
 
 apply from: "https://raw.githubusercontent.com/xiaopansky/android-library-publish-to-jcenter/master/bintrayUpload.gradle"
