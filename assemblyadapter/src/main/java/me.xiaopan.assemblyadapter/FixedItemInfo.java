@@ -21,9 +21,4 @@ public class FixedItemInfo {
     public void setData(Object data) {
         this.data = data;
     }
-
-    @SuppressWarnings("unused")
-    public void setItemFactory(AssemblyItemFactory itemFactory) {
-        this.itemFactory = itemFactory;
-    }
 }

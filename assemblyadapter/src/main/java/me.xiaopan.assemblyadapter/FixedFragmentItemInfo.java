@@ -21,9 +21,4 @@ public class FixedFragmentItemInfo {
     public AssemblyFragmentItemFactory getItemFactory() {
         return itemFactory;
     }
-
-    @SuppressWarnings("unused")
-    public void setItemFactory(AssemblyFragmentItemFactory itemFactory) {
-        this.itemFactory = itemFactory;
-    }
 }

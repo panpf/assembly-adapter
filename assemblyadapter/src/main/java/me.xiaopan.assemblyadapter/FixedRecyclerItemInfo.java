@@ -21,9 +21,4 @@ public class FixedRecyclerItemInfo {
     public AssemblyRecyclerItemFactory getItemFactory() {
         return itemFactory;
     }
-
-    @SuppressWarnings("unused")
-    public void setItemFactory(AssemblyRecyclerItemFactory itemFactory) {
-        this.itemFactory = itemFactory;
-    }
 }

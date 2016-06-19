@@ -21,9 +21,4 @@ public class FixedGroupItemInfo {
     public AssemblyGroupItemFactory getItemFactory() {
         return itemFactory;
     }
-
-    @SuppressWarnings("unused")
-    public void setItemFactory(AssemblyGroupItemFactory itemFactory) {
-        this.itemFactory = itemFactory;
-    }
 }
