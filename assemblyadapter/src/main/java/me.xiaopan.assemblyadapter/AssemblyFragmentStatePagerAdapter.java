@@ -35,7 +35,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的AssemblyItemFactory
+     * 添加一个将按添加顺序显示在列表头部的AssemblyFragmentItemFactory
      */
     @SuppressLint("LongLogTag")
     @SuppressWarnings("unused")
@@ -65,7 +65,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的AssemblyItemFactory
+     * 添加一个将按添加顺序显示在列表尾部的AssemblyFragmentItemFactory
      */
     @SuppressLint("LongLogTag")
     @SuppressWarnings("unused")

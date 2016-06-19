@@ -1,5 +1,6 @@
 package me.xiaopan.assemblyadapter;
 
+import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
-    private static final String TAG = "AssemblyFragmentAdapter";
+    private static final String TAG = "AssemblyFragmentPagerAdapter";
     private List dataList;
 
     private boolean itemFactoryLocked;
@@ -34,8 +35,9 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的AssemblyItemFactory
+     * 添加一个将按添加顺序显示在列表头部的AssemblyFragmentItemFactory
      */
+    @SuppressLint("LongLogTag")
     @SuppressWarnings("unused")
     public void addHeaderItem(AssemblyFragmentItemFactory headerFactory, Object data) {
         if (headerFactory == null || itemFactoryLocked) {
@@ -49,6 +51,7 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
         headerItemList.add(new FixedFragmentItemInfo(headerFactory, data));
     }
 
+    @SuppressLint("LongLogTag")
     @SuppressWarnings("unused")
     public void addItemFactory(AssemblyFragmentItemFactory itemFactory) {
         if(itemFactory == null || itemFactoryLocked){
@@ -62,8 +65,9 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的AssemblyItemFactory
+     * 添加一个将按添加顺序显示在列表尾部的AssemblyFragmentItemFactory
      */
+    @SuppressLint("LongLogTag")
     @SuppressWarnings("unused")
     public void addFooterItem(AssemblyFragmentItemFactory footerFactory, Object data) {
         if (footerFactory == null || itemFactoryLocked) {
