@@ -4,25 +4,25 @@ import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import me.xiaopan.assemblyadapter.AssemblyGroupItem;
-import me.xiaopan.assemblyadapter.AssemblyGroupItemFactory;
+import me.xiaopan.assemblyadapter.AssemblyRecyclerItem;
+import me.xiaopan.assemblyadapter.AssemblyRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.R;
 
-public class LikeFooterGroupItemFactory extends AssemblyGroupItemFactory<LikeFooterGroupItemFactory.LikeFooterGroupItem> {
+public class HeaderRecyclerItemFactory extends AssemblyRecyclerItemFactory<HeaderRecyclerItemFactory.HeaderRecyclerItem> {
     @Override
     public boolean isTarget(Object itemObject) {
         return itemObject instanceof String;
     }
 
     @Override
-    public LikeFooterGroupItem createAssemblyItem(ViewGroup parent) {
-        return new LikeFooterGroupItem(R.layout.list_item_like, parent);
+    public HeaderRecyclerItem createAssemblyItem(ViewGroup parent) {
+        return new HeaderRecyclerItem(R.layout.list_item_header, parent);
     }
 
-    public class LikeFooterGroupItem extends AssemblyGroupItem<String> {
+    public class HeaderRecyclerItem extends AssemblyRecyclerItem<String> {
         private TextView textView;
 
-        public LikeFooterGroupItem(int itemLayoutId, ViewGroup parent) {
+        public HeaderRecyclerItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
 

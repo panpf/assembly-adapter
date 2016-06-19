@@ -20,7 +20,7 @@ import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameRecyclerItemFactory;
-import me.xiaopan.assemblyadaptersample.itemfactory.LikeFooterRecyclerItemFactory;
+import me.xiaopan.assemblyadaptersample.itemfactory.HeaderRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreRecyclerItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserRecyclerItemFactory;
 
@@ -102,10 +102,10 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
                 if (adapter == null) {
                     adapter = new AssemblyRecyclerAdapter(objects);
 
-                    headerItemInfo = adapter.addHeaderItem(new LikeFooterRecyclerItemFactory(), "我是小额头呀！");
+                    headerItemInfo = adapter.addHeaderItem(new HeaderRecyclerItemFactory(), "我是小额头呀！");
                     adapter.addItemFactory(new UserRecyclerItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameRecyclerItemFactory(getActivity().getBaseContext()));
-                    adapter.addFooterItem(new LikeFooterRecyclerItemFactory(), "我是小尾巴呀！");
+                    adapter.addFooterItem(new HeaderRecyclerItemFactory(), "我是小尾巴呀！");
                     adapter.setLoadMoreItem(new LoadMoreRecyclerItemFactory(RecyclerViewFragment.this));
 
                     recyclerView.setAdapter(adapter);

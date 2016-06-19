@@ -8,10 +8,11 @@ import android.support.v4.view.ViewPager;
 
 import me.xiaopan.assemblyadapter.FragmentArrayPagerAdapter;
 import me.xiaopan.assemblyadaptersample.fragment.ExpandableListViewFragment;
-import me.xiaopan.assemblyadaptersample.fragment.ViewPagerFragment;
 import me.xiaopan.assemblyadaptersample.fragment.ListViewFragment;
+import me.xiaopan.assemblyadaptersample.fragment.PagerAdapterFragment;
 import me.xiaopan.assemblyadaptersample.fragment.RecyclerViewFragment;
 import me.xiaopan.assemblyadaptersample.fragment.SpinnerFragment;
+import me.xiaopan.assemblyadaptersample.fragment.ViewPagerFragment;
 import me.xiaopan.psts.PagerSlidingTabStrip;
 
 public class MainActivity extends FragmentActivity {
@@ -29,6 +30,7 @@ public class MainActivity extends FragmentActivity {
                 new ExpandableListViewFragment(),
                 new SpinnerFragment(),
                 new ViewPagerFragment(),
+                new PagerAdapterFragment(),
         }));
 
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabStrip_mainActivity_tabs);

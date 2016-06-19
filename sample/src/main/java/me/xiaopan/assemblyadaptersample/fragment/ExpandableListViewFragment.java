@@ -22,7 +22,7 @@ import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadaptersample.bean.UserGroup;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameChildItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameGroupItemFactory;
-import me.xiaopan.assemblyadaptersample.itemfactory.LikeFooterGroupItemFactory;
+import me.xiaopan.assemblyadaptersample.itemfactory.HeaderGroupItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreGroupItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserChildItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserGroupItemFactory;
@@ -130,13 +130,13 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
                 if (adapter == null) {
                     adapter = new AssemblyExpandableAdapter(objects);
 
-                    headerItemInfo = adapter.addHeaderItem(new LikeFooterGroupItemFactory(), "我是小额头呀！");
+                    headerItemInfo = adapter.addHeaderItem(new HeaderGroupItemFactory(), "我是小额头呀！");
                     adapter.addGroupItemFactory(new GameGroupItemFactory());
                     adapter.addGroupItemFactory(new UserGroupItemFactory());
                     adapter.addChildItemFactory(new GameChildItemFactory(getActivity().getBaseContext()));
                     adapter.addChildItemFactory(new UserChildItemFactory(getActivity().getBaseContext()));
                     adapter.setLoadMoreItem(new LoadMoreGroupItemFactory(ExpandableListViewFragment.this));
-                    footerItemInfo = adapter.addFooterItem(new LikeFooterGroupItemFactory(), "我是小尾巴呀！");
+                    footerItemInfo = adapter.addFooterItem(new HeaderGroupItemFactory(), "我是小尾巴呀！");
 
                     listView.setAdapter(adapter);
                 } else {

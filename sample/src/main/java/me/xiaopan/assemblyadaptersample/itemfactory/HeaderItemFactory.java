@@ -8,21 +8,21 @@ import me.xiaopan.assemblyadapter.AssemblyItem;
 import me.xiaopan.assemblyadapter.AssemblyItemFactory;
 import me.xiaopan.assemblyadaptersample.R;
 
-public class LikeFooterItemFactory extends AssemblyItemFactory<LikeFooterItemFactory.LikeFooterItem>{
+public class HeaderItemFactory extends AssemblyItemFactory<HeaderItemFactory.HeaderItem>{
     @Override
     public boolean isTarget(Object itemObject) {
         return itemObject instanceof String;
     }
 
     @Override
-    public LikeFooterItem createAssemblyItem(ViewGroup parent) {
-        return new LikeFooterItem(R.layout.list_item_like, parent);
+    public HeaderItem createAssemblyItem(ViewGroup parent) {
+        return new HeaderItem(R.layout.list_item_header, parent);
     }
 
-    public class LikeFooterItem extends AssemblyItem<String>{
+    public class HeaderItem extends AssemblyItem<String>{
         private TextView textView;
 
-        public LikeFooterItem(int itemLayoutId, ViewGroup parent) {
+        public HeaderItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
 

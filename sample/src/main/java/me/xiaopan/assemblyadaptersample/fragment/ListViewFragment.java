@@ -19,7 +19,7 @@ import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadaptersample.bean.User;
 import me.xiaopan.assemblyadaptersample.itemfactory.GameListItemFactory;
-import me.xiaopan.assemblyadaptersample.itemfactory.LikeFooterItemFactory;
+import me.xiaopan.assemblyadaptersample.itemfactory.HeaderItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreItemFactory;
 import me.xiaopan.assemblyadaptersample.itemfactory.UserListItemFactory;
 
@@ -100,10 +100,10 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = new AssemblyAdapter(objects);
 
-                    adapter.addHeaderItem(new LikeFooterItemFactory(), "我是小额头呀！");
+                    adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
                     adapter.addItemFactory(new UserListItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameListItemFactory(getActivity().getBaseContext()));
-                    footerItemInfo = adapter.addFooterItem(new LikeFooterItemFactory(), "我是小尾巴呀！");
+                    footerItemInfo = adapter.addFooterItem(new HeaderItemFactory(), "我是小尾巴呀！");
                     adapter.setLoadMoreItem(new LoadMoreItemFactory(ListViewFragment.this));
 
                     listView.setAdapter(adapter);

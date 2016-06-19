@@ -11,7 +11,7 @@ import android.widget.TextView;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.sketch.SketchImageView;
 
-public class HeaderImageFragment extends Fragment {
+public class HeaderFragment extends Fragment {
 
     private String text;
     private String imageUrl;
