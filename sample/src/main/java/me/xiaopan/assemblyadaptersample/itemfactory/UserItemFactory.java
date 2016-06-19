@@ -12,11 +12,11 @@ import me.xiaopan.assemblyadapter.AssemblyItemFactory;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.User;
 
-public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory.UserListItem> {
+public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserItem> {
 
     private EventListener eventListener;
 
-    public UserListItemFactory(Context context) {
+    public UserItemFactory(Context context) {
         this.eventListener = new EventProcessor(context);
     }
 
@@ -26,18 +26,18 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
     }
 
     @Override
-    public UserListItem createAssemblyItem(ViewGroup parent) {
-        return new UserListItem(R.layout.list_item_user, parent);
+    public UserItem createAssemblyItem(ViewGroup parent) {
+        return new UserItem(R.layout.list_item_user, parent);
     }
 
-    public class UserListItem extends AssemblyItem<User> {
+    public class UserItem extends AssemblyItem<User> {
         private ImageView headImageView;
         private TextView nameTextView;
         private TextView sexTextView;
         private TextView ageTextView;
         private TextView jobTextView;
 
-        public UserListItem(int itemLayoutId, ViewGroup parent) {
+        public UserItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
 

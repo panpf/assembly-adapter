@@ -10,11 +10,11 @@ import me.xiaopan.assemblyadapter.AssemblyItemFactory;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 
-public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory.GameListItem> {
+public class GameItemFactory extends AssemblyItemFactory<GameItemFactory.GameItem> {
 
     private EventListener eventListener;
 
-    public GameListItemFactory(Context context) {
+    public GameItemFactory(Context context) {
         this.eventListener = new EventProcessor(context);
     }
 
@@ -24,8 +24,8 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
     }
 
     @Override
-    public GameListItem createAssemblyItem(ViewGroup parent) {
-        return new GameListItem(R.layout.list_item_game, parent);
+    public GameItem createAssemblyItem(ViewGroup parent) {
+        return new GameItem(R.layout.list_item_game, parent);
     }
 
     public interface EventListener {
@@ -59,9 +59,9 @@ public class GameListItemFactory extends AssemblyItemFactory<GameListItemFactory
         }
     }
 
-    public class GameListItem extends AssemblyItem<Game> {
+    public class GameItem extends AssemblyItem<Game> {
 
-        public GameListItem(int itemLayoutId, ViewGroup parent) {
+        public GameItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
         }
 
