@@ -1,58 +1,57 @@
-#AssemblyAdapter
+# AssemblyAdapter
 
-这是Android上的一个通用Adapter库，有了它你就不需要再写新的Adapter了，并且还自带加载更多功能。支持BaseAdapter、BaseExpandableListAdapter以及RecyclerView.Adapter
+AssemblyAdapter是Android上的一个Adapter扩展库，有了它你就不用再写Adapter了。其支持组合式使用多Item、支持添加header和footer并且还自带加载更多功能
 
-This is a generic Android library on the Adapter, with it you do not need to write a new Adapter, and also comes loaded with more features. Supports BaseAdapter, BaseExpandableListAdapter, and RecyclerView.Adapter
+### 特性
+>* ``Item一处定义处处使用``. 你只需为每一个item layout写一个ItemFactory，然后使用ItemFactory即可
+>* ``便捷的组合式多Item``. 可以使用多个ItemFactory，每个ItemFactory就代表一种itemType
+>* ``支持header和footer``. 使用AssemblyAdapter可以让ExpandableListView、GridView、RecyclerView、ViewPager等也支持header和footer
+>* ``自带加载更多功能``. 自带滑动到列表底部触发加载更多功能，你只需定义一个专门用于加载更多的ItemFactory即可
+>* ``支持常用Adapter``. 支持BaseAdapter、RecyclerView.Adapter、BaseExpandableListAdapter、PagerAdapter、
+    FragmentPagerAdapter和FragmentStatePagerAdapter，涵盖了Android开发中常用的大部分Adapter
+>* ``无性能损耗``. 没有使用任何反射相关的技术，因此无须担心性能问题
 
-##Features
->* 你再也不需要写新的Adapter了，只需为每一个item layout写一个AssemblyItemFactory即可，并且遵循AssemblyItemFactory结构的代码逻辑会前所未有的清晰
->* 可以一次使用多个AssemblyItemFactory，每个AssemblyItemFactory就代表一种itemType
->* 自带加载更多功能，你只需实现一个专门用于加载更多的尾巴即可
->* 支持BaseAdapter、BaseExpandableListAdapter以及RecyclerView.Adapter，已经涵盖了Android开发中用到的所有Adapter
->* 没有使用任何反射相关的代码无须担心性能问题
->* AssemblyItemFactory的扩展性很好，可以满足你的任何需求
+### 使用指南
 
-English（From Baidu translate）
->* You don't need to write a new Adapter again, just for each layout AssemblyItemFactory write a item can, and follow the AssemblyItemFactory structure of the code logic will never clear
->* You can use more than one AssemblyItemFactory, each AssemblyItemFactory on behalf of a kind of itemType
->* Comes with more features, you just need to implement a dedicated to load more of the tail
->* Supports BaseAdapter, BaseExpandableListAdapter, and RecyclerView.Adapter, has covered all the Android development of Adapter
->* There is no need to worry about performance issues without using any reflection related code
->* AssemblyItemFactory is very good and can meet any of your needs.
-
-##Usage Guide
-####1. 导入AssemblyAdapter（Import AssemblyAdapter to your project）
-
-#####使用Gradle（Use Gradle）
-``从JCenter仓库导入（Import from jcenter）``
+#### 1. 从JCenter导入AssemblyAdapter
 
 ```groovy
 dependencies{
-	compile 'me.xiaopan:assemblyadapter:2.0.0'
+    compile 'me.xiaopan:assemblyadapter:2.1.0'
 }
 ```
+`最低兼容API 7`
 
-最低兼容API 7
+#### 2. 简述
+共有6种Adapter：
 
-###2. 使用AssemblyAdapter
-``这里只讲解AssemblyAdapter的用法，AssemblyExpandableAdapter和AssemblyRecyclerAdapter的用法跟AssemblyAdapter完全一致，只是Factory和Item所继承的类不一样而已，详情请参考sample源码``
+|Adapter|父类|适用于|支持功能|
+|:---|:---|:---|:---|
+|AssemblyAdapter|BaseAdapter|ListView、GridView、Spinner、Gallery|多Item、header和footer、加载更多|
+|AssemblyRecyclerViewAdapter|RecyclerView.Adapter|RecyclerView|多Item、header和footer、加载更多|
+|AssemblyExpandableAdapter|BaseExpandableListAdapter|ExpandableListView|多Item、header和footer、加载更多|
+|AssemblyPagerAdapter|PagerAdapter|ViewPager + View|多Item、header和footer|
+|AssemblyFragmentPagerAdapter|FragmentPagerFragment|ViewPager + Fragment|多Item、header和footer|
+|AssemblyFragmentStatePagerAdapter|FragmentStatePagerFragment|ViewPager + Fragment|多Item、header和footer|
+
+`接下来以AssemblyAdapter为例讲解具体的用法，其它Adapter你只需照葫芦画瓢，然后ItemFactory和Item继承各自专属的类即可，详情请参考sample源码`
 
 AssemblyAdapter分为三部分：
->* AssemblyAdapter：封装了Adapter部分需要的所有处理
->* AssemblyItemFactory：负责匹配Bean、创建AssemblyItem以及管理扩展参数
->* AssemblyItem：负责创建convertView、设置并处理事件、设置数据
+>* Adapter：负责维护数据、itemType以及加载更多的状态
+>* ItemFactory：负责匹配数据和创建AssemblyItem
+>* Item：负责itemView的一切，包括创建itemView、设置数据、设置并处理事件
 
-AssemblyAdapter最大的特点如其名字所表达的意思是可以组装的，你可以调用其addItemFactory(AssemblyItemFactory)方法添加多个AssemblyItemFactory，而每一个AssemblyItemFactory就代表一种ItemType，这样就轻松实现了ItemType。因而AssemblyAdapter的数据列表的类型是Object的。
+AssemblyAdapter与其它万能Adapter最根本的不同就是其把item相关的处理全部定义在了一个ItemFactory类里面，在使用的时候只需通过Adapter的addItemFactory(AssemblyItemFactory)方法将ItemFactory加到Adapter中即可。
 
-首先创建你的AssemblyItemFactory和AssemblyItem，如下所示：
+这样的好处就是真正做到了一处定义处处使用，并且可以方便的在一个页面通过多次调用addItemFactory(AssemblyItemFactory)方法使用多个ItemFactory（每个ItemFactory就代表一种ItemType），这正体现了AssemblyAdapter名字中Assembly所表达的意思
+
+另外由于支持多Item，一个Adapter又只有一个数据列表，所以数据列表的数据类型就得是Object
+
+#### 3. 创建ItemFactory
+
+在使用AssemblyAdapter之前得先创建ItemFactory和Item，如下：
 ```java
-public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory.UserListItem> {
-
-    private EventListener eventListener;
-
-    public UserListItemFactory(Context context) {
-        this.eventListener = new EventProcessor(context);
-    }
+public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserItem> {
 
     @Override
     public boolean isTarget(Object itemObject) {
@@ -64,7 +63,7 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
         return new UserListItem(R.layout.list_item_user, parent);
     }
 
-    public class UserListItem extends AssemblyItem<User> {
+    public class UserItem extends AssemblyItem<User> {
         private ImageView headImageView;
         private TextView nameTextView;
         private TextView sexTextView;
@@ -86,34 +85,10 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
 
         @Override
         protected void onConfigViews(Context context) {
-            headImageView.setOnClickListener(new View.OnClickListener() {
+            getItemView().setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    eventListener.onClickHead(getPosition(), getData());
-                }
-            });
-            nameTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    eventListener.onClickName(getPosition(), getData());
-                }
-            });
-            sexTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    eventListener.onClickSex(getPosition(), getData());
-                }
-            });
-            ageTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    eventListener.onClickAge(getPosition(), getData());
-                }
-            });
-            jobTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    eventListener.onClickJob(getPosition(), getData());
+                    Toast.makeText(v.getConext(), "第" + (getPosition() + 1) + "条数据", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -127,105 +102,147 @@ public class UserListItemFactory extends AssemblyItemFactory<UserListItemFactory
             jobTextView.setText(user.job);
         }
     }
+}
+```
 
-    public interface EventListener{
-        void onClickHead(int position, User user);
-        void onClickName(int position, User user);
-        void onClickSex(int position, User user);
-        void onClickAge(int position, User user);
-        void onClickJob(int position, User user);
+详解：
+>* `ItemFactory的泛型`是为了限定其createAssemblyItem(ViewGroup)方法返回的类型
+>* ItemFactory的`isTarget()`方法是用来匹配数据列表中的数据的，Adapter从数据列表中拿到当前位置的数据后会依次调用其所有的ItemFactory的isTarget(Object)方法，谁返回true就用谁处理当前这条数据
+>* ItemFactory的`createAssemblyItem(ViewGroup)`方法用来创建Item，返回的类型必须跟你在ItemFactory上配置的泛型一样
+>* `Item的泛型`是用来指定对应的数据类型，会在onSetData和getData()方法中用到
+>* Item的`onFindViews(View)`和`onConfigViews(Context)`方法分别用来初始化View和配置View，只会在创建Item的时候`调用一次`，另外在onFindViews方法中你可以直接使用`findViewById(int)`法获取View
+>* Item的`onSetData()`方法是用来设置数据的，在`每次getView()的时候都会调用`
+>* 你可以通过Item的`getPosition()`和`getData()`方法可直接获取当前所对应的位置和数据，因此你在处理click的时候不再需要通过setTag()来绑定位置和数据了，直接获取即可
+>* 你还可以通过过Item的`getItemView()`方法获取当前的itemView
+
+另外你还可以通过ContentSetter简化你的代码，上述例子使用ContentSetter简化后如下：
+```java
+public class UserItemFactory extends AssemblyItemFactory<UserListItemFactory.UserListItem> {
+
+    @Override
+    public boolean isTarget(Object itemObject) {
+        return itemObject instanceof User;
     }
 
-    private static class EventProcessor implements EventListener {
-        private Context context;
+    @Override
+    public UserListItem createAssemblyItem(ViewGroup parent) {
+        return new UserListItem(R.layout.list_item_user, parent);
+    }
 
-        public EventProcessor(Context context) {
-            this.context = context;
+    public class UserItem extends AssemblyItem<User> {
+        public UserListItem(int itemLayoutId, ViewGroup parent) {
+            super(itemLayoutId, parent);
         }
 
         @Override
-        public void onClickHead(int position, User user) {
-            Toast.makeText(context, "别摸我头，讨厌啦！", Toast.LENGTH_SHORT).show();
+        protected void onFindViews(View itemView) { }
+
+        @Override
+        protected void onConfigViews(Context context) {
+            getItemView().setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getConext(), "第" + (getPosition() + 1) + "条数据", Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
-        public void onClickName(int position, User user) {
-            Toast.makeText(context, "我就叫"+user.name+"，咋地不服啊！", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onClickSex(int position, User user) {
-            Toast.makeText(context, "我还就是"+user.sex+"个的了，有本事你捅我啊！", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onClickAge(int position, User user) {
-            String message;
-            if(user.sex.contains("男") || user.sex.contains("先生")){
-                message = "哥今年"+user.age+"岁了，该找媳妇了！";
-            }else{
-                message = "姐今年"+user.age+"岁了，该找人嫁了！";
-            }
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onClickJob(int position, User user) {
-            Toast.makeText(context, "我是名光荣的"+user.job, Toast.LENGTH_SHORT).show();
+        protected void onSetData(int position, User user) {
+            getSetter()
+                .setImageResource(R.id.image_userListItem_head, user.headResId)
+                .setText(R.id.text_userListItem_name, user.name)
+                .setText(R.id.text_userListItem_sex, user.sex)
+                .setText(R.id.text_userListItem_age, user.age)
+                .setText(R.id.text_userListItem_job, user.job);
         }
     }
 }
 ```
-在创建AssemblyItemFactory和AssemblyItem的时候需要注意以下几点：
->* AssemblyItemFactory和AssemblyItem的泛型是互相指定的，一定要好好配置，不可省略
->* AssemblyItemFactory.isTarget()方法是用来匹配数据源中的数据的，只有返回true才会使用当前Factory
->* AssemblyItemFactory.createAssemblyItem(ViewGroup)方法用来创建AssembleItem，返回的类型必须跟你在AssemblyItemFactory上配置的泛型一样
->* AssemblyItem的onFindViews(View)和onConfigViews(Context)方法分别用来初始化View和配置View，只会在创建AssemblyItem的时候调用一次，另外在onFindViews方法中你可以直接使用内置的findViewById方法获取View
->* AssembleItem.onSetData()方法是用来设置数据的，在每次getView()的时候都会调用
->* 你可以通过getPosition()和getData()方法直接获取当前Item所对应的位置和数据对象，因此你在处理onClick的时候不需要再通过setTag来传递数据了，直接调方法获取即可。getData()返回的对象类型和你在AssemblyItem第一个泛型配置的一样，因此你也不需要再转换类型了
->* 你可以像示例那样将所有需要处理的事件通过接口剥离出去，然后写一个专门的处理类，这样逻辑比较清晰
 
-然后new一个AssemblyAdapter直接通过其addItemFactory方法使用你自定义的UserListItemFactory即可，如下：
+#### 4. 使用ItemFactory
+
+首先你要准备好数据并new一个AssemblyAdapter，然后通过Adapter的`addItemFactory(AssemblyItemFactory)`方法添加ItemFactory即可，如下：
 ```java
 ListView listView = ...;
-List<Object> dataList = ...;
-dataList.add(new User(...));
+
+List<Object> dataList = new ArrayList<Object>;
+dataList.add(new User("隔离老王"));
+dataList.add(new User("隔壁老李"));
 
 AssemblyAdapter adapter = new AssemblyAdapter(dataList);
-adapter.addItemFactory(new UserListItemFactory(getBaseContext()));
+adapter.addItemFactory(new UserItemFactory());
+
 listView.setAdapter(adapter);
 ```
 
-**一次使用多个AssemblyItemFactory，就像这样**
+你还可以一次使用多个ItemFactory，如下：
 
 ```java
 ListView listView = ...;
-List<Object> dataList = ...;
-dataList.add(new User(...));
-dataList.add(new Game(...));
+
+List<Object> dataList = new ArrayList<Object>;
+dataList.add(new User("隔离老王"));
+dataList.add(new Game("英雄联盟"));
+dataList.add(new User("隔壁老李"));
+dataList.add(new Game("守望先锋"));
 
 AssemblyAdapter adapter = new AssemblyAdapter(dataList);
-adapter.addItemFactory(new UserListItemFactory(getBaseContext()));
-adapter.addItemFactory(new GameListItemFactory(getBaseContext()));
+adapter.addItemFactory(new UserItemFactory());
+adapter.addItemFactory(new GameItemFactory());
+
 listView.setAdapter(adapter);
 ```
 
-**使用加载更多功能**
+#### 5. 使用header和footer
 
-首先你需要创建一个继承自AbstractLoadMoreListItemFactory的ItemFactory，AbstractLoadMoreListItemFactory已经将逻辑部分的代码写好了，你只需关心界面即可，如下：
+AssemblyAdapter支持添加header和footer，可以方便的固定显示内容在列表的顶部或尾部。
+Adapter支持header和footer的重要性在于可以让GridView、RecyclerView等也支持header和footer
+
+首先定义好一个用于header或footer的ItemFactory
+
+然后调用`addHeaderItem(AssemblyItemFactory, Object)`或`addFooterItem(AssemblyItemFactory, Object)`方法添加即可，如下：
 ```java
-public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
+AssemblyAdapter adapter = new AssemblyAdapter(objects);
+
+adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
+...
+adapter.addFooterItem(new HeaderItemFactory(), "我是小尾巴呀！");
+```
+
+addHeaderItem(AssemblyItemFactory, Object)和addFooterItem(AssemblyItemFactory, Object)的第二个参数是Item需要的数据，直接传进去即可
+
+当你需要删除header或footer的时候，只需调用`removeHeaderItem(FixedItemInfo)`或`removeFooterItem(FixedItemInfo)`删除即可，删除时需要用到addHeaderItem(AssemblyItemFactory, Object)或addFooterItem(AssemblyItemFactory, Object)返回的FixedItemInfo，如下：
+```java
+AssemblyAdapter adapter = new AssemblyAdapter(objects);
+
+FixedItemInfo userFixedItemInfo = adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
+
+...
+
+adapter.removeHeaderItem(userFixedItemInfo);
+```
+
+由于有了header和footer那么Item.getPosition()方法得到的位置就是Item在Adapter中的位置，要想得到其在所属部分的真实位置可通过Adapter的`getPositionInPart(int)`获取
+
+
+#### 6. 使用加载更多功能
+
+首先你需要创建一个继承自AssemblyLoadMoreItemFactory的ItemFactory，AssemblyLoadMoreItemFactory已经将加载更多相关逻辑部分的代码写好了，你只需关心界面即可，如下：
+
+```java
+public class LoadMoreItemFactory extends AssemblyLoadMoreItemFactory {
 
     public LoadMoreListItemFactory(OnLoadMoreListener eventListener) {
         super(eventListener);
     }
 
     @Override
-    public AbstractLoadMoreListItem createAssemblyItem(ViewGroup parent) {
+    public AssemblyLoadMoreItem createAssemblyItem(ViewGroup parent) {
         return new LoadMoreListItem(R.layout.list_item_load_more, parent);
     }
 
-    public class LoadMoreListItem extends AbstractLoadMoreListItem {
+    public class LoadMoreItem extends AssemblyLoadMoreItem {
         private View loadingView;
         private View errorView;
         private View endView;
@@ -269,39 +286,43 @@ public class LoadMoreListItemFactory extends AbstractLoadMoreListItemFactory {
     }
 }
 ```
-然后调用enableLoadMore(AbstractLoadMoreListItemFactory)方法开启，如下：
+
+然后调用Adapter的`setLoadMoreItem(AssemblyLoadMoreItemFactory)`方法设置加载更多ItemFactory即可，如下：
+
 ```java
 AssemblyAdapter adapter = ...;
-adapter.enableLoadMore(new LoadMoreListItemFactory(new OnLoadMoreListener(){
-	@Override
+adapter.setLoadMoreItem(new LoadMoreItemFactory(new OnLoadMoreListener(){
+    @Override
     public void onLoadMore(AssemblyAdapter adapter) {
-        // ... 访问网络加载更多数据，最后调用adapter的loadMoreFinished()方法结束加载
-		adapter.loadMoreFinished();
+        // 访问网络加载数据
+        ...
+        
+        boolean loadSuccess = ...;
+        if (loadSuccess) {
+            // 加载成功时判断是否已经全部加载完毕，然后调用Adapter的setLoadMoreEnd(boolean)方法设置加载更多是否结束
+            boolean loadMoreEnd = ...;
+            adapter.setLoadMoreEnd(loadMoreEnd);
+        } else {
+            // 加载失败时调用Adapter的loadMoreFailed()方法显示加载失败提示，用户点击失败提示则会重新触发加载更多
+            adapter.loadMoreFailed();
+        }
     }
 }));
 ```
-注意：
->* 加载完成了你需要调用adapter.loadMoreFinished()方法结束加载
->* 如果加载失败了你需要调用adapter.loadMoreFailed()方法，调用此方法后会自动调用LoadMoreListItem的showErrorRetry()方法显示失败提示，并且点击错误提示可以重新触发onLoadMore()方法
->* 如果没有更多数据可以加载了你就调用adapter.setLoadMoreEnd(true)设置结束，setLoadMoreEnd方法会自动调用LoadMoreListItem的showEnd()方法显示结束提示，或者调用adapter.disableLoadMore()方法关闭加载更多功能
 
-除此之外还有AssemblyExpandableAdapter和AssemblyRecyclerAdapter分别用在ExpandableListView和RecyclerView，其用法和和AssemblyAdapter完全一样，只是ItemFactory和Item所继承的类不一样而已，详情请参考其[sample](https://github.com/xiaopansky/AssemblyAdapter/tree/master/sample)源码
+你还可以通过`setDisableLoadMore(boolean)`方法替代setLoadMoreEnd(boolean)来控制是否禁用加载更多功能，两者的区别在于setLoadMoreEnd(boolean)为true时会在列表尾部显示end提示，而setDisableLoadMore(boolean)则是完全不显示加载更多尾巴
 
-##License
-```java
-/*
-* Copyright (C) 2015 Peng fei Pan <sky@xiaopan.me>
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*   http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-```
+### License
+    Copyright (C) 2015 Peng fei Pan <sky@xiaopan.me>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
