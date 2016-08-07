@@ -17,7 +17,7 @@ AssemblyAdapter是Android上的一个Adapter扩展库，有了它你就不用再
 
 ```groovy
 dependencies{
-    compile 'me.xiaopan:assemblyadapter:2.1.0'
+    compile 'me.xiaopan:assemblyadapter:2.1.1'
 }
 ```
 `最低兼容API 7`
