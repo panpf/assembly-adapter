@@ -45,7 +45,7 @@ public class PagerAdapterFragment extends Fragment{
         };
         Header footer = new Header("我是小尾巴呀！", "http://www.bz55.com/uploads/allimg/150720/139-150H0110925.jpg");
 
-        AssemblyPagerAdapter adapter = new AssemblyPagerAdapter(getChildFragmentManager(), dataArray);
+        AssemblyPagerAdapter adapter = new AssemblyPagerAdapter(dataArray);
         adapter.addHeaderItem(new HeaderPagerItemFactory(), header);
         adapter.addItemFactory(new ImagePagerItemFactory());
         adapter.addItemFactory(new TextPagerItemFactory());
