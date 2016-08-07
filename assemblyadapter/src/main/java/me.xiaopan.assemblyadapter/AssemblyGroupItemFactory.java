@@ -18,7 +18,7 @@ public abstract class AssemblyGroupItemFactory<ITEM extends AssemblyGroupItem> {
         return adapter;
     }
 
-    public void setAdapter(AssemblyExpandableAdapter adapter) {
+    void setAdapter(AssemblyExpandableAdapter adapter) {
         this.adapter = adapter;
     }
 

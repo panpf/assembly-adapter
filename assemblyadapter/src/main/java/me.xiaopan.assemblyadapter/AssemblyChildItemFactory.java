@@ -18,7 +18,7 @@ public abstract class AssemblyChildItemFactory<ITEM extends AssemblyChildItem> {
         return adapter;
     }
 
-    public void setAdapter(AssemblyExpandableAdapter adapter) {
+    void setAdapter(AssemblyExpandableAdapter adapter) {
         this.adapter = adapter;
     }
 

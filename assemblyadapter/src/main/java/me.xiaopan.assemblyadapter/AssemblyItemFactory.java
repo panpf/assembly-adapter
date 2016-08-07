@@ -14,7 +14,7 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> {
         this.itemType = itemType;
     }
 
-    public void setAdapter(AssemblyAdapter adapter) {
+    void setAdapter(AssemblyAdapter adapter) {
         this.adapter = adapter;
     }
 

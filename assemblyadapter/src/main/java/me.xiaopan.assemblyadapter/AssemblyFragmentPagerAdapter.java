@@ -45,6 +45,8 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
             return;
         }
 
+        headerFactory.setAdapter(this);
+
         if (headerItemList == null) {
             headerItemList = new ArrayList<FixedFragmentItemInfo>(2);
         }
@@ -56,7 +58,10 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     public void addItemFactory(AssemblyFragmentItemFactory itemFactory) {
         if(itemFactory == null || itemFactoryLocked){
             Log.w(TAG, "itemFactory is nll or locked");
+            return;
         }
+
+        itemFactory.setAdapter(this);
 
         if (itemFactoryList == null) {
             itemFactoryList = new ArrayList<AssemblyFragmentItemFactory>(2);
@@ -74,6 +79,8 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
             Log.w(TAG, "footerFactory is nll or locked");
             return;
         }
+
+        footerFactory.setAdapter(this);
 
         if (footerItemList == null) {
             footerItemList = new ArrayList<FixedFragmentItemInfo>(2);

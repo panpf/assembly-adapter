@@ -20,5 +20,6 @@ public class FixedItemInfo {
 
     public void setData(Object data) {
         this.data = data;
+        itemFactory.getAdapter().notifyDataSetChanged();
     }
 }

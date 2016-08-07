@@ -13,12 +13,13 @@ public class FixedRecyclerItemInfo {
         return data;
     }
 
-    public void setData(Object data) {
-        this.data = data;
-    }
-
     @SuppressWarnings("unused")
     public AssemblyRecyclerItemFactory getItemFactory() {
         return itemFactory;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+        itemFactory.getAdapter().notifyDataSetChanged();
     }
 }

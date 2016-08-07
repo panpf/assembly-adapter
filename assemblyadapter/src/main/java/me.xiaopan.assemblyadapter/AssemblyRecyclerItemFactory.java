@@ -18,7 +18,7 @@ public abstract class AssemblyRecyclerItemFactory<ITEM extends AssemblyRecyclerI
         return adapter;
     }
 
-    public void setAdapter(AssemblyRecyclerAdapter adapter) {
+    void setAdapter(AssemblyRecyclerAdapter adapter) {
         this.adapter = adapter;
     }
 

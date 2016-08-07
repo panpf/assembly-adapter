@@ -1,6 +1,5 @@
 package me.xiaopan.assemblyadapter;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +24,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     }
 
     @SuppressWarnings("unused")
-    public AssemblyPagerAdapter(FragmentManager fm, Object[] dataArray) {
+    public AssemblyPagerAdapter(Object[] dataArray) {
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
             Collections.addAll(dataList, dataArray);
@@ -42,6 +41,8 @@ public class AssemblyPagerAdapter extends PagerAdapter {
             return;
         }
 
+        headerFactory.setAdapter(this);
+
         if (headerItemList == null) {
             headerItemList = new ArrayList<FixedPagerItemInfo>(2);
         }
@@ -52,7 +53,10 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     public void addItemFactory(AssemblyPagerItemFactory itemFactory) {
         if (itemFactory == null || itemFactoryLocked) {
             Log.w(TAG, "itemFactory is nll or locked");
+            return;
         }
+
+        itemFactory.setAdapter(this);
 
         if (itemFactoryList == null) {
             itemFactoryList = new ArrayList<AssemblyPagerItemFactory>(2);
@@ -69,6 +73,8 @@ public class AssemblyPagerAdapter extends PagerAdapter {
             Log.w(TAG, "footerFactory is nll or locked");
             return;
         }
+
+        footerFactory.setAdapter(this);
 
         if (footerItemList == null) {
             footerItemList = new ArrayList<FixedPagerItemInfo>(2);
