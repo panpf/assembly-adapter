@@ -38,7 +38,7 @@ dependencies{
 
 AssemblyAdapter分为三部分：
 >* Adapter：负责维护数据、itemType以及加载更多的状态
->* ItemFactory：负责匹配数据和创建AssemblyItem
+>* ItemFactory：负责匹配数据和创建Item
 >* Item：负责itemView的一切，包括创建itemView、设置数据、设置并处理事件
 
 AssemblyAdapter与其它万能Adapter最根本的不同就是其把item相关的处理全部定义在了一个ItemFactory类里面，在使用的时候只需通过Adapter的addItemFactory(AssemblyItemFactory)方法将ItemFactory加到Adapter中即可。
