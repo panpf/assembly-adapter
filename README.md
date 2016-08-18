@@ -1,7 +1,7 @@
 # AssemblyAdapter
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-AssemblyAdapter-green.svg?style=true)](https://android-arsenal.com/details/1/4152)
-[![version](https://img.shields.io/bintray/v/xiaopansky/maven/AssemblyAdapter.svg)]()
+[![version](https://img.shields.io/bintray/v/xiaopansky/maven/AssemblyAdapter.svg)](https://bintray.com/xiaopansky/maven/AssemblyAdapter)
 
 AssemblyAdapter是Android上的一个Adapter扩展库，有了它你就不用再写Adapter了。其支持组合式使用多Item、支持添加header和footer并且还自带加载更多功能
 
@@ -22,7 +22,7 @@ dependencies{
     compile 'me.xiaopan:assemblyadapter:lastVersionName'
 }
 ```
-lastVersionName：[![version](https://img.shields.io/bintray/v/xiaopansky/maven/AssemblyAdapter.svg)]() （不带v）
+lastVersionName：[![version](https://img.shields.io/bintray/v/xiaopansky/maven/AssemblyAdapter.svg)](https://bintray.com/xiaopansky/maven/AssemblyAdapter) （不带v）
 
 `最低兼容API 7`
 
