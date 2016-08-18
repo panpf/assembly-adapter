@@ -22,7 +22,7 @@ dependencies{
     compile 'me.xiaopan:assemblyadapter:lastVersionName'
 }
 ```
-lastVersionName：[![Release Version](https://img.shields.io/github/release/xiaopansky/AssemblyAdapter.svg)](https://github.com/xiaopansky/AssemblyAdapter/releases)`（不带v）`
+`lastVersionName`：[![Release Version](https://img.shields.io/github/release/xiaopansky/AssemblyAdapter.svg)](https://github.com/xiaopansky/AssemblyAdapter/releases)`（不带v）`
 
 `最低兼容API 7`
 
