@@ -36,6 +36,8 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
     private ExpandableListView listView;
     private FixedGroupItemInfo headerItemInfo;
     private FixedGroupItemInfo footerItemInfo;
+    private FixedGroupItemInfo headerItemInfo2;
+    private FixedGroupItemInfo footerItemInfo2;
 
     @Nullable
     @Override
@@ -131,22 +133,27 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
                     adapter = new AssemblyExpandableAdapter(objects);
 
                     headerItemInfo = adapter.addHeaderItem(new HeaderGroupItemFactory(), "我是小额头呀！");
+                    headerItemInfo2 = adapter.addHeaderItem(new HeaderGroupItemFactory(), "唉，我的小额头呢？");
                     adapter.addGroupItemFactory(new GameGroupItemFactory());
                     adapter.addGroupItemFactory(new UserGroupItemFactory());
                     adapter.addChildItemFactory(new GameChildItemFactory(getActivity().getBaseContext()));
                     adapter.addChildItemFactory(new UserChildItemFactory(getActivity().getBaseContext()));
                     adapter.setLoadMoreItem(new LoadMoreGroupItemFactory(ExpandableListViewFragment.this));
                     footerItemInfo = adapter.addFooterItem(new HeaderGroupItemFactory(), "我是小尾巴呀！");
+                    footerItemInfo2 = adapter.addFooterItem(new HeaderGroupItemFactory(), "唉，我的小尾巴呢？");
 
                     listView.setAdapter(adapter);
                 } else {
                     adapter.addAll(objects);
+
+                    headerItemInfo2.setEnabled(!headerItemInfo2.isEnabled());
+                    footerItemInfo2.setEnabled(!footerItemInfo2.isEnabled());
                 }
 
                 boolean loadMoreEnd = nextStart >= 100;
                 if (loadMoreEnd) {
-                    adapter.removeHeaderItem(headerItemInfo);
-                    adapter.removeFooterItem(footerItemInfo);
+                    headerItemInfo.setEnabled(false);
+                    footerItemInfo.setEnabled(false);
                 }
                 adapter.setLoadMoreEnd(loadMoreEnd);
             }

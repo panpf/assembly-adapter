@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = "AssemblyFragmentPagerAdapter";
     private List dataList;

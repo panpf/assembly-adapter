@@ -1,18 +1,17 @@
 package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class AssemblyPagerItemFactory<BEAN> {
-    private PagerAdapter adapter;
+    private AssemblyPagerAdapter adapter;
 
-    void setAdapter(PagerAdapter adapter) {
+    void setAdapter(AssemblyPagerAdapter adapter) {
         this.adapter = adapter;
     }
 
-    public PagerAdapter getAdapter() {
+    public AssemblyPagerAdapter getAdapter() {
         return adapter;
     }
 

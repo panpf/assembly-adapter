@@ -29,7 +29,10 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
 
     private AssemblyAdapter adapter;
     private ListView listView;
+    private FixedItemInfo headerItemInfo;
+    private FixedItemInfo headerItemInfo2;
     private FixedItemInfo footerItemInfo;
+    private FixedItemInfo footerItemInfo2;
 
     @Nullable
     @Override
@@ -100,20 +103,26 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = new AssemblyAdapter(objects);
 
-                    adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
+                    headerItemInfo = adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
+                    headerItemInfo2 = adapter.addHeaderItem(new HeaderItemFactory(), "唉，我的小额头呢！");
                     adapter.addItemFactory(new UserItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameItemFactory(getActivity().getBaseContext()));
                     footerItemInfo = adapter.addFooterItem(new HeaderItemFactory(), "我是小尾巴呀！");
+                    footerItemInfo2 = adapter.addFooterItem(new HeaderItemFactory(), "唉，我的小尾巴呢！");
                     adapter.setLoadMoreItem(new LoadMoreItemFactory(ListViewFragment.this));
 
                     listView.setAdapter(adapter);
                 } else {
                     adapter.addAll(objects);
+
+                    headerItemInfo2.setEnabled(!headerItemInfo2.isEnabled());
+                    footerItemInfo2.setEnabled(!footerItemInfo2.isEnabled());
                 }
 
                 boolean loadMoreEnd = nextStart >= 100;
                 if(loadMoreEnd){
-                    adapter.removeFooterItem(footerItemInfo);
+                    headerItemInfo.setEnabled(false);
+                    footerItemInfo.setEnabled(false);
                 }
                 adapter.setLoadMoreEnd(loadMoreEnd);
             }

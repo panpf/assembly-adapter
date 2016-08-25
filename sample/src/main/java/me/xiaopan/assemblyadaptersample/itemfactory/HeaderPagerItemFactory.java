@@ -12,6 +12,12 @@ import me.xiaopan.assemblyadaptersample.bean.Header;
 import me.xiaopan.sketch.SketchImageView;
 
 public class HeaderPagerItemFactory extends AssemblyPagerItemFactory<Header>{
+    private View.OnClickListener clickListener;
+
+    public HeaderPagerItemFactory(View.OnClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
     @Override
     public boolean isTarget(Object itemObject) {
         return itemObject instanceof Header;
@@ -26,6 +32,8 @@ public class HeaderPagerItemFactory extends AssemblyPagerItemFactory<Header>{
 
         SketchImageView imageView = (SketchImageView) view.findViewById(R.id.image_headerImageFragment);
         imageView.displayImage(header.imageUrl);
+
+        view.setOnClickListener(clickListener);
 
         return view;
     }

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.xiaopan.assemblyadapter.AssemblyRecyclerAdapter;
-import me.xiaopan.assemblyadapter.OnRecyclerLoadMoreListener;
 import me.xiaopan.assemblyadapter.FixedRecyclerItemInfo;
+import me.xiaopan.assemblyadapter.OnRecyclerLoadMoreListener;
 import me.xiaopan.assemblyadaptersample.R;
 import me.xiaopan.assemblyadaptersample.bean.Game;
 import me.xiaopan.assemblyadaptersample.bean.User;
@@ -31,6 +31,9 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
     private AssemblyRecyclerAdapter adapter;
     private RecyclerView recyclerView;
     private FixedRecyclerItemInfo headerItemInfo;
+    private FixedRecyclerItemInfo headerItemInfo2;
+    private FixedRecyclerItemInfo footerItemInfo;
+    private FixedRecyclerItemInfo footerItemInfo2;
 
     @Nullable
     @Override
@@ -103,19 +106,24 @@ public class RecyclerViewFragment extends Fragment implements OnRecyclerLoadMore
                     adapter = new AssemblyRecyclerAdapter(objects);
 
                     headerItemInfo = adapter.addHeaderItem(new HeaderRecyclerItemFactory(), "我是小额头呀！");
+                    headerItemInfo2 = adapter.addHeaderItem(new HeaderRecyclerItemFactory(), "唉，我的小额头呢？");
                     adapter.addItemFactory(new UserRecyclerItemFactory(getActivity().getBaseContext()));
                     adapter.addItemFactory(new GameRecyclerItemFactory(getActivity().getBaseContext()));
-                    adapter.addFooterItem(new HeaderRecyclerItemFactory(), "我是小尾巴呀！");
+                    footerItemInfo = adapter.addFooterItem(new HeaderRecyclerItemFactory(), "我是小尾巴呀！");
+                    footerItemInfo2 = adapter.addFooterItem(new HeaderRecyclerItemFactory(), "唉，我的小尾巴呢？");
                     adapter.setLoadMoreItem(new LoadMoreRecyclerItemFactory(RecyclerViewFragment.this));
 
                     recyclerView.setAdapter(adapter);
                 } else {
                     adapter.addAll(objects);
+                    headerItemInfo2.setEnabled(!headerItemInfo2.isEnabled());
+                    footerItemInfo2.setEnabled(!footerItemInfo2.isEnabled());
                 }
 
                 boolean loadMoreEnd = nextStart >= 100;
-                if(loadMoreEnd){
-                    adapter.removeHeaderItem(headerItemInfo);
+                if (loadMoreEnd) {
+                    headerItemInfo.setEnabled(false);
+                    footerItemInfo.setEnabled(false);
                 }
                 adapter.setDisableLoadMore(loadMoreEnd);
             }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import me.xiaopan.assemblyadapter.AssemblyLoadMoreRecyclerItemFactory.AssemblyLoadMoreRecyclerItem;
@@ -17,11 +16,16 @@ import me.xiaopan.assemblyadapter.AssemblyLoadMoreRecyclerItemFactory.AssemblyLo
 public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     private static final String TAG = "AssemblyRecyclerAdapter";
 
-    private final Object mLock = new Object();
-    private List dataList;
+    private final Object itemListLock = new Object();
+    private final Object headerItemListLock = new Object();
+    private final Object itemFactoryListLock = new Object();
+    private final Object footerItemListLock = new Object();
 
     private int itemTypeIndex = 0;
+    private int headerItemPosition;
+    private int footerItemPosition;
     private boolean itemFactoryLocked;
+    private List dataList;
     private ArrayList<FixedRecyclerItemInfo> headerItemList;
     private ArrayList<FixedRecyclerItemInfo> footerItemList;
     private ArrayList<AssemblyRecyclerItemFactory> itemFactoryList;
@@ -30,6 +34,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     private boolean disableLoadMore;
     private AssemblyLoadMoreRecyclerItem loadMoreItem;
     private AssemblyLoadMoreRecyclerItemFactory loadMoreItemFactory;
+
+    private boolean notifyOnChange = true;
 
     public AssemblyRecyclerAdapter(List dataList) {
         this.dataList = dataList;
@@ -55,17 +61,20 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
         headerFactory.setAdapter(this);
         headerFactory.setItemType(itemTypeIndex++);
-        FixedRecyclerItemInfo headerItemInfo = new FixedRecyclerItemInfo(headerFactory, data);
+        FixedRecyclerItemInfo headerItemInfo = new FixedRecyclerItemInfo(headerFactory, data, true);
+        headerItemInfo.setPosition(headerItemPosition++);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
         itemFactoryArray.put(headerFactory.getItemType(), headerItemInfo);
 
-        if (headerItemList == null) {
-            headerItemList = new ArrayList<FixedRecyclerItemInfo>(2);
+        synchronized (headerItemListLock) {
+            if (headerItemList == null) {
+                headerItemList = new ArrayList<FixedRecyclerItemInfo>(2);
+            }
+            headerItemList.add(headerItemInfo);
         }
-        headerItemList.add(headerItemInfo);
 
         return headerItemInfo;
     }
@@ -87,10 +96,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         }
         itemFactoryArray.put(itemFactory.getItemType(), itemFactory);
 
-        if (itemFactoryList == null) {
-            itemFactoryList = new ArrayList<AssemblyRecyclerItemFactory>(5);
+        synchronized (itemFactoryListLock) {
+            if (itemFactoryList == null) {
+                itemFactoryList = new ArrayList<AssemblyRecyclerItemFactory>(5);
+            }
+            itemFactoryList.add(itemFactory);
         }
-        itemFactoryList.add(itemFactory);
     }
 
     /**
@@ -105,17 +116,20 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
         footerFactory.setAdapter(this);
         footerFactory.setItemType(itemTypeIndex++);
-        FixedRecyclerItemInfo footerItemInfo = new FixedRecyclerItemInfo(footerFactory, data);
+        FixedRecyclerItemInfo footerItemInfo = new FixedRecyclerItemInfo(footerFactory, data, false);
+        footerItemInfo.setPosition(footerItemPosition++);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
         itemFactoryArray.put(footerFactory.getItemType(), footerItemInfo);
 
-        if (footerItemList == null) {
-            footerItemList = new ArrayList<FixedRecyclerItemInfo>(2);
+        synchronized (footerItemListLock) {
+            if (footerItemList == null) {
+                footerItemList = new ArrayList<FixedRecyclerItemInfo>(2);
+            }
+            footerItemList.add(footerItemInfo);
         }
-        footerItemList.add(footerItemInfo);
 
         return footerItemInfo;
     }
@@ -155,14 +169,17 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         if (collection == null || collection.size() == 0) {
             return;
         }
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList == null) {
                 dataList = new ArrayList(collection.size());
             }
             //noinspection unchecked
             dataList.addAll(collection);
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -173,13 +190,16 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         if (items == null || items.length == 0) {
             return;
         }
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList == null) {
                 dataList = new ArrayList(items.length);
             }
             Collections.addAll(dataList, items);
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -190,14 +210,17 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         if (object == null) {
             return;
         }
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList == null) {
                 dataList = new ArrayList();
             }
             //noinspection unchecked
             dataList.add(index, object);
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -208,12 +231,15 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         if (object == null) {
             return;
         }
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList != null) {
                 dataList.remove(object);
             }
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -221,12 +247,15 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      */
     @SuppressWarnings("unused")
     public void clear() {
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList != null) {
                 dataList.clear();
             }
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -234,12 +263,15 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      */
     @SuppressWarnings("unused")
     public void sort(Comparator comparator) {
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList != null) {
                 Collections.sort(dataList, comparator);
             }
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -254,7 +286,9 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
             loadMoreItemFactory.setLoadMoreRunning(false);
         }
 
-        notifyDataSetChanged();
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -289,19 +323,91 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     /**
+     * header状态变化处理，不可用时从header列表中移除，可用时加回header列表中，并根据position排序来恢复其原本所在的位置
+     */
+    void headerEnabledChanged(FixedRecyclerItemInfo headerItemInfo) {
+        if (headerItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        if (headerItemInfo.isEnabled()) {
+            synchronized (headerItemListLock) {
+                headerItemList.add(headerItemInfo);
+                Collections.sort(headerItemList, new Comparator<FixedRecyclerItemInfo>() {
+                    @Override
+                    public int compare(FixedRecyclerItemInfo lhs, FixedRecyclerItemInfo rhs) {
+                        return lhs.getPosition() - rhs.getPosition();
+                    }
+                });
+            }
+
+            if (notifyOnChange) {
+                notifyDataSetChanged();
+            }
+        } else {
+            synchronized (headerItemListLock) {
+                if (headerItemList.remove(headerItemInfo)) {
+                    if (notifyOnChange) {
+                        notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * footer状态变化处理，不可用时从footer列表中移除，可用时加回footer列表中，并根据position排序来恢复其原本所在的位置
+     */
+    void footerEnabledChanged(FixedRecyclerItemInfo footerItemInfo) {
+        if (footerItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        if (footerItemInfo.isEnabled()) {
+            synchronized (footerItemListLock) {
+                footerItemList.add(footerItemInfo);
+                Collections.sort(footerItemList, new Comparator<FixedRecyclerItemInfo>() {
+                    @Override
+                    public int compare(FixedRecyclerItemInfo lhs, FixedRecyclerItemInfo rhs) {
+                        return lhs.getPosition() - rhs.getPosition();
+                    }
+                });
+            }
+
+            if (notifyOnChange) {
+                notifyDataSetChanged();
+            }
+        } else {
+            synchronized (footerItemListLock) {
+                if (footerItemList.remove(footerItemInfo)) {
+                    if (notifyOnChange) {
+                        notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * 删除一个HeaderItem
+     *
+     * @deprecated Use FixedItemInfo.setEnabled(false) instead
      */
     @SuppressWarnings("unused")
+    @Deprecated
     public void removeHeaderItem(FixedRecyclerItemInfo headerItemInfo) {
-        if (headerItemList != null && headerItemInfo != null) {
-            Iterator<FixedRecyclerItemInfo> iterator = headerItemList.iterator();
-            FixedRecyclerItemInfo fixedItemInfo;
-            while (iterator.hasNext()) {
-                fixedItemInfo = iterator.next();
-                if (fixedItemInfo == headerItemInfo) {
-                    iterator.remove();
+        if (headerItemInfo == null) {
+            return;
+        }
+
+        if (headerItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        synchronized (headerItemListLock) {
+            if (headerItemList != null && headerItemList.remove(headerItemInfo)) {
+                if (notifyOnChange) {
                     notifyDataSetChanged();
-                    return;
                 }
             }
         }
@@ -309,18 +415,24 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * 删除一个FooterItem
+     *
+     * @deprecated Use FixedItemInfo.setEnabled(false) instead
      */
     @SuppressWarnings("unused")
+    @Deprecated
     public void removeFooterItem(FixedRecyclerItemInfo footerItemInfo) {
-        if (footerItemList != null && footerItemInfo != null) {
-            Iterator<FixedRecyclerItemInfo> iterator = footerItemList.iterator();
-            FixedRecyclerItemInfo fixedItemInfo;
-            while (iterator.hasNext()) {
-                fixedItemInfo = iterator.next();
-                if (fixedItemInfo == footerItemInfo) {
-                    iterator.remove();
+        if (footerItemInfo == null) {
+            return;
+        }
+
+        if (footerItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        synchronized (footerItemListLock) {
+            if (footerItemList != null && footerItemList.remove(footerItemInfo)) {
+                if (notifyOnChange) {
                     notifyDataSetChanged();
-                    return;
                 }
             }
         }
@@ -363,8 +475,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      */
     @SuppressWarnings("unused")
     public void setDataList(List dataList) {
-        this.dataList = dataList;
-        notifyDataSetChanged();
+        synchronized (itemListLock) {
+            this.dataList = dataList;
+        }
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -400,6 +517,23 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      */
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
+    }
+
+    /**
+     * 数据变更时是否立即刷新列表
+     */
+    @SuppressWarnings("unused")
+    public boolean isNotifyOnChange() {
+        return notifyOnChange;
+    }
+
+    /**
+     * 设置当数据源发生改变时是否立即调用notifyDataSetChanged()刷新列表，默认true。
+     * 当你需要连续多次修改数据的时候，你应该将notifyOnChange设为false，然后在最后主动调用notifyDataSetChanged()刷新列表，最后再将notifyOnChange设为true
+     */
+    @SuppressWarnings("unused")
+    public void setNotifyOnChange(boolean notifyOnChange) {
+        this.notifyOnChange = notifyOnChange;
     }
 
     /**

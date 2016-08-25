@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import me.xiaopan.assemblyadapter.AssemblyLoadMoreGroupItemFactory.AssemblyLoadMoreGroupItem;
@@ -19,14 +18,20 @@ import me.xiaopan.assemblyadapter.AssemblyLoadMoreGroupItemFactory.AssemblyLoadM
 public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "AssemblyExpandableAdapter";
 
-    private final Object mLock = new Object();
-    private List dataList;
-    private ExpandCallback expandCallback;
+    private final Object itemListLock = new Object();
+    private final Object headerItemListLock = new Object();
+    private final Object groupItemFactoryListLock = new Object();
+    private final Object childItemFactoryListLock = new Object();
+    private final Object footerItemListLock = new Object();
 
     private int groupTypeIndex = 0;
     private int childTypeIndex = 0;
+    private int headerItemPosition;
+    private int footerItemPosition;
     private boolean groupItemFactoryLocked;
     private boolean childItemFactoryLocked;
+    private List dataList;
+    private ExpandCallback expandCallback;
     private ArrayList<FixedGroupItemInfo> headerItemList;
     private ArrayList<FixedGroupItemInfo> footerItemList;
     private ArrayList<AssemblyGroupItemFactory> groupItemFactoryList;
@@ -37,6 +42,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     private boolean disableLoadMore;
     private AssemblyLoadMoreGroupItem loadMoreItem;
     private AssemblyLoadMoreGroupItemFactory loadMoreItemFactory;
+
+    private boolean notifyOnChange = true;
 
     public AssemblyExpandableAdapter(List dataList) {
         this.dataList = dataList;
@@ -63,17 +70,20 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
 
         headerFactory.setAdapter(this);
         headerFactory.setItemType(groupTypeIndex++);
-        FixedGroupItemInfo headerItemInfo = new FixedGroupItemInfo(headerFactory, data);
+        FixedGroupItemInfo headerItemInfo = new FixedGroupItemInfo(headerFactory, data, true);
+        headerItemInfo.setPosition(headerItemPosition++);
 
         if (groupItemFactoryArray == null) {
             groupItemFactoryArray = new SparseArray<Object>();
         }
         groupItemFactoryArray.put(headerFactory.getItemType(), headerItemInfo);
 
-        if (headerItemList == null) {
-            headerItemList = new ArrayList<FixedGroupItemInfo>(2);
+        synchronized (headerItemListLock) {
+            if (headerItemList == null) {
+                headerItemList = new ArrayList<FixedGroupItemInfo>(2);
+            }
+            headerItemList.add(headerItemInfo);
         }
-        headerItemList.add(headerItemInfo);
 
         return headerItemInfo;
     }
@@ -94,10 +104,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         }
         groupItemFactoryArray.put(groupItemFactory.getItemType(), groupItemFactory);
 
-        if (groupItemFactoryList == null) {
-            groupItemFactoryList = new ArrayList<AssemblyGroupItemFactory>(5);
+        synchronized (groupItemFactoryListLock) {
+            if (groupItemFactoryList == null) {
+                groupItemFactoryList = new ArrayList<AssemblyGroupItemFactory>(5);
+            }
+            groupItemFactoryList.add(groupItemFactory);
         }
-        groupItemFactoryList.add(groupItemFactory);
     }
 
     /**
@@ -116,10 +128,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         }
         childItemFactoryArray.put(childItemFactory.getItemType(), childItemFactory);
 
-        if (childItemFactoryList == null) {
-            childItemFactoryList = new ArrayList<AssemblyChildItemFactory>(5);
+        synchronized (childItemFactoryListLock) {
+            if (childItemFactoryList == null) {
+                childItemFactoryList = new ArrayList<AssemblyChildItemFactory>(5);
+            }
+            childItemFactoryList.add(childItemFactory);
         }
-        childItemFactoryList.add(childItemFactory);
     }
 
     /**
@@ -135,17 +149,20 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
 
         footerFactory.setAdapter(this);
         footerFactory.setItemType(groupTypeIndex++);
-        FixedGroupItemInfo footerItemInfo = new FixedGroupItemInfo(footerFactory, data);
+        FixedGroupItemInfo footerItemInfo = new FixedGroupItemInfo(footerFactory, data, false);
+        footerItemInfo.setPosition(footerItemPosition++);
 
         if (groupItemFactoryArray == null) {
             groupItemFactoryArray = new SparseArray<Object>();
         }
         groupItemFactoryArray.put(footerFactory.getItemType(), footerItemInfo);
 
-        if (footerItemList == null) {
-            footerItemList = new ArrayList<FixedGroupItemInfo>(2);
+        synchronized (footerItemListLock) {
+            if (footerItemList == null) {
+                footerItemList = new ArrayList<FixedGroupItemInfo>(2);
+            }
+            footerItemList.add(footerItemInfo);
         }
-        footerItemList.add(footerItemInfo);
 
         return footerItemInfo;
     }
@@ -185,14 +202,17 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         if (collection == null || collection.size() == 0) {
             return;
         }
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList == null) {
                 dataList = new ArrayList(collection.size());
             }
             //noinspection unchecked
             dataList.addAll(collection);
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -203,13 +223,16 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         if (items == null || items.length == 0) {
             return;
         }
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList == null) {
                 dataList = new ArrayList(items.length);
             }
             Collections.addAll(dataList, items);
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -220,14 +243,17 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         if (object == null) {
             return;
         }
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList == null) {
                 dataList = new ArrayList();
             }
             //noinspection unchecked
             dataList.add(index, object);
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -238,12 +264,15 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         if (object == null) {
             return;
         }
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList != null) {
                 dataList.remove(object);
             }
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -251,12 +280,15 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     @SuppressWarnings("unused")
     public void clear() {
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList != null) {
                 dataList.clear();
             }
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -264,12 +296,15 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     @SuppressWarnings("unused")
     public void sort(Comparator comparator) {
-        synchronized (mLock) {
+        synchronized (itemListLock) {
             if (dataList != null) {
                 Collections.sort(dataList, comparator);
             }
         }
-        notifyDataSetChanged();
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -284,7 +319,9 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
             loadMoreItemFactory.setLoadMoreRunning(false);
         }
 
-        notifyDataSetChanged();
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -319,19 +356,91 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     }
 
     /**
+     * header状态变化处理，不可用时从header列表中移除，可用时加回header列表中，并根据position排序来恢复其原本所在的位置
+     */
+    void headerEnabledChanged(FixedGroupItemInfo headerItemInfo) {
+        if (headerItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        if (headerItemInfo.isEnabled()) {
+            synchronized (headerItemListLock) {
+                headerItemList.add(headerItemInfo);
+                Collections.sort(headerItemList, new Comparator<FixedGroupItemInfo>() {
+                    @Override
+                    public int compare(FixedGroupItemInfo lhs, FixedGroupItemInfo rhs) {
+                        return lhs.getPosition() - rhs.getPosition();
+                    }
+                });
+            }
+
+            if (notifyOnChange) {
+                notifyDataSetChanged();
+            }
+        } else {
+            synchronized (headerItemListLock) {
+                if (headerItemList.remove(headerItemInfo)) {
+                    if (notifyOnChange) {
+                        notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * footer状态变化处理，不可用时从footer列表中移除，可用时加回footer列表中，并根据position排序来恢复其原本所在的位置
+     */
+    void footerEnabledChanged(FixedGroupItemInfo footerItemInfo) {
+        if (footerItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        if (footerItemInfo.isEnabled()) {
+            synchronized (footerItemListLock) {
+                footerItemList.add(footerItemInfo);
+                Collections.sort(footerItemList, new Comparator<FixedGroupItemInfo>() {
+                    @Override
+                    public int compare(FixedGroupItemInfo lhs, FixedGroupItemInfo rhs) {
+                        return lhs.getPosition() - rhs.getPosition();
+                    }
+                });
+            }
+
+            if (notifyOnChange) {
+                notifyDataSetChanged();
+            }
+        } else {
+            synchronized (footerItemListLock) {
+                if (footerItemList.remove(footerItemInfo)) {
+                    if (notifyOnChange) {
+                        notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * 删除一个HeaderItem
+     *
+     * @deprecated Use FixedItemInfo.setEnabled(false) instead
      */
     @SuppressWarnings("unused")
+    @Deprecated
     public void removeHeaderItem(FixedGroupItemInfo headerItemInfo) {
-        if (headerItemList != null && headerItemInfo != null) {
-            Iterator<FixedGroupItemInfo> iterator = headerItemList.iterator();
-            FixedGroupItemInfo fixedItemInfo;
-            while (iterator.hasNext()) {
-                fixedItemInfo = iterator.next();
-                if (fixedItemInfo == headerItemInfo) {
-                    iterator.remove();
+        if (headerItemInfo == null) {
+            return;
+        }
+
+        if (headerItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        synchronized (headerItemListLock) {
+            if (headerItemList != null && headerItemList.remove(headerItemInfo)) {
+                if (notifyOnChange) {
                     notifyDataSetChanged();
-                    return;
                 }
             }
         }
@@ -339,18 +448,24 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
 
     /**
      * 删除一个FooterItem
+     *
+     * @deprecated Use FixedItemInfo.setEnabled(false) instead
      */
     @SuppressWarnings("unused")
+    @Deprecated
     public void removeFooterItem(FixedGroupItemInfo footerItemInfo) {
-        if (footerItemList != null && footerItemInfo != null) {
-            Iterator<FixedGroupItemInfo> iterator = footerItemList.iterator();
-            FixedGroupItemInfo fixedItemInfo;
-            while (iterator.hasNext()) {
-                fixedItemInfo = iterator.next();
-                if (fixedItemInfo == footerItemInfo) {
-                    iterator.remove();
+        if (footerItemInfo == null) {
+            return;
+        }
+
+        if (footerItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        synchronized (footerItemListLock) {
+            if (footerItemList != null && footerItemList.remove(footerItemInfo)) {
+                if (notifyOnChange) {
                     notifyDataSetChanged();
-                    return;
                 }
             }
         }
@@ -401,8 +516,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     @SuppressWarnings("unused")
     public void setDataList(List dataList) {
-        this.dataList = dataList;
-        notifyDataSetChanged();
+        synchronized (itemListLock) {
+            this.dataList = dataList;
+        }
+
+        if (notifyOnChange) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -445,6 +565,23 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
+    }
+
+    /**
+     * 数据变更时是否立即刷新列表
+     */
+    @SuppressWarnings("unused")
+    public boolean isNotifyOnChange() {
+        return notifyOnChange;
+    }
+
+    /**
+     * 设置当数据源发生改变时是否立即调用notifyDataSetChanged()刷新列表，默认true。
+     * 当你需要连续多次修改数据的时候，你应该将notifyOnChange设为false，然后在最后主动调用notifyDataSetChanged()刷新列表，最后再将notifyOnChange设为true
+     */
+    @SuppressWarnings("unused")
+    public void setNotifyOnChange(boolean notifyOnChange) {
+        this.notifyOnChange = notifyOnChange;
     }
 
     /**
