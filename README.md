@@ -9,6 +9,7 @@ AssemblyAdapter是Android上的一个Adapter扩展库，有了它你就不用再
 >* ``Item一处定义处处使用``. 你只需为每一个item layout写一个ItemFactory，然后使用ItemFactory即可
 >* ``便捷的组合式多Item``. 可以使用多个ItemFactory，每个ItemFactory就代表一种itemType
 >* ``支持header和footer``. 使用AssemblyAdapter可以让ExpandableListView、GridView、RecyclerView、ViewPager等也支持header和footer
+>* ``随意隐藏、显示header或footer``. header和footer还支持通过其setEnabled(boolean)方法控制隐藏或显示 
 >* ``自带加载更多功能``. 自带滑动到列表底部触发加载更多功能，你只需定义一个专门用于加载更多的ItemFactory即可
 >* ``支持常用Adapter``. 支持BaseAdapter、RecyclerView.Adapter、BaseExpandableListAdapter、PagerAdapter、
     FragmentPagerAdapter和FragmentStatePagerAdapter，涵盖了Android开发中常用的大部分Adapter
@@ -205,6 +206,7 @@ Adapter支持header和footer的重要性在于可以让GridView、RecyclerView�
 
 首先定义好一个用于header或footer的ItemFactory
 
+##### 添加header、footer：
 然后调用`addHeaderItem(AssemblyItemFactory, Object)`或`addFooterItem(AssemblyItemFactory, Object)`方法添加即可，如下：
 ```java
 AssemblyAdapter adapter = new AssemblyAdapter(objects);
@@ -216,15 +218,18 @@ adapter.addFooterItem(new HeaderItemFactory(), "我是小尾巴呀！");
 
 addHeaderItem(AssemblyItemFactory, Object)和addFooterItem(AssemblyItemFactory, Object)的第二个参数是Item需要的数据，直接传进去即可
 
-当你需要删除header或footer的时候，只需调用`removeHeaderItem(FixedItemInfo)`或`removeFooterItem(FixedItemInfo)`删除即可，删除时需要用到addHeaderItem(AssemblyItemFactory, Object)或addFooterItem(AssemblyItemFactory, Object)返回的FixedItemInfo，如下：
+##### 隐藏或显示header、footer
+addHeaderItem()或addFooterItem()都会返回一个用于控制header或footer的FixedItemInfo对象，如下：
 ```java
 AssemblyAdapter adapter = new AssemblyAdapter(objects);
 
 FixedItemInfo userFixedItemInfo = adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
 
-...
+// 隐藏
+userFixedItemInfo.setEnabled(false);
 
-adapter.removeHeaderItem(userFixedItemInfo);
+// 显示
+userFixedItemInfo.setEnabled(true);
 ```
 
 由于有了header和footer那么Item.getPosition()方法得到的位置就是Item在Adapter中的位置，要想得到其在所属部分的真实位置可通过Adapter的`getPositionInPart(int)`获取
