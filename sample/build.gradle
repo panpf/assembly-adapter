@@ -8,8 +8,8 @@ android {
         applicationId "me.xiaopan.assemblyadaptersample"
         minSdkVersion 8
         targetSdkVersion 22
-        versionCode 110
-        versionName "1.1.0"
+        versionCode 220
+        versionName "2.2.0"
     }
 
     buildTypes {
