@@ -28,6 +28,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:22.2.0'
     compile 'me.xiaopan:pagerslidingtabstrip:1.7.0'
-    compile 'me.xiaopan:sketch:2.2.2'
+    compile 'me.xiaopan:sketch:2.3.0-beta7'
     compile project(':assemblyadapter')
 }

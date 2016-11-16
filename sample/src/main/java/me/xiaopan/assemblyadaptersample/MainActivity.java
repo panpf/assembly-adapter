@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 
 import me.xiaopan.assemblyadapter.FragmentArrayPagerAdapter;
 import me.xiaopan.assemblyadaptersample.fragment.ExpandableListViewFragment;
+import me.xiaopan.assemblyadaptersample.fragment.GridRecyclerViewFragment;
 import me.xiaopan.assemblyadaptersample.fragment.ListViewFragment;
 import me.xiaopan.assemblyadaptersample.fragment.PagerAdapterFragment;
 import me.xiaopan.assemblyadaptersample.fragment.RecyclerViewFragment;
@@ -27,6 +28,7 @@ public class MainActivity extends FragmentActivity {
         viewPager.setAdapter(new FragmentArrayPagerAdapter(getSupportFragmentManager(), new Fragment[]{
                 new ListViewFragment(),
                 new RecyclerViewFragment(),
+                new GridRecyclerViewFragment(),
                 new ExpandableListViewFragment(),
                 new SpinnerFragment(),
                 new ViewPagerFragment(),
