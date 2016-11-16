@@ -3,6 +3,8 @@ package me.xiaopan.assemblyadaptersample.itemfactory;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import me.xiaopan.assemblyadapter.AssemblyItem;
@@ -60,6 +62,9 @@ public class GameItemFactory extends AssemblyItemFactory<GameItemFactory.GameIte
     }
 
     public class GameItem extends AssemblyItem<Game> {
+        ImageView iconImageView;
+        TextView nameTextView;
+        TextView likeTextView;
 
         public GameItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
@@ -67,37 +72,40 @@ public class GameItemFactory extends AssemblyItemFactory<GameItemFactory.GameIte
 
         @Override
         protected void onFindViews() {
+            iconImageView = (ImageView) findViewById(R.id.image_gameListItem_icon);
+            nameTextView = (TextView) findViewById(R.id.text_gameListItem_name);
+            likeTextView = (TextView) findViewById(R.id.text_gameListItem_like);
         }
 
         @Override
         protected void onConfigViews(Context context) {
-            getSetter()
-                    .setOnClickListener(R.id.image_gameListItem_icon, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            eventListener.onClickIcon(getPosition(), getData());
-                        }
-                    })
-                    .setOnClickListener(R.id.text_gameListItem_name, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            eventListener.onClickName(getPosition(), getData());
-                        }
-                    })
-                    .setOnClickListener(R.id.text_gameListItem_like, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            eventListener.onClickLike(getPosition(), getData());
-                        }
-                    });
+            iconImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eventListener.onClickIcon(getPosition(), getData());
+                }
+            });
+
+            nameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eventListener.onClickName(getPosition(), getData());
+                }
+            });
+
+            likeTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eventListener.onClickLike(getPosition(), getData());
+                }
+            });
         }
 
         @Override
         protected void onSetData(int position, Game game) {
-            getSetter()
-                    .setImageResource(R.id.image_gameListItem_icon, game.iconResId)
-                    .setText(R.id.text_gameListItem_name, game.name)
-                    .setText(R.id.text_gameListItem_like, game.like);
+            iconImageView.setImageResource(game.iconResId);
+            nameTextView.setText(game.name);
+            likeTextView.setText(game.like);
         }
     }
 }

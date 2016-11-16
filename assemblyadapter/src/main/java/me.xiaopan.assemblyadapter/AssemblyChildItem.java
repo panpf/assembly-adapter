@@ -11,7 +11,6 @@ public abstract class AssemblyChildItem<DATA> {
     private int groupPosition;
     private boolean isLastChild;
     private DATA data;
-    private ContentSetter setter;
 
     public AssemblyChildItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
@@ -113,13 +112,5 @@ public abstract class AssemblyChildItem<DATA> {
     @SuppressWarnings("unused")
     public boolean isLastChild() {
         return isLastChild;
-    }
-
-    @SuppressWarnings("unused")
-    public ContentSetter getSetter() {
-        if (setter == null) {
-            setter = new ContentSetter(itemView);
-        }
-        return setter;
     }
 }

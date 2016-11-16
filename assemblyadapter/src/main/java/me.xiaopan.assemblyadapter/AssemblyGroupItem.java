@@ -10,7 +10,6 @@ public abstract class AssemblyGroupItem<DATA> {
     private int position;
     private boolean isExpanded;
     private DATA data;
-    private ContentSetter setter;
 
     public AssemblyGroupItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
@@ -103,13 +102,5 @@ public abstract class AssemblyGroupItem<DATA> {
     @SuppressWarnings({"unused", "WeakerAccess"})
     public boolean isExpanded() {
         return isExpanded;
-    }
-
-    @SuppressWarnings("unused")
-    public ContentSetter getSetter() {
-        if (setter == null) {
-            setter = new ContentSetter(itemView);
-        }
-        return setter;
     }
 }

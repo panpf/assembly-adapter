@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 public abstract class AssemblyRecyclerItem<DATA> extends RecyclerView.ViewHolder {
     private DATA data;
-    private ContentSetter setter;
 
     public AssemblyRecyclerItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
@@ -80,14 +79,6 @@ public abstract class AssemblyRecyclerItem<DATA> extends RecyclerView.ViewHolder
      */
     public DATA getData() {
         return data;
-    }
-
-    @SuppressWarnings("unused")
-    public ContentSetter getSetter() {
-        if (setter == null) {
-            setter = new ContentSetter(itemView);
-        }
-        return setter;
     }
 
     /**

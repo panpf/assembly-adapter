@@ -9,7 +9,6 @@ public abstract class AssemblyItem<DATA> {
     private View itemView;
     private int position;
     private DATA data;
-    private ContentSetter setter;
 
     public AssemblyItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
@@ -90,13 +89,5 @@ public abstract class AssemblyItem<DATA> {
      */
     public int getPosition() {
         return position;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public ContentSetter getSetter() {
-        if (setter == null) {
-            setter = new ContentSetter(itemView);
-        }
-        return setter;
     }
 }
