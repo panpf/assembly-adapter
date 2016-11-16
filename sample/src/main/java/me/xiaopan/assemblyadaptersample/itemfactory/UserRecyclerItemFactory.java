@@ -90,11 +90,11 @@ public class UserRecyclerItemFactory extends AssemblyRecyclerItemFactory<UserRec
 
         @Override
         protected void onFindViews() {
-            headImageView = (ImageView) itemView.findViewById(R.id.image_userListItem_head);
-            nameTextView = (TextView) itemView.findViewById(R.id.text_userListItem_name);
-            sexTextView = (TextView) itemView.findViewById(R.id.text_userListItem_sex);
-            ageTextView = (TextView) itemView.findViewById(R.id.text_userListItem_age);
-            jobTextView = (TextView) itemView.findViewById(R.id.text_userListItem_job);
+            headImageView = findViewById(R.id.image_userListItem_head);
+            nameTextView = findViewById(R.id.text_userListItem_name);
+            sexTextView = findViewById(R.id.text_userListItem_sex);
+            ageTextView = findViewById(R.id.text_userListItem_age);
+            jobTextView = findViewById(R.id.text_userListItem_job);
         }
 
         @Override

@@ -1,7 +1,6 @@
 package me.xiaopan.assemblyadaptersample.itemfactory;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -29,7 +28,7 @@ public class SpinnerItemFactory extends AssemblyItemFactory<SpinnerItemFactory.S
 
         @Override
         protected void onFindViews() {
-            textView = (TextView) findViewById(android.R.id.text1);
+            textView = findViewById(android.R.id.text1);
         }
 
         @Override

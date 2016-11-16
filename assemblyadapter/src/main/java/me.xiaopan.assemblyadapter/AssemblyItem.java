@@ -39,16 +39,18 @@ public abstract class AssemblyItem<DATA> {
     /**
      * 根据id查找View
      */
-    public View findViewById(int id) {
-        return itemView.findViewById(id);
+    public <T extends View> T findViewById(int id) {
+        //noinspection unchecked
+        return (T) itemView.findViewById(id);
     }
 
     /**
      * 根据tag查找View
      */
     @SuppressWarnings("unused")
-    public View findViewWithTag(Object tag) {
-        return itemView.findViewWithTag(tag);
+    public <T extends View> T findViewWithTag(Object tag) {
+        //noinspection unchecked
+        return (T) itemView.findViewWithTag(tag);
     }
 
     /**

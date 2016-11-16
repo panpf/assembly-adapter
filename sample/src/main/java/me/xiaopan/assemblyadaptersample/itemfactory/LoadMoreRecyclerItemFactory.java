@@ -29,9 +29,9 @@ public class LoadMoreRecyclerItemFactory extends AssemblyLoadMoreRecyclerItemFac
 
         @Override
         protected void onFindViews() {
-            loadingView = itemView.findViewById(R.id.text_loadMoreListItem_loading);
-            errorView = itemView.findViewById(R.id.text_loadMoreListItem_error);
-            endView = itemView.findViewById(R.id.text_loadMoreListItem_end);
+            loadingView = findViewById(R.id.text_loadMoreListItem_loading);
+            errorView = findViewById(R.id.text_loadMoreListItem_error);
+            endView = findViewById(R.id.text_loadMoreListItem_end);
         }
 
         @Override

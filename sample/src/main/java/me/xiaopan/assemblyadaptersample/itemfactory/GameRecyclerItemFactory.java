@@ -70,9 +70,9 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
 
         @Override
         protected void onFindViews() {
-            iconImageView = (ImageView) itemView.findViewById(R.id.image_gameListItem_icon);
-            nameTextView = (TextView) itemView.findViewById(R.id.text_gameListItem_name);
-            likeTextView = (TextView) itemView.findViewById(R.id.text_gameListItem_like);
+            iconImageView = findViewById(R.id.image_gameListItem_icon);
+            nameTextView = findViewById(R.id.text_gameListItem_name);
+            likeTextView = findViewById(R.id.text_gameListItem_like);
         }
 
         @Override
