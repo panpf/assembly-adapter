@@ -12,8 +12,8 @@ import me.xiaopan.assemblyadaptersample.bean.UserGroup;
 public class UserGroupItemFactory extends AssemblyGroupItemFactory<UserGroupItemFactory.UserGroupItem>{
 
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof UserGroup;
+    public boolean isTarget(Object data) {
+        return data instanceof UserGroup;
     }
 
     @Override

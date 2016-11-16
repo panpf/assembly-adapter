@@ -19,8 +19,8 @@ public class HeaderPagerItemFactory extends AssemblyPagerItemFactory<Header>{
     }
 
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof Header;
+    public boolean isTarget(Object data) {
+        return data instanceof Header;
     }
 
     @Override

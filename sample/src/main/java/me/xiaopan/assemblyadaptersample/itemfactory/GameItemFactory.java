@@ -21,8 +21,8 @@ public class GameItemFactory extends AssemblyItemFactory<GameItemFactory.GameIte
     }
 
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof Game;
+    public boolean isTarget(Object data) {
+        return data instanceof Game;
     }
 
     @Override

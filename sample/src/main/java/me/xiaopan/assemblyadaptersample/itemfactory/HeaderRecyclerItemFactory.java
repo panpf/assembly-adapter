@@ -10,8 +10,8 @@ import me.xiaopan.assemblyadaptersample.R;
 
 public class HeaderRecyclerItemFactory extends AssemblyRecyclerItemFactory<HeaderRecyclerItemFactory.HeaderRecyclerItem> {
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof String;
+    public boolean isTarget(Object data) {
+        return data instanceof String;
     }
 
     @Override

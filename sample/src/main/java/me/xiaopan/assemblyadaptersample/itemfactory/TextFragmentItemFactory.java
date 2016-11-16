@@ -8,8 +8,8 @@ import me.xiaopan.assemblyadaptersample.fragment.TextFragment;
 
 public class TextFragmentItemFactory extends AssemblyFragmentItemFactory<Text> {
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof Text;
+    public boolean isTarget(Object data) {
+        return data instanceof Text;
     }
 
     @Override

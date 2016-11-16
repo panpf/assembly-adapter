@@ -322,7 +322,7 @@ adapter.setLoadMoreItem(new LoadMoreItemFactory(new OnLoadMoreListener(){
 你还可以通过`setDisableLoadMore(boolean)`方法替代setLoadMoreEnd(boolean)来控制是否禁用加载更多功能，两者的区别在于setLoadMoreEnd(boolean)为true时会在列表尾部显示end提示，而setDisableLoadMore(boolean)则是完全不显示加载更多尾巴
 
 ### License
-    Copyright (C) 2015 Peng fei Pan <sky@xiaopan.me>
+    Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

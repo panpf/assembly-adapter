@@ -12,8 +12,8 @@ import me.xiaopan.assemblyadaptersample.bean.Text;
 
 public class TextPagerItemFactory extends AssemblyPagerItemFactory<Text>{
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof Text;
+    public boolean isTarget(Object data) {
+        return data instanceof Text;
     }
 
     @Override

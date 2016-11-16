@@ -18,8 +18,8 @@ public class AppListHeaderItemFactory extends AssemblyRecyclerItemFactory<AppLis
     }
 
     @Override
-    public boolean isTarget(Object o) {
-        return o instanceof String;
+    public boolean isTarget(Object data) {
+        return data instanceof String;
     }
 
     @Override

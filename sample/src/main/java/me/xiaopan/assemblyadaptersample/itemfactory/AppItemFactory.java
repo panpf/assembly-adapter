@@ -12,8 +12,8 @@ import me.xiaopan.sketch.SketchImageView;
 
 public class AppItemFactory extends AssemblyRecyclerItemFactory<AppItemFactory.AppItem> {
     @Override
-    public boolean isTarget(Object o) {
-        return o instanceof AppInfo;
+    public boolean isTarget(Object data) {
+        return data instanceof AppInfo;
     }
 
     @Override

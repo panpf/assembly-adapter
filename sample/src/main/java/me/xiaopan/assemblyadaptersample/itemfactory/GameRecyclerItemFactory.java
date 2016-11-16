@@ -21,8 +21,8 @@ public class GameRecyclerItemFactory extends AssemblyRecyclerItemFactory<GameRec
     }
 
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof Game;
+    public boolean isTarget(Object data) {
+        return data instanceof Game;
     }
 
     @Override

@@ -11,8 +11,8 @@ import me.xiaopan.sketch.SketchImageView;
 
 public class ImagePagerItemFactory extends AssemblyPagerItemFactory<String>{
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof String;
+    public boolean isTarget(Object data) {
+        return data instanceof String;
     }
 
     @Override

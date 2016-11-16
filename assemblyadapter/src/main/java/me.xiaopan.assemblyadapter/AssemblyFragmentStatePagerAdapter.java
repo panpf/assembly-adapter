@@ -1,3 +1,19 @@
+/**
+ * Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package me.xiaopan.assemblyadapter;
 
 import android.annotation.SuppressLint;
@@ -10,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 通用组合式FragmentStatePagerAdapter，支持组合式多ItemType，支持头、尾巴以及加载更多
+ */
 public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
     private static final String TAG = "AssemblyFragmentStatePagerAdapter";
     private List dataList;
@@ -123,6 +142,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取列表头的个数
      */
+    @SuppressWarnings("WeakerAccess")
     public int getHeaderItemCount() {
         return headerItemList != null ? headerItemList.size() : 0;
     }
@@ -130,6 +150,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取ItemFactory的个数
      */
+    @SuppressWarnings("WeakerAccess")
     public int getItemFactoryCount() {
         return itemFactoryList != null ? itemFactoryList.size() : 0;
     }
@@ -137,6 +158,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取列表头的个数
      */
+    @SuppressWarnings("WeakerAccess")
     public int getFooterItemCount() {
         return footerItemList != null ? footerItemList.size() : 0;
     }
@@ -144,6 +166,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取数据列表的长度
      */
+    @SuppressWarnings("WeakerAccess")
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
     }

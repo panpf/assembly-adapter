@@ -21,8 +21,8 @@ public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserIte
     }
 
     @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof User;
+    public boolean isTarget(Object data) {
+        return data instanceof User;
     }
 
     @Override
