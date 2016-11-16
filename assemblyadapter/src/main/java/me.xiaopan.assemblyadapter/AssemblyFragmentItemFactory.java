@@ -3,7 +3,7 @@ package me.xiaopan.assemblyadapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 
-public abstract class AssemblyFragmentItemFactory<BEAN> {
+public abstract class AssemblyFragmentItemFactory<DATA> {
     private PagerAdapter adapter;
 
     void setAdapter(PagerAdapter adapter) {
@@ -16,5 +16,5 @@ public abstract class AssemblyFragmentItemFactory<BEAN> {
 
     public abstract boolean isTarget(Object itemObject);
 
-    public abstract Fragment createFragment(int position, BEAN bean);
+    public abstract Fragment createFragment(int position, DATA data);
 }

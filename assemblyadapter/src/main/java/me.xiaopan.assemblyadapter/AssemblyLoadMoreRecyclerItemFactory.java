@@ -29,11 +29,13 @@ public abstract class AssemblyLoadMoreRecyclerItemFactory extends AssemblyRecycl
     public abstract class AssemblyLoadMoreRecyclerItem extends AssemblyRecyclerItem<String> {
         public AssemblyLoadMoreRecyclerItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
+            fullSpanInStaggeredGrid();
         }
 
         @SuppressWarnings("unused")
         public AssemblyLoadMoreRecyclerItem(View convertView) {
             super(convertView);
+            fullSpanInStaggeredGrid();
         }
 
         public abstract View getErrorRetryView();
@@ -46,15 +48,18 @@ public abstract class AssemblyLoadMoreRecyclerItemFactory extends AssemblyRecycl
 
         @Override
         public void onConfigViews(Context context) {
-            getErrorRetryView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (eventListener != null) {
-                        loadMoreRunning = false;
-                        setData(getLayoutPosition(), getData());
+            View errorView = getErrorRetryView();
+            if (errorView != null) {
+                errorView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (eventListener != null) {
+                            loadMoreRunning = false;
+                            setData(getLayoutPosition(), getData());
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         @Override

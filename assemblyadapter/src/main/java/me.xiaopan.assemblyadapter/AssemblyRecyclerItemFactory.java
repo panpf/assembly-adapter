@@ -22,6 +22,10 @@ public abstract class AssemblyRecyclerItemFactory<ITEM extends AssemblyRecyclerI
         this.adapter = adapter;
     }
 
+    public int getSpanSize() {
+        return 1;
+    }
+
     public abstract boolean isTarget(Object itemObject);
 
     public abstract ITEM createAssemblyItem(ViewGroup parent);

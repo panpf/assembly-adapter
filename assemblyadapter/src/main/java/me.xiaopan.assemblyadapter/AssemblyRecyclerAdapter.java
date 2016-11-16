@@ -573,6 +573,58 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         throw new IllegalArgumentException("illegal position: " + position);
     }
 
+    /**
+     * 获取指定位置占几列
+     */
+    public int getSpanSize(int position){
+        // 头
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            //noinspection UnnecessaryLocalVariable
+            int positionInHeaderList = position;
+            return headerItemList.get(positionInHeaderList).getItemFactory().getSpanSize();
+        }
+
+        // 数据
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            int positionInDataList = position - headerItemCount;
+            Object dataObject = dataList.get(positionInDataList);
+
+            AssemblyRecyclerItemFactory itemFactory;
+            for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
+                itemFactory = itemFactoryList.get(w);
+                if (itemFactory.isTarget(dataObject)) {
+                    return itemFactory.getSpanSize();
+                }
+            }
+
+            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. " +
+                    "positionInDataList=" + positionInDataList + ", " +
+                    "dataObject=" + (dataObject != null ? dataObject.getClass().getName() : "null"));
+        }
+
+        // 尾巴
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            int positionInFooterList = position - headerItemCount - dataCount;
+            return footerItemList.get(positionInFooterList).getItemFactory().getSpanSize();
+        }
+
+        // 加载更多尾巴
+        if (dataCount > 0 && hasLoadMoreFooter() && position == getItemCount() - 1) {
+            return loadMoreItemFactory.getSpanSize();
+        }
+
+        return 1;
+    }
+
     @Override
     public int getItemCount() {
         int headerItemCount = getHeaderItemCount();

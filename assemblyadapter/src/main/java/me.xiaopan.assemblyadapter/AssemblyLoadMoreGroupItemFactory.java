@@ -46,15 +46,18 @@ public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItem
 
         @Override
         public void onConfigViews(Context context) {
-            getErrorRetryView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (eventListener != null) {
-                        loadMoreRunning = false;
-                        setData(getPosition(), isExpanded(), getData());
+            View errorView = getErrorRetryView();
+            if (errorView != null) {
+                errorView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (eventListener != null) {
+                            loadMoreRunning = false;
+                            setData(getPosition(), isExpanded(), getData());
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         @Override
