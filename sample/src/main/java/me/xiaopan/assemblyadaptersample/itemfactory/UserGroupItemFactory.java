@@ -30,7 +30,7 @@ public class UserGroupItemFactory extends AssemblyGroupItemFactory<UserGroupItem
 
         @Override
         protected void onFindViews() {
-            titleTextView = findViewById(R.id.text_userListGroup_name);
+            titleTextView = (TextView) findViewById(R.id.text_userListGroup_name);
         }
 
         @Override

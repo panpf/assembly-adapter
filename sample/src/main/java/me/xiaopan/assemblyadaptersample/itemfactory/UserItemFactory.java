@@ -43,11 +43,11 @@ public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserIte
 
         @Override
         protected void onFindViews() {
-            headImageView = findViewById(R.id.image_userListItem_head);
-            nameTextView = findViewById(R.id.text_userListItem_name);
-            sexTextView = findViewById(R.id.text_userListItem_sex);
-            ageTextView = findViewById(R.id.text_userListItem_age);
-            jobTextView = findViewById(R.id.text_userListItem_job);
+            headImageView = (ImageView) findViewById(R.id.image_userListItem_head);
+            nameTextView = (TextView) findViewById(R.id.text_userListItem_name);
+            sexTextView = (TextView) findViewById(R.id.text_userListItem_sex);
+            ageTextView = (TextView) findViewById(R.id.text_userListItem_age);
+            jobTextView = (TextView) findViewById(R.id.text_userListItem_job);
         }
 
         @Override

@@ -28,7 +28,7 @@ public class SpinnerItemFactory extends AssemblyItemFactory<SpinnerItemFactory.S
 
         @Override
         protected void onFindViews() {
-            textView = findViewById(android.R.id.text1);
+            textView = (TextView) findViewById(android.R.id.text1);
         }
 
         @Override

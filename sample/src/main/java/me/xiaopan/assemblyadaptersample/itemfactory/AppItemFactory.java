@@ -31,8 +31,8 @@ public class AppItemFactory extends AssemblyRecyclerItemFactory<AppItemFactory.A
 
         @Override
         protected void onFindViews() {
-            iconImageView = findViewById(R.id.image_installedApp_icon);
-            nameTextView = findViewById(R.id.text_installedApp_name);
+            iconImageView = (SketchImageView) findViewById(R.id.image_installedApp_icon);
+            nameTextView = (TextView) findViewById(R.id.text_installedApp_name);
         }
 
         @Override

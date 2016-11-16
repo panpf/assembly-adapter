@@ -50,7 +50,7 @@ public class AppListHeaderItemFactory extends AssemblyRecyclerItemFactory<AppLis
 
         @Override
         protected void onFindViews() {
-            textView = findViewById(R.id.text_appListHeaderItem);
+            textView = (TextView) findViewById(R.id.text_appListHeaderItem);
         }
 
         @Override

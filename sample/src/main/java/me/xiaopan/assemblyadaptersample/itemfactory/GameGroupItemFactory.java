@@ -30,7 +30,7 @@ public class GameGroupItemFactory extends AssemblyGroupItemFactory<GameGroupItem
 
         @Override
         protected void onFindViews() {
-            titleTextView = findViewById(R.id.text_gameListGroup_name);
+            titleTextView = (TextView) findViewById(R.id.text_gameListGroup_name);
         }
 
         @Override
