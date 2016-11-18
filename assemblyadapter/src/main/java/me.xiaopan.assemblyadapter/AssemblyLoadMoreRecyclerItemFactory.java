@@ -17,6 +17,7 @@
 package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,6 +32,18 @@ public abstract class AssemblyLoadMoreRecyclerItemFactory extends AssemblyRecycl
 
     public AssemblyLoadMoreRecyclerItemFactory(OnRecyclerLoadMoreListener eventListener) {
         this.eventListener = eventListener;
+    }
+
+    @Override
+    public AssemblyLoadMoreRecyclerItemFactory fullSpan(RecyclerView recyclerView) {
+        super.fullSpan(recyclerView);
+        return this;
+    }
+
+    @Override
+    public AssemblyLoadMoreRecyclerItemFactory setSpanSize(int spanSize) {
+        super.setSpanSize(spanSize);
+        return this;
     }
 
     /**
