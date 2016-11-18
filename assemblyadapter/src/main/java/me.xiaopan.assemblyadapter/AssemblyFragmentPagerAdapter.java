@@ -219,7 +219,7 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             FixedFragmentItemInfo fixedItemInfo = headerItemList.get(position);
             //noinspection unchecked
-            return fixedItemInfo.getItemFactory().createFragment(position, fixedItemInfo.getData());
+            return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
         }
 
         // 数据
@@ -235,7 +235,7 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
                 itemFactory = itemFactoryList.get(w);
                 if (itemFactory.isTarget(dataObject)) {
                     //noinspection unchecked
-                    return itemFactory.createFragment(position, dataObject);
+                    return itemFactory.dispatchCreateFragment(position, dataObject);
                 }
             }
 
@@ -252,7 +252,7 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
             int positionInFooterList = position - headerItemCount - dataCount;
             FixedFragmentItemInfo fixedItemInfo = footerItemList.get(positionInFooterList);
             //noinspection unchecked
-            return fixedItemInfo.getItemFactory().createFragment(position, fixedItemInfo.getData());
+            return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
         }
 
         throw new IllegalArgumentException("illegal position: " + position);

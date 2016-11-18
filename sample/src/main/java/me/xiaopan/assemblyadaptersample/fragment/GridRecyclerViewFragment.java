@@ -128,7 +128,7 @@ public class GridRecyclerViewFragment extends Fragment {
                 }
                 AssemblyRecyclerAdapter adapter = new AssemblyRecyclerAdapter(dataList);
                 adapter.addItemFactory(new AppItemFactory());
-                adapter.addItemFactory(new AppListHeaderItemFactory(recyclerView));
+                adapter.addItemFactory(new AppListHeaderItemFactory().fullSpan(recyclerView));
                 recyclerView.setAdapter(adapter);
                 recyclerView.scheduleLayoutAnimation();
                 GridRecyclerViewFragment.this.adapter = adapter;

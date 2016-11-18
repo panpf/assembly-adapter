@@ -42,6 +42,11 @@ public abstract class AssemblyPagerItemFactory<DATA> {
         this.adapter = adapter;
     }
 
+    @SuppressWarnings("WeakerAccess")
+    protected View dispatchCreateView(Context context, ViewGroup container, int position, DATA data) {
+        return createView(context, container, position, data);
+    }
+
     /**
      * 匹配数据
      *

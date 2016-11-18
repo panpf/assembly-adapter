@@ -42,6 +42,11 @@ public abstract class AssemblyFragmentItemFactory<DATA> {
         this.adapter = adapter;
     }
 
+    @SuppressWarnings("WeakerAccess")
+    protected Fragment dispatchCreateFragment(int position, DATA data) {
+        return createFragment(position, data);
+    }
+
     /**
      * 匹配数据
      *

@@ -726,13 +726,13 @@ public class AssemblyAdapter extends BaseAdapter {
         // Item
         if (item instanceof AssemblyItemFactory) {
             AssemblyItemFactory itemFactory = (AssemblyItemFactory) item;
-            return itemFactory.createAssemblyItem(parent);
+            return itemFactory.dispatchCreateAssemblyItem(parent);
         }
 
         // 头或尾巴或加载更多尾巴
         if (item instanceof FixedItemInfo) {
             FixedItemInfo fixedItemInfo = (FixedItemInfo) item;
-            return fixedItemInfo.getItemFactory().createAssemblyItem(parent);
+            return fixedItemInfo.getItemFactory().dispatchCreateAssemblyItem(parent);
         }
 
         throw new IllegalStateException("unknown viewType: " + viewType + ", " +

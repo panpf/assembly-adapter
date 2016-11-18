@@ -71,13 +71,12 @@ public abstract class AssemblyLoadMoreRecyclerItemFactory extends AssemblyRecycl
         public AssemblyLoadMoreRecyclerItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
             loadMoreItem = this;
-            fullSpanInStaggeredGrid();
         }
 
         @SuppressWarnings("unused")
         public AssemblyLoadMoreRecyclerItem(View convertView) {
             super(convertView);
-            fullSpanInStaggeredGrid();
+            loadMoreItem = this;
         }
 
         /**

@@ -756,13 +756,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         // Item
         if (item instanceof AssemblyRecyclerItemFactory) {
             AssemblyRecyclerItemFactory itemFactory = (AssemblyRecyclerItemFactory) item;
-            return itemFactory.createAssemblyItem(parent);
+            return itemFactory.dispatchCreateAssemblyItem(parent);
         }
 
         // 头或尾巴或加载更多尾巴
         if (item instanceof FixedRecyclerItemInfo) {
             FixedRecyclerItemInfo fixedItemInfo = (FixedRecyclerItemInfo) item;
-            return fixedItemInfo.getItemFactory().createAssemblyItem(parent);
+            return fixedItemInfo.getItemFactory().dispatchCreateAssemblyItem(parent);
         }
 
         throw new IllegalStateException("unknown viewType: " + viewType + ", " +

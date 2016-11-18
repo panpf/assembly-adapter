@@ -854,13 +854,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         // GroupItem
         if (item instanceof AssemblyGroupItemFactory) {
             AssemblyGroupItemFactory itemFactory = (AssemblyGroupItemFactory) item;
-            return itemFactory.createAssemblyItem(parent);
+            return itemFactory.dispatchCreateAssemblyItem(parent);
         }
 
         // 头或尾巴或加载更多尾巴
         if (item instanceof FixedGroupItemInfo) {
             FixedGroupItemInfo fixedItemInfo = (FixedGroupItemInfo) item;
-            return fixedItemInfo.getItemFactory().createAssemblyItem(parent);
+            return fixedItemInfo.getItemFactory().dispatchCreateAssemblyItem(parent);
         }
 
         throw new IllegalStateException("unknown groupViewType: " + viewType + ", " +
@@ -894,7 +894,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         // ChildItem
         if (item instanceof AssemblyChildItemFactory) {
             AssemblyChildItemFactory itemFactory = (AssemblyChildItemFactory) item;
-            return itemFactory.createAssemblyItem(parent);
+            return itemFactory.dispatchCreateAssemblyItem(parent);
         }
 
         throw new IllegalStateException("unknown childViewType: " + viewType + ", " +

@@ -18,7 +18,6 @@ package me.xiaopan.assemblyadapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,18 +98,5 @@ public abstract class AssemblyRecyclerItem<DATA> extends RecyclerView.ViewHolder
      */
     public DATA getData() {
         return data;
-    }
-
-    /**
-     * 使当前Item在StaggeredGirdLayoutManager中独占一行
-     */
-    @SuppressWarnings("WeakerAccess")
-    protected void fullSpanInStaggeredGrid() {
-        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) getItemView().getLayoutParams();
-        if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
-            StaggeredGridLayoutManager.LayoutParams staggeredGridLayoutParams = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
-            staggeredGridLayoutParams.setFullSpan(true);
-            getItemView().setLayoutParams(layoutParams);
-        }
     }
 }

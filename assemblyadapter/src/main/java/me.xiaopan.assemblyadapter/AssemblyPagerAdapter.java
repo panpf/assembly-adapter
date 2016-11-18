@@ -510,7 +510,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             FixedPagerItemInfo fixedItemInfo = headerItemList.get(position);
             //noinspection unchecked
-            View itemView = fixedItemInfo.getItemFactory().createView(container.getContext(), container, position, fixedItemInfo.getData());
+            View itemView = fixedItemInfo.getItemFactory().dispatchCreateView(container.getContext(), container, position, fixedItemInfo.getData());
             container.addView(itemView);
             return itemView;
         }
@@ -528,7 +528,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
                 itemFactory = itemFactoryList.get(w);
                 if (itemFactory.isTarget(dataObject)) {
                     //noinspection unchecked
-                    View itemView = itemFactory.createView(container.getContext(), container, position, dataObject);
+                    View itemView = itemFactory.dispatchCreateView(container.getContext(), container, position, dataObject);
                     container.addView(itemView);
                     return itemView;
                 }
@@ -547,7 +547,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
             int positionInFooterList = position - headerItemCount - dataCount;
             FixedPagerItemInfo fixedItemInfo = footerItemList.get(positionInFooterList);
             //noinspection unchecked
-            View itemView = fixedItemInfo.getItemFactory().createView(container.getContext(), container, position, fixedItemInfo.getData());
+            View itemView = fixedItemInfo.getItemFactory().dispatchCreateView(container.getContext(), container, position, fixedItemInfo.getData());
             container.addView(itemView);
             return itemView;
         }

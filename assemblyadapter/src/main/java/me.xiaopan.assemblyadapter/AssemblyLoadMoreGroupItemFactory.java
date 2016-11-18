@@ -76,6 +76,7 @@ public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItem
         @SuppressWarnings("unused")
         public AssemblyLoadMoreGroupItem(View convertView) {
             super(convertView);
+            loadMoreItem = this;
         }
 
         /**

@@ -57,6 +57,11 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> {
         this.adapter = adapter;
     }
 
+    @SuppressWarnings("WeakerAccess")
+    protected ITEM dispatchCreateAssemblyItem(ViewGroup parent) {
+        return createAssemblyItem(parent);
+    }
+
     /**
      * 匹配数据
      *
