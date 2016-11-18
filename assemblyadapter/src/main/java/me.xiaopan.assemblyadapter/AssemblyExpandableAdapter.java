@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,8 +29,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import me.xiaopan.assemblyadapter.AssemblyLoadMoreGroupItemFactory.AssemblyLoadMoreGroupItem;
-
 /**
  * 通用组合式BaseExpandableListAdapter，支持组合式多ItemType，支持头、尾巴以及加载更多
  */
@@ -58,9 +56,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     private SparseArray<Object> groupItemFactoryArray;
     private SparseArray<Object> childItemFactoryArray;
 
-    private boolean disableLoadMore;
-    private AssemblyLoadMoreGroupItem loadMoreItem;
-    private AssemblyLoadMoreGroupItemFactory loadMoreItemFactory;
+    private LoadMoreFixedGroupItemInfo loadMoreFixedItemInfo;
 
     private boolean notifyOnChange = true;
 
@@ -83,12 +79,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     @SuppressWarnings("unused")
     public FixedGroupItemInfo addHeaderItem(AssemblyGroupItemFactory headerFactory, Object data) {
         if (headerFactory == null || groupItemFactoryLocked) {
-            Log.w(TAG, "headerFactory is nll or locked");
+            Log.w(TAG, "headerFactory is nll or item factory locked");
             return null;
         }
 
         headerFactory.setAdapter(this);
         headerFactory.setItemType(groupTypeIndex++);
+
         FixedGroupItemInfo headerItemInfo = new FixedGroupItemInfo(headerFactory, data, true);
         headerItemInfo.setPosition(headerItemPosition++);
 
@@ -112,7 +109,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     public void addGroupItemFactory(AssemblyGroupItemFactory groupItemFactory) {
         if (groupItemFactory == null || groupItemFactoryLocked) {
-            throw new IllegalStateException("groupItemFactory is null or locked");
+            throw new IllegalStateException("groupItemFactory is null or item factory locked");
         }
 
         groupItemFactory.setAdapter(this);
@@ -136,7 +133,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     public void addChildItemFactory(AssemblyChildItemFactory childItemFactory) {
         if (childItemFactory == null || childItemFactoryLocked) {
-            throw new IllegalStateException("childItemFactory is null or locked");
+            throw new IllegalStateException("childItemFactory is null or item factory locked");
         }
 
         childItemFactory.setAdapter(this);
@@ -162,12 +159,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     @SuppressWarnings("unused")
     public FixedGroupItemInfo addFooterItem(AssemblyGroupItemFactory footerFactory, Object data) {
         if (footerFactory == null || groupItemFactoryLocked) {
-            Log.w(TAG, "footerFactory is nll or locked");
+            Log.w(TAG, "footerFactory is nll or item factory locked");
             return null;
         }
 
         footerFactory.setAdapter(this);
         footerFactory.setItemType(groupTypeIndex++);
+
         FixedGroupItemInfo footerItemInfo = new FixedGroupItemInfo(footerFactory, data, false);
         footerItemInfo.setPosition(footerItemPosition++);
 
@@ -190,27 +188,37 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      * 设置一个将显示在列表最后（在Footer的后面）的加载更多尾巴
      */
     @SuppressLint("LongLogTag")
-    public void setLoadMoreItem(AssemblyLoadMoreGroupItemFactory newLoadMoreItemFactory) {
-        if (newLoadMoreItemFactory == null || groupItemFactoryLocked) {
-            Log.w(TAG, "loadMoreItemFactory is null or locked");
-            return;
+    @SuppressWarnings({"unused", "WeakerAccess"})
+    public LoadMoreFixedGroupItemInfo setLoadMoreItem(AssemblyLoadMoreGroupItemFactory loadMoreItemFactory, Object data) {
+        if (loadMoreItemFactory == null || groupItemFactoryLocked) {
+            Log.w(TAG, "loadMoreItemFactory is null or item factory locked");
+            return null;
         }
 
-        newLoadMoreItemFactory.setEnd(false);
-        newLoadMoreItemFactory.setAdapter(this);
-        if (loadMoreItemFactory != null) {
-            newLoadMoreItemFactory.setItemType(loadMoreItemFactory.getItemType());
+        loadMoreItemFactory.setAdapter(this);
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreItemFactory.setItemType(loadMoreFixedItemInfo.getItemFactory().getItemType());
         } else {
-            newLoadMoreItemFactory.setItemType(groupTypeIndex++);
+            loadMoreItemFactory.setItemType(groupTypeIndex++);
         }
-        newLoadMoreItemFactory.setLoadMoreRunning(false);
+
+        loadMoreItemFactory.loadMoreFinished(false);
+        LoadMoreFixedGroupItemInfo loadMoreFixedItemInfo = new LoadMoreFixedGroupItemInfo(loadMoreItemFactory, data, false);
 
         if (groupItemFactoryArray == null) {
             groupItemFactoryArray = new SparseArray<Object>();
         }
-        groupItemFactoryArray.put(newLoadMoreItemFactory.getItemType(), newLoadMoreItemFactory);
+        groupItemFactoryArray.put(loadMoreItemFactory.getItemType(), loadMoreFixedItemInfo);
 
-        loadMoreItemFactory = newLoadMoreItemFactory;
+        return this.loadMoreFixedItemInfo = loadMoreFixedItemInfo;
+    }
+
+    /**
+     * 设置一个将显示在列表最后（在Footer的后面）的加载更多尾巴
+     */
+    @SuppressWarnings("unused")
+    public LoadMoreFixedGroupItemInfo setLoadMoreItem(AssemblyLoadMoreGroupItemFactory loadMoreItemFactory) {
+        return setLoadMoreItem(loadMoreItemFactory, null);
     }
 
     /**
@@ -327,19 +335,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * 设置是否禁用加载更多
+     * 设置禁用加载更多
      */
     @SuppressWarnings("unused")
     public void setDisableLoadMore(boolean disableLoadMore) {
-        this.disableLoadMore = disableLoadMore;
-
-        if (loadMoreItemFactory != null) {
-            loadMoreItemFactory.setEnd(false);
-            loadMoreItemFactory.setLoadMoreRunning(false);
-        }
-
-        if (notifyOnChange) {
-            notifyDataSetChanged();
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.setEnabled(!disableLoadMore);
         }
     }
 
@@ -348,16 +349,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     @SuppressWarnings("unused")
     public void setLoadMoreEnd(boolean loadMoreEnd) {
-        if (loadMoreItemFactory != null) {
-            loadMoreItemFactory.setLoadMoreRunning(false);
-            loadMoreItemFactory.setEnd(loadMoreEnd);
-        }
-        if (loadMoreItem != null) {
-            if (loadMoreEnd) {
-                loadMoreItem.showEnd();
-            } else {
-                loadMoreItem.showLoading();
-            }
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFinished(loadMoreEnd);
         }
     }
 
@@ -366,11 +359,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
      */
     @SuppressWarnings("unused")
     public void loadMoreFailed() {
-        if (loadMoreItemFactory != null) {
-            loadMoreItemFactory.setLoadMoreRunning(false);
-        }
-        if (loadMoreItem != null) {
-            loadMoreItem.showErrorRetry();
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFailed();
         }
     }
 
@@ -547,6 +537,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     /**
      * 获取列表头的个数
      */
+    @SuppressWarnings("WeakerAccess")
     public int getHeaderItemCount() {
         return headerItemList != null ? headerItemList.size() : 0;
     }
@@ -554,6 +545,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     /**
      * 获取GroupItemFactory的个数
      */
+    @SuppressWarnings("WeakerAccess")
     public int getGroupItemFactoryCount() {
         return groupItemFactoryList != null ? groupItemFactoryList.size() : 0;
     }
@@ -561,6 +553,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     /**
      * 获取ChildItemFactory的个数
      */
+    @SuppressWarnings("WeakerAccess")
     public int getChildItemFactoryCount() {
         return childItemFactoryList != null ? childItemFactoryList.size() : 0;
     }
@@ -568,6 +561,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     /**
      * 获取列表头的个数
      */
+    @SuppressWarnings("WeakerAccess")
     public int getFooterItemCount() {
         return footerItemList != null ? footerItemList.size() : 0;
     }
@@ -575,13 +569,15 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     /**
      * 是否有加载更多尾巴
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean hasLoadMoreFooter() {
-        return !disableLoadMore && loadMoreItemFactory != null;
+        return loadMoreFixedItemInfo != null && loadMoreFixedItemInfo.isEnabled();
     }
 
     /**
      * 获取数据列表的长度
      */
+    @SuppressWarnings("WeakerAccess")
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
     }
@@ -589,7 +585,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     /**
      * 数据变更时是否立即刷新列表
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "WeakerAccess"})
     public boolean isNotifyOnChange() {
         return notifyOnChange;
     }
@@ -693,7 +689,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
 
         // 加载更多尾巴
         if (dataCount > 0 && hasLoadMoreFooter() && groupPosition == getGroupCount() - 1) {
-            return null;
+            return loadMoreFixedItemInfo.getData();
         }
 
         return null;
@@ -790,7 +786,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
 
         // 加载更多尾巴
         if (dataCount > 0 && hasLoadMoreFooter() && groupPosition == getGroupCount() - 1) {
-            return loadMoreItemFactory.getItemType();
+            return loadMoreFixedItemInfo.getItemFactory().getItemType();
         }
 
         throw new IllegalStateException("not found match viewType, groupPosition: " + groupPosition);
@@ -855,17 +851,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
     private AssemblyGroupItem createGroupItem(ViewGroup parent, int viewType) {
         Object item = groupItemFactoryArray.get(viewType);
 
-        // GroupItem或加载更多尾巴
+        // GroupItem
         if (item instanceof AssemblyGroupItemFactory) {
             AssemblyGroupItemFactory itemFactory = (AssemblyGroupItemFactory) item;
-            AssemblyGroupItem assemblyItem = itemFactory.createAssemblyItem(parent);
-            if (assemblyItem instanceof AssemblyLoadMoreGroupItem) {
-                this.loadMoreItem = (AssemblyLoadMoreGroupItem) assemblyItem;
-            }
-            return assemblyItem;
+            return itemFactory.createAssemblyItem(parent);
         }
 
-        // 头或尾巴
+        // 头或尾巴或加载更多尾巴
         if (item instanceof FixedGroupItemInfo) {
             FixedGroupItemInfo fixedItemInfo = (FixedGroupItemInfo) item;
             return fixedItemInfo.getItemFactory().createAssemblyItem(parent);
@@ -875,7 +867,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
                 "itemFactory: " + (item != null ? item.getClass().getName() : "null"));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "WeakerAccess"})
     public void bindGroupItem(AssemblyGroupItem groupItem, boolean isExpanded, int groupPosition) {
         groupItem.setData(groupPosition, isExpanded, getGroup(groupPosition));
     }
@@ -909,11 +901,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
                 "itemFactory: " + (item != null ? item.getClass().getName() : "null"));
     }
 
-    @SuppressWarnings("unchecked")
-    public void bindChildItem(AssemblyChildItem childItem, int groupPosition, int childPosition, boolean isLastChild) {
+    private void bindChildItem(AssemblyChildItem childItem, int groupPosition, int childPosition, boolean isLastChild) {
+        //noinspection unchecked
         childItem.setData(groupPosition, childPosition, isLastChild, getChild(groupPosition, childPosition));
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface ExpandCallback {
         boolean hasStableIds();
 

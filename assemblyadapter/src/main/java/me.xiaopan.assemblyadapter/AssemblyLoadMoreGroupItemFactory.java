@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,30 +24,53 @@ import android.view.ViewGroup;
  * AssemblyExpandableListAdapter专用的加载更多ItemFactory
  */
 public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItemFactory<AssemblyLoadMoreGroupItemFactory.AssemblyLoadMoreGroupItem> {
-    private boolean loadMoreRunning;
+    private boolean paused;
     private boolean end;
     private OnGroupLoadMoreListener eventListener;
+    private AssemblyLoadMoreGroupItem loadMoreItem;
 
     public AssemblyLoadMoreGroupItemFactory(OnGroupLoadMoreListener eventListener) {
         this.eventListener = eventListener;
     }
 
-    public void setEnd(boolean end) {
+    /**
+     * 加载更多完成
+     * @param end 已全部加载完毕，切换至结束状态
+     */
+    @SuppressWarnings("WeakerAccess")
+    public void loadMoreFinished(boolean end){
+        this.paused = false;
         this.end = end;
+
+        if (loadMoreItem != null) {
+            if (end) {
+                loadMoreItem.showEnd();
+            } else {
+                loadMoreItem.showLoading();
+            }
+        }
     }
 
-    void setLoadMoreRunning(boolean loadMoreRunning) {
-        this.loadMoreRunning = loadMoreRunning;
+    /**
+     * 加载更多失败
+     */
+    @SuppressWarnings("WeakerAccess")
+    public void loadMoreFailed(){
+        paused = false;
+        if (loadMoreItem != null) {
+            loadMoreItem.showErrorRetry();
+        }
     }
 
     @Override
     public boolean isTarget(Object data) {
-        return false;
+        return true;
     }
 
-    public abstract class AssemblyLoadMoreGroupItem extends AssemblyGroupItem<String> {
+    public abstract class AssemblyLoadMoreGroupItem<T> extends AssemblyGroupItem<T> {
         public AssemblyLoadMoreGroupItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
+            loadMoreItem = this;
         }
 
         @SuppressWarnings("unused")
@@ -56,7 +79,7 @@ public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItem
         }
 
         /**
-         * 获取错误重试View，用户实现点击重试功能
+         * 获取错误重试View，实现点击重试功能
          */
         public abstract View getErrorRetryView();
 
@@ -83,7 +106,7 @@ public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItem
                     @Override
                     public void onClick(View v) {
                         if (eventListener != null) {
-                            loadMoreRunning = false;
+                            paused = false;
                             setData(getPosition(), isExpanded(), getData());
                         }
                     }
@@ -92,13 +115,13 @@ public abstract class AssemblyLoadMoreGroupItemFactory extends AssemblyGroupItem
         }
 
         @Override
-        public void onSetData(int position, String s) {
+        protected void onSetData(int position, T t) {
             if (end) {
                 showEnd();
             } else {
                 showLoading();
-                if (eventListener != null && !loadMoreRunning) {
-                    loadMoreRunning = true;
+                if (eventListener != null && !paused) {
+                    paused = true;
                     eventListener.onLoadMore(getAdapter());
                 }
             }

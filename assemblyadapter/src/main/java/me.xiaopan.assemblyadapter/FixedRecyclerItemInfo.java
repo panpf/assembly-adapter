@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,6 +62,10 @@ public class FixedRecyclerItemInfo {
             return;
         }
         this.enabled = enabled;
+        enableChanged();
+    }
+
+    protected void enableChanged() {
         if (header) {
             itemFactory.getAdapter().headerEnabledChanged(this);
         } else {

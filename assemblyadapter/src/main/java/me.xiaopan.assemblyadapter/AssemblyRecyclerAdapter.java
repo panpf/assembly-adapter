@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,8 +27,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import me.xiaopan.assemblyadapter.AssemblyLoadMoreRecyclerItemFactory.AssemblyLoadMoreRecyclerItem;
-
 /**
  * 通用组合式RecyclerView.Adapter，支持组合式多ItemType，支持头、尾巴以及加载更多
  */
@@ -50,9 +48,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     private ArrayList<AssemblyRecyclerItemFactory> itemFactoryList;
     private SparseArray<Object> itemFactoryArray;
 
-    private boolean disableLoadMore;
-    private AssemblyLoadMoreRecyclerItem loadMoreItem;
-    private AssemblyLoadMoreRecyclerItemFactory loadMoreItemFactory;
+    private LoadMoreFixedRecyclerItemInfo loadMoreFixedItemInfo;
 
     private boolean notifyOnChange = true;
 
@@ -74,12 +70,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     @SuppressWarnings("unused")
     public FixedRecyclerItemInfo addHeaderItem(AssemblyRecyclerItemFactory headerFactory, Object data) {
         if (headerFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "headerFactory is nll or locked");
+            Log.w(TAG, "headerFactory is nll or item factory locked");
             return null;
         }
 
         headerFactory.setAdapter(this);
         headerFactory.setItemType(itemTypeIndex++);
+
         FixedRecyclerItemInfo headerItemInfo = new FixedRecyclerItemInfo(headerFactory, data, true);
         headerItemInfo.setPosition(headerItemPosition++);
 
@@ -103,7 +100,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      */
     public void addItemFactory(AssemblyRecyclerItemFactory itemFactory) {
         if (itemFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "itemFactory is nll or locked");
+            Log.w(TAG, "itemFactory is nll or item factory locked");
             return;
         }
 
@@ -129,12 +126,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     @SuppressWarnings("unused")
     public FixedRecyclerItemInfo addFooterItem(AssemblyRecyclerItemFactory footerFactory, Object data) {
         if (footerFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "footerFactory is nll or locked");
+            Log.w(TAG, "footerFactory is nll or item factory locked");
             return null;
         }
 
         footerFactory.setAdapter(this);
         footerFactory.setItemType(itemTypeIndex++);
+
         FixedRecyclerItemInfo footerItemInfo = new FixedRecyclerItemInfo(footerFactory, data, false);
         footerItemInfo.setPosition(footerItemPosition++);
 
@@ -156,28 +154,37 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     /**
      * 设置一个将显示在列表最后（在Footer的后面）的加载更多尾巴
      */
-    @SuppressWarnings("unused")
-    public void setLoadMoreItem(AssemblyLoadMoreRecyclerItemFactory newLoadMoreItemFactory) {
-        if (newLoadMoreItemFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "newLoadMoreItemFactory is null or locked");
-            return;
+    @SuppressWarnings({"unused", "WeakerAccess"})
+    public LoadMoreFixedRecyclerItemInfo setLoadMoreItem(AssemblyLoadMoreRecyclerItemFactory loadMoreItemFactory, Object data) {
+        if (loadMoreItemFactory == null || itemFactoryLocked) {
+            Log.w(TAG, "loadMoreItemFactory is null or item factory locked");
+            return null;
         }
 
-        newLoadMoreItemFactory.setEnd(false);
-        newLoadMoreItemFactory.setAdapter(this);
-        if (loadMoreItemFactory != null) {
-            newLoadMoreItemFactory.setItemType(loadMoreItemFactory.getItemType());
+        loadMoreItemFactory.setAdapter(this);
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreItemFactory.setItemType(loadMoreFixedItemInfo.getItemFactory().getItemType());
         } else {
-            newLoadMoreItemFactory.setItemType(itemTypeIndex++);
+            loadMoreItemFactory.setItemType(itemTypeIndex++);
         }
-        newLoadMoreItemFactory.setLoadMoreRunning(false);
+
+        loadMoreItemFactory.loadMoreFinished(false);
+        LoadMoreFixedRecyclerItemInfo loadMoreFixedItemInfo = new LoadMoreFixedRecyclerItemInfo(loadMoreItemFactory, data, false);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
-        itemFactoryArray.put(newLoadMoreItemFactory.getItemType(), newLoadMoreItemFactory);
+        itemFactoryArray.put(loadMoreItemFactory.getItemType(), loadMoreFixedItemInfo);
 
-        loadMoreItemFactory = newLoadMoreItemFactory;
+        return this.loadMoreFixedItemInfo = loadMoreFixedItemInfo;
+    }
+
+    /**
+     * 设置一个将显示在列表最后（在Footer的后面）的加载更多尾巴
+     */
+    @SuppressWarnings("unused")
+    public LoadMoreFixedRecyclerItemInfo setLoadMoreItem(AssemblyLoadMoreRecyclerItemFactory loadMoreItemFactory) {
+        return setLoadMoreItem(loadMoreItemFactory, null);
     }
 
     /**
@@ -294,19 +301,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 设置是否禁用加载更多
+     * 设置禁用加载更多
      */
     @SuppressWarnings("unused")
     public void setDisableLoadMore(boolean disableLoadMore) {
-        this.disableLoadMore = disableLoadMore;
-
-        if (loadMoreItemFactory != null) {
-            loadMoreItemFactory.setEnd(false);
-            loadMoreItemFactory.setLoadMoreRunning(false);
-        }
-
-        if (notifyOnChange) {
-            notifyDataSetChanged();
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.setEnabled(!disableLoadMore);
         }
     }
 
@@ -315,16 +315,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      */
     @SuppressWarnings("unused")
     public void setLoadMoreEnd(boolean loadMoreEnd) {
-        if (loadMoreItemFactory != null) {
-            loadMoreItemFactory.setLoadMoreRunning(false);
-            loadMoreItemFactory.setEnd(loadMoreEnd);
-        }
-        if (loadMoreItem != null) {
-            if (loadMoreEnd) {
-                loadMoreItem.showEnd();
-            } else {
-                loadMoreItem.showLoading();
-            }
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFinished(loadMoreEnd);
         }
     }
 
@@ -333,11 +325,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      */
     @SuppressWarnings("unused")
     public void loadMoreFailed() {
-        if (loadMoreItemFactory != null) {
-            loadMoreItemFactory.setLoadMoreRunning(false);
-        }
-        if (loadMoreItem != null) {
-            loadMoreItem.showErrorRetry();
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFailed();
         }
     }
 
@@ -532,7 +521,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
      */
     @SuppressWarnings("WeakerAccess")
     public boolean hasLoadMoreFooter() {
-        return !disableLoadMore && loadMoreItemFactory != null;
+        return loadMoreFixedItemInfo != null && loadMoreFixedItemInfo.isEnabled();
     }
 
     /**
@@ -643,7 +632,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
         // 加载更多尾巴
         if (dataCount > 0 && hasLoadMoreFooter() && position == getItemCount() - 1) {
-            return loadMoreItemFactory.getSpanSize();
+            return loadMoreFixedItemInfo.getItemFactory().getSpanSize();
         }
 
         return 1;
@@ -694,7 +683,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
         // 加载更多尾巴
         if (dataCount > 0 && hasLoadMoreFooter() && position == getItemCount() - 1) {
-            return null;
+            return loadMoreFixedItemInfo.getData();
         }
 
         return null;
@@ -754,7 +743,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
         // 加载更多尾巴
         if (dataCount > 0 && hasLoadMoreFooter() && position == getItemCount() - 1) {
-            return loadMoreItemFactory.getItemType();
+            return loadMoreFixedItemInfo.getItemFactory().getItemType();
         }
 
         throw new IllegalStateException("not found match viewType, position: " + position);
@@ -764,17 +753,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Object item = itemFactoryArray.get(viewType);
 
-        // Item或加载更多尾巴
+        // Item
         if (item instanceof AssemblyRecyclerItemFactory) {
             AssemblyRecyclerItemFactory itemFactory = (AssemblyRecyclerItemFactory) item;
-            AssemblyRecyclerItem assemblyItem = itemFactory.createAssemblyItem(parent);
-            if (assemblyItem instanceof AssemblyLoadMoreRecyclerItem) {
-                this.loadMoreItem = (AssemblyLoadMoreRecyclerItem) assemblyItem;
-            }
-            return assemblyItem;
+            return itemFactory.createAssemblyItem(parent);
         }
 
-        // 头或尾巴
+        // 头或尾巴或加载更多尾巴
         if (item instanceof FixedRecyclerItemInfo) {
             FixedRecyclerItemInfo fixedItemInfo = (FixedRecyclerItemInfo) item;
             return fixedItemInfo.getItemFactory().createAssemblyItem(parent);
@@ -791,5 +776,4 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
             ((AssemblyRecyclerItem) viewHolder).setData(position, getItem(position));
         }
     }
-
 }
