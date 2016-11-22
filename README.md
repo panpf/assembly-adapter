@@ -9,10 +9,11 @@ AssemblyAdapter是Android上的一个Adapter扩展库，有了它你就不用再
 >* ``Item一处定义处处使用``. 你只需为每一个item layout写一个ItemFactory，然后使用ItemFactory即可
 >* ``便捷的组合式多Item``. 可以使用多个ItemFactory，每个ItemFactory就代表一种itemType
 >* ``支持header和footer``. 使用AssemblyAdapter可以让ExpandableListView、GridView、RecyclerView、ViewPager等也支持header和footer
->* ``随意隐藏、显示header或footer``. header和footer还支持通过其setEnabled(boolean)方法控制隐藏或显示 
+>* ``随意隐藏、显示header或footer``. header和footer还支持通过其setEnabled(boolean)方法控制隐藏或显示
 >* ``自带加载更多功能``. 自带滑动到列表底部触发加载更多功能，你只需定义一个专门用于加载更多的ItemFactory即可
 >* ``支持常用Adapter``. 支持BaseAdapter、RecyclerView.Adapter、BaseExpandableListAdapter、PagerAdapter、
     FragmentPagerAdapter和FragmentStatePagerAdapter，涵盖了Android开发中常用的大部分Adapter
+> * ``支持SpanSize``. AssemblyRecyclerItemFactory支持SpanSize，可轻松实现横跨多列功能
 >* ``无性能损耗``. 没有使用任何反射相关的技术，因此无须担心性能问题
 
 ### 使用指南
@@ -120,51 +121,6 @@ public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserIte
 >* 你可以通过Item的`getPosition()`和`getData()`方法可直接获取当前所对应的位置和数据，因此你在处理click的时候不再需要通过setTag()来绑定位置和数据了，直接获取即可
 >* 你还可以通过过Item的`getItemView()`方法获取当前的itemView
 
-另外你还可以通过ContentSetter简化你的代码，上述例子使用ContentSetter简化后如下：
-```java
-public class UserItemFactory extends AssemblyItemFactory<UserListItemFactory.UserListItem> {
-
-    @Override
-    public boolean isTarget(Object itemObject) {
-        return itemObject instanceof User;
-    }
-
-    @Override
-    public UserListItem createAssemblyItem(ViewGroup parent) {
-        return new UserListItem(R.layout.list_item_user, parent);
-    }
-
-    public class UserItem extends AssemblyItem<User> {
-        public UserListItem(int itemLayoutId, ViewGroup parent) {
-            super(itemLayoutId, parent);
-        }
-
-        @Override
-        protected void onFindViews(View itemView) { }
-
-        @Override
-        protected void onConfigViews(Context context) {
-            getItemView().setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getConext(), "第" + (getPosition() + 1) + "条数据", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-        @Override
-        protected void onSetData(int position, User user) {
-            getSetter()
-                .setImageResource(R.id.image_userListItem_head, user.headResId)
-                .setText(R.id.text_userListItem_name, user.name)
-                .setText(R.id.text_userListItem_sex, user.sex)
-                .setText(R.id.text_userListItem_age, user.age)
-                .setText(R.id.text_userListItem_job, user.job);
-        }
-    }
-}
-```
-
 #### 4. 使用ItemFactory
 
 首先你要准备好数据并new一个AssemblyAdapter，然后通过Adapter的`addItemFactory(AssemblyItemFactory)`方法添加ItemFactory即可，如下：
@@ -201,12 +157,12 @@ listView.setAdapter(adapter);
 
 #### 5. 使用header和footer
 
-AssemblyAdapter支持添加header和footer，可以方便的固定显示内容在列表的顶部或尾部。
-Adapter支持header和footer的重要性在于可以让GridView、RecyclerView等也支持header和footer
+所有Adapter均支持添加header和footer，可以方便的固定显示内容在列表的头部或尾部，更重要的意义在于可以让GridView、RecyclerView等也支持header和footer
+
+##### 添加header、footer
 
 首先定义好一个用于header或footer的ItemFactory
 
-##### 添加header、footer：
 然后调用`addHeaderItem(AssemblyItemFactory, Object)`或`addFooterItem(AssemblyItemFactory, Object)`方法添加即可，如下：
 ```java
 AssemblyAdapter adapter = new AssemblyAdapter(objects);
@@ -305,12 +261,12 @@ adapter.setLoadMoreItem(new LoadMoreItemFactory(new OnLoadMoreListener(){
     public void onLoadMore(AssemblyAdapter adapter) {
         // 访问网络加载数据
         ...
-        
+
         boolean loadSuccess = ...;
         if (loadSuccess) {
-            // 加载成功时判断是否已经全部加载完毕，然后调用Adapter的setLoadMoreEnd(boolean)方法设置加载更多是否结束
+            // 加载成功时判断是否已经全部加载完毕，然后调用Adapter的loadMoreFinished(boolean)方法设置加载更多是否结束
             boolean loadMoreEnd = ...;
-            adapter.setLoadMoreEnd(loadMoreEnd);
+            adapter.loadMoreFinished(loadMoreEnd);
         } else {
             // 加载失败时调用Adapter的loadMoreFailed()方法显示加载失败提示，用户点击失败提示则会重新触发加载更多
             adapter.loadMoreFailed();
@@ -320,6 +276,49 @@ adapter.setLoadMoreItem(new LoadMoreItemFactory(new OnLoadMoreListener(){
 ```
 
 你还可以通过`setDisableLoadMore(boolean)`方法替代setLoadMoreEnd(boolean)来控制是否禁用加载更多功能，两者的区别在于setLoadMoreEnd(boolean)为true时会在列表尾部显示end提示，而setDisableLoadMore(boolean)则是完全不显示加载更多尾巴
+
+#### 7. 在RecyclerView的GridLayoutManager中一个Item独占一行或任意列
+
+通过RecyclerView的GridLayoutManager我们可以很轻松的实现网格列表，同时GridLayoutManager还为我们提供了SpanSizeLookup接口，可以让我们指定哪一个Item需要独占一行或多列，AssemblyRecyclerAdapter 自然对如此重要的功能也做了封装，让你可以更方便的使用它
+
+首先注册SpanSizeLookup，并通过AssemblyRecyclerAdapter的getSpanSize(int)方法获取每一个位置的Item的SpanSize：
+
+```java
+GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
+gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+    @Override
+    public int getSpanSize(int position) {
+        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+        if (adapter == null || !(adapter instanceof AssemblyRecyclerAdapter)) {
+            return 1;
+        }
+        return ((AssemblyRecyclerAdapter) adapter).getSpanSize(position);
+    }
+});
+recyclerView.setLayoutManager(gridLayoutManager);
+```
+
+然后创建AssemblyRecyclerAdapter、添加ItemFactory并设置SpanSize
+
+```java
+AssemblyRecyclerAdapter adapter = new AssemblyRecyclerAdapter(dataList);
+adapter.addItemFactory(new AppListHeaderItemFactory().setSpanSize(4));
+
+recyclerView.setAdapter(adapter);
+```
+
+AppListHeaderItemFactory继承自AssemblyRecyclerItemFactory因此其拥有setSpanSize(int)方法
+
+你也可以直接使用fullSpan(RecyclerView)方法设置独占一行，fullSpan方法会通过RecyclerView取出其GridLayoutManager的SpanCount作为SpanSize
+
+```java
+AssemblyRecyclerAdapter adapter = new AssemblyRecyclerAdapter(dataList);
+adapter.addItemFactory(new AppListHeaderItemFactory().fullSpan(recyclerView));
+
+recyclerView.setAdapter(adapter);
+```
+
+fullSpan()方法如果检测到RecyclerView的LayoutManager是StaggeredGridLayoutManager的话，还会自动为Item设置setFullSpan(true)，好让Item在StaggeredGridLayoutManager中可以独占一行
 
 ### License
     Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
