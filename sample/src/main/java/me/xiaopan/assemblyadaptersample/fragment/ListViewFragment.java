@@ -124,7 +124,7 @@ public class ListViewFragment extends Fragment implements OnLoadMoreListener {
                     headerItemInfo.setEnabled(false);
                     footerItemInfo.setEnabled(false);
                 }
-                adapter.setLoadMoreEnd(loadMoreEnd);
+                adapter.loadMoreFinished(loadMoreEnd);
             }
         }.execute("");
     }

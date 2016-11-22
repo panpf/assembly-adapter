@@ -314,9 +314,24 @@ public class AssemblyAdapter extends BaseAdapter {
 
     /**
      * 设置加载更多是否已结束，已结束会显示结束的文案并且不再触发加载更多
+     *
+     * @deprecated 使用loadMoreFinished(boolean)替代
      */
     @SuppressWarnings("unused")
+    @Deprecated
     public void setLoadMoreEnd(boolean loadMoreEnd) {
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFinished(loadMoreEnd);
+        }
+    }
+
+    /**
+     * 加载更多完成时调用
+     *
+     * @param loadMoreEnd 全部加载完毕，为true会显示结束的文案并且不再触发加载更多
+     */
+    @SuppressWarnings("unused")
+    public void loadMoreFinished(boolean loadMoreEnd) {
         if (loadMoreFixedItemInfo != null) {
             loadMoreFixedItemInfo.loadMoreFinished(loadMoreEnd);
         }

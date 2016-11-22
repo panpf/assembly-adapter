@@ -48,8 +48,10 @@ public class GridRecyclerViewFragment extends Fragment {
             @Override
             public int getSpanSize(int position) {
                 RecyclerView.Adapter adapter = recyclerView.getAdapter();
-                return adapter != null && adapter instanceof AssemblyRecyclerAdapter
-                        ? ((AssemblyRecyclerAdapter) adapter).getSpanSize(position) : 1;
+                if (adapter == null || !(adapter instanceof AssemblyRecyclerAdapter)) {
+                    return 1;
+                }
+                return ((AssemblyRecyclerAdapter) adapter).getSpanSize(position);
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);

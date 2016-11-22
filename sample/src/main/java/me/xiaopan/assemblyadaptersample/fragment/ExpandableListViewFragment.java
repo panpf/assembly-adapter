@@ -155,7 +155,7 @@ public class ExpandableListViewFragment extends Fragment implements OnGroupLoadM
                     headerItemInfo.setEnabled(false);
                     footerItemInfo.setEnabled(false);
                 }
-                adapter.setLoadMoreEnd(loadMoreEnd);
+                adapter.loadMoreFinished(loadMoreEnd);
             }
         }.execute("");
     }
