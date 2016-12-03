@@ -211,10 +211,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
 
     @Override
     public Fragment getItem(int position) {
-        if (getItemFactoryCount() <= 0) {
-            throw new IllegalStateException("You need to configure AssemblyFragmentItemFactory use addItemFactory method");
-        }
-
         // 头
         int headerItemCount = getHeaderItemCount();
         int headerStartPosition = 0;

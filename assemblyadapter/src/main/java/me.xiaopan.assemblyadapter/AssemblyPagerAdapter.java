@@ -411,7 +411,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取ItemFactory的个数
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "unused"})
     public int getItemFactoryCount() {
         return itemFactoryList != null ? itemFactoryList.size() : 0;
     }
@@ -499,10 +499,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if (getItemFactoryCount() <= 0) {
-            throw new IllegalStateException("You need to configure AssemblyPagerItemFactory use addItemFactory method");
-        }
-
         // 头
         int headerItemCount = getHeaderItemCount();
         int headerStartPosition = 0;

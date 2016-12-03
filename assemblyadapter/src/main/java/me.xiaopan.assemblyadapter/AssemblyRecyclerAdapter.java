@@ -711,9 +711,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (getItemFactoryCount() <= 0) {
-            throw new IllegalStateException("You need to configure AssemblyItemFactory use addItemFactory method");
-        }
         itemFactoryLocked = true;
 
         // 头
