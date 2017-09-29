@@ -113,6 +113,8 @@ public abstract class AssemblyRecyclerItemFactory<ITEM extends AssemblyRecyclerI
                 item.getItemView().setLayoutParams(layoutParams);
             }
         }
+        item.onFindViews();
+        item.onConfigViews(parent.getContext());
         return item;
     }
 

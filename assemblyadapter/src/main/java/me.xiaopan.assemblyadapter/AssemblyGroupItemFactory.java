@@ -58,7 +58,10 @@ public abstract class AssemblyGroupItemFactory<ITEM extends AssemblyGroupItem> {
 
     @SuppressWarnings("WeakerAccess")
     protected ITEM dispatchCreateAssemblyItem(ViewGroup parent) {
-        return createAssemblyItem(parent);
+        ITEM item = createAssemblyItem(parent);
+        item.onFindViews();
+        item.onConfigViews(parent.getContext());
+        return item;
     }
 
     /**

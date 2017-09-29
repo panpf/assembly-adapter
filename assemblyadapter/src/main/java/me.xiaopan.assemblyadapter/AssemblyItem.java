@@ -40,8 +40,6 @@ public abstract class AssemblyItem<DATA> {
             throw new IllegalArgumentException("itemView may not be null");
         }
         this.itemView = itemView;
-        onFindViews();
-        onConfigViews(itemView.getContext());
     }
 
     /**
@@ -59,6 +57,7 @@ public abstract class AssemblyItem<DATA> {
     /**
      * 根据id查找View
      */
+    @SuppressWarnings("unused")
     public View findViewById(int id) {
         return itemView.findViewById(id);
     }
@@ -74,7 +73,10 @@ public abstract class AssemblyItem<DATA> {
     /**
      * 专门用来find view，只会执行一次
      */
-    protected abstract void onFindViews();
+    @SuppressWarnings("WeakerAccess")
+    protected void onFindViews() {
+
+    }
 
     /**
      * 专门用来配置View，你可在在这里设置View的样式以及尺寸，只会执行一次
