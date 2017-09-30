@@ -324,6 +324,33 @@ fullSpan() 方法如果检测到 RecyclerView 的 LayoutManager 是 StaggeredGri
 
 从 2.3.2 开始 AssemblyAdapter 支持在 Kotlin 中使用 [Kotterknife] 来注入 View，之前的版本不行，如果你用的还是旧版本请尽快升级
 
+AssemblyRecyclerItem 继承自 RecyclerView.ViewHolder 因此通过 [Kotterknife] 其可以使用 bindView
+
+AssemblyItem、AssemblyGroupItem、AssemblyChildItem 就需要自己动手扩展 [Kotterknife] 了，将如下代码加入 [Kotterknife] 的 [Botterknife.kt] 文件即可
+
+```kotlin
+public fun <V : View> AssemblyItem<*>.bindView(id: Int)
+        : ReadOnlyProperty<AssemblyItem<*>, V> = required(id, viewFinder)
+
+private val AssemblyItem<*>.viewFinder: AssemblyItem<*>.(Int) -> View?
+    get() = { itemView.findViewById(it) }
+
+public fun <V : View> AssemblyGroupItem<*>.bindView(id: Int)
+        : ReadOnlyProperty<AssemblyGroupItem<*>, V> = required(id, viewFinder)
+
+private val AssemblyGroupItem<*>.viewFinder: AssemblyGroupItem<*>.(Int) -> View?
+    get() = { itemView.findViewById(it) }
+
+public fun <V : View> AssemblyChildItem<*>.bindView(id: Int)
+        : ReadOnlyProperty<AssemblyChildItem<*>, V> = required(id, viewFinder)
+
+private val AssemblyChildItem<*>.viewFinder: AssemblyChildItem<*>.(Int) -> View?
+    get() = { itemView.findViewById(it) }
+```
+
+详情可参考示例 app 中的 [ Sample Botterknife.kt] 文件
+
+
 ### License
     Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
 
@@ -344,3 +371,5 @@ fullSpan() 方法如果检测到 RecyclerView 的 LayoutManager 是 StaggeredGri
 [release_icon]: https://img.shields.io/github/release/panpf/AssemblyAdapter.svg
 [release_link]: https://github.com/panpf/AssemblyAdapter/releases
 [Kotterknife]: https://github.com/JakeWharton/kotterknife
+[Botterknife.kt]: https://github.com/JakeWharton/kotterknife/blob/master/src/main/kotlin/kotterknife/ButterKnife.kt
+[ Sample Botterknife.kt]: https://github.com/panpf/AssemblyAdapter/blob/master/sample/src/main/java/me/xiaopan/assemblyadaptersample/ButterKnife.kt
