@@ -1,26 +1,25 @@
 # AssemblyAdapter
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-AssemblyAdapter-green.svg?style=true)](https://android-arsenal.com/details/1/4152)
-[![Release Version](https://img.shields.io/github/release/xiaopansky/AssemblyAdapter.svg)](https://github.com/xiaopansky/AssemblyAdapter/releases)
+[![Android Arsenal][android_arsenal_icon]][android_arsenal_link]
+[![Release][release_icon]][release_link]
 
-AssemblyAdapter是Android上的一个Adapter扩展库，有了它你就不用再写Adapter了。其支持组合式使用多Item、支持添加header和footer并且还自带加载更多功能
+AssemblyAdapter 是 Android 上的一个 Adapter 库，有了它你就不用再写 Adapter 了，支持组合式多 Item、支持添加 header 和 footer、支持加载更多尾巴
 
 ### 特性
->* ``Item一处定义处处使用``. 你只需为每一个item layout写一个ItemFactory，然后使用ItemFactory即可
->* ``便捷的组合式多Item``. 可以使用多个ItemFactory，每个ItemFactory就代表一种itemType
->* ``支持header和footer``. 使用AssemblyAdapter可以让ExpandableListView、GridView、RecyclerView、ViewPager等也支持header和footer
->* ``随意隐藏、显示header或footer``. header和footer还支持通过其setEnabled(boolean)方法控制隐藏或显示
->* ``自带加载更多功能``. 自带滑动到列表底部触发加载更多功能，你只需定义一个专门用于加载更多的ItemFactory即可
->* ``支持常用Adapter``. 支持BaseAdapter、RecyclerView.Adapter、BaseExpandableListAdapter、PagerAdapter、
-    FragmentPagerAdapter和FragmentStatePagerAdapter，涵盖了Android开发中常用的大部分Adapter
-> * ``支持SpanSize``. AssemblyRecyclerItemFactory支持SpanSize，可轻松实现横跨多列功能
+>* ``Item 一处定义处处使用``. 你只需为每一个 item layout 写一个 ItemFactory，然后到处使用 ItemFactory 即可
+>* ``便捷的组合式多 Item``. 可以组合式使用多个 ItemFactory，每个 ItemFactory 代表一种 itemType
+>* ``支持 header 和 footer``. 使用 AssemblyAdapter 可以让 ExpandableListView、GridView、RecyclerView、ViewPager 等也支持 header 和 footer
+>* ``随意隐藏、显示 header 或 footer``. header 和 footer 还支持通过其 setEnabled(boolean) 方法控制隐藏或显示
+>* ``自带加载更多功能``. 自带滑动到列表底部触发加载更多功能，你只需定义一个专门用于加载更多的 ItemFactory 即可
+>* ``支持常用 Adapter``. 支持 BaseAdapter、RecyclerView.Adapter、BaseExpandableListAdapter、PagerAdapter、FragmentPagerAdapter 和 FragmentStatePagerAdapter，涵盖了 Android 开发中常用的大部分 Adapter
+> * ``支持 SpanSize``. AssemblyRecyclerItemFactory 支持 SpanSize，可轻松实现横跨多列功能
 >* ``无性能损耗``. 没有使用任何反射相关的技术，因此无须担心性能问题
 
 ### 使用指南
 
-#### 1. 从JCenter导入AssemblyAdapter
+#### 1. 从 JCenter 导入 AssemblyAdapter
 ```groovy
-dependencies{
+dependencies {
     compile 'me.xiaopan:assemblyadapter:lastVersionName'
 }
 ```
@@ -29,7 +28,7 @@ dependencies{
 `最低兼容API 7`
 
 #### 2. 简述
-共有6种Adapter：
+共有 6 种 Adapter：
 
 |Adapter|父类|适用于|支持功能|
 |:---|:---|:---|:---|
@@ -40,22 +39,22 @@ dependencies{
 |AssemblyFragmentPagerAdapter|FragmentPagerFragment|ViewPager + Fragment|多Item、header和footer|
 |AssemblyFragmentStatePagerAdapter|FragmentStatePagerFragment|ViewPager + Fragment|多Item、header和footer|
 
-`接下来以AssemblyAdapter为例讲解具体的用法，其它Adapter你只需照葫芦画瓢，然后ItemFactory和Item继承各自专属的类即可，详情请参考sample源码`
+`接下来以 AssemblyAdapter 为例讲解具体的用法，其它 Adapter 你只需照葫芦画瓢，然后 ItemFactory 和 Item 继承各自专属的类即可，详情请参考 sample 源码`
 
-AssemblyAdapter分为三部分：
->* Adapter：负责维护数据、itemType以及加载更多的状态
->* ItemFactory：负责匹配数据和创建Item
->* Item：负责itemView的一切，包括创建itemView、设置数据、设置并处理事件
+AssemblyAdapter 分为三部分：
+>* Adapter：负责维护数据、itemType 以及加载更多的状态
+>* ItemFactory：负责匹配数据和创建 Item
+>* Item：负责创建 itemView、设置数据、设置并处理事件
 
-AssemblyAdapter与其它万能Adapter最根本的不同就是其把item相关的处理全部定义在了一个ItemFactory类里面，在使用的时候只需通过Adapter的addItemFactory(AssemblyItemFactory)方法将ItemFactory加到Adapter中即可。
+AssemblyAdapter 与其它万能 Adapter 最根本的不同就是其把 item 相关的处理全部定义在了一个 ItemFactory 类里面，在使用的时候只需通过 Adapter 的 addItemFactory(AssemblyItemFactory) 方法将 ItemFactory 加到 Adapter 中即可
 
-这样的好处就是真正做到了一处定义处处使用，并且可以方便的在一个页面通过多次调用addItemFactory(AssemblyItemFactory)方法使用多个ItemFactory（每个ItemFactory就代表一种ItemType），这正体现了AssemblyAdapter名字中Assembly所表达的意思
+这样的好处就是真正做到了一处定义处处使用，并且可以方便的在一个页面通过多次调用 addItemFactory(AssemblyItemFactory) 方法使用多个 ItemFactory（每个 ItemFactory 就代表一种 ItemType），这正体现了 AssemblyAdapter 名字中 Assembly 所表达的意思
 
-另外由于支持多Item，一个Adapter又只有一个数据列表，所以数据列表的数据类型就得是Object
+另外由于支持多 Item，一个 Adapter 又只有一个数据列表，所以数据列表的数据类型就得是 Object
 
-#### 3. 创建ItemFactory
+#### 3. 定义 ItemFactory
 
-在使用AssemblyAdapter之前得先创建ItemFactory和Item，如下：
+在使用 AssemblyAdapter 之前得先定义 ItemFactory 和 Item，如下：
 ```java
 public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserItem> {
 
@@ -112,18 +111,18 @@ public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserIte
 ```
 
 详解：
->* `ItemFactory的泛型`是为了限定其createAssemblyItem(ViewGroup)方法返回的类型
->* ItemFactory的`isTarget()`方法是用来匹配数据列表中的数据的，Adapter从数据列表中拿到当前位置的数据后会依次调用其所有的ItemFactory的isTarget(Object)方法，谁返回true就用谁处理当前这条数据
->* ItemFactory的`createAssemblyItem(ViewGroup)`方法用来创建Item，返回的类型必须跟你在ItemFactory上配置的泛型一样
->* `Item的泛型`是用来指定对应的数据类型，会在onSetData和getData()方法中用到
->* Item的`onFindViews(View)`和`onConfigViews(Context)`方法分别用来初始化View和配置View，只会在创建Item的时候`调用一次`，另外在onFindViews方法中你可以直接使用`findViewById(int)`法获取View
->* Item的`onSetData()`方法是用来设置数据的，在`每次getView()的时候都会调用`
->* 你可以通过Item的`getPosition()`和`getData()`方法可直接获取当前所对应的位置和数据，因此你在处理click的时候不再需要通过setTag()来绑定位置和数据了，直接获取即可
->* 你还可以通过过Item的`getItemView()`方法获取当前的itemView
+>* `ItemFactory 的泛型`是为了限定其 createAssemblyItem(ViewGroup) 方法返回的类型
+>* ItemFactory 的 `isTarget()` 方法是用来匹配数据列表中的数据的，Adapter  从数据列表中拿到当前位置的数据后会依次调用其所有的 ItemFactory 的 isTarget(Object) 方法，谁返回 true 就用谁处理当前这条数据
+>* ItemFactory 的 `createAssemblyItem(ViewGroup)` 方法用来创建 Item，返回的类型必须跟你在ItemFactory 上配置的泛型一样
+>* `Item的泛型`是用来指定对应的数据类型，会在 onSetData 和 getData() 方法中用到
+>* Item 的 `onFindViews(View)` 和 `onConfigViews(Context)` 方法分别用来初始化 View 和配置 View，只会在创建 Item 的时候`调用一次`，另外在 onFindViews 方法中你可以直接使用 `findViewById(int)` 法获取 View
+>* Item 的 `onSetData()` 方法是用来设置数据的，在 `每次 getView() 的时候都会调用`
+>* 你可以通过 Item 的 `getPosition()` 和 `getData()` 方法可直接获取当前所对应的位置和数据，因此你在处理 click 的时候不再需要通过 setTag() 来绑定位置和数据了，直接获取即可
+>* 你还可以通过过 Item 的 `getItemView()` 方法获取当前的 itemView
 
-#### 4. 使用ItemFactory
+#### 4. 使用 ItemFactory
 
-首先你要准备好数据并new一个AssemblyAdapter，然后通过Adapter的`addItemFactory(AssemblyItemFactory)`方法添加ItemFactory即可，如下：
+首先你要准备好数据并 new 一个 AssemblyAdapter，然后通过 Adapter 的 `addItemFactory(AssemblyItemFactory)`方法添加 ItemFactory 即可，如下：
 ```java
 ListView listView = ...;
 
@@ -137,7 +136,7 @@ adapter.addItemFactory(new UserItemFactory());
 listView.setAdapter(adapter);
 ```
 
-你还可以一次使用多个ItemFactory，如下：
+你还可以一次使用多个 ItemFactory，如下：
 
 ```java
 ListView listView = ...;
@@ -155,15 +154,15 @@ adapter.addItemFactory(new GameItemFactory());
 listView.setAdapter(adapter);
 ```
 
-#### 5. 使用header和footer
+#### 5. 使用 header 和 footer
 
-所有Adapter均支持添加header和footer，可以方便的固定显示内容在列表的头部或尾部，更重要的意义在于可以让GridView、RecyclerView等也支持header和footer
+所有 Adapter 均支持添加 header 和 footer，可以方便的固定显示内容在列表的头部或尾部，更重要的意义在于可以让 GridView、RecyclerView 等也支持 header 和 footer
 
-##### 添加header、footer
+##### 添加 header、footer
 
-首先定义好一个用于header或footer的ItemFactory
+首先定义好一个用于 header 或 footer 的 ItemFactory
 
-然后调用`addHeaderItem(AssemblyItemFactory, Object)`或`addFooterItem(AssemblyItemFactory, Object)`方法添加即可，如下：
+然后调用 `addHeaderItem(AssemblyItemFactory, Object)` 或 `addFooterItem(AssemblyItemFactory, Object)` 方法添加即可，如下：
 ```java
 AssemblyAdapter adapter = new AssemblyAdapter(objects);
 
@@ -172,10 +171,10 @@ adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
 adapter.addFooterItem(new HeaderItemFactory(), "我是小尾巴呀！");
 ```
 
-addHeaderItem(AssemblyItemFactory, Object)和addFooterItem(AssemblyItemFactory, Object)的第二个参数是Item需要的数据，直接传进去即可
+addHeaderItem(AssemblyItemFactory, Object) 和 addFooterItem(AssemblyItemFactory, Object) 的第二个参数是 Item 需要的数据，直接传进去即可
 
 ##### 隐藏或显示header、footer
-addHeaderItem()或addFooterItem()都会返回一个用于控制header或footer的FixedItemInfo对象，如下：
+addHeaderItem() 或 addFooterItem() 都会返回一个用于控制 header 或 footer 的 FixedItemInfo 对象，如下：
 ```java
 AssemblyAdapter adapter = new AssemblyAdapter(objects);
 
@@ -188,12 +187,12 @@ userFixedItemInfo.setEnabled(false);
 userFixedItemInfo.setEnabled(true);
 ```
 
-由于有了header和footer那么Item.getPosition()方法得到的位置就是Item在Adapter中的位置，要想得到其在所属部分的真实位置可通过Adapter的`getPositionInPart(int)`获取
+由于有了 header 和 footer 那么 Item.getPosition() 方法得到的位置就是 Item 在 Adapter 中的位置，要想得到其在所属部分的真实位置可通过 Adapter 的 `getPositionInPart(int)` 获取
 
 
 #### 6. 使用加载更多功能
 
-首先你需要创建一个继承自AssemblyLoadMoreItemFactory的ItemFactory，AssemblyLoadMoreItemFactory已经将加载更多相关逻辑部分的代码写好了，你只需关心界面即可，如下：
+首先你需要定义一个继承自 AssemblyLoadMoreItemFactory 的 ItemFactory， AssemblyLoadMoreItemFactory 已经将加载更多相关逻辑部分的代码写好了，你只需关心界面即可，如下：
 
 ```java
 public class LoadMoreItemFactory extends AssemblyLoadMoreItemFactory {
@@ -252,7 +251,7 @@ public class LoadMoreItemFactory extends AssemblyLoadMoreItemFactory {
 }
 ```
 
-然后调用Adapter的`setLoadMoreItem(AssemblyLoadMoreItemFactory)`方法设置加载更多ItemFactory即可，如下：
+然后调用 Adapter 的 `setLoadMoreItem(AssemblyLoadMoreItemFactory)` 方法设置加载更多 ItemFactory 即可，如下：
 
 ```java
 AssemblyAdapter adapter = ...;
@@ -275,13 +274,13 @@ adapter.setLoadMoreItem(new LoadMoreItemFactory(new OnLoadMoreListener(){
 }));
 ```
 
-你还可以通过`setDisableLoadMore(boolean)`方法替代setLoadMoreEnd(boolean)来控制是否禁用加载更多功能，两者的区别在于setLoadMoreEnd(boolean)为true时会在列表尾部显示end提示，而setDisableLoadMore(boolean)则是完全不显示加载更多尾巴
+你还可以通过`setDisableLoadMore(boolean)`方法替代 setLoadMoreEnd(boolean) 来控制是否禁用加载更多功能，两者的区别在于 setLoadMoreEnd(boolean) 为 true 时会在列表尾部显示 end 提示，而 setDisableLoadMore(boolean) 则是完全不显示加载更多尾巴
 
-#### 7. 在RecyclerView的GridLayoutManager中一个Item独占一行或任意列
+#### 7. 在 RecyclerView 的 GridLayoutManager 中一个 Item 独占一行或任意列
 
-通过RecyclerView的GridLayoutManager我们可以很轻松的实现网格列表，同时GridLayoutManager还为我们提供了SpanSizeLookup接口，可以让我们指定哪一个Item需要独占一行或多列，AssemblyRecyclerAdapter 自然对如此重要的功能也做了封装，让你可以更方便的使用它
+通过 RecyclerView 的 GridLayoutManager 我们可以很轻松的实现网格列表，同时 GridLayoutManager 还为我们提供了 SpanSizeLookup 接口，可以让我们指定哪一个 Item 需要独占一行或多列，AssemblyRecyclerAdapter 自然对如此重要的功能也做了封装，让你可以更方便的使用它
 
-首先注册SpanSizeLookup，并通过AssemblyRecyclerAdapter的getSpanSize(int)方法获取每一个位置的Item的SpanSize：
+首先注册 SpanSizeLookup，并通过 AssemblyRecyclerAdapter 的 getSpanSize(int) 方法获取每一个位置的 Item 的 SpanSize：
 
 ```java
 GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
@@ -298,7 +297,7 @@ gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 recyclerView.setLayoutManager(gridLayoutManager);
 ```
 
-然后创建AssemblyRecyclerAdapter、添加ItemFactory并设置SpanSize
+然后创建 AssemblyRecyclerAdapter、添加 ItemFactory 并设置 SpanSize
 
 ```java
 AssemblyRecyclerAdapter adapter = new AssemblyRecyclerAdapter(dataList);
@@ -307,9 +306,9 @@ adapter.addItemFactory(new AppListHeaderItemFactory().setSpanSize(4));
 recyclerView.setAdapter(adapter);
 ```
 
-AppListHeaderItemFactory继承自AssemblyRecyclerItemFactory因此其拥有setSpanSize(int)方法
+AppListHeaderItemFactory 继承自 AssemblyRecyclerItemFactory 因此其拥有 setSpanSize(int) 方法
 
-你也可以直接使用fullSpan(RecyclerView)方法设置独占一行，fullSpan方法会通过RecyclerView取出其GridLayoutManager的SpanCount作为SpanSize
+你也可以直接使用 fullSpan(RecyclerView) 方法设置独占一行，fullSpan 方法会通过 RecyclerView 取出其GridLayoutManager 的 SpanCount 作为 SpanSize
 
 ```java
 AssemblyRecyclerAdapter adapter = new AssemblyRecyclerAdapter(dataList);
@@ -318,7 +317,12 @@ adapter.addItemFactory(new AppListHeaderItemFactory().fullSpan(recyclerView));
 recyclerView.setAdapter(adapter);
 ```
 
-fullSpan()方法如果检测到RecyclerView的LayoutManager是StaggeredGridLayoutManager的话，还会自动为Item设置setFullSpan(true)，好让Item在StaggeredGridLayoutManager中可以独占一行
+fullSpan() 方法如果检测到 RecyclerView 的 LayoutManager 是 StaggeredGridLayoutManager 的话，还会自动为 Item 设置 setFullSpan(true)，好让 Item 在 StaggeredGridLayoutManager 中可以独占一行
+
+
+#### 8.在 Kotlin 中使用并兼容 Kotterknife
+
+从 2.3.2 开始 AssemblyAdapter 支持在 Kotlin 中使用 [Kotterknife] 来注入 View，之前的版本不行，如果你用的还是旧版本请尽快升级
 
 ### License
     Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
@@ -334,3 +338,9 @@ fullSpan()方法如果检测到RecyclerView的LayoutManager是StaggeredGridLayou
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+[android_arsenal_icon]: https://img.shields.io/badge/Android%20Arsenal-AssemblyAdapter-green.svg?style=true
+[android_arsenal_link]: https://android-arsenal.com/details/1/4152
+[release_icon]: https://img.shields.io/github/release/panpf/AssemblyAdapter.svg
+[release_link]: https://github.com/panpf/AssemblyAdapter/releases
+[Kotterknife]: https://github.com/JakeWharton/kotterknife
