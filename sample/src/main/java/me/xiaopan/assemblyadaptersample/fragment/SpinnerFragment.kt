@@ -9,7 +9,7 @@ import android.widget.Spinner
 import me.xiaopan.assemblyadapter.AssemblyAdapter
 import me.xiaopan.assemblyadaptersample.R
 import me.xiaopan.assemblyadaptersample.itemfactory.SpinnerItemFactory
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 import java.util.*
 
 class SpinnerFragment : Fragment() {

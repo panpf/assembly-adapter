@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 import me.xiaopan.assemblyadaptersample.R
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class TextFragment : Fragment() {
 

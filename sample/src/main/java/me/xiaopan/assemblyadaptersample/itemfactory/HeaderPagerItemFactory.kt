@@ -9,7 +9,7 @@ import android.widget.TextView
 import me.xiaopan.assemblyadapter.AssemblyPagerItemFactory
 import me.xiaopan.assemblyadaptersample.R
 import me.xiaopan.assemblyadaptersample.bean.Header
-import me.xiaopan.sketch.SketchImageView
+import me.panpf.sketch.SketchImageView
 
 class HeaderPagerItemFactory(private val clickListener: View.OnClickListener) : AssemblyPagerItemFactory<Header>() {
 

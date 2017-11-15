@@ -18,7 +18,7 @@ import me.xiaopan.assemblyadaptersample.itemfactory.GameRecyclerItemFactory
 import me.xiaopan.assemblyadaptersample.itemfactory.HeaderRecyclerItemFactory
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreRecyclerItemFactory
 import me.xiaopan.assemblyadaptersample.itemfactory.UserRecyclerItemFactory
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 import java.util.*
 
 class RecyclerViewFragment : Fragment(), OnRecyclerLoadMoreListener {

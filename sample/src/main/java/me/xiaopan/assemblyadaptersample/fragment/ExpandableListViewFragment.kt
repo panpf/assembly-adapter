@@ -15,8 +15,8 @@ import me.xiaopan.assemblyadaptersample.bean.Game
 import me.xiaopan.assemblyadaptersample.bean.GameGroup
 import me.xiaopan.assemblyadaptersample.bean.User
 import me.xiaopan.assemblyadaptersample.bean.UserGroup
+import me.xiaopan.assemblyadaptersample.bindView
 import me.xiaopan.assemblyadaptersample.itemfactory.*
-import me.xiaopan.ssvt.bindView
 import java.util.*
 
 class ExpandableListViewFragment : Fragment(), OnGroupLoadMoreListener {

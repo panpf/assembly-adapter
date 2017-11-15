@@ -8,7 +8,7 @@ import me.xiaopan.assemblyadapter.AssemblyGroupItem
 import me.xiaopan.assemblyadapter.AssemblyGroupItemFactory
 import me.xiaopan.assemblyadaptersample.R
 import me.xiaopan.assemblyadaptersample.bean.UserGroup
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class UserGroupItemFactory : AssemblyGroupItemFactory<UserGroupItemFactory.UserGroupItem>() {
 

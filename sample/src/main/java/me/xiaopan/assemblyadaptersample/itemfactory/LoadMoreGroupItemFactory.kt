@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import me.xiaopan.assemblyadapter.AssemblyLoadMoreGroupItemFactory
 import me.xiaopan.assemblyadapter.OnGroupLoadMoreListener
 import me.xiaopan.assemblyadaptersample.R
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class LoadMoreGroupItemFactory(eventListener: OnGroupLoadMoreListener) : AssemblyLoadMoreGroupItemFactory(eventListener) {
 

@@ -6,7 +6,7 @@ import android.widget.TextView
 
 import me.xiaopan.assemblyadapter.AssemblyItem
 import me.xiaopan.assemblyadapter.AssemblyItemFactory
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class SpinnerItemFactory : AssemblyItemFactory<SpinnerItemFactory.SpinnerItem>() {
 

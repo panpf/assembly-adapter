@@ -6,18 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
+import me.panpf.sketch.SketchImageView
 import me.xiaopan.assemblyadaptersample.R
-import me.xiaopan.sketch.SketchImageView
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class HeaderFragment : Fragment() {
 
     var text: String? = null
-    var imageUrl: String? = null
+    private var imageUrl: String? = null
 
-    val textView: TextView by bindView(R.id.text_headerImageFragment)
-    val imageView: SketchImageView by bindView(R.id.image_headerImageFragment)
+    private val textView: TextView by bindView(R.id.text_headerImageFragment)
+    private val imageView: SketchImageView by bindView(R.id.image_headerImageFragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,7 @@ class HeaderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         textView.text = text
-        imageView.displayImage(imageUrl)
+        imageView.displayImage(imageUrl ?: "")
     }
 
     companion object {

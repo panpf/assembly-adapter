@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
-    <me.xiaopan.sketch.SketchImageView
+    <me.panpf.sketch.SketchImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/image_installedApp_icon"

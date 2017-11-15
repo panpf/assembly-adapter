@@ -3,13 +3,14 @@ package me.xiaopan.assemblyadaptersample.itemfactory
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.TextView
-
+import me.panpf.sketch.SketchImageView
+import me.panpf.sketch.uri.ApkIconUriModel
+import me.panpf.sketch.uri.AppIconUriModel
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItem
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItemFactory
 import me.xiaopan.assemblyadaptersample.R
 import me.xiaopan.assemblyadaptersample.bean.AppInfo
-import me.xiaopan.sketch.SketchImageView
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class AppItemFactory : AssemblyRecyclerItemFactory<AppItemFactory.AppItem>() {
     override fun isTarget(data: Any): Boolean {
@@ -30,9 +31,9 @@ class AppItemFactory : AssemblyRecyclerItemFactory<AppItemFactory.AppItem>() {
 
         override fun onSetData(i: Int, appInfo: AppInfo) {
             if (appInfo.isTempInstalled) {
-                iconImageView.displayInstalledAppIcon(appInfo.id, appInfo.versionCode)
+                iconImageView.displayImage(AppIconUriModel.makeUri(appInfo.id, appInfo.versionCode))
             } else {
-                iconImageView.displayImage(appInfo.apkFilePath)
+                iconImageView.displayImage(ApkIconUriModel.makeUri(appInfo.apkFilePath))
             }
             nameTextView.text = appInfo.name
         }

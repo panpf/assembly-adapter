@@ -5,15 +5,14 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import me.panpf.sketch.SketchImageView
 import me.xiaopan.assemblyadaptersample.R
-import me.xiaopan.sketch.SketchImageView
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class ImageFragment : Fragment() {
 
     private var imageUrl: String? = null
-    val imageView: SketchImageView by bindView(R.id.image_imageFragment)
+    private val imageView: SketchImageView by bindView(R.id.image_imageFragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +30,7 @@ class ImageFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        imageView.displayImage(imageUrl)
+        imageView.displayImage(imageUrl ?: "")
     }
 
     companion object {

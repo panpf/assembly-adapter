@@ -15,7 +15,7 @@ import me.xiaopan.assemblyadaptersample.R
 import me.xiaopan.assemblyadaptersample.bean.AppInfo
 import me.xiaopan.assemblyadaptersample.itemfactory.AppItemFactory
 import me.xiaopan.assemblyadaptersample.itemfactory.AppListHeaderItemFactory
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 import java.io.File
 import java.util.*
 

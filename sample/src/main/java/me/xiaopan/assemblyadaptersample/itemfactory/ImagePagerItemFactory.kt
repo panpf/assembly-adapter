@@ -7,7 +7,7 @@ import android.view.ViewGroup
 
 import me.xiaopan.assemblyadapter.AssemblyPagerItemFactory
 import me.xiaopan.assemblyadaptersample.R
-import me.xiaopan.sketch.SketchImageView
+import me.panpf.sketch.SketchImageView
 
 class ImagePagerItemFactory : AssemblyPagerItemFactory<String>() {
     override fun isTarget(data: Any): Boolean {

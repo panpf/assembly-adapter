@@ -11,7 +11,7 @@
         android:gravity="center"
         android:padding="16dp"/>
 
-    <me.xiaopan.sketch.SketchImageView
+    <me.panpf.sketch.SketchImageView
         android:id="@+id/image_headerImageFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

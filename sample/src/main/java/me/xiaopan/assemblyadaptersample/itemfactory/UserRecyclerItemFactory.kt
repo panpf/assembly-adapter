@@ -9,7 +9,7 @@ import me.xiaopan.assemblyadapter.AssemblyRecyclerItem
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItemFactory
 import me.xiaopan.assemblyadaptersample.R
 import me.xiaopan.assemblyadaptersample.bean.User
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class UserRecyclerItemFactory(context: Context) : AssemblyRecyclerItemFactory<UserRecyclerItemFactory.UserRecyclerItem>() {
 

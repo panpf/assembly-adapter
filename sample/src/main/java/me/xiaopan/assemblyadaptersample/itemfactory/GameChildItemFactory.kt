@@ -9,7 +9,7 @@ import me.xiaopan.assemblyadapter.AssemblyChildItem
 import me.xiaopan.assemblyadapter.AssemblyChildItemFactory
 import me.xiaopan.assemblyadaptersample.R
 import me.xiaopan.assemblyadaptersample.bean.Game
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class GameChildItemFactory(context: Context) : AssemblyChildItemFactory<GameChildItemFactory.GameChildItem>() {
 

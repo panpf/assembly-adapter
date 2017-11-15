@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()
-    buildToolsVersion "${BUILD_TOOLS_VERSION}"
 
     defaultConfig {
         applicationId "me.xiaopan.assemblyadaptersample"
@@ -29,8 +28,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:support-v4:22.2.0'
-    implementation 'me.xiaopan:pagerslidingtabstrip:1.7.0'
-    implementation 'me.xiaopan:sketch:2.3.0-beta7'
+    implementation "com.android.support:support-v4:${SUPPORT_VERSION}"
+    implementation "me.xiaopan:pagerslidingtabstrip:${PAGER_SLIDING_TAB_STRIP_VERSION}"
+    implementation "me.panpf:sketch:${SKETCH_VERSION}"
     implementation project(':assemblyadapter')
 }

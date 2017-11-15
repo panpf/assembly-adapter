@@ -16,7 +16,14 @@ class MainActivity : FragmentActivity() {
         setContentView(R.layout.activity_main)
 
         val viewPager = findViewById(R.id.pager_mainActivity_content) as ViewPager
-        viewPager.adapter = FragmentArrayPagerAdapter(supportFragmentManager, arrayOf(ListViewFragment(), RecyclerViewFragment(), GridRecyclerViewFragment(), ExpandableListViewFragment(), SpinnerFragment(), ViewPagerFragment(), PagerAdapterFragment()))
+        viewPager.adapter = FragmentArrayPagerAdapter(supportFragmentManager, arrayOf(
+                ListViewFragment(),
+                RecyclerViewFragment(),
+                GridRecyclerViewFragment(),
+                ExpandableListViewFragment(),
+                SpinnerFragment(),
+                ViewPagerFragment(),
+                PagerAdapterFragment()))
 
         val tabStrip = findViewById(R.id.tabStrip_mainActivity_tabs) as PagerSlidingTabStrip
         tabStrip.setViewPager(viewPager)

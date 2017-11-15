@@ -7,7 +7,7 @@ import android.widget.TextView
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItem
 import me.xiaopan.assemblyadapter.AssemblyRecyclerItemFactory
 import me.xiaopan.assemblyadaptersample.R
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class AppListHeaderItemFactory : AssemblyRecyclerItemFactory<AppListHeaderItemFactory.AppListHeaderItem>() {
 

@@ -17,7 +17,7 @@ import me.xiaopan.assemblyadaptersample.itemfactory.GameItemFactory
 import me.xiaopan.assemblyadaptersample.itemfactory.HeaderItemFactory
 import me.xiaopan.assemblyadaptersample.itemfactory.LoadMoreItemFactory
 import me.xiaopan.assemblyadaptersample.itemfactory.UserItemFactory
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 import java.util.*
 
 class ListViewFragment : Fragment(), OnLoadMoreListener {

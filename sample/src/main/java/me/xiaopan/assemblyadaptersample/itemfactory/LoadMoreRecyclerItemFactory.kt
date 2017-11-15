@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import me.xiaopan.assemblyadapter.AssemblyLoadMoreRecyclerItemFactory
 import me.xiaopan.assemblyadapter.OnRecyclerLoadMoreListener
 import me.xiaopan.assemblyadaptersample.R
-import me.xiaopan.ssvt.bindView
+import me.xiaopan.assemblyadaptersample.bindView
 
 class LoadMoreRecyclerItemFactory(eventListener: OnRecyclerLoadMoreListener) : AssemblyLoadMoreRecyclerItemFactory(eventListener) {
 
