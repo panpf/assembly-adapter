@@ -20,10 +20,10 @@ AssemblyAdapter 是 Android 上的一个 Adapter 库，有了它你就不用再�
 #### 1. 从 JCenter 导入 AssemblyAdapter
 ```groovy
 dependencies {
-    compile 'me.xiaopan:assemblyadapter:lastVersionName'
+    compile 'me.panpf:assembly-adapter:$lastVersionName'
 }
 ```
-`lastVersionName`：[![Release Version](https://img.shields.io/github/release/xiaopansky/AssemblyAdapter.svg)](https://github.com/xiaopansky/AssemblyAdapter/releases)`（不带v）`
+`$lastVersionName`：[![Release Version](https://img.shields.io/github/release/panpf/assembly-adapter.svg)](https://github.com/panpf/assembly-adapter/releases)`（不带v）`
 
 `最低兼容API 7`
 
@@ -326,7 +326,7 @@ fullSpan() 方法如果检测到 RecyclerView 的 LayoutManager 是 StaggeredGri
 
 AssemblyRecyclerItem 继承自 RecyclerView.ViewHolder 因此通过 [Kotterknife] 其可以使用 bindView
 
-AssemblyItem、AssemblyGroupItem、AssemblyChildItem 就需要自己动手扩展 [Kotterknife] 了，将如下代码加入 [Kotterknife] 的 [Botterknife.kt] 文件即可
+AssemblyItem、AssemblyGroupItem、AssemblyChildItem 就需要自己动手扩展 [Kotterknife] 了，将如下代码加入 [Kotterknife] 的 [ButterKnife.kt] 文件即可
 
 ```kotlin
 public fun <V : View> AssemblyItem<*>.bindView(id: Int)
@@ -348,11 +348,11 @@ private val AssemblyChildItem<*>.viewFinder: AssemblyChildItem<*>.(Int) -> View?
     get() = { itemView.findViewById(it) }
 ```
 
-详情可参考示例 app 中的 [ Sample Botterknife.kt] 文件
+详情可参考示例 app 中的 [Sample ButterKnife.kt] 文件
 
 
 ### License
-    Copyright (C) 2016 Peng fei Pan <sky@xiaopan.me>
+    Copyright (C) 2017 Peng fei Pan <sky@panpf.me>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -368,8 +368,8 @@ private val AssemblyChildItem<*>.viewFinder: AssemblyChildItem<*>.(Int) -> View?
 
 [android_arsenal_icon]: https://img.shields.io/badge/Android%20Arsenal-AssemblyAdapter-green.svg?style=true
 [android_arsenal_link]: https://android-arsenal.com/details/1/4152
-[release_icon]: https://img.shields.io/github/release/panpf/AssemblyAdapter.svg
-[release_link]: https://github.com/panpf/AssemblyAdapter/releases
+[release_icon]: https://img.shields.io/github/release/panpf/assembly-adapter.svg
+[release_link]: https://github.com/panpf/assembly-adapter/releases
 [Kotterknife]: https://github.com/JakeWharton/kotterknife
-[Botterknife.kt]: https://github.com/JakeWharton/kotterknife/blob/master/src/main/kotlin/kotterknife/ButterKnife.kt
-[ Sample Botterknife.kt]: https://github.com/panpf/AssemblyAdapter/blob/master/sample/src/main/java/me/xiaopan/assemblyadaptersample/ButterKnife.kt
+[ButterKnife.kt]: https://github.com/JakeWharton/kotterknife/blob/master/src/main/kotlin/kotterknife/ButterKnife.kt
+[Sample ButterKnife.kt]: sample/src/main/java/me/panpf/assemblyadapter/sample/ButterKnife.kt

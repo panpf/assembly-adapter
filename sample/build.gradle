@@ -5,7 +5,7 @@ android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()
 
     defaultConfig {
-        applicationId "me.xiaopan.assemblyadaptersample"
+        applicationId "me.panpf.assemblyadapter.sample"
         minSdkVersion MIN_SDK_VERSION_SAMPLE.toInteger()
         targetSdkVersion TARGET_SDK_VERSION.toInteger()
         versionCode VERSION_CODE.toInteger()
@@ -31,5 +31,5 @@ dependencies {
     implementation "com.android.support:support-v4:${SUPPORT_VERSION}"
     implementation "me.xiaopan:pagerslidingtabstrip:${PAGER_SLIDING_TAB_STRIP_VERSION}"
     implementation "me.panpf:sketch:${SKETCH_VERSION}"
-    implementation project(':assemblyadapter')
+    implementation project(':assembly-adapter')
 }
