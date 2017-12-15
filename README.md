@@ -372,4 +372,4 @@ private val AssemblyChildItem<*>.viewFinder: AssemblyChildItem<*>.(Int) -> View?
 [release_link]: https://github.com/panpf/assembly-adapter/releases
 [Kotterknife]: https://github.com/JakeWharton/kotterknife
 [ButterKnife.kt]: https://github.com/JakeWharton/kotterknife/blob/master/src/main/kotlin/kotterknife/ButterKnife.kt
-[Sample ButterKnife.kt]: sample/src/main/java/me/panpf/assemblyadapter/sample/ButterKnife.kt
+[Sample ButterKnife.kt]: sample/src/main/java/me/panpf/adapter/sample/ButterKnife.kt

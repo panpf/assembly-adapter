@@ -5,7 +5,7 @@ android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()
 
     defaultConfig {
-        applicationId "me.panpf.assemblyadapter.sample"
+        applicationId "me.panpf.adapter.sample"
         minSdkVersion MIN_SDK_VERSION_SAMPLE.toInteger()
         targetSdkVersion TARGET_SDK_VERSION.toInteger()
         versionCode VERSION_CODE.toInteger()
