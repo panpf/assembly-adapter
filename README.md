@@ -1,7 +1,10 @@
 # AssemblyAdapter
 
-[![Android Arsenal][android_arsenal_icon]][android_arsenal_link]
+![Platform][platform_image]
+[![API][api_image]][api_link]
 [![Release][release_icon]][release_link]
+[![Android Arsenal][android_arsenal_icon]][android_arsenal_link]
+[![License][license_image]][license_link]
 
 AssemblyAdapter 是 Android 上的一个 Adapter 库，有了它你就不用再写 Adapter 了，支持组合式多 Item、支持添加 header 和 footer、支持加载更多尾巴
 
@@ -366,10 +369,15 @@ private val AssemblyChildItem<*>.viewFinder: AssemblyChildItem<*>.(Int) -> View?
     See the License for the specific language governing permissions and
     limitations under the License.
 
+[platform_image]: https://img.shields.io/badge/Platform-Android-brightgreen.svg
 [android_arsenal_icon]: https://img.shields.io/badge/Android%20Arsenal-AssemblyAdapter-green.svg?style=true
 [android_arsenal_link]: https://android-arsenal.com/details/1/4152
+[api_image]: https://img.shields.io/badge/API-7%2B-orange.svg
+[api_link]: https://android-arsenal.com/api?level=7
 [release_icon]: https://img.shields.io/github/release/panpf/assembly-adapter.svg
 [release_link]: https://github.com/panpf/assembly-adapter/releases
+[license_image]: https://img.shields.io/badge/License-Apache%202-blue.svg
+[license_link]: https://www.apache.org/licenses/LICENSE-2.0
 [Kotterknife]: https://github.com/JakeWharton/kotterknife
 [ButterKnife.kt]: https://github.com/JakeWharton/kotterknife/blob/master/src/main/kotlin/kotterknife/ButterKnife.kt
 [Sample ButterKnife.kt]: sample/src/main/java/me/panpf/adapter/sample/ButterKnife.kt
