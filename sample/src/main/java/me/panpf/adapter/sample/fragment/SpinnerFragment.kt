@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Spinner
-import me.panpf.adapter.AssemblyListAdapter
+import me.panpf.adapter.list.AssemblyListAdapter
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.itemfactory.SpinnerItemFactory
 import me.panpf.adapter.sample.bindView

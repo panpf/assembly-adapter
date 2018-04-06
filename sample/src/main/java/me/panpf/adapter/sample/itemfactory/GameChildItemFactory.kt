@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import me.panpf.adapter.AssemblyChildItem
-import me.panpf.adapter.AssemblyChildItemFactory
+import me.panpf.adapter.expandable.AssemblyChildItem
+import me.panpf.adapter.expandable.AssemblyChildItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bindView

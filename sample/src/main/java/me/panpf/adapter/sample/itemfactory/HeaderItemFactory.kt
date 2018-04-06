@@ -3,8 +3,8 @@ package me.panpf.adapter.sample.itemfactory
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.TextView
-import me.panpf.adapter.AssemblyListItem
-import me.panpf.adapter.AssemblyListItemFactory
+import me.panpf.adapter.list.AssemblyListItem
+import me.panpf.adapter.list.AssemblyListItemFactory
 import me.panpf.adapter.sample.R
 
 class HeaderItemFactory : AssemblyListItemFactory<HeaderItemFactory.HeaderItem>() {

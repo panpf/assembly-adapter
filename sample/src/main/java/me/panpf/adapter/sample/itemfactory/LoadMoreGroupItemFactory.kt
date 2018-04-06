@@ -3,8 +3,8 @@ package me.panpf.adapter.sample.itemfactory
 import android.view.View
 import android.view.ViewGroup
 
-import me.panpf.adapter.AssemblyLoadMoreGroupItemFactory
-import me.panpf.adapter.OnGroupLoadMoreListener
+import me.panpf.adapter.expandable.AssemblyLoadMoreGroupItemFactory
+import me.panpf.adapter.expandable.OnGroupLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bindView
 

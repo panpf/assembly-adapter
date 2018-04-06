@@ -1,6 +1,6 @@
 package me.panpf.adapter.sample.bean
 
-import me.panpf.adapter.AssemblyGroup
+import me.panpf.adapter.expandable.AssemblyGroup
 
 class GameGroup : AssemblyGroup {
     var title: String? = null

@@ -6,9 +6,9 @@ import android.app.DialogFragment
 import android.app.Fragment
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
-import me.panpf.adapter.AssemblyChildItem
-import me.panpf.adapter.AssemblyGroupItem
-import me.panpf.adapter.AssemblyListItem
+import me.panpf.adapter.expandable.AssemblyChildItem
+import me.panpf.adapter.expandable.AssemblyGroupItem
+import me.panpf.adapter.list.AssemblyListItem
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import android.support.v4.app.DialogFragment as SupportDialogFragment

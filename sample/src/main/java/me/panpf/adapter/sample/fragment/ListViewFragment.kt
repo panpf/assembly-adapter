@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import me.panpf.adapter.AssemblyListAdapter
-import me.panpf.adapter.FixedListItemInfo
-import me.panpf.adapter.OnListLoadMoreListener
+import me.panpf.adapter.list.AssemblyListAdapter
+import me.panpf.adapter.list.FixedListItemInfo
+import me.panpf.adapter.list.OnListLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User

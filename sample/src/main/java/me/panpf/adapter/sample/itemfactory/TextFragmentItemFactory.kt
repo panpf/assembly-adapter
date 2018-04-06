@@ -2,7 +2,7 @@ package me.panpf.adapter.sample.itemfactory
 
 import android.support.v4.app.Fragment
 
-import me.panpf.adapter.AssemblyFragmentItemFactory
+import me.panpf.adapter.pager.AssemblyFragmentItemFactory
 import me.panpf.adapter.sample.bean.Text
 import me.panpf.adapter.sample.fragment.TextFragment
 

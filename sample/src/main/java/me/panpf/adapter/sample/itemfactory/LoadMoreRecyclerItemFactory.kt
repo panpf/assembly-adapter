@@ -3,8 +3,8 @@ package me.panpf.adapter.sample.itemfactory
 import android.view.View
 import android.view.ViewGroup
 
-import me.panpf.adapter.AssemblyLoadMoreRecyclerItemFactory
-import me.panpf.adapter.OnRecyclerLoadMoreListener
+import me.panpf.adapter.recycler.AssemblyLoadMoreRecyclerItemFactory
+import me.panpf.adapter.recycler.OnRecyclerLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bindView
 

@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import me.panpf.adapter.AssemblyListItem
-import me.panpf.adapter.AssemblyListItemFactory
+import me.panpf.adapter.list.AssemblyListItem
+import me.panpf.adapter.list.AssemblyListItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bindView

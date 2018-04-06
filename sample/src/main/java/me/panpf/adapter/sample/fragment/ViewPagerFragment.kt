@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import me.panpf.adapter.AssemblyFragmentStatePagerAdapter
+import me.panpf.adapter.pager.AssemblyFragmentStatePagerAdapter
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Header
 import me.panpf.adapter.sample.bean.Text

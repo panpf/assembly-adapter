@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import me.panpf.adapter.AssemblyPagerItemFactory
+import me.panpf.adapter.pager.AssemblyPagerItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Header
 import me.panpf.sketch.SketchImageView

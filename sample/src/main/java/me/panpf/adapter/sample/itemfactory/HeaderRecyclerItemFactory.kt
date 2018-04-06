@@ -4,8 +4,8 @@ import android.content.Context
 import android.view.ViewGroup
 import android.widget.TextView
 
-import me.panpf.adapter.AssemblyRecyclerItem
-import me.panpf.adapter.AssemblyRecyclerItemFactory
+import me.panpf.adapter.recycler.AssemblyRecyclerItem
+import me.panpf.adapter.recycler.AssemblyRecyclerItemFactory
 import me.panpf.adapter.sample.R
 
 class HeaderRecyclerItemFactory : AssemblyRecyclerItemFactory<HeaderRecyclerItemFactory.HeaderRecyclerItem>() {

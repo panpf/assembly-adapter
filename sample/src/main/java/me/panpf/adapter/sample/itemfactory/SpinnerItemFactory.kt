@@ -4,8 +4,8 @@ import android.content.Context
 import android.view.ViewGroup
 import android.widget.TextView
 
-import me.panpf.adapter.AssemblyListItem
-import me.panpf.adapter.AssemblyListItemFactory
+import me.panpf.adapter.list.AssemblyListItem
+import me.panpf.adapter.list.AssemblyListItemFactory
 import me.panpf.adapter.sample.bindView
 
 class SpinnerItemFactory : AssemblyListItemFactory<SpinnerItemFactory.SpinnerItem>() {

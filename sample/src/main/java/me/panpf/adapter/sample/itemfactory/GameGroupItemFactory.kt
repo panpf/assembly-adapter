@@ -4,8 +4,8 @@ import android.content.Context
 import android.view.ViewGroup
 import android.widget.TextView
 
-import me.panpf.adapter.AssemblyGroupItem
-import me.panpf.adapter.AssemblyGroupItemFactory
+import me.panpf.adapter.expandable.AssemblyGroupItem
+import me.panpf.adapter.expandable.AssemblyGroupItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.GameGroup
 import me.panpf.adapter.sample.bindView

@@ -10,7 +10,7 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.panpf.adapter.AssemblyRecyclerAdapter
+import me.panpf.adapter.recycler.AssemblyRecyclerAdapter
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.AppInfo
 import me.panpf.adapter.sample.bindView

@@ -6,8 +6,8 @@ import android.widget.TextView
 import me.panpf.sketch.SketchImageView
 import me.panpf.sketch.uri.ApkIconUriModel
 import me.panpf.sketch.uri.AppIconUriModel
-import me.panpf.adapter.AssemblyRecyclerItem
-import me.panpf.adapter.AssemblyRecyclerItemFactory
+import me.panpf.adapter.recycler.AssemblyRecyclerItem
+import me.panpf.adapter.recycler.AssemblyRecyclerItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.AppInfo
 import me.panpf.adapter.sample.bindView

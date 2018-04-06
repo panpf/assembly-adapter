@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import me.panpf.adapter.AssemblyPagerItemFactory
+import me.panpf.adapter.pager.AssemblyPagerItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.sketch.SketchImageView
 
