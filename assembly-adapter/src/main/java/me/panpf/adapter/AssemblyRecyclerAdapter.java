@@ -16,6 +16,7 @@
 
 package me.panpf.adapter;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
@@ -621,7 +622,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object dataObject = dataList.get(positionInDataList);
+            Object dataObject = getDataItem(positionInDataList);
 
             AssemblyRecyclerItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -675,7 +676,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            return headerItemList.get(positionInHeaderList).getData();
+            return getHeaderItem(positionInHeaderList);
         }
 
         // 数据
@@ -684,7 +685,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            return dataList.get(positionInDataList);
+            return getDataItem(positionInDataList);
         }
 
         // 尾巴
@@ -693,7 +694,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).getData();
+            return getFooterItem(positionInFooterList);
         }
 
         // 加载更多尾巴
@@ -702,6 +703,21 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         }
 
         return null;
+    }
+
+    @Nullable
+    public Object getHeaderItem(int positionInHeaderList){
+        return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
+    }
+
+    @Nullable
+    public Object getDataItem(int positionInDataList){
+        return dataList != null ? dataList.get(positionInDataList) : null;
+    }
+
+    @Nullable
+    public Object getFooterItem(int positionInFooterList){
+        return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
     }
 
     @Override
@@ -729,7 +745,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object dataObject = dataList.get(positionInDataList);
+            Object dataObject = getDataItem(positionInDataList);
 
             AssemblyRecyclerItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {

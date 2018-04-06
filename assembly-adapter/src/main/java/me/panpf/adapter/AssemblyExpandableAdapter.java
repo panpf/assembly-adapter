@@ -17,6 +17,7 @@
 package me.panpf.adapter;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -681,7 +682,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         if (groupPosition >= headerStartPosition && groupPosition <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = groupPosition;
-            return headerItemList.get(positionInHeaderList).getData();
+            return getHeaderItem(positionInHeaderList);
         }
 
         // 数据
@@ -690,7 +691,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (groupPosition >= dataStartPosition && groupPosition <= dataEndPosition && dataCount > 0) {
             int positionInDataList = groupPosition - headerItemCount;
-            return dataList.get(positionInDataList);
+            return getDataItem(positionInDataList);
         }
 
         // 尾巴
@@ -699,7 +700,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (groupPosition >= footerStartPosition && groupPosition <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = groupPosition - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).getData();
+            return getFooterItem(positionInFooterList);
         }
 
         // 加载更多尾巴
@@ -708,6 +709,21 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         }
 
         return null;
+    }
+
+    @Nullable
+    public Object getHeaderItem(int positionInHeaderList){
+        return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
+    }
+
+    @Nullable
+    public Object getDataItem(int positionInDataList){
+        return dataList != null ? dataList.get(positionInDataList) : null;
+    }
+
+    @Nullable
+    public Object getFooterItem(int positionInFooterList){
+        return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
     }
 
     @Override
@@ -775,7 +791,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (groupPosition >= dataStartPosition && groupPosition <= dataEndPosition && dataCount > 0) {
             int positionInDataList = groupPosition - headerItemCount;
-            Object groupDataObject = dataList.get(positionInDataList);
+            Object groupDataObject = getDataItem(positionInDataList);
 
             AssemblyGroupItemFactory itemFactory;
             for (int w = 0, size = groupItemFactoryList.size(); w < size; w++) {

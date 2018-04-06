@@ -17,6 +17,7 @@
 package me.panpf.adapter;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -209,6 +210,21 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
         return getHeaderItemCount() + getDataCount() + getFooterItemCount();
     }
 
+    @Nullable
+    public Object getHeaderItem(int positionInHeaderList){
+        return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
+    }
+
+    @Nullable
+    public Object getDataItem(int positionInDataList){
+        return dataList != null ? dataList.get(positionInDataList) : null;
+    }
+
+    @Nullable
+    public Object getFooterItem(int positionInFooterList){
+        return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
+    }
+
     @Override
     public Fragment getItem(int position) {
         // 头
@@ -216,7 +232,9 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            FixedFragmentItemInfo fixedItemInfo = headerItemList.get(position);
+            //noinspection UnnecessaryLocalVariable
+            int positionInHeaderList = position;
+            FixedFragmentItemInfo fixedItemInfo = headerItemList.get(positionInHeaderList);
             //noinspection unchecked
             return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
         }
@@ -227,7 +245,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object dataObject = dataList.get(positionInDataList);
+            Object dataObject = getDataItem(positionInDataList);
 
             AssemblyFragmentItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {

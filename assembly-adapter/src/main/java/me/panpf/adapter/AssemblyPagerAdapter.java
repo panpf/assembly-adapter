@@ -16,6 +16,8 @@
 
 package me.panpf.adapter;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
@@ -488,23 +490,41 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == object;
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
 
+    @Nullable
+    public Object getHeaderItem(int positionInHeaderList){
+        return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
+    }
+
+    @Nullable
+    public Object getDataItem(int positionInDataList){
+        return dataList != null ? dataList.get(positionInDataList) : null;
+    }
+
+    @Nullable
+    public Object getFooterItem(int positionInFooterList){
+        return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
+    }
+
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
         // 头
         int headerItemCount = getHeaderItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            FixedPagerItemInfo fixedItemInfo = headerItemList.get(position);
+            //noinspection UnnecessaryLocalVariable
+            int positionInHeaderList = position;
+            FixedPagerItemInfo fixedItemInfo = headerItemList.get(positionInHeaderList);
             //noinspection unchecked
             View itemView = fixedItemInfo.getItemFactory().dispatchCreateView(container.getContext(), container, position, fixedItemInfo.getData());
             container.addView(itemView);
@@ -517,7 +537,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object dataObject = dataList.get(positionInDataList);
+            Object dataObject = getDataItem(positionInDataList);
 
             AssemblyPagerItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
