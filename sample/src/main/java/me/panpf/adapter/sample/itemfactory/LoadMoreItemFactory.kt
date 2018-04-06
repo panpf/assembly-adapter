@@ -3,18 +3,18 @@ package me.panpf.adapter.sample.itemfactory
 import android.view.View
 import android.view.ViewGroup
 
-import me.panpf.adapter.AssemblyLoadMoreItemFactory
-import me.panpf.adapter.OnLoadMoreListener
+import me.panpf.adapter.AssemblyLoadMoreListItemFactory
+import me.panpf.adapter.OnListLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bindView
 
-class LoadMoreItemFactory(eventListener: OnLoadMoreListener) : AssemblyLoadMoreItemFactory(eventListener) {
+class LoadMoreItemFactory(eventListenerList: OnListLoadMoreListener) : AssemblyLoadMoreListItemFactory(eventListenerList) {
 
-    override fun createAssemblyItem(parent: ViewGroup): AssemblyLoadMoreItemFactory.AssemblyLoadMoreItem<*> {
+    override fun createAssemblyItem(parent: ViewGroup): AssemblyLoadMoreListItem<*> {
         return LoadMoreItem(R.layout.list_item_load_more, parent)
     }
 
-    inner class LoadMoreItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyLoadMoreItemFactory.AssemblyLoadMoreItem<Int>(itemLayoutId, parent) {
+    inner class LoadMoreItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyLoadMoreListItem<Int>(itemLayoutId, parent) {
         val loadingView: View by bindView(R.id.text_loadMoreListItem_loading)
         val errorView: View by bindView(R.id.text_loadMoreListItem_error)
         val endView: View by bindView(R.id.text_loadMoreListItem_end)

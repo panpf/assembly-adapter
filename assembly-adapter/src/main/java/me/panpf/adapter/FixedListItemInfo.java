@@ -17,17 +17,17 @@
 package me.panpf.adapter;
 
 /**
- * AssemblyAdapter 专用的固定位置 Item 管理器
+ * {@link AssemblyListAdapter} 专用的固定位置 Item 管理器
  */
-public class FixedItemInfo {
-    private AssemblyItemFactory itemFactory;
+public class FixedListItemInfo {
+    private AssemblyListItemFactory itemFactory;
     private Object data;
     private boolean enabled;
     private int position;
     private boolean header;
 
     @SuppressWarnings("WeakerAccess")
-    public FixedItemInfo(AssemblyItemFactory itemFactory, Object data, boolean header) {
+    public FixedListItemInfo(AssemblyListItemFactory itemFactory, Object data, boolean header) {
         this.data = data;
         this.itemFactory = itemFactory;
         this.enabled = true;
@@ -41,14 +41,14 @@ public class FixedItemInfo {
     public void setData(Object data) {
         this.data = data;
 
-        AssemblyAdapter adapter = itemFactory.getAdapter();
+        AssemblyListAdapter adapter = itemFactory.getAdapter();
         if (adapter.isNotifyOnChange()) {
             adapter.notifyDataSetChanged();
         }
     }
 
     @SuppressWarnings("unused")
-    public AssemblyItemFactory getItemFactory() {
+    public AssemblyListItemFactory getItemFactory() {
         return itemFactory;
     }
 

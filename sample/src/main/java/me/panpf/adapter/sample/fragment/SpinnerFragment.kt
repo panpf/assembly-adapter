@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Spinner
-import me.panpf.adapter.AssemblyAdapter
+import me.panpf.adapter.AssemblyListAdapter
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.itemfactory.SpinnerItemFactory
 import me.panpf.adapter.sample.bindView
@@ -35,7 +35,7 @@ class SpinnerFragment : Fragment() {
         stringList.add("9")
         stringList.add("10")
 
-        val adapter = AssemblyAdapter(stringList)
+        val adapter = AssemblyListAdapter(stringList)
         adapter.addItemFactory(SpinnerItemFactory())
         spinner.adapter = adapter
     }

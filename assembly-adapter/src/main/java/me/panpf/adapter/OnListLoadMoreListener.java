@@ -17,8 +17,8 @@
 package me.panpf.adapter;
 
 /**
- * AssemblyAdapter 专用的加载更多监听器
+ * {@link AssemblyListAdapter} 专用的加载更多监听器
  */
-public interface OnLoadMoreListener {
-    void onLoadMore(AssemblyAdapter adapter);
+public interface OnListLoadMoreListener {
+    void onLoadMore(AssemblyListAdapter adapter);
 }

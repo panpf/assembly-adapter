@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import me.panpf.adapter.AssemblyItem
-import me.panpf.adapter.AssemblyItemFactory
+import me.panpf.adapter.AssemblyListItem
+import me.panpf.adapter.AssemblyListItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.bindView
 
-class UserItemFactory(context: Context) : AssemblyItemFactory<UserItemFactory.UserItem>() {
+class UserItemFactory(context: Context) : AssemblyListItemFactory<UserItemFactory.UserItem>() {
 
     private val eventListener: EventListener
 
@@ -27,7 +27,7 @@ class UserItemFactory(context: Context) : AssemblyItemFactory<UserItemFactory.Us
         return UserItem(R.layout.list_item_user, parent)
     }
 
-    inner class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLayoutId, parent) {
+    inner class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyListItem<User>(itemLayoutId, parent) {
         val headImageView: ImageView by bindView(R.id.image_userListItem_head)
         val nameTextView: TextView by bindView(R.id.text_userListItem_name)
         val sexTextView: TextView by bindView(R.id.text_userListItem_sex)

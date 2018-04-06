@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import me.panpf.adapter.AssemblyItem
-import me.panpf.adapter.AssemblyItemFactory
+import me.panpf.adapter.AssemblyListItem
+import me.panpf.adapter.AssemblyListItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bindView
 
-class GameItemFactory(context: Context) : AssemblyItemFactory<GameItemFactory.GameItem>() {
+class GameItemFactory(context: Context) : AssemblyListItemFactory<GameItemFactory.GameItem>() {
 
     private val eventListener: EventListener
 
@@ -50,7 +50,7 @@ class GameItemFactory(context: Context) : AssemblyItemFactory<GameItemFactory.Ga
         }
     }
 
-    inner class GameItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<Game>(itemLayoutId, parent) {
+    inner class GameItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyListItem<Game>(itemLayoutId, parent) {
         val iconImageView: ImageView by bindView(R.id.image_gameListItem_icon)
         val nameTextView: TextView by bindView(R.id.text_gameListItem_name)
         val likeTextView: TextView by bindView(R.id.text_gameListItem_like)

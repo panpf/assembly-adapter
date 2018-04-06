@@ -54,15 +54,15 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
         int firstDataItemPosition = 0;
         int lastDataItemPosition = 0;
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
-        AssemblyRecyclerAdapter assemblyAdapter = null;
+        AssemblyRecyclerAdapter recyclerAdapter = null;
         if (adapter instanceof AssemblyRecyclerAdapter) {
-            assemblyAdapter = (AssemblyRecyclerAdapter) adapter;
+            recyclerAdapter = (AssemblyRecyclerAdapter) adapter;
             itemPosition = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            firstDataItemPosition = assemblyAdapter.getHeaderItemCount();
-            lastDataItemPosition = firstDataItemPosition + (assemblyAdapter.getDataCount() - 1);
+            firstDataItemPosition = recyclerAdapter.getHeaderItemCount();
+            lastDataItemPosition = firstDataItemPosition + (recyclerAdapter.getDataCount() - 1);
         }
 
-        if (assemblyAdapter == null || (itemPosition >= firstDataItemPosition && itemPosition <= lastDataItemPosition)) {
+        if (recyclerAdapter == null || (itemPosition >= firstDataItemPosition && itemPosition <= lastDataItemPosition)) {
             if (mOrientation == LinearLayoutManager.VERTICAL) {
                 outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
             } else {
@@ -92,11 +92,11 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
         int firstDataItemPosition = 0;
         int lastDataItemPosition = 0;
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
-        AssemblyRecyclerAdapter assemblyAdapter = null;
+        AssemblyRecyclerAdapter recyclerAdapter = null;
         if (adapter instanceof AssemblyRecyclerAdapter) {
-            assemblyAdapter = (AssemblyRecyclerAdapter) adapter;
-            firstDataItemPosition = assemblyAdapter.getHeaderItemCount();
-            lastDataItemPosition = firstDataItemPosition + (assemblyAdapter.getDataCount() - 1);
+            recyclerAdapter = (AssemblyRecyclerAdapter) adapter;
+            firstDataItemPosition = recyclerAdapter.getHeaderItemCount();
+            lastDataItemPosition = firstDataItemPosition + (recyclerAdapter.getDataCount() - 1);
         }
 
         final int left = parent.getPaddingLeft();
@@ -108,7 +108,7 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
             int itemPosition = ((RecyclerView.LayoutParams) child.getLayoutParams()).getViewLayoutPosition();
             int bottomMargin = ((RecyclerView.LayoutParams) child.getLayoutParams()).bottomMargin;
 
-            if (assemblyAdapter == null || (itemPosition >= firstDataItemPosition && itemPosition <= lastDataItemPosition)) {
+            if (recyclerAdapter == null || (itemPosition >= firstDataItemPosition && itemPosition <= lastDataItemPosition)) {
                 final int top = child.getBottom() + bottomMargin;
                 final int bottom = top + mDivider.getIntrinsicHeight();
                 mDivider.setBounds(left, top, right, bottom);
@@ -121,11 +121,11 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
         int firstDataItemPosition = 0;
         int lastDataItemPosition = 0;
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
-        AssemblyRecyclerAdapter assemblyAdapter = null;
+        AssemblyRecyclerAdapter recyclerAdapter = null;
         if (adapter instanceof AssemblyRecyclerAdapter) {
-            assemblyAdapter = (AssemblyRecyclerAdapter) adapter;
-            firstDataItemPosition = assemblyAdapter.getHeaderItemCount();
-            lastDataItemPosition = firstDataItemPosition + (assemblyAdapter.getDataCount() - 1);
+            recyclerAdapter = (AssemblyRecyclerAdapter) adapter;
+            firstDataItemPosition = recyclerAdapter.getHeaderItemCount();
+            lastDataItemPosition = firstDataItemPosition + (recyclerAdapter.getDataCount() - 1);
         }
         final int top = parent.getPaddingTop();
         final int bottom = parent.getHeight() - parent.getPaddingBottom();
@@ -136,7 +136,7 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
             int itemPosition = ((RecyclerView.LayoutParams) child.getLayoutParams()).getViewLayoutPosition();
             int rightMargin = ((RecyclerView.LayoutParams) child.getLayoutParams()).rightMargin;
 
-            if (assemblyAdapter == null || (itemPosition >= firstDataItemPosition && itemPosition <= lastDataItemPosition)) {
+            if (recyclerAdapter == null || (itemPosition >= firstDataItemPosition && itemPosition <= lastDataItemPosition)) {
                 final int left = child.getRight() + rightMargin;
                 final int right = left + mDivider.getIntrinsicHeight();
                 mDivider.setBounds(left, top, right, bottom);

@@ -57,9 +57,9 @@ AssemblyAdapter 与其它万能 Adapter 最根本的不同就是其把 item 相�
 
 #### 3. 定义 ItemFactory
 
-在使用 AssemblyAdapter 之前得先定义 ItemFactory 和 Item，如下：
+在使用 AssemblyAdapter 之前得先定义 ItemFactory 和 Item，我们以 AssemblyListAdapter 为例，如下：
 ```java
-public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserItem> {
+public class UserItemFactory extends AssemblyListItemFactory<UserItemFactory.UserItem> {
 
     @Override
     public boolean isTarget(Object itemObject) {
@@ -71,7 +71,7 @@ public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserIte
         return new UserListItem(R.layout.list_item_user, parent);
     }
 
-    public class UserItem extends AssemblyItem<User> {
+    public class UserItem extends AssemblyListItem<User> {
         private ImageView headImageView;
         private TextView nameTextView;
         private TextView sexTextView;
@@ -125,7 +125,7 @@ public class UserItemFactory extends AssemblyItemFactory<UserItemFactory.UserIte
 
 #### 4. 使用 ItemFactory
 
-首先你要准备好数据并 new 一个 AssemblyAdapter，然后通过 Adapter 的 `addItemFactory(AssemblyItemFactory)`方法添加 ItemFactory 即可，如下：
+首先你要准备好数据并 new 一个 AssemblyListAdapter，然后通过 Adapter 的 `addItemFactory(AssemblyItemFactory)`方法添加 ItemFactory 即可，如下：
 ```java
 ListView listView = ...;
 
@@ -133,7 +133,7 @@ List<Object> dataList = new ArrayList<Object>;
 dataList.add(new User("隔离老王"));
 dataList.add(new User("隔壁老李"));
 
-AssemblyAdapter adapter = new AssemblyAdapter(dataList);
+AssemblyListAdapter adapter = new AssemblyListAdapter(dataList);
 adapter.addItemFactory(new UserItemFactory());
 
 listView.setAdapter(adapter);
@@ -150,7 +150,7 @@ dataList.add(new Game("英雄联盟"));
 dataList.add(new User("隔壁老李"));
 dataList.add(new Game("守望先锋"));
 
-AssemblyAdapter adapter = new AssemblyAdapter(dataList);
+AssemblyListAdapter adapter = new AssemblyListAdapter(dataList);
 adapter.addItemFactory(new UserItemFactory());
 adapter.addItemFactory(new GameItemFactory());
 
@@ -167,7 +167,7 @@ listView.setAdapter(adapter);
 
 然后调用 `addHeaderItem(AssemblyItemFactory, Object)` 或 `addFooterItem(AssemblyItemFactory, Object)` 方法添加即可，如下：
 ```java
-AssemblyAdapter adapter = new AssemblyAdapter(objects);
+AssemblyListAdapter adapter = new AssemblyListAdapter(objects);
 
 adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
 ...
@@ -198,7 +198,7 @@ userFixedItemInfo.setEnabled(true);
 首先你需要定义一个继承自 AssemblyLoadMoreItemFactory 的 ItemFactory， AssemblyLoadMoreItemFactory 已经将加载更多相关逻辑部分的代码写好了，你只需关心界面即可，如下：
 
 ```java
-public class LoadMoreItemFactory extends AssemblyLoadMoreItemFactory {
+public class LoadMoreItemFactory extends AssemblyLoadMoreListItemFactory {
 
     public LoadMoreListItemFactory(OnLoadMoreListener eventListener) {
         super(eventListener);
@@ -209,7 +209,7 @@ public class LoadMoreItemFactory extends AssemblyLoadMoreItemFactory {
         return new LoadMoreListItem(R.layout.list_item_load_more, parent);
     }
 
-    public class LoadMoreItem extends AssemblyLoadMoreItem {
+    public class LoadMoreItem extends AssemblyLoadMoreListItem {
         private View loadingView;
         private View errorView;
         private View endView;
@@ -254,10 +254,10 @@ public class LoadMoreItemFactory extends AssemblyLoadMoreItemFactory {
 }
 ```
 
-然后调用 Adapter 的 `setLoadMoreItem(AssemblyLoadMoreItemFactory)` 方法设置加载更多 ItemFactory 即可，如下：
+然后调用 Adapter 的 `setLoadMoreItem(AssemblyLoadMoreListItemFactory)` 方法设置加载更多 ItemFactory 即可，如下：
 
 ```java
-AssemblyAdapter adapter = ...;
+AssemblyListAdapter adapter = ...;
 adapter.setLoadMoreItem(new LoadMoreItemFactory(new OnLoadMoreListener(){
     @Override
     public void onLoadMore(AssemblyAdapter adapter) {
@@ -332,10 +332,10 @@ AssemblyRecyclerItem 继承自 RecyclerView.ViewHolder 因此通过 [Kotterknife
 AssemblyItem、AssemblyGroupItem、AssemblyChildItem 就需要自己动手扩展 [Kotterknife] 了，将如下代码加入 [Kotterknife] 的 [ButterKnife.kt] 文件即可
 
 ```kotlin
-public fun <V : View> AssemblyItem<*>.bindView(id: Int)
-        : ReadOnlyProperty<AssemblyItem<*>, V> = required(id, viewFinder)
+public fun <V : View> AssemblyListItem<*>.bindView(id: Int)
+        : ReadOnlyProperty<AssemblyListItem<*>, V> = required(id, viewFinder)
 
-private val AssemblyItem<*>.viewFinder: AssemblyItem<*>.(Int) -> View?
+private val AssemblyListItem<*>.viewFinder: AssemblyListItem<*>.(Int) -> View?
     get() = { itemView.findViewById(it) }
 
 public fun <V : View> AssemblyGroupItem<*>.bindView(id: Int)

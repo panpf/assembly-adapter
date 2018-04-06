@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import me.panpf.adapter.AssemblyAdapter
-import me.panpf.adapter.FixedItemInfo
-import me.panpf.adapter.OnLoadMoreListener
+import me.panpf.adapter.AssemblyListAdapter
+import me.panpf.adapter.FixedListItemInfo
+import me.panpf.adapter.OnListLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
@@ -20,17 +20,17 @@ import me.panpf.adapter.sample.itemfactory.LoadMoreItemFactory
 import me.panpf.adapter.sample.itemfactory.UserItemFactory
 import java.util.*
 
-class ListViewFragment : Fragment(), OnLoadMoreListener {
+class ListViewFragment : Fragment(), OnListLoadMoreListener {
     var nextStart = 0
     val size = 20
 
     val listView: ListView by bindView(R.id.list_listViewFragment_content)
 
-    var adapter: AssemblyAdapter? = null
-    var headerItemInfo: FixedItemInfo? = null
-    var headerItemInfo2: FixedItemInfo? = null
-    var footerItemInfo: FixedItemInfo? = null
-    var footerItemInfo2: FixedItemInfo? = null
+    var listAdapter: AssemblyListAdapter? = null
+    var headerListItemInfo: FixedListItemInfo? = null
+    var headerListItemInfo2: FixedListItemInfo? = null
+    var footerListItemInfo: FixedListItemInfo? = null
+    var footerListItemInfo2: FixedListItemInfo? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list_view, container, false)
@@ -39,8 +39,8 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (adapter != null) {
-            listView.adapter = adapter
+        if (listAdapter != null) {
+            listView.adapter = listAdapter
         } else {
             loadData()
         }
@@ -93,36 +93,36 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
                 }
 
                 nextStart += size
-                if (adapter == null) {
-                    adapter = AssemblyAdapter(objects)
+                if (listAdapter == null) {
+                    listAdapter = AssemblyListAdapter(objects)
 
-                    headerItemInfo = adapter!!.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
-                    headerItemInfo2 = adapter!!.addHeaderItem(HeaderItemFactory(), "唉，我的小额头呢！")
-                    adapter!!.addItemFactory(UserItemFactory(appContext))
-                    adapter!!.addItemFactory(GameItemFactory(appContext))
-                    footerItemInfo = adapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
-                    footerItemInfo2 = adapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢！")
-                    adapter!!.setLoadMoreItem(LoadMoreItemFactory(this@ListViewFragment))
+                    headerListItemInfo = listAdapter!!.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
+                    headerListItemInfo2 = listAdapter!!.addHeaderItem(HeaderItemFactory(), "唉，我的小额头呢！")
+                    listAdapter!!.addItemFactory(UserItemFactory(appContext))
+                    listAdapter!!.addItemFactory(GameItemFactory(appContext))
+                    footerListItemInfo = listAdapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
+                    footerListItemInfo2 = listAdapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢！")
+                    listAdapter!!.setLoadMoreItem(LoadMoreItemFactory(this@ListViewFragment))
 
-                    listView.adapter = adapter
+                    listView.adapter = listAdapter
                 } else {
-                    adapter!!.addAll(objects)
+                    listAdapter!!.addAll(objects)
 
-                    headerItemInfo2!!.isEnabled = !headerItemInfo2!!.isEnabled
-                    footerItemInfo2!!.isEnabled = !footerItemInfo2!!.isEnabled
+                    headerListItemInfo2!!.isEnabled = !headerListItemInfo2!!.isEnabled
+                    footerListItemInfo2!!.isEnabled = !footerListItemInfo2!!.isEnabled
                 }
 
                 val loadMoreEnd = nextStart >= 100
                 if (loadMoreEnd) {
-                    headerItemInfo!!.isEnabled = false
-                    footerItemInfo!!.isEnabled = false
+                    headerListItemInfo!!.isEnabled = false
+                    footerListItemInfo!!.isEnabled = false
                 }
-                adapter!!.loadMoreFinished(loadMoreEnd)
+                listAdapter!!.loadMoreFinished(loadMoreEnd)
             }
         }.execute("")
     }
 
-    override fun onLoadMore(adapter: AssemblyAdapter) {
+    override fun onLoadMore(listAdapter: AssemblyListAdapter) {
         loadData()
     }
 }

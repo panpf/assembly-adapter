@@ -19,7 +19,7 @@ package me.panpf.adapter;
 import android.view.ViewGroup;
 
 /**
- * AssemblyAdapter 专用的 ItemFactory，负责匹配数据和创建 Item
+ * {@link AssemblyExpandableAdapter} 专用的 ItemFactory，负责匹配数据和创建 Item
  *
  * @param <ITEM> 指定 Item 类型，防止 createAssemblyItem() 方法返回错误的类型
  */

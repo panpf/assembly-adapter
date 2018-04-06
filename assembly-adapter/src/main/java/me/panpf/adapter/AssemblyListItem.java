@@ -25,17 +25,17 @@ import android.view.ViewGroup;
  * Item负责创建、初始化View并设置数据
  * @param <DATA> 指定需要的数据的类型
  */
-public abstract class AssemblyItem<DATA> {
+public abstract class AssemblyListItem<DATA> {
     private View itemView;
     private int position;
     private DATA data;
 
-    public AssemblyItem(int itemLayoutId, ViewGroup parent) {
+    public AssemblyListItem(int itemLayoutId, ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
     }
 
     @SuppressWarnings("WeakerAccess")
-    public AssemblyItem(View itemView) {
+    public AssemblyListItem(View itemView) {
         if (itemView == null) {
             throw new IllegalArgumentException("itemView may not be null");
         }

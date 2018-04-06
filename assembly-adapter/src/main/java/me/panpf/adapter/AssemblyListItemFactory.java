@@ -23,9 +23,9 @@ import android.view.ViewGroup;
  *
  * @param <ITEM> 指定Item类型，防止createAssemblyItem()方法返回错误的类型
  */
-public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> {
+public abstract class AssemblyListItemFactory<ITEM extends AssemblyListItem> {
     private int itemType;
-    private AssemblyAdapter adapter;
+    private AssemblyListAdapter adapter;
 
     /**
      * 获取Item类型
@@ -46,14 +46,14 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> {
     /**
      * 获取Adapter
      */
-    public AssemblyAdapter getAdapter() {
+    public AssemblyListAdapter getAdapter() {
         return adapter;
     }
 
     /**
      * 设置Adapter，此方法由Adapter调用
      */
-    void setAdapter(AssemblyAdapter adapter) {
+    void setAdapter(AssemblyListAdapter adapter) {
         this.adapter = adapter;
     }
 

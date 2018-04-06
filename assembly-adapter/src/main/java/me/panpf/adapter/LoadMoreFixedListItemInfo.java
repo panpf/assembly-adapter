@@ -17,18 +17,18 @@
 package me.panpf.adapter;
 
 /**
- * AssemblyAdapter 专用的加载更多固定尾巴
+ * {@link AssemblyListAdapter} 专用的加载更多固定尾巴
  */
 @SuppressWarnings("WeakerAccess")
-public class LoadMoreFixedItemInfo extends FixedItemInfo {
+public class LoadMoreFixedListItemInfo extends FixedListItemInfo {
 
-    public LoadMoreFixedItemInfo(AssemblyLoadMoreItemFactory itemFactory, Object data, boolean header) {
+    public LoadMoreFixedListItemInfo(AssemblyLoadMoreListItemFactory itemFactory, Object data, boolean header) {
         super(itemFactory, data, header);
     }
 
     @Override
-    public AssemblyLoadMoreItemFactory getItemFactory() {
-        return (AssemblyLoadMoreItemFactory) super.getItemFactory();
+    public AssemblyLoadMoreListItemFactory getItemFactory() {
+        return (AssemblyLoadMoreListItemFactory) super.getItemFactory();
     }
 
     @Override

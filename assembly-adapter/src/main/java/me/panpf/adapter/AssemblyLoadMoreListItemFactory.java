@@ -21,15 +21,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * AssemblyAdapter 专用的加载更多 ItemFactory
+ * {@link AssemblyListAdapter} 专用的加载更多 ItemFactory
  */
-public abstract class AssemblyLoadMoreItemFactory extends AssemblyItemFactory<AssemblyLoadMoreItemFactory.AssemblyLoadMoreItem> {
+public abstract class AssemblyLoadMoreListItemFactory extends AssemblyListItemFactory<AssemblyLoadMoreListItemFactory.AssemblyLoadMoreListItem> {
     private boolean paused;
     private boolean end;
-    private OnLoadMoreListener eventListener;
-    private AssemblyLoadMoreItem loadMoreItem;
+    private OnListLoadMoreListener eventListener;
+    private AssemblyLoadMoreListItem loadMoreItem;
 
-    public AssemblyLoadMoreItemFactory(OnLoadMoreListener eventListener) {
+    public AssemblyLoadMoreListItemFactory(OnListLoadMoreListener eventListener) {
         this.eventListener = eventListener;
     }
 
@@ -67,14 +67,14 @@ public abstract class AssemblyLoadMoreItemFactory extends AssemblyItemFactory<As
         return true;
     }
 
-    public abstract class AssemblyLoadMoreItem<T> extends AssemblyItem<T> {
-        public AssemblyLoadMoreItem(int itemLayoutId, ViewGroup parent) {
+    public abstract class AssemblyLoadMoreListItem<T> extends AssemblyListItem<T> {
+        public AssemblyLoadMoreListItem(int itemLayoutId, ViewGroup parent) {
             super(itemLayoutId, parent);
             loadMoreItem = this;
         }
 
         @SuppressWarnings("unused")
-        public AssemblyLoadMoreItem(View convertView) {
+        public AssemblyLoadMoreListItem(View convertView) {
             super(convertView);
             loadMoreItem = this;
         }
