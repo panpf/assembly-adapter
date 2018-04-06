@@ -20,14 +20,14 @@ class PagerAdapterFragment : Fragment() {
     var headerItemInfo: FixedPagerItemInfo? = null
     var footerItemInfo: FixedPagerItemInfo? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_view_pager, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_view_pager, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewPager = view!!.findViewById(R.id.pager_viewPagerFragment_content) as ViewPager
+        val viewPager = view.findViewById(R.id.pager_viewPagerFragment_content) as ViewPager
 
         val header = Header("我是小额头呀！\n你敢戳我，我就敢消失！哼！", "http://www.bz55.com/uploads/allimg/150605/139-150605153433-50.jpg")
         val dataArray = arrayOf(

@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <me.xiaopan.psts.PagerSlidingTabStrip
+    <me.panpf.pagerid.PagerIndicator
         android:id="@+id/tabStrip_mainActivity_tabs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        app:slidingBlock="@drawable/shape_sliding_block"
+        app:pi_slidingBlock="@drawable/shape_sliding_block"
         android:background="@color/colorPrimary">
         <LinearLayout
             android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                 android:textColor="@color/selector_tab"
                 android:text="PAGER_ADAPTER"/>
         </LinearLayout>
-    </me.xiaopan.psts.PagerSlidingTabStrip>
+    </me.panpf.pagerid.PagerIndicator>
 
     <FrameLayout
         android:layout_width="match_parent"

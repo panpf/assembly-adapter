@@ -13,11 +13,11 @@ import me.panpf.adapter.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
+import me.panpf.adapter.sample.bindView
 import me.panpf.adapter.sample.itemfactory.GameItemFactory
 import me.panpf.adapter.sample.itemfactory.HeaderItemFactory
 import me.panpf.adapter.sample.itemfactory.LoadMoreItemFactory
 import me.panpf.adapter.sample.itemfactory.UserItemFactory
-import me.panpf.adapter.sample.bindView
 import java.util.*
 
 class ListViewFragment : Fragment(), OnLoadMoreListener {
@@ -32,11 +32,11 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
     var footerItemInfo: FixedItemInfo? = null
     var footerItemInfo2: FixedItemInfo? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_list_view, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_list_view, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (adapter != null) {
@@ -47,6 +47,7 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
     }
 
     private fun loadData() {
+        val appContext = context?.applicationContext ?: return
         object : AsyncTask<String, String, List<Any>>() {
 
             override fun doInBackground(vararg params: String): List<Any> {
@@ -97,8 +98,8 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
 
                     headerItemInfo = adapter!!.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
                     headerItemInfo2 = adapter!!.addHeaderItem(HeaderItemFactory(), "唉，我的小额头呢！")
-                    adapter!!.addItemFactory(UserItemFactory(activity.baseContext))
-                    adapter!!.addItemFactory(GameItemFactory(activity.baseContext))
+                    adapter!!.addItemFactory(UserItemFactory(appContext))
+                    adapter!!.addItemFactory(GameItemFactory(appContext))
                     footerItemInfo = adapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
                     footerItemInfo2 = adapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢！")
                     adapter!!.setLoadMoreItem(LoadMoreItemFactory(this@ListViewFragment))

@@ -13,9 +13,9 @@ import android.view.ViewGroup
 import me.panpf.adapter.AssemblyRecyclerAdapter
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.AppInfo
+import me.panpf.adapter.sample.bindView
 import me.panpf.adapter.sample.itemfactory.AppItemFactory
 import me.panpf.adapter.sample.itemfactory.AppListHeaderItemFactory
-import me.panpf.adapter.sample.bindView
 import java.io.File
 import java.util.*
 
@@ -25,11 +25,11 @@ class GridRecyclerViewFragment : Fragment() {
     
     var adapter: AssemblyRecyclerAdapter? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_recycler_view, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_recycler_view, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val gridLayoutManager = GridLayoutManager(activity, 4)
@@ -52,15 +52,11 @@ class GridRecyclerViewFragment : Fragment() {
     }
 
     private fun loadAppList() {
+        val appContext = context?.applicationContext ?: return
         object : AsyncTask<Int, Int, Array<List<AppInfo>>>() {
-            private val context = activity.baseContext
-
-            override fun onPreExecute() {
-                super.onPreExecute()
-            }
 
             override fun doInBackground(vararg params: Int?): Array<List<AppInfo>>? {
-                val packageManager = context.packageManager
+                val packageManager = appContext.packageManager
                 val packageInfoList = packageManager.getInstalledPackages(0)
                 val systemAppList = ArrayList<AppInfo>()
                 val userAppList = ArrayList<AppInfo>()
@@ -95,8 +91,8 @@ class GridRecyclerViewFragment : Fragment() {
                 val systemAppList = appInfoLists[0]
                 val userAppList = appInfoLists[1]
 
-                val systemAppListSize = systemAppList?.size ?: 0
-                val userAppListSize = userAppList?.size ?: 0
+                val systemAppListSize = systemAppList.size
+                val userAppListSize = userAppList.size
 
                 var dataListSize = if (systemAppListSize > 0) systemAppListSize + 1 else 0
                 dataListSize += if (userAppListSize > 0) userAppListSize + 1 else 0

@@ -19,11 +19,11 @@ import me.panpf.adapter.sample.bindView
 class ViewPagerFragment : Fragment() {
     val viewPager: ViewPager by bindView(R.id.pager_viewPagerFragment_content)
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_view_pager, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_view_pager, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val header = Header("我是小额头呀！", "http://img4.imgtn.bdimg.com/it/u=16705507,1328875785&fm=21&gp=0.jpg")

@@ -14,11 +14,11 @@ import me.panpf.adapter.OnRecyclerLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
+import me.panpf.adapter.sample.bindView
 import me.panpf.adapter.sample.itemfactory.GameRecyclerItemFactory
 import me.panpf.adapter.sample.itemfactory.HeaderRecyclerItemFactory
 import me.panpf.adapter.sample.itemfactory.LoadMoreRecyclerItemFactory
 import me.panpf.adapter.sample.itemfactory.UserRecyclerItemFactory
-import me.panpf.adapter.sample.bindView
 import java.util.*
 
 class RecyclerViewFragment : Fragment(), OnRecyclerLoadMoreListener {
@@ -33,11 +33,11 @@ class RecyclerViewFragment : Fragment(), OnRecyclerLoadMoreListener {
     var footerItemInfo: FixedRecyclerItemInfo? = null
     var footerItemInfo2: FixedRecyclerItemInfo? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_recycler_view, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_recycler_view, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -50,6 +50,7 @@ class RecyclerViewFragment : Fragment(), OnRecyclerLoadMoreListener {
     }
 
     private fun loadData() {
+        val appContext = context?.applicationContext ?: return
         object : AsyncTask<String, String, List<Any>>() {
 
             override fun doInBackground(vararg params: String): List<Any> {
@@ -100,8 +101,8 @@ class RecyclerViewFragment : Fragment(), OnRecyclerLoadMoreListener {
 
                     headerItemInfo = adapter!!.addHeaderItem(HeaderRecyclerItemFactory(), "我是小额头呀！")
                     headerItemInfo2 = adapter!!.addHeaderItem(HeaderRecyclerItemFactory(), "唉，我的小额头呢？")
-                    adapter!!.addItemFactory(UserRecyclerItemFactory(activity.baseContext))
-                    adapter!!.addItemFactory(GameRecyclerItemFactory(activity.baseContext))
+                    adapter!!.addItemFactory(UserRecyclerItemFactory(appContext))
+                    adapter!!.addItemFactory(GameRecyclerItemFactory(appContext))
                     footerItemInfo = adapter!!.addFooterItem(HeaderRecyclerItemFactory(), "我是小尾巴呀！")
                     footerItemInfo2 = adapter!!.addFooterItem(HeaderRecyclerItemFactory(), "唉，我的小尾巴呢？")
                     adapter!!.setLoadMoreItem(LoadMoreRecyclerItemFactory(this@RecyclerViewFragment))

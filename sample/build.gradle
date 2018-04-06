@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "me.panpf.adapter.sample"
-        minSdkVersion MIN_SDK_VERSION_SAMPLE.toInteger()
+        minSdkVersion MIN_SDK_VERSION.toInteger()
         targetSdkVersion TARGET_SDK_VERSION.toInteger()
         versionCode VERSION_CODE.toInteger()
         versionName "${VERSION_NAME}"
@@ -28,8 +28,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.android.support:support-v4:${SUPPORT_VERSION}"
-    implementation "me.xiaopan:pagerslidingtabstrip:${PAGER_SLIDING_TAB_STRIP_VERSION}"
+    implementation "com.android.support:support-fragment:${SUPPORT_VERSION}"
+    implementation "me.panpf:pager-indicator:${PAGER_INDICATOR}"
     implementation "me.panpf:sketch:${SKETCH_VERSION}"
     implementation project(':assembly-adapter')
 }
