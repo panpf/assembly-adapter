@@ -1,27 +1,8 @@
-/*
- * Copyright (C) 2017 Peng fei Pan <sky@panpf.me>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package me.panpf.adapter;
 
-package me.panpf.adapter.list;
-
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,38 +10,58 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * 通用组合式 BaseAdapter，支持组合式多 ItemType，支持头、尾巴以及加载更多
- */
-public class AssemblyListAdapter extends BaseAdapter {
-    private static final String TAG = "AssemblyListAdapter";
+import me.panpf.adapter.more.LoadMoreFixedItemInfo;
+import me.panpf.adapter.more.LoadMoreItemFactoryBridle;
 
-    private final Object itemListLock = new Object();
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class ItemStorage {
+
+    private static final String TAG = "ItemStorage";
+
+    @NonNull
     private final Object headerItemListLock = new Object();
+    @NonNull
+    private final Object itemListLock = new Object();
+    @NonNull
     private final Object itemFactoryListLock = new Object();
+    @NonNull
     private final Object footerItemListLock = new Object();
+
+    @NonNull
+    private AssemblyAdapter adapter;
 
     private int itemTypeIndex = 0;
     private int headerItemPosition;
     private int footerItemPosition;
     private boolean itemFactoryLocked;
-    private List dataList;
-    private ArrayList<FixedListItemInfo> headerItemList;
-    private ArrayList<FixedListItemInfo> footerItemList;
-    private ArrayList<AssemblyListItemFactory> itemFactoryList;
-    private SparseArray<Object> itemFactoryArray;
 
-    private LoadMoreFixedListItemInfo loadMoreFixedListItemInfo;
+    @Nullable
+    private ArrayList<FixedItemInfo> headerItemList;
+    @Nullable
+    private List dataList;
+    @Nullable
+    private ArrayList<FixedItemInfo> footerItemList;
+    @Nullable
+    private LoadMoreFixedItemInfo loadMoreFixedItemInfo;
+
+    @Nullable
+    private ArrayList<ItemFactory> itemFactoryList;
+    @Nullable
+    private SparseArray<Object> itemFactoryArray;
 
     private boolean notifyOnChange = true;
 
-    @SuppressWarnings("unused")
-    public AssemblyListAdapter(List dataList) {
+    public ItemStorage(@NonNull AssemblyAdapter adapter) {
+        this.adapter = adapter;
+    }
+
+    public ItemStorage(@NonNull AssemblyAdapter adapter, @Nullable List dataList) {
+        this.adapter = adapter;
         this.dataList = dataList;
     }
 
-    @SuppressWarnings("unused")
-    public AssemblyListAdapter(Object[] dataArray) {
+    public ItemStorage(@NonNull AssemblyAdapter adapter, @Nullable Object[] dataArray) {
+        this.adapter = adapter;
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
             Collections.addAll(dataList, dataArray);
@@ -68,46 +69,46 @@ public class AssemblyListAdapter extends BaseAdapter {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的 AssemblyItemFactory
+     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
      */
-    @SuppressWarnings("unused")
-    public FixedListItemInfo addHeaderItem(AssemblyListItemFactory headerFactory, Object data) {
-        if (headerFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "headerFactory is nll or item factory locked");
-            return null;
+    @NonNull
+    public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
+        //noinspection ConstantConditions
+        if (itemFactory == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemFactory is null or item factory locked");
         }
 
-        headerFactory.setAdapter(this);
-        headerFactory.setItemType(itemTypeIndex++);
+        itemFactory.setAdapter(adapter);
+        itemFactory.setItemType(itemTypeIndex++);
 
-        FixedListItemInfo headerItemInfo = new FixedListItemInfo(headerFactory, data, true);
-        headerItemInfo.setPosition(headerItemPosition++);
+        FixedItemInfo fixedItemInfo = new FixedItemInfo(itemFactory, data, true);
+        fixedItemInfo.setPosition(headerItemPosition++);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
-        itemFactoryArray.put(headerFactory.getItemType(), headerItemInfo);
+        itemFactoryArray.put(itemFactory.getItemType(), fixedItemInfo);
 
         synchronized (headerItemListLock) {
             if (headerItemList == null) {
-                headerItemList = new ArrayList<FixedListItemInfo>(2);
+                headerItemList = new ArrayList<FixedItemInfo>(2);
             }
-            headerItemList.add(headerItemInfo);
+            headerItemList.add(fixedItemInfo);
         }
 
-        return headerItemInfo;
+        return fixedItemInfo;
     }
 
     /**
-     * 添加一个用来处理并显示 dataList 中的数据的 AssemblyItemFactory
+     * 添加一个用来处理并显示 dataList 中的数据的 ItemFactory
      */
-    public void addItemFactory(AssemblyListItemFactory itemFactory) {
+    public void addItemFactory(@NonNull ItemFactory itemFactory) {
+        //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "itemFactory is nll or item factory locked");
-            return;
+            throw new IllegalArgumentException("itemFactory is null or item factory locked");
         }
 
-        itemFactory.setAdapter(this);
+        itemFactory.setAdapter(adapter);
         itemFactory.setItemType(itemTypeIndex++);
 
         if (itemFactoryArray == null) {
@@ -117,84 +118,84 @@ public class AssemblyListAdapter extends BaseAdapter {
 
         synchronized (itemFactoryListLock) {
             if (itemFactoryList == null) {
-                itemFactoryList = new ArrayList<AssemblyListItemFactory>(5);
+                itemFactoryList = new ArrayList<ItemFactory>(5);
             }
             itemFactoryList.add(itemFactory);
         }
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 AssemblyItemFactory
+     * 添加一个将按添加顺序显示在列表尾部的 ItemFactory
      */
-    @SuppressWarnings("unused")
-    public FixedListItemInfo addFooterItem(AssemblyListItemFactory footerFactory, Object data) {
-        if (footerFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "footerFactory is nll or item factory locked");
-            return null;
+    @NonNull
+    public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
+        //noinspection ConstantConditions
+        if (itemFactory == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemFactory is null or item factory locked");
         }
 
-        footerFactory.setAdapter(this);
-        footerFactory.setItemType(itemTypeIndex++);
+        itemFactory.setAdapter(adapter);
+        itemFactory.setItemType(itemTypeIndex++);
 
-        FixedListItemInfo footerItemInfo = new FixedListItemInfo(footerFactory, data, false);
-        footerItemInfo.setPosition(footerItemPosition++);
+        FixedItemInfo fixedItemInfo = new FixedItemInfo(itemFactory, data, false);
+        fixedItemInfo.setPosition(footerItemPosition++);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
-        itemFactoryArray.put(footerFactory.getItemType(), footerItemInfo);
+        itemFactoryArray.put(itemFactory.getItemType(), fixedItemInfo);
 
         synchronized (footerItemListLock) {
             if (footerItemList == null) {
-                footerItemList = new ArrayList<FixedListItemInfo>(2);
+                footerItemList = new ArrayList<FixedItemInfo>(2);
             }
-            footerItemList.add(footerItemInfo);
+            footerItemList.add(fixedItemInfo);
         }
 
-        return footerItemInfo;
+        return fixedItemInfo;
     }
 
     /**
      * 设置一个将显示在列表最后（在 Footer 的后面）的加载更多尾巴
      */
-    @SuppressWarnings({"unused", "WeakerAccess"})
-    public LoadMoreFixedListItemInfo setLoadMoreItem(AssemblyLoadMoreListItemFactory loadMoreItemFactory, Object data) {
-        if (loadMoreItemFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "loadMoreItemFactory is null or item factory locked");
-            return null;
+    @NonNull
+    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory, @Nullable Object data) {
+        //noinspection ConstantConditions
+        if (itemFactory == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemFactory is null or item factory locked");
         }
 
-        loadMoreItemFactory.setAdapter(this);
-        if (this.loadMoreFixedListItemInfo != null) {
-            loadMoreItemFactory.setItemType(this.loadMoreFixedListItemInfo.getItemFactory().getItemType());
+        itemFactory.setAdapter(adapter);
+        if (this.loadMoreFixedItemInfo != null) {
+            itemFactory.setItemType(this.loadMoreFixedItemInfo.getItemFactory().getItemType());
         } else {
-            loadMoreItemFactory.setItemType(itemTypeIndex++);
+            itemFactory.setItemType(itemTypeIndex++);
         }
 
-        loadMoreItemFactory.loadMoreFinished(false);
-        LoadMoreFixedListItemInfo loadMoreFixedListItemInfo = new LoadMoreFixedListItemInfo(loadMoreItemFactory, data, false);
+        itemFactory.loadMoreFinished(false);
+        LoadMoreFixedItemInfo loadMoreFixedItemInfo = new LoadMoreFixedItemInfo(itemFactory, data, false);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
-        itemFactoryArray.put(loadMoreItemFactory.getItemType(), loadMoreFixedListItemInfo);
+        itemFactoryArray.put(itemFactory.getItemType(), loadMoreFixedItemInfo);
 
-        return this.loadMoreFixedListItemInfo = loadMoreFixedListItemInfo;
+        return this.loadMoreFixedItemInfo = loadMoreFixedItemInfo;
     }
 
     /**
      * 设置一个将显示在列表最后（在 Footer 的后面）的加载更多尾巴
      */
-    @SuppressWarnings("unused")
-    public LoadMoreFixedListItemInfo setLoadMoreItem(AssemblyLoadMoreListItemFactory loadMoreItemFactory) {
-        return setLoadMoreItem(loadMoreItemFactory, null);
+    @NonNull
+    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory) {
+        return setLoadMoreItem(itemFactory, null);
     }
 
     /**
      * 批量添加数据
      */
-    @SuppressWarnings("unused")
-    public void addAll(Collection collection) {
+    public void addAll(@NonNull Collection collection) {
+        //noinspection ConstantConditions
         if (collection == null || collection.size() == 0) {
             return;
         }
@@ -207,15 +208,15 @@ public class AssemblyListAdapter extends BaseAdapter {
         }
 
         if (notifyOnChange) {
-            notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 批量添加数据
      */
-    @SuppressWarnings("unused")
-    public void addAll(Object... items) {
+    public void addAll(@NonNull Object... items) {
+        //noinspection ConstantConditions
         if (items == null || items.length == 0) {
             return;
         }
@@ -227,15 +228,14 @@ public class AssemblyListAdapter extends BaseAdapter {
         }
 
         if (notifyOnChange) {
-            notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 插入一条数据
      */
-    @SuppressWarnings("unused")
-    public void insert(Object object, int index) {
+    public void insert(@Nullable Object object, int index) {
         if (object == null) {
             return;
         }
@@ -248,15 +248,14 @@ public class AssemblyListAdapter extends BaseAdapter {
         }
 
         if (notifyOnChange) {
-            notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 删除一条数据
      */
-    @SuppressWarnings("unused")
-    public void remove(Object object) {
+    public void remove(@Nullable Object object) {
         if (object == null) {
             return;
         }
@@ -267,14 +266,13 @@ public class AssemblyListAdapter extends BaseAdapter {
         }
 
         if (notifyOnChange) {
-            notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 清空数据
      */
-    @SuppressWarnings("unused")
     public void clear() {
         synchronized (itemListLock) {
             if (dataList != null) {
@@ -283,15 +281,14 @@ public class AssemblyListAdapter extends BaseAdapter {
         }
 
         if (notifyOnChange) {
-            notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 对数据排序
      */
-    @SuppressWarnings("unused")
-    public void sort(Comparator comparator) {
+    public void sort(@NonNull Comparator comparator) {
         synchronized (itemListLock) {
             if (dataList != null) {
                 Collections.sort(dataList, comparator);
@@ -299,30 +296,16 @@ public class AssemblyListAdapter extends BaseAdapter {
         }
 
         if (notifyOnChange) {
-            notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 设置禁用加载更多
      */
-    @SuppressWarnings("unused")
     public void setDisableLoadMore(boolean disableLoadMore) {
-        if (loadMoreFixedListItemInfo != null) {
-            loadMoreFixedListItemInfo.setEnabled(!disableLoadMore);
-        }
-    }
-
-    /**
-     * 设置加载更多是否已结束，已结束会显示结束的文案并且不再触发加载更多
-     *
-     * @deprecated 使用 loadMoreFinished(boolean) 替代
-     */
-    @SuppressWarnings("unused")
-    @Deprecated
-    public void setLoadMoreEnd(boolean loadMoreEnd) {
-        if (loadMoreFixedListItemInfo != null) {
-            loadMoreFixedListItemInfo.loadMoreFinished(loadMoreEnd);
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.setEnabled(!disableLoadMore);
         }
     }
 
@@ -331,50 +314,52 @@ public class AssemblyListAdapter extends BaseAdapter {
      *
      * @param loadMoreEnd 全部加载完毕，为 true 会显示结束的文案并且不再触发加载更多
      */
-    @SuppressWarnings("unused")
     public void loadMoreFinished(boolean loadMoreEnd) {
-        if (loadMoreFixedListItemInfo != null) {
-            loadMoreFixedListItemInfo.loadMoreFinished(loadMoreEnd);
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFinished(loadMoreEnd);
         }
     }
 
     /**
      * 加载更多失败的时候调用此方法显示错误提示，并可点击重新加载
      */
-    @SuppressWarnings("unused")
     public void loadMoreFailed() {
-        if (loadMoreFixedListItemInfo != null) {
-            loadMoreFixedListItemInfo.loadMoreFailed();
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFailed();
         }
     }
 
     /**
      * header状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    void headerEnabledChanged(FixedListItemInfo headerItemInfo) {
-        if (headerItemInfo.getItemFactory().getAdapter() != this) {
+    public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
+        //noinspection ConstantConditions
+        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != this) {
             return;
         }
 
-        if (headerItemInfo.isEnabled()) {
+        if (fixedItemInfo.isEnabled()) {
             synchronized (headerItemListLock) {
-                headerItemList.add(headerItemInfo);
-                Collections.sort(headerItemList, new Comparator<FixedListItemInfo>() {
+                if (headerItemList == null) {
+                    headerItemList = new ArrayList<FixedItemInfo>(2);
+                }
+                headerItemList.add(fixedItemInfo);
+                Collections.sort(headerItemList, new Comparator<FixedItemInfo>() {
                     @Override
-                    public int compare(FixedListItemInfo lhs, FixedListItemInfo rhs) {
+                    public int compare(FixedItemInfo lhs, FixedItemInfo rhs) {
                         return lhs.getPosition() - rhs.getPosition();
                     }
                 });
             }
 
             if (notifyOnChange) {
-                notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
         } else {
             synchronized (headerItemListLock) {
-                if (headerItemList.remove(headerItemInfo)) {
+                if (headerItemList != null && headerItemList.remove(fixedItemInfo)) {
                     if (notifyOnChange) {
-                        notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -384,81 +369,35 @@ public class AssemblyListAdapter extends BaseAdapter {
     /**
      * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    void footerEnabledChanged(FixedListItemInfo footerItemInfo) {
-        if (footerItemInfo.getItemFactory().getAdapter() != this) {
+    public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
+        //noinspection ConstantConditions
+        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != this) {
             return;
         }
 
-        if (footerItemInfo.isEnabled()) {
+        if (fixedItemInfo.isEnabled()) {
             synchronized (footerItemListLock) {
-                footerItemList.add(footerItemInfo);
-                Collections.sort(footerItemList, new Comparator<FixedListItemInfo>() {
+                if (footerItemList == null) {
+                    footerItemList = new ArrayList<FixedItemInfo>(2);
+                }
+                footerItemList.add(fixedItemInfo);
+                Collections.sort(footerItemList, new Comparator<FixedItemInfo>() {
                     @Override
-                    public int compare(FixedListItemInfo lhs, FixedListItemInfo rhs) {
+                    public int compare(FixedItemInfo lhs, FixedItemInfo rhs) {
                         return lhs.getPosition() - rhs.getPosition();
                     }
                 });
             }
 
             if (notifyOnChange) {
-                notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
         } else {
             synchronized (footerItemListLock) {
-                if (footerItemList.remove(footerItemInfo)) {
+                if (footerItemList != null && footerItemList.remove(fixedItemInfo)) {
                     if (notifyOnChange) {
-                        notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
-                }
-            }
-        }
-    }
-
-    /**
-     * 删除一个 HeaderItem
-     *
-     * @deprecated Use FixedItemInfo.setEnabled(false) instead
-     */
-    @SuppressWarnings("unused")
-    @Deprecated
-    public void removeHeaderItem(FixedListItemInfo headerItemInfo) {
-        if (headerItemInfo == null) {
-            return;
-        }
-
-        if (headerItemInfo.getItemFactory().getAdapter() != this) {
-            return;
-        }
-
-        synchronized (headerItemListLock) {
-            if (headerItemList != null && headerItemList.remove(headerItemInfo)) {
-                if (notifyOnChange) {
-                    notifyDataSetChanged();
-                }
-            }
-        }
-    }
-
-    /**
-     * 删除一个 FooterItem
-     *
-     * @deprecated Use FixedItemInfo.setEnabled(false) instead
-     */
-    @SuppressWarnings("unused")
-    @Deprecated
-    public void removeFooterItem(FixedListItemInfo footerItemInfo) {
-        if (footerItemInfo == null) {
-            return;
-        }
-
-        if (footerItemInfo.getItemFactory().getAdapter() != this) {
-            return;
-        }
-
-        synchronized (footerItemListLock) {
-            if (footerItemList != null && footerItemList.remove(footerItemInfo)) {
-                if (notifyOnChange) {
-                    notifyDataSetChanged();
                 }
             }
         }
@@ -467,31 +406,31 @@ public class AssemblyListAdapter extends BaseAdapter {
     /**
      * 获取 Header 列表
      */
-    @SuppressWarnings("unused")
-    public List<FixedListItemInfo> getHeaderItemList() {
+    @Nullable
+    public List<FixedItemInfo> getHeaderItemList() {
         return headerItemList;
     }
 
     /**
      * 获取 ItemFactory 列表
      */
-    @SuppressWarnings("unused")
-    public List<AssemblyListItemFactory> getItemFactoryList() {
+    @Nullable
+    public List<ItemFactory> getItemFactoryList() {
         return itemFactoryList;
     }
 
     /**
      * 获取 Footer 列表
      */
-    @SuppressWarnings("unused")
-    public List<FixedListItemInfo> getFooterItemList() {
+    @Nullable
+    public List<FixedItemInfo> getFooterItemList() {
         return footerItemList;
     }
 
     /**
      * 获取数据列表
      */
-    @SuppressWarnings("unused")
+    @Nullable
     public List getDataList() {
         return dataList;
     }
@@ -499,21 +438,19 @@ public class AssemblyListAdapter extends BaseAdapter {
     /**
      * 设置数据列表
      */
-    @SuppressWarnings("unused")
-    public void setDataList(List dataList) {
+    public void setDataList(@Nullable List dataList) {
         synchronized (itemListLock) {
             this.dataList = dataList;
         }
 
         if (notifyOnChange) {
-            notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 获取列表头的个数
      */
-    @SuppressWarnings("WeakerAccess")
     public int getHeaderItemCount() {
         return headerItemList != null ? headerItemList.size() : 0;
     }
@@ -521,7 +458,6 @@ public class AssemblyListAdapter extends BaseAdapter {
     /**
      * 获取 ItemFactory 的个数
      */
-    @SuppressWarnings("WeakerAccess")
     public int getItemFactoryCount() {
         return itemFactoryList != null ? itemFactoryList.size() : 0;
     }
@@ -529,7 +465,6 @@ public class AssemblyListAdapter extends BaseAdapter {
     /**
      * 获取列表头的个数
      */
-    @SuppressWarnings("WeakerAccess")
     public int getFooterItemCount() {
         return footerItemList != null ? footerItemList.size() : 0;
     }
@@ -537,15 +472,13 @@ public class AssemblyListAdapter extends BaseAdapter {
     /**
      * 是否有加载更多尾巴
      */
-    @SuppressWarnings("WeakerAccess")
     public boolean hasLoadMoreFooter() {
-        return loadMoreFixedListItemInfo != null && loadMoreFixedListItemInfo.isEnabled();
+        return loadMoreFixedItemInfo != null && loadMoreFixedItemInfo.isEnabled();
     }
 
     /**
      * 获取数据列表的长度
      */
-    @SuppressWarnings("WeakerAccess")
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
     }
@@ -553,7 +486,6 @@ public class AssemblyListAdapter extends BaseAdapter {
     /**
      * 数据变更时是否立即刷新列表
      */
-    @SuppressWarnings({"unused", "WeakerAccess"})
     public boolean isNotifyOnChange() {
         return notifyOnChange;
     }
@@ -562,7 +494,6 @@ public class AssemblyListAdapter extends BaseAdapter {
      * 设置当数据发生改变时是否立即调用 notifyDataSetChanged() 刷新列表，默认 true。
      * 当你需要连续多次修改数据的时候，你应该将 notifyOnChange 设为 false，然后在最后主动调用 notifyDataSetChanged() 刷新列表，最后再将 notifyOnChange 设为 true
      */
-    @SuppressWarnings("unused")
     public void setNotifyOnChange(boolean notifyOnChange) {
         this.notifyOnChange = notifyOnChange;
     }
@@ -570,7 +501,6 @@ public class AssemblyListAdapter extends BaseAdapter {
     /**
      * 获取在各自区域的位置
      */
-    @SuppressWarnings("unused")
     public int getPositionInPart(int position) {
         // 头
         int headerItemCount = getHeaderItemCount();
@@ -604,7 +534,6 @@ public class AssemblyListAdapter extends BaseAdapter {
         throw new IllegalArgumentException("illegal position: " + position);
     }
 
-    @Override
     public int getCount() {
         int headerItemCount = getHeaderItemCount();
         int dataCount = getDataCount();
@@ -617,7 +546,7 @@ public class AssemblyListAdapter extends BaseAdapter {
         }
     }
 
-    @Override
+    @Nullable
     public Object getItem(int position) {
         // 头
         int headerItemCount = getHeaderItemCount();
@@ -649,47 +578,44 @@ public class AssemblyListAdapter extends BaseAdapter {
 
         // 加载更多尾巴
         if (dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
-            return loadMoreFixedListItemInfo.getData();
+            return loadMoreFixedItemInfo != null ? loadMoreFixedItemInfo.getData() : null;
         }
 
         return null;
     }
 
     @Nullable
-    public Object getHeaderItem(int positionInHeaderList){
+    public Object getHeaderItem(int positionInHeaderList) {
         return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
     }
 
     @Nullable
-    public Object getDataItem(int positionInDataList){
+    public Object getDataItem(int positionInDataList) {
         return dataList != null ? dataList.get(positionInDataList) : null;
     }
 
     @Nullable
-    public Object getFooterItem(int positionInFooterList){
+    public Object getFooterItem(int positionInFooterList) {
         return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
     public int getViewTypeCount() {
+        // 只要访问了 getViewTypeCount() 方法就认为开始显示了，需要锁定 itemFactory 列表
         itemFactoryLocked = true;
-        return itemTypeIndex > 0 ? itemTypeIndex : super.getViewTypeCount();
+        // 1 来自 BaseAdapter.getViewTypeCount()
+        return itemTypeIndex > 0 ? itemTypeIndex : 1;
     }
 
-    @Override
     public int getItemViewType(int position) {
+        // 只要访问了 getItemViewType(int) 方法就认为开始显示了，需要锁定 itemFactory 列表
         itemFactoryLocked = true;
 
-        // 头
         int headerItemCount = getHeaderItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
-        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+
+        // 头
+        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
             return headerItemList.get(positionInHeaderList).getItemFactory().getItemType();
@@ -699,11 +625,11 @@ public class AssemblyListAdapter extends BaseAdapter {
         int dataCount = getDataCount();
         int dataStartPosition = headerEndPosition + 1;
         int dataEndPosition = headerEndPosition + dataCount;
-        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+        if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = getDataItem(positionInDataList);
 
-            AssemblyListItemFactory itemFactory;
+            ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
                 itemFactory = itemFactoryList.get(w);
                 if (itemFactory.isTarget(dataObject)) {
@@ -711,7 +637,69 @@ public class AssemblyListAdapter extends BaseAdapter {
                 }
             }
 
-            throw new IllegalStateException("Didn't find suitable AssemblyItemFactory. " +
+            throw new IllegalStateException("Didn't find suitable ItemFactory. " +
+                    "positionInDataList=" + positionInDataList + ", " +
+                    "dataObject=" + (dataObject != null ? dataObject.toString() : "null"));
+        }
+
+        // 尾巴
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            int positionInFooterList = position - headerItemCount - dataCount;
+            return footerItemList.get(positionInFooterList).getItemFactory().getItemType();
+        }
+
+        // 加载更多尾巴
+        if (loadMoreFixedItemInfo != null && dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
+            return loadMoreFixedItemInfo.getItemFactory().getItemType();
+        }
+
+        throw new IllegalStateException("Not found match viewType, position: " + position);
+    }
+
+    /**
+     * 根据 view 类型获取 itemFactory
+     *
+     * @param viewType view 类型，参见 {@link #getItemViewType(int)} 方法
+     * @return null：没有；{@link ItemFactory} 或 {@link FixedItemInfo}
+     */
+    public Object getItemFactoryByViewType(int viewType) {
+        return itemFactoryArray != null ? itemFactoryArray.get(viewType) : null;
+    }
+
+    /**
+     * 获取指定位置占几列
+     */
+    public int getSpanSize(int position) {
+        // 头
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            //noinspection UnnecessaryLocalVariable
+            int positionInHeaderList = position;
+            return headerItemList.get(positionInHeaderList).getItemFactory().getSpanSize();
+        }
+
+        // 数据
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            int positionInDataList = position - headerItemCount;
+            Object dataObject = getDataItem(positionInDataList);
+
+            ItemFactory itemFactory;
+            for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
+                itemFactory = itemFactoryList.get(w);
+                if (itemFactory.isTarget(dataObject)) {
+                    return itemFactory.getSpanSize();
+                }
+            }
+
+            throw new IllegalStateException("Didn't find suitable ItemFactory. " +
                     "positionInDataList=" + positionInDataList + ", " +
                     "dataObject=" + (dataObject != null ? dataObject.getClass().getName() : "null"));
         }
@@ -720,55 +708,16 @@ public class AssemblyListAdapter extends BaseAdapter {
         int footerItemCount = getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
-        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).getItemFactory().getItemType();
+            return footerItemList.get(positionInFooterList).getItemFactory().getSpanSize();
         }
 
         // 加载更多尾巴
-        if (dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
-            return loadMoreFixedListItemInfo.getItemFactory().getItemType();
+        if (loadMoreFixedItemInfo != null && dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
+            return loadMoreFixedItemInfo.getItemFactory().getSpanSize();
         }
 
-        throw new IllegalStateException("not found match viewType, position: " + position);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        AssemblyListItem assemblyListItem;
-        if (convertView == null) {
-            assemblyListItem = createItem(parent, getItemViewType(position));
-            convertView = assemblyListItem.getItemView();
-            convertView.setTag(assemblyListItem);
-        } else {
-            assemblyListItem = (AssemblyListItem) convertView.getTag();
-        }
-        bindItem(assemblyListItem, position);
-        return convertView;
-    }
-
-    private AssemblyListItem createItem(ViewGroup parent, int viewType) {
-        Object item = itemFactoryArray.get(viewType);
-
-        // Item
-        if (item instanceof AssemblyListItemFactory) {
-            AssemblyListItemFactory itemFactory = (AssemblyListItemFactory) item;
-            return itemFactory.dispatchCreateAssemblyItem(parent);
-        }
-
-        // 头或尾巴或加载更多尾巴
-        if (item instanceof FixedListItemInfo) {
-            FixedListItemInfo fixedListItemInfo = (FixedListItemInfo) item;
-            return fixedListItemInfo.getItemFactory().dispatchCreateAssemblyItem(parent);
-        }
-
-        throw new IllegalStateException("unknown viewType: " + viewType + ", " +
-                "itemFactory: " + (item != null ? item.getClass().getName() : "null"));
-    }
-
-    private void bindItem(AssemblyListItem assemblyListItem, int position) {
-        //noinspection unchecked
-        assemblyListItem.setData(position, getItem(position));
+        return 1;
     }
 }

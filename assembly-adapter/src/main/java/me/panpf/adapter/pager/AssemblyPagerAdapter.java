@@ -32,6 +32,7 @@ import java.util.List;
 /**
  * 通用组合式PagerAdapter，支持组合式多ItemType，支持头、尾巴
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class AssemblyPagerAdapter extends PagerAdapter {
     private static final String TAG = "AssemblyPagerAdapter";
 
@@ -50,12 +51,10 @@ public class AssemblyPagerAdapter extends PagerAdapter {
 
     private boolean notifyOnChange = true;
 
-    @SuppressWarnings("unused")
     public AssemblyPagerAdapter(List dataList) {
         this.dataList = dataList;
     }
 
-    @SuppressWarnings("unused")
     public AssemblyPagerAdapter(Object[] dataArray) {
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
@@ -66,7 +65,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 添加一个将按添加顺序显示在列表头部的AssemblyPagerItemFactory
      */
-    @SuppressWarnings("unused")
     public FixedPagerItemInfo addHeaderItem(AssemblyPagerItemFactory headerFactory, Object data) {
         if (headerFactory == null || itemFactoryLocked) {
             Log.w(TAG, "headerFactory is nll or locked");
@@ -86,7 +84,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
         return headerItemInfo;
     }
 
-    @SuppressWarnings("unused")
     public void addItemFactory(AssemblyPagerItemFactory itemFactory) {
         if (itemFactory == null || itemFactoryLocked) {
             Log.w(TAG, "itemFactory is nll or locked");
@@ -106,7 +103,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 添加一个将按添加顺序显示在列表尾部的AssemblyPagerItemFactory
      */
-    @SuppressWarnings("unused")
     public FixedPagerItemInfo addFooterItem(AssemblyPagerItemFactory footerFactory, Object data) {
         if (footerFactory == null || itemFactoryLocked) {
             Log.w(TAG, "footerFactory is nll or locked");
@@ -130,7 +126,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 批量添加数据
      */
-    @SuppressWarnings("unused")
     public void addAll(Collection collection) {
         if (collection == null || collection.size() == 0) {
             return;
@@ -151,7 +146,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 批量添加数据
      */
-    @SuppressWarnings("unused")
     public void addAll(Object... items) {
         if (items == null || items.length == 0) {
             return;
@@ -171,7 +165,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 插入一条数据
      */
-    @SuppressWarnings("unused")
     public void insert(Object object, int index) {
         if (object == null) {
             return;
@@ -192,7 +185,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 删除一条数据
      */
-    @SuppressWarnings("unused")
     public void remove(Object object) {
         if (object == null) {
             return;
@@ -211,7 +203,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 清空数据
      */
-    @SuppressWarnings("unused")
     public void clear() {
         synchronized (itemListLock) {
             if (dataList != null) {
@@ -227,7 +218,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 对数据排序
      */
-    @SuppressWarnings("unused")
     public void sort(Comparator comparator) {
         synchronized (itemListLock) {
             if (dataList != null) {
@@ -311,7 +301,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      *
      * @deprecated Use FixedItemInfo.setEnabled(false) instead
      */
-    @SuppressWarnings("unused")
     @Deprecated
     public void removeHeaderItem(FixedPagerItemInfo headerItemInfo) {
         if (headerItemInfo == null) {
@@ -336,7 +325,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      *
      * @deprecated Use FixedItemInfo.setEnabled(false) instead
      */
-    @SuppressWarnings("unused")
     @Deprecated
     public void removeFooterItem(FixedPagerItemInfo footerItemInfo) {
         if (footerItemInfo == null) {
@@ -359,7 +347,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取Header列表
      */
-    @SuppressWarnings("unused")
     public List<FixedPagerItemInfo> getHeaderItemList() {
         return headerItemList;
     }
@@ -367,7 +354,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取ItemFactory列表
      */
-    @SuppressWarnings("unused")
     public List<AssemblyPagerItemFactory> getItemFactoryList() {
         return itemFactoryList;
     }
@@ -375,7 +361,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取Footer列表
      */
-    @SuppressWarnings("unused")
     public List<FixedPagerItemInfo> getFooterItemList() {
         return footerItemList;
     }
@@ -383,7 +368,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取数据列表
      */
-    @SuppressWarnings("unused")
     public List getDataList() {
         return dataList;
     }
@@ -391,7 +375,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 设置数据列表
      */
-    @SuppressWarnings("unused")
     public void setDataList(List dataList) {
         synchronized (itemListLock) {
             this.dataList = dataList;
@@ -405,7 +388,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取列表头的个数
      */
-    @SuppressWarnings("WeakerAccess")
     public int getHeaderItemCount() {
         return headerItemList != null ? headerItemList.size() : 0;
     }
@@ -413,7 +395,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取ItemFactory的个数
      */
-    @SuppressWarnings({"WeakerAccess", "unused"})
     public int getItemFactoryCount() {
         return itemFactoryList != null ? itemFactoryList.size() : 0;
     }
@@ -421,7 +402,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取列表头的个数
      */
-    @SuppressWarnings("WeakerAccess")
     public int getFooterItemCount() {
         return footerItemList != null ? footerItemList.size() : 0;
     }
@@ -429,7 +409,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取数据列表的长度
      */
-    @SuppressWarnings("WeakerAccess")
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
     }
@@ -437,7 +416,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 数据变更时是否立即刷新列表
      */
-    @SuppressWarnings({"unused", "WeakerAccess"})
     public boolean isNotifyOnChange() {
         return notifyOnChange;
     }
@@ -446,7 +424,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 设置当数据源发生改变时是否立即调用notifyDataSetChanged()刷新列表，默认true。
      * 当你需要连续多次修改数据的时候，你应该将notifyOnChange设为false，然后在最后主动调用notifyDataSetChanged()刷新列表，最后再将notifyOnChange设为true
      */
-    @SuppressWarnings("unused")
     public void setNotifyOnChange(boolean notifyOnChange) {
         this.notifyOnChange = notifyOnChange;
     }
@@ -454,7 +431,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     /**
      * 获取在各自区域的位置
      */
-    @SuppressWarnings("unused")
     public int getPositionInPart(int position) {
         // 头
         int headerItemCount = getHeaderItemCount();

@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * 通用组合式FragmentPagerAdapter，支持组合式多ItemType，支持头、尾巴
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = "AssemblyFragmentPagerAdapter";
     private List dataList;
@@ -40,13 +40,11 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<FixedFragmentItemInfo> footerItemList;
     private ArrayList<AssemblyFragmentItemFactory> itemFactoryList;
 
-    @SuppressWarnings("unused")
     public AssemblyFragmentPagerAdapter(FragmentManager fm, List dataList) {
         super(fm);
         this.dataList = dataList;
     }
 
-    @SuppressWarnings("unused")
     public AssemblyFragmentPagerAdapter(FragmentManager fm, Object[] dataArray) {
         super(fm);
         if (dataArray != null && dataArray.length > 0) {
@@ -59,7 +57,6 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
      * 添加一个将按添加顺序显示在列表头部的AssemblyFragmentItemFactory
      */
     @SuppressLint("LongLogTag")
-    @SuppressWarnings("unused")
     public void addHeaderItem(AssemblyFragmentItemFactory headerFactory, Object data) {
         if (headerFactory == null || itemFactoryLocked) {
             Log.w(TAG, "headerFactory is nll or locked");
@@ -75,7 +72,6 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     @SuppressLint("LongLogTag")
-    @SuppressWarnings("unused")
     public void addItemFactory(AssemblyFragmentItemFactory itemFactory) {
         if(itemFactory == null || itemFactoryLocked){
             Log.w(TAG, "itemFactory is nll or locked");
@@ -94,7 +90,6 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
      * 添加一个将按添加顺序显示在列表尾部的AssemblyFragmentItemFactory
      */
     @SuppressLint("LongLogTag")
-    @SuppressWarnings("unused")
     public void addFooterItem(AssemblyFragmentItemFactory footerFactory, Object data) {
         if (footerFactory == null || itemFactoryLocked) {
             Log.w(TAG, "footerFactory is nll or locked");
@@ -112,7 +107,6 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     /**
      * 获取Header列表
      */
-    @SuppressWarnings("unused")
     public List<FixedFragmentItemInfo> getHeaderItemList() {
         return headerItemList;
     }
@@ -120,7 +114,6 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     /**
      * 获取ItemFactory列表
      */
-    @SuppressWarnings("unused")
     public List<AssemblyFragmentItemFactory> getItemFactoryList() {
         return itemFactoryList;
     }
@@ -128,7 +121,6 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     /**
      * 获取Footer列表
      */
-    @SuppressWarnings("unused")
     public List<FixedFragmentItemInfo> getFooterItemList() {
         return footerItemList;
     }
@@ -136,7 +128,6 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     /**
      * 获取数据列表
      */
-    @SuppressWarnings("unused")
     public List getDataList() {
         return dataList;
     }
@@ -172,7 +163,6 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     /**
      * 获取在各自区域的位置
      */
-    @SuppressWarnings("unused")
     public int getPositionInPart(int position) {
         // 头
         int headerItemCount = getHeaderItemCount();

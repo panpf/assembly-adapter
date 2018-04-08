@@ -19,7 +19,7 @@ class GameChildItemFactory(context: Context) : AssemblyChildItemFactory<GameChil
         this.eventListener = EventProcessor(context)
     }
 
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is Game
     }
 

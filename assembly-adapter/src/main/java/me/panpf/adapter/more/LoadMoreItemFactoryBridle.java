@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package me.panpf.adapter.list;
+package me.panpf.adapter.more;
 
-/**
- * {@link AssemblyListAdapter} 专用的加载更多监听器
- */
-public interface OnListLoadMoreListener {
-    void onLoadMore(AssemblyListAdapter adapter);
+import me.panpf.adapter.ItemFactory;
+
+public interface LoadMoreItemFactoryBridle<ITEM extends LoadMoreItemBridle> extends ItemFactory<ITEM> {
+
+    /**
+     * 加载更多完成
+     *
+     * @param end 已全部加载完毕，切换至结束状态
+     */
+    void loadMoreFinished(boolean end);
+
+    /**
+     * 加载更多失败
+     */
+    void loadMoreFailed();
 }

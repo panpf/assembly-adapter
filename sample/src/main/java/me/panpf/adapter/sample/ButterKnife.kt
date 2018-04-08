@@ -6,9 +6,9 @@ import android.app.DialogFragment
 import android.app.Fragment
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
+import me.panpf.adapter.AssemblyItem
 import me.panpf.adapter.expandable.AssemblyChildItem
 import me.panpf.adapter.expandable.AssemblyGroupItem
-import me.panpf.adapter.list.AssemblyListItem
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import android.support.v4.app.DialogFragment as SupportDialogFragment
@@ -156,10 +156,10 @@ private fun <T, V : View> requiredNoCache(ids: IntArray, finder: T.(Int) -> View
 private fun <T, V : View> optionalNoCache(ids: IntArray, finder: T.(Int) -> View?)
         = NoCacheLazy { t: T, desc -> ids.map { t.finder(it) as V? }.filterNotNull() }
 
-public fun <V : View> AssemblyListItem<*>.bindView(id: Int)
-        : ReadOnlyProperty<AssemblyListItem<*>, V> = required(id, viewFinder)
+public fun <V : View> AssemblyItem<*>.bindView(id: Int)
+        : ReadOnlyProperty<AssemblyItem<*>, V> = required(id, viewFinder)
 
-private val AssemblyListItem<*>.viewFinder: AssemblyListItem<*>.(Int) -> View?
+private val AssemblyItem<*>.viewFinder: AssemblyItem<*>.(Int) -> View?
     get() = { itemView.findViewById(it) }
 
 public fun <V : View> AssemblyGroupItem<*>.bindView(id: Int)

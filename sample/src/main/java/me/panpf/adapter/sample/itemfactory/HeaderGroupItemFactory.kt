@@ -9,7 +9,7 @@ import me.panpf.adapter.expandable.AssemblyGroupItemFactory
 import me.panpf.adapter.sample.R
 
 class HeaderGroupItemFactory : AssemblyGroupItemFactory<HeaderGroupItemFactory.HeaderGroupItem>() {
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is String
     }
 

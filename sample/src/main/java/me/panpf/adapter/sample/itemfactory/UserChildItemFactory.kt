@@ -19,7 +19,7 @@ class UserChildItemFactory(context: Context) : AssemblyChildItemFactory<UserChil
         this.eventListener = EventProcessor(context)
     }
 
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is User
     }
 

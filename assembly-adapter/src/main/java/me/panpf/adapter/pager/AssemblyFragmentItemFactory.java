@@ -20,16 +20,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 
 /**
- * AssemblyFragmentPagerAdapter和AssemblyFragmentStatePagerAdapter专用的ItemFactory，
- * 负责匹配数据和创建Fragment
+ * {@link AssemblyFragmentPagerAdapter} 和 {@link AssemblyFragmentStatePagerAdapter} 专用的 item factory 负责匹配数据和创建 {@link Fragment}
  *
  * @param <DATA> 指定数据类型
  */
 public abstract class AssemblyFragmentItemFactory<DATA> {
+
     private PagerAdapter adapter;
 
     /**
-     * 获取Adapter
+     * 获取 {@link PagerAdapter}
      */
     public PagerAdapter getAdapter() {
         return adapter;
@@ -42,7 +42,6 @@ public abstract class AssemblyFragmentItemFactory<DATA> {
         this.adapter = adapter;
     }
 
-    @SuppressWarnings("WeakerAccess")
     protected Fragment dispatchCreateFragment(int position, DATA data) {
         return createFragment(position, data);
     }

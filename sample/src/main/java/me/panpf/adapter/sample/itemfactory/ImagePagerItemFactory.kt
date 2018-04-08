@@ -10,7 +10,7 @@ import me.panpf.adapter.sample.R
 import me.panpf.sketch.SketchImageView
 
 class ImagePagerItemFactory : AssemblyPagerItemFactory<String>() {
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is String
     }
 

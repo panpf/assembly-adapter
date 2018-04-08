@@ -6,7 +6,7 @@ import me.panpf.adapter.pager.AssemblyFragmentItemFactory
 import me.panpf.adapter.sample.fragment.ImageFragment
 
 class ImageFragmentItemFactory : AssemblyFragmentItemFactory<String>() {
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is String
     }
 

@@ -8,30 +8,31 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.panpf.adapter.recycler.AssemblyRecyclerAdapter
-import me.panpf.adapter.recycler.FixedRecyclerItemInfo
-import me.panpf.adapter.recycler.OnRecyclerLoadMoreListener
+import me.panpf.adapter.AssemblyAdapter
+import me.panpf.adapter.AssemblyRecyclerAdapter
+import me.panpf.adapter.FixedItemInfo
+import me.panpf.adapter.more.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.bindView
-import me.panpf.adapter.sample.itemfactory.GameRecyclerItemFactory
-import me.panpf.adapter.sample.itemfactory.HeaderRecyclerItemFactory
-import me.panpf.adapter.sample.itemfactory.LoadMoreRecyclerItemFactory
-import me.panpf.adapter.sample.itemfactory.UserRecyclerItemFactory
+import me.panpf.adapter.sample.itemfactory.GameItemFactory
+import me.panpf.adapter.sample.itemfactory.HeaderItemFactory
+import me.panpf.adapter.sample.itemfactory.LoadMoreItemFactory
+import me.panpf.adapter.sample.itemfactory.UserItemFactory
 import java.util.*
 
-class RecyclerViewFragment : Fragment(), OnRecyclerLoadMoreListener {
+class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
     var nextStart: Int = 0
     var size = 20
 
     val recyclerView: RecyclerView by bindView(R.id.list_recyclerViewFragment_content)
 
     var adapter: AssemblyRecyclerAdapter? = null
-    var headerItemInfo: FixedRecyclerItemInfo? = null
-    var headerItemInfo2: FixedRecyclerItemInfo? = null
-    var footerItemInfo: FixedRecyclerItemInfo? = null
-    var footerItemInfo2: FixedRecyclerItemInfo? = null
+    var headerItemInfo: FixedItemInfo? = null
+    var headerItemInfo2: FixedItemInfo? = null
+    var footerItemInfo: FixedItemInfo? = null
+    var footerItemInfo2: FixedItemInfo? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recycler_view, container, false)
@@ -99,13 +100,13 @@ class RecyclerViewFragment : Fragment(), OnRecyclerLoadMoreListener {
                 if (adapter == null) {
                     adapter = AssemblyRecyclerAdapter(objects)
 
-                    headerItemInfo = adapter!!.addHeaderItem(HeaderRecyclerItemFactory(), "我是小额头呀！")
-                    headerItemInfo2 = adapter!!.addHeaderItem(HeaderRecyclerItemFactory(), "唉，我的小额头呢？")
-                    adapter!!.addItemFactory(UserRecyclerItemFactory(appContext))
-                    adapter!!.addItemFactory(GameRecyclerItemFactory(appContext))
-                    footerItemInfo = adapter!!.addFooterItem(HeaderRecyclerItemFactory(), "我是小尾巴呀！")
-                    footerItemInfo2 = adapter!!.addFooterItem(HeaderRecyclerItemFactory(), "唉，我的小尾巴呢？")
-                    adapter!!.setLoadMoreItem(LoadMoreRecyclerItemFactory(this@RecyclerViewFragment))
+                    headerItemInfo = adapter!!.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
+                    headerItemInfo2 = adapter!!.addHeaderItem(HeaderItemFactory(), "唉，我的小额头呢？")
+                    adapter!!.addItemFactory(UserItemFactory(appContext))
+                    adapter!!.addItemFactory(GameItemFactory(appContext))
+                    footerItemInfo = adapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
+                    footerItemInfo2 = adapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢？")
+                    adapter!!.setLoadMoreItem(LoadMoreItemFactory(this@RecyclerViewFragment))
 
                     recyclerView.adapter = adapter
                 } else {
@@ -124,7 +125,7 @@ class RecyclerViewFragment : Fragment(), OnRecyclerLoadMoreListener {
         }.execute("")
     }
 
-    override fun onLoadMore(adapter: AssemblyRecyclerAdapter) {
+    override fun onLoadMore(adapter: AssemblyAdapter) {
         loadData()
     }
 }

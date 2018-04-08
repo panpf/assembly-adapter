@@ -30,6 +30,7 @@ import java.util.List;
 /**
  * 通用组合式FragmentStatePagerAdapter，支持组合式多ItemType，支持头、尾巴以及加载更多
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
     private static final String TAG = "AssemblyFragmentStatePagerAdapter";
     private List dataList;
@@ -39,13 +40,11 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     private ArrayList<FixedFragmentItemInfo> footerItemList;
     private ArrayList<AssemblyFragmentItemFactory> itemFactoryList;
 
-    @SuppressWarnings("unused")
     public AssemblyFragmentStatePagerAdapter(FragmentManager fm, List dataList) {
         super(fm);
         this.dataList = dataList;
     }
 
-    @SuppressWarnings("unused")
     public AssemblyFragmentStatePagerAdapter(FragmentManager fm, Object[] dataArray) {
         super(fm);
         if (dataArray != null && dataArray.length > 0) {
@@ -58,7 +57,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
      * 添加一个将按添加顺序显示在列表头部的AssemblyFragmentItemFactory
      */
     @SuppressLint("LongLogTag")
-    @SuppressWarnings("unused")
     public void addHeaderItem(AssemblyFragmentItemFactory headerFactory, Object data) {
         if (headerFactory == null || itemFactoryLocked) {
             Log.w(TAG, "headerFactory is nll or locked");
@@ -74,7 +72,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     }
 
     @SuppressLint("LongLogTag")
-    @SuppressWarnings("unused")
     public void addItemFactory(AssemblyFragmentItemFactory itemFactory) {
         if(itemFactory == null || itemFactoryLocked){
             Log.w(TAG, "itemFactory is nll or locked");
@@ -93,7 +90,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
      * 添加一个将按添加顺序显示在列表尾部的AssemblyFragmentItemFactory
      */
     @SuppressLint("LongLogTag")
-    @SuppressWarnings("unused")
     public void addFooterItem(AssemblyFragmentItemFactory footerFactory, Object data) {
         if (footerFactory == null || itemFactoryLocked) {
             Log.w(TAG, "footerFactory is nll or locked");
@@ -111,7 +107,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取Header列表
      */
-    @SuppressWarnings("unused")
     public List<FixedFragmentItemInfo> getHeaderItemList() {
         return headerItemList;
     }
@@ -119,7 +114,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取ItemFactory列表
      */
-    @SuppressWarnings("unused")
     public List<AssemblyFragmentItemFactory> getItemFactoryList() {
         return itemFactoryList;
     }
@@ -127,7 +121,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取Footer列表
      */
-    @SuppressWarnings("unused")
     public List<FixedFragmentItemInfo> getFooterItemList() {
         return footerItemList;
     }
@@ -135,7 +128,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取数据列表
      */
-    @SuppressWarnings("unused")
     public List getDataList() {
         return dataList;
     }
@@ -143,7 +135,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取列表头的个数
      */
-    @SuppressWarnings("WeakerAccess")
     public int getHeaderItemCount() {
         return headerItemList != null ? headerItemList.size() : 0;
     }
@@ -151,7 +142,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取ItemFactory的个数
      */
-    @SuppressWarnings("WeakerAccess")
     public int getItemFactoryCount() {
         return itemFactoryList != null ? itemFactoryList.size() : 0;
     }
@@ -159,7 +149,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取列表头的个数
      */
-    @SuppressWarnings("WeakerAccess")
     public int getFooterItemCount() {
         return footerItemList != null ? footerItemList.size() : 0;
     }
@@ -167,7 +156,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取数据列表的长度
      */
-    @SuppressWarnings("WeakerAccess")
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
     }
@@ -175,7 +163,6 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取在各自区域的位置
      */
-    @SuppressWarnings("unused")
     public int getPositionInPart(int position) {
         // 头
         int headerItemCount = getHeaderItemCount();

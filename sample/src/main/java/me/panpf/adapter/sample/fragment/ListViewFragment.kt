@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import me.panpf.adapter.list.AssemblyListAdapter
-import me.panpf.adapter.list.FixedListItemInfo
-import me.panpf.adapter.list.OnListLoadMoreListener
+import me.panpf.adapter.AssemblyAdapter
+import me.panpf.adapter.AssemblyListAdapter
+import me.panpf.adapter.FixedItemInfo
+import me.panpf.adapter.more.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
@@ -20,17 +21,17 @@ import me.panpf.adapter.sample.itemfactory.LoadMoreItemFactory
 import me.panpf.adapter.sample.itemfactory.UserItemFactory
 import java.util.*
 
-class ListViewFragment : Fragment(), OnListLoadMoreListener {
+class ListViewFragment : Fragment(), OnLoadMoreListener {
     var nextStart = 0
     val size = 20
 
     val listView: ListView by bindView(R.id.list_listViewFragment_content)
 
     var listAdapter: AssemblyListAdapter? = null
-    var headerListItemInfo: FixedListItemInfo? = null
-    var headerListItemInfo2: FixedListItemInfo? = null
-    var footerListItemInfo: FixedListItemInfo? = null
-    var footerListItemInfo2: FixedListItemInfo? = null
+    var headerListItemInfo: FixedItemInfo? = null
+    var headerListItemInfo2: FixedItemInfo? = null
+    var footerListItemInfo: FixedItemInfo? = null
+    var footerListItemInfo2: FixedItemInfo? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list_view, container, false)
@@ -122,7 +123,7 @@ class ListViewFragment : Fragment(), OnListLoadMoreListener {
         }.execute("")
     }
 
-    override fun onLoadMore(listAdapter: AssemblyListAdapter) {
+    override fun onLoadMore(listAdapter: AssemblyAdapter) {
         loadData()
     }
 }

@@ -14,21 +14,26 @@
  * limitations under the License.
  */
 
-package me.panpf.adapter.recycler;
+package me.panpf.adapter.more;
+
+import android.support.annotation.NonNull;
+
+import me.panpf.adapter.FixedItemInfo;
 
 /**
- * AssemblyRecyclerAdapter专用的加载更多固定尾巴
+ * 加载更多专用的固定尾巴
  */
-@SuppressWarnings("WeakerAccess")
-public class LoadMoreFixedRecyclerItemInfo extends FixedRecyclerItemInfo {
+@SuppressWarnings("unused")
+public class LoadMoreFixedItemInfo extends FixedItemInfo {
 
-    public LoadMoreFixedRecyclerItemInfo(AssemblyLoadMoreRecyclerItemFactory itemFactory, Object data, boolean header) {
+    public LoadMoreFixedItemInfo(LoadMoreItemFactoryBridle itemFactory, Object data, boolean header) {
         super(itemFactory, data, header);
     }
 
+    @NonNull
     @Override
-    public AssemblyLoadMoreRecyclerItemFactory getItemFactory() {
-        return (AssemblyLoadMoreRecyclerItemFactory) super.getItemFactory();
+    public LoadMoreItemFactoryBridle getItemFactory() {
+        return (LoadMoreItemFactoryBridle) super.getItemFactory();
     }
 
     @Override

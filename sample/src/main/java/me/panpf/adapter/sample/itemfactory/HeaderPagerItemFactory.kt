@@ -13,7 +13,7 @@ import me.panpf.sketch.SketchImageView
 
 class HeaderPagerItemFactory(private val clickListener: View.OnClickListener) : AssemblyPagerItemFactory<Header>() {
 
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is Header
     }
 

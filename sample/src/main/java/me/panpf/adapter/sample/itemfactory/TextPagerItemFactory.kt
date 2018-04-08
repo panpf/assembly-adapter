@@ -11,7 +11,7 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Text
 
 class TextPagerItemFactory : AssemblyPagerItemFactory<Text>() {
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is Text
     }
 

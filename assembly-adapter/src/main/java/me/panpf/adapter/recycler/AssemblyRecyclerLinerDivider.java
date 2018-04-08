@@ -9,8 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import me.panpf.adapter.AssemblyRecyclerAdapter;
+
 /**
- * RecyclerView 专用 Divider，头和尾巴不显示 divider
+ * {@link RecyclerView} 专用 divider，头和尾巴不显示 divider
  */
 @SuppressWarnings("unused")
 public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
