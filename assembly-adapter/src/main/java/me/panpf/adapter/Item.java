@@ -32,7 +32,13 @@ public interface Item<DATA> {
      */
     int getPosition();
 
+    /**
+     * 获取当前 item 的布局位置，为 {@link android.support.v7.widget.RecyclerView} 预留的方法
+     */
     int getLayoutPosition();
 
+    /**
+     * 获取当前 item 在 adapter 中的位置，为 {@link android.support.v7.widget.RecyclerView} 预留的方法
+     */
     int getAdapterPosition();
 }

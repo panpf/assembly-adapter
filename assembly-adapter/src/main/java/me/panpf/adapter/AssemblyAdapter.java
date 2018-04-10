@@ -13,30 +13,30 @@ import me.panpf.adapter.more.LoadMoreFixedItemInfo;
 @SuppressWarnings("unused")
 public interface AssemblyAdapter {
     /**
-     * 添加一个将按添加顺序显示在列表头部的 AssemblyItemFactory
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
      */
     @NonNull
     <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> headerFactory, @Nullable Object data);
 
     /**
-     * 添加一个用来处理并显示 dataList 中的数据的 AssemblyItemFactory
+     * 添加一个用来处理并显示 dataList 中的数据的 {@link AssemblyItemFactory}
      */
     <ITEM extends AssemblyItem> void addItemFactory(@NonNull AssemblyItemFactory<ITEM> itemFactory);
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 AssemblyItemFactory
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
      */
     @NonNull
     <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> footerFactory, @Nullable Object data);
 
     /**
-     * 设置一个将显示在列表最后（在 Footer 的后面）的加载更多尾巴
+     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
     LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory assemblyLoadMoreItemFactory, @Nullable Object data);
 
     /**
-     * 设置一个将显示在列表最后（在 Footer 的后面）的加载更多尾巴
+     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
     LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory assemblyLoadMoreItemFactory);
@@ -89,7 +89,7 @@ public interface AssemblyAdapter {
     void loadMoreFailed();
 
     /**
-     * header状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
+     * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
      */
     void headerEnabledChanged(@NonNull FixedItemInfo headerItemInfo);
 
@@ -99,19 +99,19 @@ public interface AssemblyAdapter {
     void footerEnabledChanged(@NonNull FixedItemInfo footerItemInfo);
 
     /**
-     * 获取 Header 列表
+     * 获取 header 列表
      */
     @Nullable
     List<FixedItemInfo> getHeaderItemList();
 
     /**
-     * 获取 ItemFactory 列表
+     * 获取 {@link ItemFactory} 列表
      */
     @Nullable
     List<ItemFactory> getItemFactoryList();
 
     /**
-     * 获取 Footer 列表
+     * 获取 footer 列表
      */
     @Nullable
     List<FixedItemInfo> getFooterItemList();
@@ -133,7 +133,7 @@ public interface AssemblyAdapter {
     int getHeaderItemCount();
 
     /**
-     * 获取 ItemFactory 的个数
+     * 获取 {@link ItemFactory} 的个数
      */
     int getItemFactoryCount();
 
@@ -168,23 +168,53 @@ public interface AssemblyAdapter {
      */
     int getPositionInPart(int position);
 
+    /**
+     * 获取头部指定位置的数据
+     *
+     * @param positionInHeaderList 在头部的位置
+     */
     @Nullable
-    Object getHeaderItem(int positionInHeaderList);
+    Object getHeaderData(int positionInHeaderList);
 
+    /**
+     * 获取数据列表中指定位置的数据
+     *
+     * @param positionInDataList 数据列表中的位置
+     */
     @Nullable
-    Object getDataItem(int positionInDataList);
+    Object getData(int positionInDataList);
 
+    /**
+     * 获取尾部指定位置的数据
+     *
+     * @param positionInFooterList 在尾部的位置
+     */
     @Nullable
-    Object getFooterItem(int positionInFooterList);
+    Object getFooterData(int positionInFooterList);
 
+    /**
+     * 刷新列表
+     */
     void notifyDataSetChanged();
 
     /**
-     * 获取指定位置占几列
+     * 获取指定位置占几列，专为 {@link android.support.v7.widget.RecyclerView} 预留
      */
     int getSpanSize(int position);
 
+    /**
+     * 获取执行位置 item 的类型
+     *
+     * @param position item 的位置
+     * @return 类型，从 0 开始
+     */
     int getItemViewType(int position);
 
+    /**
+     * 获取指定位置的数据
+     *
+     * @param position 位置
+     */
+    @Nullable
     Object getItem(int position);
 }

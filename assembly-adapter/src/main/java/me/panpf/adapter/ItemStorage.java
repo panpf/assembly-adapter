@@ -555,7 +555,7 @@ public class ItemStorage {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            return getHeaderItem(positionInHeaderList);
+            return getHeaderData(positionInHeaderList);
         }
 
         // 数据
@@ -564,7 +564,7 @@ public class ItemStorage {
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            return getDataItem(positionInDataList);
+            return getData(positionInDataList);
         }
 
         // 尾巴
@@ -573,7 +573,7 @@ public class ItemStorage {
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return getFooterItem(positionInFooterList);
+            return getFooterData(positionInFooterList);
         }
 
         // 加载更多尾巴
@@ -585,17 +585,17 @@ public class ItemStorage {
     }
 
     @Nullable
-    public Object getHeaderItem(int positionInHeaderList) {
+    public Object getHeaderData(int positionInHeaderList) {
         return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
     }
 
     @Nullable
-    public Object getDataItem(int positionInDataList) {
+    public Object getData(int positionInDataList) {
         return dataList != null ? dataList.get(positionInDataList) : null;
     }
 
     @Nullable
-    public Object getFooterItem(int positionInFooterList) {
+    public Object getFooterData(int positionInFooterList) {
         return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
     }
 
@@ -627,7 +627,7 @@ public class ItemStorage {
         int dataEndPosition = headerEndPosition + dataCount;
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object dataObject = getDataItem(positionInDataList);
+            Object dataObject = getData(positionInDataList);
 
             ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -660,11 +660,12 @@ public class ItemStorage {
     }
 
     /**
-     * 根据 view 类型获取 itemFactory
+     * 根据 view 类型获取 {@link ItemFactory} 或 {@link FixedItemInfo}
      *
      * @param viewType view 类型，参见 {@link #getItemViewType(int)} 方法
      * @return null：没有；{@link ItemFactory} 或 {@link FixedItemInfo}
      */
+    @Nullable
     public Object getItemFactoryByViewType(int viewType) {
         return itemFactoryArray != null ? itemFactoryArray.get(viewType) : null;
     }
@@ -689,7 +690,7 @@ public class ItemStorage {
         int dataEndPosition = headerEndPosition + dataCount;
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object dataObject = getDataItem(positionInDataList);
+            Object dataObject = getData(positionInDataList);
 
             ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {

@@ -216,20 +216,20 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @Nullable
     @Override
-    public Object getHeaderItem(int positionInHeaderList) {
-        return storage.getHeaderItem(positionInHeaderList);
+    public Object getHeaderData(int positionInHeaderList) {
+        return storage.getHeaderData(positionInHeaderList);
     }
 
     @Nullable
     @Override
-    public Object getDataItem(int positionInDataList) {
-        return storage.getDataItem(positionInDataList);
+    public Object getData(int positionInDataList) {
+        return storage.getData(positionInDataList);
     }
 
     @Nullable
     @Override
-    public Object getFooterItem(int positionInFooterList) {
-        return storage.getFooterItem(positionInFooterList);
+    public Object getFooterData(int positionInFooterList) {
+        return storage.getFooterData(positionInFooterList);
     }
 
     @Override

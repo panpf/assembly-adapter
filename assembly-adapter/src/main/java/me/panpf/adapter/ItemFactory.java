@@ -6,7 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface ItemFactory<ITEM extends Item> {
     /**
      * 获取 item 类型
@@ -37,7 +37,7 @@ public interface ItemFactory<ITEM extends Item> {
     /**
      * 设置在 {@link GridLayoutManager} 里所占的列数，不能小于 1
      */
-    @SuppressWarnings("UnusedReturnValue")
+    @NonNull
     ItemFactory<ITEM> setSpanSize(int spanSize);
 
     /**
@@ -45,7 +45,8 @@ public interface ItemFactory<ITEM extends Item> {
      *
      * @param recyclerView 需要从 {@link RecyclerView} 中取出 {@link GridLayoutManager} 再取出 SpanCount
      */
-    ItemFactory<ITEM> fullSpan(RecyclerView recyclerView);
+    @NonNull
+    ItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView);
 
     /**
      * 匹配数据
@@ -55,5 +56,6 @@ public interface ItemFactory<ITEM extends Item> {
      */
     boolean isTarget(@Nullable Object data);
 
+    @NonNull
     ITEM dispatchCreateItem(@NonNull ViewGroup parent);
 }

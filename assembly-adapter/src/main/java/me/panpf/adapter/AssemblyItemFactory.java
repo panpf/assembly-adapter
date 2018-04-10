@@ -42,6 +42,7 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements 
         return spanSize;
     }
 
+    @NonNull
     @Override
     public AssemblyItemFactory<ITEM> setSpanSize(int spanSize) {
         if (spanSize > 0) {
@@ -50,11 +51,13 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements 
         return this;
     }
 
+    @NonNull
     @Override
-    public AssemblyItemFactory<ITEM> fullSpan(RecyclerView recyclerView) {
+    public AssemblyItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView) {
         setSpanSize(1);
         fullSpanInStaggeredGrid = false;
 
+        //noinspection ConstantConditions
         if (recyclerView != null) {
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
             if (layoutManager instanceof GridLayoutManager) {
@@ -67,6 +70,7 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements 
         return this;
     }
 
+    @NonNull
     @Override
     public ITEM dispatchCreateItem(@NonNull ViewGroup parent) {
         @NonNull

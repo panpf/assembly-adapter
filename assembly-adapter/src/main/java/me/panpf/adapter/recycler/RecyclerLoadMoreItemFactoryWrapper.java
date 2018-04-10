@@ -55,14 +55,16 @@ public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBr
         return itemFactory.getSpanSize();
     }
 
+    @NonNull
     @Override
     public RecyclerLoadMoreItemFactoryWrapper setSpanSize(int spanSize) {
         itemFactory.setSpanSize(spanSize);
         return this;
     }
 
+    @NonNull
     @Override
-    public RecyclerLoadMoreItemFactoryWrapper fullSpan(RecyclerView recyclerView) {
+    public RecyclerLoadMoreItemFactoryWrapper fullSpan(@NonNull RecyclerView recyclerView) {
         itemFactory.fullSpan(recyclerView);
         return this;
     }
@@ -72,6 +74,7 @@ public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBr
         return itemFactory.isTarget(data);
     }
 
+    @NonNull
     @Override
     public RecyclerLoadMoreItemWrapper dispatchCreateItem(@NonNull ViewGroup parent) {
         return new RecyclerLoadMoreItemWrapper((AssemblyLoadMoreItem) itemFactory.dispatchCreateItem(parent));

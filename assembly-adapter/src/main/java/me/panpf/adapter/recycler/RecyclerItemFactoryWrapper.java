@@ -43,14 +43,16 @@ public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapp
         return itemFactory.getSpanSize();
     }
 
+    @NonNull
     @Override
     public RecyclerItemFactoryWrapper setSpanSize(int spanSize) {
         itemFactory.setSpanSize(spanSize);
         return this;
     }
 
+    @NonNull
     @Override
-    public RecyclerItemFactoryWrapper fullSpan(RecyclerView recyclerView) {
+    public RecyclerItemFactoryWrapper fullSpan(@NonNull RecyclerView recyclerView) {
         itemFactory.fullSpan(recyclerView);
         return this;
     }
@@ -60,6 +62,7 @@ public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapp
         return itemFactory.isTarget(data);
     }
 
+    @NonNull
     @Override
     public RecyclerItemWrapper dispatchCreateItem(@NonNull ViewGroup parent) {
         return new RecyclerItemWrapper(itemFactory.dispatchCreateItem(parent));
