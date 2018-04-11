@@ -16,8 +16,11 @@
 
 package me.panpf.adapter.expandable;
 
+import android.support.annotation.Nullable;
+
 public interface AssemblyGroup {
     int getChildCount();
 
+    @Nullable
     Object getChild(int childPosition);
 }

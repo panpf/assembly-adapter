@@ -9,6 +9,7 @@ import me.panpf.adapter.Item;
 
 @SuppressWarnings({"WeakerAccess"})
 public class RecyclerItemWrapper<DATA> extends RecyclerView.ViewHolder implements Item<DATA> {
+
     @NonNull
     private Item<DATA> item;
 
@@ -39,5 +40,35 @@ public class RecyclerItemWrapper<DATA> extends RecyclerView.ViewHolder implement
     @NonNull
     public final View getItemView() {
         return item.getItemView();
+    }
+
+    @Override
+    public boolean isExpanded() {
+        return item.isExpanded();
+    }
+
+    @Override
+    public void setExpanded(boolean expanded) {
+        item.setExpanded(expanded);
+    }
+
+    @Override
+    public int getGroupPosition() {
+        return item.getGroupPosition();
+    }
+
+    @Override
+    public void setGroupPosition(int groupPosition) {
+        item.setGroupPosition(groupPosition);
+    }
+
+    @Override
+    public boolean isLastChild() {
+        return item.isLastChild();
+    }
+
+    @Override
+    public void setLastChild(boolean lastChild) {
+        item.setLastChild(lastChild);
     }
 }

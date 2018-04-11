@@ -18,6 +18,10 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
     private DATA data;
     private int position;
 
+    private boolean expanded; // ExpandableListView 专用字段
+    private int groupPosition; // ExpandableListView 专用字段
+    private boolean lastChild; // ExpandableListView 专用字段
+
     public AssemblyItem(@NonNull View itemView) {
         //noinspection ConstantConditions
         if (itemView == null) {
@@ -77,6 +81,36 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
     @Nullable
     public View findViewWithTag(@NonNull Object tag) {
         return itemView.findViewWithTag(tag);
+    }
+
+    @Override
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    @Override
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    @Override
+    public int getGroupPosition() {
+        return groupPosition;
+    }
+
+    @Override
+    public void setGroupPosition(int groupPosition) {
+        this.groupPosition = groupPosition;
+    }
+
+    @Override
+    public boolean isLastChild() {
+        return lastChild;
+    }
+
+    @Override
+    public void setLastChild(boolean lastChild) {
+        this.lastChild = lastChild;
     }
 
     /**

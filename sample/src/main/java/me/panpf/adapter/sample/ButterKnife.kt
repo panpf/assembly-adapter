@@ -7,8 +7,6 @@ import android.app.Fragment
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
 import me.panpf.adapter.AssemblyItem
-import me.panpf.adapter.expandable.AssemblyChildItem
-import me.panpf.adapter.expandable.AssemblyGroupItem
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import android.support.v4.app.DialogFragment as SupportDialogFragment
@@ -160,16 +158,4 @@ public fun <V : View> AssemblyItem<*>.bindView(id: Int)
         : ReadOnlyProperty<AssemblyItem<*>, V> = required(id, viewFinder)
 
 private val AssemblyItem<*>.viewFinder: AssemblyItem<*>.(Int) -> View?
-    get() = { itemView.findViewById(it) }
-
-public fun <V : View> AssemblyGroupItem<*>.bindView(id: Int)
-        : ReadOnlyProperty<AssemblyGroupItem<*>, V> = required(id, viewFinder)
-
-private val AssemblyGroupItem<*>.viewFinder: AssemblyGroupItem<*>.(Int) -> View?
-    get() = { itemView.findViewById(it) }
-
-public fun <V : View> AssemblyChildItem<*>.bindView(id: Int)
-        : ReadOnlyProperty<AssemblyChildItem<*>, V> = required(id, viewFinder)
-
-private val AssemblyChildItem<*>.viewFinder: AssemblyChildItem<*>.(Int) -> View?
     get() = { itemView.findViewById(it) }

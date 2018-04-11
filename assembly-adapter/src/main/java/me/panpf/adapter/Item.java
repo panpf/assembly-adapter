@@ -33,12 +33,42 @@ public interface Item<DATA> {
     int getPosition();
 
     /**
-     * 获取当前 item 的布局位置，为 {@link android.support.v7.widget.RecyclerView} 预留的方法
+     * 获取当前 item 的布局位置，{@link android.support.v7.widget.RecyclerView} 专用方法
      */
     int getLayoutPosition();
 
     /**
-     * 获取当前 item 在 adapter 中的位置，为 {@link android.support.v7.widget.RecyclerView} 预留的方法
+     * 获取当前 item 在 adapter 中的位置，{@link android.support.v7.widget.RecyclerView} 专用方法
      */
     int getAdapterPosition();
+
+    /**
+     * 是否已展开，{@link android.widget.ExpandableListView} 专用方法
+     */
+    boolean isExpanded();
+
+    /**
+     * 设置是否已展开，{@link android.widget.ExpandableListView} 专用方法
+     */
+    void setExpanded(boolean expanded);
+
+    /**
+     * 获取其 group 的位置，{@link android.widget.ExpandableListView} 专用方法
+     */
+    int getGroupPosition();
+
+    /**
+     * 设置其 group 的位置，{@link android.widget.ExpandableListView} 专用方法
+     */
+    void setGroupPosition(int groupPosition);
+
+    /**
+     * 是否是最后一个 child item，{@link android.widget.ExpandableListView} 专用方法
+     */
+    boolean isLastChild();
+
+    /**
+     * 设置是否是最后一个 child item，{@link android.widget.ExpandableListView} 专用方法
+     */
+    void setLastChild(boolean lastChild);
 }

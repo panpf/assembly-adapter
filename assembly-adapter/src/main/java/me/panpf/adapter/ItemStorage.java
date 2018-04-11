@@ -16,8 +16,6 @@ import me.panpf.adapter.more.LoadMoreItemFactoryBridle;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ItemStorage {
 
-    private static final String TAG = "ItemStorage";
-
     @NonNull
     private final Object headerItemListLock = new Object();
     @NonNull
@@ -68,6 +66,57 @@ public class ItemStorage {
         }
     }
 
+    @NonNull
+    public AssemblyAdapter getAdapter() {
+        return adapter;
+    }
+
+
+    /* ************************ 数据 ItemFactory *************************** */
+
+    /**
+     * 添加一个用来处理并显示 dataList 中的数据的 {@link ItemFactory}
+     */
+    public void addItemFactory(@NonNull ItemFactory itemFactory) {
+        //noinspection ConstantConditions
+        if (itemFactory == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemFactory is null or item factory locked");
+        }
+
+        itemFactory.setAdapter(adapter);
+        itemFactory.setItemType(itemTypeIndex++);
+
+        if (itemFactoryArray == null) {
+            itemFactoryArray = new SparseArray<Object>();
+        }
+        itemFactoryArray.put(itemFactory.getItemType(), itemFactory);
+
+        synchronized (itemFactoryListLock) {
+            if (itemFactoryList == null) {
+                itemFactoryList = new ArrayList<ItemFactory>(5);
+            }
+            itemFactoryList.add(itemFactory);
+        }
+    }
+
+    /**
+     * 获取数据  {@link ItemFactory} 列表
+     */
+    @Nullable
+    public List<ItemFactory> getItemFactoryList() {
+        return itemFactoryList;
+    }
+
+    /**
+     * 获取数据  {@link ItemFactory} 的个数
+     */
+    public int getItemFactoryCount() {
+        return itemFactoryList != null ? itemFactoryList.size() : 0;
+    }
+
+
+    /* ************************ 头部 ItemFactory *************************** */
+
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
      */
@@ -100,32 +149,67 @@ public class ItemStorage {
     }
 
     /**
-     * 添加一个用来处理并显示 dataList 中的数据的 ItemFactory
+     * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    public void addItemFactory(@NonNull ItemFactory itemFactory) {
+    public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemFactoryLocked) {
-            throw new IllegalArgumentException("itemFactory is null or item factory locked");
+        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != this) {
+            return;
         }
 
-        itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemTypeIndex++);
-
-        if (itemFactoryArray == null) {
-            itemFactoryArray = new SparseArray<Object>();
-        }
-        itemFactoryArray.put(itemFactory.getItemType(), itemFactory);
-
-        synchronized (itemFactoryListLock) {
-            if (itemFactoryList == null) {
-                itemFactoryList = new ArrayList<ItemFactory>(5);
+        if (fixedItemInfo.isEnabled()) {
+            synchronized (headerItemListLock) {
+                if (headerItemList == null) {
+                    headerItemList = new ArrayList<FixedItemInfo>(2);
+                }
+                headerItemList.add(fixedItemInfo);
+                Collections.sort(headerItemList, new Comparator<FixedItemInfo>() {
+                    @Override
+                    public int compare(FixedItemInfo lhs, FixedItemInfo rhs) {
+                        return lhs.getPosition() - rhs.getPosition();
+                    }
+                });
             }
-            itemFactoryList.add(itemFactory);
+
+            if (notifyOnChange) {
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            synchronized (headerItemListLock) {
+                if (headerItemList != null && headerItemList.remove(fixedItemInfo)) {
+                    if (notifyOnChange) {
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
         }
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 ItemFactory
+     * 获取 header 列表
+     */
+    @Nullable
+    public List<FixedItemInfo> getHeaderItemList() {
+        return headerItemList;
+    }
+
+    /**
+     * 获取列表头的个数
+     */
+    public int getHeaderItemCount() {
+        return headerItemList != null ? headerItemList.size() : 0;
+    }
+
+    @Nullable
+    public Object getHeaderData(int positionInHeaderList) {
+        return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
+    }
+
+
+    /* ************************ 尾巴 ItemFactory *************************** */
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
      */
     @NonNull
     public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
@@ -156,7 +240,67 @@ public class ItemStorage {
     }
 
     /**
-     * 设置一个将显示在列表最后（在 Footer 的后面）的加载更多尾巴
+     * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
+     */
+    public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
+        //noinspection ConstantConditions
+        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != this) {
+            return;
+        }
+
+        if (fixedItemInfo.isEnabled()) {
+            synchronized (footerItemListLock) {
+                if (footerItemList == null) {
+                    footerItemList = new ArrayList<FixedItemInfo>(2);
+                }
+                footerItemList.add(fixedItemInfo);
+                Collections.sort(footerItemList, new Comparator<FixedItemInfo>() {
+                    @Override
+                    public int compare(FixedItemInfo lhs, FixedItemInfo rhs) {
+                        return lhs.getPosition() - rhs.getPosition();
+                    }
+                });
+            }
+
+            if (notifyOnChange) {
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            synchronized (footerItemListLock) {
+                if (footerItemList != null && footerItemList.remove(fixedItemInfo)) {
+                    if (notifyOnChange) {
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取 footer 列表
+     */
+    @Nullable
+    public List<FixedItemInfo> getFooterItemList() {
+        return footerItemList;
+    }
+
+    /**
+     * 获取列表尾的个数
+     */
+    public int getFooterItemCount() {
+        return footerItemList != null ? footerItemList.size() : 0;
+    }
+
+    @Nullable
+    public Object getFooterData(int positionInFooterList) {
+        return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
+    }
+
+
+    /* ************************ 加载更多 *************************** */
+
+    /**
+     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
     public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory, @Nullable Object data) {
@@ -184,11 +328,71 @@ public class ItemStorage {
     }
 
     /**
-     * 设置一个将显示在列表最后（在 Footer 的后面）的加载更多尾巴
+     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
     public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory) {
         return setLoadMoreItem(itemFactory, null);
+    }
+
+    /**
+     * 设置禁用加载更多
+     */
+    public void setDisableLoadMore(boolean disableLoadMore) {
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.setEnabled(!disableLoadMore);
+        }
+    }
+
+    /**
+     * 是否有加载更多尾巴
+     */
+    public boolean hasLoadMoreFooter() {
+        return loadMoreFixedItemInfo != null && loadMoreFixedItemInfo.isEnabled();
+    }
+
+    /**
+     * 加载更多完成时调用
+     *
+     * @param loadMoreEnd 全部加载完毕，为 true 会显示结束的文案并且不再触发加载更多
+     */
+    public void loadMoreFinished(boolean loadMoreEnd) {
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFinished(loadMoreEnd);
+        }
+    }
+
+    /**
+     * 加载更多失败的时候调用此方法显示错误提示，并可点击重新加载
+     */
+    public void loadMoreFailed() {
+        if (loadMoreFixedItemInfo != null) {
+            loadMoreFixedItemInfo.loadMoreFailed();
+        }
+    }
+
+
+    /* ************************ 数据列表 *************************** */
+
+    /**
+     * 获取数据列表
+     */
+    @Nullable
+    public List getDataList() {
+        return dataList;
+    }
+
+    /**
+     * 设置数据列表
+     */
+    public void setDataList(@Nullable List dataList) {
+        synchronized (itemListLock) {
+            this.dataList = dataList;
+        }
+
+        if (notifyOnChange) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**
@@ -255,7 +459,8 @@ public class ItemStorage {
     /**
      * 删除一条数据
      */
-    public void remove(@Nullable Object object) {
+    public void remove(@NonNull Object object) {
+        //noinspection ConstantConditions
         if (object == null) {
             return;
         }
@@ -301,240 +506,21 @@ public class ItemStorage {
     }
 
     /**
-     * 设置禁用加载更多
-     */
-    public void setDisableLoadMore(boolean disableLoadMore) {
-        if (loadMoreFixedItemInfo != null) {
-            loadMoreFixedItemInfo.setEnabled(!disableLoadMore);
-        }
-    }
-
-    /**
-     * 加载更多完成时调用
-     *
-     * @param loadMoreEnd 全部加载完毕，为 true 会显示结束的文案并且不再触发加载更多
-     */
-    public void loadMoreFinished(boolean loadMoreEnd) {
-        if (loadMoreFixedItemInfo != null) {
-            loadMoreFixedItemInfo.loadMoreFinished(loadMoreEnd);
-        }
-    }
-
-    /**
-     * 加载更多失败的时候调用此方法显示错误提示，并可点击重新加载
-     */
-    public void loadMoreFailed() {
-        if (loadMoreFixedItemInfo != null) {
-            loadMoreFixedItemInfo.loadMoreFailed();
-        }
-    }
-
-    /**
-     * header状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
-     */
-    public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
-        //noinspection ConstantConditions
-        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != this) {
-            return;
-        }
-
-        if (fixedItemInfo.isEnabled()) {
-            synchronized (headerItemListLock) {
-                if (headerItemList == null) {
-                    headerItemList = new ArrayList<FixedItemInfo>(2);
-                }
-                headerItemList.add(fixedItemInfo);
-                Collections.sort(headerItemList, new Comparator<FixedItemInfo>() {
-                    @Override
-                    public int compare(FixedItemInfo lhs, FixedItemInfo rhs) {
-                        return lhs.getPosition() - rhs.getPosition();
-                    }
-                });
-            }
-
-            if (notifyOnChange) {
-                adapter.notifyDataSetChanged();
-            }
-        } else {
-            synchronized (headerItemListLock) {
-                if (headerItemList != null && headerItemList.remove(fixedItemInfo)) {
-                    if (notifyOnChange) {
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
-     */
-    public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
-        //noinspection ConstantConditions
-        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != this) {
-            return;
-        }
-
-        if (fixedItemInfo.isEnabled()) {
-            synchronized (footerItemListLock) {
-                if (footerItemList == null) {
-                    footerItemList = new ArrayList<FixedItemInfo>(2);
-                }
-                footerItemList.add(fixedItemInfo);
-                Collections.sort(footerItemList, new Comparator<FixedItemInfo>() {
-                    @Override
-                    public int compare(FixedItemInfo lhs, FixedItemInfo rhs) {
-                        return lhs.getPosition() - rhs.getPosition();
-                    }
-                });
-            }
-
-            if (notifyOnChange) {
-                adapter.notifyDataSetChanged();
-            }
-        } else {
-            synchronized (footerItemListLock) {
-                if (footerItemList != null && footerItemList.remove(fixedItemInfo)) {
-                    if (notifyOnChange) {
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * 获取 Header 列表
-     */
-    @Nullable
-    public List<FixedItemInfo> getHeaderItemList() {
-        return headerItemList;
-    }
-
-    /**
-     * 获取 ItemFactory 列表
-     */
-    @Nullable
-    public List<ItemFactory> getItemFactoryList() {
-        return itemFactoryList;
-    }
-
-    /**
-     * 获取 Footer 列表
-     */
-    @Nullable
-    public List<FixedItemInfo> getFooterItemList() {
-        return footerItemList;
-    }
-
-    /**
-     * 获取数据列表
-     */
-    @Nullable
-    public List getDataList() {
-        return dataList;
-    }
-
-    /**
-     * 设置数据列表
-     */
-    public void setDataList(@Nullable List dataList) {
-        synchronized (itemListLock) {
-            this.dataList = dataList;
-        }
-
-        if (notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    /**
-     * 获取列表头的个数
-     */
-    public int getHeaderItemCount() {
-        return headerItemList != null ? headerItemList.size() : 0;
-    }
-
-    /**
-     * 获取 ItemFactory 的个数
-     */
-    public int getItemFactoryCount() {
-        return itemFactoryList != null ? itemFactoryList.size() : 0;
-    }
-
-    /**
-     * 获取列表头的个数
-     */
-    public int getFooterItemCount() {
-        return footerItemList != null ? footerItemList.size() : 0;
-    }
-
-    /**
-     * 是否有加载更多尾巴
-     */
-    public boolean hasLoadMoreFooter() {
-        return loadMoreFixedItemInfo != null && loadMoreFixedItemInfo.isEnabled();
-    }
-
-    /**
      * 获取数据列表的长度
      */
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
     }
 
-    /**
-     * 数据变更时是否立即刷新列表
-     */
-    public boolean isNotifyOnChange() {
-        return notifyOnChange;
+    @Nullable
+    public Object getData(int positionInDataList) {
+        return dataList != null ? dataList.get(positionInDataList) : null;
     }
 
-    /**
-     * 设置当数据发生改变时是否立即调用 notifyDataSetChanged() 刷新列表，默认 true。
-     * 当你需要连续多次修改数据的时候，你应该将 notifyOnChange 设为 false，然后在最后主动调用 notifyDataSetChanged() 刷新列表，最后再将 notifyOnChange 设为 true
-     */
-    public void setNotifyOnChange(boolean notifyOnChange) {
-        this.notifyOnChange = notifyOnChange;
-    }
 
-    /**
-     * 获取在各自区域的位置
-     */
-    public int getPositionInPart(int position) {
-        // 头
-        int headerItemCount = getHeaderItemCount();
-        int headerStartPosition = 0;
-        int headerEndPosition = headerItemCount - 1;
-        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            return position;
-        }
+    /* ************************ 完整列表 *************************** */
 
-        // 数据
-        int dataCount = getDataCount();
-        int dataStartPosition = headerEndPosition + 1;
-        int dataEndPosition = headerEndPosition + dataCount;
-        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
-            return position - headerItemCount;
-        }
-
-        // 尾巴
-        int footerItemCount = getFooterItemCount();
-        int footerStartPosition = dataEndPosition + 1;
-        int footerEndPosition = dataEndPosition + footerItemCount;
-        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
-            return position - headerItemCount - dataCount;
-        }
-
-        // 加载更多尾巴
-        if (dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
-            return 0;
-        }
-
-        throw new IllegalArgumentException("illegal position: " + position);
-    }
-
-    public int getCount() {
+    public int getItemCount() {
         int headerItemCount = getHeaderItemCount();
         int dataCount = getDataCount();
         int footerItemCount = getFooterItemCount();
@@ -577,26 +563,117 @@ public class ItemStorage {
         }
 
         // 加载更多尾巴
-        if (dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
+        if (dataCount > 0 && hasLoadMoreFooter() && position == getItemCount() - 1) {
             return loadMoreFixedItemInfo != null ? loadMoreFixedItemInfo.getData() : null;
         }
 
         return null;
     }
 
-    @Nullable
-    public Object getHeaderData(int positionInHeaderList) {
-        return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
+    /**
+     * 获取在各自区域的位置
+     */
+    public int getPositionInPart(int position) {
+        // 头
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            return position;
+        }
+
+        // 数据
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            return position - headerItemCount;
+        }
+
+        // 尾巴
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            return position - headerItemCount - dataCount;
+        }
+
+        // 加载更多尾巴
+        if (dataCount > 0 && hasLoadMoreFooter() && position == getItemCount() - 1) {
+            return 0;
+        }
+
+        throw new IllegalArgumentException("illegal position: " + position);
     }
 
-    @Nullable
-    public Object getData(int positionInDataList) {
-        return dataList != null ? dataList.get(positionInDataList) : null;
+
+    /* ************************ 其它 *************************** */
+
+    /**
+     * 数据变更时是否立即刷新列表
+     */
+    public boolean isNotifyOnChange() {
+        return notifyOnChange;
     }
 
-    @Nullable
-    public Object getFooterData(int positionInFooterList) {
-        return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
+    /**
+     * 设置当数据发生改变时是否立即调用 notifyDataSetChanged() 刷新列表，默认 true。
+     * 当你需要连续多次修改数据的时候，你应该将 notifyOnChange 设为 false，然后在最后主动调用 notifyDataSetChanged() 刷新列表，最后再将 notifyOnChange 设为 true
+     */
+    public void setNotifyOnChange(boolean notifyOnChange) {
+        this.notifyOnChange = notifyOnChange;
+    }
+
+    /**
+     * 获取指定位置占几列
+     */
+    public int getSpanSize(int position) {
+        // 头
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            //noinspection UnnecessaryLocalVariable
+            int positionInHeaderList = position;
+            return headerItemList.get(positionInHeaderList).getItemFactory().getSpanSize();
+        }
+
+        // 数据
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            int positionInDataList = position - headerItemCount;
+            Object dataObject = getData(positionInDataList);
+
+            ItemFactory itemFactory;
+            for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
+                itemFactory = itemFactoryList.get(w);
+                if (itemFactory.isTarget(dataObject)) {
+                    return itemFactory.getSpanSize();
+                }
+            }
+
+            throw new IllegalStateException(String.format(
+                    "Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
+                    positionInDataList, dataObject != null ? dataObject.getClass().getName() : "null"));
+        }
+
+        // 尾巴
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            int positionInFooterList = position - headerItemCount - dataCount;
+            return footerItemList.get(positionInFooterList).getItemFactory().getSpanSize();
+        }
+
+        // 加载更多尾巴
+        if (loadMoreFixedItemInfo != null && dataCount > 0 && hasLoadMoreFooter() && position == getItemCount() - 1) {
+            return loadMoreFixedItemInfo.getItemFactory().getSpanSize();
+        }
+
+        return 1;
     }
 
     public int getViewTypeCount() {
@@ -637,9 +714,9 @@ public class ItemStorage {
                 }
             }
 
-            throw new IllegalStateException("Didn't find suitable ItemFactory. " +
-                    "positionInDataList=" + positionInDataList + ", " +
-                    "dataObject=" + (dataObject != null ? dataObject.toString() : "null"));
+            throw new IllegalStateException(String.format(
+                    "Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
+                    positionInDataList, dataObject != null ? dataObject.toString() : "null"));
         }
 
         // 尾巴
@@ -652,7 +729,7 @@ public class ItemStorage {
         }
 
         // 加载更多尾巴
-        if (loadMoreFixedItemInfo != null && dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
+        if (loadMoreFixedItemInfo != null && dataCount > 0 && hasLoadMoreFooter() && position == getItemCount() - 1) {
             return loadMoreFixedItemInfo.getItemFactory().getItemType();
         }
 
@@ -668,57 +745,5 @@ public class ItemStorage {
     @Nullable
     public Object getItemFactoryByViewType(int viewType) {
         return itemFactoryArray != null ? itemFactoryArray.get(viewType) : null;
-    }
-
-    /**
-     * 获取指定位置占几列
-     */
-    public int getSpanSize(int position) {
-        // 头
-        int headerItemCount = getHeaderItemCount();
-        int headerStartPosition = 0;
-        int headerEndPosition = headerItemCount - 1;
-        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            //noinspection UnnecessaryLocalVariable
-            int positionInHeaderList = position;
-            return headerItemList.get(positionInHeaderList).getItemFactory().getSpanSize();
-        }
-
-        // 数据
-        int dataCount = getDataCount();
-        int dataStartPosition = headerEndPosition + 1;
-        int dataEndPosition = headerEndPosition + dataCount;
-        if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
-            int positionInDataList = position - headerItemCount;
-            Object dataObject = getData(positionInDataList);
-
-            ItemFactory itemFactory;
-            for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
-                itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(dataObject)) {
-                    return itemFactory.getSpanSize();
-                }
-            }
-
-            throw new IllegalStateException("Didn't find suitable ItemFactory. " +
-                    "positionInDataList=" + positionInDataList + ", " +
-                    "dataObject=" + (dataObject != null ? dataObject.getClass().getName() : "null"));
-        }
-
-        // 尾巴
-        int footerItemCount = getFooterItemCount();
-        int footerStartPosition = dataEndPosition + 1;
-        int footerEndPosition = dataEndPosition + footerItemCount;
-        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
-            int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).getItemFactory().getSpanSize();
-        }
-
-        // 加载更多尾巴
-        if (loadMoreFixedItemInfo != null && dataCount > 0 && hasLoadMoreFooter() && position == getCount() - 1) {
-            return loadMoreFixedItemInfo.getItemFactory().getSpanSize();
-        }
-
-        return 1;
     }
 }

@@ -11,6 +11,7 @@ import me.panpf.adapter.more.LoadMoreItemBridle;
 
 @SuppressWarnings("WeakerAccess")
 public class RecyclerLoadMoreItemWrapper<DATA> extends RecyclerView.ViewHolder implements LoadMoreItemBridle<DATA> {
+
     @NonNull
     private AssemblyLoadMoreItem<DATA> item;
 
@@ -39,6 +40,36 @@ public class RecyclerLoadMoreItemWrapper<DATA> extends RecyclerView.ViewHolder i
     @Override
     public View getItemView() {
         return item.getItemView();
+    }
+
+    @Override
+    public boolean isExpanded() {
+        return item.isExpanded();
+    }
+
+    @Override
+    public void setExpanded(boolean expanded) {
+        item.setExpanded(expanded);
+    }
+
+    @Override
+    public int getGroupPosition() {
+        return item.getGroupPosition();
+    }
+
+    @Override
+    public void setGroupPosition(int groupPosition) {
+        item.setGroupPosition(groupPosition);
+    }
+
+    @Override
+    public boolean isLastChild() {
+        return item.isLastChild();
+    }
+
+    @Override
+    public void setLastChild(boolean lastChild) {
+        item.setLastChild(lastChild);
     }
 
     @NonNull

@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import me.panpf.adapter.more.AssemblyLoadMoreItem;
 import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
 import me.panpf.adapter.more.LoadMoreFixedItemInfo;
 import me.panpf.adapter.recycler.RecyclerItemFactoryWrapper;
@@ -35,6 +36,7 @@ import me.panpf.adapter.recycler.RecyclerLoadMoreItemFactoryWrapper;
  */
 @SuppressWarnings("unused")
 public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements AssemblyAdapter {
+
     @NonNull
     private ItemStorage storage;
 
@@ -50,6 +52,28 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         this.storage = new ItemStorage(this, dataArray);
     }
 
+
+    /* ************************ 数据 ItemFactory *************************** */
+
+    @Override
+    public <ITEM extends AssemblyItem> void addItemFactory(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+        storage.addItemFactory(new RecyclerItemFactoryWrapper(itemFactory));
+    }
+
+    @Nullable
+    @Override
+    public List<ItemFactory> getItemFactoryList() {
+        return storage.getItemFactoryList();
+    }
+
+    @Override
+    public int getItemFactoryCount() {
+        return storage.getItemFactoryCount();
+    }
+
+
+    /* ************************ 头部 ItemFactory *************************** */
+
     @NonNull
     @Override
     public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
@@ -57,9 +81,29 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     }
 
     @Override
-    public <ITEM extends AssemblyItem> void addItemFactory(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
-        storage.addItemFactory(new RecyclerItemFactoryWrapper(itemFactory));
+    public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
+        storage.headerEnabledChanged(fixedItemInfo);
     }
+
+    @Nullable
+    @Override
+    public List<FixedItemInfo> getHeaderItemList() {
+        return storage.getHeaderItemList();
+    }
+
+    @Override
+    public int getHeaderItemCount() {
+        return storage.getHeaderItemCount();
+    }
+
+    @Nullable
+    @Override
+    public Object getHeaderData(int positionInHeaderList) {
+        return storage.getHeaderData(positionInHeaderList);
+    }
+
+
+    /* ************************ 尾巴 ItemFactory *************************** */
 
     @NonNull
     @Override
@@ -67,16 +111,75 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return storage.addFooterItem(new RecyclerItemFactoryWrapper(itemFactory), data);
     }
 
+    @Override
+    public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
+        storage.footerEnabledChanged(fixedItemInfo);
+    }
+
+    @Override
+    public int getFooterItemCount() {
+        return storage.getFooterItemCount();
+    }
+
+    @Nullable
+    @Override
+    public List<FixedItemInfo> getFooterItemList() {
+        return storage.getFooterItemList();
+    }
+
+    @Nullable
+    @Override
+    public Object getFooterData(int positionInFooterList) {
+        return storage.getFooterData(positionInFooterList);
+    }
+
+
+    /* ************************ 加载更多 *************************** */
+
     @NonNull
     @Override
-    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
         return storage.setLoadMoreItem(new RecyclerLoadMoreItemFactoryWrapper(itemFactory), data);
     }
 
     @NonNull
     @Override
-    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory itemFactory) {
+    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory) {
         return storage.setLoadMoreItem(new RecyclerLoadMoreItemFactoryWrapper(itemFactory));
+    }
+
+    @Override
+    public void setDisableLoadMore(boolean disableLoadMore) {
+        storage.setDisableLoadMore(disableLoadMore);
+    }
+
+    @Override
+    public boolean hasLoadMoreFooter() {
+        return storage.hasLoadMoreFooter();
+    }
+
+    @Override
+    public void loadMoreFinished(boolean loadMoreEnd) {
+        storage.loadMoreFinished(loadMoreEnd);
+    }
+
+    @Override
+    public void loadMoreFailed() {
+        storage.loadMoreFailed();
+    }
+
+
+    /* ************************ 数据列表 *************************** */
+
+    @Nullable
+    @Override
+    public List getDataList() {
+        return storage.getDataList();
+    }
+
+    @Override
+    public void setDataList(@Nullable List dataList) {
+        storage.setDataList(dataList);
     }
 
     @Override
@@ -90,12 +193,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     }
 
     @Override
-    public void insert(@Nullable Object object, int index) {
+    public void insert(@NonNull Object object, int index) {
         storage.insert(object, index);
     }
 
     @Override
-    public void remove(@Nullable Object object) {
+    public void remove(@NonNull Object object) {
         storage.remove(object);
     }
 
@@ -110,83 +213,36 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     }
 
     @Override
-    public void setDisableLoadMore(boolean disableLoadMore) {
-        storage.setDisableLoadMore(disableLoadMore);
-    }
-
-    @Override
-    public void loadMoreFinished(boolean loadMoreEnd) {
-        storage.loadMoreFinished(loadMoreEnd);
-    }
-
-    @Override
-    public void loadMoreFailed() {
-        storage.loadMoreFailed();
-    }
-
-    @Override
-    public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
-        storage.headerEnabledChanged(fixedItemInfo);
-    }
-
-    @Override
-    public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
-        storage.footerEnabledChanged(fixedItemInfo);
-    }
-
-    @Nullable
-    @Override
-    public List<FixedItemInfo> getHeaderItemList() {
-        return storage.getHeaderItemList();
-    }
-
-    @Nullable
-    @Override
-    public List<ItemFactory> getItemFactoryList() {
-        return storage.getItemFactoryList();
-    }
-
-    @Nullable
-    @Override
-    public List<FixedItemInfo> getFooterItemList() {
-        return storage.getFooterItemList();
-    }
-
-    @Nullable
-    @Override
-    public List getDataList() {
-        return storage.getDataList();
-    }
-
-    @Override
-    public void setDataList(@Nullable List dataList) {
-        storage.setDataList(dataList);
-    }
-
-    @Override
-    public int getHeaderItemCount() {
-        return storage.getHeaderItemCount();
-    }
-
-    @Override
-    public int getItemFactoryCount() {
-        return storage.getItemFactoryCount();
-    }
-
-    @Override
-    public int getFooterItemCount() {
-        return storage.getFooterItemCount();
-    }
-
-    @Override
-    public boolean hasLoadMoreFooter() {
-        return storage.hasLoadMoreFooter();
-    }
-
-    @Override
     public int getDataCount() {
         return storage.getDataCount();
     }
+
+    @Nullable
+    @Override
+    public Object getData(int positionInDataList) {
+        return storage.getData(positionInDataList);
+    }
+
+    /* ************************ 完整列表 *************************** */
+
+    @Override
+    public int getItemCount() {
+        return storage.getItemCount();
+    }
+
+    @Nullable
+    @Override
+    public Object getItem(int position) {
+        return storage.getItem(position);
+    }
+
+    @Override
+    public int getPositionInPart(int position) {
+        return storage.getPositionInPart(position);
+    }
+
+
+    /* ************************ 其它 *************************** */
 
     @Override
     public boolean isNotifyOnChange() {
@@ -196,40 +252,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     @Override
     public void setNotifyOnChange(boolean notifyOnChange) {
         storage.setNotifyOnChange(notifyOnChange);
-    }
-
-    @Override
-    public int getPositionInPart(int position) {
-        return storage.getPositionInPart(position);
-    }
-
-    @Override
-    public int getItemCount() {
-        return storage.getCount();
-    }
-
-    @Nullable
-    @Override
-    public Object getItem(int position) {
-        return storage.getItem(position);
-    }
-
-    @Nullable
-    @Override
-    public Object getHeaderData(int positionInHeaderList) {
-        return storage.getHeaderData(positionInHeaderList);
-    }
-
-    @Nullable
-    @Override
-    public Object getData(int positionInDataList) {
-        return storage.getData(positionInDataList);
-    }
-
-    @Nullable
-    @Override
-    public Object getFooterData(int positionInFooterList) {
-        return storage.getFooterData(positionInFooterList);
     }
 
     @Override

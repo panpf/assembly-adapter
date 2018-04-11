@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import me.panpf.adapter.expandable.AssemblyChildItem
-import me.panpf.adapter.expandable.AssemblyChildItemFactory
+import me.panpf.adapter.AssemblyItem
+import me.panpf.adapter.AssemblyItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.bindView
 
-class UserChildItemFactory(context: Context) : AssemblyChildItemFactory<UserChildItemFactory.UserChildItem>() {
+class UserChildItemFactory(context: Context) : AssemblyItemFactory<UserChildItemFactory.UserChildItem>() {
 
     private val eventListener: EventListener
 
@@ -50,11 +50,10 @@ class UserChildItemFactory(context: Context) : AssemblyChildItemFactory<UserChil
         }
 
         override fun onClickAge(position: Int, user: User) {
-            val message: String
-            if ((user.sex ?: "").contains("男") || (user.sex ?: "").contains("先生")) {
-                message = "哥今年" + user.age + "岁了，该找媳妇了！"
+            val message: String = if ((user.sex ?: "").contains("男") || (user.sex ?: "").contains("先生")) {
+                "哥今年" + user.age + "岁了，该找媳妇了！"
             } else {
-                message = "姐今年" + user.age + "岁了，该找人嫁了！"
+                "姐今年" + user.age + "岁了，该找人嫁了！"
             }
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
@@ -64,27 +63,27 @@ class UserChildItemFactory(context: Context) : AssemblyChildItemFactory<UserChil
         }
     }
 
-    inner class UserChildItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyChildItem<User>(itemLayoutId, parent) {
-        val headImageView: ImageView by bindView(R.id.image_userListItem_head)
-        val nameTextView: TextView by bindView(R.id.text_userListItem_name)
-        val sexTextView: TextView by bindView(R.id.text_userListItem_sex)
-        val ageTextView: TextView by bindView(R.id.text_userListItem_age)
-        val jobTextView: TextView by bindView(R.id.text_userListItem_job)
+    inner class UserChildItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLayoutId, parent) {
+        private val headImageView: ImageView by bindView(R.id.image_userListItem_head)
+        private val nameTextView: TextView by bindView(R.id.text_userListItem_name)
+        private val sexTextView: TextView by bindView(R.id.text_userListItem_sex)
+        private val ageTextView: TextView by bindView(R.id.text_userListItem_age)
+        private val jobTextView: TextView by bindView(R.id.text_userListItem_job)
 
         override fun onConfigViews(context: Context) {
-            headImageView.setOnClickListener { eventListener.onClickHead(position, data) }
-            nameTextView.setOnClickListener { eventListener.onClickName(position, data) }
-            sexTextView.setOnClickListener { eventListener.onClickSex(position, data) }
-            ageTextView.setOnClickListener { eventListener.onClickAge(position, data) }
-            jobTextView.setOnClickListener { eventListener.onClickJob(position, data) }
+            headImageView.setOnClickListener { data?.let { it1 -> eventListener.onClickHead(position, it1) } }
+            nameTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickName(position, it1) } }
+            sexTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickSex(position, it1) } }
+            ageTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickAge(position, it1) } }
+            jobTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickJob(position, it1) } }
         }
 
-        override fun onSetData(position: Int, user: User) {
-            headImageView.setImageResource(user.headResId)
-            nameTextView.text = user.name
-            sexTextView.text = user.sex
-            ageTextView.text = user.age
-            jobTextView.text = user.job
+        override fun onSetData(position: Int, user: User?) {
+            if(user != null) headImageView.setImageResource(user.headResId) else headImageView.setImageDrawable(null)
+            nameTextView.text = user?.name
+            sexTextView.text = user?.sex
+            ageTextView.text = user?.age
+            jobTextView.text = user?.job
         }
     }
 }
