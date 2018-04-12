@@ -16,6 +16,9 @@
 
 package me.panpf.adapter.more;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import me.panpf.adapter.AssemblyItemFactory;
 
 /**
@@ -27,11 +30,13 @@ public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreI
 
     boolean paused;
     boolean end;
-    OnLoadMoreListener eventListener;
-    AssemblyLoadMoreItem assemblyLoadMoreItem;
+    @NonNull
+    OnLoadMoreListener listener;
+    @Nullable
+    AssemblyLoadMoreItem item;
 
-    public AssemblyLoadMoreItemFactory(OnLoadMoreListener eventListener) {
-        this.eventListener = eventListener;
+    public AssemblyLoadMoreItemFactory(@NonNull OnLoadMoreListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -39,11 +44,11 @@ public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreI
         this.paused = false;
         this.end = end;
 
-        if (assemblyLoadMoreItem != null) {
+        if (item != null) {
             if (end) {
-                assemblyLoadMoreItem.showEnd();
+                item.showEnd();
             } else {
-                assemblyLoadMoreItem.showLoading();
+                item.showLoading();
             }
         }
     }
@@ -51,13 +56,13 @@ public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreI
     @Override
     public void loadMoreFailed() {
         paused = false;
-        if (assemblyLoadMoreItem != null) {
-            assemblyLoadMoreItem.showErrorRetry();
+        if (item != null) {
+            item.showErrorRetry();
         }
     }
 
     @Override
-    public boolean isTarget(Object data) {
+    public boolean isTarget(@Nullable Object data) {
         return true;
     }
 }

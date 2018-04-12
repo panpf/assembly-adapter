@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListView
 import me.panpf.adapter.AssemblyAdapter
+import me.panpf.adapter.AssemblyExpandableAdapter
 import me.panpf.adapter.FixedItemInfo
-import me.panpf.adapter.expandable.AssemblyExpandableAdapter
 import me.panpf.adapter.more.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game

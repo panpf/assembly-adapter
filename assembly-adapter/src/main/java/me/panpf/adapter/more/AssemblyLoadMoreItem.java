@@ -11,18 +11,20 @@ import me.panpf.adapter.AssemblyItem;
 
 @SuppressWarnings("unused")
 public abstract class AssemblyLoadMoreItem<DATA> extends AssemblyItem<DATA> implements LoadMoreItemBridle<DATA> {
-    private AssemblyLoadMoreItemFactory assemblyLoadMoreItemFactory;
 
-    public AssemblyLoadMoreItem(AssemblyLoadMoreItemFactory assemblyLoadMoreItemFactory, int itemLayoutId, ViewGroup parent) {
+    @NonNull
+    private AssemblyLoadMoreItemFactory itemFactory;
+
+    public AssemblyLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory itemFactory, int itemLayoutId, @NonNull ViewGroup parent) {
         super(itemLayoutId, parent);
-        this.assemblyLoadMoreItemFactory = assemblyLoadMoreItemFactory;
-        assemblyLoadMoreItemFactory.assemblyLoadMoreItem = this;
+        this.itemFactory = itemFactory;
+        this.itemFactory.item = this;
     }
 
-    public AssemblyLoadMoreItem(AssemblyLoadMoreItemFactory assemblyLoadMoreItemFactory, View convertView) {
+    public AssemblyLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory itemFactory, @NonNull View convertView) {
         super(convertView);
-        this.assemblyLoadMoreItemFactory = assemblyLoadMoreItemFactory;
-        assemblyLoadMoreItemFactory.assemblyLoadMoreItem = this;
+        this.itemFactory = itemFactory;
+        this.itemFactory.item = this;
     }
 
     @Override
@@ -33,8 +35,9 @@ public abstract class AssemblyLoadMoreItem<DATA> extends AssemblyItem<DATA> impl
             errorView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (assemblyLoadMoreItemFactory.eventListener != null) {
-                        assemblyLoadMoreItemFactory.paused = false;
+                    //noinspection ConstantConditions
+                    if (itemFactory.listener != null) {
+                        itemFactory.paused = false;
                         setData(getPosition(), getData());
                     }
                 }
@@ -44,14 +47,15 @@ public abstract class AssemblyLoadMoreItem<DATA> extends AssemblyItem<DATA> impl
 
     @Override
     public void onSetData(int position, @Nullable DATA DATA) {
-        final AssemblyAdapter adapter = assemblyLoadMoreItemFactory.getAdapter();
-        if (assemblyLoadMoreItemFactory.end) {
+        final AssemblyAdapter adapter = itemFactory.getAdapter();
+        if (itemFactory.end) {
             showEnd();
         } else if (adapter != null) {
             showLoading();
-            if (assemblyLoadMoreItemFactory.eventListener != null && !assemblyLoadMoreItemFactory.paused) {
-                assemblyLoadMoreItemFactory.paused = true;
-                assemblyLoadMoreItemFactory.eventListener.onLoadMore(adapter);
+            //noinspection ConstantConditions
+            if (itemFactory.listener != null && !itemFactory.paused) {
+                itemFactory.paused = true;
+                itemFactory.listener.onLoadMore(adapter);
             }
         }
     }

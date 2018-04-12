@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.panpf.adapter.expandable;
+package me.panpf.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,6 +32,7 @@ import me.panpf.adapter.AssemblyItemFactory;
 import me.panpf.adapter.FixedItemInfo;
 import me.panpf.adapter.Item;
 import me.panpf.adapter.ItemFactory;
+import me.panpf.adapter.expandable.ExpandableItemStorage;
 import me.panpf.adapter.more.AssemblyLoadMoreItem;
 import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
 import me.panpf.adapter.more.LoadMoreFixedItemInfo;
