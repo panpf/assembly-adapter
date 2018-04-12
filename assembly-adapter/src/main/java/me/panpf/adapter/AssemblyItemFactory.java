@@ -77,11 +77,14 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements 
         ITEM item = createAssemblyItem(parent);
 
         if (fullSpanInStaggeredGrid) {
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) item.getItemView().getLayoutParams();
-            if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
-                StaggeredGridLayoutManager.LayoutParams staggeredGridLayoutParams = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
-                staggeredGridLayoutParams.setFullSpan(true);
-                item.getItemView().setLayoutParams(layoutParams);
+            ViewGroup.LayoutParams layoutParams = item.getItemView().getLayoutParams();
+            if (layoutParams != null && layoutParams instanceof RecyclerView.LayoutParams) {
+                RecyclerView.LayoutParams recyclerLayoutParams = (RecyclerView.LayoutParams) item.getItemView().getLayoutParams();
+                if (recyclerLayoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+                    StaggeredGridLayoutManager.LayoutParams staggeredGridLayoutParams = (StaggeredGridLayoutManager.LayoutParams) recyclerLayoutParams;
+                    staggeredGridLayoutParams.setFullSpan(true);
+                    item.getItemView().setLayoutParams(recyclerLayoutParams);
+                }
             }
         }
 
