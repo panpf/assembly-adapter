@@ -183,12 +183,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     }
 
     @Override
-    public void addAll(@NonNull Collection collection) {
+    public void addAll(@Nullable Collection collection) {
         storage.addAll(collection);
     }
 
     @Override
-    public void addAll(@NonNull Object... items) {
+    public void addAll(@Nullable Object... items) {
         storage.addAll(items);
     }
 

@@ -26,12 +26,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.AssemblyAdapter;
-import me.panpf.adapter.AssemblyItem;
-import me.panpf.adapter.AssemblyItemFactory;
-import me.panpf.adapter.FixedItemInfo;
-import me.panpf.adapter.Item;
-import me.panpf.adapter.ItemFactory;
 import me.panpf.adapter.expandable.ExpandableItemStorage;
 import me.panpf.adapter.more.AssemblyLoadMoreItem;
 import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
@@ -219,12 +213,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     @Override
-    public void addAll(@NonNull Collection collection) {
+    public void addAll(@Nullable Collection collection) {
         storage.addAll(collection);
     }
 
     @Override
-    public void addAll(@NonNull Object... items) {
+    public void addAll(@Nullable Object... items) {
         storage.addAll(items);
     }
 

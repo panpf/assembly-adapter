@@ -20,6 +20,7 @@ import me.panpf.adapter.sample.itemfactory.GameItemFactory
 import me.panpf.adapter.sample.itemfactory.HeaderItemFactory
 import me.panpf.adapter.sample.itemfactory.LoadMoreItemFactory
 import me.panpf.adapter.sample.itemfactory.UserItemFactory
+import java.lang.ref.WeakReference
 import java.util.*
 
 class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
@@ -51,10 +52,18 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
     }
 
     private fun loadData() {
-        val appContext = context?.applicationContext ?: return
-        object : AsyncTask<String, String, List<Any>>() {
+        LoadDataTask(WeakReference(this)).execute("")
+    }
 
-            override fun doInBackground(vararg params: String): List<Any> {
+    override fun onLoadMore(adapter: AssemblyAdapter) {
+        loadData()
+    }
+
+    class LoadDataTask(private val fragmentRef: WeakReference<RecyclerViewFragment>) : AsyncTask<String, String, List<Any>?>() {
+
+        override fun doInBackground(vararg params: String): List<Any>? {
+            val fragment = fragmentRef.get() ?: return null
+            fragment.run {
                 var index = 0
                 val dataList = ArrayList<Any>(size)
                 var userStatus = true
@@ -86,16 +95,15 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
                     }
-
                 }
                 return dataList
             }
+        }
 
-            override fun onPostExecute(objects: List<Any>) {
-                if (activity == null) {
-                    return
-                }
-
+        override fun onPostExecute(objects: List<Any>?) {
+            val fragment = fragmentRef.get() ?: return
+            val appContext = fragment.context?.applicationContext ?: return
+            fragment.apply {
                 nextStart += size
                 if (adapter == null) {
                     adapter = AssemblyRecyclerAdapter(objects)
@@ -106,7 +114,7 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
                     adapter!!.addItemFactory(GameItemFactory(appContext))
                     footerItemInfo = adapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
                     footerItemInfo2 = adapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢？")
-                    adapter!!.setLoadMoreItem(LoadMoreItemFactory(this@RecyclerViewFragment))
+                    adapter!!.setLoadMoreItem(LoadMoreItemFactory(fragment))
 
                     recyclerView.adapter = adapter
                 } else {
@@ -122,10 +130,6 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
                 }
                 adapter!!.setDisableLoadMore(loadMoreEnd)
             }
-        }.execute("")
-    }
-
-    override fun onLoadMore(adapter: AssemblyAdapter) {
-        loadData()
+        }
     }
 }

@@ -398,7 +398,7 @@ public class ItemStorage {
     /**
      * 批量添加数据
      */
-    public void addAll(@NonNull Collection collection) {
+    public void addAll(@Nullable Collection collection) {
         //noinspection ConstantConditions
         if (collection == null || collection.size() == 0) {
             return;
@@ -419,7 +419,7 @@ public class ItemStorage {
     /**
      * 批量添加数据
      */
-    public void addAll(@NonNull Object... items) {
+    public void addAll(@Nullable Object... items) {
         //noinspection ConstantConditions
         if (items == null || items.length == 0) {
             return;

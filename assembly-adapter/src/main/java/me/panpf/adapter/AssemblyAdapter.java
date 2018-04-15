@@ -157,12 +157,12 @@ public interface AssemblyAdapter {
     /**
      * 批量添加数据
      */
-    void addAll(@NonNull Collection collection);
+    void addAll(@Nullable Collection collection);
 
     /**
      * 批量添加数据
      */
-    void addAll(@NonNull Object... items);
+    void addAll(@Nullable Object... items);
 
     /**
      * 插入一条数据
