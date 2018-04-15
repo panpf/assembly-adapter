@@ -11,7 +11,9 @@ class TextFragmentItemFactory : AssemblyFragmentItemFactory<Text>() {
         return data is Text
     }
 
-    override fun createFragment(position: Int, text: Text): Fragment {
+    override fun createFragment(position: Int, text: Text?): Fragment {
+        if (text == null) throw IllegalArgumentException("data is null")
+
         val textFragment = TextFragment()
         textFragment.arguments = TextFragment.buildParams(text.text)
         return textFragment

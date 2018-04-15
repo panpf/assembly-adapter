@@ -80,7 +80,7 @@ public class ItemStorage {
     public void addItemFactory(@NonNull ItemFactory itemFactory) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
-            throw new IllegalArgumentException("itemFactory is null or item factory locked");
+            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(adapter);
@@ -124,7 +124,7 @@ public class ItemStorage {
     public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
-            throw new IllegalArgumentException("itemFactory is null or item factory locked");
+            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(adapter);
@@ -140,7 +140,7 @@ public class ItemStorage {
 
         synchronized (headerItemListLock) {
             if (headerItemList == null) {
-                headerItemList = new ArrayList<FixedItemInfo>(2);
+                headerItemList = new ArrayList<FixedItemInfo>(1);
             }
             headerItemList.add(fixedItemInfo);
         }
@@ -160,7 +160,7 @@ public class ItemStorage {
         if (fixedItemInfo.isEnabled()) {
             synchronized (headerItemListLock) {
                 if (headerItemList == null) {
-                    headerItemList = new ArrayList<FixedItemInfo>(2);
+                    headerItemList = new ArrayList<FixedItemInfo>(1);
                 }
                 headerItemList.add(fixedItemInfo);
                 Collections.sort(headerItemList, new Comparator<FixedItemInfo>() {
@@ -215,7 +215,7 @@ public class ItemStorage {
     public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
-            throw new IllegalArgumentException("itemFactory is null or item factory locked");
+            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(adapter);
@@ -231,7 +231,7 @@ public class ItemStorage {
 
         synchronized (footerItemListLock) {
             if (footerItemList == null) {
-                footerItemList = new ArrayList<FixedItemInfo>(2);
+                footerItemList = new ArrayList<FixedItemInfo>(1);
             }
             footerItemList.add(fixedItemInfo);
         }
@@ -251,7 +251,7 @@ public class ItemStorage {
         if (fixedItemInfo.isEnabled()) {
             synchronized (footerItemListLock) {
                 if (footerItemList == null) {
-                    footerItemList = new ArrayList<FixedItemInfo>(2);
+                    footerItemList = new ArrayList<FixedItemInfo>(1);
                 }
                 footerItemList.add(fixedItemInfo);
                 Collections.sort(footerItemList, new Comparator<FixedItemInfo>() {
@@ -306,7 +306,7 @@ public class ItemStorage {
     public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
-            throw new IllegalArgumentException("itemFactory is null or item factory locked");
+            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(adapter);

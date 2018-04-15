@@ -5,9 +5,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.panpf.sketch.SketchImageView
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bindView
+import me.panpf.sketch.SketchImageView
 
 class ImageFragment : Fragment() {
 
@@ -36,9 +36,9 @@ class ImageFragment : Fragment() {
     companion object {
 
         fun buildParams(imageUrl: String): Bundle {
-            val bundle = Bundle()
-            bundle.putString("imageUrl", imageUrl)
-            return bundle
+            return Bundle().apply {
+                putString("imageUrl", imageUrl)
+            }
         }
     }
 }

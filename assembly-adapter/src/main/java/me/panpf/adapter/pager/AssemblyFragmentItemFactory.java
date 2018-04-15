@@ -16,6 +16,8 @@
 
 package me.panpf.adapter.pager;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 
@@ -25,37 +27,40 @@ import android.support.v4.view.PagerAdapter;
  * @param <DATA> 指定数据类型
  */
 public abstract class AssemblyFragmentItemFactory<DATA> {
-
+    @Nullable
     private PagerAdapter adapter;
 
     /**
      * 获取 {@link PagerAdapter}
      */
+    @Nullable
     public PagerAdapter getAdapter() {
         return adapter;
     }
 
     /**
-     * 设置Adapter，此方法由Adapter调用
+     * 设置 Adapter，此方法由 Adapter 调用
      */
-    void setAdapter(PagerAdapter adapter) {
+    void setAdapter(@NonNull PagerAdapter adapter) {
         this.adapter = adapter;
     }
 
-    protected Fragment dispatchCreateFragment(int position, DATA data) {
+    @NonNull
+    protected Fragment dispatchCreateFragment(int position, @Nullable DATA data) {
         return createFragment(position, data);
     }
 
     /**
      * 匹配数据
      *
-     * @param data 待匹配的数据，通常是使用instanceof关键字匹配类型
-     * @return 如果返回true，Adapter将会使用此ItemFactory来处理当前这条数据
+     * @param data 待匹配的数据，通常是使用 instanceof 关键字匹配类型
+     * @return 如果返回 true，Adapter 将会使用此 {@link AssemblyFragmentItemFactory} 来处理当前这条数据
      */
-    public abstract boolean isTarget(Object data);
+    public abstract boolean isTarget(@Nullable Object data);
 
     /**
      * 创建Fragment
      */
-    public abstract Fragment createFragment(int position, DATA data);
+    @NonNull
+    public abstract Fragment createFragment(int position, @Nullable DATA data);
 }

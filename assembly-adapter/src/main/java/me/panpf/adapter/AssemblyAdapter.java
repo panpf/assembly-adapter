@@ -12,7 +12,7 @@ import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
 import me.panpf.adapter.more.LoadMoreFixedItemInfo;
 
 /**
- * 组合式 Adapter，支持多 item 和加载更多功能。故名思议可以通过组合不同的 {@link ItemFactory} 来快捷的支持多 item
+ * 组合式 Adapter，支持组合式多类型 item，支持头、尾巴以及加载更多
  */
 @SuppressWarnings("unused")
 public interface AssemblyAdapter {

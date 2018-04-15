@@ -10,7 +10,9 @@ class ImageFragmentItemFactory : AssemblyFragmentItemFactory<String>() {
         return data is String
     }
 
-    override fun createFragment(position: Int, string: String): Fragment {
+    override fun createFragment(position: Int, string: String?): Fragment {
+        if (string == null) throw IllegalArgumentException("data is null")
+
         val imageFragment = ImageFragment()
         imageFragment.arguments = ImageFragment.buildParams(string)
         return imageFragment

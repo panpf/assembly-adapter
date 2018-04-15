@@ -16,36 +16,43 @@
 
 package me.panpf.adapter.pager;
 
-import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * 通用组合式FragmentStatePagerAdapter，支持组合式多ItemType，支持头、尾巴以及加载更多
+ * 通用组合式 {@link FragmentStatePagerAdapter}，支持组合式多类型 item，支持头、尾巴以及加载更多
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
-    private static final String TAG = "AssemblyFragmentStatePagerAdapter";
+
+    @Nullable
     private List dataList;
 
     private boolean itemFactoryLocked;
+    @Nullable
     private ArrayList<FixedFragmentItemInfo> headerItemList;
+    @Nullable
     private ArrayList<FixedFragmentItemInfo> footerItemList;
+    @Nullable
     private ArrayList<AssemblyFragmentItemFactory> itemFactoryList;
 
-    public AssemblyFragmentStatePagerAdapter(FragmentManager fm, List dataList) {
+    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm) {
+        super(fm);
+    }
+
+    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @Nullable List dataList) {
         super(fm);
         this.dataList = dataList;
     }
 
-    public AssemblyFragmentStatePagerAdapter(FragmentManager fm, Object[] dataArray) {
+    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @Nullable Object[] dataArray) {
         super(fm);
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
@@ -53,29 +60,10 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
         }
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表头部的AssemblyFragmentItemFactory
-     */
-    @SuppressLint("LongLogTag")
-    public void addHeaderItem(AssemblyFragmentItemFactory headerFactory, Object data) {
-        if (headerFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "headerFactory is nll or locked");
-            return;
-        }
-
-        headerFactory.setAdapter(this);
-
-        if (headerItemList == null) {
-            headerItemList = new ArrayList<FixedFragmentItemInfo>(2);
-        }
-        headerItemList.add(new FixedFragmentItemInfo(headerFactory, data));
-    }
-
-    @SuppressLint("LongLogTag")
-    public void addItemFactory(AssemblyFragmentItemFactory itemFactory) {
-        if(itemFactory == null || itemFactoryLocked){
-            Log.w(TAG, "itemFactory is nll or locked");
-            return;
+    public void addItemFactory(@NonNull AssemblyFragmentItemFactory itemFactory) {
+        //noinspection ConstantConditions
+        if (itemFactory == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(this);
@@ -87,26 +75,43 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的AssemblyFragmentItemFactory
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
      */
-    @SuppressLint("LongLogTag")
-    public void addFooterItem(AssemblyFragmentItemFactory footerFactory, Object data) {
+    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory, @Nullable Object data) {
+        //noinspection ConstantConditions
+        if (headerFactory == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
+        }
+
+        headerFactory.setAdapter(this);
+
+        if (headerItemList == null) {
+            headerItemList = new ArrayList<FixedFragmentItemInfo>(1);
+        }
+        headerItemList.add(new FixedFragmentItemInfo(headerFactory, data));
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
+     */
+    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @Nullable Object data) {
+        //noinspection ConstantConditions
         if (footerFactory == null || itemFactoryLocked) {
-            Log.w(TAG, "footerFactory is nll or locked");
-            return;
+            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         footerFactory.setAdapter(this);
 
         if (footerItemList == null) {
-            footerItemList = new ArrayList<FixedFragmentItemInfo>(2);
+            footerItemList = new ArrayList<FixedFragmentItemInfo>(1);
         }
         footerItemList.add(new FixedFragmentItemInfo(footerFactory, data));
     }
 
     /**
-     * 获取Header列表
+     * 获取 header 列表
      */
+    @Nullable
     public List<FixedFragmentItemInfo> getHeaderItemList() {
         return headerItemList;
     }
@@ -114,6 +119,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取ItemFactory列表
      */
+    @Nullable
     public List<AssemblyFragmentItemFactory> getItemFactoryList() {
         return itemFactoryList;
     }
@@ -121,6 +127,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取Footer列表
      */
+    @Nullable
     public List<FixedFragmentItemInfo> getFooterItemList() {
         return footerItemList;
     }
@@ -128,6 +135,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /**
      * 获取数据列表
      */
+    @Nullable
     public List getDataList() {
         return dataList;
     }
@@ -198,17 +206,17 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     }
 
     @Nullable
-    public Object getHeaderItem(int positionInHeaderList){
+    public Object getHeaderItem(int positionInHeaderList) {
         return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
     }
 
     @Nullable
-    public Object getDataItem(int positionInDataList){
+    public Object getDataItem(int positionInDataList) {
         return dataList != null ? dataList.get(positionInDataList) : null;
     }
 
     @Nullable
-    public Object getFooterItem(int positionInFooterList){
+    public Object getFooterItem(int positionInFooterList) {
         return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
     }
 
@@ -218,7 +226,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
         int headerItemCount = getHeaderItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
-        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
             FixedFragmentItemInfo fixedItemInfo = headerItemList.get(positionInHeaderList);
@@ -230,7 +238,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
         int dataCount = getDataCount();
         int dataStartPosition = headerEndPosition + 1;
         int dataEndPosition = headerEndPosition + dataCount;
-        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+        if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = getDataItem(positionInDataList);
 
@@ -243,22 +251,21 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
                 }
             }
 
-            throw new IllegalStateException("Didn't find suitable AssemblyFragmentItemFactory. " +
-                    "position=" + position + ", " +
-                    "dataObject=" + (dataObject != null ? dataObject.getClass().getName() : "null"));
+            throw new IllegalStateException(String.format("Didn't find suitable AssemblyFragmentItemFactory. position=%d, dataObject=%s",
+                    position, dataObject != null ? dataObject.getClass().getName() : "null"));
         }
 
         // 尾巴
         int footerItemCount = getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
-        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
             FixedFragmentItemInfo fixedItemInfo = footerItemList.get(positionInFooterList);
             //noinspection unchecked
             return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
         }
 
-        throw new IllegalArgumentException("illegal position: " + position);
+        throw new IllegalArgumentException("Illegal position: " + position);
     }
 }

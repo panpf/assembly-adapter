@@ -44,7 +44,7 @@ public class ExpandableItemStorage extends ItemStorage {
     public void addChildItemFactory(@NonNull ItemFactory childItemFactory) {
         //noinspection ConstantConditions
         if (childItemFactory == null || childItemFactoryLocked) {
-            throw new IllegalStateException("childItemFactory is null or item factory locked");
+            throw new IllegalStateException("childItemFactory is null or item factory list locked");
         }
 
         childItemFactory.setAdapter(getAdapter());

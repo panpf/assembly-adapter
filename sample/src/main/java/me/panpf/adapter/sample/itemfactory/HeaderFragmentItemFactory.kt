@@ -11,7 +11,9 @@ class HeaderFragmentItemFactory : AssemblyFragmentItemFactory<Header>() {
         return data is Header
     }
 
-    override fun createFragment(position: Int, header: Header): Fragment {
+    override fun createFragment(position: Int, header: Header?): Fragment {
+        if (header == null) throw IllegalArgumentException("data is null")
+
         val headerFragment = HeaderFragment()
         headerFragment.arguments = HeaderFragment.buildParams(header.text, header.imageUrl)
         return headerFragment
