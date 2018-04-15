@@ -22,8 +22,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,80 +30,54 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
-    @Nullable
-    private List dataList;
-
-    private boolean itemFactoryLocked;
-    @Nullable
-    private ArrayList<FixedFragmentItemInfo> headerItemList;
-    @Nullable
-    private ArrayList<FixedFragmentItemInfo> footerItemList;
-    @Nullable
-    private ArrayList<AssemblyFragmentItemFactory> itemFactoryList;
+    @NonNull
+    private FragmentItemStorage storage;
 
     public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
+        this.storage = new FragmentItemStorage(this);
     }
 
-    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @Nullable List dataList) {
+    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @NonNull List dataList) {
         super(fm);
-        this.dataList = dataList;
+        this.storage = new FragmentItemStorage(this, dataList);
     }
 
     public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @Nullable Object[] dataArray) {
         super(fm);
-        if (dataArray != null && dataArray.length > 0) {
-            this.dataList = new ArrayList(dataArray.length);
-            Collections.addAll(dataList, dataArray);
-        }
+        this.storage = new FragmentItemStorage(this, dataArray);
     }
+
+
+    /* ************************ 数据 ItemFactory *************************** */
 
     public void addItemFactory(@NonNull AssemblyFragmentItemFactory itemFactory) {
-        //noinspection ConstantConditions
-        if (itemFactory == null || itemFactoryLocked) {
-            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
-        }
-
-        itemFactory.setAdapter(this);
-
-        if (itemFactoryList == null) {
-            itemFactoryList = new ArrayList<AssemblyFragmentItemFactory>(2);
-        }
-        itemFactoryList.add(itemFactory);
+        storage.addItemFactory(itemFactory);
     }
+
+    /**
+     * 获取 {@link me.panpf.adapter.ItemFactory} 列表
+     */
+    @Nullable
+    public List<AssemblyFragmentItemFactory> getItemFactoryList() {
+        return storage.getItemFactoryList();
+    }
+
+    /**
+     * 获取 {@link me.panpf.adapter.ItemFactory} 的个数
+     */
+    public int getItemFactoryCount() {
+        return storage.getItemFactoryCount();
+    }
+
+
+    /* ************************ 头部 ItemFactory *************************** */
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
      */
     public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory, @Nullable Object data) {
-        //noinspection ConstantConditions
-        if (headerFactory == null || itemFactoryLocked) {
-            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
-        }
-
-        headerFactory.setAdapter(this);
-
-        if (headerItemList == null) {
-            headerItemList = new ArrayList<FixedFragmentItemInfo>(1);
-        }
-        headerItemList.add(new FixedFragmentItemInfo(headerFactory, data));
-    }
-
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
-     */
-    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @Nullable Object data) {
-        //noinspection ConstantConditions
-        if (footerFactory == null || itemFactoryLocked) {
-            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
-        }
-
-        footerFactory.setAdapter(this);
-
-        if (footerItemList == null) {
-            footerItemList = new ArrayList<FixedFragmentItemInfo>(1);
-        }
-        footerItemList.add(new FixedFragmentItemInfo(footerFactory, data));
+        storage.addHeaderItem(headerFactory, data);
     }
 
     /**
@@ -113,159 +85,91 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
      */
     @Nullable
     public List<FixedFragmentItemInfo> getHeaderItemList() {
-        return headerItemList;
-    }
-
-    /**
-     * 获取ItemFactory列表
-     */
-    @Nullable
-    public List<AssemblyFragmentItemFactory> getItemFactoryList() {
-        return itemFactoryList;
-    }
-
-    /**
-     * 获取Footer列表
-     */
-    @Nullable
-    public List<FixedFragmentItemInfo> getFooterItemList() {
-        return footerItemList;
-    }
-
-    /**
-     * 获取数据列表
-     */
-    @Nullable
-    public List getDataList() {
-        return dataList;
+        return storage.getHeaderItemList();
     }
 
     /**
      * 获取列表头的个数
      */
     public int getHeaderItemCount() {
-        return headerItemList != null ? headerItemList.size() : 0;
+        return storage.getHeaderItemCount();
+    }
+
+    @Nullable
+    public Object getHeaderData(int positionInHeaderList) {
+        return storage.getHeaderData(positionInHeaderList);
+    }
+
+
+    /* ************************ 尾巴 ItemFactory *************************** */
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
+     */
+    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @Nullable Object data) {
+        storage.addFooterItem(footerFactory, data);
     }
 
     /**
-     * 获取ItemFactory的个数
+     * 获取 footer 列表
      */
-    public int getItemFactoryCount() {
-        return itemFactoryList != null ? itemFactoryList.size() : 0;
+    @Nullable
+    public List<FixedFragmentItemInfo> getFooterItemList() {
+        return storage.getFooterItemList();
     }
 
     /**
      * 获取列表头的个数
      */
     public int getFooterItemCount() {
-        return footerItemList != null ? footerItemList.size() : 0;
+        return storage.getFooterItemCount();
+    }
+
+    @Nullable
+    public Object getFooterData(int positionInFooterList) {
+        return storage.getFooterData(positionInFooterList);
+    }
+
+
+    /* ************************ 数据列表 *************************** */
+
+    /**
+     * 获取数据列表
+     */
+    @Nullable
+    public List getDataList() {
+        return storage.getDataList();
     }
 
     /**
      * 获取数据列表的长度
      */
     public int getDataCount() {
-        return dataList != null ? dataList.size() : 0;
+        return storage.getDataCount();
     }
+
+    @Nullable
+    public Object getData(int positionInDataList) {
+        return storage.getData(positionInDataList);
+    }
+
+
+    /* ************************ 完整列表 *************************** */
 
     /**
      * 获取在各自区域的位置
      */
     public int getPositionInPart(int position) {
-        // 头
-        int headerItemCount = getHeaderItemCount();
-        int headerStartPosition = 0;
-        int headerEndPosition = headerItemCount - 1;
-        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            return position;
-        }
-
-        // 数据
-        int dataCount = getDataCount();
-        int dataStartPosition = headerEndPosition + 1;
-        int dataEndPosition = headerEndPosition + dataCount;
-        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
-            return position - headerItemCount;
-        }
-
-        // 尾巴
-        int footerItemCount = getFooterItemCount();
-        int footerStartPosition = dataEndPosition + 1;
-        int footerEndPosition = dataEndPosition + footerItemCount;
-        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
-            return position - headerItemCount - dataCount;
-        }
-
-        throw new IllegalArgumentException("illegal position: " + position);
+        return storage.getPositionInPart(position);
     }
 
     @Override
     public int getCount() {
-        itemFactoryLocked = true;
-        return getHeaderItemCount() + getDataCount() + getFooterItemCount();
-    }
-
-    @Nullable
-    public Object getHeaderItem(int positionInHeaderList) {
-        return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
-    }
-
-    @Nullable
-    public Object getDataItem(int positionInDataList) {
-        return dataList != null ? dataList.get(positionInDataList) : null;
-    }
-
-    @Nullable
-    public Object getFooterItem(int positionInFooterList) {
-        return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
+        return storage.getItemCount();
     }
 
     @Override
     public Fragment getItem(int position) {
-        // 头
-        int headerItemCount = getHeaderItemCount();
-        int headerStartPosition = 0;
-        int headerEndPosition = headerItemCount - 1;
-        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            //noinspection UnnecessaryLocalVariable
-            int positionInHeaderList = position;
-            FixedFragmentItemInfo fixedItemInfo = headerItemList.get(positionInHeaderList);
-            //noinspection unchecked
-            return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
-        }
-
-        // 数据
-        int dataCount = getDataCount();
-        int dataStartPosition = headerEndPosition + 1;
-        int dataEndPosition = headerEndPosition + dataCount;
-        if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
-            int positionInDataList = position - headerItemCount;
-            Object dataObject = getDataItem(positionInDataList);
-
-            AssemblyFragmentItemFactory itemFactory;
-            for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
-                itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(dataObject)) {
-                    //noinspection unchecked
-                    return itemFactory.dispatchCreateFragment(position, dataObject);
-                }
-            }
-
-            throw new IllegalStateException(String.format("Didn't find suitable AssemblyFragmentItemFactory. position=%d, dataObject=%s",
-                    position, dataObject != null ? dataObject.getClass().getName() : "null"));
-        }
-
-        // 尾巴
-        int footerItemCount = getFooterItemCount();
-        int footerStartPosition = dataEndPosition + 1;
-        int footerEndPosition = dataEndPosition + footerItemCount;
-        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
-            int positionInFooterList = position - headerItemCount - dataCount;
-            FixedFragmentItemInfo fixedItemInfo = footerItemList.get(positionInFooterList);
-            //noinspection unchecked
-            return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
-        }
-
-        throw new IllegalArgumentException("Illegal position: " + position);
+        return storage.getItem(position);
     }
 }

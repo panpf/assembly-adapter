@@ -27,6 +27,7 @@ import android.support.v4.view.PagerAdapter;
  * @param <DATA> 指定数据类型
  */
 public abstract class AssemblyFragmentItemFactory<DATA> {
+
     @Nullable
     private PagerAdapter adapter;
 
@@ -39,7 +40,7 @@ public abstract class AssemblyFragmentItemFactory<DATA> {
     }
 
     /**
-     * 设置 Adapter，此方法由 Adapter 调用
+     * 设置 {@link PagerAdapter}，此方法由 Adapter 调用
      */
     void setAdapter(@NonNull PagerAdapter adapter) {
         this.adapter = adapter;
@@ -59,7 +60,7 @@ public abstract class AssemblyFragmentItemFactory<DATA> {
     public abstract boolean isTarget(@Nullable Object data);
 
     /**
-     * 创建Fragment
+     * 创建 {@link Fragment}
      */
     @NonNull
     public abstract Fragment createFragment(int position, @Nullable DATA data);

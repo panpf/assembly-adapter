@@ -16,30 +16,42 @@
 
 package me.panpf.adapter.pager;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+
 /**
- * AssemblyFragmentPagerAdapter和AssemblyFragmentStatePagerAdapter专用的固定位置Item管理器
+ * {@link AssemblyFragmentPagerAdapter} 和 {@link AssemblyFragmentStatePagerAdapter} 专用的固定位置 item 管理器
  */
 @SuppressWarnings("WeakerAccess")
 public class FixedFragmentItemInfo {
+
+    @NonNull
     private AssemblyFragmentItemFactory itemFactory;
+    @Nullable
     private Object data;
 
-    public FixedFragmentItemInfo(AssemblyFragmentItemFactory itemFactory, Object data) {
+    public FixedFragmentItemInfo(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data) {
         this.data = data;
         this.itemFactory = itemFactory;
     }
 
+    @Nullable
     public Object getData() {
         return data;
     }
 
-    @SuppressWarnings("unused")
-    public AssemblyFragmentItemFactory getItemFactory() {
-        return itemFactory;
+    public void setData(@Nullable Object data) {
+        this.data = data;
+
+        PagerAdapter adapter = itemFactory.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
-    public void setData(Object data) {
-        this.data = data;
-        itemFactory.getAdapter().notifyDataSetChanged();
+    @NonNull
+    public AssemblyFragmentItemFactory getItemFactory() {
+        return itemFactory;
     }
 }

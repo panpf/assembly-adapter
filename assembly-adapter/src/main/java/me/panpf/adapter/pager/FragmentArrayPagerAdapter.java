@@ -16,17 +16,20 @@
 
 package me.panpf.adapter.pager;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 /**
- * Fragment数组PagerAdapter
+ * {@link Fragment} 数组 {@link FragmentPagerAdapter}
  */
 public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
+
+    @NonNull
     private Fragment[] fragments;
 
-    public FragmentArrayPagerAdapter(FragmentManager fm, Fragment[] fragments) {
+    public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
         super(fm);
         this.fragments = fragments;
     }
@@ -38,6 +41,7 @@ public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
+        //noinspection ConstantConditions
         return fragments != null ? fragments.length : 0;
     }
 }
