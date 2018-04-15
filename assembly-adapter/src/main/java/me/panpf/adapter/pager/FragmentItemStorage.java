@@ -19,16 +19,12 @@ package me.panpf.adapter.pager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 通用组合式 {@link FragmentPagerAdapter}，支持组合式多类型 item，支持头、尾巴
- */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class FragmentItemStorage {
 

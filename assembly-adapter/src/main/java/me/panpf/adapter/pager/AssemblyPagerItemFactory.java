@@ -17,46 +17,50 @@
 package me.panpf.adapter.pager;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * AssemblyPagerAdapter专用的ItemFactory，负责匹配数据好和创建Item View
+ * {@link AssemblyPagerAdapter} 专用的 item factory，负责匹配数据和创建 item
  *
  * @param <DATA> 指定数据类型
  */
 public abstract class AssemblyPagerItemFactory<DATA> {
+
+    @Nullable
     private AssemblyPagerAdapter adapter;
 
     /**
-     * 获取Adapter
+     * 获取 {@link AssemblyPagerAdapter}
      */
+    @Nullable
     public AssemblyPagerAdapter getAdapter() {
         return adapter;
     }
 
     /**
-     * 设置Adapter，此方法由Adapter调用
+     * 设置 {@link AssemblyPagerAdapter}，此方法由 Adapter 调用
      */
-    void setAdapter(AssemblyPagerAdapter adapter) {
+    void setAdapter(@Nullable AssemblyPagerAdapter adapter) {
         this.adapter = adapter;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    protected View dispatchCreateView(Context context, ViewGroup container, int position, DATA data) {
+    protected View dispatchCreateView(@NonNull Context context, @NonNull ViewGroup container, int position, @Nullable DATA data) {
         return createView(context, container, position, data);
     }
 
     /**
      * 匹配数据
      *
-     * @param data 待匹配的数据，通常是使用instanceof关键字匹配类型
-     * @return 如果返回true，Adapter将会使用此ItemFactory来处理当前这条数据
+     * @param data 待匹配的数据，通常是使用 instanceof 关键字匹配类型
+     * @return 如果返回 true，Adapter 将会使用此 item factory 来处理当前这条数据
      */
-    public abstract boolean isTarget(Object data);
+    public abstract boolean isTarget(@Nullable Object data);
 
     /**
-     * 创建Fragment
+     * 创建 View
      */
-    public abstract View createView(Context context, ViewGroup container, int position, DATA data);
+    public abstract View createView(@NonNull Context context, @NonNull ViewGroup container, int position, @Nullable DATA data);
 }

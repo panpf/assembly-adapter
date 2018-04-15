@@ -17,7 +17,9 @@ class HeaderPagerItemFactory(private val clickListener: View.OnClickListener) : 
         return data is Header
     }
 
-    override fun createView(context: Context, container: ViewGroup, position: Int, header: Header): View {
+    override fun createView(context: Context, container: ViewGroup, position: Int, header: Header?): View {
+        if (header == null) throw IllegalArgumentException("data is null")
+
         val view = LayoutInflater.from(context).inflate(R.layout.fragment_header_image, container, false)
 
         val textView = view.findViewById(R.id.text_headerImageFragment) as TextView

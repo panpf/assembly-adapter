@@ -15,7 +15,9 @@ class TextPagerItemFactory : AssemblyPagerItemFactory<Text>() {
         return data is Text
     }
 
-    override fun createView(context: Context, container: ViewGroup, position: Int, text: Text): View {
+    override fun createView(context: Context, container: ViewGroup, position: Int, text: Text?): View {
+        if (text == null) throw IllegalArgumentException("data is null")
+
         val view = LayoutInflater.from(context).inflate(R.layout.fragment_text, container, false)
 
         val textView = view.findViewById(R.id.text_imageFragment_content) as TextView

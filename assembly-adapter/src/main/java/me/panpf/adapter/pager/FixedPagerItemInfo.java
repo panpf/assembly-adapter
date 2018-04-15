@@ -16,37 +16,45 @@
 
 package me.panpf.adapter.pager;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 /**
- * AssemblyPagerAdapter专用的固定位置Item管理器
+ * {@link AssemblyPagerAdapter} 专用的固定位置 item 管理器
  */
+@SuppressWarnings("WeakerAccess")
 public class FixedPagerItemInfo {
+
+    @NonNull
     private AssemblyPagerItemFactory itemFactory;
+    @Nullable
     private Object data;
     private boolean enabled;
     private int position;
     private boolean header;
 
-    public FixedPagerItemInfo(AssemblyPagerItemFactory itemFactory, Object data, boolean header) {
+    public FixedPagerItemInfo(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data, boolean header) {
         this.data = data;
         this.itemFactory = itemFactory;
         this.enabled = true;
         this.header = header;
     }
 
+    @Nullable
     public Object getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(@Nullable Object data) {
         this.data = data;
 
-        AssemblyPagerAdapter pagerAdapter = itemFactory.getAdapter();
-        if (pagerAdapter.isNotifyOnChange()) {
-            pagerAdapter.notifyDataSetChanged();
+        AssemblyPagerAdapter adapter = itemFactory.getAdapter();
+        if (adapter != null && adapter.isNotifyOnChange()) {
+            adapter.notifyDataSetChanged();
         }
     }
 
-    @SuppressWarnings("unused")
+    @NonNull
     public AssemblyPagerItemFactory getItemFactory() {
         return itemFactory;
     }
@@ -55,7 +63,6 @@ public class FixedPagerItemInfo {
         return enabled;
     }
 
-    @SuppressWarnings("unused")
     public void setEnabled(boolean enabled) {
         if (this.enabled == enabled) {
             return;
@@ -66,9 +73,15 @@ public class FixedPagerItemInfo {
 
     protected void enableChanged() {
         if (header) {
-            itemFactory.getAdapter().headerEnabledChanged(this);
+            AssemblyPagerAdapter adapter = itemFactory.getAdapter();
+            if (adapter != null) {
+                adapter.headerEnabledChanged(this);
+            }
         } else {
-            itemFactory.getAdapter().footerEnabledChanged(this);
+            AssemblyPagerAdapter adapter = itemFactory.getAdapter();
+            if (adapter != null) {
+                adapter.footerEnabledChanged(this);
+            }
         }
     }
 
@@ -80,7 +93,6 @@ public class FixedPagerItemInfo {
         this.position = position;
     }
 
-    @SuppressWarnings("unused")
     public boolean isHeader() {
         return header;
     }
