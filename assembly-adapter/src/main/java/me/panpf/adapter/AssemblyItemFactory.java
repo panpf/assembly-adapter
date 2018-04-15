@@ -13,7 +13,7 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements 
     private int itemType;
     private AssemblyAdapter adapter;
 
-    private int spanSize;
+    private int spanSize = 1;
     private boolean fullSpanInStaggeredGrid;
 
     @Override

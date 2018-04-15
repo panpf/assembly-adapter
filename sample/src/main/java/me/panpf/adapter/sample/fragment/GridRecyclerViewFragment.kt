@@ -17,13 +17,13 @@ import me.panpf.adapter.sample.bindView
 import me.panpf.adapter.sample.itemfactory.AppItemFactory
 import me.panpf.adapter.sample.itemfactory.AppListHeaderItemFactory
 import java.io.File
+import java.lang.ref.WeakReference
 import java.util.*
 
 class GridRecyclerViewFragment : Fragment() {
 
     val recyclerView: RecyclerView by bindView(R.id.list_recyclerViewFragment_content)
-    
-    var adapter: AssemblyRecyclerAdapter? = null
+    lateinit var adapter: AssemblyRecyclerAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recycler_view, container, false)
@@ -32,62 +32,63 @@ class GridRecyclerViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gridLayoutManager = GridLayoutManager(activity, 4)
-        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val adapter = recyclerView.adapter
-                if (adapter == null || adapter !is AssemblyRecyclerAdapter) {
-                    return 1
+        recyclerView.layoutManager = GridLayoutManager(activity, 4).apply {
+            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    val adapter = recyclerView.adapter
+                    if (adapter == null || adapter !is AssemblyRecyclerAdapter) {
+                        return 1
+                    }
+                    return adapter.getSpanSize(position)
                 }
-                return adapter.getSpanSize(position)
             }
         }
-        recyclerView.layoutManager = gridLayoutManager
 
-        if (adapter != null) {
-            recyclerView.adapter = adapter
-        } else {
-            loadAppList()
+        adapter = AssemblyRecyclerAdapter().apply {
+            addItemFactory(AppItemFactory())
+            addItemFactory(AppListHeaderItemFactory().fullSpan(recyclerView))
         }
+        recyclerView.adapter = adapter
+
+        LoadDataTask(WeakReference(this)).execute(0)
     }
 
-    private fun loadAppList() {
-        val appContext = context?.applicationContext ?: return
-        object : AsyncTask<Int, Int, Array<List<AppInfo>>>() {
+    class LoadDataTask(private val fragmentRef: WeakReference<GridRecyclerViewFragment>) : AsyncTask<Int, Int, Array<List<AppInfo>>>() {
+        override fun doInBackground(vararg params: Int?): Array<List<AppInfo>>? {
+            val fragment = fragmentRef.get() ?: return null
+            val appContext = fragment.context?.applicationContext ?: return null
 
-            override fun doInBackground(vararg params: Int?): Array<List<AppInfo>>? {
-                val packageManager = appContext.packageManager
-                val packageInfoList = packageManager.getInstalledPackages(0)
-                val systemAppList = ArrayList<AppInfo>()
-                val userAppList = ArrayList<AppInfo>()
-                for (packageInfo in packageInfoList) {
-                    val appInfo = AppInfo(true)
-                    appInfo.name = packageInfo.applicationInfo.loadLabel(packageManager).toString()
-                    appInfo.sortName = appInfo.name
-                    appInfo.id = packageInfo.packageName
-                    appInfo.versionName = packageInfo.versionName
-                    appInfo.apkFilePath = packageInfo.applicationInfo.publicSourceDir
-                    appInfo.appSize = Formatter.formatFileSize(context, File(appInfo.apkFilePath).length())
-                    appInfo.versionCode = packageInfo.versionCode
-                    if (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) {
-                        systemAppList.add(appInfo)
-                    } else {
-                        userAppList.add(appInfo)
-                    }
+            val packageManager = appContext.packageManager
+            val packageInfoList = packageManager.getInstalledPackages(0)
+            val systemAppList = ArrayList<AppInfo>()
+            val userAppList = ArrayList<AppInfo>()
+            for (packageInfo in packageInfoList) {
+                val appInfo = AppInfo(true)
+                appInfo.name = packageInfo.applicationInfo.loadLabel(packageManager).toString()
+                appInfo.sortName = appInfo.name
+                appInfo.id = packageInfo.packageName
+                appInfo.versionName = packageInfo.versionName
+                appInfo.apkFilePath = packageInfo.applicationInfo.publicSourceDir
+                appInfo.appSize = Formatter.formatFileSize(appContext, File(appInfo.apkFilePath).length())
+                appInfo.versionCode = packageInfo.versionCode
+                if (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) {
+                    systemAppList.add(appInfo)
+                } else {
+                    userAppList.add(appInfo)
                 }
-
-                Collections.sort(systemAppList) { lhs, rhs ->
-                    (lhs.sortName ?: "").compareTo(rhs.sortName ?: "")
-                }
-
-                return arrayOf<List<AppInfo>>(systemAppList, userAppList)
             }
 
-            override fun onPostExecute(appInfoLists: Array<List<AppInfo>>) {
-                if (activity == null) {
-                    return
-                }
+            systemAppList.sortWith(Comparator { lhs, rhs ->
+                (lhs.sortName ?: "").compareTo(rhs.sortName ?: "")
+            })
 
+            return arrayOf(systemAppList, userAppList)
+        }
+
+        override fun onPostExecute(appInfoLists: Array<List<AppInfo>>) {
+            val fragment = fragmentRef.get() ?: return
+
+            fragment.apply {
                 val systemAppList = appInfoLists[0]
                 val userAppList = appInfoLists[1]
 
@@ -106,13 +107,10 @@ class GridRecyclerViewFragment : Fragment() {
                     dataList.add(String.format("系统应用%d个", systemAppListSize))
                     dataList.addAll(systemAppList)
                 }
-                val adapter = AssemblyRecyclerAdapter(dataList)
-                adapter.addItemFactory(AppItemFactory())
-                adapter.addItemFactory(AppListHeaderItemFactory().fullSpan(recyclerView))
-                recyclerView.adapter = adapter
+
+                adapter.dataList = dataList
                 recyclerView.scheduleLayoutAnimation()
-                this@GridRecyclerViewFragment.adapter = adapter
             }
-        }.execute(0)
+        }
     }
 }
