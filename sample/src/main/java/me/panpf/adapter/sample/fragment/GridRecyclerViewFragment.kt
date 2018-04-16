@@ -4,13 +4,13 @@ import android.content.pm.ApplicationInfo
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.panpf.adapter.AssemblyRecyclerAdapter
+import me.panpf.adapter.recycler.AssemblyGridLayoutManager
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.AppInfo
 import me.panpf.adapter.sample.bindView
@@ -32,17 +32,8 @@ class GridRecyclerViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.layoutManager = GridLayoutManager(activity, 4).apply {
-            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    val adapter = recyclerView.adapter
-                    if (adapter == null || adapter !is AssemblyRecyclerAdapter) {
-                        return 1
-                    }
-                    return adapter.getSpanSize(position)
-                }
-            }
-        }
+        val context = context ?: return
+        recyclerView.layoutManager = AssemblyGridLayoutManager(context, 4, recyclerView)
 
         adapter = AssemblyRecyclerAdapter().apply {
             addItemFactory(AppItemFactory())
