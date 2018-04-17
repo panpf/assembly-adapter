@@ -74,12 +74,12 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
     }
 
     @Nullable
-    public View findViewById(int id) {
+    public <T extends View> T findViewById(int id) {
         return itemView.findViewById(id);
     }
 
     @Nullable
-    public View findViewWithTag(@NonNull Object tag) {
+    public <T extends View> T findViewWithTag(@NonNull Object tag) {
         return itemView.findViewWithTag(tag);
     }
 
