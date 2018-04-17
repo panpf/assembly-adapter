@@ -15,6 +15,7 @@ import me.panpf.adapter.more.LoadMoreItemFactoryBridle;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ItemStorage {
+    public static final Object NONE_DATA = new Object();
 
     @NonNull
     private final Object headerItemListLock = new Object();
@@ -121,10 +122,15 @@ public class ItemStorage {
      * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
      */
     @NonNull
-    public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
+    public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory, @NonNull Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
+        }
+
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
         }
 
         itemFactory.setAdapter(adapter);
@@ -146,6 +152,14 @@ public class ItemStorage {
         }
 
         return fixedItemInfo;
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
+     */
+    @NonNull
+    public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory) {
+        return addHeaderItem(itemFactory, NONE_DATA);
     }
 
     /**
@@ -212,10 +226,15 @@ public class ItemStorage {
      * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
      */
     @NonNull
-    public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
+    public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory, @NonNull Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
+        }
+
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
         }
 
         itemFactory.setAdapter(adapter);
@@ -237,6 +256,14 @@ public class ItemStorage {
         }
 
         return fixedItemInfo;
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
+     */
+    @NonNull
+    public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory) {
+        return addFooterItem(itemFactory, NONE_DATA);
     }
 
     /**
@@ -303,10 +330,15 @@ public class ItemStorage {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory, @Nullable Object data) {
+    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory, @NonNull Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
+        }
+
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
         }
 
         itemFactory.setAdapter(adapter);
@@ -332,7 +364,7 @@ public class ItemStorage {
      */
     @NonNull
     public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory) {
-        return setLoadMoreItem(itemFactory, null);
+        return setLoadMoreItem(itemFactory, NONE_DATA);
     }
 
     /**
@@ -645,6 +677,9 @@ public class ItemStorage {
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = getData(positionInDataList);
+            if (dataObject == null) {
+                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
+            }
 
             ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -656,7 +691,7 @@ public class ItemStorage {
 
             throw new IllegalStateException(String.format(
                     "Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
-                    positionInDataList, dataObject != null ? dataObject.getClass().getName() : "null"));
+                    positionInDataList, dataObject.getClass().getName()));
         }
 
         // 尾巴
@@ -705,6 +740,9 @@ public class ItemStorage {
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = getData(positionInDataList);
+            if (dataObject == null) {
+                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
+            }
 
             ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -716,7 +754,7 @@ public class ItemStorage {
 
             throw new IllegalStateException(String.format(
                     "Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
-                    positionInDataList, dataObject != null ? dataObject.toString() : "null"));
+                    positionInDataList, dataObject.toString()));
         }
 
         // 尾巴

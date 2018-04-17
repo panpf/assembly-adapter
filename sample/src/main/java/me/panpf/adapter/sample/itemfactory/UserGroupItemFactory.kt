@@ -12,7 +12,7 @@ import me.panpf.adapter.sample.bindView
 
 class UserGroupItemFactory : AssemblyItemFactory<UserGroupItemFactory.UserGroupItem>() {
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun isTarget(data: Any): Boolean {
         return data is UserGroup
     }
 
@@ -27,13 +27,13 @@ class UserGroupItemFactory : AssemblyItemFactory<UserGroupItemFactory.UserGroupI
 
         }
 
-        override fun onSetData(position: Int, userGroup: UserGroup?) {
+        override fun onSetData(position: Int, userGroup: UserGroup) {
             if (isExpanded) {
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_collapse, 0, 0, 0)
             } else {
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_expand, 0, 0, 0)
             }
-            titleTextView.text = userGroup?.title
+            titleTextView.text = userGroup.title
         }
     }
 }

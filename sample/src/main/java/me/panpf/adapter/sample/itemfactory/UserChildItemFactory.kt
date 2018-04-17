@@ -13,13 +13,13 @@ import me.panpf.adapter.sample.bindView
 
 class UserChildItemFactory(context: Context) : AssemblyItemFactory<UserChildItemFactory.UserChildItem>() {
 
-    private val eventListener: EventListener
+    private val listener: UserChildItemListener
 
     init {
-        this.eventListener = EventProcessor(context)
+        this.listener = UserChildItemListenerImpl(context)
     }
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun isTarget(data: Any): Boolean {
         return data is User
     }
 
@@ -27,7 +27,7 @@ class UserChildItemFactory(context: Context) : AssemblyItemFactory<UserChildItem
         return UserChildItem(R.layout.list_item_user, parent)
     }
 
-    interface EventListener {
+    interface UserChildItemListener {
         fun onClickHead(position: Int, user: User)
         fun onClickName(position: Int, user: User)
         fun onClickSex(position: Int, user: User)
@@ -35,7 +35,7 @@ class UserChildItemFactory(context: Context) : AssemblyItemFactory<UserChildItem
         fun onClickJob(position: Int, user: User)
     }
 
-    private class EventProcessor(private val context: Context) : EventListener {
+    private class UserChildItemListenerImpl(private val context: Context) : UserChildItemListener {
 
         override fun onClickHead(position: Int, user: User) {
             Toast.makeText(context, "别摸我头，讨厌啦！", Toast.LENGTH_SHORT).show()
@@ -71,19 +71,19 @@ class UserChildItemFactory(context: Context) : AssemblyItemFactory<UserChildItem
         private val jobTextView: TextView by bindView(R.id.text_userListItem_job)
 
         override fun onConfigViews(context: Context) {
-            headImageView.setOnClickListener { data?.let { it1 -> eventListener.onClickHead(position, it1) } }
-            nameTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickName(position, it1) } }
-            sexTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickSex(position, it1) } }
-            ageTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickAge(position, it1) } }
-            jobTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickJob(position, it1) } }
+            headImageView.setOnClickListener { data.let { it1 -> listener.onClickHead(position, it1) } }
+            nameTextView.setOnClickListener { data.let { it1 -> listener.onClickName(position, it1) } }
+            sexTextView.setOnClickListener { data.let { it1 -> listener.onClickSex(position, it1) } }
+            ageTextView.setOnClickListener { data.let { it1 -> listener.onClickAge(position, it1) } }
+            jobTextView.setOnClickListener { data.let { it1 -> listener.onClickJob(position, it1) } }
         }
 
-        override fun onSetData(position: Int, user: User?) {
-            if(user != null) headImageView.setImageResource(user.headResId) else headImageView.setImageDrawable(null)
-            nameTextView.text = user?.name
-            sexTextView.text = user?.sex
-            ageTextView.text = user?.age
-            jobTextView.text = user?.job
+        override fun onSetData(position: Int, user: User) {
+            headImageView.setImageResource(user.headResId)
+            nameTextView.text = user.name
+            sexTextView.text = user.sex
+            ageTextView.text = user.age
+            jobTextView.text = user.job
         }
     }
 }

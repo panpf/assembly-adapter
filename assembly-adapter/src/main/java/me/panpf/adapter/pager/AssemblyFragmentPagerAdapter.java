@@ -76,8 +76,15 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
      */
-    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory, @Nullable Object data) {
+    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory, @NonNull Object data) {
         storage.addHeaderItem(headerFactory, data);
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
+     */
+    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory) {
+        storage.addHeaderItem(headerFactory);
     }
 
     /**
@@ -106,8 +113,15 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
      */
-    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @Nullable Object data) {
+    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @NonNull Object data) {
         storage.addFooterItem(footerFactory, data);
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
+     */
+    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory) {
+        storage.addFooterItem(footerFactory);
     }
 
     /**

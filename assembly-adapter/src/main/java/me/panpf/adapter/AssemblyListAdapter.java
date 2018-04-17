@@ -75,8 +75,14 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data) {
         return storage.addHeaderItem(itemFactory, data);
+    }
+
+    @NonNull
+    @Override
+    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+        return storage.addHeaderItem(itemFactory);
     }
 
     @Override
@@ -106,8 +112,14 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data) {
         return storage.addFooterItem(itemFactory, data);
+    }
+
+    @NonNull
+    @Override
+    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+        return storage.addFooterItem(itemFactory);
     }
 
     @Override
@@ -137,7 +149,7 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @NonNull Object data) {
         return storage.setLoadMoreItem(itemFactory, data);
     }
 
@@ -310,7 +322,10 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     }
 
     private void bindItem(@NonNull Item item, int position) {
-        //noinspection unchecked
-        item.setData(position, getItem(position));
+        Object itemObject = getItem(position);
+        if (itemObject != null) {
+            //noinspection unchecked
+            item.setData(position, itemObject);
+        }
     }
 }

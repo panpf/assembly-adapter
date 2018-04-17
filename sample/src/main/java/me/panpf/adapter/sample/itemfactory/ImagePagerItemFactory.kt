@@ -10,13 +10,11 @@ import me.panpf.adapter.sample.R
 import me.panpf.sketch.SketchImageView
 
 class ImagePagerItemFactory : AssemblyPagerItemFactory<String>() {
-    override fun isTarget(data: Any?): Boolean {
+    override fun isTarget(data: Any): Boolean {
         return data is String
     }
 
-    override fun createView(context: Context, container: ViewGroup, position: Int, imageUrl: String?): View {
-        if (imageUrl == null) throw IllegalArgumentException("data is null")
-
+    override fun createView(context: Context, container: ViewGroup, position: Int, imageUrl: String): View {
         val view = LayoutInflater.from(context).inflate(R.layout.fragment_image, container, false)
 
         val imageView = view.findViewById(R.id.image_imageFragment) as SketchImageView

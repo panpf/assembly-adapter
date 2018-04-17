@@ -117,7 +117,7 @@ public class ExpandableItemStorage extends ItemStorage {
             ItemFactory childItemFactory;
             for (int w = 0, size = childItemFactoryList.size(); w < size; w++) {
                 childItemFactory = childItemFactoryList.get(w);
-                if (childItemFactory.isTarget(childDataObject)) {
+                if (childDataObject != null && childItemFactory.isTarget(childDataObject)) {
                     return childItemFactory.getItemType();
                 }
             }

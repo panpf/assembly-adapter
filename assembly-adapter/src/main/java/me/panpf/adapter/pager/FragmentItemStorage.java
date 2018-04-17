@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import me.panpf.adapter.ItemStorage;
+
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class FragmentItemStorage {
 
@@ -97,18 +99,30 @@ public class FragmentItemStorage {
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
      */
-    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory, @Nullable Object data) {
+    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory, @NonNull Object data) {
         //noinspection ConstantConditions
-        if (headerFactory == null || itemFactoryLocked) {
+        if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        headerFactory.setAdapter(adapter);
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
+        }
+
+        itemFactory.setAdapter(adapter);
 
         if (headerItemList == null) {
             headerItemList = new ArrayList<FixedFragmentItemInfo>(1);
         }
-        headerItemList.add(new FixedFragmentItemInfo(headerFactory, data));
+        headerItemList.add(new FixedFragmentItemInfo(itemFactory, data));
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
+     */
+    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory) {
+        addHeaderItem(itemFactory, ItemStorage.NONE_DATA);
     }
 
     /**
@@ -137,18 +151,30 @@ public class FragmentItemStorage {
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
      */
-    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @Nullable Object data) {
+    public void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory, @NonNull Object data) {
         //noinspection ConstantConditions
-        if (footerFactory == null || itemFactoryLocked) {
+        if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        footerFactory.setAdapter(adapter);
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
+        }
+
+        itemFactory.setAdapter(adapter);
 
         if (footerItemList == null) {
             footerItemList = new ArrayList<FixedFragmentItemInfo>(1);
         }
-        footerItemList.add(new FixedFragmentItemInfo(footerFactory, data));
+        footerItemList.add(new FixedFragmentItemInfo(itemFactory, data));
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
+     */
+    public void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory) {
+        addFooterItem(itemFactory, ItemStorage.NONE_DATA);
     }
 
     /**
@@ -253,6 +279,9 @@ public class FragmentItemStorage {
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = getData(positionInDataList);
+            if (dataObject == null) {
+                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
+            }
 
             AssemblyFragmentItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -263,8 +292,9 @@ public class FragmentItemStorage {
                 }
             }
 
-            throw new IllegalStateException(String.format("Didn't find suitable AssemblyFragmentItemFactory. position=%d, dataObject=%s",
-                    position, dataObject != null ? dataObject.getClass().getName() : "null"));
+            throw new IllegalStateException(String.format(
+                    "Didn't find suitable AssemblyFragmentItemFactory. position=%d, dataObject=%s",
+                    position, dataObject.getClass().getName()));
         }
 
         // 尾巴

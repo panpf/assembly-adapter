@@ -13,13 +13,11 @@ import me.panpf.sketch.SketchImageView
 
 class HeaderPagerItemFactory(private val clickListener: View.OnClickListener) : AssemblyPagerItemFactory<Header>() {
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun isTarget(data: Any): Boolean {
         return data is Header
     }
 
-    override fun createView(context: Context, container: ViewGroup, position: Int, header: Header?): View {
-        if (header == null) throw IllegalArgumentException("data is null")
-
+    override fun createView(context: Context, container: ViewGroup, position: Int, header: Header): View {
         val view = LayoutInflater.from(context).inflate(R.layout.fragment_header_image, container, false)
 
         val textView = view.findViewById(R.id.text_headerImageFragment) as TextView

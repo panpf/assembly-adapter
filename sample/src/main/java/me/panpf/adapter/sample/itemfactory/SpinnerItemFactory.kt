@@ -9,7 +9,7 @@ import me.panpf.adapter.sample.bindView
 
 class SpinnerItemFactory : AssemblyItemFactory<SpinnerItemFactory.SpinnerItem>() {
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun isTarget(data: Any): Boolean {
         return data is String
     }
 
@@ -24,7 +24,7 @@ class SpinnerItemFactory : AssemblyItemFactory<SpinnerItemFactory.SpinnerItem>()
 
         }
 
-        override fun onSetData(position: Int, s: String?) {
+        override fun onSetData(position: Int, s: String) {
             textView.text = s
         }
     }

@@ -13,13 +13,13 @@ import me.panpf.adapter.sample.bindView
 
 class GameChildItemFactory(context: Context) : AssemblyItemFactory<GameChildItemFactory.GameChildItem>() {
 
-    private val eventListener: EventListener
+    private val listener: GameChildItemListener
 
     init {
-        this.eventListener = EventProcessor(context)
+        this.listener = GameChildItemListenerImpl(context)
     }
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun isTarget(data: Any): Boolean {
         return data is Game
     }
 
@@ -27,7 +27,7 @@ class GameChildItemFactory(context: Context) : AssemblyItemFactory<GameChildItem
         return GameChildItem(R.layout.list_item_game, parent)
     }
 
-    interface EventListener {
+    interface GameChildItemListener {
         fun onClickIcon(position: Int, user: Game)
 
         fun onClickName(position: Int, user: Game)
@@ -35,7 +35,7 @@ class GameChildItemFactory(context: Context) : AssemblyItemFactory<GameChildItem
         fun onClickLike(position: Int, user: Game)
     }
 
-    private class EventProcessor(private val context: Context) : EventListener {
+    private class GameChildItemListenerImpl(private val context: Context) : GameChildItemListener {
 
         override fun onClickIcon(position: Int, user: Game) {
             Toast.makeText(context, "瞅这游戏这臭逼样！", Toast.LENGTH_SHORT).show()
@@ -56,15 +56,15 @@ class GameChildItemFactory(context: Context) : AssemblyItemFactory<GameChildItem
         private val likeTextView: TextView by bindView(R.id.text_gameListItem_like)
 
         override fun onConfigViews(context: Context) {
-            iconImageView.setOnClickListener { data?.let { it1 -> eventListener.onClickIcon(position, it1) } }
-            nameTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickName(position, it1) } }
-            likeTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickLike(position, it1) } }
+            iconImageView.setOnClickListener { data.let { it1 -> listener.onClickIcon(position, it1) } }
+            nameTextView.setOnClickListener { data.let { it1 -> listener.onClickName(position, it1) } }
+            likeTextView.setOnClickListener { data.let { it1 -> listener.onClickLike(position, it1) } }
         }
 
-        override fun onSetData(position: Int, game: Game?) {
-            if (game != null) iconImageView.setImageResource(game.iconResId) else iconImageView.setImageDrawable(null)
-            nameTextView.text = game?.name
-            likeTextView.text = game?.like
+        override fun onSetData(position: Int, game: Game) {
+            iconImageView.setImageResource(game.iconResId)
+            nameTextView.text = game.name
+            likeTextView.text = game.like
         }
     }
 }

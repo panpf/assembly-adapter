@@ -27,6 +27,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import me.panpf.adapter.ItemStorage;
+
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class PagerItemStorage {
 
@@ -113,14 +115,19 @@ public class PagerItemStorage {
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory headerFactory, @Nullable Object data) {
+    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @NonNull Object data) {
         //noinspection ConstantConditions
-        if (headerFactory == null || itemFactoryLocked) {
+        if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        headerFactory.setAdapter(adapter);
-        FixedPagerItemInfo headerItemInfo = new FixedPagerItemInfo(headerFactory, data, true);
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
+        }
+
+        itemFactory.setAdapter(adapter);
+        FixedPagerItemInfo headerItemInfo = new FixedPagerItemInfo(itemFactory, data, true);
         headerItemInfo.setPosition(headerItemPosition++);
 
         synchronized (headerItemListLock) {
@@ -130,6 +137,14 @@ public class PagerItemStorage {
             headerItemList.add(headerItemInfo);
         }
         return headerItemInfo;
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
+     */
+    @NonNull
+    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+        return addHeaderItem(itemFactory, ItemStorage.NONE_DATA);
     }
 
     /**
@@ -195,14 +210,19 @@ public class PagerItemStorage {
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory footerFactory, @Nullable Object data) {
+    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @NonNull Object data) {
         //noinspection ConstantConditions
-        if (footerFactory == null || itemFactoryLocked) {
+        if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        footerFactory.setAdapter(adapter);
-        FixedPagerItemInfo footerItemInfo = new FixedPagerItemInfo(footerFactory, data, false);
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
+        }
+
+        itemFactory.setAdapter(adapter);
+        FixedPagerItemInfo footerItemInfo = new FixedPagerItemInfo(itemFactory, data, false);
         footerItemInfo.setPosition(footerItemPosition++);
 
         synchronized (footerItemListLock) {
@@ -213,6 +233,14 @@ public class PagerItemStorage {
         }
 
         return footerItemInfo;
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
+     */
+    @NonNull
+    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+        return addFooterItem(itemFactory, ItemStorage.NONE_DATA);
     }
 
     /**
@@ -449,6 +477,9 @@ public class PagerItemStorage {
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = getData(positionInDataList);
+            if (dataObject == null) {
+                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
+            }
 
             AssemblyPagerItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -462,7 +493,7 @@ public class PagerItemStorage {
             }
 
             throw new IllegalStateException(String.format("Didn't find suitable AssemblyPagerItemFactory. position=%d, dataObject=%s",
-                    position, dataObject != null ? dataObject.getClass().getName() : "null"));
+                    position, dataObject.getClass().getName()));
         }
 
         // 尾巴

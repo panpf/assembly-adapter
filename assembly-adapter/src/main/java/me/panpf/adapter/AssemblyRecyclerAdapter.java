@@ -76,8 +76,14 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data) {
         return storage.addHeaderItem(new RecyclerItemFactoryWrapper(itemFactory), data);
+    }
+
+    @NonNull
+    @Override
+    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+        return storage.addHeaderItem(new RecyclerItemFactoryWrapper(itemFactory));
     }
 
     @Override
@@ -107,8 +113,14 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data) {
         return storage.addFooterItem(new RecyclerItemFactoryWrapper(itemFactory), data);
+    }
+
+    @NonNull
+    @Override
+    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+        return storage.addFooterItem(new RecyclerItemFactoryWrapper(itemFactory));
     }
 
     @Override
@@ -138,7 +150,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @NonNull Object data) {
         return storage.setLoadMoreItem(new RecyclerLoadMoreItemFactoryWrapper(itemFactory), data);
     }
 

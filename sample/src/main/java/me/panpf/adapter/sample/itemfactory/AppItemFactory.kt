@@ -13,7 +13,7 @@ import me.panpf.sketch.uri.ApkIconUriModel
 import me.panpf.sketch.uri.AppIconUriModel
 
 class AppItemFactory : AssemblyItemFactory<AppItemFactory.AppItem>() {
-    override fun isTarget(data: Any?): Boolean {
+    override fun isTarget(data: Any): Boolean {
         return data is AppInfo
     }
 
@@ -29,15 +29,13 @@ class AppItemFactory : AssemblyItemFactory<AppItemFactory.AppItem>() {
 
         }
 
-        override fun onSetData(i: Int, appInfo: AppInfo?) {
-            appInfo?.let {
-                if (appInfo.isTempInstalled) {
-                    iconImageView.displayImage(AppIconUriModel.makeUri(appInfo.id, appInfo.versionCode))
-                } else {
-                    iconImageView.displayImage(ApkIconUriModel.makeUri(appInfo.apkFilePath))
-                }
-                nameTextView.text = appInfo.name
+        override fun onSetData(i: Int, appInfo: AppInfo) {
+            if (appInfo.isTempInstalled) {
+                iconImageView.displayImage(AppIconUriModel.makeUri(appInfo.id, appInfo.versionCode))
+            } else {
+                iconImageView.displayImage(ApkIconUriModel.makeUri(appInfo.apkFilePath))
             }
+            nameTextView.text = appInfo.name
         }
     }
 }

@@ -7,13 +7,11 @@ import me.panpf.adapter.sample.bean.Header
 import me.panpf.adapter.sample.fragment.HeaderFragment
 
 class HeaderFragmentItemFactory : AssemblyFragmentItemFactory<Header>() {
-    override fun isTarget(data: Any?): Boolean {
+    override fun isTarget(data: Any): Boolean {
         return data is Header
     }
 
-    override fun createFragment(position: Int, header: Header?): Fragment {
-        if (header == null) throw IllegalArgumentException("data is null")
-
+    override fun createFragment(position: Int, header: Header): Fragment {
         val headerFragment = HeaderFragment()
         headerFragment.arguments = HeaderFragment.buildParams(header.text, header.imageUrl)
         return headerFragment

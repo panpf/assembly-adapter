@@ -1,32 +1,35 @@
 package me.panpf.adapter;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 @SuppressWarnings("WeakerAccess")
 public class FixedItemInfo {
 
     @NonNull
     private ItemFactory itemFactory;
-    @Nullable
+    @NonNull
     private Object data;
     private boolean enabled;
     private int position;
     private boolean header;
 
-    public FixedItemInfo(@NonNull ItemFactory itemFactory, @Nullable Object data, boolean header) {
+    public FixedItemInfo(@NonNull ItemFactory itemFactory, @NonNull Object data, boolean header) {
         this.data = data;
         this.itemFactory = itemFactory;
         this.enabled = true;
         this.header = header;
     }
 
-    @Nullable
+    @NonNull
     public Object getData() {
         return data;
     }
 
-    public void setData(@Nullable Object data) {
+    public void setData(@NonNull Object data) {
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
+        }
         this.data = data;
 
         AssemblyAdapter adapter = itemFactory.getAdapter();

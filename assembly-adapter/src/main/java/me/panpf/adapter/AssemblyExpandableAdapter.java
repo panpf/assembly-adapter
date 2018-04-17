@@ -110,8 +110,14 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> headerFactory, @Nullable Object data) {
-        return storage.addHeaderItem(headerFactory, data);
+    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data) {
+        return storage.addHeaderItem(itemFactory, data);
+    }
+
+    @NonNull
+    @Override
+    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+        return storage.addHeaderItem(itemFactory);
     }
 
     @Override
@@ -140,8 +146,14 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> footerFactory, @Nullable Object data) {
-        return storage.addFooterItem(footerFactory, data);
+    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data) {
+        return storage.addFooterItem(itemFactory, data);
+    }
+
+    @NonNull
+    @Override
+    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+        return storage.addHeaderItem(itemFactory);
     }
 
     @Override
@@ -169,7 +181,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @NonNull Object data) {
         return storage.setLoadMoreItem(itemFactory, data);
     }
 
@@ -295,6 +307,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return storage.getItemCount();
     }
 
+    @Nullable
     @Override
     public Object getGroup(int groupPosition) {
         return storage.getItem(groupPosition);
@@ -320,6 +333,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return storage.getChildrenCount(groupPosition);
     }
 
+    @Nullable
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         return storage.getChild(groupPosition, childPosition);
@@ -380,9 +394,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     private void bindGroupItem(@NonNull Item groupItem, boolean isExpanded, int groupPosition) {
-        groupItem.setExpanded(isExpanded);
-        //noinspection unchecked
-        groupItem.setData(groupPosition, getGroup(groupPosition));
+        Object group = getGroup(groupPosition);
+        if (group != null) {
+            groupItem.setExpanded(isExpanded);
+            //noinspection unchecked
+            groupItem.setData(groupPosition, group);
+        }
     }
 
     @Override
@@ -412,10 +429,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     private void bindChildItem(Item childItem, int groupPosition, int childPosition, boolean isLastChild) {
-        childItem.setGroupPosition(groupPosition);
-        childItem.setLastChild(isLastChild);
-        //noinspection unchecked
-        childItem.setData(childPosition, getChild(groupPosition, childPosition));
+        Object child = getChild(groupPosition, childPosition);
+        if (child != null) {
+            childItem.setGroupPosition(groupPosition);
+            childItem.setLastChild(isLastChild);
+            //noinspection unchecked
+            childItem.setData(childPosition, child);
+        }
     }
 
     /**

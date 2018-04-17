@@ -17,7 +17,6 @@
 package me.panpf.adapter.pager;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 
 /**
@@ -28,20 +27,24 @@ public class FixedFragmentItemInfo {
 
     @NonNull
     private AssemblyFragmentItemFactory itemFactory;
-    @Nullable
+    @NonNull
     private Object data;
 
-    public FixedFragmentItemInfo(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data) {
+    public FixedFragmentItemInfo(@NonNull AssemblyFragmentItemFactory itemFactory, @NonNull Object data) {
         this.data = data;
         this.itemFactory = itemFactory;
     }
 
-    @Nullable
+    @NonNull
     public Object getData() {
         return data;
     }
 
-    public void setData(@Nullable Object data) {
+    public void setData(@NonNull Object data) {
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
+        }
         this.data = data;
 
         PagerAdapter adapter = itemFactory.getAdapter();

@@ -62,7 +62,7 @@ public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreI
     }
 
     @Override
-    public boolean isTarget(@Nullable Object data) {
+    public boolean isTarget(@NonNull Object data) {
         return true;
     }
 }

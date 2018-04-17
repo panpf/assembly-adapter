@@ -44,7 +44,13 @@ public interface AssemblyAdapter {
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
      */
     @NonNull
-    <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> headerFactory, @Nullable Object data);
+    <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data);
+
+    /**
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
+     */
+    @NonNull
+    <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory);
 
     /**
      * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
@@ -77,7 +83,13 @@ public interface AssemblyAdapter {
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
      */
     @NonNull
-    <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> footerFactory, @Nullable Object data);
+    <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data);
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
+     */
+    @NonNull
+    <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory);
 
     /**
      * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
@@ -110,13 +122,13 @@ public interface AssemblyAdapter {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> assemblyLoadMoreItemFactory, @Nullable Object data);
+    <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @NonNull Object data);
 
     /**
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> assemblyLoadMoreItemFactory);
+    <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory);
 
     /**
      * 设置禁用加载更多

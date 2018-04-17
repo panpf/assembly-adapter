@@ -76,8 +76,16 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory headerFactory, @Nullable Object data) {
-        return storage.addHeaderItem(headerFactory, data);
+    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @NonNull Object data) {
+        return storage.addHeaderItem(itemFactory, data);
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
+     */
+    @NonNull
+    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+        return storage.addHeaderItem(itemFactory);
     }
 
     /**
@@ -114,8 +122,16 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory footerFactory, @Nullable Object data) {
-        return storage.addFooterItem(footerFactory, data);
+    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @NonNull Object data) {
+        return storage.addFooterItem(itemFactory, data);
+    }
+
+    /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
+     */
+    @NonNull
+    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+        return storage.addFooterItem(itemFactory);
     }
 
     /**

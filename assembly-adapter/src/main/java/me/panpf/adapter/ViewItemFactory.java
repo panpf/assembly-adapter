@@ -59,7 +59,7 @@ public class ViewItemFactory extends AssemblyItemFactory<ViewItemFactory.ViewIte
     }
 
     @Override
-    public boolean isTarget(@Nullable Object data) {
+    public boolean isTarget(@NonNull Object data) {
         return dataClazz == null || dataClazz.isInstance(data);
     }
 
@@ -97,7 +97,7 @@ public class ViewItemFactory extends AssemblyItemFactory<ViewItemFactory.ViewIte
         }
 
         @Override
-        protected void onSetData(int position, @Nullable Object o) {
+        protected void onSetData(int position, @NonNull Object o) {
 
         }
     }

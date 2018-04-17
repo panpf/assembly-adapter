@@ -70,7 +70,7 @@ public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBr
     }
 
     @Override
-    public boolean isTarget(@Nullable Object data) {
+    public boolean isTarget(@NonNull Object data) {
         return itemFactory.isTarget(data);
     }
 
