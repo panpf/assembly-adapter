@@ -18,6 +18,7 @@ package me.panpf.adapter.more;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 
 import me.panpf.adapter.AssemblyItemFactory;
 
@@ -64,5 +65,19 @@ public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreI
     @Override
     public boolean isTarget(@NonNull Object data) {
         return true;
+    }
+
+    @NonNull
+    @Override
+    public AssemblyLoadMoreItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView) {
+        super.fullSpan(recyclerView);
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public AssemblyLoadMoreItemFactory<ITEM> setSpanSize(int spanSize) {
+        super.setSpanSize(spanSize);
+        return this;
     }
 }
