@@ -18,7 +18,6 @@ package me.panpf.adapter.pager;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 
 import java.util.ArrayList;
@@ -218,96 +217,5 @@ public class FragmentItemStorage {
     @Nullable
     public Object getData(int positionInDataList) {
         return dataList != null ? dataList.get(positionInDataList) : null;
-    }
-
-
-    /* ************************ 完整列表 *************************** */
-
-    /**
-     * 获取在各自区域的位置
-     */
-    public int getPositionInPart(int position) {
-        // 头
-        int headerItemCount = getHeaderItemCount();
-        int headerStartPosition = 0;
-        int headerEndPosition = headerItemCount - 1;
-        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            return position;
-        }
-
-        // 数据
-        int dataCount = getDataCount();
-        int dataStartPosition = headerEndPosition + 1;
-        int dataEndPosition = headerEndPosition + dataCount;
-        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
-            return position - headerItemCount;
-        }
-
-        // 尾巴
-        int footerItemCount = getFooterItemCount();
-        int footerStartPosition = dataEndPosition + 1;
-        int footerEndPosition = dataEndPosition + footerItemCount;
-        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
-            return position - headerItemCount - dataCount;
-        }
-
-        throw new IllegalArgumentException("Illegal position: " + position);
-    }
-
-    public int getItemCount() {
-        itemFactoryLocked = true;
-        return getHeaderItemCount() + getDataCount() + getFooterItemCount();
-    }
-
-    public Fragment getItem(int position) {
-        // 头
-        int headerItemCount = getHeaderItemCount();
-        int headerStartPosition = 0;
-        int headerEndPosition = headerItemCount - 1;
-        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            //noinspection UnnecessaryLocalVariable
-            int positionInHeaderList = position;
-            FixedFragmentItemInfo fixedItemInfo = headerItemList.get(positionInHeaderList);
-            //noinspection unchecked
-            return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
-        }
-
-        // 数据
-        int dataCount = getDataCount();
-        int dataStartPosition = headerEndPosition + 1;
-        int dataEndPosition = headerEndPosition + dataCount;
-        if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
-            int positionInDataList = position - headerItemCount;
-            Object dataObject = getData(positionInDataList);
-            if (dataObject == null) {
-                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
-            }
-
-            AssemblyFragmentItemFactory itemFactory;
-            for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
-                itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(dataObject)) {
-                    //noinspection unchecked
-                    return itemFactory.dispatchCreateFragment(position, dataObject);
-                }
-            }
-
-            throw new IllegalStateException(String.format(
-                    "Didn't find suitable AssemblyFragmentItemFactory. position=%d, dataObject=%s",
-                    position, dataObject.getClass().getName()));
-        }
-
-        // 尾巴
-        int footerItemCount = getFooterItemCount();
-        int footerStartPosition = dataEndPosition + 1;
-        int footerEndPosition = dataEndPosition + footerItemCount;
-        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
-            int positionInFooterList = position - headerItemCount - dataCount;
-            FixedFragmentItemInfo fixedItemInfo = footerItemList.get(positionInFooterList);
-            //noinspection unchecked
-            return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
-        }
-
-        throw new IllegalArgumentException("Illegal position: " + position);
     }
 }

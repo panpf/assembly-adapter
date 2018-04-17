@@ -38,6 +38,8 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     private ItemStorage storage;
+    @NonNull
+    private ItemActor actor = new ItemActor(this);
 
     public AssemblyListAdapter() {
         this.storage = new ItemStorage(this);
@@ -159,6 +161,12 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
         return storage.setLoadMoreItem(itemFactory);
     }
 
+    @Nullable
+    @Override
+    public LoadMoreFixedItemInfo getLoadMoreFixedItemInfo() {
+        return storage.getLoadMoreFixedItemInfo();
+    }
+
     @Override
     public void setDisableLoadMore(boolean disableLoadMore) {
         storage.setDisableLoadMore(disableLoadMore);
@@ -239,23 +247,23 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @Override
     public int getItemCount() {
-        return storage.getItemCount();
+        return actor.getItemCount();
     }
 
     @Nullable
     @Override
     public Object getItem(int position) {
-        return storage.getItem(position);
+        return actor.getItem(position);
     }
 
     @Override
     public int getPositionInPart(int position) {
-        return storage.getPositionInPart(position);
+        return actor.getPositionInPart(position);
     }
 
     @Override
     public int getCount() {
-        return storage.getItemCount();
+        return actor.getItemCount();
     }
 
 
@@ -273,7 +281,7 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @Override
     public int getSpanSize(int position) {
-        return storage.getSpanSize(position);
+        return actor.getSpanSize(position);
     }
 
     @Override
@@ -288,7 +296,7 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @Override
     public int getItemViewType(int position) {
-        return storage.getItemViewType(position);
+        return actor.getItemViewType(position);
     }
 
     @Override

@@ -28,10 +28,12 @@ import java.util.List;
  * 通用组合式 {@link FragmentPagerAdapter}，支持组合式多类型 item，支持头、尾巴
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
+public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implements AssemblyFragmentAdapter {
 
     @NonNull
     private FragmentItemStorage storage;
+    @NonNull
+    private FragmentItemActor actor = new FragmentItemActor(this);
 
     public AssemblyFragmentPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
@@ -51,21 +53,18 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /* ************************ 数据 ItemFactory *************************** */
 
+    @Override
     public void addItemFactory(@NonNull AssemblyFragmentItemFactory itemFactory) {
         storage.addItemFactory(itemFactory);
     }
 
-    /**
-     * 获取 {@link me.panpf.adapter.ItemFactory} 列表
-     */
     @Nullable
+    @Override
     public List<AssemblyFragmentItemFactory> getItemFactoryList() {
         return storage.getItemFactoryList();
     }
 
-    /**
-     * 获取 {@link me.panpf.adapter.ItemFactory} 的个数
-     */
+    @Override
     public int getItemFactoryCount() {
         return storage.getItemFactoryCount();
     }
@@ -73,36 +72,29 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /* ************************ 头部 ItemFactory *************************** */
 
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
-     */
+    @Override
     public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory, @NonNull Object data) {
         storage.addHeaderItem(headerFactory, data);
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
-     */
+    @Override
     public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory) {
         storage.addHeaderItem(headerFactory);
     }
 
-    /**
-     * 获取 header 列表
-     */
     @Nullable
+    @Override
     public List<FixedFragmentItemInfo> getHeaderItemList() {
         return storage.getHeaderItemList();
     }
 
-    /**
-     * 获取列表头的个数
-     */
+    @Override
     public int getHeaderItemCount() {
         return storage.getHeaderItemCount();
     }
 
     @Nullable
+    @Override
     public Object getHeaderData(int positionInHeaderList) {
         return storage.getHeaderData(positionInHeaderList);
     }
@@ -110,36 +102,29 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /* ************************ 尾巴 ItemFactory *************************** */
 
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
-     */
+    @Override
     public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @NonNull Object data) {
         storage.addFooterItem(footerFactory, data);
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
-     */
+    @Override
     public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory) {
         storage.addFooterItem(footerFactory);
     }
 
-    /**
-     * 获取 footer 列表
-     */
     @Nullable
+    @Override
     public List<FixedFragmentItemInfo> getFooterItemList() {
         return storage.getFooterItemList();
     }
 
-    /**
-     * 获取列表头的个数
-     */
+    @Override
     public int getFooterItemCount() {
         return storage.getFooterItemCount();
     }
 
     @Nullable
+    @Override
     public Object getFooterData(int positionInFooterList) {
         return storage.getFooterData(positionInFooterList);
     }
@@ -147,22 +132,19 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /* ************************ 数据列表 *************************** */
 
-    /**
-     * 获取数据列表
-     */
     @Nullable
+    @Override
     public List getDataList() {
         return storage.getDataList();
     }
 
-    /**
-     * 获取数据列表的长度
-     */
+    @Override
     public int getDataCount() {
         return storage.getDataCount();
     }
 
     @Nullable
+    @Override
     public Object getData(int positionInDataList) {
         return storage.getData(positionInDataList);
     }
@@ -170,20 +152,18 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /* ************************ 完整列表 *************************** */
 
-    /**
-     * 获取在各自区域的位置
-     */
+    @Override
     public int getPositionInPart(int position) {
-        return storage.getPositionInPart(position);
+        return actor.getPositionInPart(position);
     }
 
     @Override
     public int getCount() {
-        return storage.getItemCount();
+        return actor.getItemCount();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return storage.getItem(position);
+        return actor.getItem(position);
     }
 }

@@ -34,6 +34,8 @@ public class AssemblyPagerAdapter extends PagerAdapter {
 
     @NonNull
     private PagerItemStorage storage;
+    @NonNull
+    private PagerItemActor actor = new PagerItemActor(this);
 
     public AssemblyPagerAdapter() {
         this.storage = new PagerItemStorage(this);
@@ -238,14 +240,14 @@ public class AssemblyPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return storage.getItemCount();
+        return actor.getItemCount();
     }
 
     /**
      * 获取在各自区域的位置
      */
     public int getPositionInPart(int position) {
-        return storage.getPositionInPart(position);
+        return actor.getPositionInPart(position);
     }
 
 
@@ -264,7 +266,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        return storage.getItem(container, position);
+        return actor.getItem(container, position);
     }
 
     /**

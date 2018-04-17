@@ -130,6 +130,9 @@ public interface AssemblyAdapter {
     @NonNull
     <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory);
 
+    @Nullable
+    LoadMoreFixedItemInfo getLoadMoreFixedItemInfo();
+
     /**
      * 设置禁用加载更多
      */

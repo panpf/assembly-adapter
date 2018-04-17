@@ -27,6 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import me.panpf.adapter.expandable.ExpandableItemStorage;
+import me.panpf.adapter.expandable.ExpandableItemActor;
 import me.panpf.adapter.more.AssemblyLoadMoreItem;
 import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
 import me.panpf.adapter.more.LoadMoreFixedItemInfo;
@@ -39,6 +40,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     private ExpandableItemStorage storage;
+    @NonNull
+    private ExpandableItemActor actor = new ExpandableItemActor(this);
 
     private ExpandCallback expandCallback;
 
@@ -191,6 +194,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return storage.setLoadMoreItem(itemFactory);
     }
 
+    @Nullable
+    @Override
+    public LoadMoreFixedItemInfo getLoadMoreFixedItemInfo() {
+        return storage.getLoadMoreFixedItemInfo();
+    }
+
     @Override
     public void setDisableLoadMore(boolean disableLoadMore) {
         storage.setDisableLoadMore(disableLoadMore);
@@ -270,18 +279,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getItemCount() {
-        return storage.getItemCount();
+        return actor.getItemCount();
     }
 
     @Nullable
     @Override
     public Object getItem(int position) {
-        return storage.getItem(position);
+        return actor.getItem(position);
     }
 
     @Override
     public int getPositionInPart(int position) {
-        return storage.getPositionInPart(position);
+        return actor.getPositionInPart(position);
     }
 
 
@@ -299,18 +308,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getSpanSize(int position) {
-        return storage.getSpanSize(position);
+        return actor.getSpanSize(position);
     }
 
     @Override
     public int getGroupCount() {
-        return storage.getItemCount();
+        return actor.getItemCount();
     }
 
     @Nullable
     @Override
     public Object getGroup(int groupPosition) {
-        return storage.getItem(groupPosition);
+        return actor.getItem(groupPosition);
     }
 
     @Override
@@ -325,18 +334,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getGroupType(int groupPosition) {
-        return storage.getItemViewType(groupPosition);
+        return actor.getItemViewType(groupPosition);
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return storage.getChildrenCount(groupPosition);
+        return actor.getChildrenCount(groupPosition);
     }
 
     @Nullable
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return storage.getChild(groupPosition, childPosition);
+        return actor.getChild(groupPosition, childPosition);
     }
 
     @Override
@@ -351,7 +360,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getChildType(int groupPosition, int childPosition) {
-        return storage.getChildType(groupPosition, childPosition);
+        return actor.getChildType(groupPosition, childPosition);
     }
 
     @Override

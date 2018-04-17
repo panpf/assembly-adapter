@@ -78,60 +78,15 @@ public class ExpandableItemStorage extends ItemStorage {
         return childItemFactoryList != null ? childItemFactoryList.size() : 0;
     }
 
-    public int getChildrenCount(int groupPosition) {
-        Object groupObject = getItem(groupPosition);
-        if (groupObject != null && groupObject instanceof AssemblyGroup) {
-            return ((AssemblyGroup) groupObject).getChildCount();
-        }
-        return 0;
-    }
-
-    @Nullable
-    public Object getChild(int groupPosition, int childPosition) {
-        Object groupDataObject = getItem(groupPosition);
-        if (groupDataObject == null) {
-            return null;
-        }
-        if (!(groupDataObject instanceof AssemblyGroup)) {
-            throw new IllegalArgumentException(String.format(
-                    "group object must implements AssemblyGroup interface. groupPosition=%d, groupDataObject=%s",
-                    groupPosition, groupDataObject.getClass().getName()));
-        }
-        return ((AssemblyGroup) groupDataObject).getChild(childPosition);
-    }
-
     public int getChildTypeCount() {
         childItemFactoryLocked = true;
         return childTypeIndex > 0 ? childTypeIndex : 1;
     }
 
-    public int getChildType(int groupPosition, int childPosition) {
-        if (getChildItemFactoryCount() <= 0) {
-            throw new IllegalStateException("You need to configure ItemFactory use addChildItemFactory method");
-        }
-        childItemFactoryLocked = true;
-
-        Object childDataObject = getChild(groupPosition, childPosition);
-
-        if (childItemFactoryList != null) {
-            ItemFactory childItemFactory;
-            for (int w = 0, size = childItemFactoryList.size(); w < size; w++) {
-                childItemFactory = childItemFactoryList.get(w);
-                if (childDataObject != null && childItemFactory.isTarget(childDataObject)) {
-                    return childItemFactory.getItemType();
-                }
-            }
-        }
-
-        throw new IllegalStateException(String.format(
-                "Didn't find suitable ItemFactory. groupPosition=%d, childPosition=%d, childDataObject=%s",
-                groupPosition, childPosition, childDataObject != null ? childDataObject.getClass().getName() : "null"));
-    }
-
     /**
      * 根据 view 类型获取 {@link ItemFactory} 或 {@link FixedItemInfo}
      *
-     * @param viewType view 类型，参见 {@link #getItemViewType(int)} 方法
+     * @param viewType view 类型
      * @return null：没有；{@link ItemFactory} 或 {@link FixedItemInfo}
      */
     @Nullable

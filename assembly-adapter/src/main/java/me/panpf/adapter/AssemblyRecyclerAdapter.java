@@ -39,6 +39,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     private ItemStorage storage;
+    @NonNull
+    private ItemActor actor = new ItemActor(this);
 
     public AssemblyRecyclerAdapter() {
         this.storage = new ItemStorage(this);
@@ -160,6 +162,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return storage.setLoadMoreItem(new RecyclerLoadMoreItemFactoryWrapper(itemFactory));
     }
 
+    @Nullable
+    @Override
+    public LoadMoreFixedItemInfo getLoadMoreFixedItemInfo() {
+        return storage.getLoadMoreFixedItemInfo();
+    }
+
     @Override
     public void setDisableLoadMore(boolean disableLoadMore) {
         storage.setDisableLoadMore(disableLoadMore);
@@ -239,18 +247,18 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @Override
     public int getItemCount() {
-        return storage.getItemCount();
+        return actor.getItemCount();
     }
 
     @Nullable
     @Override
     public Object getItem(int position) {
-        return storage.getItem(position);
+        return actor.getItem(position);
     }
 
     @Override
     public int getPositionInPart(int position) {
-        return storage.getPositionInPart(position);
+        return actor.getPositionInPart(position);
     }
 
 
@@ -268,7 +276,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @Override
     public int getSpanSize(int position) {
-        return storage.getSpanSize(position);
+        return actor.getSpanSize(position);
     }
 
     @Override
@@ -278,7 +286,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @Override
     public int getItemViewType(int position) {
-        return storage.getItemViewType(position);
+        return actor.getItemViewType(position);
     }
 
     @NonNull
@@ -306,8 +314,11 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof Item) {
-            //noinspection unchecked
-            ((Item) viewHolder).setData(position, getItem(position));
+            Object itemData = getItem(position);
+            if (itemData != null) {
+                //noinspection unchecked
+                ((Item) viewHolder).setData(position, itemData);
+            }
         }
     }
 }
