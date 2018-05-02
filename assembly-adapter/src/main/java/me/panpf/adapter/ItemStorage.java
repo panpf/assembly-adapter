@@ -158,7 +158,7 @@ public class ItemStorage {
      */
     public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
         //noinspection ConstantConditions
-        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != this) {
+        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
@@ -254,7 +254,7 @@ public class ItemStorage {
      */
     public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
         //noinspection ConstantConditions
-        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != this) {
+        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
