@@ -54,7 +54,7 @@ public class ExpandableItemActor extends ItemActor {
             ItemFactory childItemFactory;
             for (int w = 0, size = childItemFactoryList.size(); w < size; w++) {
                 childItemFactory = childItemFactoryList.get(w);
-                if (childDataObject != null && childItemFactory.isTarget(childDataObject)) {
+                if (childItemFactory.isTarget(childDataObject)) {
                     return childItemFactory.getItemType();
                 }
             }

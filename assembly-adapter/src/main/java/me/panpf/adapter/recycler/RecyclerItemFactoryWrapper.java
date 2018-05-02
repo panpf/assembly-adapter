@@ -59,13 +59,14 @@ public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapp
     }
 
     @Override
-    public boolean isTarget(@NonNull Object data) {
+    public boolean isTarget(@Nullable Object data) {
         return itemFactory.isTarget(data);
     }
 
     @NonNull
     @Override
     public RecyclerItemWrapper dispatchCreateItem(@NonNull ViewGroup parent) {
+        //noinspection unchecked
         return new RecyclerItemWrapper(itemFactory.dispatchCreateItem(parent));
     }
 

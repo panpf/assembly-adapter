@@ -19,7 +19,7 @@ class GameItemFactory(context: Context) : AssemblyItemFactory<GameItemFactory.Ga
         this.eventListener = EventProcessor(context)
     }
 
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is Game
     }
 
@@ -56,14 +56,15 @@ class GameItemFactory(context: Context) : AssemblyItemFactory<GameItemFactory.Ga
         private val likeTextView: TextView by bindView(R.id.text_gameListItem_like)
 
         override fun onConfigViews(context: Context) {
-            iconImageView.setOnClickListener { data.let { it1 -> eventListener.onClickIcon(position, it1) } }
+            iconImageView.setOnClickListener { data?.let { it1 -> eventListener.onClickIcon(position, it1) } }
 
-            nameTextView.setOnClickListener { data.let { it1 -> eventListener.onClickName(position, it1) } }
+            nameTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickName(position, it1) } }
 
-            likeTextView.setOnClickListener { data.let { it1 -> eventListener.onClickLike(position, it1) } }
+            likeTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickLike(position, it1) } }
         }
 
-        override fun onSetData(position: Int, game: Game) {
+        override fun onSetData(position: Int, game: Game?) {
+            game ?: return
             iconImageView.setImageResource(game.iconResId)
             nameTextView.text = game.name
             likeTextView.text = game.like

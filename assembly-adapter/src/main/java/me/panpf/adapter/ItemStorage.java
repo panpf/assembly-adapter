@@ -15,7 +15,6 @@ import me.panpf.adapter.more.LoadMoreItemFactoryBridle;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ItemStorage {
-    public static final Object NONE_DATA = new Object();
 
     @NonNull
     private final Object headerItemListLock = new Object();
@@ -120,8 +119,6 @@ public class ItemStorage {
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
     public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
@@ -151,9 +148,6 @@ public class ItemStorage {
         return fixedItemInfo;
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
-     */
     @NonNull
     public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory) {
         return addHeaderItem(itemFactory, null);
@@ -221,8 +215,6 @@ public class ItemStorage {
 
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
     public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
@@ -252,9 +244,6 @@ public class ItemStorage {
         return fixedItemInfo;
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
-     */
     @NonNull
     public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory) {
         return addFooterItem(itemFactory, null);
@@ -322,8 +311,6 @@ public class ItemStorage {
 
     /**
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
     public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory, @Nullable Object data) {
@@ -350,9 +337,6 @@ public class ItemStorage {
         return this.loadMoreFixedItemInfo = loadMoreFixedItemInfo;
     }
 
-    /**
-     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴，data 默认为 {@link ItemStorage#NONE_DATA}
-     */
     @NonNull
     public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory) {
         return setLoadMoreItem(itemFactory, null);

@@ -45,17 +45,14 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
         this.wrapper = wrapper;
     }
 
-    @NonNull
+    @Nullable
     @Override
     public DATA getData() {
-        if (data == null) {
-            throw new IllegalStateException("Calling getData() method is illegal before setData() method");
-        }
         return data;
     }
 
     @Override
-    public void setData(int position, @NonNull DATA data) {
+    public void setData(int position, @Nullable DATA data) {
         this.position = position;
         this.data = data;
         onSetData(position, data);
@@ -140,5 +137,5 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
      * @param position 位置
      * @param data     数据
      */
-    protected abstract void onSetData(int position, @NonNull DATA data);
+    protected abstract void onSetData(int position, @Nullable DATA data);
 }

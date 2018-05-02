@@ -315,10 +315,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof Item) {
             Object itemData = getItem(position);
-            if (itemData != null) {
-                //noinspection unchecked
-                ((Item) viewHolder).setData(position, itemData);
-            }
+            //noinspection unchecked
+            ((Item) viewHolder).setData(position, itemData);
         }
     }
 }

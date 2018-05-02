@@ -11,7 +11,7 @@ import me.panpf.adapter.sample.bindView
 
 class AppListHeaderItemFactory : AssemblyItemFactory<AppListHeaderItemFactory.AppListHeaderItem>() {
 
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is String
     }
 
@@ -25,7 +25,7 @@ class AppListHeaderItemFactory : AssemblyItemFactory<AppListHeaderItemFactory.Ap
         override fun onConfigViews(context: Context) {
         }
 
-        override fun onSetData(i: Int, s: String) {
+        override fun onSetData(i: Int, s: String?) {
             textView.text = s
         }
     }

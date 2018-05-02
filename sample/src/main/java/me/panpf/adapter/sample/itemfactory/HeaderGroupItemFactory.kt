@@ -9,7 +9,7 @@ import me.panpf.adapter.AssemblyItemFactory
 import me.panpf.adapter.sample.R
 
 class HeaderGroupItemFactory : AssemblyItemFactory<HeaderGroupItemFactory.HeaderGroupItem>() {
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is String
     }
 
@@ -23,7 +23,7 @@ class HeaderGroupItemFactory : AssemblyItemFactory<HeaderGroupItemFactory.Header
 
         }
 
-        override fun onSetData(position: Int, s: String) {
+        override fun onSetData(position: Int, s: String?) {
             (itemView as TextView).text = s
         }
     }

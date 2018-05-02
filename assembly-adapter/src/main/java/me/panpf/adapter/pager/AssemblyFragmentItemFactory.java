@@ -47,7 +47,7 @@ public abstract class AssemblyFragmentItemFactory<DATA> {
     }
 
     @NonNull
-    protected Fragment dispatchCreateFragment(int position, @NonNull DATA data) {
+    protected Fragment dispatchCreateFragment(int position, @Nullable DATA data) {
         return createFragment(position, data);
     }
 
@@ -57,11 +57,11 @@ public abstract class AssemblyFragmentItemFactory<DATA> {
      * @param data 待匹配的数据，通常是使用 instanceof 关键字匹配类型
      * @return 如果返回 true，Adapter 将会使用此 {@link AssemblyFragmentItemFactory} 来处理当前这条数据
      */
-    public abstract boolean isTarget(@NonNull Object data);
+    public abstract boolean isTarget(@Nullable Object data);
 
     /**
      * 创建 {@link Fragment}
      */
     @NonNull
-    public abstract Fragment createFragment(int position, @NonNull DATA data);
+    public abstract Fragment createFragment(int position, @Nullable DATA data);
 }

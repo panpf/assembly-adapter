@@ -26,8 +26,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.ItemStorage;
-
 /**
  * 通用组合式 {@link PagerAdapter}，支持组合式多类型 item，支持头、尾巴
  */
@@ -78,8 +76,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
     public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
@@ -87,7 +83,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
     public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
@@ -126,8 +122,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
 
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
     public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
@@ -135,7 +129,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
     public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {

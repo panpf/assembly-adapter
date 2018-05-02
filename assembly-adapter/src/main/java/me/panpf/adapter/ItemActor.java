@@ -106,7 +106,7 @@ public class ItemActor {
             return 0;
         }
 
-        throw new IllegalArgumentException("illegal position: " + position);
+        throw new IllegalArgumentException("Illegal position: " + position);
     }
 
 
@@ -135,9 +135,6 @@ public class ItemActor {
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = adapter.getData(positionInDataList);
-            if (dataObject == null) {
-                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
-            }
 
             ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -147,9 +144,8 @@ public class ItemActor {
                 }
             }
 
-            throw new IllegalStateException(String.format(
-                    "Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
-                    positionInDataList, dataObject.getClass().getName()));
+            throw new IllegalStateException(String.format("Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
+                    positionInDataList, dataObject != null ? dataObject.getClass().getName() : null));
         }
 
         // 尾巴
@@ -192,9 +188,6 @@ public class ItemActor {
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = adapter.getData(positionInDataList);
-            if (dataObject == null) {
-                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
-            }
 
             ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -204,9 +197,8 @@ public class ItemActor {
                 }
             }
 
-            throw new IllegalStateException(String.format(
-                    "Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
-                    positionInDataList, dataObject.toString()));
+            throw new IllegalStateException(String.format("Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
+                    positionInDataList, dataObject != null ? dataObject.toString() : null));
         }
 
         // 尾巴

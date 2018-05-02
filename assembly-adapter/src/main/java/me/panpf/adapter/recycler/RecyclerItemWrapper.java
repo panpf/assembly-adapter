@@ -31,14 +31,14 @@ public class RecyclerItemWrapper<DATA> extends RecyclerView.ViewHolder implement
         // 不可以重复 wrapper
     }
 
-    @NonNull
+    @Nullable
     @Override
     public DATA getData() {
         return item.getData();
     }
 
     @Override
-    public void setData(int position, @NonNull DATA data) {
+    public void setData(int position, @Nullable DATA data) {
         item.setData(position, data);
     }
 

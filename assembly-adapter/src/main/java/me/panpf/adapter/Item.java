@@ -23,7 +23,7 @@ public interface Item<DATA> {
     /**
      * 获取当前 item 的数据
      */
-    @NonNull
+    @Nullable
     DATA getData();
 
     /**
@@ -32,7 +32,7 @@ public interface Item<DATA> {
      * @param position 位置
      * @param data     数据
      */
-    void setData(int position, @NonNull DATA data);
+    void setData(int position, @Nullable DATA data);
 
     /**
      * 获取当前 item 的 View

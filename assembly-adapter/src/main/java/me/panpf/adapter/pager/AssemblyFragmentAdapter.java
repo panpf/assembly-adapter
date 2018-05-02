@@ -23,8 +23,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
-import me.panpf.adapter.ItemStorage;
-
 /**
  * 通用组合式 {@link FragmentStatePagerAdapter}，支持组合式多类型 item，支持头、尾巴以及加载更多
  */
@@ -52,13 +50,11 @@ public interface AssemblyFragmentAdapter {
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data);
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
      */
     void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory);
 
@@ -81,13 +77,11 @@ public interface AssemblyFragmentAdapter {
 
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data);
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
      */
     void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory);
 

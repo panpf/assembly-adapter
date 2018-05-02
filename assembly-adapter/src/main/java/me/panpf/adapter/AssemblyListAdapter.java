@@ -331,9 +331,7 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     private void bindItem(@NonNull Item item, int position) {
         Object itemObject = getItem(position);
-        if (itemObject != null) {
-            //noinspection unchecked
-            item.setData(position, itemObject);
-        }
+        //noinspection unchecked
+        item.setData(position, itemObject);
     }
 }

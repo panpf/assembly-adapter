@@ -8,38 +8,31 @@ public class FixedItemInfo {
 
     @NonNull
     private ItemFactory itemFactory;
-    @NonNull
+    @Nullable
     private Object data;
     private boolean enabled;
     private int position;
     private boolean header;
 
     public FixedItemInfo(@NonNull ItemFactory itemFactory, @Nullable Object data, boolean header) {
-        this.data = data != null ? data : ItemStorage.NONE_DATA;
+        this.data = data;
         this.itemFactory = itemFactory;
         this.enabled = true;
         this.header = header;
     }
 
-    @NonNull
+    @Nullable
     public Object getData() {
         return data;
     }
 
-    /**
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
-     */
     public void setData(@Nullable Object data) {
-        this.data = data != null ? data : ItemStorage.NONE_DATA;
+        this.data = data;
 
         AssemblyAdapter adapter = itemFactory.getAdapter();
         if (adapter != null && adapter.isNotifyOnChange()) {
             adapter.notifyDataSetChanged();
         }
-    }
-
-    public boolean isNoneData() {
-        return data == ItemStorage.NONE_DATA;
     }
 
     @NonNull

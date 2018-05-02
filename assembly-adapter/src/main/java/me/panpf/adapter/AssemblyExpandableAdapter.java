@@ -26,8 +26,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.expandable.ExpandableItemStorage;
 import me.panpf.adapter.expandable.ExpandableItemActor;
+import me.panpf.adapter.expandable.ExpandableItemStorage;
 import me.panpf.adapter.more.AssemblyLoadMoreItem;
 import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
 import me.panpf.adapter.more.LoadMoreFixedItemInfo;
@@ -404,11 +404,9 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     private void bindGroupItem(@NonNull Item groupItem, boolean isExpanded, int groupPosition) {
         Object group = getGroup(groupPosition);
-        if (group != null) {
-            groupItem.setExpanded(isExpanded);
-            //noinspection unchecked
-            groupItem.setData(groupPosition, group);
-        }
+        groupItem.setExpanded(isExpanded);
+        //noinspection unchecked
+        groupItem.setData(groupPosition, group);
     }
 
     @Override
@@ -439,12 +437,10 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     private void bindChildItem(Item childItem, int groupPosition, int childPosition, boolean isLastChild) {
         Object child = getChild(groupPosition, childPosition);
-        if (child != null) {
-            childItem.setGroupPosition(groupPosition);
-            childItem.setLastChild(isLastChild);
-            //noinspection unchecked
-            childItem.setData(childPosition, child);
-        }
+        childItem.setGroupPosition(groupPosition);
+        childItem.setLastChild(isLastChild);
+        //noinspection unchecked
+        childItem.setData(childPosition, child);
     }
 
     /**

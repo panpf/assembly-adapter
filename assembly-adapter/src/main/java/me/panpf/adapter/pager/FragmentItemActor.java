@@ -91,9 +91,6 @@ public class FragmentItemActor {
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = adapter.getData(positionInDataList);
-            if (dataObject == null) {
-                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
-            }
 
             AssemblyFragmentItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -104,9 +101,8 @@ public class FragmentItemActor {
                 }
             }
 
-            throw new IllegalStateException(String.format(
-                    "Didn't find suitable AssemblyFragmentItemFactory. position=%d, dataObject=%s",
-                    position, dataObject.getClass().getName()));
+            throw new IllegalStateException(String.format("Didn't find suitable AssemblyFragmentItemFactory. position=%d, dataObject=%s",
+                    position, dataObject != null ? dataObject.getClass().getName() : null));
         }
 
         // 尾巴

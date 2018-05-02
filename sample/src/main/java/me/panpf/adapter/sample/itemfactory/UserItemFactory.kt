@@ -19,7 +19,7 @@ class UserItemFactory(context: Context) : AssemblyItemFactory<UserItemFactory.Us
         this.listener = UserItemListenerImpl(context)
     }
 
-    override fun isTarget(data: Any): Boolean {
+    override fun isTarget(data: Any?): Boolean {
         return data is User
     }
 
@@ -35,14 +35,15 @@ class UserItemFactory(context: Context) : AssemblyItemFactory<UserItemFactory.Us
         private val jobTextView: TextView by bindView(R.id.text_userListItem_job)
 
         override fun onConfigViews(context: Context) {
-            headImageView.setOnClickListener { data.let { it1 -> listener.onClickHead(position, it1) } }
-            nameTextView.setOnClickListener { data.let { it1 -> listener.onClickName(position, it1) } }
-            sexTextView.setOnClickListener { data.let { it1 -> listener.onClickSex(position, it1) } }
-            ageTextView.setOnClickListener { data.let { it1 -> listener.onClickAge(position, it1) } }
-            jobTextView.setOnClickListener { data.let { it1 -> listener.onClickJob(position, it1) } }
+            headImageView.setOnClickListener { data?.let { it1 -> listener.onClickHead(position, it1) } }
+            nameTextView.setOnClickListener { data?.let { it1 -> listener.onClickName(position, it1) } }
+            sexTextView.setOnClickListener { data?.let { it1 -> listener.onClickSex(position, it1) } }
+            ageTextView.setOnClickListener { data?.let { it1 -> listener.onClickAge(position, it1) } }
+            jobTextView.setOnClickListener { data?.let { it1 -> listener.onClickJob(position, it1) } }
         }
 
-        override fun onSetData(position: Int, user: User) {
+        override fun onSetData(position: Int, user: User?) {
+            user ?: return
             headImageView.setImageResource(user.headResId)
             nameTextView.text = user.name
             sexTextView.text = user.sex

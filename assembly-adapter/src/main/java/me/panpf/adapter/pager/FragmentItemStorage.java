@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import me.panpf.adapter.ItemStorage;
-
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class FragmentItemStorage {
 
@@ -97,8 +95,6 @@ public class FragmentItemStorage {
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     public void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
@@ -115,7 +111,7 @@ public class FragmentItemStorage {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
      */
     public void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory) {
         addHeaderItem(itemFactory, null);
@@ -146,8 +142,6 @@ public class FragmentItemStorage {
 
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
-     *
-     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     public void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
@@ -164,7 +158,7 @@ public class FragmentItemStorage {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
      */
     public void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory) {
         addFooterItem(itemFactory, null);

@@ -64,9 +64,6 @@ public class PagerItemActor {
         if (itemFactoryList != null && position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
             Object dataObject = adapter.getData(positionInDataList);
-            if (dataObject == null) {
-                throw new IllegalArgumentException("data is null, position is " + position + ", positionInDataList is " + positionInDataList);
-            }
 
             AssemblyPagerItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
@@ -80,7 +77,7 @@ public class PagerItemActor {
             }
 
             throw new IllegalStateException(String.format("Didn't find suitable AssemblyPagerItemFactory. position=%d, dataObject=%s",
-                    position, dataObject.getClass().getName()));
+                    position, dataObject != null ? dataObject.getClass().getName() : null));
         }
 
         // 尾巴
