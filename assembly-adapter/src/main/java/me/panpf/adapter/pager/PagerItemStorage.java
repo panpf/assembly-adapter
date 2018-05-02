@@ -111,17 +111,14 @@ public class PagerItemStorage {
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
+     *
+     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
-    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @NonNull Object data) {
+    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
-        }
-
-        //noinspection ConstantConditions
-        if (data == null) {
-            throw new IllegalArgumentException("data is null");
         }
 
         itemFactory.setAdapter(adapter);
@@ -138,11 +135,11 @@ public class PagerItemStorage {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
      */
     @NonNull
     public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
-        return addHeaderItem(itemFactory, ItemStorage.NONE_DATA);
+        return addHeaderItem(itemFactory, null);
     }
 
     /**
@@ -206,17 +203,14 @@ public class PagerItemStorage {
 
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
+     *
+     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
-    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @NonNull Object data) {
+    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
-        }
-
-        //noinspection ConstantConditions
-        if (data == null) {
-            throw new IllegalArgumentException("data is null");
         }
 
         itemFactory.setAdapter(adapter);
@@ -234,11 +228,11 @@ public class PagerItemStorage {
     }
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
      */
     @NonNull
     public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
-        return addFooterItem(itemFactory, ItemStorage.NONE_DATA);
+        return addFooterItem(itemFactory, null);
     }
 
     /**

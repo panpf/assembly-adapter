@@ -17,6 +17,7 @@
 package me.panpf.adapter.more;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import me.panpf.adapter.FixedItemInfo;
 
@@ -26,7 +27,7 @@ import me.panpf.adapter.FixedItemInfo;
 @SuppressWarnings("unused")
 public class LoadMoreFixedItemInfo extends FixedItemInfo {
 
-    public LoadMoreFixedItemInfo(@NonNull LoadMoreItemFactoryBridle itemFactory, @NonNull Object data, boolean header) {
+    public LoadMoreFixedItemInfo(@NonNull LoadMoreItemFactoryBridle itemFactory, @Nullable Object data, boolean header) {
         super(itemFactory, data, header);
     }
 

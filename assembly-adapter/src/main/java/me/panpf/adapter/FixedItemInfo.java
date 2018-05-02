@@ -1,8 +1,9 @@
 package me.panpf.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class FixedItemInfo {
 
     @NonNull
@@ -13,8 +14,8 @@ public class FixedItemInfo {
     private int position;
     private boolean header;
 
-    public FixedItemInfo(@NonNull ItemFactory itemFactory, @NonNull Object data, boolean header) {
-        this.data = data;
+    public FixedItemInfo(@NonNull ItemFactory itemFactory, @Nullable Object data, boolean header) {
+        this.data = data != null ? data : ItemStorage.NONE_DATA;
         this.itemFactory = itemFactory;
         this.enabled = true;
         this.header = header;
@@ -25,17 +26,20 @@ public class FixedItemInfo {
         return data;
     }
 
-    public void setData(@NonNull Object data) {
-        //noinspection ConstantConditions
-        if (data == null) {
-            throw new IllegalArgumentException("data is null");
-        }
-        this.data = data;
+    /**
+     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
+     */
+    public void setData(@Nullable Object data) {
+        this.data = data != null ? data : ItemStorage.NONE_DATA;
 
         AssemblyAdapter adapter = itemFactory.getAdapter();
         if (adapter != null && adapter.isNotifyOnChange()) {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    public boolean isNoneData() {
+        return data == ItemStorage.NONE_DATA;
     }
 
     @NonNull

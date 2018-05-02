@@ -73,7 +73,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /* ************************ 头部 ItemFactory *************************** */
 
     @Override
-    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory, @NonNull Object data) {
+    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data) {
         storage.addHeaderItem(itemFactory, data);
     }
 
@@ -103,7 +103,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     /* ************************ 尾巴 ItemFactory *************************** */
 
     @Override
-    public void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory, @NonNull Object data) {
+    public void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data) {
         storage.addFooterItem(itemFactory, data);
     }
 

@@ -17,12 +17,15 @@
 package me.panpf.adapter.pager;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
+
+import me.panpf.adapter.ItemStorage;
 
 /**
  * {@link AssemblyFragmentPagerAdapter} 和 {@link AssemblyFragmentStatePagerAdapter} 专用的固定位置 item 管理器
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class FixedFragmentItemInfo {
 
     @NonNull
@@ -30,8 +33,8 @@ public class FixedFragmentItemInfo {
     @NonNull
     private Object data;
 
-    public FixedFragmentItemInfo(@NonNull AssemblyFragmentItemFactory itemFactory, @NonNull Object data) {
-        this.data = data;
+    public FixedFragmentItemInfo(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data) {
+        this.data = data != null ? data : ItemStorage.NONE_DATA;
         this.itemFactory = itemFactory;
     }
 
@@ -40,17 +43,20 @@ public class FixedFragmentItemInfo {
         return data;
     }
 
-    public void setData(@NonNull Object data) {
-        //noinspection ConstantConditions
-        if (data == null) {
-            throw new IllegalArgumentException("data is null");
-        }
-        this.data = data;
+    /**
+     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
+     */
+    public void setData(@Nullable Object data) {
+        this.data = data != null ? data : ItemStorage.NONE_DATA;
 
         PagerAdapter adapter = itemFactory.getAdapter();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    public boolean isNoneData() {
+        return data == ItemStorage.NONE_DATA;
     }
 
     @NonNull

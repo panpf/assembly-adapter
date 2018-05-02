@@ -42,12 +42,14 @@ public interface AssemblyAdapter {
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
+     *
+     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
-    <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data);
+    <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data);
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
+     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
      */
     @NonNull
     <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory);
@@ -81,12 +83,14 @@ public interface AssemblyAdapter {
 
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
+     *
+     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
-    <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @NonNull Object data);
+    <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data);
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
+     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}，data 默认为 {@link ItemStorage#NONE_DATA}
      */
     @NonNull
     <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory);
@@ -120,12 +124,14 @@ public interface AssemblyAdapter {
 
     /**
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
+     *
+     * @param data 如果 data 为 null 将用 {@link ItemStorage#NONE_DATA} 代替
      */
     @NonNull
-    <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @NonNull Object data);
+    <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @Nullable Object data);
 
     /**
-     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
+     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴，data 默认为 {@link ItemStorage#NONE_DATA}
      */
     @NonNull
     <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory);
