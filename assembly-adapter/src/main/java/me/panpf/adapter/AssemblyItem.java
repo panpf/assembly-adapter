@@ -34,6 +34,12 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
         this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
     }
 
+    @Nullable
+    @Override
+    public Item<DATA> getWrapper() {
+        return wrapper;
+    }
+
     @Override
     public void setWrapper(@Nullable Item<DATA> wrapper) {
         this.wrapper = wrapper;

@@ -6,11 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import me.panpf.adapter.AssemblyAdapter;
+import me.panpf.adapter.ItemFactory;
+import me.panpf.adapter.WrapperItemFactory;
 import me.panpf.adapter.more.AssemblyLoadMoreItem;
 import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
 import me.panpf.adapter.more.LoadMoreItemFactoryBridle;
 
-public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBridle<RecyclerLoadMoreItemWrapper> {
+public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBridle<RecyclerLoadMoreItemWrapper>, WrapperItemFactory {
 
     @NonNull
     private AssemblyLoadMoreItemFactory itemFactory;
@@ -78,5 +80,11 @@ public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBr
     @Override
     public RecyclerLoadMoreItemWrapper dispatchCreateItem(@NonNull ViewGroup parent) {
         return new RecyclerLoadMoreItemWrapper((AssemblyLoadMoreItem) itemFactory.dispatchCreateItem(parent));
+    }
+
+    @NonNull
+    @Override
+    public ItemFactory getWrappedItemFactory() {
+        return itemFactory;
     }
 }

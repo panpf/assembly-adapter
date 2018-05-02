@@ -20,6 +20,12 @@ public class RecyclerItemWrapper<DATA> extends RecyclerView.ViewHolder implement
         this.item.setWrapper(this);
     }
 
+    @Nullable
+    @Override
+    public Item<DATA> getWrapper() {
+        return null;
+    }
+
     @Override
     public void setWrapper(@Nullable Item<DATA> wrapper) {
         // 不可以重复 wrapper

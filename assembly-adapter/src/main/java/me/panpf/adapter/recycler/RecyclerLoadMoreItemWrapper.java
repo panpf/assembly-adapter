@@ -20,6 +20,12 @@ public class RecyclerLoadMoreItemWrapper<DATA> extends RecyclerView.ViewHolder i
         this.item = item;
     }
 
+    @Nullable
+    @Override
+    public Item<DATA> getWrapper() {
+        return null;
+    }
+
     @Override
     public void setWrapper(@Nullable Item wrapper) {
         // 不可以重复 wrapper

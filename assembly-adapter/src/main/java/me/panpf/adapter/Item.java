@@ -4,7 +4,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+@SuppressWarnings("unused")
 public interface Item<DATA> {
+
+    /**
+     * 获取包装器
+     */
+    @Nullable
+    Item<DATA> getWrapper();
+
+    /**
+     * 设置包装器
+     *
+     * @param wrapper 包装器
+     */
     void setWrapper(@Nullable Item<DATA> wrapper);
 
     /**

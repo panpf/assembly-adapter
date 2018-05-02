@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 
 import me.panpf.adapter.AssemblyAdapter;
 import me.panpf.adapter.ItemFactory;
+import me.panpf.adapter.WrapperItemFactory;
 
-public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapper> {
+public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapper>, WrapperItemFactory {
 
     @NonNull
     private ItemFactory itemFactory;
@@ -66,5 +67,11 @@ public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapp
     @Override
     public RecyclerItemWrapper dispatchCreateItem(@NonNull ViewGroup parent) {
         return new RecyclerItemWrapper(itemFactory.dispatchCreateItem(parent));
+    }
+
+    @NonNull
+    @Override
+    public ItemFactory getWrappedItemFactory() {
+        return itemFactory;
     }
 }
