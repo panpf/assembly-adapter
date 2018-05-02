@@ -58,6 +58,28 @@ public class ViewItemFactory extends AssemblyItemFactory<ViewItemFactory.ViewIte
         this(layoutResId, null, null);
     }
 
+    public ViewItemFactory(@NonNull final View view, @Nullable Class<?> dataClazz, @Nullable OnClickViewListener listener) {
+        this(new ViewFactory() {
+            @NonNull
+            @Override
+            public View createItemView(@NonNull ViewGroup parent) {
+                return view;
+            }
+        }, dataClazz, listener);
+    }
+
+    public ViewItemFactory(@NonNull final View view, @Nullable Class<?> dataClazz) {
+        this(view, dataClazz, null);
+    }
+
+    public ViewItemFactory(@NonNull final View view, @Nullable OnClickViewListener listener) {
+        this(view, null, listener);
+    }
+
+    public ViewItemFactory(@NonNull final View view) {
+        this(view, null, null);
+    }
+
     @Override
     public boolean isTarget(@NonNull Object data) {
         return dataClazz == null || dataClazz.isInstance(data);
