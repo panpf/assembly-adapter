@@ -202,7 +202,7 @@ public class ItemActor {
         }
 
         // 尾巴
-        List<FixedItemInfo> footerItemList = adapter.getHeaderItemList();
+        List<FixedItemInfo> footerItemList = adapter.getFooterItemList();
         int footerItemCount = adapter.getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
