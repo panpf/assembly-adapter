@@ -28,14 +28,14 @@ import me.panpf.adapter.ItemStorage;
 @SuppressWarnings("unused")
 public class LoadMoreFixedItemInfo extends FixedItemInfo {
 
-    public LoadMoreFixedItemInfo(@NonNull ItemStorage storage, @NonNull LoadMoreItemFactoryBridle itemFactory, @Nullable Object data, boolean header) {
+    public LoadMoreFixedItemInfo(@NonNull ItemStorage storage, @NonNull MoreItemFactory itemFactory, @Nullable Object data, boolean header) {
         super(storage, itemFactory, data, header);
     }
 
     @NonNull
     @Override
-    public LoadMoreItemFactoryBridle getItemFactory() {
-        return (LoadMoreItemFactoryBridle) super.getItemFactory();
+    public MoreItemFactory getItemFactory() {
+        return (MoreItemFactory) super.getItemFactory();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.panpf.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -19,6 +20,13 @@ public interface Item<DATA> {
      * @param wrapper 包装器
      */
     void setWrapper(@Nullable Item<DATA> wrapper);
+
+    /**
+     * 初始化
+     *
+     * @param context {@link Context}
+     */
+    void onInit(@NonNull Context context);
 
     /**
      * 获取当前 item 的数据

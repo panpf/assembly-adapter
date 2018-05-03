@@ -10,7 +10,7 @@ import me.panpf.adapter.AssemblyAdapter;
 import me.panpf.adapter.AssemblyItem;
 
 @SuppressWarnings("unused")
-public abstract class AssemblyLoadMoreItem<DATA> extends AssemblyItem<DATA> implements LoadMoreItemBridle<DATA> {
+public abstract class AssemblyLoadMoreItem<DATA> extends AssemblyItem<DATA> implements MoreItem<DATA> {
 
     @NonNull
     private AssemblyLoadMoreItemFactory itemFactory;

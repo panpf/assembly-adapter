@@ -55,6 +55,17 @@ public interface ItemFactory<ITEM extends Item> {
     ItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView);
 
     /**
+     * 是否将要用在 {@link RecyclerView} 中
+     */
+    boolean isInRecycler();
+
+    /**
+     * 设置是否将要用在 {@link RecyclerView} 中
+     */
+    ItemFactory<ITEM>  setInRecycler(boolean inRecycler);
+
+
+    /**
      * 匹配数据
      *
      * @param data 待匹配的数据，通常是使用 instanceof 关键字匹配类型

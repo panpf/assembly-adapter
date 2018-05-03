@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import me.panpf.adapter.more.LoadMoreFixedItemInfo;
-import me.panpf.adapter.more.LoadMoreItemFactoryBridle;
+import me.panpf.adapter.more.MoreItemFactory;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ItemStorage {
@@ -313,7 +313,7 @@ public class ItemStorage {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory, @Nullable Object data) {
+    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull MoreItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
@@ -338,7 +338,7 @@ public class ItemStorage {
     }
 
     @NonNull
-    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull LoadMoreItemFactoryBridle itemFactory) {
+    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull MoreItemFactory itemFactory) {
         return setLoadMoreItem(itemFactory, null);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Peng fei Pan <sky@panpf.me>
+ * Copyright (C) 2017 Peng fei Pan <sky@panpf.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package me.panpf.adapter;
+package me.panpf.adapter.more;
 
-import android.support.annotation.NonNull;
+import me.panpf.adapter.ItemFactory;
 
-@SuppressWarnings("unused")
-public interface WrapperItemFactory<ITEM extends Item> {
-    @NonNull
-    ItemFactory<ITEM> getWrappedItemFactory();
+public interface MoreItemFactory<ITEM extends MoreItem> extends ItemFactory<ITEM> {
+
+    /**
+     * 加载更多完成
+     *
+     * @param end 已全部加载完毕，切换至结束状态
+     */
+    void loadMoreFinished(boolean end);
+
+    /**
+     * 加载更多失败
+     */
+    void loadMoreFailed();
 }

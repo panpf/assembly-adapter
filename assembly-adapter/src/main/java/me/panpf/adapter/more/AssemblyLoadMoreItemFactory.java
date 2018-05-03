@@ -27,7 +27,7 @@ import me.panpf.adapter.AssemblyItemFactory;
  */
 @SuppressWarnings("unused")
 public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreItem>
-        extends AssemblyItemFactory<ITEM> implements LoadMoreItemFactoryBridle<ITEM> {
+        extends AssemblyItemFactory<ITEM> implements MoreItemFactory<ITEM> {
 
     boolean paused;
     boolean end;
@@ -78,6 +78,12 @@ public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreI
     @Override
     public AssemblyLoadMoreItemFactory<ITEM> setSpanSize(int spanSize) {
         super.setSpanSize(spanSize);
+        return this;
+    }
+
+    @Override
+    public AssemblyLoadMoreItemFactory<ITEM> setInRecycler(boolean inRecycler) {
+        super.setInRecycler(inRecycler);
         return this;
     }
 }

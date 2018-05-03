@@ -1,5 +1,6 @@
 package me.panpf.adapter.recycler;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,11 @@ public class RecyclerItemWrapper<DATA> extends RecyclerView.ViewHolder implement
     @Override
     public void setWrapper(@Nullable Item<DATA> wrapper) {
         // 不可以重复 wrapper
+    }
+
+    @Override
+    public void onInit(@NonNull Context context) {
+        item.onInit(context);
     }
 
     @Nullable

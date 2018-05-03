@@ -7,14 +7,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ViewGroup;
 
+import me.panpf.adapter.recycler.RecyclerItemWrapper;
+
 @SuppressWarnings("unused")
-public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements ItemFactory<ITEM> {
+public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFactory<ITEM> {
 
     private int itemType;
     private AssemblyAdapter adapter;
 
     private int spanSize = 1;
     private boolean fullSpanInStaggeredGrid;
+    private boolean inRecycler;
 
     @NonNull
     @Override
@@ -57,6 +60,17 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements 
         return this;
     }
 
+    @Override
+    public boolean isInRecycler() {
+        return inRecycler;
+    }
+
+    @Override
+    public AssemblyItemFactory<ITEM> setInRecycler(boolean inRecycler) {
+        this.inRecycler = inRecycler;
+        return this;
+    }
+
     @NonNull
     @Override
     public AssemblyItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView) {
@@ -93,10 +107,8 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements 
                 }
             }
         }
-
-        item.onFindViews();
-        item.onConfigViews(parent.getContext());
-        return item;
+        item.onInit(parent.getContext());
+        return inRecycler ? (ITEM) new RecyclerItemWrapper(item) : item;
     }
 
     /**

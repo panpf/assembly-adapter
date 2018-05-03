@@ -5,7 +5,7 @@ import android.view.View;
 
 import me.panpf.adapter.Item;
 
-public interface LoadMoreItemBridle<DATA> extends Item<DATA> {
+public interface MoreItem<DATA> extends Item<DATA> {
     /**
      * 获取错误重试View，实现点击重试功能
      */

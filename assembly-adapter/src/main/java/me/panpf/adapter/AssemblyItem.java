@@ -45,6 +45,12 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
         this.wrapper = wrapper;
     }
 
+    @Override
+    public void onInit(@NonNull Context context) {
+        onFindViews();
+        onConfigViews(context);
+    }
+
     @Nullable
     @Override
     public DATA getData() {
