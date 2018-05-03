@@ -91,13 +91,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     }
 
     /**
-     * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
-     */
-    void headerEnabledChanged(@NonNull FixedPagerItemInfo headerItemInfo) {
-        storage.headerEnabledChanged(headerItemInfo);
-    }
-
-    /**
      * 获取 header 列表
      */
     @Nullable
@@ -134,13 +127,6 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     @NonNull
     public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
         return storage.addFooterItem(itemFactory);
-    }
-
-    /**
-     * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
-     */
-    void footerEnabledChanged(@NonNull FixedPagerItemInfo footerItemInfo) {
-        storage.footerEnabledChanged(footerItemInfo);
     }
 
     /**

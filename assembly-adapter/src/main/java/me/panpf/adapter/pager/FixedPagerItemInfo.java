@@ -24,19 +24,21 @@ import android.support.annotation.Nullable;
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class FixedPagerItemInfo {
-
+    @NonNull
+    private PagerItemStorage storage;
     @NonNull
     private AssemblyPagerItemFactory itemFactory;
     @Nullable
     private Object data;
-    private boolean enabled;
-    private int position;
     private boolean header;
 
-    public FixedPagerItemInfo(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data, boolean header) {
-        this.data = data;
+    private int position;
+    private boolean enabled = true;
+
+    public FixedPagerItemInfo(@NonNull PagerItemStorage storage, @NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data, boolean header) {
+        this.storage = storage;
         this.itemFactory = itemFactory;
-        this.enabled = true;
+        this.data = data;
         this.header = header;
     }
 
@@ -73,15 +75,9 @@ public class FixedPagerItemInfo {
 
     protected void enableChanged() {
         if (header) {
-            AssemblyPagerAdapter adapter = itemFactory.getAdapter();
-            if (adapter != null) {
-                adapter.headerEnabledChanged(this);
-            }
+            storage.headerEnabledChanged(this);
         } else {
-            AssemblyPagerAdapter adapter = itemFactory.getAdapter();
-            if (adapter != null) {
-                adapter.footerEnabledChanged(this);
-            }
+            storage.footerEnabledChanged(this);
         }
     }
 

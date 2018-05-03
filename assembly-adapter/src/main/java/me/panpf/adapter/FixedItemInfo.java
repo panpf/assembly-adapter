@@ -7,17 +7,20 @@ import android.support.annotation.Nullable;
 public class FixedItemInfo {
 
     @NonNull
+    private ItemStorage itemStorage;
+    @NonNull
     private ItemFactory itemFactory;
     @Nullable
     private Object data;
-    private boolean enabled;
     private int position;
     private boolean header;
 
-    public FixedItemInfo(@NonNull ItemFactory itemFactory, @Nullable Object data, boolean header) {
-        this.data = data;
+    private boolean enabled = true;
+
+    public FixedItemInfo(@NonNull ItemStorage itemStorage, @NonNull ItemFactory itemFactory, @Nullable Object data, boolean header) {
+        this.itemStorage = itemStorage;
         this.itemFactory = itemFactory;
-        this.enabled = true;
+        this.data = data;
         this.header = header;
     }
 
@@ -53,13 +56,10 @@ public class FixedItemInfo {
     }
 
     protected void enableChanged() {
-        AssemblyAdapter adapter = itemFactory.getAdapter();
-        if (adapter != null) {
-            if (header) {
-                adapter.headerEnabledChanged(this);
-            } else {
-                adapter.footerEnabledChanged(this);
-            }
+        if (header) {
+            itemStorage.headerEnabledChanged(this);
+        } else {
+            itemStorage.footerEnabledChanged(this);
         }
     }
 

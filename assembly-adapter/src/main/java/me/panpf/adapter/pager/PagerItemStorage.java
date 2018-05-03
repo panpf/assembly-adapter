@@ -118,7 +118,7 @@ public class PagerItemStorage {
         }
 
         itemFactory.setAdapter(adapter);
-        FixedPagerItemInfo headerItemInfo = new FixedPagerItemInfo(itemFactory, data, true);
+        FixedPagerItemInfo headerItemInfo = new FixedPagerItemInfo(this, itemFactory, data, true);
         headerItemInfo.setPosition(headerItemPosition++);
 
         synchronized (headerItemListLock) {
@@ -208,7 +208,7 @@ public class PagerItemStorage {
         }
 
         itemFactory.setAdapter(adapter);
-        FixedPagerItemInfo footerItemInfo = new FixedPagerItemInfo(itemFactory, data, false);
+        FixedPagerItemInfo footerItemInfo = new FixedPagerItemInfo(this, itemFactory, data, false);
         footerItemInfo.setPosition(footerItemPosition++);
 
         synchronized (footerItemListLock) {

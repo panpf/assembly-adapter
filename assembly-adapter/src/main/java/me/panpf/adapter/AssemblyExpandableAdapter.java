@@ -124,11 +124,6 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     @Override
-    public void headerEnabledChanged(@NonNull FixedItemInfo headerItemInfo) {
-        storage.headerEnabledChanged(headerItemInfo);
-    }
-
-    @Override
     public List<FixedItemInfo> getHeaderItemList() {
         return storage.getHeaderItemList();
     }
@@ -157,11 +152,6 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     @Override
     public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
         return storage.addHeaderItem(itemFactory);
-    }
-
-    @Override
-    public void footerEnabledChanged(@NonNull FixedItemInfo footerItemInfo) {
-        storage.footerEnabledChanged(footerItemInfo);
     }
 
     @Override

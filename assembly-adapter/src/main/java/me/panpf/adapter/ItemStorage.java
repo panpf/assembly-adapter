@@ -130,7 +130,7 @@ public class ItemStorage {
         itemFactory.setAdapter(adapter);
         itemFactory.setItemType(itemTypeIndex++);
 
-        FixedItemInfo fixedItemInfo = new FixedItemInfo(itemFactory, data, true);
+        FixedItemInfo fixedItemInfo = new FixedItemInfo(this, itemFactory, data, true);
         fixedItemInfo.setPosition(headerItemPosition++);
 
         if (itemFactoryArray == null) {
@@ -226,7 +226,7 @@ public class ItemStorage {
         itemFactory.setAdapter(adapter);
         itemFactory.setItemType(itemTypeIndex++);
 
-        FixedItemInfo fixedItemInfo = new FixedItemInfo(itemFactory, data, false);
+        FixedItemInfo fixedItemInfo = new FixedItemInfo(this, itemFactory, data, false);
         fixedItemInfo.setPosition(footerItemPosition++);
 
         if (itemFactoryArray == null) {
@@ -327,7 +327,7 @@ public class ItemStorage {
         }
 
         itemFactory.loadMoreFinished(false);
-        LoadMoreFixedItemInfo loadMoreFixedItemInfo = new LoadMoreFixedItemInfo(itemFactory, data, false);
+        LoadMoreFixedItemInfo loadMoreFixedItemInfo = new LoadMoreFixedItemInfo(this, itemFactory, data, false);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();

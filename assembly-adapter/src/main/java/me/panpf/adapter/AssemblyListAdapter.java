@@ -87,11 +87,6 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
         return storage.addHeaderItem(itemFactory);
     }
 
-    @Override
-    public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
-        storage.headerEnabledChanged(fixedItemInfo);
-    }
-
     @Nullable
     @Override
     public List<FixedItemInfo> getHeaderItemList() {
@@ -122,11 +117,6 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     @Override
     public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
         return storage.addFooterItem(itemFactory);
-    }
-
-    @Override
-    public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
-        storage.footerEnabledChanged(fixedItemInfo);
     }
 
     @Nullable

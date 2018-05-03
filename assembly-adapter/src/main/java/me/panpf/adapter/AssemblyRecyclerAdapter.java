@@ -88,11 +88,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return storage.addHeaderItem(new RecyclerItemFactoryWrapper(itemFactory));
     }
 
-    @Override
-    public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
-        storage.headerEnabledChanged(fixedItemInfo);
-    }
-
     @Nullable
     @Override
     public List<FixedItemInfo> getHeaderItemList() {
@@ -123,11 +118,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     @Override
     public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
         return storage.addFooterItem(new RecyclerItemFactoryWrapper(itemFactory));
-    }
-
-    @Override
-    public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
-        storage.footerEnabledChanged(fixedItemInfo);
     }
 
     @Override
