@@ -16,6 +16,12 @@ public abstract class AssemblyItemFactory<ITEM extends AssemblyItem> implements 
     private int spanSize = 1;
     private boolean fullSpanInStaggeredGrid;
 
+    @NonNull
+    @Override
+    public ItemFactory<ITEM> getWrappedItemFactory() {
+        return this;
+    }
+
     @Override
     public int getItemType() {
         return itemType;

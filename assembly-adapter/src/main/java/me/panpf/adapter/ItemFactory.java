@@ -9,6 +9,12 @@ import android.view.ViewGroup;
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface ItemFactory<ITEM extends Item> {
     /**
+     * 获取被包装的 {@link ItemFactory}
+     */
+    @NonNull
+    ItemFactory<ITEM> getWrappedItemFactory();
+
+    /**
      * 获取 item 类型
      */
     int getItemType();

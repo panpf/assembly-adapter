@@ -7,15 +7,20 @@ import android.view.ViewGroup;
 
 import me.panpf.adapter.AssemblyAdapter;
 import me.panpf.adapter.ItemFactory;
-import me.panpf.adapter.WrapperItemFactory;
 
-public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapper>, WrapperItemFactory {
+public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapper> {
 
     @NonNull
     private ItemFactory itemFactory;
 
     public RecyclerItemFactoryWrapper(@NonNull ItemFactory itemFactory) {
         this.itemFactory = itemFactory;
+    }
+
+    @NonNull
+    @Override
+    public ItemFactory getWrappedItemFactory() {
+        return itemFactory;
     }
 
     @Override
@@ -66,13 +71,6 @@ public class RecyclerItemFactoryWrapper implements ItemFactory<RecyclerItemWrapp
     @NonNull
     @Override
     public RecyclerItemWrapper dispatchCreateItem(@NonNull ViewGroup parent) {
-        //noinspection unchecked
         return new RecyclerItemWrapper(itemFactory.dispatchCreateItem(parent));
-    }
-
-    @NonNull
-    @Override
-    public ItemFactory getWrappedItemFactory() {
-        return itemFactory;
     }
 }

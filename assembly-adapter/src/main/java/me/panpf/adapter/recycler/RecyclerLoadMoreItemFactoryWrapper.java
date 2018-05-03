@@ -7,18 +7,23 @@ import android.view.ViewGroup;
 
 import me.panpf.adapter.AssemblyAdapter;
 import me.panpf.adapter.ItemFactory;
-import me.panpf.adapter.WrapperItemFactory;
 import me.panpf.adapter.more.AssemblyLoadMoreItem;
 import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
 import me.panpf.adapter.more.LoadMoreItemFactoryBridle;
 
-public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBridle<RecyclerLoadMoreItemWrapper>, WrapperItemFactory {
+public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBridle<RecyclerLoadMoreItemWrapper> {
 
     @NonNull
     private AssemblyLoadMoreItemFactory itemFactory;
 
     public RecyclerLoadMoreItemFactoryWrapper(@NonNull AssemblyLoadMoreItemFactory itemFactory) {
         this.itemFactory = itemFactory;
+    }
+
+    @NonNull
+    @Override
+    public ItemFactory getWrappedItemFactory() {
+        return itemFactory;
     }
 
     @Override
@@ -72,7 +77,7 @@ public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBr
     }
 
     @Override
-    public boolean isTarget(@NonNull Object data) {
+    public boolean isTarget(@Nullable Object data) {
         return itemFactory.isTarget(data);
     }
 
@@ -80,11 +85,5 @@ public class RecyclerLoadMoreItemFactoryWrapper implements LoadMoreItemFactoryBr
     @Override
     public RecyclerLoadMoreItemWrapper dispatchCreateItem(@NonNull ViewGroup parent) {
         return new RecyclerLoadMoreItemWrapper((AssemblyLoadMoreItem) itemFactory.dispatchCreateItem(parent));
-    }
-
-    @NonNull
-    @Override
-    public ItemFactory getWrappedItemFactory() {
-        return itemFactory;
     }
 }
