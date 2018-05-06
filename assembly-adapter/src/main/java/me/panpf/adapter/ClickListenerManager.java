@@ -7,30 +7,30 @@ import android.view.View;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClickListenerManager {
+public class ClickListenerManager<DATA> {
     @NonNull
     private List<Object> holders = new LinkedList<Object>();
 
-    public void add(@IdRes int viewId, @NonNull OnClickListener onClickListener) {
-        holders.add(new ClickListenerHolder(viewId, onClickListener));
+    public void add(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener) {
+        holders.add(new ClickListenerHolder<DATA>(viewId, onClickListener));
     }
 
-    public void add(@NonNull OnClickListener onClickListener) {
-        holders.add(new ClickListenerHolder(onClickListener));
+    public void add(@NonNull OnClickListener<DATA> onClickListener) {
+        holders.add(new ClickListenerHolder<DATA>(onClickListener));
     }
 
-    public void add(@IdRes int viewId, @NonNull OnLongClickListener onClickListener) {
-        holders.add(new LongClickListenerHolder(viewId, onClickListener));
+    public void add(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener) {
+        holders.add(new LongClickListenerHolder<DATA>(viewId, onClickListener));
     }
 
-    public void add(@NonNull OnLongClickListener onClickListener) {
-        holders.add(new LongClickListenerHolder(onClickListener));
+    public void add(@NonNull OnLongClickListener<DATA> onClickListener) {
+        holders.add(new LongClickListenerHolder<DATA>(onClickListener));
     }
 
-    public void register(@NonNull final ItemFactory itemFactory, @NonNull Item item, @NonNull View itemView) {
+    public void register(@NonNull final ItemFactory<DATA> itemFactory, @NonNull Item<DATA> item, @NonNull View itemView) {
         for (final Object holder : holders) {
             if (holder instanceof ClickListenerHolder) {
-                final ClickListenerHolder clickListenerHolder = (ClickListenerHolder) holder;
+                final ClickListenerHolder<DATA> clickListenerHolder = (ClickListenerHolder<DATA>) holder;
                 int viewId = clickListenerHolder.getViewId();
                 final View targetView = viewId > 0 ? itemView.findViewById(viewId) : itemView;
                 if (targetView == null) {
@@ -41,7 +41,7 @@ public class ClickListenerManager {
                 targetView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Item item = (Item) targetView.getTag(R.id.aa_item_holder);
+                        Item<DATA> item = (Item<DATA>) targetView.getTag(R.id.aa_item_holder);
                         int position = item.getAdapterPosition();
                         AssemblyAdapter adapter = itemFactory.getAdapter();
                         int positionInPart = adapter != null ? adapter.getPositionInPart(position) : position;
@@ -49,7 +49,7 @@ public class ClickListenerManager {
                     }
                 });
             } else if (holder instanceof LongClickListenerHolder) {
-                final LongClickListenerHolder longClickListenerHolder = (LongClickListenerHolder) holder;
+                final LongClickListenerHolder<DATA> longClickListenerHolder = (LongClickListenerHolder<DATA>) holder;
                 int viewId = longClickListenerHolder.getViewId();
                 final View targetView = viewId > 0 ? itemView.findViewById(viewId) : itemView;
                 if (targetView == null) {
@@ -60,7 +60,7 @@ public class ClickListenerManager {
                 targetView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        Item item = (Item) targetView.getTag(R.id.aa_item_holder);
+                        Item<DATA> item = (Item<DATA>) targetView.getTag(R.id.aa_item_holder);
                         int position = item.getAdapterPosition();
                         AssemblyAdapter adapter = itemFactory.getAdapter();
                         int positionInPart = adapter != null ? adapter.getPositionInPart(position) : position;

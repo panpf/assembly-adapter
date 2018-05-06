@@ -9,7 +9,7 @@ import me.panpf.adapter.AssemblyItemFactory
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bindView
 
-class AppListHeaderItemFactory : AssemblyItemFactory<AppListHeaderItemFactory.AppListHeaderItem>() {
+class AppListHeaderItemFactory : AssemblyItemFactory<String>() {
 
     override fun isTarget(data: Any?): Boolean {
         return data is String

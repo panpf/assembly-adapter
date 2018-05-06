@@ -1,5 +1,9 @@
 package me.panpf.adapter.sample.fragment
 
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.ApplicationInfo
 import android.os.AsyncTask
 import android.os.Bundle
@@ -18,13 +22,12 @@ import me.panpf.adapter.sample.bindView
 import me.panpf.adapter.sample.itemfactory.AppItemFactory
 import me.panpf.adapter.sample.itemfactory.AppListHeaderItemFactory
 import java.io.File
-import java.lang.ref.WeakReference
 import java.util.*
 
 class GridRecyclerViewFragment : Fragment() {
 
-    val recyclerView: RecyclerView by bindView(R.id.list_recyclerViewFragment_content)
-    lateinit var adapter: AssemblyRecyclerAdapter
+    private val recyclerView: RecyclerView by bindView(R.id.list_recyclerViewFragment_content)
+    private val appsViewModel: AppsViewModel by lazy { ViewModelProviders.of(this).get(AppsViewModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recycler_view, container, false)
@@ -36,83 +39,88 @@ class GridRecyclerViewFragment : Fragment() {
         val context = context ?: return
         recyclerView.layoutManager = AssemblyGridLayoutManager(context, 4, recyclerView)
 
-        adapter = AssemblyRecyclerAdapter().apply {
+        val adapter = AssemblyRecyclerAdapter().apply {
             addItemFactory(AppItemFactory().setOnItemClickListener { view, position, positionInPart, data ->
-                val launchIntent = context.packageManager.getLaunchIntentForPackage((data as AppInfo).packageName)
+                val launchIntent = context.packageManager.getLaunchIntentForPackage(data?.packageName)
                 if (launchIntent != null) {
                     startActivity(launchIntent)
                 } else {
-                    Toast.makeText(context, "无法启动 ${data.name}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "无法启动 ${data?.name}", Toast.LENGTH_LONG).show()
                 }
             })
             addItemFactory(AppListHeaderItemFactory().fullSpan(recyclerView))
         }
         recyclerView.adapter = adapter
 
-        LoadDataTask(WeakReference(this)).execute(0)
+        appsViewModel.apps.observe(this, android.arch.lifecycle.Observer {
+            it ?: return@Observer
+
+            val systemAppList = it[0]
+            val userAppList = it[1]
+
+            val systemAppListSize = systemAppList.size
+            val userAppListSize = userAppList.size
+
+            var dataListSize = if (systemAppListSize > 0) systemAppListSize + 1 else 0
+            dataListSize += if (userAppListSize > 0) userAppListSize + 1 else 0
+
+            val dataList = ArrayList<Any>(dataListSize)
+            if (userAppListSize > 0) {
+                dataList.add(String.format("自安装应用%d个", userAppListSize))
+                dataList.addAll(userAppList)
+            }
+            if (systemAppListSize > 0) {
+                dataList.add(String.format("系统应用%d个", systemAppListSize))
+                dataList.addAll(systemAppList)
+            }
+
+            adapter.dataList = dataList
+            recyclerView.scheduleLayoutAnimation()
+        })
+
+        appsViewModel.load()
+    }
+}
+
+class AppsViewModel(application: Application) : AndroidViewModel(application) {
+    val apps = MutableLiveData<Array<List<AppInfo>>>()
+
+    fun load() {
+        LoadDataTask(apps, getApplication()).execute()
+    }
+}
+
+class LoadDataTask(private val apps: MutableLiveData<Array<List<AppInfo>>>, private val appContext: Application) : AsyncTask<Int, Int, Array<List<AppInfo>>>() {
+    override fun doInBackground(vararg params: Int?): Array<List<AppInfo>>? {
+        val packageManager = appContext.packageManager
+        val packageInfoList = packageManager.getInstalledPackages(0)
+        val systemAppList = ArrayList<AppInfo>()
+        val userAppList = ArrayList<AppInfo>()
+        for (packageInfo in packageInfoList) {
+            val appInfo = AppInfo(true)
+            appInfo.packageName = packageInfo.packageName
+            appInfo.name = packageInfo.applicationInfo.loadLabel(packageManager).toString()
+            appInfo.sortName = appInfo.name
+            appInfo.id = packageInfo.packageName
+            appInfo.versionName = packageInfo.versionName
+            appInfo.apkFilePath = packageInfo.applicationInfo.publicSourceDir
+            appInfo.appSize = Formatter.formatFileSize(appContext, File(appInfo.apkFilePath).length())
+            appInfo.versionCode = packageInfo.versionCode
+            if (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) {
+                systemAppList.add(appInfo)
+            } else {
+                userAppList.add(appInfo)
+            }
+        }
+
+        systemAppList.sortWith(Comparator { lhs, rhs ->
+            (lhs.sortName ?: "").compareTo(rhs.sortName ?: "")
+        })
+
+        return arrayOf(systemAppList, userAppList)
     }
 
-    class LoadDataTask(private val fragmentRef: WeakReference<GridRecyclerViewFragment>) : AsyncTask<Int, Int, Array<List<AppInfo>>>() {
-        override fun doInBackground(vararg params: Int?): Array<List<AppInfo>>? {
-            val fragment = fragmentRef.get() ?: return null
-            val appContext = fragment.context?.applicationContext ?: return null
-
-            val packageManager = appContext.packageManager
-            val packageInfoList = packageManager.getInstalledPackages(0)
-            val systemAppList = ArrayList<AppInfo>()
-            val userAppList = ArrayList<AppInfo>()
-            for (packageInfo in packageInfoList) {
-                val appInfo = AppInfo(true)
-                appInfo.packageName = packageInfo.packageName
-                appInfo.name = packageInfo.applicationInfo.loadLabel(packageManager).toString()
-                appInfo.sortName = appInfo.name
-                appInfo.id = packageInfo.packageName
-                appInfo.versionName = packageInfo.versionName
-                appInfo.apkFilePath = packageInfo.applicationInfo.publicSourceDir
-                appInfo.appSize = Formatter.formatFileSize(appContext, File(appInfo.apkFilePath).length())
-                appInfo.versionCode = packageInfo.versionCode
-                if (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) {
-                    systemAppList.add(appInfo)
-                } else {
-                    userAppList.add(appInfo)
-                }
-            }
-
-            systemAppList.sortWith(Comparator { lhs, rhs ->
-                (lhs.sortName ?: "").compareTo(rhs.sortName ?: "")
-            })
-
-            return arrayOf(systemAppList, userAppList)
-        }
-
-        override fun onPostExecute(appInfoLists: Array<List<AppInfo>>) {
-            val fragment = fragmentRef.get() ?: return
-
-            fragment.apply {
-                val systemAppList = appInfoLists[0]
-                val userAppList = appInfoLists[1]
-
-                val systemAppListSize = systemAppList.size
-                val userAppListSize = userAppList.size
-
-                var dataListSize = if (systemAppListSize > 0) systemAppListSize + 1 else 0
-                dataListSize += if (userAppListSize > 0) userAppListSize + 1 else 0
-
-                val dataList = ArrayList<Any>(dataListSize)
-                if (userAppListSize > 0) {
-                    dataList.add(String.format("自安装应用%d个", userAppListSize))
-                    dataList.addAll(userAppList)
-                }
-                if (systemAppListSize > 0) {
-                    dataList.add(String.format("系统应用%d个", systemAppListSize))
-                    dataList.addAll(systemAppList)
-                }
-
-                adapter.dataList = dataList
-                if (recyclerView != null) {
-                    recyclerView.scheduleLayoutAnimation()
-                }
-            }
-        }
+    override fun onPostExecute(appInfoLists: Array<List<AppInfo>>) {
+        apps.value = appInfoLists
     }
 }

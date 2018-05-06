@@ -17,26 +17,26 @@ public class PagerClickListenerManager<DATA> {
     @NonNull
     private List<Object> holders = new LinkedList<Object>();
 
-    public void add(@IdRes int viewId, @NonNull OnClickListener onClickListener) {
-        holders.add(new ClickListenerHolder(viewId, onClickListener));
+    public void add(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener) {
+        holders.add(new ClickListenerHolder<DATA>(viewId, onClickListener));
     }
 
-    public void add(@NonNull OnClickListener onClickListener) {
-        holders.add(new ClickListenerHolder(onClickListener));
+    public void add(@NonNull OnClickListener<DATA> onClickListener) {
+        holders.add(new ClickListenerHolder<DATA>(onClickListener));
     }
 
-    public void add(@IdRes int viewId, @NonNull OnLongClickListener onClickListener) {
-        holders.add(new LongClickListenerHolder(viewId, onClickListener));
+    public void add(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener) {
+        holders.add(new LongClickListenerHolder<DATA>(viewId, onClickListener));
     }
 
-    public void add(@NonNull OnLongClickListener onClickListener) {
-        holders.add(new LongClickListenerHolder(onClickListener));
+    public void add(@NonNull OnLongClickListener<DATA> onClickListener) {
+        holders.add(new LongClickListenerHolder<DATA>(onClickListener));
     }
 
-    public void register(@NonNull final AssemblyPagerItemFactory itemFactory, @NonNull View itemView, int position, DATA data) {
+    public void register(@NonNull final AssemblyPagerItemFactory<DATA> itemFactory, @NonNull View itemView, int position, DATA data) {
         for (final Object holder : holders) {
             if (holder instanceof ClickListenerHolder) {
-                final ClickListenerHolder clickListenerHolder = (ClickListenerHolder) holder;
+                final ClickListenerHolder<DATA> clickListenerHolder = (ClickListenerHolder<DATA>) holder;
                 int viewId = clickListenerHolder.getViewId();
                 final View targetView = viewId > 0 ? itemView.findViewById(viewId) : itemView;
                 if (targetView == null) {
@@ -53,11 +53,11 @@ public class PagerClickListenerManager<DATA> {
                     @Override
                     public void onClick(View v) {
                         clickListenerHolder.getListener().onViewClick(v, (Integer) v.getTag(R.id.aa_item_position),
-                                (Integer) v.getTag(R.id.aa_item_position), v.getTag(R.id.aa_item_position));
+                                (Integer) v.getTag(R.id.aa_item_position_in_port), (DATA) v.getTag(R.id.aa_item_data));
                     }
                 });
             } else if (holder instanceof LongClickListenerHolder) {
-                final LongClickListenerHolder longClickListenerHolder = (LongClickListenerHolder) holder;
+                final LongClickListenerHolder<DATA> longClickListenerHolder = (LongClickListenerHolder<DATA>) holder;
                 int viewId = longClickListenerHolder.getViewId();
                 final View targetView = viewId > 0 ? itemView.findViewById(viewId) : itemView;
                 if (targetView == null) {
@@ -74,7 +74,7 @@ public class PagerClickListenerManager<DATA> {
                     @Override
                     public boolean onLongClick(View v) {
                         return longClickListenerHolder.getListener().onViewLongClick(v, (Integer) v.getTag(R.id.aa_item_position),
-                                (Integer) v.getTag(R.id.aa_item_position), v.getTag(R.id.aa_item_position));
+                                (Integer) v.getTag(R.id.aa_item_position_in_port), (DATA) v.getTag(R.id.aa_item_data));
                     }
                 });
             }

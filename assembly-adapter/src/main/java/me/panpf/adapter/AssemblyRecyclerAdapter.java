@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.AssemblyMoreItem;
 import me.panpf.adapter.more.AssemblyMoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 import me.panpf.adapter.recycler.RecyclerItemWrapper;
@@ -57,7 +56,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     /* ************************ 数据 ItemFactory *************************** */
 
     @Override
-    public <ITEM extends AssemblyItem> void addItemFactory(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <DATA> void addItemFactory(@NonNull AssemblyItemFactory<DATA> itemFactory) {
         storage.addItemFactory(itemFactory.setInRecycler(true));
     }
 
@@ -77,13 +76,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.addHeaderItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory) {
         return storage.addHeaderItem(itemFactory.setInRecycler(true));
     }
 
@@ -109,13 +108,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.addFooterItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory) {
         return storage.addFooterItem(itemFactory.setInRecycler(true));
     }
 
@@ -141,13 +140,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.setMoreItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory) {
         return storage.setMoreItem(itemFactory.setInRecycler(true));
     }
 

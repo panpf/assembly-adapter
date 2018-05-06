@@ -3,18 +3,18 @@ package me.panpf.adapter;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 
-public class LongClickListenerHolder {
+public class LongClickListenerHolder<DATA> {
     @IdRes
     private int viewId;
     @NonNull
-    private OnLongClickListener listener;
+    private OnLongClickListener<DATA> listener;
 
-    public LongClickListenerHolder(@IdRes int viewId, @NonNull OnLongClickListener listener) {
+    public LongClickListenerHolder(@IdRes int viewId, @NonNull OnLongClickListener<DATA> listener) {
         this.viewId = viewId;
         this.listener = listener;
     }
 
-    public LongClickListenerHolder(@NonNull OnLongClickListener listener) {
+    public LongClickListenerHolder(@NonNull OnLongClickListener<DATA> listener) {
         this.listener = listener;
     }
 
@@ -24,7 +24,7 @@ public class LongClickListenerHolder {
     }
 
     @NonNull
-    public OnLongClickListener getListener() {
+    public OnLongClickListener<DATA> getListener() {
         return listener;
     }
 }

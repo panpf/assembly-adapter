@@ -8,12 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-public interface ItemFactory<ITEM extends Item> {
+public interface ItemFactory<DATA> {
     /**
      * 获取被包装的 {@link ItemFactory}
      */
     @NonNull
-    ItemFactory<ITEM> getWrappedItemFactory();
+    ItemFactory<DATA> getWrappedItemFactory();
 
     /**
      * 获取 item 类型
@@ -45,7 +45,7 @@ public interface ItemFactory<ITEM extends Item> {
      * 设置在 {@link GridLayoutManager} 里所占的列数，不能小于 1
      */
     @NonNull
-    ItemFactory<ITEM> setSpanSize(int spanSize);
+    ItemFactory<DATA> setSpanSize(int spanSize);
 
     /**
      * 在 {@link GridLayoutManager} 里占满一行
@@ -53,7 +53,7 @@ public interface ItemFactory<ITEM extends Item> {
      * @param recyclerView 需要从 {@link RecyclerView} 中取出 {@link GridLayoutManager} 再取出 SpanCount
      */
     @NonNull
-    ItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView);
+    ItemFactory<DATA> fullSpan(@NonNull RecyclerView recyclerView);
 
     /**
      * 是否将要用在 {@link RecyclerView} 中
@@ -63,9 +63,7 @@ public interface ItemFactory<ITEM extends Item> {
     /**
      * 设置是否将要用在 {@link RecyclerView} 中
      */
-    ItemFactory<ITEM>  setInRecycler(boolean inRecycler);
-
-
+    ItemFactory<DATA> setInRecycler(boolean inRecycler);
 
     /**
      * 监听指定 id 的 view 的点击事件
@@ -73,14 +71,14 @@ public interface ItemFactory<ITEM extends Item> {
      * @param viewId          view 的 id
      * @param onClickListener 点击监听
      */
-    ItemFactory<ITEM> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener onClickListener);
+    ItemFactory<DATA> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener);
 
     /**
      * 监听 item 的点击事件
      *
      * @param onClickListener 点击监听
      */
-    ItemFactory<ITEM> setOnItemClickListener(@NonNull OnClickListener onClickListener);
+    ItemFactory<DATA> setOnItemClickListener(@NonNull OnClickListener<DATA> onClickListener);
 
     /**
      * 监听指定 id 的 view 的长按事件
@@ -88,14 +86,14 @@ public interface ItemFactory<ITEM extends Item> {
      * @param viewId          view 的 id
      * @param onClickListener 长按监听
      */
-    ItemFactory<ITEM> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener onClickListener);
+    ItemFactory<DATA> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener);
 
     /**
      * 监听 item 的长按事件
      *
      * @param onClickListener 长按监听
      */
-    ItemFactory<ITEM> setOnItemLongClickListener(@NonNull OnLongClickListener onClickListener);
+    ItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener);
 
     /**
      * 匹配数据
@@ -106,5 +104,5 @@ public interface ItemFactory<ITEM extends Item> {
     boolean isTarget(@Nullable Object data);
 
     @NonNull
-    ITEM dispatchCreateItem(@NonNull ViewGroup parent);
+    Item<DATA> dispatchCreateItem(@NonNull ViewGroup parent);
 }

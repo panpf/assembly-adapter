@@ -10,8 +10,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.MoreItemHolder;
 import me.panpf.adapter.more.MoreItemFactory;
+import me.panpf.adapter.more.MoreItemHolder;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ItemStorage {
@@ -121,7 +121,7 @@ public class ItemStorage {
      * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
      */
     @NonNull
-    public ItemHolder addHeaderItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
@@ -130,7 +130,7 @@ public class ItemStorage {
         itemFactory.setAdapter(adapter);
         itemFactory.setItemType(itemTypeIndex++);
 
-        ItemHolder itemHolder = new ItemHolder(this, itemFactory, data, true);
+        ItemHolder<DATA> itemHolder = new ItemHolder<DATA>(this, itemFactory, data, true);
         itemHolder.setPosition(headerItemPosition++);
 
         if (itemFactoryArray == null) {
@@ -149,7 +149,7 @@ public class ItemStorage {
     }
 
     @NonNull
-    public ItemHolder addHeaderItem(@NonNull ItemFactory itemFactory) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
         return addHeaderItem(itemFactory, null);
     }
 
@@ -217,7 +217,7 @@ public class ItemStorage {
      * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
      */
     @NonNull
-    public ItemHolder addFooterItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
@@ -226,7 +226,7 @@ public class ItemStorage {
         itemFactory.setAdapter(adapter);
         itemFactory.setItemType(itemTypeIndex++);
 
-        ItemHolder itemHolder = new ItemHolder(this, itemFactory, data, false);
+        ItemHolder<DATA> itemHolder = new ItemHolder<DATA>(this, itemFactory, data, false);
         itemHolder.setPosition(footerItemPosition++);
 
         if (itemFactoryArray == null) {
@@ -245,7 +245,7 @@ public class ItemStorage {
     }
 
     @NonNull
-    public ItemHolder addFooterItem(@NonNull ItemFactory itemFactory) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
         return addFooterItem(itemFactory, null);
     }
 
@@ -313,7 +313,7 @@ public class ItemStorage {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    public MoreItemHolder setMoreItem(@NonNull MoreItemFactory itemFactory, @Nullable Object data) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
@@ -327,18 +327,19 @@ public class ItemStorage {
         }
 
         itemFactory.loadMoreFinished(false);
-        MoreItemHolder moreItemHolder = new MoreItemHolder(this, itemFactory, data, false);
+        MoreItemHolder<DATA> moreItemHolder = new MoreItemHolder<DATA>(this, itemFactory, data, false);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
         itemFactoryArray.put(itemFactory.getItemType(), moreItemHolder);
 
-        return this.moreItemHolder = moreItemHolder;
+        this.moreItemHolder = moreItemHolder;
+        return moreItemHolder;
     }
 
     @NonNull
-    public MoreItemHolder setMoreItem(@NonNull MoreItemFactory itemFactory) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
         return setMoreItem(itemFactory, null);
     }
 

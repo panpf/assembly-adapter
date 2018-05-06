@@ -24,24 +24,24 @@ import android.support.v4.view.PagerAdapter;
  * {@link AssemblyFragmentPagerAdapter} 和 {@link AssemblyFragmentStatePagerAdapter} 专用的固定位置 item 管理器
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class FragmentItemHolder {
+public class FragmentItemHolder<DATA> {
 
     @NonNull
     private AssemblyFragmentItemFactory itemFactory;
     @Nullable
-    private Object data;
+    private DATA data;
 
-    public FragmentItemHolder(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data) {
+    public FragmentItemHolder(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable DATA data) {
         this.data = data;
         this.itemFactory = itemFactory;
     }
 
     @Nullable
-    public Object getData() {
+    public DATA getData() {
         return data;
     }
 
-    public void setData(@Nullable Object data) {
+    public void setData(@Nullable DATA data) {
         this.data = data;
 
         PagerAdapter adapter = itemFactory.getAdapter();

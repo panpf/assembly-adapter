@@ -28,10 +28,10 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
     val listView: ListView by bindView(R.id.list_listViewFragment_content)
 
     var listAdapter: AssemblyListAdapter? = null
-    var headerListItemHolder: ItemHolder? = null
-    var headerListItemHolder2: ItemHolder? = null
-    var footerListItemHolder: ItemHolder? = null
-    var footerListItemHolder2: ItemHolder? = null
+    var headerListItemHolder: ItemHolder<String>? = null
+    var headerListItemHolder2: ItemHolder<String>? = null
+    var footerListItemHolder: ItemHolder<String>? = null
+    var footerListItemHolder2: ItemHolder<String>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list_view, container, false)

@@ -26,9 +26,9 @@ import me.panpf.adapter.ItemStorage;
  * 加载更多专用的固定尾巴
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class MoreItemHolder extends ItemHolder {
+public class MoreItemHolder<DATA> extends ItemHolder<DATA> {
 
-    public MoreItemHolder(@NonNull ItemStorage storage, @NonNull MoreItemFactory itemFactory, @Nullable Object data, boolean header) {
+    public MoreItemHolder(@NonNull ItemStorage storage, @NonNull MoreItemFactory itemFactory, @Nullable DATA data, boolean header) {
         super(storage, itemFactory, data, header);
     }
 

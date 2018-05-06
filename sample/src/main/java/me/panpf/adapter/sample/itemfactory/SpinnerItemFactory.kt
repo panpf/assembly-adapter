@@ -7,7 +7,7 @@ import me.panpf.adapter.AssemblyItem
 import me.panpf.adapter.AssemblyItemFactory
 import me.panpf.adapter.sample.bindView
 
-class SpinnerItemFactory : AssemblyItemFactory<SpinnerItemFactory.SpinnerItem>() {
+class SpinnerItemFactory : AssemblyItemFactory<String>() {
 
     override fun isTarget(data: Any?): Boolean {
         return data is String

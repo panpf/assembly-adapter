@@ -17,8 +17,8 @@ import me.panpf.adapter.sample.itemfactory.ImagePagerItemFactory
 import me.panpf.adapter.sample.itemfactory.TextPagerItemFactory
 
 class PagerAdapterFragment : Fragment() {
-    var headerItemHolder: PagerItemHolder? = null
-    var footerItemHolder: PagerItemHolder? = null
+    var headerItemHolder: PagerItemHolder<Any>? = null
+    var footerItemHolder: PagerItemHolder<Any>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_view_pager, container, false)

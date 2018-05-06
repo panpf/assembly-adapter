@@ -29,10 +29,10 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
     private val listView: ExpandableListView by bindView(id = R.id.expandableList_expandableListViewFragment_content)
 
     var adapter: AssemblyExpandableAdapter? = null
-    var headerItemHolder: ItemHolder? = null
-    var footerItemHolder: ItemHolder? = null
-    var headerItemHolder2: ItemHolder? = null
-    var footerItemHolder2: ItemHolder? = null
+    var headerItemHolder: ItemHolder<String>? = null
+    var footerItemHolder: ItemHolder<String>? = null
+    var headerItemHolder2: ItemHolder<String>? = null
+    var footerItemHolder2: ItemHolder<String>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_expandable_list_view, container, false)

@@ -30,10 +30,10 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
     val recyclerView: RecyclerView by bindView(R.id.list_recyclerViewFragment_content)
 
     var adapter: AssemblyRecyclerAdapter? = null
-    var headerItemHolder: ItemHolder? = null
-    var headerItemHolder2: ItemHolder? = null
-    var footerItemHolder: ItemHolder? = null
-    var footerItemHolder2: ItemHolder? = null
+    var headerItemHolder: ItemHolder<String>? = null
+    var headerItemHolder2: ItemHolder<String>? = null
+    var footerItemHolder: ItemHolder<String>? = null
+    var footerItemHolder2: ItemHolder<String>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recycler_view, container, false)

@@ -18,7 +18,7 @@ package me.panpf.adapter.more;
 
 import me.panpf.adapter.ItemFactory;
 
-public interface MoreItemFactory<ITEM extends MoreItem> extends ItemFactory<ITEM> {
+public interface MoreItemFactory<DATA> extends ItemFactory<DATA> {
 
     /**
      * 加载更多完成

@@ -26,8 +26,7 @@ import me.panpf.adapter.AssemblyItemFactory;
  * 加载更多专用 {@link AssemblyItemFactory}
  */
 @SuppressWarnings("unused")
-public abstract class AssemblyMoreItemFactory<ITEM extends AssemblyMoreItem>
-        extends AssemblyItemFactory<ITEM> implements MoreItemFactory<ITEM> {
+public abstract class AssemblyMoreItemFactory<DATA> extends AssemblyItemFactory<DATA> implements MoreItemFactory<DATA> {
 
     boolean paused;
     boolean end;
@@ -69,20 +68,20 @@ public abstract class AssemblyMoreItemFactory<ITEM extends AssemblyMoreItem>
 
     @NonNull
     @Override
-    public AssemblyMoreItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView) {
+    public AssemblyMoreItemFactory<DATA> fullSpan(@NonNull RecyclerView recyclerView) {
         super.fullSpan(recyclerView);
         return this;
     }
 
     @NonNull
     @Override
-    public AssemblyMoreItemFactory<ITEM> setSpanSize(int spanSize) {
+    public AssemblyMoreItemFactory<DATA> setSpanSize(int spanSize) {
         super.setSpanSize(spanSize);
         return this;
     }
 
     @Override
-    public AssemblyMoreItemFactory<ITEM> setInRecycler(boolean inRecycler) {
+    public AssemblyMoreItemFactory<DATA> setInRecycler(boolean inRecycler) {
         super.setInRecycler(inRecycler);
         return this;
     }

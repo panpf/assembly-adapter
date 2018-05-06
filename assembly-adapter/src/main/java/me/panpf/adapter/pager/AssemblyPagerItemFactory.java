@@ -60,7 +60,7 @@ public abstract class AssemblyPagerItemFactory<DATA> {
      * @param viewId          view 的 id
      * @param onClickListener 点击监听
      */
-    public AssemblyPagerItemFactory setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener onClickListener) {
+    public AssemblyPagerItemFactory<DATA> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
             clickListenerManager = new PagerClickListenerManager<DATA>();
         }
@@ -73,7 +73,7 @@ public abstract class AssemblyPagerItemFactory<DATA> {
      *
      * @param onClickListener 点击监听
      */
-    public AssemblyPagerItemFactory setOnItemClickListener(@NonNull OnClickListener onClickListener) {
+    public AssemblyPagerItemFactory<DATA> setOnItemClickListener(@NonNull OnClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
             clickListenerManager = new PagerClickListenerManager<DATA>();
         }
@@ -87,7 +87,7 @@ public abstract class AssemblyPagerItemFactory<DATA> {
      * @param viewId          view 的 id
      * @param onClickListener 长按监听
      */
-    public AssemblyPagerItemFactory setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener onClickListener) {
+    public AssemblyPagerItemFactory<DATA> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
             clickListenerManager = new PagerClickListenerManager<DATA>();
         }
@@ -100,7 +100,7 @@ public abstract class AssemblyPagerItemFactory<DATA> {
      *
      * @param onClickListener 长按监听
      */
-    public AssemblyPagerItemFactory setOnItemLongClickListener(@NonNull OnLongClickListener onClickListener) {
+    public AssemblyPagerItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
             clickListenerManager = new PagerClickListenerManager<DATA>();
         }

@@ -4,20 +4,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class ItemHolder {
+public class ItemHolder<DATA> {
 
     @NonNull
     private ItemStorage itemStorage;
     @NonNull
     private ItemFactory itemFactory;
     @Nullable
-    private Object data;
+    private DATA data;
     private int position;
     private boolean header;
 
     private boolean enabled = true;
 
-    public ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory itemFactory, @Nullable Object data, boolean header) {
+    public ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory itemFactory, @Nullable DATA data, boolean header) {
         this.itemStorage = itemStorage;
         this.itemFactory = itemFactory;
         this.data = data;
@@ -25,11 +25,11 @@ public class ItemHolder {
     }
 
     @Nullable
-    public Object getData() {
+    public DATA getData() {
         return data;
     }
 
-    public void setData(@Nullable Object data) {
+    public void setData(@Nullable DATA data) {
         this.data = data;
 
         AssemblyAdapter adapter = itemFactory.getAdapter();

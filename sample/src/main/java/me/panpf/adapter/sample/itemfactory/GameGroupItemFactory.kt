@@ -10,7 +10,7 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.GameGroup
 import me.panpf.adapter.sample.bindView
 
-class GameGroupItemFactory : AssemblyItemFactory<GameGroupItemFactory.GameGroupItem>() {
+class GameGroupItemFactory : AssemblyItemFactory<GameGroup>() {
 
     override fun isTarget(data: Any?): Boolean {
         return data is GameGroup

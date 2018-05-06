@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import me.panpf.adapter.recycler.RecyclerItemWrapper;
 
 @SuppressWarnings("unused")
-public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFactory<ITEM> {
+public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
 
     private int itemType;
     @Nullable
@@ -21,11 +21,11 @@ public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFact
     private boolean fullSpanInStaggeredGrid;
     private boolean inRecycler;
     @Nullable
-    private ClickListenerManager clickListenerManager;
+    private ClickListenerManager<DATA> clickListenerManager;
 
     @NonNull
     @Override
-    public ItemFactory<ITEM> getWrappedItemFactory() {
+    public ItemFactory<DATA> getWrappedItemFactory() {
         return this;
     }
 
@@ -57,7 +57,7 @@ public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFact
 
     @NonNull
     @Override
-    public AssemblyItemFactory<ITEM> setSpanSize(int spanSize) {
+    public AssemblyItemFactory<DATA> setSpanSize(int spanSize) {
         if (spanSize > 0) {
             this.spanSize = spanSize;
         }
@@ -70,42 +70,42 @@ public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFact
     }
 
     @Override
-    public AssemblyItemFactory<ITEM> setInRecycler(boolean inRecycler) {
+    public AssemblyItemFactory<DATA> setInRecycler(boolean inRecycler) {
         this.inRecycler = inRecycler;
         return this;
     }
 
     @Override
-    public AssemblyItemFactory<ITEM> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener onClickListener) {
+    public AssemblyItemFactory<DATA> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
-            clickListenerManager = new ClickListenerManager();
+            clickListenerManager = new ClickListenerManager<DATA>();
         }
         clickListenerManager.add(viewId, onClickListener);
         return this;
     }
 
     @Override
-    public AssemblyItemFactory<ITEM> setOnItemClickListener(@NonNull OnClickListener onClickListener) {
+    public AssemblyItemFactory<DATA> setOnItemClickListener(@NonNull OnClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
-            clickListenerManager = new ClickListenerManager();
+            clickListenerManager = new ClickListenerManager<DATA>();
         }
         clickListenerManager.add(onClickListener);
         return this;
     }
 
     @Override
-    public AssemblyItemFactory<ITEM> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener onClickListener) {
+    public AssemblyItemFactory<DATA> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
-            clickListenerManager = new ClickListenerManager();
+            clickListenerManager = new ClickListenerManager<DATA>();
         }
         clickListenerManager.add(viewId, onClickListener);
         return this;
     }
 
     @Override
-    public AssemblyItemFactory<ITEM> setOnItemLongClickListener(@NonNull OnLongClickListener onClickListener) {
+    public AssemblyItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
-            clickListenerManager = new ClickListenerManager();
+            clickListenerManager = new ClickListenerManager<DATA>();
         }
         clickListenerManager.add(onClickListener);
         return this;
@@ -113,7 +113,7 @@ public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFact
 
     @NonNull
     @Override
-    public AssemblyItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView) {
+    public AssemblyItemFactory<DATA> fullSpan(@NonNull RecyclerView recyclerView) {
         setSpanSize(1);
         fullSpanInStaggeredGrid = false;
 
@@ -132,9 +132,9 @@ public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFact
 
     @NonNull
     @Override
-    public ITEM dispatchCreateItem(@NonNull ViewGroup parent) {
+    public Item<DATA> dispatchCreateItem(@NonNull ViewGroup parent) {
         @NonNull
-        ITEM item = createAssemblyItem(parent);
+        Item<DATA> item = createAssemblyItem(parent);
 
         if (fullSpanInStaggeredGrid) {
             ViewGroup.LayoutParams layoutParams = item.getItemView().getLayoutParams();
@@ -150,22 +150,22 @@ public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFact
 
         item.onInit(parent.getContext());
 
-        ITEM finalItem = inRecycler ? (ITEM) new RecyclerItemWrapper(item) : item;
+        Item<DATA> finalItem = inRecycler ? new RecyclerItemWrapper<DATA>(item) : item;
 
         registerListeners(finalItem);
 
         return finalItem;
     }
 
-    private void registerListeners(ITEM item) {
+    private void registerListeners(Item<DATA> item) {
         if (clickListenerManager != null) {
             clickListenerManager.register(this, item, item.getItemView());
         }
     }
 
     /**
-     * 创建 {@link AssemblyItem}
+     * 创建 {@link Item}
      */
     @NonNull
-    public abstract ITEM createAssemblyItem(@NonNull ViewGroup parent);
+    public abstract Item<DATA> createAssemblyItem(@NonNull ViewGroup parent);
 }

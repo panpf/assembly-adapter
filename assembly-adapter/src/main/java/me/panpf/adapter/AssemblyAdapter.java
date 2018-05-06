@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.AssemblyMoreItem;
 import me.panpf.adapter.more.AssemblyMoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
@@ -24,7 +23,7 @@ public interface AssemblyAdapter {
      *
      * @param itemFactory 用来匹配并根据数据创建 item view
      */
-    <ITEM extends AssemblyItem> void addItemFactory(@NonNull AssemblyItemFactory<ITEM> itemFactory);
+    <DATA> void addItemFactory(@NonNull AssemblyItemFactory<DATA> itemFactory);
 
     /**
      * 获取数据  {@link ItemFactory} 列表
@@ -44,13 +43,13 @@ public interface AssemblyAdapter {
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
      */
     @NonNull
-    <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data);
+    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
      */
     @NonNull
-    <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory);
+    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory);
 
     /**
      * 获取 header 列表
@@ -78,13 +77,13 @@ public interface AssemblyAdapter {
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
      */
     @NonNull
-    <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data);
+    <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
      */
     @NonNull
-    <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory);
+    <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory);
 
     /**
      * 获取 footer 列表
@@ -112,13 +111,13 @@ public interface AssemblyAdapter {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data);
+    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     /**
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory);
+    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory);
 
     @Nullable
     MoreItemHolder getMoreItemHolder();

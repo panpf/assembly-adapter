@@ -28,7 +28,6 @@ import java.util.List;
 
 import me.panpf.adapter.expandable.ExpandableItemActor;
 import me.panpf.adapter.expandable.ExpandableItemStorage;
-import me.panpf.adapter.more.AssemblyMoreItem;
 import me.panpf.adapter.more.AssemblyMoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
@@ -61,15 +60,15 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     /* ************************ 数据 ItemFactory *************************** */
 
     @Override
-    public <ITEM extends AssemblyItem> void addItemFactory(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <DATA> void addItemFactory(@NonNull AssemblyItemFactory<DATA> itemFactory) {
         storage.addItemFactory(itemFactory);
     }
 
-    public <ITEM extends AssemblyItem> void addGroupItemFactory(@NonNull AssemblyItemFactory<ITEM> groupItemFactory) {
+    public <DATA> void addGroupItemFactory(@NonNull AssemblyItemFactory<DATA> groupItemFactory) {
         storage.addItemFactory(groupItemFactory);
     }
 
-    public <ITEM extends AssemblyItem> void addChildItemFactory(@NonNull AssemblyItemFactory<ITEM> childItemFactory) {
+    public <DATA> void addChildItemFactory(@NonNull AssemblyItemFactory<DATA> childItemFactory) {
         storage.addChildItemFactory(childItemFactory);
     }
 
@@ -113,13 +112,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.addHeaderItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory) {
         return storage.addHeaderItem(itemFactory);
     }
 
@@ -144,13 +143,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.addFooterItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory) {
         return storage.addHeaderItem(itemFactory);
     }
 
@@ -174,13 +173,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.setMoreItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory) {
         return storage.setMoreItem(itemFactory);
     }
 
