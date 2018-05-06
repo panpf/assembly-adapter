@@ -111,6 +111,10 @@ public abstract class AssemblyItemFactory<ITEM extends Item> implements ItemFact
         return inRecycler ? (ITEM) new RecyclerItemWrapper(item) : item;
     }
 
+    private void registerListeners() {
+
+    }
+
     /**
      * 创建 {@link AssemblyItem}
      */

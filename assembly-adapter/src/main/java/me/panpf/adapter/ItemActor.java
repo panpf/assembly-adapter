@@ -28,7 +28,7 @@ public class ItemActor {
         int footerItemCount = adapter.getFooterItemCount();
 
         if (dataCount > 0) {
-            return headerItemCount + dataCount + footerItemCount + (adapter.hasLoadMoreFooter() ? 1 : 0);
+            return headerItemCount + dataCount + footerItemCount + (adapter.hasMoreFooter() ? 1 : 0);
         } else {
             return headerItemCount + footerItemCount;
         }
@@ -65,9 +65,9 @@ public class ItemActor {
         }
 
         // 加载更多尾巴
-        if (dataCount > 0 && adapter.hasLoadMoreFooter() && position == getItemCount() - 1) {
-            FixedItemInfo loadMoreFixedItemInfo = adapter.getLoadMoreFixedItemInfo();
-            return loadMoreFixedItemInfo != null ? loadMoreFixedItemInfo.getData() : null;
+        if (dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
+            FixedItemInfo moreFixedItemInfo = adapter.getMoreFixedItemInfo();
+            return moreFixedItemInfo != null ? moreFixedItemInfo.getData() : null;
         }
 
         return null;
@@ -102,7 +102,7 @@ public class ItemActor {
         }
 
         // 加载更多尾巴
-        if (dataCount > 0 && adapter.hasLoadMoreFooter() && position == adapter.getItemCount() - 1) {
+        if (dataCount > 0 && adapter.hasMoreFooter() && position == adapter.getItemCount() - 1) {
             return 0;
         }
 
@@ -159,9 +159,9 @@ public class ItemActor {
         }
 
         // 加载更多尾巴
-        FixedItemInfo loadMoreFixedItemInfo = adapter.getLoadMoreFixedItemInfo();
-        if (loadMoreFixedItemInfo != null && dataCount > 0 && adapter.hasLoadMoreFooter() && position == getItemCount() - 1) {
-            return loadMoreFixedItemInfo.getItemFactory().getSpanSize();
+        FixedItemInfo moreFixedItemInfo = adapter.getMoreFixedItemInfo();
+        if (moreFixedItemInfo != null && dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
+            return moreFixedItemInfo.getItemFactory().getSpanSize();
         }
 
         return 1;
@@ -212,9 +212,9 @@ public class ItemActor {
         }
 
         // 加载更多尾巴
-        FixedItemInfo loadMoreFixedItemInfo = adapter.getLoadMoreFixedItemInfo();
-        if (loadMoreFixedItemInfo != null && dataCount > 0 && adapter.hasLoadMoreFooter() && position == getItemCount() - 1) {
-            return loadMoreFixedItemInfo.getItemFactory().getItemType();
+        FixedItemInfo moreFixedItemInfo = adapter.getMoreFixedItemInfo();
+        if (moreFixedItemInfo != null && dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
+            return moreFixedItemInfo.getItemFactory().getItemType();
         }
 
         throw new IllegalStateException("Not found match viewType, position: " + position);

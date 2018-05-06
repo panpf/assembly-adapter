@@ -114,7 +114,7 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
                     adapter!!.addItemFactory(GameItemFactory(appContext))
                     footerItemInfo = adapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
                     footerItemInfo2 = adapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢？")
-                    adapter!!.setLoadMoreItem(LoadMoreItemFactory(fragment))
+                    adapter!!.setMoreItem(LoadMoreItemFactory(fragment))
 
                     recyclerView.adapter = adapter
                 } else {
@@ -128,7 +128,7 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
                     headerItemInfo!!.isEnabled = false
                     footerItemInfo!!.isEnabled = false
                 }
-                adapter!!.setDisableLoadMore(loadMoreEnd)
+                adapter!!.moreFixedItemInfo?.isEnabled = !loadMoreEnd
             }
         }
     }

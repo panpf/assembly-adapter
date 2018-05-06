@@ -103,7 +103,7 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
                     listAdapter!!.addItemFactory(GameItemFactory(appContext))
                     footerListItemInfo = listAdapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
                     footerListItemInfo2 = listAdapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢！")
-                    listAdapter!!.setLoadMoreItem(LoadMoreItemFactory(this@ListViewFragment))
+                    listAdapter!!.setMoreItem(LoadMoreItemFactory(this@ListViewFragment))
 
                     listView.adapter = listAdapter
                 } else {
@@ -118,7 +118,7 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
                     headerListItemInfo!!.isEnabled = false
                     footerListItemInfo!!.isEnabled = false
                 }
-                listAdapter!!.loadMoreFinished(loadMoreEnd)
+                listAdapter!!.moreFixedItemInfo?.loadMoreFinished(loadMoreEnd)
             }
         }.execute("")
     }

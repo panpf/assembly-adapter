@@ -1,4 +1,6 @@
+AssemblyLoadMore* 重命名为 AssemblyMore*
 
+Adapter 中删除 setDisableLoadMore(boolean)、loadMoreFinished(boolean)、loadMoreFailed() 方法，请通过 getMoreFixedItemInfo() 获取 MoreFixedItemInfo 后，通过 MoreFixedItemInfo 使用相关替代方法
 
 升级指南：
 * 全局搜索 `AssemblyRecyclerItemFactory` 替换为 `AssemblyItemFactory`（记得勾选 'Match case' 和 'Words'）

@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.LoadMoreFixedItemInfo;
+import me.panpf.adapter.more.MoreFixedItemInfo;
 import me.panpf.adapter.more.MoreItemFactory;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -40,7 +40,7 @@ public class ItemStorage {
     @Nullable
     private ArrayList<FixedItemInfo> footerItemList;
     @Nullable
-    private LoadMoreFixedItemInfo loadMoreFixedItemInfo;
+    private MoreFixedItemInfo moreFixedItemInfo;
 
     @Nullable
     private ArrayList<ItemFactory> itemFactoryList;
@@ -313,74 +313,45 @@ public class ItemStorage {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull MoreItemFactory itemFactory, @Nullable Object data) {
+    public MoreFixedItemInfo setMoreItem(@NonNull MoreItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(adapter);
-        if (this.loadMoreFixedItemInfo != null) {
-            itemFactory.setItemType(this.loadMoreFixedItemInfo.getItemFactory().getItemType());
+        if (this.moreFixedItemInfo != null) {
+            itemFactory.setItemType(this.moreFixedItemInfo.getItemFactory().getItemType());
         } else {
             itemFactory.setItemType(itemTypeIndex++);
         }
 
         itemFactory.loadMoreFinished(false);
-        LoadMoreFixedItemInfo loadMoreFixedItemInfo = new LoadMoreFixedItemInfo(this, itemFactory, data, false);
+        MoreFixedItemInfo moreFixedItemInfo = new MoreFixedItemInfo(this, itemFactory, data, false);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
-        itemFactoryArray.put(itemFactory.getItemType(), loadMoreFixedItemInfo);
+        itemFactoryArray.put(itemFactory.getItemType(), moreFixedItemInfo);
 
-        return this.loadMoreFixedItemInfo = loadMoreFixedItemInfo;
+        return this.moreFixedItemInfo = moreFixedItemInfo;
     }
 
     @NonNull
-    public LoadMoreFixedItemInfo setLoadMoreItem(@NonNull MoreItemFactory itemFactory) {
-        return setLoadMoreItem(itemFactory, null);
+    public MoreFixedItemInfo setMoreItem(@NonNull MoreItemFactory itemFactory) {
+        return setMoreItem(itemFactory, null);
     }
 
     @Nullable
-    public LoadMoreFixedItemInfo getLoadMoreFixedItemInfo() {
-        return loadMoreFixedItemInfo;
-    }
-
-    /**
-     * 设置禁用加载更多
-     */
-    public void setDisableLoadMore(boolean disableLoadMore) {
-        if (loadMoreFixedItemInfo != null) {
-            loadMoreFixedItemInfo.setEnabled(!disableLoadMore);
-        }
+    public MoreFixedItemInfo getMoreFixedItemInfo() {
+        return moreFixedItemInfo;
     }
 
     /**
      * 是否有加载更多尾巴
      */
-    public boolean hasLoadMoreFooter() {
-        return loadMoreFixedItemInfo != null && loadMoreFixedItemInfo.isEnabled();
-    }
-
-    /**
-     * 加载更多完成时调用
-     *
-     * @param loadMoreEnd 全部加载完毕，为 true 会显示结束的文案并且不再触发加载更多
-     */
-    public void loadMoreFinished(boolean loadMoreEnd) {
-        if (loadMoreFixedItemInfo != null) {
-            loadMoreFixedItemInfo.loadMoreFinished(loadMoreEnd);
-        }
-    }
-
-    /**
-     * 加载更多失败的时候调用此方法显示错误提示，并可点击重新加载
-     */
-    public void loadMoreFailed() {
-        if (loadMoreFixedItemInfo != null) {
-            loadMoreFixedItemInfo.loadMoreFailed();
-        }
+    public boolean hasMoreFooter() {
+        return moreFixedItemInfo != null && moreFixedItemInfo.isEnabled();
     }
 
 

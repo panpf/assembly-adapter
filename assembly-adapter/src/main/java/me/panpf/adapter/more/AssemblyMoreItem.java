@@ -10,18 +10,18 @@ import me.panpf.adapter.AssemblyAdapter;
 import me.panpf.adapter.AssemblyItem;
 
 @SuppressWarnings("unused")
-public abstract class AssemblyLoadMoreItem<DATA> extends AssemblyItem<DATA> implements MoreItem<DATA> {
+public abstract class AssemblyMoreItem<DATA> extends AssemblyItem<DATA> implements MoreItem<DATA> {
 
     @NonNull
-    private AssemblyLoadMoreItemFactory itemFactory;
+    private AssemblyMoreItemFactory itemFactory;
 
-    public AssemblyLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory itemFactory, int itemLayoutId, @NonNull ViewGroup parent) {
+    public AssemblyMoreItem(@NonNull AssemblyMoreItemFactory itemFactory, int itemLayoutId, @NonNull ViewGroup parent) {
         super(itemLayoutId, parent);
         this.itemFactory = itemFactory;
         this.itemFactory.item = this;
     }
 
-    public AssemblyLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory itemFactory, @NonNull View convertView) {
+    public AssemblyMoreItem(@NonNull AssemblyMoreItemFactory itemFactory, @NonNull View convertView) {
         super(convertView);
         this.itemFactory = itemFactory;
         this.itemFactory.item = this;

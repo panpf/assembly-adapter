@@ -25,10 +25,10 @@ import me.panpf.adapter.ItemStorage;
 /**
  * 加载更多专用的固定尾巴
  */
-@SuppressWarnings("unused")
-public class LoadMoreFixedItemInfo extends FixedItemInfo {
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class MoreFixedItemInfo extends FixedItemInfo {
 
-    public LoadMoreFixedItemInfo(@NonNull ItemStorage storage, @NonNull MoreItemFactory itemFactory, @Nullable Object data, boolean header) {
+    public MoreFixedItemInfo(@NonNull ItemStorage storage, @NonNull MoreItemFactory itemFactory, @Nullable Object data, boolean header) {
         super(storage, itemFactory, data, header);
     }
 

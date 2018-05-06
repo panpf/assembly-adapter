@@ -26,7 +26,7 @@ import me.panpf.adapter.AssemblyItemFactory;
  * 加载更多专用 {@link AssemblyItemFactory}
  */
 @SuppressWarnings("unused")
-public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreItem>
+public abstract class AssemblyMoreItemFactory<ITEM extends AssemblyMoreItem>
         extends AssemblyItemFactory<ITEM> implements MoreItemFactory<ITEM> {
 
     boolean paused;
@@ -34,9 +34,9 @@ public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreI
     @NonNull
     OnLoadMoreListener listener;
     @Nullable
-    AssemblyLoadMoreItem item;
+    AssemblyMoreItem item;
 
-    public AssemblyLoadMoreItemFactory(@NonNull OnLoadMoreListener listener) {
+    public AssemblyMoreItemFactory(@NonNull OnLoadMoreListener listener) {
         this.listener = listener;
     }
 
@@ -69,20 +69,20 @@ public abstract class AssemblyLoadMoreItemFactory<ITEM extends AssemblyLoadMoreI
 
     @NonNull
     @Override
-    public AssemblyLoadMoreItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView) {
+    public AssemblyMoreItemFactory<ITEM> fullSpan(@NonNull RecyclerView recyclerView) {
         super.fullSpan(recyclerView);
         return this;
     }
 
     @NonNull
     @Override
-    public AssemblyLoadMoreItemFactory<ITEM> setSpanSize(int spanSize) {
+    public AssemblyMoreItemFactory<ITEM> setSpanSize(int spanSize) {
         super.setSpanSize(spanSize);
         return this;
     }
 
     @Override
-    public AssemblyLoadMoreItemFactory<ITEM> setInRecycler(boolean inRecycler) {
+    public AssemblyMoreItemFactory<ITEM> setInRecycler(boolean inRecycler) {
         super.setInRecycler(inRecycler);
         return this;
     }

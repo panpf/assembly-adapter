@@ -26,9 +26,9 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.AssemblyLoadMoreItem;
-import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
-import me.panpf.adapter.more.LoadMoreFixedItemInfo;
+import me.panpf.adapter.more.AssemblyMoreItem;
+import me.panpf.adapter.more.AssemblyMoreItemFactory;
+import me.panpf.adapter.more.MoreFixedItemInfo;
 
 /**
  * 通用组合式 {@link BaseAdapter}，支持组合式多类型 item，支持头、尾巴以及加载更多
@@ -141,40 +141,25 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
-        return storage.setLoadMoreItem(itemFactory, data);
+    public <ITEM extends AssemblyMoreItem> MoreFixedItemInfo setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
+        return storage.setMoreItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory) {
-        return storage.setLoadMoreItem(itemFactory);
+    public <ITEM extends AssemblyMoreItem> MoreFixedItemInfo setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory) {
+        return storage.setMoreItem(itemFactory);
     }
 
     @Nullable
     @Override
-    public LoadMoreFixedItemInfo getLoadMoreFixedItemInfo() {
-        return storage.getLoadMoreFixedItemInfo();
+    public MoreFixedItemInfo getMoreFixedItemInfo() {
+        return storage.getMoreFixedItemInfo();
     }
 
     @Override
-    public void setDisableLoadMore(boolean disableLoadMore) {
-        storage.setDisableLoadMore(disableLoadMore);
-    }
-
-    @Override
-    public boolean hasLoadMoreFooter() {
-        return storage.hasLoadMoreFooter();
-    }
-
-    @Override
-    public void loadMoreFinished(boolean loadMoreEnd) {
-        storage.loadMoreFinished(loadMoreEnd);
-    }
-
-    @Override
-    public void loadMoreFailed() {
-        storage.loadMoreFailed();
+    public boolean hasMoreFooter() {
+        return storage.hasMoreFooter();
     }
 
 

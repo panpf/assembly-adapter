@@ -138,7 +138,7 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
                     adapter!!.addGroupItemFactory(UserGroupItemFactory())
                     adapter!!.addChildItemFactory(GameChildItemFactory(context))
                     adapter!!.addChildItemFactory(UserChildItemFactory(context))
-                    adapter!!.setLoadMoreItem(LoadMoreItemFactory(this))
+                    adapter!!.setMoreItem(LoadMoreItemFactory(this))
                     footerItemInfo = adapter!!.addFooterItem(HeaderGroupItemFactory(), "我是小尾巴呀！")
                     footerItemInfo2 = adapter!!.addFooterItem(HeaderGroupItemFactory(), "唉，我的小尾巴呢？")
 
@@ -155,7 +155,7 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
                     headerItemInfo!!.isEnabled = false
                     footerItemInfo!!.isEnabled = false
                 }
-                adapter!!.loadMoreFinished(loadMoreEnd)
+                adapter!!.moreFixedItemInfo?.loadMoreFinished(loadMoreEnd)
             }
         }
     }

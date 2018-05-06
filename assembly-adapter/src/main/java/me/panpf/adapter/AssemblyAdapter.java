@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.AssemblyLoadMoreItem;
-import me.panpf.adapter.more.AssemblyLoadMoreItemFactory;
-import me.panpf.adapter.more.LoadMoreFixedItemInfo;
+import me.panpf.adapter.more.AssemblyMoreItem;
+import me.panpf.adapter.more.AssemblyMoreItemFactory;
+import me.panpf.adapter.more.MoreFixedItemInfo;
 
 /**
  * 组合式 Adapter，支持组合式多类型 item，支持头、尾巴以及加载更多
@@ -112,38 +112,21 @@ public interface AssemblyAdapter {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory, @Nullable Object data);
+    <ITEM extends AssemblyMoreItem> MoreFixedItemInfo setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data);
 
     /**
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    <ITEM extends AssemblyLoadMoreItem> LoadMoreFixedItemInfo setLoadMoreItem(@NonNull AssemblyLoadMoreItemFactory<ITEM> itemFactory);
+    <ITEM extends AssemblyMoreItem> MoreFixedItemInfo setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory);
 
     @Nullable
-    LoadMoreFixedItemInfo getLoadMoreFixedItemInfo();
-
-    /**
-     * 设置禁用加载更多
-     */
-    void setDisableLoadMore(boolean disableLoadMore);
+    MoreFixedItemInfo getMoreFixedItemInfo();
 
     /**
      * 是否有加载更多尾巴
      */
-    boolean hasLoadMoreFooter();
-
-    /**
-     * 加载更多完成时调用
-     *
-     * @param loadMoreEnd 全部加载完毕，为 true 会显示结束的文案并且不再触发加载更多
-     */
-    void loadMoreFinished(boolean loadMoreEnd);
-
-    /**
-     * 加载更多失败的时候调用此方法显示错误提示，并可点击重新加载
-     */
-    void loadMoreFailed();
+    boolean hasMoreFooter();
 
 
     /* ************************ 数据列表 *************************** */
