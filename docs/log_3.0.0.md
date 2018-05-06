@@ -1,4 +1,6 @@
-AssemblyLoadMore* 重命名为 AssemblyMore*
+*LoadMore* 重命名为 *More*
+*LoadMore* 重命名为 *More*
+*FixedItemInfo 重命名为 *ItemHolder
 
 Adapter 中删除 setDisableLoadMore(boolean)、loadMoreFinished(boolean)、loadMoreFailed() 方法，请通过 getMoreFixedItemInfo() 获取 MoreFixedItemInfo 后，通过 MoreFixedItemInfo 使用相关替代方法
 

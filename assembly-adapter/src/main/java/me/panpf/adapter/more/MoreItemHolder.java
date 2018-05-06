@@ -19,16 +19,16 @@ package me.panpf.adapter.more;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import me.panpf.adapter.FixedItemInfo;
+import me.panpf.adapter.ItemHolder;
 import me.panpf.adapter.ItemStorage;
 
 /**
  * 加载更多专用的固定尾巴
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class MoreFixedItemInfo extends FixedItemInfo {
+public class MoreItemHolder extends ItemHolder {
 
-    public MoreFixedItemInfo(@NonNull ItemStorage storage, @NonNull MoreItemFactory itemFactory, @Nullable Object data, boolean header) {
+    public MoreItemHolder(@NonNull ItemStorage storage, @NonNull MoreItemFactory itemFactory, @Nullable Object data, boolean header) {
         super(storage, itemFactory, data, header);
     }
 

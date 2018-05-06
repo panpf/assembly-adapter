@@ -74,13 +74,13 @@ public class FragmentItemActor {
         int headerItemCount = adapter.getHeaderItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
-        List<FixedFragmentItemInfo> headerItemList = adapter.getHeaderItemList();
+        List<FragmentItemHolder> headerItemList = adapter.getHeaderItemList();
         if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            FixedFragmentItemInfo fixedItemInfo = headerItemList.get(positionInHeaderList);
+            FragmentItemHolder itemHolder = headerItemList.get(positionInHeaderList);
             //noinspection unchecked
-            return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
+            return itemHolder.getItemFactory().dispatchCreateFragment(position, itemHolder.getData());
         }
 
         // 数据
@@ -109,12 +109,12 @@ public class FragmentItemActor {
         int footerItemCount = adapter.getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
-        List<FixedFragmentItemInfo> footerItemList = adapter.getFooterItemList();
+        List<FragmentItemHolder> footerItemList = adapter.getFooterItemList();
         if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            FixedFragmentItemInfo fixedItemInfo = footerItemList.get(positionInFooterList);
+            FragmentItemHolder itemHolder = footerItemList.get(positionInFooterList);
             //noinspection unchecked
-            return fixedItemInfo.getItemFactory().dispatchCreateFragment(position, fixedItemInfo.getData());
+            return itemHolder.getItemFactory().dispatchCreateFragment(position, itemHolder.getData());
         }
 
         throw new IllegalArgumentException("Illegal position: " + position);

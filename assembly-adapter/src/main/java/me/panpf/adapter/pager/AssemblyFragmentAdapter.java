@@ -62,7 +62,7 @@ public interface AssemblyFragmentAdapter {
      * 获取 header 列表
      */
     @Nullable
-    List<FixedFragmentItemInfo> getHeaderItemList();
+    List<FragmentItemHolder> getHeaderItemList();
 
     /**
      * 获取列表头的个数
@@ -89,7 +89,7 @@ public interface AssemblyFragmentAdapter {
      * 获取 footer 列表
      */
     @Nullable
-    List<FixedFragmentItemInfo> getFooterItemList();
+    List<FragmentItemHolder> getFooterItemList();
 
     /**
      * 获取列表头的个数

@@ -27,7 +27,7 @@ import java.util.List;
 
 import me.panpf.adapter.more.AssemblyMoreItem;
 import me.panpf.adapter.more.AssemblyMoreItemFactory;
-import me.panpf.adapter.more.MoreFixedItemInfo;
+import me.panpf.adapter.more.MoreItemHolder;
 import me.panpf.adapter.recycler.RecyclerItemWrapper;
 
 /**
@@ -77,19 +77,19 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
         return storage.addHeaderItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
         return storage.addHeaderItem(itemFactory.setInRecycler(true));
     }
 
     @Nullable
     @Override
-    public List<FixedItemInfo> getHeaderItemList() {
+    public List<ItemHolder> getHeaderItemList() {
         return storage.getHeaderItemList();
     }
 
@@ -109,13 +109,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
         return storage.addFooterItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
         return storage.addFooterItem(itemFactory.setInRecycler(true));
     }
 
@@ -126,7 +126,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @Nullable
     @Override
-    public List<FixedItemInfo> getFooterItemList() {
+    public List<ItemHolder> getFooterItemList() {
         return storage.getFooterItemList();
     }
 
@@ -141,20 +141,20 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyMoreItem> MoreFixedItemInfo setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
         return storage.setMoreItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyMoreItem> MoreFixedItemInfo setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory) {
+    public <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory) {
         return storage.setMoreItem(itemFactory.setInRecycler(true));
     }
 
     @Nullable
     @Override
-    public MoreFixedItemInfo getMoreFixedItemInfo() {
-        return storage.getMoreFixedItemInfo();
+    public MoreItemHolder getMoreItemHolder() {
+        return storage.getMoreItemHolder();
     }
 
     @Override
@@ -276,8 +276,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
             } else {
                 throw new IllegalStateException(String.format("Item not RecyclerItemWrapper. itemFactory: %s", itemFactory.toString()));
             }
-        } else if (itemObject instanceof FixedItemInfo) {
-            ItemFactory itemFactory = ((FixedItemInfo) itemObject).getItemFactory();
+        } else if (itemObject instanceof ItemHolder) {
+            ItemFactory itemFactory = ((ItemHolder) itemObject).getItemFactory();
             Item item = itemFactory.dispatchCreateItem(parent);
             if (item instanceof RecyclerItemWrapper) {
                 return (RecyclerItemWrapper) item;

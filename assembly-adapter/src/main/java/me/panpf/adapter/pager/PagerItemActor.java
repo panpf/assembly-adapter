@@ -45,13 +45,13 @@ public class PagerItemActor {
         int headerItemCount = adapter.getHeaderItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
-        List<FixedPagerItemInfo> headerItemList = adapter.getHeaderItemList();
+        List<PagerItemHolder> headerItemList = adapter.getHeaderItemList();
         if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            FixedPagerItemInfo fixedItemInfo = headerItemList.get(positionInHeaderList);
+            PagerItemHolder itemHolder = headerItemList.get(positionInHeaderList);
             //noinspection unchecked
-            View itemView = fixedItemInfo.getItemFactory().dispatchCreateView(container.getContext(), container, position, fixedItemInfo.getData());
+            View itemView = itemHolder.getItemFactory().dispatchCreateView(container.getContext(), container, position, itemHolder.getData());
             container.addView(itemView);
             return itemView;
         }
@@ -84,12 +84,12 @@ public class PagerItemActor {
         int footerItemCount = adapter.getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
-        List<FixedPagerItemInfo> footerItemList = adapter.getFooterItemList();
+        List<PagerItemHolder> footerItemList = adapter.getFooterItemList();
         if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            FixedPagerItemInfo fixedItemInfo = footerItemList.get(positionInFooterList);
+            PagerItemHolder itemHolder = footerItemList.get(positionInFooterList);
             //noinspection unchecked
-            View itemView = fixedItemInfo.getItemFactory().dispatchCreateView(container.getContext(), container, position, fixedItemInfo.getData());
+            View itemView = itemHolder.getItemFactory().dispatchCreateView(container.getContext(), container, position, itemHolder.getData());
             container.addView(itemView);
             return itemView;
         }

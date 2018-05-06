@@ -84,7 +84,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
 
     @Nullable
     @Override
-    public List<FixedFragmentItemInfo> getHeaderItemList() {
+    public List<FragmentItemHolder> getHeaderItemList() {
         return storage.getHeaderItemList();
     }
 
@@ -114,7 +114,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
 
     @Nullable
     @Override
-    public List<FixedFragmentItemInfo> getFooterItemList() {
+    public List<FragmentItemHolder> getFooterItemList() {
         return storage.getFooterItemList();
     }
 

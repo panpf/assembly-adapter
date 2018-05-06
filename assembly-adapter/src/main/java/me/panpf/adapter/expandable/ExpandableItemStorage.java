@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.panpf.adapter.AssemblyAdapter;
-import me.panpf.adapter.FixedItemInfo;
+import me.panpf.adapter.ItemHolder;
 import me.panpf.adapter.ItemFactory;
 import me.panpf.adapter.ItemStorage;
 
@@ -84,10 +84,10 @@ public class ExpandableItemStorage extends ItemStorage {
     }
 
     /**
-     * 根据 view 类型获取 {@link ItemFactory} 或 {@link FixedItemInfo}
+     * 根据 view 类型获取 {@link ItemFactory} 或 {@link ItemHolder}
      *
      * @param viewType view 类型
-     * @return null：没有；{@link ItemFactory} 或 {@link FixedItemInfo}
+     * @return null：没有；{@link ItemFactory} 或 {@link ItemHolder}
      */
     @Nullable
     public Object getChildItemFactoryByViewType(int viewType) {

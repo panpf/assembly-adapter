@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class FixedItemInfo {
+public class ItemHolder {
 
     @NonNull
     private ItemStorage itemStorage;
@@ -17,7 +17,7 @@ public class FixedItemInfo {
 
     private boolean enabled = true;
 
-    public FixedItemInfo(@NonNull ItemStorage itemStorage, @NonNull ItemFactory itemFactory, @Nullable Object data, boolean header) {
+    public ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory itemFactory, @Nullable Object data, boolean header) {
         this.itemStorage = itemStorage;
         this.itemFactory = itemFactory;
         this.data = data;

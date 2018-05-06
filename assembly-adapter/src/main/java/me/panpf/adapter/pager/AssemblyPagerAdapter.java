@@ -78,7 +78,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
+    public PagerItemHolder addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
         return storage.addHeaderItem(itemFactory, data);
     }
 
@@ -86,7 +86,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+    public PagerItemHolder addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
         return storage.addHeaderItem(itemFactory);
     }
 
@@ -94,7 +94,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 获取 header 列表
      */
     @Nullable
-    public List<FixedPagerItemInfo> getHeaderItemList() {
+    public List<PagerItemHolder> getHeaderItemList() {
         return storage.getHeaderItemList();
     }
 
@@ -117,7 +117,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
+    public PagerItemHolder addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
         return storage.addFooterItem(itemFactory, data);
     }
 
@@ -125,7 +125,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+    public PagerItemHolder addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
         return storage.addFooterItem(itemFactory);
     }
 
@@ -133,7 +133,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      * 获取 footer 列表
      */
     @Nullable
-    public List<FixedPagerItemInfo> getFooterItemList() {
+    public List<PagerItemHolder> getFooterItemList() {
         return storage.getFooterItemList();
     }
 

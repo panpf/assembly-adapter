@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyRecyclerAdapter
-import me.panpf.adapter.FixedItemInfo
+import me.panpf.adapter.ItemHolder
 import me.panpf.adapter.more.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
@@ -30,10 +30,10 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
     val recyclerView: RecyclerView by bindView(R.id.list_recyclerViewFragment_content)
 
     var adapter: AssemblyRecyclerAdapter? = null
-    var headerItemInfo: FixedItemInfo? = null
-    var headerItemInfo2: FixedItemInfo? = null
-    var footerItemInfo: FixedItemInfo? = null
-    var footerItemInfo2: FixedItemInfo? = null
+    var headerItemHolder: ItemHolder? = null
+    var headerItemHolder2: ItemHolder? = null
+    var footerItemHolder: ItemHolder? = null
+    var footerItemHolder2: ItemHolder? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recycler_view, container, false)
@@ -108,27 +108,27 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = AssemblyRecyclerAdapter(objects)
 
-                    headerItemInfo = adapter!!.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
-                    headerItemInfo2 = adapter!!.addHeaderItem(HeaderItemFactory(), "唉，我的小额头呢？")
+                    headerItemHolder = adapter!!.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
+                    headerItemHolder2 = adapter!!.addHeaderItem(HeaderItemFactory(), "唉，我的小额头呢？")
                     adapter!!.addItemFactory(UserItemFactory(appContext))
                     adapter!!.addItemFactory(GameItemFactory(appContext))
-                    footerItemInfo = adapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
-                    footerItemInfo2 = adapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢？")
+                    footerItemHolder = adapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
+                    footerItemHolder2 = adapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢？")
                     adapter!!.setMoreItem(LoadMoreItemFactory(fragment))
 
                     recyclerView.adapter = adapter
                 } else {
                     adapter!!.addAll(objects)
-                    headerItemInfo2!!.isEnabled = !headerItemInfo2!!.isEnabled
-                    footerItemInfo2!!.isEnabled = !footerItemInfo2!!.isEnabled
+                    headerItemHolder2!!.isEnabled = !headerItemHolder2!!.isEnabled
+                    footerItemHolder2!!.isEnabled = !footerItemHolder2!!.isEnabled
                 }
 
                 val loadMoreEnd = nextStart >= 100
                 if (loadMoreEnd) {
-                    headerItemInfo!!.isEnabled = false
-                    footerItemInfo!!.isEnabled = false
+                    headerItemHolder!!.isEnabled = false
+                    footerItemHolder!!.isEnabled = false
                 }
-                adapter!!.moreFixedItemInfo?.isEnabled = !loadMoreEnd
+                adapter!!.moreItemHolder?.isEnabled = !loadMoreEnd
             }
         }
     }

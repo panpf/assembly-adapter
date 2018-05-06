@@ -30,7 +30,7 @@ import me.panpf.adapter.expandable.ExpandableItemActor;
 import me.panpf.adapter.expandable.ExpandableItemStorage;
 import me.panpf.adapter.more.AssemblyMoreItem;
 import me.panpf.adapter.more.AssemblyMoreItemFactory;
-import me.panpf.adapter.more.MoreFixedItemInfo;
+import me.panpf.adapter.more.MoreItemHolder;
 
 /**
  * 通用组合式 {@link BaseExpandableListAdapter}，支持组合式多 item，支持头、尾巴以及加载更多
@@ -113,18 +113,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
         return storage.addHeaderItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <ITEM extends AssemblyItem> ItemHolder addHeaderItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
         return storage.addHeaderItem(itemFactory);
     }
 
     @Override
-    public List<FixedItemInfo> getHeaderItemList() {
+    public List<ItemHolder> getHeaderItemList() {
         return storage.getHeaderItemList();
     }
 
@@ -144,18 +144,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory, @Nullable Object data) {
         return storage.addFooterItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyItem> FixedItemInfo addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
+    public <ITEM extends AssemblyItem> ItemHolder addFooterItem(@NonNull AssemblyItemFactory<ITEM> itemFactory) {
         return storage.addHeaderItem(itemFactory);
     }
 
     @Override
-    public List<FixedItemInfo> getFooterItemList() {
+    public List<ItemHolder> getFooterItemList() {
         return storage.getFooterItemList();
     }
 
@@ -174,20 +174,20 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyMoreItem> MoreFixedItemInfo setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
+    public <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory, @Nullable Object data) {
         return storage.setMoreItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <ITEM extends AssemblyMoreItem> MoreFixedItemInfo setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory) {
+    public <ITEM extends AssemblyMoreItem> MoreItemHolder setMoreItem(@NonNull AssemblyMoreItemFactory<ITEM> itemFactory) {
         return storage.setMoreItem(itemFactory);
     }
 
     @Nullable
     @Override
-    public MoreFixedItemInfo getMoreFixedItemInfo() {
-        return storage.getMoreFixedItemInfo();
+    public MoreItemHolder getMoreItemHolder() {
+        return storage.getMoreItemHolder();
     }
 
     @Override
@@ -368,9 +368,9 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         if (itemObject instanceof AssemblyItemFactory) {
             AssemblyItemFactory itemFactory = (AssemblyItemFactory) itemObject;
             return itemFactory.dispatchCreateItem(parent);
-        } else if (itemObject instanceof FixedItemInfo) {
-            FixedItemInfo fixedItemInfo = (FixedItemInfo) itemObject;
-            return fixedItemInfo.getItemFactory().dispatchCreateItem(parent);
+        } else if (itemObject instanceof ItemHolder) {
+            ItemHolder itemHolder = (ItemHolder) itemObject;
+            return itemHolder.getItemFactory().dispatchCreateItem(parent);
         } else {
             throw new IllegalStateException(String.format("Unknown groupViewType: %d, itemFactory: %s",
                     viewType, itemObject != null ? itemObject.getClass().getName() : "null"));

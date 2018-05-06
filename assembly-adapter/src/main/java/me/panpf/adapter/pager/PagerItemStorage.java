@@ -45,9 +45,9 @@ public class PagerItemStorage {
     @Nullable
     private List dataList;
     @Nullable
-    private ArrayList<FixedPagerItemInfo> headerItemList;
+    private ArrayList<PagerItemHolder> headerItemList;
     @Nullable
-    private ArrayList<FixedPagerItemInfo> footerItemList;
+    private ArrayList<PagerItemHolder> footerItemList;
     @Nullable
     private ArrayList<AssemblyPagerItemFactory> itemFactoryList;
 
@@ -111,50 +111,50 @@ public class PagerItemStorage {
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
+    public PagerItemHolder addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(adapter);
-        FixedPagerItemInfo headerItemInfo = new FixedPagerItemInfo(this, itemFactory, data, true);
-        headerItemInfo.setPosition(headerItemPosition++);
+        PagerItemHolder itemHolder = new PagerItemHolder(this, itemFactory, data, true);
+        itemHolder.setPosition(headerItemPosition++);
 
         synchronized (headerItemListLock) {
             if (headerItemList == null) {
-                headerItemList = new ArrayList<FixedPagerItemInfo>(1);
+                headerItemList = new ArrayList<PagerItemHolder>(1);
             }
-            headerItemList.add(headerItemInfo);
+            headerItemList.add(itemHolder);
         }
-        return headerItemInfo;
+        return itemHolder;
     }
 
     /**
      * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+    public PagerItemHolder addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
         return addHeaderItem(itemFactory, null);
     }
 
     /**
      * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    void headerEnabledChanged(@NonNull FixedPagerItemInfo headerItemInfo) {
-        if (headerItemInfo.getItemFactory().getAdapter() != adapter) {
+    void headerEnabledChanged(@NonNull PagerItemHolder itemHolder) {
+        if (itemHolder.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
-        if (headerItemInfo.isEnabled()) {
+        if (itemHolder.isEnabled()) {
             synchronized (headerItemListLock) {
                 if (headerItemList == null) {
-                    headerItemList = new ArrayList<FixedPagerItemInfo>(1);
+                    headerItemList = new ArrayList<PagerItemHolder>(1);
                 }
-                headerItemList.add(headerItemInfo);
-                Collections.sort(headerItemList, new Comparator<FixedPagerItemInfo>() {
+                headerItemList.add(itemHolder);
+                Collections.sort(headerItemList, new Comparator<PagerItemHolder>() {
                     @Override
-                    public int compare(FixedPagerItemInfo lhs, FixedPagerItemInfo rhs) {
+                    public int compare(PagerItemHolder lhs, PagerItemHolder rhs) {
                         return lhs.getPosition() - rhs.getPosition();
                     }
                 });
@@ -165,7 +165,7 @@ public class PagerItemStorage {
             }
         } else {
             synchronized (headerItemListLock) {
-                if (headerItemList != null && headerItemList.remove(headerItemInfo)) {
+                if (headerItemList != null && headerItemList.remove(itemHolder)) {
                     if (notifyOnChange) {
                         adapter.notifyDataSetChanged();
                     }
@@ -178,7 +178,7 @@ public class PagerItemStorage {
      * 获取 header 列表
      */
     @Nullable
-    public List<FixedPagerItemInfo> getHeaderItemList() {
+    public List<PagerItemHolder> getHeaderItemList() {
         return headerItemList;
     }
 
@@ -201,51 +201,51 @@ public class PagerItemStorage {
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
+    public PagerItemHolder addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(adapter);
-        FixedPagerItemInfo footerItemInfo = new FixedPagerItemInfo(this, itemFactory, data, false);
-        footerItemInfo.setPosition(footerItemPosition++);
+        PagerItemHolder itemHolder = new PagerItemHolder(this, itemFactory, data, false);
+        itemHolder.setPosition(footerItemPosition++);
 
         synchronized (footerItemListLock) {
             if (footerItemList == null) {
-                footerItemList = new ArrayList<FixedPagerItemInfo>(1);
+                footerItemList = new ArrayList<PagerItemHolder>(1);
             }
-            footerItemList.add(footerItemInfo);
+            footerItemList.add(itemHolder);
         }
 
-        return footerItemInfo;
+        return itemHolder;
     }
 
     /**
      * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
      */
     @NonNull
-    public FixedPagerItemInfo addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+    public PagerItemHolder addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
         return addFooterItem(itemFactory, null);
     }
 
     /**
      * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    void footerEnabledChanged(@NonNull FixedPagerItemInfo footerItemInfo) {
-        if (footerItemInfo.getItemFactory().getAdapter() != adapter) {
+    void footerEnabledChanged(@NonNull PagerItemHolder itemHolder) {
+        if (itemHolder.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
-        if (footerItemInfo.isEnabled()) {
+        if (itemHolder.isEnabled()) {
             synchronized (footerItemListLock) {
                 if (footerItemList == null) {
-                    footerItemList = new ArrayList<FixedPagerItemInfo>(1);
+                    footerItemList = new ArrayList<PagerItemHolder>(1);
                 }
-                footerItemList.add(footerItemInfo);
-                Collections.sort(footerItemList, new Comparator<FixedPagerItemInfo>() {
+                footerItemList.add(itemHolder);
+                Collections.sort(footerItemList, new Comparator<PagerItemHolder>() {
                     @Override
-                    public int compare(FixedPagerItemInfo lhs, FixedPagerItemInfo rhs) {
+                    public int compare(PagerItemHolder lhs, PagerItemHolder rhs) {
                         return lhs.getPosition() - rhs.getPosition();
                     }
                 });
@@ -256,7 +256,7 @@ public class PagerItemStorage {
             }
         } else {
             synchronized (footerItemListLock) {
-                if (footerItemList != null && footerItemList.remove(footerItemInfo)) {
+                if (footerItemList != null && footerItemList.remove(itemHolder)) {
                     if (notifyOnChange) {
                         adapter.notifyDataSetChanged();
                     }
@@ -269,7 +269,7 @@ public class PagerItemStorage {
      * 获取 footer 列表
      */
     @Nullable
-    public List<FixedPagerItemInfo> getFooterItemList() {
+    public List<PagerItemHolder> getFooterItemList() {
         return footerItemList;
     }
 

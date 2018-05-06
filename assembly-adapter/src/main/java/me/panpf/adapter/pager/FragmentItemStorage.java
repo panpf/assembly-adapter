@@ -35,9 +35,9 @@ public class FragmentItemStorage {
 
     private boolean itemFactoryLocked;
     @Nullable
-    private ArrayList<FixedFragmentItemInfo> headerItemList;
+    private ArrayList<FragmentItemHolder> headerItemList;
     @Nullable
-    private ArrayList<FixedFragmentItemInfo> footerItemList;
+    private ArrayList<FragmentItemHolder> footerItemList;
     @Nullable
     private ArrayList<AssemblyFragmentItemFactory> itemFactoryList;
 
@@ -105,9 +105,9 @@ public class FragmentItemStorage {
         itemFactory.setAdapter(adapter);
 
         if (headerItemList == null) {
-            headerItemList = new ArrayList<FixedFragmentItemInfo>(1);
+            headerItemList = new ArrayList<FragmentItemHolder>(1);
         }
-        headerItemList.add(new FixedFragmentItemInfo(itemFactory, data));
+        headerItemList.add(new FragmentItemHolder(itemFactory, data));
     }
 
     /**
@@ -121,7 +121,7 @@ public class FragmentItemStorage {
      * 获取 header 列表
      */
     @Nullable
-    public List<FixedFragmentItemInfo> getHeaderItemList() {
+    public List<FragmentItemHolder> getHeaderItemList() {
         return headerItemList;
     }
 
@@ -152,9 +152,9 @@ public class FragmentItemStorage {
         itemFactory.setAdapter(adapter);
 
         if (footerItemList == null) {
-            footerItemList = new ArrayList<FixedFragmentItemInfo>(1);
+            footerItemList = new ArrayList<FragmentItemHolder>(1);
         }
-        footerItemList.add(new FixedFragmentItemInfo(itemFactory, data));
+        footerItemList.add(new FragmentItemHolder(itemFactory, data));
     }
 
     /**
@@ -168,7 +168,7 @@ public class FragmentItemStorage {
      * 获取 footer 列表
      */
     @Nullable
-    public List<FixedFragmentItemInfo> getFooterItemList() {
+    public List<FragmentItemHolder> getFooterItemList() {
         return footerItemList;
     }
 

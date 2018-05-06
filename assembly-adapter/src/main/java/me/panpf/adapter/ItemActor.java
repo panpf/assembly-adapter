@@ -66,8 +66,8 @@ public class ItemActor {
 
         // 加载更多尾巴
         if (dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
-            FixedItemInfo moreFixedItemInfo = adapter.getMoreFixedItemInfo();
-            return moreFixedItemInfo != null ? moreFixedItemInfo.getData() : null;
+            ItemHolder moreItemHolder = adapter.getMoreItemHolder();
+            return moreItemHolder != null ? moreItemHolder.getData() : null;
         }
 
         return null;
@@ -120,7 +120,7 @@ public class ItemActor {
         int headerItemCount = adapter.getHeaderItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
-        List<FixedItemInfo> headerItemList = adapter.getHeaderItemList();
+        List<ItemHolder> headerItemList = adapter.getHeaderItemList();
         if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
@@ -152,16 +152,16 @@ public class ItemActor {
         int footerItemCount = adapter.getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
-        List<FixedItemInfo> footerItemList = adapter.getHeaderItemList();
+        List<ItemHolder> footerItemList = adapter.getHeaderItemList();
         if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
             return footerItemList.get(positionInFooterList).getItemFactory().getSpanSize();
         }
 
         // 加载更多尾巴
-        FixedItemInfo moreFixedItemInfo = adapter.getMoreFixedItemInfo();
-        if (moreFixedItemInfo != null && dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
-            return moreFixedItemInfo.getItemFactory().getSpanSize();
+        ItemHolder moreItemHolder = adapter.getMoreItemHolder();
+        if (moreItemHolder != null && dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
+            return moreItemHolder.getItemFactory().getSpanSize();
         }
 
         return 1;
@@ -173,7 +173,7 @@ public class ItemActor {
         int headerEndPosition = headerItemCount - 1;
 
         // 头
-        List<FixedItemInfo> headerItemList = adapter.getHeaderItemList();
+        List<ItemHolder> headerItemList = adapter.getHeaderItemList();
         if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
@@ -202,7 +202,7 @@ public class ItemActor {
         }
 
         // 尾巴
-        List<FixedItemInfo> footerItemList = adapter.getFooterItemList();
+        List<ItemHolder> footerItemList = adapter.getFooterItemList();
         int footerItemCount = adapter.getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
@@ -212,9 +212,9 @@ public class ItemActor {
         }
 
         // 加载更多尾巴
-        FixedItemInfo moreFixedItemInfo = adapter.getMoreFixedItemInfo();
-        if (moreFixedItemInfo != null && dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
-            return moreFixedItemInfo.getItemFactory().getItemType();
+        ItemHolder moreItemHolder = adapter.getMoreItemHolder();
+        if (moreItemHolder != null && dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
+            return moreItemHolder.getItemFactory().getItemType();
         }
 
         throw new IllegalStateException("Not found match viewType, position: " + position);

@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.MoreFixedItemInfo;
+import me.panpf.adapter.more.MoreItemHolder;
 import me.panpf.adapter.more.MoreItemFactory;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -34,13 +34,13 @@ public class ItemStorage {
     private boolean itemFactoryLocked;
 
     @Nullable
-    private ArrayList<FixedItemInfo> headerItemList;
+    private ArrayList<ItemHolder> headerItemList;
     @Nullable
     private List dataList;
     @Nullable
-    private ArrayList<FixedItemInfo> footerItemList;
+    private ArrayList<ItemHolder> footerItemList;
     @Nullable
-    private MoreFixedItemInfo moreFixedItemInfo;
+    private MoreItemHolder moreItemHolder;
 
     @Nullable
     private ArrayList<ItemFactory> itemFactoryList;
@@ -121,7 +121,7 @@ public class ItemStorage {
      * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
      */
     @NonNull
-    public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
+    public ItemHolder addHeaderItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
@@ -130,47 +130,47 @@ public class ItemStorage {
         itemFactory.setAdapter(adapter);
         itemFactory.setItemType(itemTypeIndex++);
 
-        FixedItemInfo fixedItemInfo = new FixedItemInfo(this, itemFactory, data, true);
-        fixedItemInfo.setPosition(headerItemPosition++);
+        ItemHolder itemHolder = new ItemHolder(this, itemFactory, data, true);
+        itemHolder.setPosition(headerItemPosition++);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
-        itemFactoryArray.put(itemFactory.getItemType(), fixedItemInfo);
+        itemFactoryArray.put(itemFactory.getItemType(), itemHolder);
 
         synchronized (headerItemListLock) {
             if (headerItemList == null) {
-                headerItemList = new ArrayList<FixedItemInfo>(1);
+                headerItemList = new ArrayList<ItemHolder>(1);
             }
-            headerItemList.add(fixedItemInfo);
+            headerItemList.add(itemHolder);
         }
 
-        return fixedItemInfo;
+        return itemHolder;
     }
 
     @NonNull
-    public FixedItemInfo addHeaderItem(@NonNull ItemFactory itemFactory) {
+    public ItemHolder addHeaderItem(@NonNull ItemFactory itemFactory) {
         return addHeaderItem(itemFactory, null);
     }
 
     /**
      * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    public void headerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
+    public void headerEnabledChanged(@NonNull ItemHolder itemHolder) {
         //noinspection ConstantConditions
-        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != adapter) {
+        if (itemHolder == null || itemHolder.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
-        if (fixedItemInfo.isEnabled()) {
+        if (itemHolder.isEnabled()) {
             synchronized (headerItemListLock) {
                 if (headerItemList == null) {
-                    headerItemList = new ArrayList<FixedItemInfo>(1);
+                    headerItemList = new ArrayList<ItemHolder>(1);
                 }
-                headerItemList.add(fixedItemInfo);
-                Collections.sort(headerItemList, new Comparator<FixedItemInfo>() {
+                headerItemList.add(itemHolder);
+                Collections.sort(headerItemList, new Comparator<ItemHolder>() {
                     @Override
-                    public int compare(FixedItemInfo lhs, FixedItemInfo rhs) {
+                    public int compare(ItemHolder lhs, ItemHolder rhs) {
                         return lhs.getPosition() - rhs.getPosition();
                     }
                 });
@@ -181,7 +181,7 @@ public class ItemStorage {
             }
         } else {
             synchronized (headerItemListLock) {
-                if (headerItemList != null && headerItemList.remove(fixedItemInfo)) {
+                if (headerItemList != null && headerItemList.remove(itemHolder)) {
                     if (notifyOnChange) {
                         adapter.notifyDataSetChanged();
                     }
@@ -194,7 +194,7 @@ public class ItemStorage {
      * 获取 header 列表
      */
     @Nullable
-    public List<FixedItemInfo> getHeaderItemList() {
+    public List<ItemHolder> getHeaderItemList() {
         return headerItemList;
     }
 
@@ -217,7 +217,7 @@ public class ItemStorage {
      * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
      */
     @NonNull
-    public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
+    public ItemHolder addFooterItem(@NonNull ItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
@@ -226,47 +226,47 @@ public class ItemStorage {
         itemFactory.setAdapter(adapter);
         itemFactory.setItemType(itemTypeIndex++);
 
-        FixedItemInfo fixedItemInfo = new FixedItemInfo(this, itemFactory, data, false);
-        fixedItemInfo.setPosition(footerItemPosition++);
+        ItemHolder itemHolder = new ItemHolder(this, itemFactory, data, false);
+        itemHolder.setPosition(footerItemPosition++);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
-        itemFactoryArray.put(itemFactory.getItemType(), fixedItemInfo);
+        itemFactoryArray.put(itemFactory.getItemType(), itemHolder);
 
         synchronized (footerItemListLock) {
             if (footerItemList == null) {
-                footerItemList = new ArrayList<FixedItemInfo>(1);
+                footerItemList = new ArrayList<ItemHolder>(1);
             }
-            footerItemList.add(fixedItemInfo);
+            footerItemList.add(itemHolder);
         }
 
-        return fixedItemInfo;
+        return itemHolder;
     }
 
     @NonNull
-    public FixedItemInfo addFooterItem(@NonNull ItemFactory itemFactory) {
+    public ItemHolder addFooterItem(@NonNull ItemFactory itemFactory) {
         return addFooterItem(itemFactory, null);
     }
 
     /**
      * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    public void footerEnabledChanged(@NonNull FixedItemInfo fixedItemInfo) {
+    public void footerEnabledChanged(@NonNull ItemHolder itemHolder) {
         //noinspection ConstantConditions
-        if (fixedItemInfo == null || fixedItemInfo.getItemFactory().getAdapter() != adapter) {
+        if (itemHolder == null || itemHolder.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
-        if (fixedItemInfo.isEnabled()) {
+        if (itemHolder.isEnabled()) {
             synchronized (footerItemListLock) {
                 if (footerItemList == null) {
-                    footerItemList = new ArrayList<FixedItemInfo>(1);
+                    footerItemList = new ArrayList<ItemHolder>(1);
                 }
-                footerItemList.add(fixedItemInfo);
-                Collections.sort(footerItemList, new Comparator<FixedItemInfo>() {
+                footerItemList.add(itemHolder);
+                Collections.sort(footerItemList, new Comparator<ItemHolder>() {
                     @Override
-                    public int compare(FixedItemInfo lhs, FixedItemInfo rhs) {
+                    public int compare(ItemHolder lhs, ItemHolder rhs) {
                         return lhs.getPosition() - rhs.getPosition();
                     }
                 });
@@ -277,7 +277,7 @@ public class ItemStorage {
             }
         } else {
             synchronized (footerItemListLock) {
-                if (footerItemList != null && footerItemList.remove(fixedItemInfo)) {
+                if (footerItemList != null && footerItemList.remove(itemHolder)) {
                     if (notifyOnChange) {
                         adapter.notifyDataSetChanged();
                     }
@@ -290,7 +290,7 @@ public class ItemStorage {
      * 获取 footer 列表
      */
     @Nullable
-    public List<FixedItemInfo> getFooterItemList() {
+    public List<ItemHolder> getFooterItemList() {
         return footerItemList;
     }
 
@@ -313,45 +313,45 @@ public class ItemStorage {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    public MoreFixedItemInfo setMoreItem(@NonNull MoreItemFactory itemFactory, @Nullable Object data) {
+    public MoreItemHolder setMoreItem(@NonNull MoreItemFactory itemFactory, @Nullable Object data) {
         //noinspection ConstantConditions
         if (itemFactory == null || itemFactoryLocked) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         itemFactory.setAdapter(adapter);
-        if (this.moreFixedItemInfo != null) {
-            itemFactory.setItemType(this.moreFixedItemInfo.getItemFactory().getItemType());
+        if (this.moreItemHolder != null) {
+            itemFactory.setItemType(this.moreItemHolder.getItemFactory().getItemType());
         } else {
             itemFactory.setItemType(itemTypeIndex++);
         }
 
         itemFactory.loadMoreFinished(false);
-        MoreFixedItemInfo moreFixedItemInfo = new MoreFixedItemInfo(this, itemFactory, data, false);
+        MoreItemHolder moreItemHolder = new MoreItemHolder(this, itemFactory, data, false);
 
         if (itemFactoryArray == null) {
             itemFactoryArray = new SparseArray<Object>();
         }
-        itemFactoryArray.put(itemFactory.getItemType(), moreFixedItemInfo);
+        itemFactoryArray.put(itemFactory.getItemType(), moreItemHolder);
 
-        return this.moreFixedItemInfo = moreFixedItemInfo;
+        return this.moreItemHolder = moreItemHolder;
     }
 
     @NonNull
-    public MoreFixedItemInfo setMoreItem(@NonNull MoreItemFactory itemFactory) {
+    public MoreItemHolder setMoreItem(@NonNull MoreItemFactory itemFactory) {
         return setMoreItem(itemFactory, null);
     }
 
     @Nullable
-    public MoreFixedItemInfo getMoreFixedItemInfo() {
-        return moreFixedItemInfo;
+    public MoreItemHolder getMoreItemHolder() {
+        return moreItemHolder;
     }
 
     /**
      * 是否有加载更多尾巴
      */
     public boolean hasMoreFooter() {
-        return moreFixedItemInfo != null && moreFixedItemInfo.isEnabled();
+        return moreItemHolder != null && moreItemHolder.isEnabled();
     }
 
 
@@ -526,10 +526,10 @@ public class ItemStorage {
     }
 
     /**
-     * 根据 view 类型获取 {@link ItemFactory} 或 {@link FixedItemInfo}
+     * 根据 view 类型获取 {@link ItemFactory} 或 {@link ItemHolder}
      *
      * @param viewType view 类型
-     * @return null：没有；{@link ItemFactory} 或 {@link FixedItemInfo}
+     * @return null：没有；{@link ItemFactory} 或 {@link ItemHolder}
      */
     @Nullable
     public Object getItemFactoryByViewType(int viewType) {

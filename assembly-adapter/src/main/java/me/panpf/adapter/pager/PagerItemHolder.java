@@ -23,7 +23,7 @@ import android.support.annotation.Nullable;
  * {@link AssemblyPagerAdapter} 专用的固定位置 item 管理器
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class FixedPagerItemInfo {
+public class PagerItemHolder {
     @NonNull
     private PagerItemStorage storage;
     @NonNull
@@ -35,7 +35,7 @@ public class FixedPagerItemInfo {
     private int position;
     private boolean enabled = true;
 
-    public FixedPagerItemInfo(@NonNull PagerItemStorage storage, @NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data, boolean header) {
+    public PagerItemHolder(@NonNull PagerItemStorage storage, @NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data, boolean header) {
         this.storage = storage;
         this.itemFactory = itemFactory;
         this.data = data;

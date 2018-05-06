@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ExpandableListView
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyExpandableAdapter
-import me.panpf.adapter.FixedItemInfo
+import me.panpf.adapter.ItemHolder
 import me.panpf.adapter.more.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
@@ -29,10 +29,10 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
     private val listView: ExpandableListView by bindView(id = R.id.expandableList_expandableListViewFragment_content)
 
     var adapter: AssemblyExpandableAdapter? = null
-    var headerItemInfo: FixedItemInfo? = null
-    var footerItemInfo: FixedItemInfo? = null
-    var headerItemInfo2: FixedItemInfo? = null
-    var footerItemInfo2: FixedItemInfo? = null
+    var headerItemHolder: ItemHolder? = null
+    var footerItemHolder: ItemHolder? = null
+    var headerItemHolder2: ItemHolder? = null
+    var footerItemHolder2: ItemHolder? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_expandable_list_view, container, false)
@@ -132,30 +132,30 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = AssemblyExpandableAdapter(objects)
 
-                    headerItemInfo = adapter!!.addHeaderItem(HeaderGroupItemFactory(), "我是小额头呀！")
-                    headerItemInfo2 = adapter!!.addHeaderItem(HeaderGroupItemFactory(), "唉，我的小额头呢？")
+                    headerItemHolder = adapter!!.addHeaderItem(HeaderGroupItemFactory(), "我是小额头呀！")
+                    headerItemHolder2 = adapter!!.addHeaderItem(HeaderGroupItemFactory(), "唉，我的小额头呢？")
                     adapter!!.addGroupItemFactory(GameGroupItemFactory())
                     adapter!!.addGroupItemFactory(UserGroupItemFactory())
                     adapter!!.addChildItemFactory(GameChildItemFactory(context))
                     adapter!!.addChildItemFactory(UserChildItemFactory(context))
                     adapter!!.setMoreItem(LoadMoreItemFactory(this))
-                    footerItemInfo = adapter!!.addFooterItem(HeaderGroupItemFactory(), "我是小尾巴呀！")
-                    footerItemInfo2 = adapter!!.addFooterItem(HeaderGroupItemFactory(), "唉，我的小尾巴呢？")
+                    footerItemHolder = adapter!!.addFooterItem(HeaderGroupItemFactory(), "我是小尾巴呀！")
+                    footerItemHolder2 = adapter!!.addFooterItem(HeaderGroupItemFactory(), "唉，我的小尾巴呢？")
 
                     listView.setAdapter(adapter)
                 } else {
                     adapter!!.addAll(objects)
 
-                    headerItemInfo2!!.isEnabled = !headerItemInfo2!!.isEnabled
-                    footerItemInfo2!!.isEnabled = !footerItemInfo2!!.isEnabled
+                    headerItemHolder2!!.isEnabled = !headerItemHolder2!!.isEnabled
+                    footerItemHolder2!!.isEnabled = !footerItemHolder2!!.isEnabled
                 }
 
                 val loadMoreEnd = nextStart >= 100
                 if (loadMoreEnd) {
-                    headerItemInfo!!.isEnabled = false
-                    footerItemInfo!!.isEnabled = false
+                    headerItemHolder!!.isEnabled = false
+                    footerItemHolder!!.isEnabled = false
                 }
-                adapter!!.moreFixedItemInfo?.loadMoreFinished(loadMoreEnd)
+                adapter!!.moreItemHolder?.loadMoreFinished(loadMoreEnd)
             }
         }
     }

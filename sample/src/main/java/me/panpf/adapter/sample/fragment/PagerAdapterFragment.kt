@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import me.panpf.adapter.pager.AssemblyPagerAdapter
-import me.panpf.adapter.pager.FixedPagerItemInfo
+import me.panpf.adapter.pager.PagerItemHolder
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Header
 import me.panpf.adapter.sample.bean.Text
@@ -17,8 +17,8 @@ import me.panpf.adapter.sample.itemfactory.ImagePagerItemFactory
 import me.panpf.adapter.sample.itemfactory.TextPagerItemFactory
 
 class PagerAdapterFragment : Fragment() {
-    var headerItemInfo: FixedPagerItemInfo? = null
-    var footerItemInfo: FixedPagerItemInfo? = null
+    var headerItemHolder: PagerItemHolder? = null
+    var footerItemHolder: PagerItemHolder? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_view_pager, container, false)
@@ -42,16 +42,16 @@ class PagerAdapterFragment : Fragment() {
 
         val adapter = AssemblyPagerAdapter(dataArray)
 
-        headerItemInfo = adapter.addHeaderItem(HeaderPagerItemFactory(View.OnClickListener {
-            headerItemInfo!!.isEnabled = false
+        headerItemHolder = adapter.addHeaderItem(HeaderPagerItemFactory(View.OnClickListener {
+            headerItemHolder!!.isEnabled = false
             viewPager.adapter = null
             viewPager.adapter = adapter
         }), header)
         adapter.addItemFactory(ImagePagerItemFactory())
         adapter.addItemFactory(TextPagerItemFactory())
 
-        footerItemInfo = adapter.addFooterItem(HeaderPagerItemFactory(View.OnClickListener {
-            footerItemInfo!!.isEnabled = false
+        footerItemHolder = adapter.addFooterItem(HeaderPagerItemFactory(View.OnClickListener {
+            footerItemHolder!!.isEnabled = false
             viewPager.adapter = null
             viewPager.adapter = adapter
         }), footer)
