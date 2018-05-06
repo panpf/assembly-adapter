@@ -95,7 +95,7 @@ public class FragmentItemActor {
             AssemblyFragmentItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
                 itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(dataObject)) {
+                if (itemFactory.match(dataObject)) {
                     //noinspection unchecked
                     return itemFactory.dispatchCreateFragment(position, dataObject);
                 }

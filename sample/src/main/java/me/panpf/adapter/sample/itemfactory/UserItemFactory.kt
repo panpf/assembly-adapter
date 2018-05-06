@@ -37,7 +37,7 @@ class UserItemFactory(context: Context) : AssemblyItemFactory<User>() {
         }
     }
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun match(data: Any?): Boolean {
         return data is User
     }
 

@@ -6,7 +6,7 @@ import me.panpf.adapter.sample.bean.Header
 import me.panpf.adapter.sample.fragment.HeaderFragment
 
 class HeaderFragmentItemFactory : AssemblyFragmentItemFactory<Header>() {
-    override fun isTarget(data: Any?): Boolean {
+    override fun match(data: Any?): Boolean {
         return data is Header
     }
 

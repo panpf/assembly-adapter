@@ -13,6 +13,7 @@ AssemblyItemFactory 和 AssemblyPagerItemFactory 新增四种点击监听设置�
 * setOnItemLongClickListener(@NonNull OnLongClickListener)
 
 AssemblyItemFactory 的泛型现在是 DATA
+AssemblyItemFactory.isTarget(Object) 重命名为 match(Object)
 
 ViewItemFactory
 

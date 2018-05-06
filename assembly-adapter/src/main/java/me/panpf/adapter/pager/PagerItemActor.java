@@ -68,7 +68,7 @@ public class PagerItemActor {
             AssemblyPagerItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
                 itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(dataObject)) {
+                if (itemFactory.match(dataObject)) {
                     //noinspection unchecked
                     View itemView = itemFactory.dispatchCreateView(container.getContext(), container, position, dataObject);
                     container.addView(itemView);

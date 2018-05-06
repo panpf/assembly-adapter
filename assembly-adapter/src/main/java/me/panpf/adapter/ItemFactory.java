@@ -101,7 +101,7 @@ public interface ItemFactory<DATA> {
      * @param data 待匹配的数据，通常是使用 instanceof 关键字匹配类型
      * @return 如果返回 true，{@link AssemblyAdapter} 将会使用此 {@link ItemFactory} 来处理当前这条数据
      */
-    boolean isTarget(@Nullable Object data);
+    boolean match(@Nullable Object data);
 
     @NonNull
     Item<DATA> dispatchCreateItem(@NonNull ViewGroup parent);

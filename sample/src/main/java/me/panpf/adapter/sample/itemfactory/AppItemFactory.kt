@@ -14,7 +14,7 @@ import me.panpf.sketch.uri.AppIconUriModel
 
 class AppItemFactory : AssemblyItemFactory<AppInfo>() {
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun match(data: Any?): Boolean {
         return data is AppInfo
     }
 

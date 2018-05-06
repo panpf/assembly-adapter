@@ -57,7 +57,7 @@ public abstract class AssemblyFragmentItemFactory<DATA> {
      * @param data 待匹配的数据，通常是使用 instanceof 关键字匹配类型
      * @return 如果返回 true，Adapter 将会使用此 {@link AssemblyFragmentItemFactory} 来处理当前这条数据
      */
-    public abstract boolean isTarget(@Nullable Object data);
+    public abstract boolean match(@Nullable Object data);
 
     /**
      * 创建 {@link Fragment}

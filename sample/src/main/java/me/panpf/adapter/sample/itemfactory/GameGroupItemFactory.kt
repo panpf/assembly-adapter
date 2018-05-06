@@ -12,7 +12,7 @@ import me.panpf.adapter.sample.bindView
 
 class GameGroupItemFactory : AssemblyItemFactory<GameGroup>() {
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun match(data: Any?): Boolean {
         return data is GameGroup
     }
 

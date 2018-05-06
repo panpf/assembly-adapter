@@ -20,7 +20,7 @@ class HeaderPagerItemFactory : AssemblyPagerItemFactory<Header>() {
         }
     }
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun match(data: Any?): Boolean {
         return data is Header
     }
 

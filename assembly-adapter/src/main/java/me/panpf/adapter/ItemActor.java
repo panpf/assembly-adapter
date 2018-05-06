@@ -139,7 +139,7 @@ public class ItemActor {
             ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
                 itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(dataObject)) {
+                if (itemFactory.match(dataObject)) {
                     return itemFactory.getSpanSize();
                 }
             }
@@ -192,7 +192,7 @@ public class ItemActor {
             ItemFactory itemFactory;
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
                 itemFactory = itemFactoryList.get(w);
-                if (itemFactory.isTarget(dataObject)) {
+                if (itemFactory.match(dataObject)) {
                     return itemFactory.getItemType();
                 }
             }

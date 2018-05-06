@@ -62,7 +62,7 @@ public abstract class AssemblyMoreItemFactory<DATA> extends AssemblyItemFactory<
     }
 
     @Override
-    public boolean isTarget(@Nullable Object data) {
+    public boolean match(@Nullable Object data) {
         return true;
     }
 

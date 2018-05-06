@@ -53,7 +53,7 @@ public class ViewItemFactory extends AssemblyItemFactory<Object> {
     }
 
     @Override
-    public boolean isTarget(@Nullable Object data) {
+    public boolean match(@Nullable Object data) {
         return dataClazz == null || dataClazz.isInstance(data);
     }
 

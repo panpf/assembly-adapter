@@ -25,7 +25,7 @@ class GameChildItemFactory(context: Context) : AssemblyItemFactory<Game>() {
         }
     }
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun match(data: Any?): Boolean {
         return data is Game
     }
 

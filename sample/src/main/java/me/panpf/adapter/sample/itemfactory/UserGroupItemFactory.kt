@@ -12,7 +12,7 @@ import me.panpf.adapter.sample.bindView
 
 class UserGroupItemFactory : AssemblyItemFactory<UserGroup>() {
 
-    override fun isTarget(data: Any?): Boolean {
+    override fun match(data: Any?): Boolean {
         return data is UserGroup
     }
 
