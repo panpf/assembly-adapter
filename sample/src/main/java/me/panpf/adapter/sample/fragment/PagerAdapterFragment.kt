@@ -42,19 +42,19 @@ class PagerAdapterFragment : Fragment() {
 
         val adapter = AssemblyPagerAdapter(dataArray)
 
-        headerItemHolder = adapter.addHeaderItem(HeaderPagerItemFactory(View.OnClickListener {
+        headerItemHolder = adapter.addHeaderItem(HeaderPagerItemFactory().setOnItemClickListener{view, position, positionInPart, data ->
             headerItemHolder!!.isEnabled = false
             viewPager.adapter = null
             viewPager.adapter = adapter
-        }), header)
+        }, header)
         adapter.addItemFactory(ImagePagerItemFactory())
         adapter.addItemFactory(TextPagerItemFactory())
 
-        footerItemHolder = adapter.addFooterItem(HeaderPagerItemFactory(View.OnClickListener {
+        footerItemHolder = adapter.addFooterItem(HeaderPagerItemFactory().setOnItemClickListener{view, position, positionInPart, data ->
             footerItemHolder!!.isEnabled = false
             viewPager.adapter = null
             viewPager.adapter = adapter
-        }), footer)
+        }, footer)
 
         viewPager.adapter = adapter
     }

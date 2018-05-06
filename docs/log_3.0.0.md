@@ -4,6 +4,14 @@
 
 Adapter 中删除 setDisableLoadMore(boolean)、loadMoreFinished(boolean)、loadMoreFailed() 方法，请通过 getMoreFixedItemInfo() 获取 MoreFixedItemInfo 后，通过 MoreFixedItemInfo 使用相关替代方法
 
+AssemblyItem.onConfigViews(Context) 现在是非 abstract 的
+
+AssemblyItemFactory 和 AssemblyPagerItemFactory 新增四种点击监听设置方法：
+* setOnViewClickListener(@IdRes int, @NonNull OnClickListener)
+* setOnItemClickListener(@NonNull OnClickListener onClickListener)
+* setOnViewLongClickListener(@IdRes int, @NonNull OnLongClickListener)
+* setOnItemLongClickListener(@NonNull OnLongClickListener)
+
 升级指南：
 * 全局搜索 `AssemblyRecyclerItemFactory` 替换为 `AssemblyItemFactory`（记得勾选 'Match case' 和 'Words'）
 * 全局搜索 `AssemblyRecyclerItem` 替换为 `AssemblyItem`（记得勾选 'Match case' 和 'Words'）

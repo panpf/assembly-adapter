@@ -9,6 +9,7 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import me.panpf.adapter.AssemblyRecyclerAdapter
 import me.panpf.adapter.recycler.AssemblyGridLayoutManager
 import me.panpf.adapter.sample.R
@@ -36,7 +37,14 @@ class GridRecyclerViewFragment : Fragment() {
         recyclerView.layoutManager = AssemblyGridLayoutManager(context, 4, recyclerView)
 
         adapter = AssemblyRecyclerAdapter().apply {
-            addItemFactory(AppItemFactory())
+            addItemFactory(AppItemFactory().setOnItemClickListener { view, position, positionInPart, data ->
+                val launchIntent = context.packageManager.getLaunchIntentForPackage((data as AppInfo).packageName)
+                if (launchIntent != null) {
+                    startActivity(launchIntent)
+                } else {
+                    Toast.makeText(context, "无法启动 ${data.name}", Toast.LENGTH_LONG).show()
+                }
+            })
             addItemFactory(AppListHeaderItemFactory().fullSpan(recyclerView))
         }
         recyclerView.adapter = adapter
@@ -55,6 +63,7 @@ class GridRecyclerViewFragment : Fragment() {
             val userAppList = ArrayList<AppInfo>()
             for (packageInfo in packageInfoList) {
                 val appInfo = AppInfo(true)
+                appInfo.packageName = packageInfo.packageName
                 appInfo.name = packageInfo.applicationInfo.loadLabel(packageManager).toString()
                 appInfo.sortName = appInfo.name
                 appInfo.id = packageInfo.packageName
@@ -100,7 +109,9 @@ class GridRecyclerViewFragment : Fragment() {
                 }
 
                 adapter.dataList = dataList
-                recyclerView.scheduleLayoutAnimation()
+                if (recyclerView != null) {
+                    recyclerView.scheduleLayoutAnimation()
+                }
             }
         }
     }

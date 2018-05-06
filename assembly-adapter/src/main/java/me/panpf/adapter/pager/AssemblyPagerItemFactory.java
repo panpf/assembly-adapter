@@ -17,20 +17,27 @@
 package me.panpf.adapter.pager;
 
 import android.content.Context;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+
+import me.panpf.adapter.OnClickListener;
+import me.panpf.adapter.OnLongClickListener;
 
 /**
  * {@link AssemblyPagerAdapter} 专用的 item factory，负责匹配数据和创建 item
  *
  * @param <DATA> 指定数据类型
  */
+@SuppressWarnings("unused")
 public abstract class AssemblyPagerItemFactory<DATA> {
 
     @Nullable
     private AssemblyPagerAdapter adapter;
+    @Nullable
+    private PagerClickListenerManager<DATA> clickListenerManager;
 
     /**
      * 获取 {@link AssemblyPagerAdapter}
@@ -47,8 +54,68 @@ public abstract class AssemblyPagerItemFactory<DATA> {
         this.adapter = adapter;
     }
 
+    /**
+     * 监听指定 id 的 view 的点击事件
+     *
+     * @param viewId          view 的 id
+     * @param onClickListener 点击监听
+     */
+    public AssemblyPagerItemFactory setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener onClickListener) {
+        if (clickListenerManager == null) {
+            clickListenerManager = new PagerClickListenerManager<DATA>();
+        }
+        clickListenerManager.add(viewId, onClickListener);
+        return this;
+    }
+
+    /**
+     * 监听 item 的点击事件
+     *
+     * @param onClickListener 点击监听
+     */
+    public AssemblyPagerItemFactory setOnItemClickListener(@NonNull OnClickListener onClickListener) {
+        if (clickListenerManager == null) {
+            clickListenerManager = new PagerClickListenerManager<DATA>();
+        }
+        clickListenerManager.add(onClickListener);
+        return this;
+    }
+
+    /**
+     * 监听指定 id 的 view 的长按事件
+     *
+     * @param viewId          view 的 id
+     * @param onClickListener 长按监听
+     */
+    public AssemblyPagerItemFactory setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener onClickListener) {
+        if (clickListenerManager == null) {
+            clickListenerManager = new PagerClickListenerManager<DATA>();
+        }
+        clickListenerManager.add(viewId, onClickListener);
+        return this;
+    }
+
+    /**
+     * 监听 item 的长按事件
+     *
+     * @param onClickListener 长按监听
+     */
+    public AssemblyPagerItemFactory setOnItemLongClickListener(@NonNull OnLongClickListener onClickListener) {
+        if (clickListenerManager == null) {
+            clickListenerManager = new PagerClickListenerManager<DATA>();
+        }
+        clickListenerManager.add(onClickListener);
+        return this;
+    }
+
     protected View dispatchCreateView(@NonNull Context context, @NonNull ViewGroup container, int position, @Nullable DATA data) {
-        return createView(context, container, position, data);
+        View itemView = createView(context, container, position, data);
+
+        if (clickListenerManager != null) {
+            clickListenerManager.register(this, itemView, position, data);
+        }
+
+        return itemView;
     }
 
     /**

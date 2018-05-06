@@ -13,10 +13,28 @@ import me.panpf.adapter.sample.bindView
 
 class UserItemFactory(context: Context) : AssemblyItemFactory<UserItemFactory.UserItem>() {
 
-    private val listener: UserItemListener
-
     init {
-        this.listener = UserItemListenerImpl(context)
+        setOnViewClickListener(R.id.image_userListItem_head) { view, position, positionInPart, data ->
+            Toast.makeText(context, "别摸我头，讨厌啦！", Toast.LENGTH_SHORT).show()
+        }
+        setOnViewClickListener(R.id.text_userListItem_name) { view, position, positionInPart, data ->
+            Toast.makeText(context, "我就叫" + (data as User).name + "，咋地不服啊！", Toast.LENGTH_SHORT).show()
+        }
+        setOnViewClickListener(R.id.text_userListItem_sex) { view, position, positionInPart, data ->
+            Toast.makeText(context, "我还就是" + (data as User).sex + "个的了，有本事你捅我啊！", Toast.LENGTH_SHORT).show()
+        }
+        setOnViewClickListener(R.id.text_userListItem_age) { view, position, positionInPart, data ->
+            val message: String = if (((data as User).sex
+                            ?: "").contains("男") || ((data as User).sex ?: "").contains("先生")) {
+                "哥今年" + (data as User).age + "岁了，该找媳妇了！"
+            } else {
+                "姐今年" + (data as User).age + "岁了，该找人嫁了！"
+            }
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+        setOnViewClickListener(R.id.text_userListItem_job) { view, position, positionInPart, data ->
+            Toast.makeText(context, "我是名光荣的" + (data as User).job, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun isTarget(data: Any?): Boolean {
@@ -35,11 +53,6 @@ class UserItemFactory(context: Context) : AssemblyItemFactory<UserItemFactory.Us
         private val jobTextView: TextView by bindView(R.id.text_userListItem_job)
 
         override fun onConfigViews(context: Context) {
-            headImageView.setOnClickListener { data?.let { it1 -> listener.onClickHead(position, it1) } }
-            nameTextView.setOnClickListener { data?.let { it1 -> listener.onClickName(position, it1) } }
-            sexTextView.setOnClickListener { data?.let { it1 -> listener.onClickSex(position, it1) } }
-            ageTextView.setOnClickListener { data?.let { it1 -> listener.onClickAge(position, it1) } }
-            jobTextView.setOnClickListener { data?.let { it1 -> listener.onClickJob(position, it1) } }
         }
 
         override fun onSetData(position: Int, user: User?) {
@@ -49,43 +62,6 @@ class UserItemFactory(context: Context) : AssemblyItemFactory<UserItemFactory.Us
             sexTextView.text = user.sex
             ageTextView.text = user.age
             jobTextView.text = user.job
-        }
-    }
-
-    interface UserItemListener {
-        fun onClickHead(position: Int, user: User)
-        fun onClickName(position: Int, user: User)
-        fun onClickSex(position: Int, user: User)
-        fun onClickAge(position: Int, user: User)
-        fun onClickJob(position: Int, user: User)
-    }
-
-    private class UserItemListenerImpl(private val context: Context) : UserItemListener {
-
-        override fun onClickHead(position: Int, user: User) {
-            Toast.makeText(context, "别摸我头，讨厌啦！", Toast.LENGTH_SHORT).show()
-        }
-
-        override fun onClickName(position: Int, user: User) {
-            Toast.makeText(context, "我就叫" + user.name + "，咋地不服啊！", Toast.LENGTH_SHORT).show()
-        }
-
-        override fun onClickSex(position: Int, user: User) {
-            Toast.makeText(context, "我还就是" + user.sex + "个的了，有本事你捅我啊！", Toast.LENGTH_SHORT).show()
-        }
-
-        override fun onClickAge(position: Int, user: User) {
-            val message: String = if ((user.sex ?: "").contains("男") || (user.sex
-                            ?: "").contains("先生")) {
-                "哥今年" + user.age + "岁了，该找媳妇了！"
-            } else {
-                "姐今年" + user.age + "岁了，该找人嫁了！"
-            }
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        }
-
-        override fun onClickJob(position: Int, user: User) {
-            Toast.makeText(context, "我是名光荣的" + user.job, Toast.LENGTH_SHORT).show()
         }
     }
 }

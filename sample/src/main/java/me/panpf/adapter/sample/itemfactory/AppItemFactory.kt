@@ -13,6 +13,7 @@ import me.panpf.sketch.uri.ApkIconUriModel
 import me.panpf.sketch.uri.AppIconUriModel
 
 class AppItemFactory : AssemblyItemFactory<AppItemFactory.AppItem>() {
+
     override fun isTarget(data: Any?): Boolean {
         return data is AppInfo
     }

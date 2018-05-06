@@ -135,7 +135,9 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
     /**
      * 专门用来配置 View，你可在在这里设置 View 的样式以及尺寸，只会执行一次
      */
-    protected abstract void onConfigViews(@NonNull Context context);
+    protected void onConfigViews(@NonNull Context context){
+
+    }
 
     /**
      * 设置数据

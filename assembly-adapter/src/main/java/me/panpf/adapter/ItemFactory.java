@@ -1,5 +1,6 @@
 package me.panpf.adapter;
 
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -64,6 +65,37 @@ public interface ItemFactory<ITEM extends Item> {
      */
     ItemFactory<ITEM>  setInRecycler(boolean inRecycler);
 
+
+
+    /**
+     * 监听指定 id 的 view 的点击事件
+     *
+     * @param viewId          view 的 id
+     * @param onClickListener 点击监听
+     */
+    ItemFactory<ITEM> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener onClickListener);
+
+    /**
+     * 监听 item 的点击事件
+     *
+     * @param onClickListener 点击监听
+     */
+    ItemFactory<ITEM> setOnItemClickListener(@NonNull OnClickListener onClickListener);
+
+    /**
+     * 监听指定 id 的 view 的长按事件
+     *
+     * @param viewId          view 的 id
+     * @param onClickListener 长按监听
+     */
+    ItemFactory<ITEM> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener onClickListener);
+
+    /**
+     * 监听 item 的长按事件
+     *
+     * @param onClickListener 长按监听
+     */
+    ItemFactory<ITEM> setOnItemLongClickListener(@NonNull OnLongClickListener onClickListener);
 
     /**
      * 匹配数据

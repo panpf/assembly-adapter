@@ -13,10 +13,16 @@ import me.panpf.adapter.sample.bindView
 
 class GameItemFactory(context: Context) : AssemblyItemFactory<GameItemFactory.GameItem>() {
 
-    private val eventListener: EventListener
-
     init {
-        this.eventListener = EventProcessor(context)
+        setOnViewClickListener(R.id.image_gameListItem_icon) { view, position, positionInPart, data ->
+            Toast.makeText(context, "瞅这游戏这臭逼样！", Toast.LENGTH_SHORT).show()
+        }
+        setOnViewClickListener(R.id.text_gameListItem_name) { view, position, positionInPart, data ->
+            Toast.makeText(context, "原来你叫" + (data as Game).name + "啊！", Toast.LENGTH_SHORT).show()
+        }
+        setOnViewClickListener(R.id.text_gameListItem_like) { view, position, positionInPart, data ->
+            Toast.makeText(context, "我也" + (data as Game).like + "这游戏！", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun isTarget(data: Any?): Boolean {
@@ -27,40 +33,12 @@ class GameItemFactory(context: Context) : AssemblyItemFactory<GameItemFactory.Ga
         return GameItem(R.layout.list_item_game, parent)
     }
 
-    interface EventListener {
-        fun onClickIcon(position: Int, user: Game)
-
-        fun onClickName(position: Int, user: Game)
-
-        fun onClickLike(position: Int, user: Game)
-    }
-
-    private class EventProcessor(private val context: Context) : EventListener {
-
-        override fun onClickIcon(position: Int, user: Game) {
-            Toast.makeText(context, "瞅这游戏这臭逼样！", Toast.LENGTH_SHORT).show()
-        }
-
-        override fun onClickName(position: Int, user: Game) {
-            Toast.makeText(context, "原来你叫" + user.name + "啊！", Toast.LENGTH_SHORT).show()
-        }
-
-        override fun onClickLike(position: Int, user: Game) {
-            Toast.makeText(context, "我也" + user.like + "这游戏！", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     inner class GameItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<Game>(itemLayoutId, parent) {
         private val iconImageView: ImageView by bindView(R.id.image_gameListItem_icon)
         private val nameTextView: TextView by bindView(R.id.text_gameListItem_name)
         private val likeTextView: TextView by bindView(R.id.text_gameListItem_like)
 
         override fun onConfigViews(context: Context) {
-            iconImageView.setOnClickListener { data?.let { it1 -> eventListener.onClickIcon(position, it1) } }
-
-            nameTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickName(position, it1) } }
-
-            likeTextView.setOnClickListener { data?.let { it1 -> eventListener.onClickLike(position, it1) } }
         }
 
         override fun onSetData(position: Int, game: Game?) {

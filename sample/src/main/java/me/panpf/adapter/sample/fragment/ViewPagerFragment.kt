@@ -27,7 +27,6 @@ class ViewPagerFragment : Fragment() {
 
         val header = Header("我是小额头呀！", "http://img4.imgtn.bdimg.com/it/u=16705507,1328875785&fm=21&gp=0.jpg")
         val dataArray = arrayOf(
-                "http://news.yzz.cn/public/images/100829/68_184435_2_lit.jpg",
                 "http://image-qzone.mamaquan.mama.cn/upload/2015/03/20/9d4e2fda0e904bcca07a_w300X405_w196X264.jpeg",
                 "http://img1.imgtn.bdimg.com/it/u=2055412405,1351161078&fm=21&gp=0.jpg",
                 Text("华丽的分割线"),

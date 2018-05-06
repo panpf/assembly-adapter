@@ -4,6 +4,7 @@ package me.panpf.adapter.sample.bean
  * App信息
  */
 class AppInfo(val isTempInstalled: Boolean) {
+    var packageName: String? = null
     var name: String? = null
     var id: String? = null
     var versionName: String? = null
