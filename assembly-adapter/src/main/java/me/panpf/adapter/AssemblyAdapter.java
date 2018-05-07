@@ -127,6 +127,23 @@ public interface AssemblyAdapter {
      */
     boolean hasMoreFooter();
 
+    /**
+     * 激活加载更多
+     */
+    void setEnabledMoreItem(boolean enabledMoreItem);
+
+    /**
+     * 加载更多完成时调用
+     *
+     * @param loadMoreEnd 全部加载完毕，为 true 会显示结束的文案并且不再触发加载更多
+     */
+    void loadMoreFinished(boolean loadMoreEnd);
+
+    /**
+     * 加载更多失败的时候调用此方法显示错误提示，并可点击重新加载
+     */
+    void loadMoreFailed();
+
 
     /* ************************ 数据列表 *************************** */
 

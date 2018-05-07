@@ -2,7 +2,7 @@
 *LoadMore* 重命名为 *More*
 *FixedItemInfo 重命名为 *ItemHolder
 
-Adapter 中删除 setDisableLoadMore(boolean)、loadMoreFinished(boolean)、loadMoreFailed() 方法，请通过 getMoreFixedItemInfo() 获取 MoreFixedItemInfo 后，通过 MoreFixedItemInfo 使用相关替代方法
+Adapter 中删除 setDisableLoadMore(boolean) 方法，新增 setEnabledMoreItem(boolean) 方法
 
 AssemblyItem.onConfigViews(Context) 现在是非 abstract 的
 
@@ -43,3 +43,11 @@ ViewItemFactory
 * 全局搜索 `import me.panpf.adapter.AssemblyFragmentPagerAdapter` 替换为 `import me.panpf.adapter.pager.AssemblyFragmentPagerAdapter`（记得勾选 'Match case' 和 'Words'）
 * 全局搜索 `private AssemblyAdapter` 替换为 `private AssemblyListAdapter`（记得勾选 'Match case'）
 * 全局搜索 `new AssemblyAdapter(` 替换为 `new AssemblyListAdapter(`（记得勾选 'Match case'）
+* 全局搜索 `FixedItemInfo` 替换为 `ItemHolder`（记得勾选 'Match case' 和 'Words'）
+* 全局搜索 `LoadMoreFixedItemInfo` 替换为 `MoreItemHolder`（记得勾选 'Match case' 和 'Words'）
+* 全局搜索 `AssemblyLoadMoreItemFactory` 替换为 `AssemblyMoreItemFactory`（记得勾选 'Match case' 和 'Words'）
+* 全局搜索 `AssemblyLoadMoreItem` 替换为 `AssemblyMoreItem`（记得勾选 'Match case' 和 'Words'）
+* 全局搜索 `public boolean isTarget(` 替换为 `public boolean match(`（记得勾选 'Match case'）
+* 全局搜索 `override fun isTarget(` 替换为 `override fun match(`（记得勾选 'Match case'）
+* 所有 ItemFactory 的泛型参数改为 DATA（跟 Item 一样）
+* 全局搜索 `.setLoadMoreItem(` 替换为 `.setMoreItem(`（记得勾选 'Match case'）

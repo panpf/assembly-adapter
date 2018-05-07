@@ -161,6 +161,21 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return storage.hasMoreFooter();
     }
 
+    @Override
+    public void setEnabledMoreItem(boolean enabledMoreItem) {
+        storage.setEnabledMoreItem(enabledMoreItem);
+    }
+
+    @Override
+    public void loadMoreFinished(boolean loadMoreEnd) {
+        storage.loadMoreFinished(loadMoreEnd);
+    }
+
+    @Override
+    public void loadMoreFailed() {
+        storage.loadMoreFailed();
+    }
+
 
     /* ************************ 数据列表 *************************** */
 

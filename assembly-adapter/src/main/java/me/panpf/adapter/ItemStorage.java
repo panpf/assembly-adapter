@@ -355,6 +355,35 @@ public class ItemStorage {
         return moreItemHolder != null && moreItemHolder.isEnabled();
     }
 
+    /**
+     * 设置禁用加载更多
+     */
+    public void setEnabledMoreItem(boolean enabledMoreItem) {
+        if (moreItemHolder != null) {
+            moreItemHolder.setEnabled(enabledMoreItem);
+        }
+    }
+
+    /**
+     * 加载更多完成时调用
+     *
+     * @param loadMoreEnd 全部加载完毕，为 true 会显示结束的文案并且不再触发加载更多
+     */
+    public void loadMoreFinished(boolean loadMoreEnd) {
+        if (moreItemHolder != null) {
+            moreItemHolder.loadMoreFinished(loadMoreEnd);
+        }
+    }
+
+    /**
+     * 加载更多失败的时候调用此方法显示错误提示，并可点击重新加载
+     */
+    public void loadMoreFailed() {
+        if (moreItemHolder != null) {
+            moreItemHolder.loadMoreFailed();
+        }
+    }
+
 
     /* ************************ 数据列表 *************************** */
 
