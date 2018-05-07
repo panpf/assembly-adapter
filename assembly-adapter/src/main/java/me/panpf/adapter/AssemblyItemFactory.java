@@ -164,8 +164,8 @@ public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
     }
 
     /**
-     * 创建 {@link Item}
+     * 创建 {@link AssemblyItem}
      */
     @NonNull
-    public abstract Item<DATA> createAssemblyItem(@NonNull ViewGroup parent);
+    public abstract AssemblyItem<DATA> createAssemblyItem(@NonNull ViewGroup parent);
 }

@@ -2,17 +2,15 @@ package me.panpf.adapter.sample.itemfactory
 
 import android.view.View
 import android.view.ViewGroup
-import me.panpf.adapter.Item
 import me.panpf.adapter.more.AssemblyMoreItem
 import me.panpf.adapter.more.AssemblyMoreItemFactory
 import me.panpf.adapter.more.OnLoadMoreListener
-
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bindView
 
 class LoadMoreItemFactory(eventListenerList: OnLoadMoreListener) : AssemblyMoreItemFactory<Int>(eventListenerList) {
 
-    override fun createAssemblyItem(parent: ViewGroup): Item<Int> {
+    override fun createAssemblyItem(parent: ViewGroup): AssemblyMoreItem<Int> {
         return LoadMoreItem(this, R.layout.list_item_load_more, parent)
     }
 

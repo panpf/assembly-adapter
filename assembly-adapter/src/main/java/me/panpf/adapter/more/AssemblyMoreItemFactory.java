@@ -19,6 +19,7 @@ package me.panpf.adapter.more;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.ViewGroup;
 
 import me.panpf.adapter.AssemblyItemFactory;
 
@@ -85,4 +86,8 @@ public abstract class AssemblyMoreItemFactory<DATA> extends AssemblyItemFactory<
         super.setInRecycler(inRecycler);
         return this;
     }
+
+    @NonNull
+    @Override
+    public abstract AssemblyMoreItem<DATA> createAssemblyItem(@NonNull ViewGroup parent);
 }
