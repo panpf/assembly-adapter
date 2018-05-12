@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+apply from: '../build_kotlin.gradle'
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()
@@ -25,13 +25,11 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:support-fragment:${SUPPORT_VERSION}"
     implementation "android.arch.lifecycle:extensions:${LIFECYCLE_VERSION}"
 
     implementation "me.panpf:pager-indicator:${PAGER_INDICATOR}"
     implementation "me.panpf:sketch:${SKETCH_VERSION}"
     implementation project(':assembly-adapter')
+    implementation project(':assembly-adapter-ktx')
 }

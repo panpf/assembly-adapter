@@ -7,9 +7,9 @@ import android.widget.TextView
 import android.widget.Toast
 import me.panpf.adapter.AssemblyItem
 import me.panpf.adapter.AssemblyItemFactory
+import me.panpf.adapter.ktx.bindView
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.User
-import me.panpf.adapter.sample.bindView
 
 class UserItemFactory(context: Context) : AssemblyItemFactory<User>() {
 

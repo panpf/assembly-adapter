@@ -1,1 +1,1 @@
-include ':sample', ':assembly-adapter'
+include ':sample', ':assembly-adapter', ':assembly-adapter-ktx'

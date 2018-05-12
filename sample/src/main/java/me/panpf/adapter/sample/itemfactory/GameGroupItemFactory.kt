@@ -5,10 +5,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import me.panpf.adapter.AssemblyItem
 import me.panpf.adapter.AssemblyItemFactory
-
+import me.panpf.adapter.ktx.bindView
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.GameGroup
-import me.panpf.adapter.sample.bindView
 
 class GameGroupItemFactory : AssemblyItemFactory<GameGroup>() {
 

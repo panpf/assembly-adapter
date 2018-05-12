@@ -17,6 +17,8 @@ AssemblyItemFactory.isTarget(Object) 重命名为 match(Object)
 
 ViewItemFactory
 
+增加 KTX
+
 升级指南：
 * 全局搜索 `AssemblyRecyclerItemFactory` 替换为 `AssemblyItemFactory`（记得勾选 'Match case' 和 'Words'）
 * 全局搜索 `AssemblyRecyclerItem` 替换为 `AssemblyItem`（记得勾选 'Match case' 和 'Words'）
@@ -51,3 +53,4 @@ ViewItemFactory
 * 全局搜索 `override fun isTarget(` 替换为 `override fun match(`（记得勾选 'Match case'）
 * 所有 ItemFactory 的泛型参数改为 DATA（跟 Item 一样）
 * 全局搜索 `.setLoadMoreItem(` 替换为 `.setMoreItem(`（记得勾选 'Match case'）
+* 所有使用 setDisableLoadMore(boolean) 方法的地方替换为 setEnabledMoreItem(boolean) 方法，注意参数值要取反
