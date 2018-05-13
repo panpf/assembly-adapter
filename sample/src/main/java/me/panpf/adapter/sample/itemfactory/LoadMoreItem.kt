@@ -36,7 +36,7 @@ class LoadMoreItem(itemFactory: Factory, itemLayoutId: Int, parent: ViewGroup)
         endView.visibility = View.VISIBLE
     }
 
-    class Factory(eventListenerList: OnLoadMoreListener) : AssemblyMoreItemFactory<Int>(eventListenerList) {
+    class Factory(listener: OnLoadMoreListener) : AssemblyMoreItemFactory<Int>(listener) {
 
         override fun createAssemblyItem(parent: ViewGroup): AssemblyMoreItem<Int> {
             return LoadMoreItem(this, R.layout.list_item_load_more, parent)

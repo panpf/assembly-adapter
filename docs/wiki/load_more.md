@@ -1,85 +1,87 @@
-使用加载更多功能
+# 加载更多
 
-首先你需要定义一个继承自 AssemblyLoadMoreItemFactory 的 ItemFactory， AssemblyLoadMoreItemFactory 已经将加载更多相关逻辑部分的代码写好了，你只需关心界面即可，如下：
+加载更多 [Item] 会始终固定显示在列表的最底部，不会受到 footer 的影响
 
-```java
-public class LoadMoreItemFactory extends AssemblyLoadMoreListItemFactory {
+### 定义
 
-    public LoadMoreListItemFactory(OnLoadMoreListener eventListener) {
-        super(eventListener);
+首先需要继承 [AssemblyMoreItem] 定义一个 [LoadMoreItem]，如下：
+
+```kotlin
+class LoadMoreItem(itemFactory: Factory, itemLayoutId: Int, parent: ViewGroup)
+    : AssemblyMoreItem<Int>(itemFactory, itemLayoutId, parent) {
+    private val loadingView: View by bindView(R.id.text_loadMoreListItem_loading)
+    private val errorView: View by bindView(R.id.text_loadMoreListItem_error)
+    private val endView: View by bindView(R.id.text_loadMoreListItem_end)
+
+    override fun getErrorRetryView(): View {
+        return errorView
     }
 
-    @Override
-    public AssemblyLoadMoreItem createAssemblyItem(ViewGroup parent) {
-        return new LoadMoreListItem(R.layout.list_item_load_more, parent);
+    override fun showLoading() {
+        loadingView.visibility = View.VISIBLE
+        errorView.visibility = View.INVISIBLE
+        endView.visibility = View.INVISIBLE
     }
 
-    public class LoadMoreItem extends AssemblyLoadMoreListItem {
-        private View loadingView;
-        private View errorView;
-        private View endView;
+    override fun showErrorRetry() {
+        loadingView.visibility = View.INVISIBLE
+        errorView.visibility = View.VISIBLE
+        endView.visibility = View.INVISIBLE
+    }
 
-        public LoadMoreListItem(int itemLayoutId, ViewGroup parent) {
-            super(itemLayoutId, parent);
-        }
-
-        @Override
-        protected void onFindViews(View itemView) {
-            loadingView = findViewById(R.id.text_loadMoreListItem_loading);
-            errorView = findViewById(R.id.text_loadMoreListItem_error);
-            endView = findViewById(R.id.text_loadMoreListItem_end);
-        }
-
-        @Override
-        public View getErrorRetryView() {
-            return errorView;
-        }
-
-        @Override
-        public void showLoading() {
-            loadingView.setVisibility(View.VISIBLE);
-            errorView.setVisibility(View.INVISIBLE);
-            endView.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        public void showErrorRetry() {
-            loadingView.setVisibility(View.INVISIBLE);
-            errorView.setVisibility(View.VISIBLE);
-            endView.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        public void showEnd() {
-            loadingView.setVisibility(View.INVISIBLE);
-            errorView.setVisibility(View.INVISIBLE);
-            endView.setVisibility(View.VISIBLE);
-        }
+    override fun showEnd() {
+        loadingView.visibility = View.INVISIBLE
+        errorView.visibility = View.INVISIBLE
+        endView.visibility = View.VISIBLE
     }
 }
 ```
 
-然后调用 Adapter 的 `setLoadMoreItem(AssemblyLoadMoreListItemFactory)` 方法设置加载更多 ItemFactory 即可，如下：
+然后继承 [AssemblyMoreItemFactory] 定义一个 [LoadMoreItemFactory]，如下：
 
-```java
-AssemblyListAdapter adapter = ...;
-adapter.setLoadMoreItem(new LoadMoreItemFactory(new OnLoadMoreListener(){
-    @Override
-    public void onLoadMore(AssemblyAdapter adapter) {
-        // 访问网络加载数据
-        ...
+```kotlin
+class LoadMoreItemFactory(listener: OnLoadMoreListener) : AssemblyMoreItemFactory<Int>(listener) {
 
-        boolean loadSuccess = ...;
-        if (loadSuccess) {
-            // 加载成功时判断是否已经全部加载完毕，然后调用Adapter的loadMoreFinished(boolean)方法设置加载更多是否结束
-            boolean loadMoreEnd = ...;
-            adapter.loadMoreFinished(loadMoreEnd);
-        } else {
-            // 加载失败时调用Adapter的loadMoreFailed()方法显示加载失败提示，用户点击失败提示则会重新触发加载更多
-            adapter.loadMoreFailed();
-        }
+    override fun createAssemblyItem(parent: ViewGroup): AssemblyMoreItem<Int> {
+        return LoadMoreItem(this, R.layout.list_item_load_more, parent)
     }
-}));
+}
 ```
 
-你还可以通过`setDisableLoadMore(boolean)`方法替代 setLoadMoreEnd(boolean) 来控制是否禁用加载更多功能，两者的区别在于 setLoadMoreEnd(boolean) 为 true 时会在列表尾部显示 end 提示，而 setDisableLoadMore(boolean) 则是完全不显示加载更多尾巴
+[AssemblyMoreItem] 和 [AssemblyMoreItemFactory] 已经将加载更多相关逻辑部分的代码写好了，你只需关心界面即可
+
+### 使用
+
+通过 [AssemblyAdapter] 的 setMoreItem(MoreItemFactory) 方法设置 [ItemFactory] 即可，如下：
+
+```kotlin
+val adapter = AssemblyRecyclerAdapter()
+adapter.setMoreItem(LoadMoreItemFactory(OnLoadMoreListener { adapter ->
+  // 加载数据
+  ...
+
+  val loadSuccess: Boolean = ...
+  if (loadSuccess) {
+      val loadMoreEnd: Boolean = ...
+      adapter.loadMoreFinished(loadMoreEnd)
+  } else {
+      adapter.loadMoreFailed()
+  }
+}))
+```
+
+### 禁用
+
+还可以通过 [AssemblyAdapter] 的 setEnabledMoreItem(boolean) 方法禁用加载更多功能，与 loadMoreFinished(boolean) 的区别在于后者 为 true 时会在列表尾部显示 end 提示，而前者则是完全不显示加载更多尾巴
+
+
+[AssemblyAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
+
+[ItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ItemFactory.java
+[Item]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/Item.java
+
+[AssemblyMoreItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItemFactory.java
+[AssemblyMoreItem]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItem.java
+
+[LoadMoreItemFactory]: https://github.com/panpf/assembly-adapter/blob/develop/sample/src/main/java/me/panpf/adapter/sample/itemfactory/LoadMoreItemFactory.kt
+[LoadMoreItem]: https://github.com/panpf/assembly-adapter/blob/develop/sample/src/main/java/me/panpf/adapter/sample/itemfactory/LoadMoreItem.kt

@@ -44,15 +44,15 @@
 ### 2. 新功能
 
 #### 2.1 通用
-* 新增通用的 view [ItemFactory]，可快速在列表中显示一个 view 或布局，省去自定义 [ItemFactory] 的成本，详情请参见
-* [ItemFactory] 和 [AssemblyPagerItemFactory] 新增四种点击监听设置方法，可对 item 或某个 view 的点击设置监听，省去在 [ItemFactory] 中定义监听并执行回调的成本，详情请参见
+* 新增通用的 view [ItemFactory]，可快速在列表中显示一个 view 或布局，省去自定义 [ItemFactory] 的成本，详情请参见 [使用 ViewItemFactory][view_item_factory]
+* [ItemFactory] 和 [AssemblyPagerItemFactory] 新增四种点击监听设置方法，可对 item 或某个 view 的点击设置监听，省去在 [ItemFactory] 中定义监听并执行回调的成本
 
 ### 2.2 RecyclerView
-* 新增 [AssemblyRecyclerLinerDivider] 可定制头和尾巴不显示分割线
-* 新增 [AssemblyGridLayoutManager] 类搭配 [ItemFactory] 的 setSpanSize(int) 和 fullSpan() 方法方便的控制占多少列
+* 新增 [AssemblyRecyclerLinerDivider] 可定制头和尾巴不显示分割线 
+* 新增 [AssemblyGridLayoutManager] 类搭配 [ItemFactory] 的 setSpanSize(int) 和 fullSpan() 方法方便的控制占多少列，详情请参见 [在 RecyclerView 的 GridLayoutManager 中一个 Item 独占一行或任意列][grid_span]
 
 #### 2.3 Kotlin 支持
-* 新增 assembly-adapter-ktx 模块，提供了 [Item] 的 bindview 功能，详情请参见
+* 新增 assembly-adapter-ktx 模块，提供了 [Item] 的 bindview 功能，详情请参见 [在 Kotlin 中使用 bindview][ktx]
 
 [AssemblyAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
 [AssemblyListAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyListAdapter.java
@@ -80,3 +80,9 @@
 [AssemblyGridLayoutManager]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyGridLayoutManager.java
 
 [ViewItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ViewItemFactory.java
+
+[header_footer]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/header_footer.md
+[grid_span]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/grid_span.md
+[load_more]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/load_more.md
+[ktx]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/ktx.md
+[view_item_factory]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/view_item_factory.md

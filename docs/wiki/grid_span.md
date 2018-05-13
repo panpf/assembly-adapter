@@ -1,42 +1,41 @@
-在 RecyclerView 的 GridLayoutManager 中一个 Item 独占一行或任意列
+# Span Size
 
-通过 RecyclerView 的 GridLayoutManager 我们可以很轻松的实现网格列表，同时 GridLayoutManager 还为我们提供了 SpanSizeLookup 接口，可以让我们指定哪一个 Item 需要独占一行或多列，AssemblyRecyclerAdapter 自然对如此重要的功能也做了封装，让你可以更方便的使用它
+[RecyclerView] 的 [GridLayoutManager] 和 [StaggeredGridLayoutManager] 支持让一个 item 横跨多列显示，但 api 使用起来较为复杂，[AssemblyAdapter] 将相应 api 进行了封装使用起来更方便
 
-首先注册 SpanSizeLookup，并通过 AssemblyRecyclerAdapter 的 getSpanSize(int) 方法获取每一个位置的 Item 的 SpanSize：
+### GridLayoutManager
 
-```java
-GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
-gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-    @Override
-    public int getSpanSize(int position) {
-        RecyclerView.Adapter adapter = recyclerView.getAdapter();
-        if (adapter == null || !(adapter instanceof AssemblyRecyclerAdapter)) {
-            return 1;
-        }
-        return ((AssemblyRecyclerAdapter) adapter).getSpanSize(position);
-    }
-});
-recyclerView.setLayoutManager(gridLayoutManager);
-```
+```kotlin
+val recyclerView: RecyclerView = ...
 
-然后创建 AssemblyRecyclerAdapter、添加 ItemFactory 并设置 SpanSize
+// AssemblyGridLayoutManager 会自动从 ItemFactory 中读取 span size 并应用
+recyclerView.layoutManager = AssemblyGridLayoutManager(context, 3, recyclerView)
 
-```java
-AssemblyRecyclerAdapter adapter = new AssemblyRecyclerAdapter(dataList);
-adapter.addItemFactory(new AppListHeaderItemFactory().setSpanSize(4));
+val adapter = AssemblyRecyclerAdapter(dataList).apply {
+    // 手动设置横跨多少列显示
+    addItemFactory(UserItem.Factory().setSpanSize(3))
+
+    // 或者通过 fullSpan(RecyclerView) 方法自动从 GridLayoutManager 获取 span count
+    addItemFactory(UserItem.Factory().fullSpan(recyclerView))
+}
 
 recyclerView.setAdapter(adapter);
 ```
 
-AppListHeaderItemFactory 继承自 AssemblyRecyclerItemFactory 因此其拥有 setSpanSize(int) 方法
+### StaggeredGridLayoutManager
 
-你也可以直接使用 fullSpan(RecyclerView) 方法设置独占一行，fullSpan 方法会通过 RecyclerView 取出其GridLayoutManager 的 SpanCount 作为 SpanSize
+```kotlin
+val recyclerView: RecyclerView = ...
 
-```java
-AssemblyRecyclerAdapter adapter = new AssemblyRecyclerAdapter(dataList);
-adapter.addItemFactory(new AppListHeaderItemFactory().fullSpan(recyclerView));
+val adapter = AssemblyRecyclerAdapter(dataList).apply {
+    // StaggeredGridLayoutManager 只能设置充满
+    addItemFactory(UserItem.Factory().fullSpan(recyclerView))
+}
 
 recyclerView.setAdapter(adapter);
 ```
 
-fullSpan() 方法如果检测到 RecyclerView 的 LayoutManager 是 StaggeredGridLayoutManager 的话，还会自动为 Item 设置 setFullSpan(true)，好让 Item 在 StaggeredGridLayoutManager 中可以独占一行
+
+[RecyclerView]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView
+[GridLayoutManager]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/GridLayoutManager
+[StaggeredGridLayoutManager]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/StaggeredGridLayoutManager
+[AssemblyAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java

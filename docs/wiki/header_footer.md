@@ -1,34 +1,60 @@
-使用 header 和 footer
+# header 和 footer
 
-所有 Adapter 均支持添加 header 和 footer，可以方便的固定显示内容在列表的头部或尾部，更重要的意义在于可以让 GridView、RecyclerView 等也支持 header 和 footer
+在日常的开发中我们也有很多的场景需要使用 header 和 footer，但现在 Android 官方提供的 API 中只有 [ListView] 支持 header 和 footer，而借助 [AssemblyAdapter] 可以让 [GridView]、[Spinner]、[Gallery]、[RecyclerView]、[ExpandableListView]、[ViewPager] 也支持 header 和 footer
 
-##### 添加 header、footer
+### 添加 header、footer
 
-首先定义好一个用于 header 或 footer 的 ItemFactory
+用于 header 和 footer 的 [Item] 同用于列表数据的 [Item] 并没有什么区别，因此先参考 [README] 中的介绍定义好一对 [Item] 和 [ItemFactory]
 
-然后调用 `addHeaderItem(AssemblyItemFactory, Object)` 或 `addFooterItem(AssemblyItemFactory, Object)` 方法添加即可，如下：
-```java
-AssemblyListAdapter adapter = new AssemblyListAdapter(objects);
+然后通过 [AssemblyAdapter] 的 `addHeaderItem(ItemFactory, Object)` 或 `addFooterItem(ItemFactory, Object)` 方法添加到 Adapter 中即可，如下：
 
-adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
-...
-adapter.addFooterItem(new HeaderItemFactory(), "我是小尾巴呀！");
+```kotlin
+val adapter = AssemblyRecyclerAdapter(objects).apply {
+  addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
+  addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
+}
 ```
 
-addHeaderItem(AssemblyItemFactory, Object) 和 addFooterItem(AssemblyItemFactory, Object) 的第二个参数是 Item 需要的数据，直接传进去即可
+addHeaderItem(ItemFactory, Object) 和 addFooterItem(ItemFactory, Object) 的第二个参数是 [Item] 需要的数据，直接传进去即可
 
-##### 隐藏或显示header、footer
-addHeaderItem() 或 addFooterItem() 都会返回一个用于控制 header 或 footer 的 FixedItemInfo 对象，如下：
-```java
-AssemblyAdapter adapter = new AssemblyAdapter(objects);
+### 隐藏或显示 header、footer
 
-FixedItemInfo userFixedItemInfo = adapter.addHeaderItem(new HeaderItemFactory(), "我是小额头呀！");
+addHeaderItem() 或 addFooterItem() 都会返回一个用于控制 header 或 footer 的 [ItemHolder]，你可以通过 [ItemHolder] 显示或隐藏 header、footer，如下：
+
+```kotlin
+val adapter = AssemblyRecyclerAdapter(objects)
+
+ItemHolder userItemHolder = adapter.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
 
 // 隐藏
-userFixedItemInfo.setEnabled(false);
+userItemHolder.enabled = false
 
 // 显示
-userFixedItemInfo.setEnabled(true);
+userItemHolder.enabled = true
 ```
 
-由于有了 header 和 footer 那么 Item.getPosition() 方法得到的位置就是 Item 在 Adapter 中的位置，要想得到其在所属部分的真实位置可通过 Adapter 的 `getPositionInPart(int)` 获取
+### 更新 header、footer 的数据
+
+```kotlin
+val adapter = AssemblyRecyclerAdapter(objects)
+
+ItemHolder userItemHolder = adapter.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
+
+// 刷新数据
+userItemHolder.data = "我是新的小额头呀！"
+```
+
+[AssemblyAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
+
+[ItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ItemFactory.java
+[Item]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/Item.java
+[ItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ItemHolder.java
+
+[ExpandableListView]: https://developer.android.google.cn/reference/android/widget/ExpandableListView
+[GridView]: https://developer.android.google.cn/reference/android/widget/GridView
+[ListView]: https://developer.android.google.cn/reference/android/widget/ListView
+[Spinner]: https://developer.android.google.cn/reference/android/widget/Spinner
+[Gallery]: https://developer.android.google.cn/reference/android/widget/Gallery
+[RecyclerView]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView
+[ViewPager]: https://developer.android.google.cn/reference/androidx/viewpager/widget/ViewPager
+[README]: ../../README.md
