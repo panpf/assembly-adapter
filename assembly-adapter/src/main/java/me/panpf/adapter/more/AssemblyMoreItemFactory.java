@@ -22,6 +22,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import me.panpf.adapter.AssemblyItemFactory;
+import me.panpf.adapter.OnClickListener;
+import me.panpf.adapter.OnLongClickListener;
 
 /**
  * 加载更多专用 {@link AssemblyItemFactory}
@@ -90,4 +92,28 @@ public abstract class AssemblyMoreItemFactory<DATA> extends AssemblyItemFactory<
     @NonNull
     @Override
     public abstract AssemblyMoreItem<DATA> createAssemblyItem(@NonNull ViewGroup parent);
+
+    @Override
+    public AssemblyMoreItemFactory<DATA> setOnViewClickListener(int viewId, @NonNull OnClickListener<DATA> onClickListener) {
+        super.setOnViewClickListener(viewId, onClickListener);
+        return this;
+    }
+
+    @Override
+    public AssemblyMoreItemFactory<DATA> setOnItemClickListener(@NonNull OnClickListener<DATA> onClickListener) {
+        super.setOnItemClickListener(onClickListener);
+        return this;
+    }
+
+    @Override
+    public AssemblyMoreItemFactory<DATA> setOnViewLongClickListener(int viewId, @NonNull OnLongClickListener<DATA> onClickListener) {
+        super.setOnViewLongClickListener(viewId, onClickListener);
+        return this;
+    }
+
+    @Override
+    public AssemblyMoreItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener) {
+        super.setOnItemLongClickListener(onClickListener);
+        return this;
+    }
 }

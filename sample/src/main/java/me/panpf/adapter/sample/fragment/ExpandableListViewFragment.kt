@@ -132,15 +132,15 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = AssemblyExpandableAdapter(objects)
 
-                    headerItemHolder = adapter!!.addHeaderItem(HeaderGroupItemFactory(), "我是小额头呀！")
-                    headerItemHolder2 = adapter!!.addHeaderItem(HeaderGroupItemFactory(), "唉，我的小额头呢？")
-                    adapter!!.addGroupItemFactory(GameGroupItemFactory())
-                    adapter!!.addGroupItemFactory(UserGroupItemFactory())
-                    adapter!!.addChildItemFactory(GameChildItemFactory(context))
-                    adapter!!.addChildItemFactory(UserChildItemFactory(context))
-                    adapter!!.setMoreItem(LoadMoreItemFactory(this))
-                    footerItemHolder = adapter!!.addFooterItem(HeaderGroupItemFactory(), "我是小尾巴呀！")
-                    footerItemHolder2 = adapter!!.addFooterItem(HeaderGroupItemFactory(), "唉，我的小尾巴呢？")
+                    headerItemHolder = adapter!!.addHeaderItem(HeaderGroupItem.Factory(), "我是小额头呀！")
+                    headerItemHolder2 = adapter!!.addHeaderItem(HeaderGroupItem.Factory(), "唉，我的小额头呢？")
+                    adapter!!.addGroupItemFactory(GameGroupItem.Factory())
+                    adapter!!.addGroupItemFactory(UserGroupItem.Factory())
+                    adapter!!.addChildItemFactory(GameChildItem.Factory())
+                    adapter!!.addChildItemFactory(UserChildItem.Factory())
+                    adapter!!.setMoreItem(LoadMoreItem.Factory(this))
+                    footerItemHolder = adapter!!.addFooterItem(HeaderGroupItem.Factory(), "我是小尾巴呀！")
+                    footerItemHolder2 = adapter!!.addFooterItem(HeaderGroupItem.Factory(), "唉，我的小尾巴呢？")
 
                     listView.setAdapter(adapter)
                 } else {

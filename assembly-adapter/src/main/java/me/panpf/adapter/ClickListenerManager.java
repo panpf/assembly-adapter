@@ -45,7 +45,7 @@ public class ClickListenerManager<DATA> {
                         int position = item.getAdapterPosition();
                         AssemblyAdapter adapter = itemFactory.getAdapter();
                         int positionInPart = adapter != null ? adapter.getPositionInPart(position) : position;
-                        clickListenerHolder.getListener().onViewClick(v, position, positionInPart, item.getData());
+                        clickListenerHolder.getListener().onViewClick(v.getContext(), v, position, positionInPart, item.getData());
                     }
                 });
             } else if (holder instanceof LongClickListenerHolder) {
@@ -64,7 +64,7 @@ public class ClickListenerManager<DATA> {
                         int position = item.getAdapterPosition();
                         AssemblyAdapter adapter = itemFactory.getAdapter();
                         int positionInPart = adapter != null ? adapter.getPositionInPart(position) : position;
-                        return longClickListenerHolder.getListener().onViewLongClick(v, position, positionInPart, item.getData());
+                        return longClickListenerHolder.getListener().onViewLongClick(v.getContext(), v, position, positionInPart, item.getData());
                     }
                 });
             }

@@ -16,10 +16,10 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.bindView
-import me.panpf.adapter.sample.itemfactory.GameItemFactory
-import me.panpf.adapter.sample.itemfactory.HeaderItemFactory
-import me.panpf.adapter.sample.itemfactory.LoadMoreItemFactory
-import me.panpf.adapter.sample.itemfactory.UserItemFactory
+import me.panpf.adapter.sample.itemfactory.GameItem
+import me.panpf.adapter.sample.itemfactory.HeaderItem
+import me.panpf.adapter.sample.itemfactory.LoadMoreItem
+import me.panpf.adapter.sample.itemfactory.UserItem
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -108,13 +108,13 @@ class RecyclerViewFragment : Fragment(), OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = AssemblyRecyclerAdapter(objects)
 
-                    headerItemHolder = adapter!!.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
-                    headerItemHolder2 = adapter!!.addHeaderItem(HeaderItemFactory(), "唉，我的小额头呢？")
-                    adapter!!.addItemFactory(UserItemFactory(appContext))
-                    adapter!!.addItemFactory(GameItemFactory(appContext))
-                    footerItemHolder = adapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
-                    footerItemHolder2 = adapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢？")
-                    adapter!!.setMoreItem(LoadMoreItemFactory(fragment))
+                    headerItemHolder = adapter!!.addHeaderItem(HeaderItem.Factory(), "我是小额头呀！")
+                    headerItemHolder2 = adapter!!.addHeaderItem(HeaderItem.Factory(), "唉，我的小额头呢？")
+                    adapter!!.addItemFactory(UserItem.Factory())
+                    adapter!!.addItemFactory(GameItem.Factory())
+                    footerItemHolder = adapter!!.addFooterItem(HeaderItem.Factory(), "我是小尾巴呀！")
+                    footerItemHolder2 = adapter!!.addFooterItem(HeaderItem.Factory(), "唉，我的小尾巴呢？")
+                    adapter!!.setMoreItem(LoadMoreItem.Factory(fragment))
 
                     recyclerView.adapter = adapter
                 } else {

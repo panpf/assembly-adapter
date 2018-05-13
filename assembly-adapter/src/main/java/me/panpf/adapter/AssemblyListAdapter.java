@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.AssemblyMoreItemFactory;
+import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
 /**
@@ -140,13 +140,13 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.setMoreItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
         return storage.setMoreItem(itemFactory);
     }
 

@@ -52,7 +52,7 @@ public class PagerClickListenerManager<DATA> {
                 targetView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickListenerHolder.getListener().onViewClick(v, (Integer) v.getTag(R.id.aa_item_position),
+                        clickListenerHolder.getListener().onViewClick(v.getContext(), v, (Integer) v.getTag(R.id.aa_item_position),
                                 (Integer) v.getTag(R.id.aa_item_position_in_port), (DATA) v.getTag(R.id.aa_item_data));
                     }
                 });
@@ -73,7 +73,7 @@ public class PagerClickListenerManager<DATA> {
                 targetView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        return longClickListenerHolder.getListener().onViewLongClick(v, (Integer) v.getTag(R.id.aa_item_position),
+                        return longClickListenerHolder.getListener().onViewLongClick(v.getContext(), v, (Integer) v.getTag(R.id.aa_item_position),
                                 (Integer) v.getTag(R.id.aa_item_position_in_port), (DATA) v.getTag(R.id.aa_item_data));
                     }
                 });

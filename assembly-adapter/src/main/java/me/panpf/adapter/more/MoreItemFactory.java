@@ -16,9 +16,38 @@
 
 package me.panpf.adapter.more;
 
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+
 import me.panpf.adapter.ItemFactory;
+import me.panpf.adapter.OnClickListener;
+import me.panpf.adapter.OnLongClickListener;
 
 public interface MoreItemFactory<DATA> extends ItemFactory<DATA> {
+
+    @NonNull
+    @Override
+    MoreItemFactory<DATA> setSpanSize(int spanSize);
+
+    @NonNull
+    @Override
+    MoreItemFactory<DATA> fullSpan(@NonNull RecyclerView recyclerView);
+
+    @Override
+    MoreItemFactory<DATA> setInRecycler(boolean inRecycler);
+
+    @Override
+    MoreItemFactory<DATA> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener);
+
+    @Override
+    MoreItemFactory<DATA> setOnItemClickListener(@NonNull OnClickListener<DATA> onClickListener);
+
+    @Override
+    MoreItemFactory<DATA> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener);
+
+    @Override
+    MoreItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener);
 
     /**
      * 加载更多完成

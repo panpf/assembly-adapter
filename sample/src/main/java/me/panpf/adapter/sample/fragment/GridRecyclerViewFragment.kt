@@ -13,14 +13,13 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import me.panpf.adapter.AssemblyRecyclerAdapter
 import me.panpf.adapter.recycler.AssemblyGridLayoutManager
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.AppInfo
 import me.panpf.adapter.sample.bindView
-import me.panpf.adapter.sample.itemfactory.AppItemFactory
-import me.panpf.adapter.sample.itemfactory.AppListHeaderItemFactory
+import me.panpf.adapter.sample.itemfactory.AppItem
+import me.panpf.adapter.sample.itemfactory.AppListHeaderItem
 import java.io.File
 import java.util.*
 
@@ -40,15 +39,8 @@ class GridRecyclerViewFragment : Fragment() {
         recyclerView.layoutManager = AssemblyGridLayoutManager(context, 3, recyclerView)
 
         val adapter = AssemblyRecyclerAdapter().apply {
-            addItemFactory(AppItemFactory().setOnItemClickListener { view, position, positionInPart, data ->
-                val launchIntent = context.packageManager.getLaunchIntentForPackage(data?.packageName)
-                if (launchIntent != null) {
-                    startActivity(launchIntent)
-                } else {
-                    Toast.makeText(context, "无法启动 ${data?.name}", Toast.LENGTH_LONG).show()
-                }
-            })
-            addItemFactory(AppListHeaderItemFactory().fullSpan(recyclerView))
+            addItemFactory(AppItem.Factory())
+            addItemFactory(AppListHeaderItem.Factory().fullSpan(recyclerView))
         }
         recyclerView.adapter = adapter
 

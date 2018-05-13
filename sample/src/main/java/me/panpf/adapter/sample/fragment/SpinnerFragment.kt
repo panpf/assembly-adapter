@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Spinner
 import me.panpf.adapter.AssemblyListAdapter
 import me.panpf.adapter.sample.R
-import me.panpf.adapter.sample.itemfactory.SpinnerItemFactory
 import me.panpf.adapter.sample.bindView
+import me.panpf.adapter.sample.itemfactory.SpinnerItem
 import java.util.*
 
 class SpinnerFragment : Fragment() {
@@ -36,7 +36,7 @@ class SpinnerFragment : Fragment() {
         stringList.add("10")
 
         val adapter = AssemblyListAdapter(stringList)
-        adapter.addItemFactory(SpinnerItemFactory())
+        adapter.addItemFactory(SpinnerItem.Factory())
         spinner.adapter = adapter
     }
 }

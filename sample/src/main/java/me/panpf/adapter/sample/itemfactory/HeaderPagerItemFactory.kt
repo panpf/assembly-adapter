@@ -15,8 +15,8 @@ import me.panpf.sketch.SketchImageView
 class HeaderPagerItemFactory : AssemblyPagerItemFactory<Header>() {
 
     init {
-        setOnViewClickListener(R.id.text_headerImageFragment) { view, position, positionInPart, data ->
-            Toast.makeText(view.context, "你戳我干嘛！", Toast.LENGTH_SHORT).show()
+        setOnViewClickListener(R.id.text_headerImageFragment) {context, view, position, positionInPart, data ->
+            Toast.makeText(context, "你戳我干嘛！", Toast.LENGTH_SHORT).show()
         }
     }
 

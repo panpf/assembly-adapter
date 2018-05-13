@@ -15,10 +15,10 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.bindView
-import me.panpf.adapter.sample.itemfactory.GameItemFactory
-import me.panpf.adapter.sample.itemfactory.HeaderItemFactory
-import me.panpf.adapter.sample.itemfactory.LoadMoreItemFactory
-import me.panpf.adapter.sample.itemfactory.UserItemFactory
+import me.panpf.adapter.sample.itemfactory.GameItem
+import me.panpf.adapter.sample.itemfactory.HeaderItem
+import me.panpf.adapter.sample.itemfactory.LoadMoreItem
+import me.panpf.adapter.sample.itemfactory.UserItem
 import java.util.*
 
 class ListViewFragment : Fragment(), OnLoadMoreListener {
@@ -97,13 +97,13 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
                 if (listAdapter == null) {
                     listAdapter = AssemblyListAdapter(objects)
 
-                    headerListItemHolder = listAdapter!!.addHeaderItem(HeaderItemFactory(), "我是小额头呀！")
-                    headerListItemHolder2 = listAdapter!!.addHeaderItem(HeaderItemFactory(), "唉，我的小额头呢！")
-                    listAdapter!!.addItemFactory(UserItemFactory(appContext))
-                    listAdapter!!.addItemFactory(GameItemFactory(appContext))
-                    footerListItemHolder = listAdapter!!.addFooterItem(HeaderItemFactory(), "我是小尾巴呀！")
-                    footerListItemHolder2 = listAdapter!!.addFooterItem(HeaderItemFactory(), "唉，我的小尾巴呢！")
-                    listAdapter!!.setMoreItem(LoadMoreItemFactory(this@ListViewFragment))
+                    headerListItemHolder = listAdapter!!.addHeaderItem(HeaderItem.Factory(), "我是小额头呀！")
+                    headerListItemHolder2 = listAdapter!!.addHeaderItem(HeaderItem.Factory(), "唉，我的小额头呢！")
+                    listAdapter!!.addItemFactory(UserItem.Factory())
+                    listAdapter!!.addItemFactory(GameItem.Factory())
+                    footerListItemHolder = listAdapter!!.addFooterItem(HeaderItem.Factory(), "我是小尾巴呀！")
+                    footerListItemHolder2 = listAdapter!!.addFooterItem(HeaderItem.Factory(), "唉，我的小尾巴呢！")
+                    listAdapter!!.setMoreItem(LoadMoreItem.Factory(this@ListViewFragment))
 
                     listView.adapter = listAdapter
                 } else {

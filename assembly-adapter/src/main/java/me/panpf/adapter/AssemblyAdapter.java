@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.AssemblyMoreItemFactory;
+import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
 /**
@@ -111,13 +111,13 @@ public interface AssemblyAdapter {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory, @Nullable DATA data);
+    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     /**
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull AssemblyMoreItemFactory<DATA> itemFactory);
+    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory);
 
     @Nullable
     MoreItemHolder getMoreItemHolder();
