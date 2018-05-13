@@ -19,7 +19,7 @@ public class AssemblySpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
     @Override
     public int getSpanSize(int position) {
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
-        if (adapter != null && adapter instanceof AssemblyAdapter) {
+        if (adapter instanceof AssemblyAdapter) {
             return ((AssemblyAdapter) adapter).getSpanSize(position);
         }
         return 1;

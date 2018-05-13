@@ -19,11 +19,11 @@ public interface AssemblyAdapter {
     /* ************************ 数据 ItemFactory *************************** */
 
     /**
-     * 添加一个用来处理并显示 dataList 中的数据的 {@link AssemblyItemFactory}
+     * 添加一个用来处理并显示 dataList 中的数据的 {@link ItemFactory}
      *
      * @param itemFactory 用来匹配并根据数据创建 item view
      */
-    <DATA> void addItemFactory(@NonNull AssemblyItemFactory<DATA> itemFactory);
+    <DATA> void addItemFactory(@NonNull ItemFactory<DATA> itemFactory);
 
     /**
      * 获取数据  {@link ItemFactory} 列表
@@ -40,16 +40,16 @@ public interface AssemblyAdapter {
     /* ************************ 头部 ItemFactory *************************** */
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
+     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
      */
     @NonNull
-    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data);
+    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyItemFactory}
+     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
      */
     @NonNull
-    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory);
+    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory);
 
     /**
      * 获取 header 列表
@@ -74,16 +74,16 @@ public interface AssemblyAdapter {
     /* ************************ 尾巴 ItemFactory *************************** */
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
+     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
      */
     @NonNull
-    <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data);
+    <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyItemFactory}
+     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
      */
     @NonNull
-    <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory);
+    <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory);
 
     /**
      * 获取 footer 列表

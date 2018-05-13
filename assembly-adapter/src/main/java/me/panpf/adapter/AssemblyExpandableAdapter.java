@@ -60,15 +60,15 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     /* ************************ 数据 ItemFactory *************************** */
 
     @Override
-    public <DATA> void addItemFactory(@NonNull AssemblyItemFactory<DATA> itemFactory) {
+    public <DATA> void addItemFactory(@NonNull ItemFactory<DATA> itemFactory) {
         storage.addItemFactory(itemFactory);
     }
 
-    public <DATA> void addGroupItemFactory(@NonNull AssemblyItemFactory<DATA> groupItemFactory) {
+    public <DATA> void addGroupItemFactory(@NonNull ItemFactory<DATA> groupItemFactory) {
         storage.addItemFactory(groupItemFactory);
     }
 
-    public <DATA> void addChildItemFactory(@NonNull AssemblyItemFactory<DATA> childItemFactory) {
+    public <DATA> void addChildItemFactory(@NonNull ItemFactory<DATA> childItemFactory) {
         storage.addChildItemFactory(childItemFactory);
     }
 
@@ -112,13 +112,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.addHeaderItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
         return storage.addHeaderItem(itemFactory);
     }
 
@@ -143,13 +143,13 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.addFooterItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
         return storage.addHeaderItem(itemFactory);
     }
 
@@ -379,8 +379,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     private Item createGroupItem(ViewGroup parent, int viewType) {
         @Nullable
         Object itemObject = storage.getItemFactoryByViewType(viewType);
-        if (itemObject instanceof AssemblyItemFactory) {
-            AssemblyItemFactory itemFactory = (AssemblyItemFactory) itemObject;
+        if (itemObject instanceof ItemFactory) {
+            ItemFactory itemFactory = (ItemFactory) itemObject;
             return itemFactory.dispatchCreateItem(parent);
         } else if (itemObject instanceof ItemHolder) {
             ItemHolder itemHolder = (ItemHolder) itemObject;
@@ -415,8 +415,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     private Item createChildItem(ViewGroup parent, int viewType) {
         @Nullable
         Object itemObject = storage.getChildItemFactoryByViewType(viewType);
-        if (itemObject instanceof AssemblyItemFactory) {
-            AssemblyItemFactory itemFactory = (AssemblyItemFactory) itemObject;
+        if (itemObject instanceof ItemFactory) {
+            ItemFactory itemFactory = (ItemFactory) itemObject;
             return itemFactory.dispatchCreateItem(parent);
         } else {
             throw new IllegalStateException(String.format("Unknown childViewType: %d, itemFactory: %s",

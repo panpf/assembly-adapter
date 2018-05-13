@@ -3,7 +3,7 @@
 package me.panpf.adapter.ktx
 
 import android.view.View
-import me.panpf.adapter.AssemblyItem
+import me.panpf.adapter.Item
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -41,17 +41,17 @@ private class Lazy<T, V>(private val initializer: (T, KProperty<*>) -> V) : Read
 }
 
 
-public fun <V : View> AssemblyItem<*>.bindView(id: Int)
-        : ReadOnlyProperty<AssemblyItem<*>, V> = required(id, viewFinder)
+public fun <V : View> Item<*>.bindView(id: Int)
+        : ReadOnlyProperty<Item<*>, V> = required(id, viewFinder)
 
-public fun <V : View> AssemblyItem<*>.bindViews(vararg id: Int)
-        : ReadOnlyProperty<AssemblyItem<*>, List<V>> = required(id, viewFinder)
+public fun <V : View> Item<*>.bindViews(vararg id: Int)
+        : ReadOnlyProperty<Item<*>, List<V>> = required(id, viewFinder)
 
-public fun <V : View> AssemblyItem<*>.bindOptionalView(id: Int)
-        : ReadOnlyProperty<AssemblyItem<*>, V?> = optional(id, viewFinder)
+public fun <V : View> Item<*>.bindOptionalView(id: Int)
+        : ReadOnlyProperty<Item<*>, V?> = optional(id, viewFinder)
 
-public fun <V : View> AssemblyItem<*>.bindOptionalViews(vararg id: Int)
-        : ReadOnlyProperty<AssemblyItem<*>, List<V>> = optional(id, viewFinder)
+public fun <V : View> Item<*>.bindOptionalViews(vararg id: Int)
+        : ReadOnlyProperty<Item<*>, List<V>> = optional(id, viewFinder)
 
-private val AssemblyItem<*>.viewFinder: AssemblyItem<*>.(Int) -> View?
+private val Item<*>.viewFinder: Item<*>.(Int) -> View?
     get() = { itemView.findViewById(it) }

@@ -37,7 +37,7 @@ class GridRecyclerViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val context = context ?: return
-        recyclerView.layoutManager = AssemblyGridLayoutManager(context, 4, recyclerView)
+        recyclerView.layoutManager = AssemblyGridLayoutManager(context, 3, recyclerView)
 
         val adapter = AssemblyRecyclerAdapter().apply {
             addItemFactory(AppItemFactory().setOnItemClickListener { view, position, positionInPart, data ->

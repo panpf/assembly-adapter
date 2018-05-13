@@ -138,13 +138,9 @@ public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
 
         if (fullSpanInStaggeredGrid) {
             ViewGroup.LayoutParams layoutParams = item.getItemView().getLayoutParams();
-            if (layoutParams != null && layoutParams instanceof RecyclerView.LayoutParams) {
-                RecyclerView.LayoutParams recyclerLayoutParams = (RecyclerView.LayoutParams) item.getItemView().getLayoutParams();
-                if (recyclerLayoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
-                    StaggeredGridLayoutManager.LayoutParams staggeredGridLayoutParams = (StaggeredGridLayoutManager.LayoutParams) recyclerLayoutParams;
-                    staggeredGridLayoutParams.setFullSpan(true);
-                    item.getItemView().setLayoutParams(recyclerLayoutParams);
-                }
+            if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
+                item.getItemView().setLayoutParams(layoutParams);
             }
         }
 

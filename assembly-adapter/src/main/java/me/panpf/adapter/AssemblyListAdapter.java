@@ -56,7 +56,7 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     /* ************************ 数据 ItemFactory *************************** */
 
     @Override
-    public <DATA> void addItemFactory(@NonNull AssemblyItemFactory<DATA> itemFactory) {
+    public <DATA> void addItemFactory(@NonNull ItemFactory<DATA> itemFactory) {
         storage.addItemFactory(itemFactory);
     }
 
@@ -76,13 +76,13 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.addHeaderItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull AssemblyItemFactory<DATA> itemFactory) {
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
         return storage.addHeaderItem(itemFactory);
     }
 
@@ -108,13 +108,13 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return storage.addFooterItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull AssemblyItemFactory<DATA> itemFactory) {
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
         return storage.addFooterItem(itemFactory);
     }
 
