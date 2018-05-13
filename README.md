@@ -6,7 +6,7 @@
 [![Android Arsenal][android_arsenal_icon]][android_arsenal_link]
 [![License][license_image]][license_link]
 
-AssemblyAdapter 是一个 Adapter 库，有了它你就不用再写 Adapter 了，支持组合式多类型 Item、支持添加 header 和 footer、支持加载更多
+[AssemblyAdapter] 是一个 Adapter 库，有了它你就不用再写 Adapter 了，支持组合式多类型 [Item]、支持添加 header 和 footer、支持加载更多
 
 ## 特性
 
@@ -36,14 +36,14 @@ dependencies {
 
 |Adapter|父类|适用于|支持功能|
 |:---|:---|:---|:---|
-|[AssemblyListAdapter]|[BaseAdapter]|[ListView]、[GridView]、[Spinner]、[Gallery]|多 Item、header 和 footer、加载更多|
-|[AssemblyRecyclerAdapter]|[RecyclerView.Adapter]|[RecyclerView]|多 Item、header 和 footer、加载更多|
-|[AssemblyExpandableAdapter]|[BaseExpandableListAdapter]|[ExpandableListView]|多 Item、header 和 footer、加载更多|
-|[AssemblyPagerAdapter]|[PagerAdapter]|[ViewPager] + [View]|多 Item、header 和 footer|
-|[AssemblyFragmentPagerAdapter]|[FragmentPagerAdapter]|[ViewPager] + [Fragment]|多 Item、header 和 footer|
-|[AssemblyFragmentStatePagerAdapter]|[FragmentStatePagerAdapter]|[ViewPager] + [Fragment]|多 Item、header 和 footer|
+|[AssemblyListAdapter]|[BaseAdapter]|[ListView]<br>[GridView]<br>[Spinner]<br>[Gallery]|多 Item<br>header 和 footer<br>加载更多|
+|[AssemblyRecyclerAdapter]|[RecyclerView.Adapter]|[RecyclerView]|多 Item<br>header 和 footer<br>加载更多|
+|[AssemblyExpandableAdapter]|[BaseExpandableListAdapter]|[ExpandableListView]|多 Item<br>header 和 footer<br>加载更多|
+|[AssemblyPagerAdapter]|[PagerAdapter]|[ViewPager] + [View]|多 Item<br>header 和 footer|
+|[AssemblyFragmentPagerAdapter]|[FragmentPagerAdapter]|[ViewPager] + [Fragment]|多 Item<br>header 和 footer|
+|[AssemblyFragmentStatePagerAdapter]|[FragmentStatePagerAdapter]|[ViewPager] + [Fragment]|多 Item<br>header 和 footer|
 
-AssemblyAdapter 共分为四部分：
+[AssemblyAdapter] 共分为四部分：
 
 * Adapter：负责维护数据、itemType 以及加载更多，只需使用提供的几种 Adapter 即可
 * [Item]：负责创建 itemView、设置数据，每个 item layout 都要有单独的 [Item]
