@@ -9,8 +9,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.novoda:bintray-release:0.8.1'
 
@@ -25,3 +23,6 @@ allprojects {
         maven { url 'https://dl.google.com/dl/android/maven2/' }
     }
 }
+
+// 禁止生产 kotin doc
+tasks.getByPath(":assembly-adapter-ktx:releaseAndroidJavadocs").enabled = false
