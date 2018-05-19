@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION.toInteger()
+
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION.toInteger()
+        targetSdkVersion TARGET_SDK_VERSION.toInteger()
+        versionCode VERSION_CODE.toInteger()
+        versionName "${VERSION_NAME}"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+    }
+}
+
+dependencies {
+    api project(':assembly-adapter')
+    api "android.arch.paging:runtime:${PAGING_VERSION}"
+}
+
+Properties properties = new Properties()
+File localPropertiesFile = project.file("local.properties")
+if (localPropertiesFile.exists()) {
+    InputStream inputStream = localPropertiesFile.newDataInputStream()
+    properties.load(inputStream)
+    inputStream.close()
+}
+
+publish {
+    groupId = 'me.panpf'
+    artifactId = 'assembly-paged-list-adapter'
+    publishVersion = android.defaultConfig.versionName
+    desc = 'Adnroid, Adapter, Paged'
+    website = 'https://github.com/panpf/assembly-adapter'
+    userOrg = properties.getProperty("bintray.userOrg")
+    bintrayUser = properties.getProperty("bintray.user")
+    bintrayKey = properties.getProperty("bintray.apikey")
+}

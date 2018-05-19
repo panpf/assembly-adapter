@@ -152,8 +152,8 @@ recyclerView.adapter = adapter
 * [使用 header 和 footer][header_footer]
 * [使用加载更多功能][load_more]
 * [在 RecyclerView 的 GridLayoutManager 中一个 Item 独占一行或任意列][grid_span]
-* [在 Kotlin 中使用 bindview][ktx]
-* [使用 ViewItemFactory][view_item_factory]
+* [在 Kotlin 中使用 bindView][ktx]
+* [支持 Paging][paged_list]
 
 ## License
     Copyright (C) 2017 Peng fei Pan <sky@panpf.me>
@@ -185,6 +185,7 @@ recyclerView.adapter = adapter
 [load_more]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/load_more.md
 [ktx]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/ktx.md
 [view_item_factory]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/view_item_factory.md
+[paged_list]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/paged_list.md
 
 [AssemblyAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
 [AssemblyListAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyListAdapter.java
