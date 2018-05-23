@@ -8,27 +8,25 @@ import android.content.pm.ApplicationInfo
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_recycler_view_sticky_header.*
 import me.panpf.adapter.recycler.AssemblyGridLayoutManager
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.adapter.AssemblyStickyRecyclerAdapter
 import me.panpf.adapter.sample.adapter.StickyRecyclerItemDecoration
 import me.panpf.adapter.sample.bean.AppInfo
 import me.panpf.adapter.sample.bean.AppsTitle
-import me.panpf.adapter.sample.bindView
 import me.panpf.adapter.sample.itemfactory.AppItem
 import me.panpf.adapter.sample.itemfactory.AppListHeaderItem
+import me.panpf.adapter.sample.itemfactory.HeaderItem
 import java.io.File
 import java.util.*
 
 class GridRecyclerViewFragment : Fragment() {
 
-    private val recyclerView: RecyclerView by bindView(R.id.list_stickyRecyclerViewFragment_content)
-    private val headerContainer: ViewGroup by bindView(R.id.container_stickyRecyclerViewFragment)
     private val appsViewModel: AppsViewModel by lazy { ViewModelProviders.of(this).get(AppsViewModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,15 +37,18 @@ class GridRecyclerViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val context = context ?: return
-        recyclerView.layoutManager = AssemblyGridLayoutManager(context, 3, recyclerView)
+        list_stickyRecyclerViewFragment_content.layoutManager = AssemblyGridLayoutManager(context, 3, list_stickyRecyclerViewFragment_content)
 
         val adapter = AssemblyStickyRecyclerAdapter().apply {
+            addHeaderItem(HeaderItem.Factory().fullSpan(list_stickyRecyclerViewFragment_content), "我是小额头呀！")
+            addHeaderItem(HeaderItem.Factory().fullSpan(list_stickyRecyclerViewFragment_content), "我是小额头呀！")
+            addHeaderItem(HeaderItem.Factory().fullSpan(list_stickyRecyclerViewFragment_content), "我是小额头呀！")
             addItemFactory(AppItem.Factory())
-            addItemFactory(AppListHeaderItem.Factory().fullSpan(recyclerView))
+            addItemFactory(AppListHeaderItem.Factory().fullSpan(list_stickyRecyclerViewFragment_content))
         }
 
-        recyclerView.addItemDecoration(StickyRecyclerItemDecoration(headerContainer))
-        recyclerView.adapter = adapter
+        list_stickyRecyclerViewFragment_content.addItemDecoration(StickyRecyclerItemDecoration(container_stickyRecyclerViewFragment))
+        list_stickyRecyclerViewFragment_content.adapter = adapter
 
         appsViewModel.apps.observe(this, android.arch.lifecycle.Observer {
             it ?: return@Observer
@@ -72,7 +73,7 @@ class GridRecyclerViewFragment : Fragment() {
             }
 
             adapter.dataList = dataList
-            recyclerView.scheduleLayoutAnimation()
+            list_stickyRecyclerViewFragment_content.scheduleLayoutAnimation()
         })
 
         appsViewModel.load()
