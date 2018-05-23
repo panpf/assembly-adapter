@@ -13,10 +13,12 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.panpf.adapter.AssemblyRecyclerAdapter
 import me.panpf.adapter.recycler.AssemblyGridLayoutManager
 import me.panpf.adapter.sample.R
+import me.panpf.adapter.sample.adapter.AssemblyStickyRecyclerAdapter
+import me.panpf.adapter.sample.adapter.StickyRecyclerItemDecoration
 import me.panpf.adapter.sample.bean.AppInfo
+import me.panpf.adapter.sample.bean.AppsTitle
 import me.panpf.adapter.sample.bindView
 import me.panpf.adapter.sample.itemfactory.AppItem
 import me.panpf.adapter.sample.itemfactory.AppListHeaderItem
@@ -25,11 +27,12 @@ import java.util.*
 
 class GridRecyclerViewFragment : Fragment() {
 
-    private val recyclerView: RecyclerView by bindView(R.id.list_recyclerViewFragment_content)
+    private val recyclerView: RecyclerView by bindView(R.id.list_stickyRecyclerViewFragment_content)
+    private val headerContainer: ViewGroup by bindView(R.id.container_stickyRecyclerViewFragment)
     private val appsViewModel: AppsViewModel by lazy { ViewModelProviders.of(this).get(AppsViewModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_recycler_view, container, false)
+        return inflater.inflate(R.layout.fragment_recycler_view_sticky_header, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,10 +41,12 @@ class GridRecyclerViewFragment : Fragment() {
         val context = context ?: return
         recyclerView.layoutManager = AssemblyGridLayoutManager(context, 3, recyclerView)
 
-        val adapter = AssemblyRecyclerAdapter().apply {
+        val adapter = AssemblyStickyRecyclerAdapter().apply {
             addItemFactory(AppItem.Factory())
             addItemFactory(AppListHeaderItem.Factory().fullSpan(recyclerView))
         }
+
+        recyclerView.addItemDecoration(StickyRecyclerItemDecoration(headerContainer))
         recyclerView.adapter = adapter
 
         appsViewModel.apps.observe(this, android.arch.lifecycle.Observer {
@@ -58,11 +63,11 @@ class GridRecyclerViewFragment : Fragment() {
 
             val dataList = ArrayList<Any>(dataListSize)
             if (userAppListSize > 0) {
-                dataList.add(String.format("自安装应用%d个", userAppListSize))
+                dataList.add(AppsTitle(String.format("自安装应用%d个", userAppListSize)))
                 dataList.addAll(userAppList)
             }
             if (systemAppListSize > 0) {
-                dataList.add(String.format("系统应用%d个", systemAppListSize))
+                dataList.add(AppsTitle(String.format("系统应用%d个", systemAppListSize)))
                 dataList.addAll(systemAppList)
             }
 
