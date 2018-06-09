@@ -33,12 +33,12 @@ public abstract class AssemblyMoreItemFactory<DATA> extends AssemblyItemFactory<
 
     boolean paused;
     boolean end;
-    @NonNull
+    @Nullable
     OnLoadMoreListener listener;
     @Nullable
     AssemblyMoreItem item;
 
-    public AssemblyMoreItemFactory(@NonNull OnLoadMoreListener listener) {
+    public AssemblyMoreItemFactory(@Nullable OnLoadMoreListener listener) {
         this.listener = listener;
     }
 

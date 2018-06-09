@@ -35,7 +35,6 @@ public abstract class AssemblyMoreItem<DATA> extends AssemblyItem<DATA> implemen
             errorView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //noinspection ConstantConditions
                     if (itemFactory.listener != null) {
                         itemFactory.paused = false;
                         setData(getPosition(), getData());
@@ -52,7 +51,6 @@ public abstract class AssemblyMoreItem<DATA> extends AssemblyItem<DATA> implemen
             showEnd();
         } else if (adapter != null) {
             showLoading();
-            //noinspection ConstantConditions
             if (itemFactory.listener != null && !itemFactory.paused) {
                 itemFactory.paused = true;
                 itemFactory.listener.onLoadMore(adapter);
