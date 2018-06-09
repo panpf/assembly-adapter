@@ -21,8 +21,9 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://dl.google.com/dl/android/maven2/' }
+        maven { url 'https://dl.bintray.com/panpf/maven' }  // sticky-recycler-item-decoration
     }
 }
 
-// 禁止生产 kotin doc
+// kotlin doc 无法生成，因此禁掉
 tasks.getByPath(":assembly-adapter-ktx:releaseAndroidJavadocs").enabled = false

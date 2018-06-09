@@ -30,6 +30,7 @@ dependencies {
 
     implementation "me.panpf:pager-indicator:${PAGER_INDICATOR}"
     implementation "me.panpf:sketch:${SKETCH_VERSION}"
+    implementation "me.panpf:sticky-recycler-item-decoration:${STICKY_RECYCLER_ITEM_DECORATION}"
     implementation project(':assembly-adapter')
     implementation project(':assembly-adapter-ktx')
 }
