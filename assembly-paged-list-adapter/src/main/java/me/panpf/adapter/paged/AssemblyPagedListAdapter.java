@@ -42,6 +42,13 @@ public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
     }
 
     /**
+     * 使用通用的 {@link ObjectDiffCallback} 作为处理对比
+     */
+    public AssemblyPagedListAdapter() {
+        this(new ObjectDiffCallback<T>());
+    }
+
+    /**
      * Set the new list to be displayed.
      * <p>
      * If a list is already being displayed, a diff will be computed on a background thread, which

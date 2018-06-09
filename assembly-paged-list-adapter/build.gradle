@@ -25,6 +25,7 @@ android {
 
 dependencies {
     api project(':assembly-adapter')
+    api "com.android.support:recyclerview-v7:${SUPPORT_VERSION}"
     api "android.arch.paging:runtime:${PAGING_VERSION}"
 }
 
