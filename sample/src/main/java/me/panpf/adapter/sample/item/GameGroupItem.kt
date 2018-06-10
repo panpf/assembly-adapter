@@ -9,7 +9,7 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.GameGroup
 
 class GameGroupItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<GameGroup>(itemLayoutId, parent) {
-    private val titleTextView: TextView by bindView(R.id.text_gameListGroup_name)
+    private val titleTextView: TextView by bindView(R.id.gameGroupItem_nameText)
 
     override fun onSetData(position: Int, gameGroup: GameGroup?) {
         if (isExpanded) {
@@ -27,7 +27,7 @@ class GameGroupItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<GameGro
         }
 
         override fun createAssemblyItem(parent: ViewGroup): GameGroupItem {
-            return GameGroupItem(R.layout.list_group_game, parent)
+            return GameGroupItem(R.layout.item_game_group, parent)
         }
     }
 }

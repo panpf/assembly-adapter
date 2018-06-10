@@ -1,95 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
     <me.panpf.pagerid.PagerIndicator
-        android:id="@+id/tabStrip_mainActivity_tabs"
-        android:layout_width="wrap_content"
+        android:id="@+id/mainAt_indicator"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:pi_slidingBlock="@drawable/shape_sliding_block"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:pi_slidingBlock="@drawable/shape_sliding_block">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="LIST"
                 android:textColor="@color/selector_tab"
-                android:text="LIST"/>
+                tools:ignore="HardcodedText" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="RECYCLER"
                 android:textColor="@color/selector_tab"
-                android:text="RECYCLER"/>
+                tools:ignore="HardcodedText" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="GRID"
                 android:textColor="@color/selector_tab"
-                android:text="GRID"/>
+                tools:ignore="HardcodedText" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="EXPANDABLE"
                 android:textColor="@color/selector_tab"
-                android:text="EXPANDABLE"/>
+                tools:ignore="HardcodedText" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="SPINNER"
                 android:textColor="@color/selector_tab"
-                android:text="SPINNER"/>
+                tools:ignore="HardcodedText" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="FRAGMENT_PAGER_ADAPTER"
                 android:textColor="@color/selector_tab"
-                android:text="FRAGMENT_PAGER_ADAPTER"/>
+                tools:ignore="HardcodedText" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="PAGER_ADAPTER"
                 android:textColor="@color/selector_tab"
-                android:text="PAGER_ADAPTER"/>
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </me.panpf.pagerid.PagerIndicator>
 
-    <FrameLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mainAt_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainAt_indicator" />
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager_mainActivity_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/shape_shadow"/>
-    </FrameLayout>
-</LinearLayout>
+        android:layout_height="4dp"
+        android:background="@drawable/shape_shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mainAt_pager" />
+</android.support.constraint.ConstraintLayout>

@@ -5,34 +5,36 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/text_loadMoreListItem_loading"
+        android:id="@+id/moreItem_loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:padding="16dp">
+
         <ProgressBar
             android:layout_width="20dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="加载中..."/>
+            android:text="加载中..." />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/text_loadMoreListItem_error"
+        android:id="@+id/moreItem_errorText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:gravity="center"
-        android:text="加载失败，点击重新加载"/>
+        android:padding="16dp"
+        android:text="加载失败，点击重新加载" />
 
     <TextView
-        android:id="@+id/text_loadMoreListItem_end"
+        android:id="@+id/moreItem_endText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:gravity="center"
-        android:text="THE END"/>
+        android:padding="16dp"
+        android:text="THE END" />
 </FrameLayout>

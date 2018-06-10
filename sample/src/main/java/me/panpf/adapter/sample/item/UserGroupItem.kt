@@ -9,7 +9,7 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.UserGroup
 
 class UserGroupItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<UserGroup>(itemLayoutId, parent) {
-    private val titleTextView: TextView by bindView(R.id.text_userListGroup_name)
+    private val titleTextView: TextView by bindView(R.id.userGroupItem_nameText)
 
     override fun onSetData(position: Int, userGroup: UserGroup?) {
         userGroup ?: return
@@ -28,7 +28,7 @@ class UserGroupItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<UserGro
         }
 
         override fun createAssemblyItem(parent: ViewGroup): UserGroupItem {
-            return UserGroupItem(R.layout.list_group_user, parent)
+            return UserGroupItem(R.layout.item_user_group, parent)
         }
     }
 }

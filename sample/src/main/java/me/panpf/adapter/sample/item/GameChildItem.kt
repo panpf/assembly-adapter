@@ -11,9 +11,9 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 
 class GameChildItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<Game>(itemLayoutId, parent) {
-    private val iconImageView: ImageView by bindView(R.id.image_gameListItem_icon)
-    private val nameTextView: TextView by bindView(R.id.text_gameListItem_name)
-    private val likeTextView: TextView by bindView(R.id.text_gameListItem_like)
+    private val iconImageView: ImageView by bindView(R.id.gameItem_iconImage)
+    private val nameTextView: TextView by bindView(R.id.gameItem_nameText)
+    private val likeTextView: TextView by bindView(R.id.gameItem_likeText)
 
     override fun onSetData(position: Int, game: Game?) {
         game ?: return
@@ -25,13 +25,13 @@ class GameChildItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<Game>(i
     class Factory : AssemblyItemFactory<Game>() {
 
         init {
-            setOnViewClickListener(R.id.image_gameListItem_icon) {context, view, position, positionInPart, data ->
+            setOnViewClickListener(R.id.gameItem_iconImage) { context, view, position, positionInPart, data ->
                 Toast.makeText(context, "瞅这游戏这臭逼样！", Toast.LENGTH_SHORT).show()
             }
-            setOnViewClickListener(R.id.text_gameListItem_name) {context, view, position, positionInPart, data ->
+            setOnViewClickListener(R.id.gameItem_nameText) { context, view, position, positionInPart, data ->
                 Toast.makeText(context, "原来你叫" + data?.name + "啊！", Toast.LENGTH_SHORT).show()
             }
-            setOnViewClickListener(R.id.text_gameListItem_like) {context, view, position, positionInPart, data ->
+            setOnViewClickListener(R.id.gameItem_likeText) { context, view, position, positionInPart, data ->
                 Toast.makeText(context, "我也" + data?.like + "这游戏！", Toast.LENGTH_SHORT).show()
             }
         }
@@ -41,7 +41,7 @@ class GameChildItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<Game>(i
         }
 
         override fun createAssemblyItem(parent: ViewGroup): GameChildItem {
-            return GameChildItem(R.layout.list_item_game, parent)
+            return GameChildItem(R.layout.item_game, parent)
         }
     }
 }

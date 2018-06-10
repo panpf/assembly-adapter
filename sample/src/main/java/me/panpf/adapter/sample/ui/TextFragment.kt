@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_text.*
+import kotlinx.android.synthetic.main.fm_text.*
 import me.panpf.adapter.sample.R
 import me.panpf.args.ktx.bindStringArg
 
@@ -14,13 +14,13 @@ class TextFragment : Fragment() {
     private val text by bindStringArg("text")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_text, container, false)
+        return inflater.inflate(R.layout.fm_text, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        text_imageFragment_content.text = text
+        textFm_text.text = text
     }
 
     companion object {

@@ -15,9 +15,9 @@ class ImagePagerItemFactory : AssemblyPagerItemFactory<String>() {
     }
 
     override fun createView(context: Context, container: ViewGroup, position: Int, imageUrl: String?): View {
-        val view = LayoutInflater.from(context).inflate(R.layout.fragment_image, container, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.fm_image, container, false)
 
-        val imageView = view.findViewById(R.id.image_imageFragment) as SketchImageView
+        val imageView = view.findViewById(R.id.imageFm_image) as SketchImageView
         imageView.displayImage(imageUrl ?: "")
 
         return view

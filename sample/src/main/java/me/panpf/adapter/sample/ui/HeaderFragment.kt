@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_header_image.*
+import kotlinx.android.synthetic.main.fm_header.*
 import me.panpf.adapter.sample.R
 import me.panpf.args.ktx.bindStringArg
 
@@ -15,14 +15,14 @@ class HeaderFragment : Fragment() {
     private val imageUrl by bindStringArg("imageUrl")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_header_image, container, false)
+        return inflater.inflate(R.layout.fm_header, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        text_headerImageFragment.text = text
-        image_headerImageFragment.displayImage(imageUrl)
+        headerFm_titleText.text = text
+        headerFm_image.displayImage(imageUrl)
     }
 
     companion object {

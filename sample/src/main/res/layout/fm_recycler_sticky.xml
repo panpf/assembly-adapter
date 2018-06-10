@@ -4,13 +4,13 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_stickyRecyclerViewFragment_content"
+        android:id="@+id/stickyRecyclerFm_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
 
     <FrameLayout
-        android:id="@+id/container_stickyRecyclerViewFragment"
+        android:id="@+id/stickyRecyclerFm_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

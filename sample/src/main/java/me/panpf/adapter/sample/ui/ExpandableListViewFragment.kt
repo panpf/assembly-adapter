@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_expandable_list_view.*
+import kotlinx.android.synthetic.main.fm_expandable.*
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyExpandableAdapter
 import me.panpf.adapter.ItemHolder
@@ -32,14 +32,14 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
     var footerItemHolder2: ItemHolder<String>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_expandable_list_view, container, false)
+        return inflater.inflate(R.layout.fm_expandable, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (adapter != null) {
-            expandableList_expandableListViewFragment_content.setAdapter(adapter)
+            expandableFm_expandableList.setAdapter(adapter)
         } else {
             loadData()
         }
@@ -139,7 +139,7 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
                     footerItemHolder = adapter!!.addFooterItem(HeaderGroupItem.Factory(), "我是小尾巴呀！")
                     footerItemHolder2 = adapter!!.addFooterItem(HeaderGroupItem.Factory(), "唉，我的小尾巴呢？")
 
-                    expandableList_expandableListViewFragment_content.setAdapter(adapter)
+                    expandableFm_expandableList.setAdapter(adapter)
                 } else {
                     adapter!!.addAll(objects)
 

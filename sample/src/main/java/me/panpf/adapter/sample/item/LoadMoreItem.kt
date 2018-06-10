@@ -10,9 +10,9 @@ import me.panpf.adapter.sample.R
 
 class LoadMoreItem(itemFactory: Factory, itemLayoutId: Int, parent: ViewGroup)
     : AssemblyMoreItem<Int>(itemFactory, itemLayoutId, parent) {
-    private val loadingView: View by bindView(R.id.text_loadMoreListItem_loading)
-    private val errorView: View by bindView(R.id.text_loadMoreListItem_error)
-    private val endView: View by bindView(R.id.text_loadMoreListItem_end)
+    private val loadingView: View by bindView(R.id.moreItem_loadingLayout)
+    private val errorView: View by bindView(R.id.moreItem_errorText)
+    private val endView: View by bindView(R.id.moreItem_endText)
 
     override fun getErrorRetryView(): View {
         return errorView
@@ -36,10 +36,10 @@ class LoadMoreItem(itemFactory: Factory, itemLayoutId: Int, parent: ViewGroup)
         endView.visibility = View.VISIBLE
     }
 
-    class Factory(listener: OnLoadMoreListener) : AssemblyMoreItemFactory<Int>(listener) {
+    class Factory(listener: OnLoadMoreListener? = null) : AssemblyMoreItemFactory<Int>(listener) {
 
         override fun createAssemblyItem(parent: ViewGroup): AssemblyMoreItem<Int> {
-            return LoadMoreItem(this, R.layout.list_item_load_more, parent)
+            return LoadMoreItem(this, R.layout.item_more, parent)
         }
     }
 }

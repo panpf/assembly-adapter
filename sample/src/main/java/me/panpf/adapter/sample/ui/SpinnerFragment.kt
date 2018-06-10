@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_spinner.*
+import kotlinx.android.synthetic.main.fm_spinner.*
 import me.panpf.adapter.AssemblyListAdapter
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.item.SpinnerItem
@@ -14,12 +14,11 @@ import java.util.*
 class SpinnerFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_spinner, container, false)
+        return inflater.inflate(R.layout.fm_spinner, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         val stringList = ArrayList<String>(10)
         stringList.add("1")
@@ -35,6 +34,6 @@ class SpinnerFragment : Fragment() {
 
         val adapter = AssemblyListAdapter(stringList)
         adapter.addItemFactory(SpinnerItem.Factory())
-        spinner_spinnerFragment.adapter = adapter
+        spinnerFm_spinner.adapter = adapter
     }
 }

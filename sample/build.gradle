@@ -26,11 +26,14 @@ android {
 
 dependencies {
     implementation "com.android.support:support-fragment:${SUPPORT_VERSION}"
+    implementation "com.android.support.constraint:constraint-layout:${CONSTRAINT_LAYOUT}"
     implementation "android.arch.lifecycle:extensions:${LIFECYCLE_VERSION}"
 
     implementation "me.panpf:pager-indicator:${PAGER_INDICATOR}"
     implementation "me.panpf:sketch:${SKETCH_VERSION}"
     implementation "me.panpf:sticky-recycler-item-decoration:${STICKY_RECYCLER_ITEM_DECORATION}"
+
     implementation project(':assembly-adapter')
     implementation project(':assembly-adapter-ktx')
+    implementation project(':assembly-paged-list-adapter')
 }

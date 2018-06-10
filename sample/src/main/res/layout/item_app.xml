@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="12dp"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:padding="12dp">
 
     <me.panpf.sketch.SketchImageView
+        android:id="@+id/appItem_iconImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/image_installedApp_icon"
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
         tools:src="@mipmap/ic_launcher" />
 
     <TextView
-        android:id="@+id/text_installedApp_name"
+        android:id="@+id/appItem_nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

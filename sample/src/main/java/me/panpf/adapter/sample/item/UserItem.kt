@@ -11,11 +11,11 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.User
 
 class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLayoutId, parent) {
-    private val headImageView: ImageView by bindView(R.id.image_userListItem_head)
-    private val nameTextView: TextView by bindView(R.id.text_userListItem_name)
-    private val sexTextView: TextView by bindView(R.id.text_userListItem_sex)
-    private val ageTextView: TextView by bindView(R.id.text_userListItem_age)
-    private val jobTextView: TextView by bindView(R.id.text_userListItem_job)
+    private val headImageView: ImageView by bindView(R.id.userItem_headImage)
+    private val nameTextView: TextView by bindView(R.id.userItem_nameText)
+    private val sexTextView: TextView by bindView(R.id.userItem_sexText)
+    private val ageTextView: TextView by bindView(R.id.userItem_ageText)
+    private val jobTextView: TextView by bindView(R.id.userItem_jobText)
 
     override fun onSetData(position: Int, user: User?) {
         user ?: return
@@ -28,16 +28,16 @@ class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLa
 
     class Factory : AssemblyItemFactory<User>() {
         init {
-            setOnViewClickListener(R.id.image_userListItem_head) {context, view, position, positionInPart, data ->
+            setOnViewClickListener(R.id.userItem_headImage) { context, view, position, positionInPart, data ->
                 Toast.makeText(context, "别摸我头，讨厌啦！", Toast.LENGTH_SHORT).show()
             }
-            setOnViewClickListener(R.id.text_userListItem_name) {context, view, position, positionInPart, data ->
+            setOnViewClickListener(R.id.userItem_nameText) { context, view, position, positionInPart, data ->
                 Toast.makeText(context, "我就叫" + data?.name + "，咋地不服啊！", Toast.LENGTH_SHORT).show()
             }
-            setOnViewClickListener(R.id.text_userListItem_sex) {context, view, position, positionInPart, data ->
+            setOnViewClickListener(R.id.userItem_sexText) { context, view, position, positionInPart, data ->
                 Toast.makeText(context, "我还就是" + data?.sex + "个的了，有本事你捅我啊！", Toast.LENGTH_SHORT).show()
             }
-            setOnViewClickListener(R.id.text_userListItem_age) {context, view, position, positionInPart, data ->
+            setOnViewClickListener(R.id.userItem_ageText) { context, view, position, positionInPart, data ->
                 val message: String = if ((data?.sex
                                 ?: "").contains("男") || (data?.sex ?: "").contains("先生")) {
                     "哥今年" + data?.age + "岁了，该找媳妇了！"
@@ -46,7 +46,7 @@ class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLa
                 }
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
-            setOnViewClickListener(R.id.text_userListItem_job) {context, view, position, positionInPart, data ->
+            setOnViewClickListener(R.id.userItem_jobText) { context, view, position, positionInPart, data ->
                 Toast.makeText(context, "我是名光荣的" + data?.job, Toast.LENGTH_SHORT).show()
             }
         }
@@ -56,7 +56,7 @@ class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLa
         }
 
         override fun createAssemblyItem(parent: ViewGroup): AssemblyItem<User> {
-            return UserItem(R.layout.list_item_user, parent)
+            return UserItem(R.layout.item_user, parent)
         }
     }
 }

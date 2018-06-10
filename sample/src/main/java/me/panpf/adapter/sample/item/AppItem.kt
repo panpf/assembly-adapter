@@ -13,8 +13,8 @@ import me.panpf.sketch.uri.ApkIconUriModel
 import me.panpf.sketch.uri.AppIconUriModel
 
 class AppItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<AppInfo>(itemLayoutId, parent) {
-    private val iconImageView: SketchImageView by bindView(R.id.image_installedApp_icon)
-    private val nameTextView: TextView by bindView(R.id.text_installedApp_name)
+    private val iconImageView: SketchImageView by bindView(R.id.appItem_iconImage)
+    private val nameTextView: TextView by bindView(R.id.appItem_nameText)
 
     override fun onSetData(i: Int, appInfo: AppInfo?) {
         appInfo ?: return
@@ -45,7 +45,7 @@ class AppItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<AppInfo>(item
         }
 
         override fun createAssemblyItem(viewGroup: ViewGroup): AppItem {
-            return AppItem(R.layout.list_item_app, viewGroup)
+            return AppItem(R.layout.item_app, viewGroup)
         }
     }
 }

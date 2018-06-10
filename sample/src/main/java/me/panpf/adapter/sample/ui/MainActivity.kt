@@ -3,19 +3,18 @@ package me.panpf.adapter.sample.ui
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.at_main.*
 import me.panpf.adapter.pager.FragmentArrayPagerAdapter
 import me.panpf.adapter.sample.R
-import me.panpf.pagerid.PagerIndicator
 
 class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.at_main)
 
-        pager_mainActivity_content.adapter = FragmentArrayPagerAdapter(supportFragmentManager, arrayOf(
+        mainAt_pager.adapter = FragmentArrayPagerAdapter(supportFragmentManager, arrayOf(
                 ListViewFragment(),
                 RecyclerViewFragment(),
                 GridRecyclerViewFragment(),
@@ -24,11 +23,10 @@ class MainActivity : FragmentActivity() {
                 ViewPagerFragment(),
                 PagerAdapterFragment()))
 
-        val tabStrip = findViewById<PagerIndicator>(R.id.tabStrip_mainActivity_tabs)
-        tabStrip.setViewPager(pager_mainActivity_content)
+        mainAt_indicator.setViewPager(mainAt_pager)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            actionBar!!.elevation = 0f
+            actionBar?.elevation = 0f
         }
     }
 }

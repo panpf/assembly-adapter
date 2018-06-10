@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_view_pager.*
+import kotlinx.android.synthetic.main.fm_pager.*
 import me.panpf.adapter.pager.AssemblyFragmentStatePagerAdapter
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Header
@@ -17,7 +17,7 @@ import me.panpf.adapter.sample.item.TextFragmentItemFactory
 class ViewPagerFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_view_pager, container, false)
+        return inflater.inflate(R.layout.fm_pager, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,6 +38,6 @@ class ViewPagerFragment : Fragment() {
         adapter.addItemFactory(ImageFragmentItemFactory())
         adapter.addItemFactory(TextFragmentItemFactory())
         adapter.addFooterItem(HeaderFragmentItemFactory(), footer)
-        pager_viewPagerFragment_content.adapter = adapter
+        pagerFm_pager.adapter = adapter
     }
 }

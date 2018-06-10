@@ -18,7 +18,7 @@ class HeaderGroupItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<Strin
         }
 
         override fun createAssemblyItem(parent: ViewGroup): HeaderGroupItem {
-            return HeaderGroupItem(R.layout.list_item_header, parent)
+            return HeaderGroupItem(R.layout.item_header, parent)
         }
     }
 }
