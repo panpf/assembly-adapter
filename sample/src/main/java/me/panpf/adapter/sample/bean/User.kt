@@ -1,10 +1,6 @@
 package me.panpf.adapter.sample.bean
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
-@Parcelize
-class User: Parcelable {
+class User {
     var headResId: Int = 0
     var name: String? = null
     var sex: String? = null

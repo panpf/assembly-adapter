@@ -16,6 +16,7 @@
 * `支持加载更多`. 自带滑动到列表底部触发加载更多功能，你只需定义一个专门用于加载更多的 [Item] 即可
 * `支持全部 Adapter`. 支持 [BaseAdapter]、[RecyclerView.Adapter]、[BaseExpandableListAdapter]、[PagerAdapter]、[FragmentPagerAdapter] 和 [FragmentStatePagerAdapter]
 * `支持 spanSize 和 fullSpan`. API 层级支持 [GridLayoutManager] 的 spanSize 和 [StaggeredGridLayoutManager] 的 fullSpan，可轻松实现横跨多列功能
+* `Paging`. 支持 [Paging]，[了解如何使用][paged_list]
 * `无性能损耗`. 没有使用任何反射相关的技术，无须担心性能问题
 
 ## 使用指南
@@ -84,9 +85,9 @@ class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLa
 * Item 的泛型用来指定对应的数据类型
 * onSetData() 方法用来设置数据，在每次 getView() 的时候都会执行
 * 还有 onFindViews(View) 和 onConfigViews(Context) 方法可分别用来初始化 View 和配置 View，只会在创建的时候执行一次
-* 可以通过 getPosition() 和 getData() 方法可直接获取当前所对应的位置和数据，因此你在处理 click 的时候不再需要通过 setTag() 来绑定位置和数据了，直接获取即可
-* 还可以通过 getItemView() 方法获取当前的 itemView
-* 在 [Item] 中使用 bindview 请参考 [在 Kotlin 中使用 bindview][ktx]
+* 通过 getPosition() 和 getData() 方法可获取当前 item 的位置和数据，因此你在处理 click 的时候不再需要通过 setTag() 来绑定位置和数据了，直接获取即可
+* 通过 getItemView() 方法可获取当前的 itemView
+* 在 [Item] 中使用 bindView 请参考 [在 Kotlin 中使用 bindView][ktx]
 
 继承自 [AssemblyItemFactory] 定义 [ItemFactory] 如下：
 
@@ -234,3 +235,4 @@ recyclerView.adapter = adapter
 [ViewPager]: https://developer.android.google.cn/reference/androidx/viewpager/widget/ViewPager
 [View]: https://developer.android.google.cn/reference/android/view/View
 [Fragment]: https://developer.android.google.cn/reference/androidx/fragment/app/Fragment
+[Paging]: https://developer.android.google.cn/topic/libraries/architecture/paging/

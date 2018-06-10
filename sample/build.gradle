@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: '../build_kotlin.gradle'
+apply from: '../build_kotlin_app.gradle'
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()

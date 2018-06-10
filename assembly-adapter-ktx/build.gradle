@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply from: '../build_kotlin.gradle'
+apply from: '../build_kotlin_library.gradle'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
