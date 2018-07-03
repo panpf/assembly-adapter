@@ -21,6 +21,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.util.SparseIntArray;
 
 import java.util.List;
 
@@ -34,6 +36,10 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
     private FragmentItemStorage storage;
     @NonNull
     private FragmentItemActor actor = new FragmentItemActor(this);
+
+    private int notifyNumber = 0;
+    @Nullable
+    private SparseIntArray notifyNumberPool;
 
     public AssemblyFragmentPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
@@ -138,6 +144,13 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
         return storage.getDataList();
     }
 
+    /**
+     * 设置数据列表
+     */
+    public void setDataList(@Nullable List dataList) {
+        storage.setDataList(dataList);
+    }
+
     @Override
     public int getDataCount() {
         return storage.getDataCount();
@@ -165,5 +178,33 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
     @Override
     public Fragment getItem(int position) {
         return actor.getItem(position);
+    }
+
+    public boolean isEnabledPositionNoneOnNotifyDataSetChanged() {
+        return notifyNumberPool != null;
+    }
+
+    public void setEnabledPositionNoneOnNotifyDataSetChanged(boolean enabled) {
+        if (enabled) {
+            notifyNumberPool = new SparseIntArray();
+            notifyNumber = 0;
+        } else {
+            notifyNumberPool = null;
+        }
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        if (notifyNumberPool != null) notifyNumber++;
+        super.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        if (notifyNumberPool != null && notifyNumberPool.get(object.hashCode()) != notifyNumber) {
+            notifyNumberPool.put(object.hashCode(), notifyNumber);
+            return PagerAdapter.POSITION_NONE;
+        }
+        return super.getItemPosition(object);
     }
 }

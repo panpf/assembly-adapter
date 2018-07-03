@@ -18,55 +18,66 @@ package me.panpf.adapter.pager;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseIntArray;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
 
 /**
- * {@link Fragment} 数组 {@link FragmentPagerAdapter}
+ * {@link View} 数组 {@link PagerAdapter}
  */
-@SuppressWarnings("unused")
-public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class ArrayPagerAdapter extends PagerAdapter {
 
     @NonNull
-    private Fragment[] fragments;
+    private View[] views;
 
     private int notifyNumber = 0;
     @Nullable
     private SparseIntArray notifyNumberPool;
 
-    public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
-        super(fm);
-        this.fragments = fragments;
+    public ArrayPagerAdapter(@NonNull View[] views) {
+        this.views = views;
     }
 
-    public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Fragment> fragments) {
-        this(fm, fragments.toArray(new Fragment[fragments.size()]));
+    public ArrayPagerAdapter(@NonNull List<View> views) {
+        this(views.toArray(new View[views.size()]));
     }
 
     @NonNull
-    public Fragment[] getFragments() {
-        return fragments;
+    public View[] getViews() {
+        return views;
     }
 
-    public void setFragments(@NonNull Fragment[] fragments) {
-        this.fragments = fragments;
+    public void setViews(@NonNull View[] views) {
+        this.views = views;
         notifyDataSetChanged();
     }
 
     @Override
-    public Fragment getItem(int position) {
-        return fragments[position];
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+        return view == object;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        container.removeView((View) object);
     }
 
     @Override
     public int getCount() {
         //noinspection ConstantConditions
-        return fragments != null ? fragments.length : 0;
+        return views != null ? views.length : 0;
+    }
+
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        View itemView = views[position];
+        container.addView(itemView);
+        return itemView;
     }
 
     public boolean isEnabledPositionNoneOnNotifyDataSetChanged() {

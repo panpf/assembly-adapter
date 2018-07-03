@@ -19,6 +19,7 @@ package me.panpf.adapter.pager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
+import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,6 +37,10 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     private PagerItemStorage storage;
     @NonNull
     private PagerItemActor actor = new PagerItemActor(this);
+
+    private int notifyNumber = 0;
+    @Nullable
+    private SparseIntArray notifyNumberPool;
 
     public AssemblyPagerAdapter() {
         this.storage = new PagerItemStorage(this);
@@ -268,5 +273,33 @@ public class AssemblyPagerAdapter extends PagerAdapter {
      */
     public void setNotifyOnChange(boolean notifyOnChange) {
         storage.setNotifyOnChange(notifyOnChange);
+    }
+
+    public boolean isEnabledPositionNoneOnNotifyDataSetChanged() {
+        return notifyNumberPool != null;
+    }
+
+    public void setEnabledPositionNoneOnNotifyDataSetChanged(boolean enabled) {
+        if (enabled) {
+            notifyNumberPool = new SparseIntArray();
+            notifyNumber = 0;
+        } else {
+            notifyNumberPool = null;
+        }
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        if (notifyNumberPool != null) notifyNumber++;
+        super.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        if (notifyNumberPool != null && notifyNumberPool.get(object.hashCode()) != notifyNumber) {
+            notifyNumberPool.put(object.hashCode(), notifyNumber);
+            return PagerAdapter.POSITION_NONE;
+        }
+        return super.getItemPosition(object);
     }
 }

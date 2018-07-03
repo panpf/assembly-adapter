@@ -28,6 +28,8 @@ import java.util.List;
 public class FragmentItemStorage {
 
     @NonNull
+    private final Object itemListLock = new Object();
+    @NonNull
     private PagerAdapter adapter;
 
     @Nullable
@@ -193,6 +195,17 @@ public class FragmentItemStorage {
     @Nullable
     public List getDataList() {
         return dataList;
+    }
+
+    /**
+     * 设置数据列表
+     */
+    public void setDataList(@Nullable List dataList) {
+        synchronized (itemListLock) {
+            this.dataList = dataList;
+        }
+
+        adapter.notifyDataSetChanged();
     }
 
     /**

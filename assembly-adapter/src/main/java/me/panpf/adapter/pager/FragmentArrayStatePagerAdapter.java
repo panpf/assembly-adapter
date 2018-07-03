@@ -20,17 +20,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseIntArray;
 
 import java.util.List;
 
 /**
- * {@link Fragment} 数组 {@link FragmentPagerAdapter}
+ * {@link Fragment} 数组 {@link FragmentStatePagerAdapter}
  */
-@SuppressWarnings("unused")
-public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
+@SuppressWarnings({"WeakerAccess", "unused"})
+public class FragmentArrayStatePagerAdapter extends FragmentStatePagerAdapter {
 
     @NonNull
     private Fragment[] fragments;
@@ -39,12 +39,12 @@ public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     private SparseIntArray notifyNumberPool;
 
-    public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
+    public FragmentArrayStatePagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
         super(fm);
         this.fragments = fragments;
     }
 
-    public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Fragment> fragments) {
+    public FragmentArrayStatePagerAdapter(@NonNull FragmentManager fm, @NonNull List<Fragment> fragments) {
         this(fm, fragments.toArray(new Fragment[fragments.size()]));
     }
 
