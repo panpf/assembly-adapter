@@ -29,7 +29,7 @@ dependencies {
 }
 ```
 
-`$lastVersionName`：[![Release Version][release_icon]][release_link]`（不带v）`
+`$lastVersionName`：[![Release Version][release_icon]][release_link]
 
 ### 2. 简介
 
@@ -156,6 +156,10 @@ recyclerView.adapter = adapter
 * [在 Kotlin 中使用 bindView][ktx]
 * [支持 Paging][paged_list]
 
+## 更新日志
+
+Please view the [CHANGELOG.md] file
+
 ## License
     Copyright (C) 2017 Peng fei Pan <sky@panpf.me>
 
@@ -176,10 +180,12 @@ recyclerView.adapter = adapter
 [android_arsenal_link]: https://android-arsenal.com/details/1/4152
 [api_image]: https://img.shields.io/badge/API-14%2B-orange.svg
 [api_link]: https://android-arsenal.com/api?level=14
-[release_icon]: https://img.shields.io/github/release/panpf/assembly-adapter.svg
-[release_link]: https://github.com/panpf/assembly-adapter/releases
+[release_icon]: https://api.bintray.com/packages/panpf/maven/assembly-adapter/images/download.svg
+[release_link]: https://bintray.com/panpf/maven/assembly-adapter/_latestVersion#files
 [license_image]: https://img.shields.io/badge/License-Apache%202-blue.svg
 [license_link]: https://www.apache.org/licenses/LICENSE-2.0
+
+[CHANGELOG.md]: CHANGELOG.md
 
 [header_footer]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/header_footer.md
 [grid_span]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/grid_span.md
