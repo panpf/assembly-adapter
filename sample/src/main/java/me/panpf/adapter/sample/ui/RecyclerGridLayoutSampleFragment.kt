@@ -1,10 +1,10 @@
 package me.panpf.adapter.sample.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.fm_recycler_sticky.*
 import me.panpf.adapter.recycler.AssemblyGridLayoutManager
 import me.panpf.adapter.sample.R
@@ -17,9 +17,16 @@ import me.panpf.arch.ktx.bindViewModel
 import me.panpf.recycler.sticky.StickyRecyclerItemDecoration
 import java.util.*
 
-class GridRecyclerViewFragment : Fragment() {
+class RecyclerGridLayoutSampleFragment : BaseFragment() {
 
     private val appsViewModel by bindViewModel(AppsViewModel::class)
+
+    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
+        val attachActivity = activity
+        if (isVisibleToUser && attachActivity is AppCompatActivity) {
+            attachActivity.supportActionBar?.subtitle = "RecyclerView - GridLayoutManager"
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fm_recycler_sticky, container, false)

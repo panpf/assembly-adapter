@@ -1,117 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <me.panpf.pagerid.PagerIndicator
-        android:id="@+id/mainAt_indicator"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mainAt_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:pi_slidingBlock="@drawable/shape_sliding_block">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="LIST"
-                android:textColor="@color/selector_tab"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="RECYCLER"
-                android:textColor="@color/selector_tab"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="GRID"
-                android:textColor="@color/selector_tab"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="EXPANDABLE"
-                android:textColor="@color/selector_tab"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="SPINNER"
-                android:textColor="@color/selector_tab"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="FRAGMENT_PAGER_ADAPTER"
-                android:textColor="@color/selector_tab"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="PAGER_ADAPTER"
-                android:textColor="@color/selector_tab"
-                tools:ignore="HardcodedText" />
-        </LinearLayout>
-    </me.panpf.pagerid.PagerIndicator>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/mainAt_pager"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/mainAt_drawer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mainAt_indicator" />
+        app:layout_constraintTop_toBottomOf="@id/mainAt_toolbar">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/shape_shadow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/mainAt_pager" />
+        <FrameLayout
+            android:id="@+id/mainAt_frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/mainAt_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/menu_navigation" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

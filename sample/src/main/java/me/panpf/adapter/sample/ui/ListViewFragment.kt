@@ -2,10 +2,10 @@ package me.panpf.adapter.sample.ui
 
 import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.fm_list.*
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyListAdapter
@@ -20,7 +20,7 @@ import me.panpf.adapter.sample.item.UserItem
 import java.lang.ref.WeakReference
 import java.util.*
 
-class ListViewFragment : Fragment(), OnLoadMoreListener {
+class ListViewFragment : BaseFragment(), OnLoadMoreListener {
     var nextStart = 0
     val size = 20
 
@@ -50,6 +50,13 @@ class ListViewFragment : Fragment(), OnLoadMoreListener {
 
     override fun onLoadMore(listAdapter: AssemblyAdapter) {
         loadData()
+    }
+
+    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
+        val attachActivity = activity
+        if (isVisibleToUser && attachActivity is AppCompatActivity) {
+            attachActivity.supportActionBar?.subtitle = "ListView"
+        }
     }
 
     class LoadDataTask(private val fragmentRef: WeakReference<ListViewFragment>) : AsyncTask<String, String, List<Any>>() {

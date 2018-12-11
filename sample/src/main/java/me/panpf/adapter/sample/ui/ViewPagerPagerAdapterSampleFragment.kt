@@ -1,12 +1,11 @@
 package me.panpf.adapter.sample.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import me.panpf.adapter.pager.AssemblyPagerAdapter
 import me.panpf.adapter.pager.PagerItemHolder
 import me.panpf.adapter.sample.R
@@ -16,9 +15,16 @@ import me.panpf.adapter.sample.item.HeaderPagerItemFactory
 import me.panpf.adapter.sample.item.ImagePagerItemFactory
 import me.panpf.adapter.sample.item.TextPagerItemFactory
 
-class PagerAdapterFragment : Fragment() {
+class ViewPagerPagerAdapterSampleFragment : BaseFragment() {
     var headerItemHolder: PagerItemHolder<Any>? = null
     var footerItemHolder: PagerItemHolder<Any>? = null
+
+    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
+        val attachActivity = activity
+        if (isVisibleToUser && attachActivity is AppCompatActivity) {
+            attachActivity.supportActionBar?.subtitle = "ViewPager - PagerAdapter"
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fm_pager, container, false)

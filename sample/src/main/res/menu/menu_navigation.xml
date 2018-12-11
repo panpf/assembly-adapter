@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="RecyclerView">
+        <menu>
+            <item
+                android:id="@+id/nav_recyclerLinear"
+                android:title="LinearLayout" />
+            <item
+                android:id="@+id/nav_recyclerGrid"
+                android:title="GridLayout" />
+            <item
+                android:id="@+id/nav_recyclerPaged"
+                android:title="PagedList" />
+        </menu>
+    </item>
+
+    <item android:title="ViewPager">
+        <menu>
+            <item
+                android:id="@+id/nav_pagerAdapter"
+                android:title="PagerAdapter" />
+            <item
+                android:id="@+id/nav_fragmentStatePagerAdapter"
+                android:title="FragmentStatePagerAdapter" />
+        </menu>
+    </item>
+
+    <item android:title="Traditional">
+        <menu>
+            <item
+                android:id="@+id/nav_list"
+                android:title="ListView" />
+            <item
+                android:id="@+id/nav_expandableList"
+                android:title="ExpandableListView" />
+            <item
+                android:id="@+id/nav_spinner"
+                android:title="Spinner" />
+        </menu>
+    </item>
+</menu>

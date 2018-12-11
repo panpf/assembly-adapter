@@ -1,12 +1,12 @@
 package me.panpf.adapter.sample.ui
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fm_recycler.*
 import me.panpf.adapter.paged.AssemblyPagedListAdapter
 import me.panpf.adapter.sample.R
@@ -18,7 +18,7 @@ import me.panpf.adapter.sample.vm.End
 import me.panpf.adapter.sample.vm.ListViewModel
 import me.panpf.arch.ktx.bindViewModel
 
-class RecyclerViewFragment : Fragment() {
+class RecyclerPagedSampleFragment : BaseFragment() {
 
     private val viewModel by bindViewModel(ListViewModel::class)
     private val adapter = AssemblyPagedListAdapter<Any>().apply {
@@ -27,6 +27,13 @@ class RecyclerViewFragment : Fragment() {
         addItemFactory(GameItem.Factory())
         addFooterItem(HeaderItem.Factory(), "我是小尾巴呀！")
         setMoreItem(LoadMoreItem.Factory())
+    }
+
+    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
+        val attachActivity = activity
+        if (isVisibleToUser && attachActivity is AppCompatActivity) {
+            attachActivity.supportActionBar?.subtitle = "Recycler - PagedList"
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

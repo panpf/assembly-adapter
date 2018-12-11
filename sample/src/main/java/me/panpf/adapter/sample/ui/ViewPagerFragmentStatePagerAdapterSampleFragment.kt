@@ -1,10 +1,10 @@
 package me.panpf.adapter.sample.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.fm_pager.*
 import me.panpf.adapter.pager.AssemblyFragmentStatePagerAdapter
 import me.panpf.adapter.sample.R
@@ -14,7 +14,14 @@ import me.panpf.adapter.sample.item.HeaderFragmentItemFactory
 import me.panpf.adapter.sample.item.ImageFragmentItemFactory
 import me.panpf.adapter.sample.item.TextFragmentItemFactory
 
-class ViewPagerFragment : Fragment() {
+class ViewPagerFragmentStatePagerAdapterSampleFragment : BaseFragment() {
+
+    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
+        val attachActivity = activity
+        if (isVisibleToUser && attachActivity is AppCompatActivity) {
+            attachActivity.supportActionBar?.subtitle = "ViewPager - FragmentStatePagerAdapter"
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fm_pager, container, false)

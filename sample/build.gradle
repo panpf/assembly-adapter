@@ -40,10 +40,11 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KOTLINX_COROUTINES"
 
     implementation "androidx.core:core-ktx:$ANDROIDX_CORE_KTX"
-
     implementation "androidx.fragment:fragment:$ANDROIDX_FRAGMENT"
     implementation "androidx.constraintlayout:constraintlayout:$ANDROIDX_CONSTRAINTLAYOUT"
     implementation "androidx.lifecycle:lifecycle-extensions:$ANDROIDX_LIFECYCLE"
+    implementation "com.google.android.material:material:$MATERIAL"
+
 
     implementation "me.panpf:pager-indicator:$PAGER_INDICATOR"
     implementation "me.panpf:sketch:$SKETCH_VERSION"

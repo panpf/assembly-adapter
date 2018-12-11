@@ -2,10 +2,10 @@ package me.panpf.adapter.sample.ui
 
 import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.fm_expandable.*
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyExpandableAdapter
@@ -20,7 +20,7 @@ import me.panpf.adapter.sample.item.*
 import java.lang.ref.WeakReference
 import java.util.*
 
-class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
+class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
     var nextStart = 0
     val groupSize = 20
     val childSize = 5
@@ -42,6 +42,13 @@ class ExpandableListViewFragment : Fragment(), OnLoadMoreListener {
             expandableFm_expandableList.setAdapter(adapter)
         } else {
             loadData()
+        }
+    }
+
+    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
+        val attachActivity = activity
+        if (isVisibleToUser && attachActivity is AppCompatActivity) {
+            attachActivity.supportActionBar?.subtitle = "ExpandableListView"
         }
     }
 
