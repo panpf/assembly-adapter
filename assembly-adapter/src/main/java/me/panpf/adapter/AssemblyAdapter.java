@@ -1,12 +1,12 @@
 package me.panpf.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
@@ -242,7 +242,7 @@ public interface AssemblyAdapter {
     void notifyDataSetChanged();
 
     /**
-     * 获取指定位置占几列，专为 {@link android.support.v7.widget.RecyclerView} 预留
+     * 获取指定位置占几列，专为 {@link RecyclerView} 预留
      */
     int getSpanSize(int position);
 }

@@ -23,8 +23,9 @@ android {
 }
 
 dependencies {
-    api "com.android.support:recyclerview-v7:${SUPPORT_VERSION}"
-    api "com.android.support:support-fragment:${SUPPORT_VERSION}"
+    api "androidx.recyclerview:recyclerview:$ANDROIDX_RECYCLERVIEW"
+    api "androidx.fragment:fragment:$ANDROIDX_FRAGMENT"
+    api "androidx.annotation:annotation:$ANDROIDX_ANNOTATION"
 }
 
 File localPropertiesFile = project.file("local.properties")

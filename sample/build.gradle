@@ -37,17 +37,17 @@ kotlin {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KOTLINX_COROUTINES"
 
-    implementation "androidx.core:core-ktx:0.3"
+    implementation "androidx.core:core-ktx:$ANDROIDX_CORE_KTX"
 
-    implementation "com.android.support:support-fragment:${SUPPORT_VERSION}"
-    implementation "com.android.support.constraint:constraint-layout:${CONSTRAINT_LAYOUT}"
-    implementation "android.arch.lifecycle:extensions:${LIFECYCLE_VERSION}"
+    implementation "androidx.fragment:fragment:$ANDROIDX_FRAGMENT"
+    implementation "androidx.constraintlayout:constraintlayout:$ANDROIDX_CONSTRAINTLAYOUT"
+    implementation "androidx.lifecycle:lifecycle-extensions:$ANDROIDX_LIFECYCLE"
 
-    implementation "me.panpf:pager-indicator:${PAGER_INDICATOR}"
-    implementation "me.panpf:sketch:${SKETCH_VERSION}"
-    implementation "me.panpf:sticky-recycler-item-decoration:${STICKY_RECYCLER_ITEM_DECORATION}"
+    implementation "me.panpf:pager-indicator:$PAGER_INDICATOR"
+    implementation "me.panpf:sketch:$SKETCH_VERSION"
+    implementation "me.panpf:sticky-recycler-item-decoration:$STICKY_RECYCLER_ITEM_DECORATION"
 
     implementation project(':assembly-adapter')
     implementation project(':assembly-adapter-ktx')

@@ -16,7 +16,7 @@
 
 package me.panpf.adapter.expandable;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public interface AssemblyGroup {
     int getChildCount();

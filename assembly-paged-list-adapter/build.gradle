@@ -24,8 +24,9 @@ android {
 
 dependencies {
     api project(':assembly-adapter')
-    api "com.android.support:recyclerview-v7:${SUPPORT_VERSION}"
-    api "android.arch.paging:runtime:${PAGING_VERSION}"
+    api "androidx.recyclerview:recyclerview:$ANDROIDX_RECYCLERVIEW"
+    api "androidx.paging:paging-runtime:$ANDROIDX_PAGING"
+    api "androidx.annotation:annotation:$ANDROIDX_ANNOTATION"
 }
 
 File localPropertiesFile = project.file("local.properties")

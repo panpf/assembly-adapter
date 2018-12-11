@@ -1,9 +1,9 @@
 package me.panpf.adapter.sample.ui
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +39,7 @@ class RecyclerViewFragment : Fragment() {
         recyclerFm_recycler.layoutManager = LinearLayoutManager(activity)
         recyclerFm_recycler.adapter = adapter
 
-        viewModel.list.observe(this, android.arch.lifecycle.Observer { adapter.submitList(it) })
+        viewModel.list.observe(this, androidx.lifecycle.Observer { adapter.submitList(it) })
         viewModel.listStatus.observe(this, Observer {
             when (it) {
                 is End -> adapter.loadMoreFinished(true)

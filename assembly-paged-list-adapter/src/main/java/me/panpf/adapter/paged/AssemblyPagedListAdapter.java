@@ -1,29 +1,27 @@
 package me.panpf.adapter.paged;
 
-import android.arch.paging.AsyncPagedListDifferProxy;
-import android.arch.paging.PagedList;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.recyclerview.extensions.AsyncDifferConfig;
-import android.support.v7.util.AdapterListUpdateCallback;
-import android.support.v7.util.DiffUtil;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.paging.AsyncPagedListDiffer;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.AdapterListUpdateCallback;
+import androidx.recyclerview.widget.AsyncDifferConfig;
+import androidx.recyclerview.widget.DiffUtil;
 import me.panpf.adapter.AssemblyRecyclerAdapter;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
 public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
 
-    private final AsyncPagedListDifferProxy<T> mDiffer;
-    private final AsyncPagedListDifferProxy.PagedListChangedListener<T> mListener = new AsyncPagedListDifferProxy.PagedListChangedListener<T>() {
+    private final AsyncPagedListDiffer<T> mDiffer;
+    private final AsyncPagedListDiffer.PagedListListener<T> mListener = new AsyncPagedListDiffer.PagedListListener<T>() {
         @Override
-        public void onCurrentListChanged(@Nullable PagedList<T> currentList) {
-            AssemblyPagedListAdapter.this.onCurrentListChanged(currentList);
+        public void onCurrentListChanged(@Nullable PagedList<T> previousList, @Nullable PagedList<T> currentList) {
+            AssemblyPagedListAdapter.this.onCurrentListChanged(previousList, currentList);
         }
     };
 
     /**
      * Creates a PagedListAdapter with default threading and
-     * {@link android.support.v7.util.ListUpdateCallback}.
+     * {@link androidx.recyclerview.widget.ListUpdateCallback}.
      * <p>
      * Convenience for PagedListAdapter(AsyncDifferConfig), which uses default threading
      * behavior.
@@ -32,17 +30,17 @@ public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
      *                     compare items in the list.
      */
     public AssemblyPagedListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
-        mDiffer = new AsyncPagedListDifferProxy<T>(this, diffCallback);
-        mDiffer.setPagedListChangedListener(mListener);
+        mDiffer = new AsyncPagedListDiffer<T>(this, diffCallback);
+        mDiffer.addPagedListListener(mListener);
     }
 
     public AssemblyPagedListAdapter(@NonNull AsyncDifferConfig<T> config) {
-        mDiffer = new AsyncPagedListDifferProxy<T>(new AdapterListUpdateCallback(this), config);
-        mDiffer.setPagedListChangedListener(mListener);
+        mDiffer = new AsyncPagedListDiffer<T>(new AdapterListUpdateCallback(this), config);
+        mDiffer.addPagedListListener(mListener);
     }
 
     /**
-     * 使用通用的 {@link ObjectDiffCallback} 作为处理对比
+     * Use the generic {@link ObjectDiffCallback} as a processing comparison
      */
     public AssemblyPagedListAdapter() {
         this(new ObjectDiffCallback<T>());
@@ -108,8 +106,11 @@ public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
      * to a snapshot version of the PagedList during a diff. This means you cannot observe each
      * PagedList via this method.
      *
+     * @param previousList PagedList that was previously displayed, may be null.
      * @param currentList new PagedList being displayed, may be null.
+     *
+     * @see #getCurrentList()
      */
-    public void onCurrentListChanged(@Nullable PagedList<T> currentList) {
+    public void onCurrentListChanged(@Nullable PagedList<T> previousList, @Nullable PagedList<T> currentList) {
     }
 }

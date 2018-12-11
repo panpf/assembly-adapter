@@ -16,8 +16,8 @@
 
 package me.panpf.adapter.pager;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * {@link AssemblyPagerAdapter} 专用的固定位置 item 管理器

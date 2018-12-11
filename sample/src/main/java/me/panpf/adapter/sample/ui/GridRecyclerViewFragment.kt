@@ -1,7 +1,7 @@
 package me.panpf.adapter.sample.ui
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +39,7 @@ class GridRecyclerViewFragment : Fragment() {
         stickyRecyclerFm_recycler.addItemDecoration(StickyRecyclerItemDecoration(stickyRecyclerFm_frame))
         stickyRecyclerFm_recycler.adapter = adapter
 
-        appsViewModel.apps.observe(this, android.arch.lifecycle.Observer {
+        appsViewModel.apps.observe(this, androidx.lifecycle.Observer {
             it ?: return@Observer
 
             val systemAppList = it[0]

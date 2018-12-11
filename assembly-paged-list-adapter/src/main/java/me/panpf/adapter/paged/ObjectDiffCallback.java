@@ -1,12 +1,12 @@
 package me.panpf.adapter.paged;
 
-import android.support.annotation.Nullable;
-import android.support.v7.util.DiffUtil;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DiffUtil;
 
 /**
- * 通用 Object 对比工具 areItemsTheSame 用内存地址对比，areContentsTheSame 用 equals 对比
+ * General Object comparison tool areItemsTheSame with memory address comparison, areContentsTheSame with equals
  *
- * @param <T> bean 类型
+ * @param <T> bean
  */
 public class ObjectDiffCallback<T> extends DiffUtil.ItemCallback<T> {
 

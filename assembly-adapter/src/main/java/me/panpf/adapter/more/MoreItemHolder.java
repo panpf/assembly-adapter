@@ -16,8 +16,8 @@
 
 package me.panpf.adapter.more;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import me.panpf.adapter.ItemHolder;
 import me.panpf.adapter.ItemStorage;

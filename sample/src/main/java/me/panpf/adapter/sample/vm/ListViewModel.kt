@@ -1,7 +1,7 @@
 package me.panpf.adapter.sample.vm
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import me.panpf.adapter.sample.ds.ListDataSource
 
 class ListViewModel(application: Application) : MyAndroidViewModel(application) {

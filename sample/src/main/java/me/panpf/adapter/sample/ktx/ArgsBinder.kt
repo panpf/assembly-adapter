@@ -7,14 +7,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import android.util.Size
 import android.util.SizeF
 import android.util.SparseArray
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import android.app.Fragment as OriginFragment
-import android.support.v4.app.Fragment as SupportFragment
+import androidx.fragment.app.Fragment as SupportFragment
 
 /* ************************************* OriginFragment ***************************************** */
 

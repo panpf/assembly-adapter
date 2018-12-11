@@ -1,9 +1,11 @@
 package me.panpf.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 @SuppressWarnings("unused")
 public interface Item<DATA> {
@@ -54,12 +56,12 @@ public interface Item<DATA> {
     int getPosition();
 
     /**
-     * 获取当前 item 的布局位置，{@link android.support.v7.widget.RecyclerView} 专用方法
+     * 获取当前 item 的布局位置，{@link RecyclerView} 专用方法
      */
     int getLayoutPosition();
 
     /**
-     * 获取当前 item 在 adapter 中的位置，{@link android.support.v7.widget.RecyclerView} 专用方法
+     * 获取当前 item 在 adapter 中的位置，{@link RecyclerView} 专用方法
      */
     int getAdapterPosition();
 

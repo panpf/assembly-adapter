@@ -1,6 +1,6 @@
 package me.panpf.adapter.sample.item
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import me.panpf.adapter.pager.AssemblyFragmentItemFactory
 import me.panpf.adapter.sample.bean.Header
 import me.panpf.adapter.sample.ui.HeaderFragment

@@ -1,12 +1,12 @@
 package me.panpf.adapter.sample.vm
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.DataSource
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 
 open class MyAndroidViewModel(application: Application) : AndroidViewModel(application) {
     private fun makePagedListConfig(pageSize: Int = 20): PagedList.Config =

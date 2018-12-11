@@ -1,6 +1,6 @@
 package me.panpf.adapter.more;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import me.panpf.adapter.Item;

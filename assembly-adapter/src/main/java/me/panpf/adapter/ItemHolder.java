@@ -1,7 +1,7 @@
 package me.panpf.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ItemHolder<DATA> {

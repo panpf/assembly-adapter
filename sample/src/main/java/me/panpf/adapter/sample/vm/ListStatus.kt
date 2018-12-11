@@ -1,7 +1,7 @@
 package me.panpf.adapter.sample.vm
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.PagedList
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.PagedList
 
 sealed class ListStatus
 
