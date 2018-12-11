@@ -187,42 +187,42 @@ Please view the [CHANGELOG.md] file
 
 [CHANGELOG.md]: CHANGELOG.md
 
-[header_footer]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/header_footer.md
-[grid_span]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/grid_span.md
-[load_more]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/load_more.md
-[ktx]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/ktx.md
-[view_item_factory]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/view_item_factory.md
-[paged_list]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/paged_list.md
+[header_footer]: docs/wiki/header_footer.md
+[grid_span]: docs/wiki/grid_span.md
+[load_more]: docs/wiki/load_more.md
+[ktx]: docs/wiki/ktx.md
+[view_item_factory]: docs/wiki/view_item_factory.md
+[paged_list]: docs/wiki/paged_list.md
 
-[AssemblyAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
-[AssemblyListAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyListAdapter.java
-[AssemblyRecyclerAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyRecyclerAdapter.java
-[AssemblyItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyItemFactory.java
-[AssemblyItem]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyItem.java
+[AssemblyAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
+[AssemblyListAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyListAdapter.java
+[AssemblyRecyclerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyRecyclerAdapter.java
+[AssemblyItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyItemFactory.java
+[AssemblyItem]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyItem.java
 
-[ItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ItemFactory.java
-[Item]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/Item.java
-[ItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ItemHolder.java
+[ItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/ItemFactory.java
+[Item]: assembly-adapter/src/main/java/me/panpf/adapter/Item.java
+[ItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/ItemHolder.java
 
-[AssemblyExpandableAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/expandable/AssemblyExpandableAdapter.java
-[AssemblyGroup]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/expandable/AssemblyGroup.java
+[AssemblyExpandableAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/expandable/AssemblyExpandableAdapter.java
+[AssemblyGroup]: assembly-adapter/src/main/java/me/panpf/adapter/expandable/AssemblyGroup.java
 
-[AssemblyMoreItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItemFactory.java
-[AssemblyMoreItem]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItem.java
-[MoreItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/MoreItemHolder.java
-[OnLoadMoreListener]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/OnLoadMoreListener.java
+[AssemblyMoreItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItemFactory.java
+[AssemblyMoreItem]: assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItem.java
+[MoreItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/more/MoreItemHolder.java
+[OnLoadMoreListener]: assembly-adapter/src/main/java/me/panpf/adapter/more/OnLoadMoreListener.java
 
-[AssemblyPagerItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerItemFactory.java
-[FragmentItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/FragmentItemHolder.java
-[PagerItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/PagerItemHolder.java
-[AssemblyPagerAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerAdapter.java
-[AssemblyFragmentPagerAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyFragmentPagerAdapter.java
-[AssemblyFragmentStatePagerAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyFragmentStatePagerAdapter.java
+[AssemblyPagerItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerItemFactory.java
+[FragmentItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/pager/FragmentItemHolder.java
+[PagerItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/pager/PagerItemHolder.java
+[AssemblyPagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerAdapter.java
+[AssemblyFragmentPagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyFragmentPagerAdapter.java
+[AssemblyFragmentStatePagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyFragmentStatePagerAdapter.java
 
-[AssemblyRecyclerLinerDivider]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyRecyclerLinerDivider.java
-[AssemblyGridLayoutManager]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyGridLayoutManager.java
+[AssemblyRecyclerLinerDivider]: assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyRecyclerLinerDivider.java
+[AssemblyGridLayoutManager]: assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyGridLayoutManager.java
 
-[ViewItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ViewItemFactory.java
+[ViewItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/ViewItemFactory.java
 
 [BaseAdapter]: https://developer.android.google.cn/reference/android/widget/BaseAdapter
 [RecyclerView.Adapter]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView.Adapter
