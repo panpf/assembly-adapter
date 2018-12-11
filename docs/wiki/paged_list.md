@@ -8,15 +8,15 @@ dependencies {
 }
 ```
 
-`$lastVersionName`：[![Release Version][release_icon]][release_link]`（不带v）`
+`$lastVersionName`：[![Release Version][release_icon]][release_link]
 
 
 然后用 [AssemblyPagedListAdapter] 替代 [PagedListAdapter] 即可
 
 [AssemblyPagedListAdapter] 扩展了一个无参构造函数，默认使用通用的 [ObjectDiffCallback] 来作为 bean 对比工具
 
-[release_icon]: https://img.shields.io/github/release/panpf/assembly-adapter.svg
-[release_link]: https://github.com/panpf/assembly-adapter/releases
+[release_icon]: https://api.bintray.com/packages/panpf/maven/assembly-paged-list-adapter/images/download.svg
+[release_link]: https://bintray.com/panpf/maven/assembly-paged-list-adapter/_latestVersion#files
 
 [AssemblyPagedListAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-paged-list-adapter/src/main/java/me/panpf/adapter/paged/AssemblyPagedListAdapter.java
 [ObjectDiffCallback]: https://github.com/panpf/assembly-adapter/blob/master/assembly-paged-list-adapter/src/main/java/me/panpf/adapter/paged/ObjectDiffCallback.java
