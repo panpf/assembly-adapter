@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
-apply from: '../build_kotlin_app.gradle'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()
@@ -22,9 +23,24 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
     }
+
+    androidExtensions {
+        experimental = true
+    }
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22'
+
+    implementation "androidx.core:core-ktx:0.3"
+
     implementation "com.android.support:support-fragment:${SUPPORT_VERSION}"
     implementation "com.android.support.constraint:constraint-layout:${CONSTRAINT_LAYOUT}"
     implementation "android.arch.lifecycle:extensions:${LIFECYCLE_VERSION}"

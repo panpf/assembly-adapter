@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()
@@ -28,21 +27,23 @@ dependencies {
     api "com.android.support:support-fragment:${SUPPORT_VERSION}"
 }
 
-Properties properties = new Properties()
 File localPropertiesFile = project.file("local.properties")
 if (localPropertiesFile.exists()) {
+    Properties properties = new Properties()
     InputStream inputStream = localPropertiesFile.newDataInputStream()
     properties.load(inputStream)
     inputStream.close()
-}
 
-publish {
-    groupId = 'me.panpf'
-    artifactId = 'assembly-adapter'
-    publishVersion = android.defaultConfig.versionName
-    desc = 'Adnroid, Adapter, Assembly'
-    website = 'https://github.com/panpf/assembly-adapter'
-    userOrg = properties.getProperty("bintray.userOrg")
-    bintrayUser = properties.getProperty("bintray.user")
-    bintrayKey = properties.getProperty("bintray.apikey")
+    apply plugin: "guru.stefma.bintrayrelease"
+
+    group = 'me.panpf'
+    version = android.defaultConfig.versionName
+    publish {
+        artifactId = 'assembly-adapter'
+        desc = 'Android, Adapter, Assembly'
+        website = 'https://github.com/panpf/assembly-adapter'
+        userOrg = properties.getProperty("bintray.userOrg")
+        bintrayUser = properties.getProperty("bintray.user")
+        bintrayKey = properties.getProperty("bintray.apikey")
+    }
 }
