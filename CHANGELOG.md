@@ -1,3 +1,7 @@
+# v...
+
+* :fire: AssemblyPagedListAdapter removes no-argument constructor
+
 # v3.3.0
 
 * :arrow_up: 升级编译版本和目标版本到 api 28
