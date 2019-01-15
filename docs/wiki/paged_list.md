@@ -11,13 +11,11 @@ dependencies {
 `$lastVersionName`：[![Release Version][release_icon]][release_link]
 
 
-然后用 [AssemblyPagedListAdapter] 替代 [PagedListAdapter] 即可
-
-[AssemblyPagedListAdapter] 扩展了一个无参构造函数，默认使用通用的 [ObjectDiffCallback] 来作为 bean 对比工具
+然后用 [AssemblyPagedListAdapter] 替代 [PagedListAdapter] 即可，另外你可以使用自带的 [DiffableDiffCallback] 实现数据对比（详情查看源码了解）
 
 [release_icon]: https://api.bintray.com/packages/panpf/maven/assembly-paged-list-adapter/images/download.svg
 [release_link]: https://bintray.com/panpf/maven/assembly-paged-list-adapter/_latestVersion#files
 
-[AssemblyPagedListAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-paged-list-adapter/src/main/java/me/panpf/adapter/paged/AssemblyPagedListAdapter.java
-[ObjectDiffCallback]: https://github.com/panpf/assembly-adapter/blob/master/assembly-paged-list-adapter/src/main/java/me/panpf/adapter/paged/ObjectDiffCallback.java
+[AssemblyPagedListAdapter]: ../../assembly-paged-list-adapter/src/main/java/me/panpf/adapter/paged/AssemblyPagedListAdapter.java
+[DiffableDiffCallback]: ../../assembly-paged-list-adapter/src/main/java/me/panpf/adapter/paged/DiffableDiffCallback.java
 [PagedListAdapter]: https://developer.android.com/reference/android/arch/paging/PagedListAdapter
