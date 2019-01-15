@@ -1,6 +1,8 @@
 # v...
 
+assembly-paged-list-adapter:
 * :fire: AssemblyPagedListAdapter removes no-argument constructor
+* :sparkles: Add DiffableDiffCallback
 
 # v3.3.0
 
