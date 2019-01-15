@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ItemHolder<DATA> {
 
-    @NonNull
+    @Nullable
     private ItemStorage itemStorage;
     @NonNull
     private ItemFactory itemFactory;
@@ -17,11 +17,16 @@ public class ItemHolder<DATA> {
 
     private boolean enabled = true;
 
-    public ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory itemFactory, @Nullable DATA data, boolean header) {
+    protected ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory itemFactory, @Nullable DATA data, boolean header) {
         this.itemStorage = itemStorage;
         this.itemFactory = itemFactory;
         this.data = data;
         this.header = header;
+    }
+
+    public ItemHolder(@NonNull ItemFactory itemFactory, @Nullable DATA data) {
+        this.itemFactory = itemFactory;
+        this.data = data;
     }
 
     @Nullable
@@ -43,6 +48,11 @@ public class ItemHolder<DATA> {
         return itemFactory;
     }
 
+    @Nullable
+    public ItemStorage getItemStorage() {
+        return itemStorage;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -55,11 +65,17 @@ public class ItemHolder<DATA> {
         enableChanged();
     }
 
+    void setItemStorage(@NonNull ItemStorage itemStorage) {
+        this.itemStorage = itemStorage;
+    }
+
     protected void enableChanged() {
-        if (header) {
-            itemStorage.headerEnabledChanged(this);
-        } else {
-            itemStorage.footerEnabledChanged(this);
+        if (itemStorage != null) {
+            if (header) {
+                itemStorage.headerEnabledChanged(this);
+            } else {
+                itemStorage.footerEnabledChanged(this);
+            }
         }
     }
 
@@ -73,5 +89,9 @@ public class ItemHolder<DATA> {
 
     public boolean isHeader() {
         return header;
+    }
+
+    void setHeader(boolean header) {
+        this.header = header;
     }
 }

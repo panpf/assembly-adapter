@@ -52,6 +52,12 @@ public interface AssemblyAdapter {
     <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory);
 
     /**
+     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
+     */
+    @NonNull
+    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder);
+
+    /**
      * 获取 header 列表
      */
     @Nullable
@@ -86,6 +92,12 @@ public interface AssemblyAdapter {
     <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory);
 
     /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
+     */
+    @NonNull
+    <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder);
+
+    /**
      * 获取 footer 列表
      */
     @Nullable
@@ -118,6 +130,12 @@ public interface AssemblyAdapter {
      */
     @NonNull
     <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory);
+
+    /**
+     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
+     */
+    @NonNull
+    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> itemHolder);
 
     @Nullable
     MoreItemHolder getMoreItemHolder();

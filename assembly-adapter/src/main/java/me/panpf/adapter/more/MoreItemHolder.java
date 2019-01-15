@@ -32,6 +32,10 @@ public class MoreItemHolder<DATA> extends ItemHolder<DATA> {
         super(storage, itemFactory, data, header);
     }
 
+    public MoreItemHolder(@NonNull MoreItemFactory itemFactory, @Nullable DATA data) {
+        super(itemFactory, data);
+    }
+
     @NonNull
     @Override
     public MoreItemFactory getItemFactory() {

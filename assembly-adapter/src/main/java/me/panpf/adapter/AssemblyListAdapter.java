@@ -16,8 +16,6 @@
 
 package me.panpf.adapter;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -26,13 +24,14 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
 /**
  * 通用组合式 {@link BaseAdapter}，支持组合式多类型 item，支持头、尾巴以及加载更多
  */
-@SuppressWarnings("unused")
 public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter {
 
     @NonNull
@@ -86,6 +85,12 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
         return storage.addHeaderItem(itemFactory);
     }
 
+    @NonNull
+    @Override
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder) {
+        return storage.addHeaderItem(itemHolder);
+    }
+
     @Nullable
     @Override
     public List<ItemHolder> getHeaderItemList() {
@@ -118,6 +123,12 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
         return storage.addFooterItem(itemFactory);
     }
 
+    @NonNull
+    @Override
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder) {
+        return storage.addFooterItem(itemHolder);
+    }
+
     @Nullable
     @Override
     public List<ItemHolder> getFooterItemList() {
@@ -148,6 +159,12 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     @Override
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
         return storage.setMoreItem(itemFactory);
+    }
+
+    @NonNull
+    @Override
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> itemHolder) {
+        return storage.setMoreItem(itemHolder);
     }
 
     @Nullable

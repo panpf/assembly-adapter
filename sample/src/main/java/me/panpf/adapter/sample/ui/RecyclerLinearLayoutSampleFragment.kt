@@ -26,17 +26,17 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
     var nextStart: Int = 0
     var size = 20
 
-    var headerItemHolder: ItemHolder<String>? = null
-    var headerItemHolder2: ItemHolder<String>? = null
-    var footerItemHolder: ItemHolder<String>? = null
-    var footerItemHolder2: ItemHolder<String>? = null
+    val headerItemHolder = ItemHolder(HeaderItem.Factory(), "我是小额头呀！")
+    val headerItemHolder2 = ItemHolder(HeaderItem.Factory(), "唉，我的小额头呢？")
+    val footerItemHolder = ItemHolder(HeaderItem.Factory(), "我是小尾巴呀！")
+    val footerItemHolder2 = ItemHolder(HeaderItem.Factory(), "唉，我的小尾巴呢？")
     private val adapter = AssemblyRecyclerAdapter().apply {
-        headerItemHolder = addHeaderItem(HeaderItem.Factory(), "我是小额头呀！")
-        headerItemHolder2 = addHeaderItem(HeaderItem.Factory(), "唉，我的小额头呢？")
+        addHeaderItem(headerItemHolder)
+        addHeaderItem(headerItemHolder2)
         addItemFactory(UserItem.Factory())
         addItemFactory(GameItem.Factory())
-        footerItemHolder = addFooterItem(HeaderItem.Factory(), "我是小尾巴呀！")
-        footerItemHolder2 = addFooterItem(HeaderItem.Factory(), "唉，我的小尾巴呢？")
+        addFooterItem(footerItemHolder)
+        addFooterItem(footerItemHolder2)
         setMoreItem(LoadMoreItem.Factory(this@RecyclerLinearLayoutSampleFragment))
     }
 
@@ -117,13 +117,13 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
             fragment.apply {
                 nextStart += size
                 adapter.addAll(objects)
-                headerItemHolder2!!.isEnabled = !headerItemHolder2!!.isEnabled
-                footerItemHolder2!!.isEnabled = !footerItemHolder2!!.isEnabled
+                headerItemHolder2.isEnabled = !headerItemHolder2.isEnabled
+                footerItemHolder2.isEnabled = !footerItemHolder2.isEnabled
 
                 val loadMoreEnd = nextStart >= 100
                 if (loadMoreEnd) {
-                    headerItemHolder!!.isEnabled = false
-                    footerItemHolder!!.isEnabled = false
+                    headerItemHolder.isEnabled = false
+                    footerItemHolder.isEnabled = false
                 }
                 adapter.moreItemHolder?.isEnabled = !loadMoreEnd
             }

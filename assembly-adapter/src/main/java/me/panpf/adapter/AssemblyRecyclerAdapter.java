@@ -16,15 +16,15 @@
 
 package me.panpf.adapter;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 import me.panpf.adapter.recycler.RecyclerItemWrapper;
@@ -32,7 +32,6 @@ import me.panpf.adapter.recycler.RecyclerItemWrapper;
 /**
  * 通用组合式 {@link RecyclerView.Adapter}，支持组合式多类型 item，支持头、尾巴以及加载更多
  */
-@SuppressWarnings("unused")
 public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements AssemblyAdapter {
 
     @NonNull
@@ -86,6 +85,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return storage.addHeaderItem(itemFactory.setInRecycler(true));
     }
 
+    @NonNull
+    @Override
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder) {
+        itemHolder.getItemFactory().setInRecycler(true);
+        return storage.addHeaderItem(itemHolder);
+    }
+
     @Nullable
     @Override
     public List<ItemHolder> getHeaderItemList() {
@@ -118,6 +124,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return storage.addFooterItem(itemFactory.setInRecycler(true));
     }
 
+    @NonNull
+    @Override
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder) {
+        itemHolder.getItemFactory().setInRecycler(true);
+        return storage.addFooterItem(itemHolder);
+    }
+
     @Override
     public int getFooterItemCount() {
         return storage.getFooterItemCount();
@@ -148,6 +161,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     @Override
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
         return storage.setMoreItem(itemFactory.setInRecycler(true));
+    }
+
+    @NonNull
+    @Override
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> itemHolder) {
+        itemHolder.getItemFactory().setInRecycler(true);
+        return storage.setMoreItem(itemHolder);
     }
 
     @Nullable

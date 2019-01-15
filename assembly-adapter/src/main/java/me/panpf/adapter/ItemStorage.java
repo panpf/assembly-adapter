@@ -1,7 +1,5 @@
 package me.panpf.adapter;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
@@ -10,6 +8,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
@@ -154,6 +154,42 @@ public class ItemStorage {
     }
 
     /**
+     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
+     */
+    @NonNull
+    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder) {
+        //noinspection ConstantConditions
+        if (itemHolder == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemHolder is null or item factory list locked");
+        }
+        //noinspection ConstantConditions
+        if (itemHolder.getItemStorage() != null) {
+            throw new IllegalArgumentException("Cannot be added repeatedly");
+        }
+
+        itemHolder.getItemFactory().setAdapter(adapter);
+        itemHolder.getItemFactory().setItemType(itemTypeIndex++);
+
+        itemHolder.setItemStorage(this);
+        itemHolder.setHeader(true);
+        itemHolder.setPosition(headerItemPosition++);
+
+        if (itemFactoryArray == null) {
+            itemFactoryArray = new SparseArray<Object>();
+        }
+        itemFactoryArray.put(itemHolder.getItemFactory().getItemType(), itemHolder);
+
+        synchronized (headerItemListLock) {
+            if (headerItemList == null) {
+                headerItemList = new ArrayList<ItemHolder>(1);
+            }
+            headerItemList.add(itemHolder);
+        }
+
+        return itemHolder;
+    }
+
+    /**
      * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
      */
     public void headerEnabledChanged(@NonNull ItemHolder itemHolder) {
@@ -250,6 +286,42 @@ public class ItemStorage {
     }
 
     /**
+     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
+     */
+    @NonNull
+    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder) {
+        //noinspection ConstantConditions
+        if (itemHolder == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemHolder is null or item factory list locked");
+        }
+        //noinspection ConstantConditions
+        if (itemHolder.getItemStorage() != null) {
+            throw new IllegalArgumentException("Cannot be added repeatedly");
+        }
+
+        itemHolder.getItemFactory().setAdapter(adapter);
+        itemHolder.getItemFactory().setItemType(itemTypeIndex++);
+
+        itemHolder.setItemStorage(this);
+        itemHolder.setHeader(false);
+        itemHolder.setPosition(footerItemPosition++);
+
+        if (itemFactoryArray == null) {
+            itemFactoryArray = new SparseArray<Object>();
+        }
+        itemFactoryArray.put(itemHolder.getItemFactory().getItemType(), itemHolder);
+
+        synchronized (footerItemListLock) {
+            if (footerItemList == null) {
+                footerItemList = new ArrayList<ItemHolder>(1);
+            }
+            footerItemList.add(itemHolder);
+        }
+
+        return itemHolder;
+    }
+
+    /**
      * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
      */
     public void footerEnabledChanged(@NonNull ItemHolder itemHolder) {
@@ -341,6 +413,36 @@ public class ItemStorage {
     @NonNull
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
         return setMoreItem(itemFactory, null);
+    }
+
+    /**
+     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
+     */
+    @NonNull
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> newItemHolder) {
+        //noinspection ConstantConditions
+        if (newItemHolder == null || itemFactoryLocked) {
+            throw new IllegalArgumentException("itemHolder is null or item factory list locked");
+        }
+
+        newItemHolder.getItemFactory().setAdapter(adapter);
+        if (this.moreItemHolder != null) {
+            newItemHolder.getItemFactory().setItemType(this.moreItemHolder.getItemFactory().getItemType());
+        } else {
+            newItemHolder.getItemFactory().setItemType(itemTypeIndex++);
+        }
+
+        newItemHolder.getItemFactory().loadMoreFinished(false);
+        ((ItemHolder) newItemHolder).setItemStorage(this);
+        ((ItemHolder) newItemHolder).setHeader(false);
+
+        if (itemFactoryArray == null) {
+            itemFactoryArray = new SparseArray<Object>();
+        }
+        itemFactoryArray.put(newItemHolder.getItemFactory().getItemType(), newItemHolder);
+
+        this.moreItemHolder = newItemHolder;
+        return newItemHolder;
     }
 
     @Nullable
