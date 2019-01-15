@@ -1,7 +1,8 @@
-# v...
+# v3.4.0-beta1
 
 assembly-paged-list-adapter:
 * :fire: AssemblyPagedListAdapter removes no-argument constructor
+* :fire: Remove ObjectDiffCallback
 * :sparkles: Add DiffableDiffCallback
 * :sparkles: Support for creating ItemHolder first, then adding ItemHolder to AssemblyAdapter
 

@@ -24,7 +24,9 @@ public class DiffableDiffCallback extends DiffUtil.ItemCallback<Object> {
 
     @Override
     public boolean areItemsTheSame(@NonNull Object oldItem, @NonNull Object newItem) {
+        //noinspection ConstantConditions
         if (oldItem == null && newItem == null) return true;
+        //noinspection ConstantConditions
         if (oldItem == null || newItem == null) return false;
         if (oldItem.getClass().equals(newItem.getClass()) && oldItem instanceof Diffable && newItem instanceof Diffable) {
             //noinspection unchecked
