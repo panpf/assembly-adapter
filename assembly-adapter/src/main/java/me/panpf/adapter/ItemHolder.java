@@ -17,19 +17,19 @@ public class ItemHolder<DATA> {
 
     private boolean enabled = true;
 
-    protected ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory itemFactory, @Nullable DATA data, boolean header) {
+    protected ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
         this.itemStorage = itemStorage;
         this.itemFactory = itemFactory;
         this.data = data;
         this.header = header;
     }
 
-    public ItemHolder(@NonNull ItemFactory itemFactory, @Nullable DATA data) {
+    public ItemHolder(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         this.itemFactory = itemFactory;
         this.data = data;
     }
 
-    public ItemHolder(@NonNull ItemFactory itemFactory) {
+    public ItemHolder(@NonNull ItemFactory<DATA> itemFactory) {
         this.itemFactory = itemFactory;
     }
 

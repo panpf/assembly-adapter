@@ -6,6 +6,7 @@ Dependencies:
 * upgrade: Paging upgraded to 2.1.1
 
 AssemblyAdapter: 
+* improve: ItemHolder's generics can now be inferred from ItemFactory in the constructor
 * new: ItemHolder adds only ItemFactory constructor
 
 # v3.4.0
