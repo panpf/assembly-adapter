@@ -8,6 +8,7 @@ Dependencies:
 AssemblyAdapter: 
 * improve: ItemHolder's generics can now be inferred from ItemFactory in the constructor
 * new: ItemHolder adds only ItemFactory constructor
+* new: AssemblyItem adds context, resources, application protected filed
 
 # v3.4.0
 

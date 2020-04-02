@@ -1,14 +1,25 @@
 package me.panpf.adapter;
 
+import android.app.Application;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+// todo 搞一个不为空的 Item 和一个可空的 item
 @SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class AssemblyItem<DATA> implements Item<DATA> {
+
+    @NonNull
+    protected Context context;
+    @NonNull
+    protected Application application;
+    @NonNull
+    protected Resources resources;
 
     @Nullable
     private Item<DATA> wrapper;
@@ -28,6 +39,9 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
             throw new IllegalArgumentException("itemView may not be null");
         }
         this.itemView = itemView;
+        this.context = itemView.getContext();
+        this.application = (Application) itemView.getContext().getApplicationContext();
+        this.resources = itemView.getResources();
     }
 
     public AssemblyItem(int itemLayoutId, @NonNull ViewGroup parent) {
@@ -135,7 +149,7 @@ public abstract class AssemblyItem<DATA> implements Item<DATA> {
     /**
      * 专门用来配置 View，你可在在这里设置 View 的样式以及尺寸，只会执行一次
      */
-    protected void onConfigViews(@NonNull Context context){
+    protected void onConfigViews(@NonNull Context context) {
 
     }
 
