@@ -29,6 +29,10 @@ public class ItemHolder<DATA> {
         this.data = data;
     }
 
+    public ItemHolder(@NonNull ItemFactory itemFactory) {
+        this.itemFactory = itemFactory;
+    }
+
     @Nullable
     public DATA getData() {
         return data;
