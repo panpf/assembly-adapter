@@ -25,21 +25,25 @@ import me.panpf.adapter.ItemStorage;
 /**
  * 加载更多专用的固定尾巴
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused"})
 public class MoreItemHolder<DATA> extends ItemHolder<DATA> {
 
-    public MoreItemHolder(@NonNull ItemStorage storage, @NonNull MoreItemFactory itemFactory, @Nullable DATA data, boolean header) {
+    public MoreItemHolder(@NonNull ItemStorage storage, @NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
         super(storage, itemFactory, data, header);
     }
 
-    public MoreItemHolder(@NonNull MoreItemFactory itemFactory, @Nullable DATA data) {
+    public MoreItemHolder(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         super(itemFactory, data);
+    }
+
+    public MoreItemHolder(@NonNull MoreItemFactory<DATA> itemFactory) {
+        super(itemFactory, null);
     }
 
     @NonNull
     @Override
-    public MoreItemFactory getItemFactory() {
-        return (MoreItemFactory) super.getItemFactory();
+    public MoreItemFactory<DATA> getItemFactory() {
+        return (MoreItemFactory<DATA>) super.getItemFactory();
     }
 
     @Override

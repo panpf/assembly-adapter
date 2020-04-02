@@ -9,7 +9,7 @@ public class ItemHolder<DATA> {
     @Nullable
     private ItemStorage itemStorage;
     @NonNull
-    private ItemFactory itemFactory;
+    private ItemFactory<DATA> itemFactory;
     @Nullable
     private DATA data;
     private int position;
@@ -48,7 +48,7 @@ public class ItemHolder<DATA> {
     }
 
     @NonNull
-    public ItemFactory getItemFactory() {
+    public ItemFactory<DATA> getItemFactory() {
         return itemFactory;
     }
 
