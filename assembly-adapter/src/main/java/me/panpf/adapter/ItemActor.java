@@ -152,7 +152,7 @@ public class ItemActor {
         int footerItemCount = adapter.getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
-        List<ItemHolder> footerItemList = adapter.getHeaderItemList();
+        List<ItemHolder> footerItemList = adapter.getFooterItemList();
         if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
             return footerItemList.get(positionInFooterList).getItemFactory().getSpanSize();

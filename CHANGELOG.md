@@ -9,6 +9,7 @@ AssemblyAdapter:
 * improve: ItemHolder's generics can now be inferred from ItemFactory in the constructor
 * new: ItemHolder adds only ItemFactory constructor
 * new: AssemblyItem adds context, resources, application protected filed
+* bug: Fixed an issue where IndexOutOfBoundsException might be thrown in the getSpanSize () method of ItemActor when using AssemblyGridLayoutManager
 
 # v3.4.0
 
