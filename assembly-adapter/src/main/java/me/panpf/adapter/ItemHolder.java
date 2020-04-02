@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
+// todo 可以通过 adapter 方便的查找 Holder 或设置 data
 public class ItemHolder<DATA> {
 
     @Nullable
@@ -17,6 +18,7 @@ public class ItemHolder<DATA> {
 
     private boolean enabled = true;
 
+    @Deprecated
     protected ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
         this.itemStorage = itemStorage;
         this.itemFactory = itemFactory;

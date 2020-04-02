@@ -1,6 +1,7 @@
 package me.panpf.adapter;
 
-import android.util.SparseArray;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,44 +9,31 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class ItemStorage {
-
-    @NonNull
-    private final Object headerItemListLock = new Object();
     @NonNull
     private final Object itemListLock = new Object();
     @NonNull
     private final Object itemFactoryListLock = new Object();
-    @NonNull
-    private final Object footerItemListLock = new Object();
 
     @NonNull
     private AssemblyAdapter adapter;
+    @NonNull
+    private ItemTypeManager itemTypeManager = new ItemTypeManager();
 
-    private int itemTypeIndex = 0;
-    private int headerItemPosition;
-    private int footerItemPosition;
-    private boolean itemFactoryLocked;
-
+    @NonNull
+    private ItemHolderManager headerItemHolderManager = new ItemHolderManager();
     @Nullable
-    private ArrayList<ItemHolder> headerItemList;
-    @Nullable
-    private List dataList;
-    @Nullable
-    private ArrayList<ItemHolder> footerItemList;
+    private ArrayList<ItemFactory> itemFactoryList;
+    @NonNull
+    private ItemHolderManager footerItemHolderManager = new ItemHolderManager();
     @Nullable
     private MoreItemHolder moreItemHolder;
 
     @Nullable
-    private ArrayList<ItemFactory> itemFactoryList;
-    @Nullable
-    private SparseArray<Object> itemFactoryArray;
+    private List dataList;
 
     private boolean notifyOnChange = true;
 
@@ -79,21 +67,18 @@ public class ItemStorage {
      */
     public void addItemFactory(@NonNull ItemFactory itemFactory) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemFactoryLocked) {
+        if (itemFactory == null || itemTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemTypeIndex++);
+        int itemType = itemTypeManager.add(itemFactory);
 
-        if (itemFactoryArray == null) {
-            itemFactoryArray = new SparseArray<Object>();
-        }
-        itemFactoryArray.put(itemFactory.getItemType(), itemFactory);
+        itemFactory.setAdapter(adapter);
+        itemFactory.setItemType(itemType);
 
         synchronized (itemFactoryListLock) {
             if (itemFactoryList == null) {
-                itemFactoryList = new ArrayList<ItemFactory>(5);
+                itemFactoryList = new ArrayList<>(5);
             }
             itemFactoryList.add(itemFactory);
         }
@@ -123,28 +108,19 @@ public class ItemStorage {
     @NonNull
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemFactoryLocked) {
+        if (itemFactory == null || itemTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
+        ItemHolder<DATA> itemHolder = new ItemHolder<>(itemFactory, data);
+        itemHolder.setItemStorage(this);
+        itemHolder.setHeader(true);
+
+        int itemType = itemTypeManager.add(itemHolder);
         itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemTypeIndex++);
+        itemFactory.setItemType(itemType);
 
-        ItemHolder<DATA> itemHolder = new ItemHolder<DATA>(this, itemFactory, data, true);
-        itemHolder.setPosition(headerItemPosition++);
-
-        if (itemFactoryArray == null) {
-            itemFactoryArray = new SparseArray<Object>();
-        }
-        itemFactoryArray.put(itemFactory.getItemType(), itemHolder);
-
-        synchronized (headerItemListLock) {
-            if (headerItemList == null) {
-                headerItemList = new ArrayList<ItemHolder>(1);
-            }
-            headerItemList.add(itemHolder);
-        }
-
+        headerItemHolderManager.add(itemHolder);
         return itemHolder;
     }
 
@@ -159,32 +135,23 @@ public class ItemStorage {
     @NonNull
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder) {
         //noinspection ConstantConditions
-        if (itemHolder == null || itemFactoryLocked) {
+        if (itemHolder == null || itemTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemHolder is null or item factory list locked");
         }
-        //noinspection ConstantConditions
         if (itemHolder.getItemStorage() != null) {
             throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
-        itemHolder.getItemFactory().setAdapter(adapter);
-        itemHolder.getItemFactory().setItemType(itemTypeIndex++);
+        int itemType = itemTypeManager.add(itemHolder);
+
+        ItemFactory itemFactory = itemHolder.getItemFactory();
+        itemFactory.setAdapter(adapter);
+        itemFactory.setItemType(itemType);
 
         itemHolder.setItemStorage(this);
         itemHolder.setHeader(true);
-        itemHolder.setPosition(headerItemPosition++);
 
-        if (itemFactoryArray == null) {
-            itemFactoryArray = new SparseArray<Object>();
-        }
-        itemFactoryArray.put(itemHolder.getItemFactory().getItemType(), itemHolder);
-
-        synchronized (headerItemListLock) {
-            if (headerItemList == null) {
-                headerItemList = new ArrayList<ItemHolder>(1);
-            }
-            headerItemList.add(itemHolder);
-        }
+        headerItemHolderManager.add(itemHolder);
 
         return itemHolder;
     }
@@ -192,58 +159,23 @@ public class ItemStorage {
     /**
      * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    public void headerEnabledChanged(@NonNull ItemHolder itemHolder) {
+    void headerEnabledChanged(@NonNull ItemHolder itemHolder) {
         //noinspection ConstantConditions
         if (itemHolder == null || itemHolder.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
-        if (itemHolder.isEnabled()) {
-            synchronized (headerItemListLock) {
-                if (headerItemList == null) {
-                    headerItemList = new ArrayList<ItemHolder>(1);
-                }
-                headerItemList.add(itemHolder);
-                Collections.sort(headerItemList, new Comparator<ItemHolder>() {
-                    @Override
-                    public int compare(ItemHolder lhs, ItemHolder rhs) {
-                        return lhs.getPosition() - rhs.getPosition();
-                    }
-                });
-            }
-
-            if (notifyOnChange) {
-                adapter.notifyDataSetChanged();
-            }
-        } else {
-            synchronized (headerItemListLock) {
-                if (headerItemList != null && headerItemList.remove(itemHolder)) {
-                    if (notifyOnChange) {
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
+        if (headerItemHolderManager.itemHolderEnabledChanged(itemHolder) && notifyOnChange) {
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 获取 header 列表
      */
-    @Nullable
-    public List<ItemHolder> getHeaderItemList() {
-        return headerItemList;
-    }
-
-    /**
-     * 获取列表头的个数
-     */
-    public int getHeaderItemCount() {
-        return headerItemList != null ? headerItemList.size() : 0;
-    }
-
-    @Nullable
-    public Object getHeaderData(int positionInHeaderList) {
-        return headerItemList != null ? headerItemList.get(positionInHeaderList).getData() : null;
+    @NonNull
+    public ItemHolderManager getHeaderItemHolderManager() {
+        return headerItemHolderManager;
     }
 
 
@@ -255,27 +187,19 @@ public class ItemStorage {
     @NonNull
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemFactoryLocked) {
+        if (itemFactory == null || itemTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
+        ItemHolder<DATA> itemHolder = new ItemHolder<>(itemFactory, data);
+        itemHolder.setItemStorage(this);
+        itemHolder.setHeader(false);
+
+        int itemType = itemTypeManager.add(itemHolder);
         itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemTypeIndex++);
+        itemFactory.setItemType(itemType);
 
-        ItemHolder<DATA> itemHolder = new ItemHolder<DATA>(this, itemFactory, data, false);
-        itemHolder.setPosition(footerItemPosition++);
-
-        if (itemFactoryArray == null) {
-            itemFactoryArray = new SparseArray<Object>();
-        }
-        itemFactoryArray.put(itemFactory.getItemType(), itemHolder);
-
-        synchronized (footerItemListLock) {
-            if (footerItemList == null) {
-                footerItemList = new ArrayList<ItemHolder>(1);
-            }
-            footerItemList.add(itemHolder);
-        }
+        footerItemHolderManager.add(itemHolder);
 
         return itemHolder;
     }
@@ -291,32 +215,23 @@ public class ItemStorage {
     @NonNull
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder) {
         //noinspection ConstantConditions
-        if (itemHolder == null || itemFactoryLocked) {
+        if (itemHolder == null || itemTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemHolder is null or item factory list locked");
         }
-        //noinspection ConstantConditions
         if (itemHolder.getItemStorage() != null) {
             throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
-        itemHolder.getItemFactory().setAdapter(adapter);
-        itemHolder.getItemFactory().setItemType(itemTypeIndex++);
+        int itemType = itemTypeManager.add(itemHolder);
+
+        ItemFactory itemFactory = itemHolder.getItemFactory();
+        itemFactory.setAdapter(adapter);
+        itemFactory.setItemType(itemType);
 
         itemHolder.setItemStorage(this);
         itemHolder.setHeader(false);
-        itemHolder.setPosition(footerItemPosition++);
 
-        if (itemFactoryArray == null) {
-            itemFactoryArray = new SparseArray<Object>();
-        }
-        itemFactoryArray.put(itemHolder.getItemFactory().getItemType(), itemHolder);
-
-        synchronized (footerItemListLock) {
-            if (footerItemList == null) {
-                footerItemList = new ArrayList<ItemHolder>(1);
-            }
-            footerItemList.add(itemHolder);
-        }
+        footerItemHolderManager.add(itemHolder);
 
         return itemHolder;
     }
@@ -324,58 +239,23 @@ public class ItemStorage {
     /**
      * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
      */
-    public void footerEnabledChanged(@NonNull ItemHolder itemHolder) {
+    void footerEnabledChanged(@NonNull ItemHolder itemHolder) {
         //noinspection ConstantConditions
         if (itemHolder == null || itemHolder.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
-        if (itemHolder.isEnabled()) {
-            synchronized (footerItemListLock) {
-                if (footerItemList == null) {
-                    footerItemList = new ArrayList<ItemHolder>(1);
-                }
-                footerItemList.add(itemHolder);
-                Collections.sort(footerItemList, new Comparator<ItemHolder>() {
-                    @Override
-                    public int compare(ItemHolder lhs, ItemHolder rhs) {
-                        return lhs.getPosition() - rhs.getPosition();
-                    }
-                });
-            }
-
-            if (notifyOnChange) {
-                adapter.notifyDataSetChanged();
-            }
-        } else {
-            synchronized (footerItemListLock) {
-                if (footerItemList != null && footerItemList.remove(itemHolder)) {
-                    if (notifyOnChange) {
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
+        if (footerItemHolderManager.itemHolderEnabledChanged(itemHolder) && notifyOnChange) {
+            adapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 获取 footer 列表
      */
-    @Nullable
-    public List<ItemHolder> getFooterItemList() {
-        return footerItemList;
-    }
-
-    /**
-     * 获取列表尾的个数
-     */
-    public int getFooterItemCount() {
-        return footerItemList != null ? footerItemList.size() : 0;
-    }
-
-    @Nullable
-    public Object getFooterData(int positionInFooterList) {
-        return footerItemList != null ? footerItemList.get(positionInFooterList).getData() : null;
+    @NonNull
+    public ItemHolderManager getFooterItemHolderManager() {
+        return footerItemHolderManager;
     }
 
 
@@ -387,24 +267,22 @@ public class ItemStorage {
     @NonNull
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemFactoryLocked) {
+        if (itemFactory == null || itemTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        itemFactory.setAdapter(adapter);
         if (this.moreItemHolder != null) {
-            itemFactory.setItemType(this.moreItemHolder.getItemFactory().getItemType());
-        } else {
-            itemFactory.setItemType(itemTypeIndex++);
+            throw new IllegalStateException("MoreItem cannot be set repeatedly");
         }
 
+        MoreItemHolder<DATA> moreItemHolder = new MoreItemHolder<>(itemFactory, data);
+        ((ItemHolder) moreItemHolder).setItemStorage(this);
+        ((ItemHolder) moreItemHolder).setHeader(false);
+
+        int itemType = itemTypeManager.add(moreItemHolder);
         itemFactory.loadMoreFinished(false);
-        MoreItemHolder<DATA> moreItemHolder = new MoreItemHolder<DATA>(this, itemFactory, data, false);
-
-        if (itemFactoryArray == null) {
-            itemFactoryArray = new SparseArray<Object>();
-        }
-        itemFactoryArray.put(itemFactory.getItemType(), moreItemHolder);
+        itemFactory.setAdapter(adapter);
+        itemFactory.setItemType(itemType);
 
         this.moreItemHolder = moreItemHolder;
         return moreItemHolder;
@@ -419,30 +297,27 @@ public class ItemStorage {
      * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
      */
     @NonNull
-    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> newItemHolder) {
+    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> moreItemHolder) {
         //noinspection ConstantConditions
-        if (newItemHolder == null || itemFactoryLocked) {
+        if (moreItemHolder == null || itemTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemHolder is null or item factory list locked");
         }
 
-        newItemHolder.getItemFactory().setAdapter(adapter);
         if (this.moreItemHolder != null) {
-            newItemHolder.getItemFactory().setItemType(this.moreItemHolder.getItemFactory().getItemType());
-        } else {
-            newItemHolder.getItemFactory().setItemType(itemTypeIndex++);
+            throw new IllegalStateException("MoreItem cannot be set repeatedly");
         }
 
-        newItemHolder.getItemFactory().loadMoreFinished(false);
-        ((ItemHolder) newItemHolder).setItemStorage(this);
-        ((ItemHolder) newItemHolder).setHeader(false);
+        ((ItemHolder) moreItemHolder).setItemStorage(this);
+        ((ItemHolder) moreItemHolder).setHeader(false);
 
-        if (itemFactoryArray == null) {
-            itemFactoryArray = new SparseArray<Object>();
-        }
-        itemFactoryArray.put(newItemHolder.getItemFactory().getItemType(), newItemHolder);
+        int itemType = itemTypeManager.add(moreItemHolder);
 
-        this.moreItemHolder = newItemHolder;
-        return newItemHolder;
+        moreItemHolder.getItemFactory().setAdapter(adapter);
+        moreItemHolder.getItemFactory().setItemType(itemType);
+        moreItemHolder.getItemFactory().loadMoreFinished(false);
+
+        this.moreItemHolder = moreItemHolder;
+        return moreItemHolder;
     }
 
     @Nullable
@@ -514,7 +389,6 @@ public class ItemStorage {
      * 批量添加数据
      */
     public void addAll(@Nullable Collection collection) {
-        //noinspection ConstantConditions
         if (collection == null || collection.size() == 0) {
             return;
         }
@@ -535,7 +409,6 @@ public class ItemStorage {
      * 批量添加数据
      */
     public void addAll(@Nullable Object... items) {
-        //noinspection ConstantConditions
         if (items == null || items.length == 0) {
             return;
         }
@@ -651,10 +524,12 @@ public class ItemStorage {
     }
 
     public int getViewTypeCount() {
-        // 只要访问了 getViewTypeCount() 方法就认为开始显示了，需要锁定 itemFactory 列表
-        itemFactoryLocked = true;
+        // 只要访问了 getViewTypeCount() 方法就认为开始显示了，需要锁定 itemFactory 列表，因为 ListView 不允许 getViewTypeCount() 改变
+        if (!itemTypeManager.isLocked()) {
+            itemTypeManager.lock();
+        }
         // 1 来自 BaseAdapter.getViewTypeCount()
-        return itemTypeIndex > 0 ? itemTypeIndex : 1;
+        return itemTypeManager.getCount();
     }
 
     /**
@@ -665,6 +540,6 @@ public class ItemStorage {
      */
     @Nullable
     public Object getItemFactoryByViewType(int viewType) {
-        return itemFactoryArray != null ? itemFactoryArray.get(viewType) : null;
+        return itemTypeManager.get(viewType);
     }
 }

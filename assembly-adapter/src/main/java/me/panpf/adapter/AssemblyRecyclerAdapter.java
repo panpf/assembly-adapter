@@ -18,13 +18,14 @@ package me.panpf.adapter;
 
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 import me.panpf.adapter.recycler.RecyclerItemWrapper;
@@ -92,21 +93,31 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return storage.addHeaderItem(itemHolder);
     }
 
+    @NonNull
+    @Override
+    public ItemHolderManager getHeaderItemHolderManager() {
+        return storage.getHeaderItemHolderManager();
+    }
+
+    /**
+     * @deprecated Use {@link #getHeaderItemHolderManager()} instead
+     */
     @Nullable
     @Override
+    @Deprecated
     public List<ItemHolder> getHeaderItemList() {
-        return storage.getHeaderItemList();
+        return storage.getHeaderItemHolderManager().getItemList();
     }
 
     @Override
     public int getHeaderItemCount() {
-        return storage.getHeaderItemCount();
+        return storage.getHeaderItemHolderManager().getItemCount();
     }
 
     @Nullable
     @Override
     public Object getHeaderData(int positionInHeaderList) {
-        return storage.getHeaderData(positionInHeaderList);
+        return storage.getHeaderItemHolderManager().getItemData(positionInHeaderList);
     }
 
 
@@ -131,21 +142,31 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return storage.addFooterItem(itemHolder);
     }
 
+    @NonNull
     @Override
-    public int getFooterItemCount() {
-        return storage.getFooterItemCount();
+    public ItemHolderManager getFooterItemHolderManager() {
+        return storage.getFooterItemHolderManager();
     }
 
+    /**
+     * @deprecated Use {@link #getFooterItemHolderManager()} instead
+     */
     @Nullable
     @Override
+    @Deprecated
     public List<ItemHolder> getFooterItemList() {
-        return storage.getFooterItemList();
+        return storage.getFooterItemHolderManager().getItemList();
+    }
+
+    @Override
+    public int getFooterItemCount() {
+        return storage.getFooterItemHolderManager().getItemCount();
     }
 
     @Nullable
     @Override
     public Object getFooterData(int positionInFooterList) {
-        return storage.getFooterData(positionInFooterList);
+        return storage.getFooterItemHolderManager().getItemData(positionInFooterList);
     }
 
 

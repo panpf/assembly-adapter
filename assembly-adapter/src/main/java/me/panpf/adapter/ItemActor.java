@@ -5,11 +5,11 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused"})
 public class ItemActor {
     /*
      * 为什么不把这里面的方法放在 ItemStorage 中，然后直接访问里面的字段，非要通过 AssemblyAdapter 来访问？
-     * 因为模仿 PagingListAdapter 实现 AssemblyRecyclerPageListAdapter 时需要重写 getDataCount() 和 getData() 方法
+     * 因为模仿 PagedListAdapter 实现 AssemblyPagedListAdapter 时需要重写 getDataCount() 和 getData() 方法
      * 但是无法直接继承 ItemStorage 重写其方法，只能继承 AssemblyRecyclerAdapter 所以不得已才这样做
      */
 
@@ -120,11 +120,14 @@ public class ItemActor {
         int headerItemCount = adapter.getHeaderItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
-        List<ItemHolder> headerItemList = adapter.getHeaderItemList();
-        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+        ItemHolderManager headerItemHolderManager = adapter.getHeaderItemHolderManager();
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            return headerItemList.get(positionInHeaderList).getItemFactory().getSpanSize();
+            ItemHolder itemHolder = headerItemHolderManager.getItem(positionInHeaderList);
+            if (itemHolder == null)
+                throw new IllegalArgumentException("Not found header item by positionInHeaderList: " + position);
+            return itemHolder.getItemFactory().getSpanSize();
         }
 
         // 数据
@@ -152,10 +155,13 @@ public class ItemActor {
         int footerItemCount = adapter.getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
-        List<ItemHolder> footerItemList = adapter.getFooterItemList();
-        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+        ItemHolderManager footerItemHolderManager = adapter.getFooterItemHolderManager();
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).getItemFactory().getSpanSize();
+            ItemHolder itemHolder = footerItemHolderManager.getItem(positionInFooterList);
+            if (itemHolder == null)
+                throw new IllegalArgumentException("Not found footer item by positionInFooterList: " + position);
+            return itemHolder.getItemFactory().getSpanSize();
         }
 
         // 加载更多尾巴
@@ -173,11 +179,14 @@ public class ItemActor {
         int headerEndPosition = headerItemCount - 1;
 
         // 头
-        List<ItemHolder> headerItemList = adapter.getHeaderItemList();
-        if (headerItemList != null && position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+        ItemHolderManager headerItemHolderManager = adapter.getHeaderItemHolderManager();
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            return headerItemList.get(positionInHeaderList).getItemFactory().getItemType();
+            ItemHolder itemHolder = headerItemHolderManager.getItem(positionInHeaderList);
+            if (itemHolder == null)
+                throw new IllegalArgumentException("Not found header item by positionInHeaderList: " + position);
+            return itemHolder.getItemFactory().getItemType();
         }
 
         // 数据
@@ -202,13 +211,16 @@ public class ItemActor {
         }
 
         // 尾巴
-        List<ItemHolder> footerItemList = adapter.getFooterItemList();
+        ItemHolderManager footerItemHolderManager = adapter.getFooterItemHolderManager();
         int footerItemCount = adapter.getFooterItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
-        if (footerItemList != null && position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            return footerItemList.get(positionInFooterList).getItemFactory().getItemType();
+            ItemHolder itemHolder = footerItemHolderManager.getItem(positionInFooterList);
+            if (itemHolder == null)
+                throw new IllegalArgumentException("Not found footer item by positionInFooterList: " + position);
+            return itemHolder.getItemFactory().getItemType();
         }
 
         // 加载更多尾巴

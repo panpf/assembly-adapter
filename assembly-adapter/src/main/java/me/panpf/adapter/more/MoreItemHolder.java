@@ -28,6 +28,7 @@ import me.panpf.adapter.ItemStorage;
 @SuppressWarnings({"unused"})
 public class MoreItemHolder<DATA> extends ItemHolder<DATA> {
 
+    @Deprecated
     public MoreItemHolder(@NonNull ItemStorage storage, @NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
         super(storage, itemFactory, data, header);
     }

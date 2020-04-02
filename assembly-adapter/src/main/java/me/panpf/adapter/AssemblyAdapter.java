@@ -1,12 +1,13 @@
 package me.panpf.adapter;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
@@ -58,9 +59,18 @@ public interface AssemblyAdapter {
     <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder);
 
     /**
+     * 获取 header 管理器
+     */
+    @NonNull
+    ItemHolderManager getHeaderItemHolderManager();
+
+    /**
      * 获取 header 列表
+     *
+     * @deprecated Use {@link #getHeaderItemHolderManager ()} instead
      */
     @Nullable
+    @Deprecated
     List<ItemHolder> getHeaderItemList();
 
     /**
@@ -98,9 +108,18 @@ public interface AssemblyAdapter {
     <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder);
 
     /**
+     * 获取 footer 管理器
+     */
+    @NonNull
+    ItemHolderManager getFooterItemHolderManager();
+
+    /**
      * 获取 footer 列表
+     *
+     * @deprecated Use {@link #getFooterItemHolderManager ()} instead
      */
     @Nullable
+    @Deprecated
     List<ItemHolder> getFooterItemList();
 
     /**
