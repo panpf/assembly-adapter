@@ -3,15 +3,16 @@ package me.panpf.adapter.sample.ds
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.vm.Initialize
 import me.panpf.adapter.sample.vm.ListStatus
 
-class ListDataSource(val status: MutableLiveData<ListStatus>) : PageKeyedDataSource<Int, Any>() {
+class ListDataSource(private val status: MutableLiveData<ListStatus>) : PageKeyedDataSource<Int, Any>() {
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Any>) {
         status.postValue(Initialize())
@@ -45,7 +46,7 @@ class ListDataSource(val status: MutableLiveData<ListStatus>) : PageKeyedDataSou
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Any>) {
-        launch {
+        GlobalScope.launch {
             delay(1500)
             val dataList = mutableListOf<Any>().apply {
                 if (params.key >= 5) {
@@ -80,7 +81,7 @@ class ListDataSource(val status: MutableLiveData<ListStatus>) : PageKeyedDataSou
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Any>) {
-        launch {
+        GlobalScope.launch {
             delay(1500)
             val dataList = mutableListOf<Any>().apply {
                 if (params.key < 0) {

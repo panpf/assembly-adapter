@@ -1,11 +1,12 @@
 package me.panpf.adapter.sample.vm
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import android.content.pm.ApplicationInfo
 import android.text.format.Formatter
-import kotlinx.coroutines.experimental.launch
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.panpf.adapter.sample.bean.AppInfo
 import java.io.File
 
@@ -13,7 +14,7 @@ class AppsViewModel(application: Application) : AndroidViewModel(application) {
     val apps = MutableLiveData<Array<List<AppInfo>>>()
 
     fun load() {
-        launch {
+        GlobalScope.launch {
             val appContext = getApplication<Application>()
             val packageManager = appContext.packageManager
             val packageInfoList = packageManager.getInstalledPackages(0)

@@ -22,6 +22,7 @@ import me.panpf.arch.ktx.bindViewModel
 class RecyclerPagedSampleFragment : BaseFragment() {
 
     private val viewModel by bindViewModel(ListViewModel::class)
+
     private val adapter = AssemblyPagedListAdapter<Any>(DiffableDiffCallback()).apply {
         addHeaderItem(HeaderItem.Factory(), "我是小额头呀！")
         addItemFactory(UserItem.Factory())
@@ -47,8 +48,8 @@ class RecyclerPagedSampleFragment : BaseFragment() {
         recyclerFm_recycler.layoutManager = LinearLayoutManager(activity)
         recyclerFm_recycler.adapter = adapter
 
-        viewModel.list.observe(this, androidx.lifecycle.Observer { adapter.submitList(it) })
-        viewModel.listStatus.observe(this, Observer {
+        viewModel.list.observe(viewLifecycleOwner, androidx.lifecycle.Observer { adapter.submitList(it) })
+        viewModel.listStatus.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is End -> adapter.loadMoreFinished(true)
             }

@@ -1,3 +1,8 @@
+# v...
+* upgrade: Fragment upgraded to 1.2.0
+* upgrade: RecyclerView upgraded to 1.1.0
+* upgrade: Paging upgraded to 2.1.1
+
 # v3.4.0
 
 assembly-paged-list-adapter:

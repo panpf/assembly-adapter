@@ -25,14 +25,13 @@ android {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${property("KOTLINX_COROUTINES")}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${property("KOTLINX_COROUTINES_ANDROID")}")
 
     implementation("androidx.core:core-ktx:${property("ANDROIDX_CORE_KTX")}")
+    implementation("androidx.appcompat:appcompat:${property("ANDROIDX_APPCOMPAT")}")
     implementation("androidx.fragment:fragment:${property("ANDROIDX_FRAGMENT")}")
     implementation("androidx.constraintlayout:constraintlayout:${property("ANDROIDX_CONSTRAINTLAYOUT")}")
-    implementation("androidx.lifecycle:lifecycle-extensions:${property("ANDROIDX_LIFECYCLE")}")
     implementation("com.google.android.material:material:${property("MATERIAL")}")
-
 
     implementation("me.panpf:pager-indicator:${property("PAGER_INDICATOR")}")
     implementation("me.panpf:sketch:${property("SKETCH_VERSION")}")

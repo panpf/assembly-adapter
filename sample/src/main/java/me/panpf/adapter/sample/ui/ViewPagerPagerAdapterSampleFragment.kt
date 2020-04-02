@@ -35,16 +35,16 @@ class ViewPagerPagerAdapterSampleFragment : BaseFragment() {
 
         val viewPager = view.findViewById(R.id.pagerFm_pager) as ViewPager
 
-        val header = Header("我是小额头呀！\n你敢戳我，我就敢消失！哼！", "http://www.bz55.com/uploads/allimg/150605/139-150605153433-50.jpg")
+        val header = Header("我是小额头呀！\n你敢戳我，我就敢消失！哼！", "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-008.jpg")
         val dataArray = arrayOf(
-                "http://img4q.duitang.com/uploads/item/201506/12/20150612095354_5w3sj.jpeg",
-                "http://img5q.duitang.com/uploads/blog/201412/11/20141211160750_hFrss.jpeg",
-                "http://pic.yesky.com/uploadImages/2015/147/00/0VC1P4UAR2V6.jpg",
-                "http://img5q.duitang.com/uploads/item/201504/10/20150410H1528_F4rEf.jpeg",
+                "https://img.ivsky.com/img/tupian/pre/201910/17/yujia-013.jpg",
+                "https://img.ivsky.com/img/tupian/pre/201910/17/yujia-016.jpg",
+                "https://img.ivsky.com/img/tupian/pre/201910/17/yujia-012.jpg",
+                "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-005.jpg",
                 Text("分割线又来了"),
-                "http://img4.duitang.com/uploads/item/201509/19/20150919212952_femTB.thumb.700_0.jpeg"
+                "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-007.jpg"
         )
-        val footer = Header("我是小尾巴呀！\n你敢戳我，我也敢消失！哼！", "http://www.bz55.com/uploads/allimg/150720/139-150H0110925.jpg")
+        val footer = Header("我是小尾巴呀！\n你敢戳我，我也敢消失！哼！", "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-004.jpg")
 
         val adapter = AssemblyPagerAdapter(dataArray)
 

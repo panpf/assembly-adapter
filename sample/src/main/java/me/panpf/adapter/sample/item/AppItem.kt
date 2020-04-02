@@ -20,9 +20,9 @@ class AppItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<AppInfo>(item
         appInfo ?: return
 
         if (appInfo.isTempInstalled) {
-            iconImageView.displayImage(AppIconUriModel.makeUri(appInfo.id, appInfo.versionCode))
+            iconImageView.displayImage(AppIconUriModel.makeUri(appInfo.id.orEmpty(), appInfo.versionCode))
         } else {
-            iconImageView.displayImage(ApkIconUriModel.makeUri(appInfo.apkFilePath))
+            iconImageView.displayImage(ApkIconUriModel.makeUri(appInfo.apkFilePath.orEmpty()))
         }
         nameTextView.text = appInfo.name
     }
@@ -31,7 +31,7 @@ class AppItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<AppInfo>(item
 
         init {
             setOnItemClickListener {context, view, position, positionInPart, data ->
-                val launchIntent = context.packageManager.getLaunchIntentForPackage(data?.packageName)
+                val launchIntent = context.packageManager.getLaunchIntentForPackage(requireNotNull(data).packageName.orEmpty())
                 if (launchIntent != null) {
                     context.startActivity(launchIntent)
                 } else {
