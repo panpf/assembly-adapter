@@ -186,7 +186,7 @@ public class ItemActor {
             ItemHolder itemHolder = headerItemHolderManager.getItem(positionInHeaderList);
             if (itemHolder == null)
                 throw new IllegalArgumentException("Not found header item by positionInHeaderList: " + position);
-            return itemHolder.getItemFactory().getItemType();
+            return itemHolder.getItemFactory().getViewType();
         }
 
         // 数据
@@ -202,7 +202,7 @@ public class ItemActor {
             for (int w = 0, size = itemFactoryList.size(); w < size; w++) {
                 itemFactory = itemFactoryList.get(w);
                 if (itemFactory.match(dataObject)) {
-                    return itemFactory.getItemType();
+                    return itemFactory.getViewType();
                 }
             }
 
@@ -220,13 +220,13 @@ public class ItemActor {
             ItemHolder itemHolder = footerItemHolderManager.getItem(positionInFooterList);
             if (itemHolder == null)
                 throw new IllegalArgumentException("Not found footer item by positionInFooterList: " + position);
-            return itemHolder.getItemFactory().getItemType();
+            return itemHolder.getItemFactory().getViewType();
         }
 
         // 加载更多尾巴
         ItemHolder moreItemHolder = adapter.getMoreItemHolder();
         if (moreItemHolder != null && dataCount > 0 && adapter.hasMoreFooter() && position == getItemCount() - 1) {
-            return moreItemHolder.getItemFactory().getItemType();
+            return moreItemHolder.getItemFactory().getViewType();
         }
 
         throw new IllegalStateException("Not found match viewType, position: " + position);

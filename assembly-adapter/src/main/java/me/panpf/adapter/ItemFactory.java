@@ -1,14 +1,20 @@
 package me.panpf.adapter;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.ViewGroup;
 
-@SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface ItemFactory<DATA> {
+
+    /**
+     * This method is called by {@link AssemblyAdapter}
+     */
+    void attachToAdapter(@NonNull AssemblyAdapter adapter, int viewType);
+
     /**
      * 获取被包装的 {@link ItemFactory}
      */
@@ -16,25 +22,18 @@ public interface ItemFactory<DATA> {
     ItemFactory<DATA> getWrappedItemFactory();
 
     /**
-     * 获取 item 类型
+     * @deprecated Use {@link #getViewType()} instead
      */
+    @Deprecated
     int getItemType();
 
-    /**
-     * 设置 item 类型，此方法由 {@link AssemblyAdapter} 调用
-     */
-    void setItemType(int itemType);
+    int getViewType();
 
     /**
      * 获取 {@link AssemblyAdapter}
      */
     @Nullable
     AssemblyAdapter getAdapter();
-
-    /**
-     * 设置 {@link AssemblyAdapter}，此方法由 {@link AssemblyAdapter} 调用
-     */
-    void setAdapter(@NonNull AssemblyAdapter adapter);
 
     /**
      * 获取在 {@link GridLayoutManager} 里所占的列数

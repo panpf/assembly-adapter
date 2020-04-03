@@ -1,19 +1,19 @@
 package me.panpf.adapter;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import android.view.ViewGroup;
 
 import me.panpf.adapter.recycler.RecyclerItemWrapper;
 
-@SuppressWarnings("unused")
 public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
 
-    private int itemType;
+    private int viewType;
     @Nullable
     private AssemblyAdapter adapter;
 
@@ -30,24 +30,28 @@ public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
     }
 
     @Override
+    public void attachToAdapter(@NonNull AssemblyAdapter adapter, int viewType) {
+        this.adapter = adapter;
+        this.viewType = viewType;
+    }
+
+    /**
+     * @deprecated Use {@link #getViewType()} instead
+     */
+    @Deprecated
     public int getItemType() {
-        return itemType;
+        return viewType;
     }
 
     @Override
-    public void setItemType(int itemType) {
-        this.itemType = itemType;
+    public int getViewType() {
+        return viewType;
     }
 
-    @Override
     @Nullable
+    @Override
     public AssemblyAdapter getAdapter() {
         return adapter;
-    }
-
-    @Override
-    public void setAdapter(@NonNull AssemblyAdapter adapter) {
-        this.adapter = adapter;
     }
 
     @Override
@@ -78,7 +82,7 @@ public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
     @Override
     public AssemblyItemFactory<DATA> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
-            clickListenerManager = new ClickListenerManager<DATA>();
+            clickListenerManager = new ClickListenerManager<>();
         }
         clickListenerManager.add(viewId, onClickListener);
         return this;
@@ -87,7 +91,7 @@ public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
     @Override
     public AssemblyItemFactory<DATA> setOnItemClickListener(@NonNull OnClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
-            clickListenerManager = new ClickListenerManager<DATA>();
+            clickListenerManager = new ClickListenerManager<>();
         }
         clickListenerManager.add(onClickListener);
         return this;
@@ -96,7 +100,7 @@ public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
     @Override
     public AssemblyItemFactory<DATA> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
-            clickListenerManager = new ClickListenerManager<DATA>();
+            clickListenerManager = new ClickListenerManager<>();
         }
         clickListenerManager.add(viewId, onClickListener);
         return this;
@@ -105,7 +109,7 @@ public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
     @Override
     public AssemblyItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
-            clickListenerManager = new ClickListenerManager<DATA>();
+            clickListenerManager = new ClickListenerManager<>();
         }
         clickListenerManager.add(onClickListener);
         return this;
@@ -146,7 +150,7 @@ public abstract class AssemblyItemFactory<DATA> implements ItemFactory<DATA> {
 
         item.onInit(parent.getContext());
 
-        Item<DATA> finalItem = inRecycler ? new RecyclerItemWrapper<DATA>(item) : item;
+        Item<DATA> finalItem = inRecycler ? new RecyclerItemWrapper<>(item) : item;
 
         registerListeners(finalItem);
 

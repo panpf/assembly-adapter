@@ -9,20 +9,16 @@ import java.util.Comparator;
 
 public class ItemHolderManager {
 
-    @NonNull
-    private final Object listEditLock = new Object();
     @Nullable
     private ArrayList<ItemHolder> itemHolderList;
     private int itemHolderPosition;
 
     public void add(@NonNull ItemHolder itemHolder) {
-        synchronized (listEditLock) {
-            itemHolder.setPosition(itemHolderPosition++);
-            if (itemHolderList == null) {
-                itemHolderList = new ArrayList<>();
-            }
-            itemHolderList.add(itemHolder);
+        itemHolder.setPosition(itemHolderPosition++);
+        if (itemHolderList == null) {
+            itemHolderList = new ArrayList<>();
         }
+        itemHolderList.add(itemHolder);
     }
 
     @Nullable
@@ -44,24 +40,20 @@ public class ItemHolderManager {
 
     public boolean itemHolderEnabledChanged(@NonNull ItemHolder itemHolder) {
         if (itemHolder.isEnabled()) {
-            synchronized (listEditLock) {
-                if (itemHolderList == null) {
-                    itemHolderList = new ArrayList<>();
-                }
-                itemHolderList.add(itemHolder);
-                Collections.sort(itemHolderList, new Comparator<ItemHolder>() {
-                    @Override
-                    public int compare(ItemHolder lhs, ItemHolder rhs) {
-                        return lhs.getPosition() - rhs.getPosition();
-                    }
-                });
+            if (itemHolderList == null) {
+                itemHolderList = new ArrayList<>();
             }
+            itemHolderList.add(itemHolder);
+            Collections.sort(itemHolderList, new Comparator<ItemHolder>() {
+                @Override
+                public int compare(ItemHolder lhs, ItemHolder rhs) {
+                    return lhs.getPosition() - rhs.getPosition();
+                }
+            });
 
             return true;
         } else {
-            synchronized (listEditLock) {
-                return itemHolderList != null && itemHolderList.remove(itemHolder);
-            }
+            return itemHolderList != null && itemHolderList.remove(itemHolder);
         }
     }
 

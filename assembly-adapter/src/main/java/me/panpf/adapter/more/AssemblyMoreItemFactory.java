@@ -16,10 +16,11 @@
 
 package me.panpf.adapter.more;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.ViewGroup;
 
 import me.panpf.adapter.AssemblyItemFactory;
 import me.panpf.adapter.OnClickListener;
@@ -28,7 +29,6 @@ import me.panpf.adapter.OnLongClickListener;
 /**
  * 加载更多专用 {@link AssemblyItemFactory}
  */
-@SuppressWarnings("unused")
 public abstract class AssemblyMoreItemFactory<DATA> extends AssemblyItemFactory<DATA> implements MoreItemFactory<DATA> {
 
     boolean paused;

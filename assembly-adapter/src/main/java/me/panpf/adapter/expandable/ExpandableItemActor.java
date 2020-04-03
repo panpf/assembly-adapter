@@ -9,7 +9,6 @@ import me.panpf.adapter.AssemblyExpandableAdapter;
 import me.panpf.adapter.ItemFactory;
 import me.panpf.adapter.ItemActor;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class ExpandableItemActor extends ItemActor {
 
     @NonNull
@@ -22,7 +21,7 @@ public class ExpandableItemActor extends ItemActor {
 
     public int getChildrenCount(int groupPosition) {
         Object groupObject = getItem(groupPosition);
-        if (groupObject != null && groupObject instanceof AssemblyGroup) {
+        if (groupObject instanceof AssemblyGroup) {
             return ((AssemblyGroup) groupObject).getChildCount();
         }
         return 0;
@@ -42,7 +41,7 @@ public class ExpandableItemActor extends ItemActor {
         return ((AssemblyGroup) groupDataObject).getChild(childPosition);
     }
 
-    public int getChildType(int groupPosition, int childPosition) {
+    public int getChildViewType(int groupPosition, int childPosition) {
         if (adapter.getChildItemFactoryCount() <= 0) {
             throw new IllegalStateException("You need to configure ItemFactory use addChildItemFactory method");
         }
@@ -55,7 +54,7 @@ public class ExpandableItemActor extends ItemActor {
             for (int w = 0, size = childItemFactoryList.size(); w < size; w++) {
                 childItemFactory = childItemFactoryList.get(w);
                 if (childItemFactory.match(childDataObject)) {
-                    return childItemFactory.getItemType();
+                    return childItemFactory.getViewType();
                 }
             }
         }

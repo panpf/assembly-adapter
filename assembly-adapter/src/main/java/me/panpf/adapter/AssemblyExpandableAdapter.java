@@ -42,6 +42,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     @NonNull
     private ExpandableItemActor actor = new ExpandableItemActor(this);
 
+    @Nullable
     private ExpandCallback expandCallback;
 
     public AssemblyExpandableAdapter() {
@@ -340,6 +341,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return actor.getSpanSize(position);
     }
 
+    @Nullable
+    @Override
+    public ItemFactory getItemFactoryByViewType(int viewType) {
+        return storage.getItemFactoryByViewType(viewType);
+    }
+
     @Override
     public int getGroupCount() {
         return actor.getItemCount();
@@ -389,7 +396,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getChildType(int groupPosition, int childPosition) {
-        return actor.getChildType(groupPosition, childPosition);
+        return actor.getChildViewType(groupPosition, childPosition);
     }
 
     @Override
@@ -416,18 +423,14 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return convertView;
     }
 
-    private Item createGroupItem(ViewGroup parent, int viewType) {
+    @NonNull
+    private Item createGroupItem(@NonNull ViewGroup parent, int viewType) {
         @Nullable
-        Object itemObject = storage.getItemFactoryByViewType(viewType);
-        if (itemObject instanceof ItemFactory) {
-            ItemFactory itemFactory = (ItemFactory) itemObject;
+        ItemFactory itemFactory = storage.getItemFactoryByViewType(viewType);
+        if (itemFactory != null) {
             return itemFactory.dispatchCreateItem(parent);
-        } else if (itemObject instanceof ItemHolder) {
-            ItemHolder itemHolder = (ItemHolder) itemObject;
-            return itemHolder.getItemFactory().dispatchCreateItem(parent);
         } else {
-            throw new IllegalStateException(String.format("Unknown groupViewType: %d, itemFactory: %s",
-                    viewType, itemObject != null ? itemObject.getClass().getName() : "null"));
+            throw new IllegalStateException(String.format("Not found ItemFactory by groupViewType: %d", viewType));
         }
     }
 
@@ -439,7 +442,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, @Nullable View convertView, @NonNull ViewGroup parent) {
         Item childItem;
         if (convertView == null) {
             childItem = createChildItem(parent, getChildType(groupPosition, childPosition));
@@ -452,7 +455,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return convertView;
     }
 
-    private Item createChildItem(ViewGroup parent, int viewType) {
+    @NonNull
+    private Item createChildItem(@NonNull ViewGroup parent, int viewType) {
         @Nullable
         Object itemObject = storage.getChildItemFactoryByViewType(viewType);
         if (itemObject instanceof ItemFactory) {
@@ -464,7 +468,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         }
     }
 
-    private void bindChildItem(Item childItem, int groupPosition, int childPosition, boolean isLastChild) {
+    private void bindChildItem(@NonNull Item childItem, int groupPosition, int childPosition, boolean isLastChild) {
         Object child = getChild(groupPosition, childPosition);
         childItem.setGroupPosition(groupPosition);
         childItem.setLastChild(isLastChild);
@@ -475,7 +479,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     /**
      * 设置扩展回调
      */
-    public void setExpandCallback(ExpandCallback expandCallback) {
+    public void setExpandCallback(@Nullable ExpandCallback expandCallback) {
         this.expandCallback = expandCallback;
     }
 

@@ -22,7 +22,6 @@ import androidx.annotation.Nullable;
 /**
  * {@link AssemblyPagerAdapter} 专用的固定位置 item 管理器
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
 public class PagerItemHolder<DATA> {
     @NonNull
     private PagerItemStorage storage;

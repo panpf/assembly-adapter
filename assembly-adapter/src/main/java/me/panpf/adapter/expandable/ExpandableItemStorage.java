@@ -2,29 +2,23 @@ package me.panpf.adapter.expandable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.panpf.adapter.AssemblyAdapter;
-import me.panpf.adapter.ItemHolder;
 import me.panpf.adapter.ItemFactory;
+import me.panpf.adapter.ItemHolder;
 import me.panpf.adapter.ItemStorage;
+import me.panpf.adapter.ViewTypeManager;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused"})
 public class ExpandableItemStorage extends ItemStorage {
 
     @NonNull
-    private final Object childItemFactoryListLock = new Object();
-
-    private int childTypeIndex = 0;
-    private boolean childItemFactoryLocked;
-
-    @Nullable
-    private ArrayList<ItemFactory> childItemFactoryList;
-    @Nullable
-    private SparseArray<Object> childItemFactoryArray;
+    private ViewTypeManager childViewTypeManager = new ViewTypeManager();
+    @NonNull
+    private ArrayList<ItemFactory> childItemFactoryList = new ArrayList<>();
 
     public ExpandableItemStorage(@NonNull AssemblyAdapter adapter) {
         super(adapter);
@@ -43,24 +37,14 @@ public class ExpandableItemStorage extends ItemStorage {
      */
     public void addChildItemFactory(@NonNull ItemFactory childItemFactory) {
         //noinspection ConstantConditions
-        if (childItemFactory == null || childItemFactoryLocked) {
+        if (childItemFactory == null || childViewTypeManager.isLocked()) {
             throw new IllegalStateException("childItemFactory is null or item factory list locked");
         }
 
-        childItemFactory.setAdapter(getAdapter());
-        childItemFactory.setItemType(childTypeIndex++);
+        childItemFactoryList.add(childItemFactory);
+        int viewType = childViewTypeManager.add(childItemFactory);
 
-        if (childItemFactoryArray == null) {
-            childItemFactoryArray = new SparseArray<Object>();
-        }
-        childItemFactoryArray.put(childItemFactory.getItemType(), childItemFactory);
-
-        synchronized (childItemFactoryListLock) {
-            if (childItemFactoryList == null) {
-                childItemFactoryList = new ArrayList<ItemFactory>(5);
-            }
-            childItemFactoryList.add(childItemFactory);
-        }
+        childItemFactory.attachToAdapter(getAdapter(), viewType);
     }
 
     /**
@@ -75,12 +59,14 @@ public class ExpandableItemStorage extends ItemStorage {
      * 获取 child {@link ItemFactory} 的个数
      */
     public int getChildItemFactoryCount() {
-        return childItemFactoryList != null ? childItemFactoryList.size() : 0;
+        return childItemFactoryList.size();
     }
 
     public int getChildTypeCount() {
-        childItemFactoryLocked = true;
-        return childTypeIndex > 0 ? childTypeIndex : 1;
+        if (!childViewTypeManager.isLocked()) {
+            childViewTypeManager.lock();
+        }
+        return childViewTypeManager.getCount();
     }
 
     /**
@@ -91,6 +77,6 @@ public class ExpandableItemStorage extends ItemStorage {
      */
     @Nullable
     public Object getChildItemFactoryByViewType(int viewType) {
-        return childItemFactoryArray != null ? childItemFactoryArray.get(viewType) : null;
+        return childViewTypeManager.get(viewType);
     }
 }

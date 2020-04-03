@@ -282,4 +282,7 @@ public interface AssemblyAdapter {
      * 获取指定位置占几列，专为 {@link RecyclerView} 预留
      */
     int getSpanSize(int position);
+
+    @Nullable
+    ItemFactory getItemFactoryByViewType(int viewType);
 }

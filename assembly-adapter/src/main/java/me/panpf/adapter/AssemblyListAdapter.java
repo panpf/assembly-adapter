@@ -312,6 +312,12 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
         return actor.getSpanSize(position);
     }
 
+    @Nullable
+    @Override
+    public ItemFactory getItemFactoryByViewType(int viewType) {
+        return storage.getItemFactoryByViewType(viewType);
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -344,16 +350,11 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     @NonNull
     private Item createItem(@NonNull ViewGroup parent, int viewType) {
         @Nullable
-        Object itemObject = storage.getItemFactoryByViewType(viewType);
-        if (itemObject instanceof ItemFactory) {
-            ItemFactory itemFactory = (ItemFactory) itemObject;
+        ItemFactory itemFactory = storage.getItemFactoryByViewType(viewType);
+        if (itemFactory != null) {
             return itemFactory.dispatchCreateItem(parent);
-        } else if (itemObject instanceof ItemHolder) {
-            ItemHolder itemHolder = (ItemHolder) itemObject;
-            return itemHolder.getItemFactory().dispatchCreateItem(parent);
         } else {
-            throw new IllegalStateException(String.format("Unknown viewType: %d, itemFactory: %s",
-                    viewType, itemObject != null ? itemObject.toString() : "null"));
+            throw new IllegalStateException(String.format("Not found ItemFactory by viewType: %d", viewType));
         }
     }
 

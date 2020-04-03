@@ -46,7 +46,7 @@ dependencies {
 
 [AssemblyAdapter] 共分为四部分：
 
-* Adapter：负责维护数据、itemType 以及加载更多，只需使用提供的几种 Adapter 即可
+* Adapter：负责维护数据、viewType 以及加载更多，只需使用提供的几种 Adapter 即可
 * [Item]：负责创建 itemView、设置数据，每个 item layout 都要有单独的 [Item]
 * [ItemFactory]：负责匹配数据类型、创建 [Item] 以及监听并处理点击事件，每个 [Item] 都要有单独的 [ItemFactory]
 * [ItemHolder]：当 [Item] 用于 header 或 footer 的时候会返回一个对应的 [ItemHolder]，你可以通过 [ItemHolder] 控制 [Item] 或更新其数据

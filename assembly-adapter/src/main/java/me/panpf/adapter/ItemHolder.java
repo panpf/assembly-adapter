@@ -71,8 +71,9 @@ public class ItemHolder<DATA> {
         enableChanged();
     }
 
-    void setItemStorage(@NonNull ItemStorage itemStorage) {
+    void attachToAdapter(@NonNull ItemStorage itemStorage, boolean header) {
         this.itemStorage = itemStorage;
+        this.header = header;
     }
 
     protected void enableChanged() {
@@ -95,9 +96,5 @@ public class ItemHolder<DATA> {
 
     public boolean isHeader() {
         return header;
-    }
-
-    void setHeader(boolean header) {
-        this.header = header;
     }
 }

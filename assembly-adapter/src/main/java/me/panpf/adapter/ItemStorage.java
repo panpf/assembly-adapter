@@ -13,20 +13,16 @@ import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
 public class ItemStorage {
-    @NonNull
-    private final Object itemListLock = new Object();
-    @NonNull
-    private final Object itemFactoryListLock = new Object();
 
     @NonNull
     private AssemblyAdapter adapter;
     @NonNull
-    private ItemTypeManager itemTypeManager = new ItemTypeManager();
+    private ViewTypeManager viewTypeManager = new ViewTypeManager();
 
     @NonNull
     private ItemHolderManager headerItemHolderManager = new ItemHolderManager();
-    @Nullable
-    private ArrayList<ItemFactory> itemFactoryList;
+    @NonNull
+    private ArrayList<ItemFactory> itemFactoryList = new ArrayList<>();
     @NonNull
     private ItemHolderManager footerItemHolderManager = new ItemHolderManager();
     @Nullable
@@ -67,21 +63,14 @@ public class ItemStorage {
      */
     public void addItemFactory(@NonNull ItemFactory itemFactory) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemTypeManager.isLocked()) {
+        if (itemFactory == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        int itemType = itemTypeManager.add(itemFactory);
+        itemFactoryList.add(itemFactory);
+        int viewType = viewTypeManager.add(itemFactory);
 
-        itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemType);
-
-        synchronized (itemFactoryListLock) {
-            if (itemFactoryList == null) {
-                itemFactoryList = new ArrayList<>(5);
-            }
-            itemFactoryList.add(itemFactory);
-        }
+        itemFactory.attachToAdapter(adapter, viewType);
     }
 
     /**
@@ -96,7 +85,7 @@ public class ItemStorage {
      * 获取数据  {@link ItemFactory} 的个数
      */
     public int getItemFactoryCount() {
-        return itemFactoryList != null ? itemFactoryList.size() : 0;
+        return itemFactoryList.size();
     }
 
 
@@ -108,19 +97,16 @@ public class ItemStorage {
     @NonNull
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemTypeManager.isLocked()) {
+        if (itemFactory == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         ItemHolder<DATA> itemHolder = new ItemHolder<>(itemFactory, data);
-        itemHolder.setItemStorage(this);
-        itemHolder.setHeader(true);
-
-        int itemType = itemTypeManager.add(itemHolder);
-        itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemType);
-
+        int viewType = viewTypeManager.add(itemHolder);
         headerItemHolderManager.add(itemHolder);
+
+        itemFactory.attachToAdapter(adapter, viewType);
+        itemHolder.attachToAdapter(this, true);
         return itemHolder;
     }
 
@@ -135,24 +121,19 @@ public class ItemStorage {
     @NonNull
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder) {
         //noinspection ConstantConditions
-        if (itemHolder == null || itemTypeManager.isLocked()) {
+        if (itemHolder == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemHolder is null or item factory list locked");
         }
         if (itemHolder.getItemStorage() != null) {
             throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
-        int itemType = itemTypeManager.add(itemHolder);
-
-        ItemFactory itemFactory = itemHolder.getItemFactory();
-        itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemType);
-
-        itemHolder.setItemStorage(this);
-        itemHolder.setHeader(true);
-
+        int viewType = viewTypeManager.add(itemHolder);
         headerItemHolderManager.add(itemHolder);
 
+        ItemFactory itemFactory = itemHolder.getItemFactory();
+        itemFactory.attachToAdapter(adapter, viewType);
+        itemHolder.attachToAdapter(this, true);
         return itemHolder;
     }
 
@@ -187,20 +168,16 @@ public class ItemStorage {
     @NonNull
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemTypeManager.isLocked()) {
+        if (itemFactory == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
         ItemHolder<DATA> itemHolder = new ItemHolder<>(itemFactory, data);
-        itemHolder.setItemStorage(this);
-        itemHolder.setHeader(false);
-
-        int itemType = itemTypeManager.add(itemHolder);
-        itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemType);
-
+        int viewType = viewTypeManager.add(itemHolder);
         footerItemHolderManager.add(itemHolder);
 
+        itemFactory.attachToAdapter(adapter, viewType);
+        itemHolder.attachToAdapter(this, false);
         return itemHolder;
     }
 
@@ -215,24 +192,19 @@ public class ItemStorage {
     @NonNull
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder) {
         //noinspection ConstantConditions
-        if (itemHolder == null || itemTypeManager.isLocked()) {
+        if (itemHolder == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemHolder is null or item factory list locked");
         }
         if (itemHolder.getItemStorage() != null) {
             throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
-        int itemType = itemTypeManager.add(itemHolder);
-
-        ItemFactory itemFactory = itemHolder.getItemFactory();
-        itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemType);
-
-        itemHolder.setItemStorage(this);
-        itemHolder.setHeader(false);
-
+        int viewType = viewTypeManager.add(itemHolder);
         footerItemHolderManager.add(itemHolder);
 
+        ItemFactory itemFactory = itemHolder.getItemFactory();
+        itemFactory.attachToAdapter(adapter, viewType);
+        itemHolder.attachToAdapter(this, false);
         return itemHolder;
     }
 
@@ -267,7 +239,7 @@ public class ItemStorage {
     @NonNull
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
-        if (itemFactory == null || itemTypeManager.isLocked()) {
+        if (itemFactory == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
@@ -275,15 +247,12 @@ public class ItemStorage {
             throw new IllegalStateException("MoreItem cannot be set repeatedly");
         }
 
-        MoreItemHolder<DATA> moreItemHolder = new MoreItemHolder<>(itemFactory, data);
-        ((ItemHolder) moreItemHolder).setItemStorage(this);
-        ((ItemHolder) moreItemHolder).setHeader(false);
-
-        int itemType = itemTypeManager.add(moreItemHolder);
         itemFactory.loadMoreFinished(false);
-        itemFactory.setAdapter(adapter);
-        itemFactory.setItemType(itemType);
+        MoreItemHolder<DATA> moreItemHolder = new MoreItemHolder<>(itemFactory, data);
+        int viewType = viewTypeManager.add(moreItemHolder);
 
+        itemFactory.attachToAdapter(adapter, viewType);
+        ((ItemHolder) moreItemHolder).attachToAdapter(this, false);
         this.moreItemHolder = moreItemHolder;
         return moreItemHolder;
     }
@@ -299,7 +268,7 @@ public class ItemStorage {
     @NonNull
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> moreItemHolder) {
         //noinspection ConstantConditions
-        if (moreItemHolder == null || itemTypeManager.isLocked()) {
+        if (moreItemHolder == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemHolder is null or item factory list locked");
         }
 
@@ -307,15 +276,12 @@ public class ItemStorage {
             throw new IllegalStateException("MoreItem cannot be set repeatedly");
         }
 
-        ((ItemHolder) moreItemHolder).setItemStorage(this);
-        ((ItemHolder) moreItemHolder).setHeader(false);
+        int viewType = viewTypeManager.add(moreItemHolder);
+        MoreItemFactory itemFactory = moreItemHolder.getItemFactory();
+        itemFactory.loadMoreFinished(false);
 
-        int itemType = itemTypeManager.add(moreItemHolder);
-
-        moreItemHolder.getItemFactory().setAdapter(adapter);
-        moreItemHolder.getItemFactory().setItemType(itemType);
-        moreItemHolder.getItemFactory().loadMoreFinished(false);
-
+        itemFactory.attachToAdapter(adapter, viewType);
+        ((ItemHolder) moreItemHolder).attachToAdapter(this, false);
         this.moreItemHolder = moreItemHolder;
         return moreItemHolder;
     }
@@ -376,7 +342,7 @@ public class ItemStorage {
      * 设置数据列表
      */
     public void setDataList(@Nullable List dataList) {
-        synchronized (itemListLock) {
+        synchronized (this) {
             this.dataList = dataList;
         }
 
@@ -392,7 +358,7 @@ public class ItemStorage {
         if (collection == null || collection.size() == 0) {
             return;
         }
-        synchronized (itemListLock) {
+        synchronized (this) {
             if (dataList == null) {
                 dataList = new ArrayList(collection.size());
             }
@@ -412,7 +378,7 @@ public class ItemStorage {
         if (items == null || items.length == 0) {
             return;
         }
-        synchronized (itemListLock) {
+        synchronized (this) {
             if (dataList == null) {
                 dataList = new ArrayList(items.length);
             }
@@ -431,7 +397,7 @@ public class ItemStorage {
         if (object == null) {
             return;
         }
-        synchronized (itemListLock) {
+        synchronized (this) {
             if (dataList == null) {
                 dataList = new ArrayList();
             }
@@ -452,7 +418,7 @@ public class ItemStorage {
         if (object == null) {
             return;
         }
-        synchronized (itemListLock) {
+        synchronized (this) {
             if (dataList != null) {
                 dataList.remove(object);
             }
@@ -467,7 +433,7 @@ public class ItemStorage {
      * 清空数据
      */
     public void clear() {
-        synchronized (itemListLock) {
+        synchronized (this) {
             if (dataList != null) {
                 dataList.clear();
             }
@@ -482,7 +448,7 @@ public class ItemStorage {
      * 对数据排序
      */
     public void sort(@NonNull Comparator comparator) {
-        synchronized (itemListLock) {
+        synchronized (this) {
             if (dataList != null) {
                 Collections.sort(dataList, comparator);
             }
@@ -525,11 +491,11 @@ public class ItemStorage {
 
     public int getViewTypeCount() {
         // 只要访问了 getViewTypeCount() 方法就认为开始显示了，需要锁定 itemFactory 列表，因为 ListView 不允许 getViewTypeCount() 改变
-        if (!itemTypeManager.isLocked()) {
-            itemTypeManager.lock();
+        if (!viewTypeManager.isLocked()) {
+            viewTypeManager.lock();
         }
         // 1 来自 BaseAdapter.getViewTypeCount()
-        return itemTypeManager.getCount();
+        return viewTypeManager.getCount();
     }
 
     /**
@@ -539,7 +505,16 @@ public class ItemStorage {
      * @return null：没有；{@link ItemFactory} 或 {@link ItemHolder}
      */
     @Nullable
-    public Object getItemFactoryByViewType(int viewType) {
-        return itemTypeManager.get(viewType);
+    public ItemFactory getItemFactoryByViewType(int viewType) {
+        Object value = viewTypeManager.get(viewType);
+        if (value instanceof ItemFactory) {
+            return (ItemFactory) value;
+        } else if (value instanceof ItemHolder) {
+            return ((ItemHolder) value).getItemFactory();
+        } else if (value != null) {
+            throw new IllegalArgumentException("Unknown viewType value. viewType=" + viewType + ", value=" + value);
+        } else {
+            return null;
+        }
     }
 }

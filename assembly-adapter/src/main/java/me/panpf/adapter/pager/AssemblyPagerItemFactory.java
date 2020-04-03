@@ -17,11 +17,12 @@
 package me.panpf.adapter.pager;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.view.View;
-import android.view.ViewGroup;
 
 import me.panpf.adapter.OnClickListener;
 import me.panpf.adapter.OnLongClickListener;
@@ -31,7 +32,7 @@ import me.panpf.adapter.OnLongClickListener;
  *
  * @param <DATA> 指定数据类型
  */
-@SuppressWarnings("unused")
+// todo 参照 ItemFactory 优化一下
 public abstract class AssemblyPagerItemFactory<DATA> {
 
     @Nullable

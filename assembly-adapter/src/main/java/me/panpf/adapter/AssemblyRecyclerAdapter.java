@@ -308,6 +308,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         return actor.getSpanSize(position);
     }
 
+    @Nullable
+    @Override
+    public ItemFactory getItemFactoryByViewType(int viewType) {
+        return storage.getItemFactoryByViewType(viewType);
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -322,17 +328,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         @Nullable
-        Object itemObject = storage.getItemFactoryByViewType(viewType);
-        if (itemObject instanceof ItemFactory) {
-            ItemFactory itemFactory = (ItemFactory) itemObject;
-            Item item = itemFactory.dispatchCreateItem(parent);
-            if (item instanceof RecyclerItemWrapper) {
-                return (RecyclerItemWrapper) item;
-            } else {
-                throw new IllegalStateException(String.format("Item not RecyclerItemWrapper. itemFactory: %s", itemFactory.toString()));
-            }
-        } else if (itemObject instanceof ItemHolder) {
-            ItemFactory itemFactory = ((ItemHolder) itemObject).getItemFactory();
+        ItemFactory itemFactory = storage.getItemFactoryByViewType(viewType);
+        if (itemFactory != null) {
             Item item = itemFactory.dispatchCreateItem(parent);
             if (item instanceof RecyclerItemWrapper) {
                 return (RecyclerItemWrapper) item;
@@ -340,7 +337,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
                 throw new IllegalStateException(String.format("Item not RecyclerItemWrapper. itemFactory: %s", itemFactory.toString()));
             }
         } else {
-            throw new IllegalStateException(String.format("Unknown viewType: %d, itemFactory: %s", viewType, itemObject != null ? itemObject.toString() : "null"));
+            throw new IllegalStateException(String.format("Not found ItemFactory by viewType: %d", viewType));
         }
     }
 
