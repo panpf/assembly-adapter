@@ -23,6 +23,7 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.AdapterListUpdateCallback;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
+
 import me.panpf.adapter.AssemblyRecyclerAdapter;
 
 public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
@@ -68,26 +69,31 @@ public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
         mDiffer.submitList(pagedList);
     }
 
-//    @Nullable
-//    protected T getItem(int position) {
-//        return mDiffer.getItem(position);
-//    }
+    @Nullable
+    public Object getItem(int position) {
+        Object item = super.getItem(position);
+        // Trigger loadAfter or loadBefore
+        if (isBodyItem(position)) {
+            mDiffer.getItem(getPositionInPart(position));
+        }
+        return item;
+    }
 //
 //    @Override
 //    public int getItemCount() {
 //        return mDiffer.getItemCount();
 //    }
 
-    @Override
-    public int getDataCount() {
-        return mDiffer.getItemCount();
-    }
-
-    @Nullable
-    @Override
-    public Object getData(int positionInDataList) {
-        return mDiffer.getItem(positionInDataList);
-    }
+//    @Override
+//    public int getDataCount() {
+//        return mDiffer.getItemCount();
+//    }
+//
+//    @Nullable
+//    @Override
+//    public Object getData(int positionInDataList) {
+//        return mDiffer.getItem(positionInDataList);
+//    }
 
     /**
      * Returns the PagedList currently being displayed by the Adapter.
@@ -116,8 +122,7 @@ public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
      * PagedList via this method.
      *
      * @param previousList PagedList that was previously displayed, may be null.
-     * @param currentList new PagedList being displayed, may be null.
-     *
+     * @param currentList  new PagedList being displayed, may be null.
      * @see #getCurrentList()
      */
     public void onCurrentListChanged(@Nullable PagedList<T> previousList, @Nullable PagedList<T> currentList) {

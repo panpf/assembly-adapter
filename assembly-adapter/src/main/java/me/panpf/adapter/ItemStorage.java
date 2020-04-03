@@ -12,13 +12,13 @@ import java.util.List;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
 
+// todo 更名 ItemManager
 public class ItemStorage {
 
     @NonNull
     private AssemblyAdapter adapter;
     @NonNull
     private ViewTypeManager viewTypeManager = new ViewTypeManager();
-
     @NonNull
     private ItemHolderManager headerItemHolderManager = new ItemHolderManager();
     @NonNull
@@ -159,6 +159,15 @@ public class ItemStorage {
         return headerItemHolderManager;
     }
 
+    public int getHeaderItemCount() {
+        return headerItemHolderManager.getItemCount();
+    }
+
+    @Nullable
+    public Object getHeaderData(int positionInHeaderList) {
+        return headerItemHolderManager.getItemData(positionInHeaderList);
+    }
+
 
     /* ************************ 尾巴 ItemFactory *************************** */
 
@@ -228,6 +237,15 @@ public class ItemStorage {
     @NonNull
     public ItemHolderManager getFooterItemHolderManager() {
         return footerItemHolderManager;
+    }
+
+    public int getFooterItemCount() {
+        return footerItemHolderManager.getItemCount();
+    }
+
+    @Nullable
+    public Object getFooterData(int positionInFooterList) {
+        return footerItemHolderManager.getItemData(positionInFooterList);
     }
 
 
@@ -516,5 +534,172 @@ public class ItemStorage {
         } else {
             return null;
         }
+    }
+
+    public int getItemCount() {
+        int headerItemCount = getHeaderItemCount();
+        int dataCount = getDataCount();
+        int footerItemCount = getFooterItemCount();
+
+        if (dataCount > 0) {
+            return headerItemCount + dataCount + footerItemCount + (hasMoreFooter() ? 1 : 0);
+        } else {
+            return headerItemCount + footerItemCount;
+        }
+    }
+
+    @Nullable
+    public ItemFactory getItemFactoryByPosition(int position) {
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+
+        // header
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            //noinspection UnnecessaryLocalVariable
+            int positionInHeaderList = position;
+            ItemHolder itemHolder = headerItemHolderManager.getItem(positionInHeaderList);
+            if (itemHolder == null)
+                throw new IllegalArgumentException("Not found header item by positionInHeaderList: " + position);
+            return itemHolder.getItemFactory();
+        }
+
+        // data
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            int positionInDataList = position - headerItemCount;
+            Object dataObject = getData(positionInDataList);
+            for (ItemFactory itemFactory : itemFactoryList) {
+                if (itemFactory.match(dataObject)) {
+                    return itemFactory;
+                }
+            }
+            throw new IllegalStateException(String.format("Didn't find suitable ItemFactory. positionInDataList=%d, dataObject=%s",
+                    positionInDataList, dataObject != null ? dataObject.toString() : null));
+        }
+
+        // footer
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            int positionInFooterList = position - headerItemCount - dataCount;
+            ItemHolder itemHolder = footerItemHolderManager.getItem(positionInFooterList);
+            if (itemHolder == null)
+                throw new IllegalArgumentException("Not found footer item by positionInFooterList: " + position);
+            return itemHolder.getItemFactory();
+        }
+
+        // more footer
+        if (moreItemHolder != null && dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1) {
+            return moreItemHolder.getItemFactory();
+        }
+
+        return null;
+    }
+
+    public int getPositionInPart(int position) {
+        // header
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            return position;
+        }
+
+        // body
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            return position - headerItemCount;
+        }
+
+        // footer
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            return position - headerItemCount - dataCount;
+        }
+
+        // more footer
+        if (dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1) {
+            return 0;
+        }
+
+        throw new IllegalArgumentException("Illegal position: " + position);
+    }
+
+    @Nullable
+    public Object getItem(int position) {
+        // header
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            //noinspection UnnecessaryLocalVariable
+            int positionInHeaderList = position;
+            return getHeaderData(positionInHeaderList);
+        }
+
+        // body
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            int positionInDataList = position - headerItemCount;
+            return getData(positionInDataList);
+        }
+
+        // footer
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            int positionInFooterList = position - headerItemCount - dataCount;
+            return getFooterData(positionInFooterList);
+        }
+
+        // more footer
+        if (dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1) {
+            return moreItemHolder != null ? moreItemHolder.getData() : null;
+        }
+
+        return null;
+    }
+
+    public boolean isHeaderItem(int position){
+        int headerItemCount = getHeaderItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        return position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0;
+    }
+
+    public boolean isBodyItem(int position){
+        int headerItemCount = getHeaderItemCount();
+        int headerEndPosition = headerItemCount - 1;
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        return position >= dataStartPosition && position <= dataEndPosition && dataCount > 0;
+    }
+
+    public boolean isFooterItem(int position){
+        int headerItemCount = getHeaderItemCount();
+        int headerEndPosition = headerItemCount - 1;
+        int dataCount = getDataCount();
+        int dataEndPosition = headerEndPosition + dataCount;
+        int footerItemCount = getFooterItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        return position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0;
+    }
+
+    public boolean isMoreFooterItem(int position){
+        int dataCount = getDataCount();
+        return dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1;
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+// todo 更名 FixedItemManager
 public class ItemHolderManager {
 
     @Nullable

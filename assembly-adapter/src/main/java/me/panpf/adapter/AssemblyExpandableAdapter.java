@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.expandable.ExpandableItemActor;
 import me.panpf.adapter.expandable.ExpandableItemStorage;
 import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
@@ -39,9 +38,6 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     private ExpandableItemStorage storage;
-    @NonNull
-    private ExpandableItemActor actor = new ExpandableItemActor(this);
-
     @Nullable
     private ExpandCallback expandCallback;
 
@@ -129,31 +125,21 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return storage.addHeaderItem(itemHolder);
     }
 
-    @NonNull
-    @Override
-    public ItemHolderManager getHeaderItemHolderManager() {
-        return storage.getHeaderItemHolderManager();
-    }
-
-    /**
-     * @deprecated Use {@link #getHeaderItemHolderManager()} instead
-     */
     @Nullable
     @Override
-    @Deprecated
     public List<ItemHolder> getHeaderItemList() {
         return storage.getHeaderItemHolderManager().getItemList();
     }
 
     @Override
     public int getHeaderItemCount() {
-        return storage.getHeaderItemHolderManager().getItemCount();
+        return storage.getHeaderItemCount();
     }
 
     @Nullable
     @Override
     public Object getHeaderData(int positionInHeaderList) {
-        return storage.getHeaderItemHolderManager().getItemData(positionInHeaderList);
+        return storage.getHeaderData(positionInHeaderList);
     }
 
 
@@ -177,30 +163,20 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return storage.addFooterItem(itemHolder);
     }
 
-    @NonNull
-    @Override
-    public ItemHolderManager getFooterItemHolderManager() {
-        return storage.getFooterItemHolderManager();
-    }
-
-    /**
-     * @deprecated Use {@link #getFooterItemHolderManager()} instead
-     */
     @Nullable
     @Override
-    @Deprecated
     public List<ItemHolder> getFooterItemList() {
         return storage.getFooterItemHolderManager().getItemList();
     }
 
     @Override
     public int getFooterItemCount() {
-        return storage.getFooterItemHolderManager().getItemCount();
+        return storage.getFooterItemCount();
     }
 
     @Nullable
     public Object getFooterData(int positionInFooterList) {
-        return storage.getFooterItemHolderManager().getItemData(positionInFooterList);
+        return storage.getFooterData(positionInFooterList);
     }
 
 
@@ -309,18 +285,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getItemCount() {
-        return actor.getItemCount();
+        return storage.getItemCount();
     }
 
     @Nullable
     @Override
     public Object getItem(int position) {
-        return actor.getItem(position);
+        return storage.getItem(position);
     }
 
     @Override
     public int getPositionInPart(int position) {
-        return actor.getPositionInPart(position);
+        return storage.getPositionInPart(position);
     }
 
 
@@ -338,7 +314,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getSpanSize(int position) {
-        return actor.getSpanSize(position);
+        ItemFactory itemFactory = storage.getItemFactoryByPosition(position);
+        return itemFactory != null ? itemFactory.getSpanSize() : 1;
     }
 
     @Nullable
@@ -347,15 +324,41 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return storage.getItemFactoryByViewType(viewType);
     }
 
+    @Nullable
+    @Override
+    public ItemFactory getItemFactoryByPosition(int position) {
+        return storage.getItemFactoryByPosition(position);
+    }
+
+    @Override
+    public boolean isHeaderItem(int position) {
+        return storage.isHeaderItem(position);
+    }
+
+    @Override
+    public boolean isBodyItem(int position) {
+        return storage.isBodyItem(position);
+    }
+
+    @Override
+    public boolean isFooterItem(int position) {
+        return storage.isFooterItem(position);
+    }
+
+    @Override
+    public boolean isMoreFooterItem(int position) {
+        return storage.isMoreFooterItem(position);
+    }
+
     @Override
     public int getGroupCount() {
-        return actor.getItemCount();
+        return storage.getItemCount();
     }
 
     @Nullable
     @Override
     public Object getGroup(int groupPosition) {
-        return actor.getItem(groupPosition);
+        return storage.getItem(groupPosition);
     }
 
     @Override
@@ -370,18 +373,23 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getGroupType(int groupPosition) {
-        return actor.getItemViewType(groupPosition);
+        ItemFactory itemFactory = storage.getItemFactoryByPosition(groupPosition);
+        if (itemFactory != null) {
+            return itemFactory.getViewType();
+        } else {
+            throw new IllegalStateException("Not found viewType by groupPosition: " + groupPosition);
+        }
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return actor.getChildrenCount(groupPosition);
+        return storage.getChildrenCount(groupPosition);
     }
 
     @Nullable
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return actor.getChild(groupPosition, childPosition);
+        return storage.getChild(groupPosition, childPosition);
     }
 
     @Override
@@ -396,7 +404,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public int getChildType(int groupPosition, int childPosition) {
-        return actor.getChildViewType(groupPosition, childPosition);
+        return storage.getChildViewType(groupPosition, childPosition);
     }
 
     @Override

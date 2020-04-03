@@ -28,9 +28,13 @@ public class DiffableDiffCallback extends DiffUtil.ItemCallback<Object> {
         if (oldItem == null && newItem == null) return true;
         //noinspection ConstantConditions
         if (oldItem == null || newItem == null) return false;
-        if (oldItem.getClass().equals(newItem.getClass()) && oldItem instanceof Diffable && newItem instanceof Diffable) {
-            //noinspection unchecked
-            return ((Diffable) oldItem).areItemsTheSame(newItem);
+        if (oldItem.getClass().equals(newItem.getClass())) {
+            if (oldItem instanceof Diffable && newItem instanceof Diffable) {
+                //noinspection unchecked
+                return ((Diffable) oldItem).areItemsTheSame(newItem);
+            } else {
+                return oldItem.equals(newItem);
+            }
         }
         return false;
     }
@@ -39,9 +43,13 @@ public class DiffableDiffCallback extends DiffUtil.ItemCallback<Object> {
     public boolean areContentsTheSame(@Nullable Object oldItem, @Nullable Object newItem) {
         if (oldItem == null && newItem == null) return true;
         if (oldItem == null || newItem == null) return false;
-        if (oldItem.getClass().equals(newItem.getClass()) && oldItem instanceof Diffable && newItem instanceof Diffable) {
-            //noinspection unchecked
-            return ((Diffable) oldItem).areContentsTheSame(newItem);
+        if (oldItem.getClass().equals(newItem.getClass())) {
+            if (oldItem instanceof Diffable && newItem instanceof Diffable) {
+                //noinspection unchecked
+                return ((Diffable) oldItem).areContentsTheSame(newItem);
+            } else {
+                return oldItem.equals(newItem);
+            }
         }
         return false;
     }

@@ -37,8 +37,6 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     private ItemStorage storage;
-    @NonNull
-    private ItemActor actor = new ItemActor(this);
 
     public AssemblyListAdapter() {
         this.storage = new ItemStorage(this);
@@ -48,7 +46,6 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
         this.storage = new ItemStorage(this, dataList);
     }
 
-    @SuppressWarnings("unused")
     public AssemblyListAdapter(@Nullable Object[] dataArray) {
         this.storage = new ItemStorage(this, dataArray);
     }
@@ -93,31 +90,21 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
         return storage.addHeaderItem(itemHolder);
     }
 
-    @NonNull
-    @Override
-    public ItemHolderManager getHeaderItemHolderManager() {
-        return storage.getHeaderItemHolderManager();
-    }
-
-    /**
-     * @deprecated Use {@link #getHeaderItemHolderManager()} instead
-     */
     @Nullable
     @Override
-    @Deprecated
     public List<ItemHolder> getHeaderItemList() {
         return storage.getHeaderItemHolderManager().getItemList();
     }
 
     @Override
     public int getHeaderItemCount() {
-        return storage.getHeaderItemHolderManager().getItemCount();
+        return storage.getHeaderItemCount();
     }
 
     @Nullable
     @Override
     public Object getHeaderData(int positionInHeaderList) {
-        return storage.getHeaderItemHolderManager().getItemData(positionInHeaderList);
+        return storage.getHeaderData(positionInHeaderList);
     }
 
 
@@ -141,31 +128,21 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
         return storage.addFooterItem(itemHolder);
     }
 
-    @NonNull
-    @Override
-    public ItemHolderManager getFooterItemHolderManager() {
-        return storage.getFooterItemHolderManager();
-    }
-
-    /**
-     * @deprecated Use {@link #getFooterItemHolderManager()} instead
-     */
     @Nullable
     @Override
-    @Deprecated
     public List<ItemHolder> getFooterItemList() {
         return storage.getFooterItemHolderManager().getItemList();
     }
 
     @Override
     public int getFooterItemCount() {
-        return storage.getFooterItemHolderManager().getItemCount();
+        return storage.getFooterItemCount();
     }
 
     @Nullable
     @Override
     public Object getFooterData(int positionInFooterList) {
-        return storage.getFooterItemHolderManager().getItemData(positionInFooterList);
+        return storage.getFooterData(positionInFooterList);
     }
 
 
@@ -275,23 +252,23 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @Override
     public int getItemCount() {
-        return actor.getItemCount();
+        return storage.getItemCount();
     }
 
     @Nullable
     @Override
     public Object getItem(int position) {
-        return actor.getItem(position);
+        return storage.getItem(position);
     }
 
     @Override
     public int getPositionInPart(int position) {
-        return actor.getPositionInPart(position);
+        return storage.getPositionInPart(position);
     }
 
     @Override
     public int getCount() {
-        return actor.getItemCount();
+        return storage.getItemCount();
     }
 
 
@@ -309,13 +286,40 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @Override
     public int getSpanSize(int position) {
-        return actor.getSpanSize(position);
+        ItemFactory itemFactory = storage.getItemFactoryByPosition(position);
+        return itemFactory != null ? itemFactory.getSpanSize() : 1;
     }
 
     @Nullable
     @Override
     public ItemFactory getItemFactoryByViewType(int viewType) {
         return storage.getItemFactoryByViewType(viewType);
+    }
+
+    @Nullable
+    @Override
+    public ItemFactory getItemFactoryByPosition(int position) {
+        return storage.getItemFactoryByPosition(position);
+    }
+
+    @Override
+    public boolean isHeaderItem(int position) {
+        return storage.isHeaderItem(position);
+    }
+
+    @Override
+    public boolean isBodyItem(int position) {
+        return storage.isBodyItem(position);
+    }
+
+    @Override
+    public boolean isFooterItem(int position) {
+        return storage.isFooterItem(position);
+    }
+
+    @Override
+    public boolean isMoreFooterItem(int position) {
+        return storage.isMoreFooterItem(position);
     }
 
     @Override
@@ -330,7 +334,12 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @Override
     public int getItemViewType(int position) {
-        return actor.getItemViewType(position);
+        ItemFactory itemFactory = storage.getItemFactoryByPosition(position);
+        if (itemFactory != null) {
+            return itemFactory.getViewType();
+        } else {
+            throw new IllegalStateException("Not found viewType by position: " + position);
+        }
     }
 
     @Override

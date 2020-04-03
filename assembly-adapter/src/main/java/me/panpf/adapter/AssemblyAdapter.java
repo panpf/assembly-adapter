@@ -14,7 +14,6 @@ import me.panpf.adapter.more.MoreItemHolder;
 /**
  * 组合式 Adapter，支持组合式多类型 item，支持头、尾巴以及加载更多
  */
-@SuppressWarnings("unused")
 public interface AssemblyAdapter {
 
     /* ************************ 数据 ItemFactory *************************** */
@@ -59,18 +58,9 @@ public interface AssemblyAdapter {
     <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder);
 
     /**
-     * 获取 header 管理器
-     */
-    @NonNull
-    ItemHolderManager getHeaderItemHolderManager();
-
-    /**
      * 获取 header 列表
-     *
-     * @deprecated Use {@link #getHeaderItemHolderManager ()} instead
      */
     @Nullable
-    @Deprecated
     List<ItemHolder> getHeaderItemList();
 
     /**
@@ -107,19 +97,7 @@ public interface AssemblyAdapter {
     @NonNull
     <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder);
 
-    /**
-     * 获取 footer 管理器
-     */
-    @NonNull
-    ItemHolderManager getFooterItemHolderManager();
-
-    /**
-     * 获取 footer 列表
-     *
-     * @deprecated Use {@link #getFooterItemHolderManager ()} instead
-     */
     @Nullable
-    @Deprecated
     List<ItemHolder> getFooterItemList();
 
     /**
@@ -285,4 +263,15 @@ public interface AssemblyAdapter {
 
     @Nullable
     ItemFactory getItemFactoryByViewType(int viewType);
+
+    @Nullable
+    ItemFactory getItemFactoryByPosition(int position);
+
+    boolean isHeaderItem(int position);
+
+    boolean isBodyItem(int position);
+
+    boolean isFooterItem(int position);
+
+    boolean isMoreFooterItem(int position);
 }
