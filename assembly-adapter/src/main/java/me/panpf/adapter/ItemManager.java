@@ -9,40 +9,38 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.more.MoreItemHolder;
+import me.panpf.adapter.more.MoreItemFactory;
 
-// todo 更名 ItemManager
-public class ItemStorage {
+public class ItemManager {
 
     @NonNull
     private AssemblyAdapter adapter;
     @NonNull
     private ViewTypeManager viewTypeManager = new ViewTypeManager();
     @NonNull
-    private ItemHolderManager headerItemHolderManager = new ItemHolderManager();
+    private ItemHolderManager headerItemManager = new ItemHolderManager();
     @NonNull
     private ArrayList<ItemFactory> itemFactoryList = new ArrayList<>();
     @NonNull
-    private ItemHolderManager footerItemHolderManager = new ItemHolderManager();
+    private ItemHolderManager footerItemManager = new ItemHolderManager();
     @Nullable
     private MoreItemHolder moreItemHolder;
 
     @Nullable
     private List dataList;
-
     private boolean notifyOnChange = true;
 
-    public ItemStorage(@NonNull AssemblyAdapter adapter) {
+    public ItemManager(@NonNull AssemblyAdapter adapter) {
         this.adapter = adapter;
     }
 
-    public ItemStorage(@NonNull AssemblyAdapter adapter, @Nullable List dataList) {
+    public ItemManager(@NonNull AssemblyAdapter adapter, @Nullable List dataList) {
         this.adapter = adapter;
         this.dataList = dataList;
     }
 
-    public ItemStorage(@NonNull AssemblyAdapter adapter, @Nullable Object[] dataArray) {
+    public ItemManager(@NonNull AssemblyAdapter adapter, @Nullable Object[] dataArray) {
         this.adapter = adapter;
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
@@ -56,11 +54,6 @@ public class ItemStorage {
     }
 
 
-    /* ************************ 数据 ItemFactory *************************** */
-
-    /**
-     * 添加一个用来处理并显示 dataList 中的数据的 {@link ItemFactory}
-     */
     public void addItemFactory(@NonNull ItemFactory itemFactory) {
         //noinspection ConstantConditions
         if (itemFactory == null || viewTypeManager.isLocked()) {
@@ -73,27 +66,7 @@ public class ItemStorage {
         itemFactory.attachToAdapter(adapter, viewType);
     }
 
-    /**
-     * 获取数据  {@link ItemFactory} 列表
-     */
-    @Nullable
-    public List<ItemFactory> getItemFactoryList() {
-        return itemFactoryList;
-    }
 
-    /**
-     * 获取数据  {@link ItemFactory} 的个数
-     */
-    public int getItemFactoryCount() {
-        return itemFactoryList.size();
-    }
-
-
-    /* ************************ 头部 ItemFactory *************************** */
-
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
-     */
     @NonNull
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
@@ -103,7 +76,7 @@ public class ItemStorage {
 
         ItemHolder<DATA> itemHolder = new ItemHolder<>(itemFactory, data);
         int viewType = viewTypeManager.add(itemHolder);
-        headerItemHolderManager.add(itemHolder);
+        headerItemManager.add(itemHolder);
 
         itemFactory.attachToAdapter(adapter, viewType);
         itemHolder.attachToAdapter(this, true);
@@ -115,21 +88,18 @@ public class ItemStorage {
         return addHeaderItem(itemFactory, null);
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link ItemFactory}
-     */
     @NonNull
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder) {
         //noinspection ConstantConditions
         if (itemHolder == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemHolder is null or item factory list locked");
         }
-        if (itemHolder.getItemStorage() != null) {
+        if (itemHolder.isAttached()) {
             throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
         int viewType = viewTypeManager.add(itemHolder);
-        headerItemHolderManager.add(itemHolder);
+        headerItemManager.add(itemHolder);
 
         ItemFactory itemFactory = itemHolder.getItemFactory();
         itemFactory.attachToAdapter(adapter, viewType);
@@ -137,43 +107,12 @@ public class ItemStorage {
         return itemHolder;
     }
 
-    /**
-     * header 状态变化处理，不可用时从 header 列表中移除，可用时加回 header 列表中，并根据 position 排序来恢复其原本所在的位置
-     */
-    void headerEnabledChanged(@NonNull ItemHolder itemHolder) {
-        //noinspection ConstantConditions
-        if (itemHolder == null || itemHolder.getItemFactory().getAdapter() != adapter) {
-            return;
-        }
-
-        if (headerItemHolderManager.itemHolderEnabledChanged(itemHolder) && notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    /**
-     * 获取 header 列表
-     */
     @NonNull
-    public ItemHolderManager getHeaderItemHolderManager() {
-        return headerItemHolderManager;
-    }
-
-    public int getHeaderItemCount() {
-        return headerItemHolderManager.getItemCount();
-    }
-
-    @Nullable
-    public Object getHeaderData(int positionInHeaderList) {
-        return headerItemHolderManager.getItemData(positionInHeaderList);
+    public ItemHolderManager getHeaderItemManager() {
+        return headerItemManager;
     }
 
 
-    /* ************************ 尾巴 ItemFactory *************************** */
-
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
-     */
     @NonNull
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
@@ -183,7 +122,7 @@ public class ItemStorage {
 
         ItemHolder<DATA> itemHolder = new ItemHolder<>(itemFactory, data);
         int viewType = viewTypeManager.add(itemHolder);
-        footerItemHolderManager.add(itemHolder);
+        footerItemManager.add(itemHolder);
 
         itemFactory.attachToAdapter(adapter, viewType);
         itemHolder.attachToAdapter(this, false);
@@ -195,21 +134,18 @@ public class ItemStorage {
         return addFooterItem(itemFactory, null);
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link ItemFactory}
-     */
     @NonNull
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder) {
         //noinspection ConstantConditions
         if (itemHolder == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemHolder is null or item factory list locked");
         }
-        if (itemHolder.getItemStorage() != null) {
+        if (itemHolder.isAttached()) {
             throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
         int viewType = viewTypeManager.add(itemHolder);
-        footerItemHolderManager.add(itemHolder);
+        footerItemManager.add(itemHolder);
 
         ItemFactory itemFactory = itemHolder.getItemFactory();
         itemFactory.attachToAdapter(adapter, viewType);
@@ -217,43 +153,30 @@ public class ItemStorage {
         return itemHolder;
     }
 
-    /**
-     * footer 状态变化处理，不可用时从 footer 列表中移除，可用时加回 footer 列表中，并根据 position 排序来恢复其原本所在的位置
-     */
-    void footerEnabledChanged(@NonNull ItemHolder itemHolder) {
+    @NonNull
+    public ItemHolderManager getFooterItemManager() {
+        return footerItemManager;
+    }
+
+    
+    void itemHolderEnabledChanged(@NonNull ItemHolder itemHolder) {
         //noinspection ConstantConditions
         if (itemHolder == null || itemHolder.getItemFactory().getAdapter() != adapter) {
             return;
         }
 
-        if (footerItemHolderManager.itemHolderEnabledChanged(itemHolder) && notifyOnChange) {
-            adapter.notifyDataSetChanged();
+        if (itemHolder.isHeader()) {
+            if (headerItemManager.itemEnabledChanged() && notifyOnChange) {
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            if (footerItemManager.itemEnabledChanged() && notifyOnChange) {
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
-    /**
-     * 获取 footer 列表
-     */
-    @NonNull
-    public ItemHolderManager getFooterItemHolderManager() {
-        return footerItemHolderManager;
-    }
 
-    public int getFooterItemCount() {
-        return footerItemHolderManager.getItemCount();
-    }
-
-    @Nullable
-    public Object getFooterData(int positionInFooterList) {
-        return footerItemHolderManager.getItemData(positionInFooterList);
-    }
-
-
-    /* ************************ 加载更多 *************************** */
-
-    /**
-     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
-     */
     @NonNull
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         //noinspection ConstantConditions
@@ -280,9 +203,6 @@ public class ItemStorage {
         return setMoreItem(itemFactory, null);
     }
 
-    /**
-     * 设置一个将显示在列表最后（在 footer 的后面）的加载更多尾巴
-     */
     @NonNull
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> moreItemHolder) {
         //noinspection ConstantConditions
@@ -309,56 +229,16 @@ public class ItemStorage {
         return moreItemHolder;
     }
 
-    /**
-     * 是否有加载更多尾巴
-     */
     public boolean hasMoreFooter() {
         return moreItemHolder != null && moreItemHolder.isEnabled();
     }
 
-    /**
-     * 设置禁用加载更多
-     */
-    public void setEnabledMoreItem(boolean enabledMoreItem) {
-        if (moreItemHolder != null) {
-            moreItemHolder.setEnabled(enabledMoreItem);
-        }
-    }
 
-    /**
-     * 加载更多完成时调用
-     *
-     * @param loadMoreEnd 全部加载完毕，为 true 会显示结束的文案并且不再触发加载更多
-     */
-    public void loadMoreFinished(boolean loadMoreEnd) {
-        if (moreItemHolder != null) {
-            moreItemHolder.loadMoreFinished(loadMoreEnd);
-        }
-    }
-
-    /**
-     * 加载更多失败的时候调用此方法显示错误提示，并可点击重新加载
-     */
-    public void loadMoreFailed() {
-        if (moreItemHolder != null) {
-            moreItemHolder.loadMoreFailed();
-        }
-    }
-
-
-    /* ************************ 数据列表 *************************** */
-
-    /**
-     * 获取数据列表
-     */
     @Nullable
     public List getDataList() {
         return dataList;
     }
 
-    /**
-     * 设置数据列表
-     */
     public void setDataList(@Nullable List dataList) {
         synchronized (this) {
             this.dataList = dataList;
@@ -369,9 +249,6 @@ public class ItemStorage {
         }
     }
 
-    /**
-     * 批量添加数据
-     */
     public void addAll(@Nullable Collection collection) {
         if (collection == null || collection.size() == 0) {
             return;
@@ -389,9 +266,6 @@ public class ItemStorage {
         }
     }
 
-    /**
-     * 批量添加数据
-     */
     public void addAll(@Nullable Object... items) {
         if (items == null || items.length == 0) {
             return;
@@ -408,9 +282,6 @@ public class ItemStorage {
         }
     }
 
-    /**
-     * 插入一条数据
-     */
     public void insert(@Nullable Object object, int index) {
         if (object == null) {
             return;
@@ -428,9 +299,6 @@ public class ItemStorage {
         }
     }
 
-    /**
-     * 删除一条数据
-     */
     public void remove(@NonNull Object object) {
         //noinspection ConstantConditions
         if (object == null) {
@@ -447,9 +315,6 @@ public class ItemStorage {
         }
     }
 
-    /**
-     * 清空数据
-     */
     public void clear() {
         synchronized (this) {
             if (dataList != null) {
@@ -462,9 +327,6 @@ public class ItemStorage {
         }
     }
 
-    /**
-     * 对数据排序
-     */
     public void sort(@NonNull Comparator comparator) {
         synchronized (this) {
             if (dataList != null) {
@@ -477,9 +339,6 @@ public class ItemStorage {
         }
     }
 
-    /**
-     * 获取数据列表的长度
-     */
     public int getDataCount() {
         return dataList != null ? dataList.size() : 0;
     }
@@ -490,21 +349,24 @@ public class ItemStorage {
     }
 
 
-    /* ************************ 其它 *************************** */
-
-    /**
-     * 数据变更时是否立即刷新列表
-     */
     public boolean isNotifyOnChange() {
         return notifyOnChange;
     }
 
-    /**
-     * 设置当数据发生改变时是否立即调用 notifyDataSetChanged() 刷新列表，默认 true。
-     * 当你需要连续多次修改数据的时候，你应该将 notifyOnChange 设为 false，然后在最后主动调用 notifyDataSetChanged() 刷新列表，最后再将 notifyOnChange 设为 true
-     */
     public void setNotifyOnChange(boolean notifyOnChange) {
         this.notifyOnChange = notifyOnChange;
+    }
+
+    public int getItemCount() {
+        int headerItemCount = headerItemManager.getEnabledItemCount();
+        int dataCount = getDataCount();
+        int footerItemCount = footerItemManager.getEnabledItemCount();
+
+        if (dataCount > 0) {
+            return headerItemCount + dataCount + footerItemCount + (hasMoreFooter() ? 1 : 0);
+        } else {
+            return headerItemCount + footerItemCount;
+        }
     }
 
     public int getViewTypeCount() {
@@ -516,12 +378,6 @@ public class ItemStorage {
         return viewTypeManager.getCount();
     }
 
-    /**
-     * 根据 view 类型获取 {@link ItemFactory} 或 {@link ItemHolder}
-     *
-     * @param viewType view 类型
-     * @return null：没有；{@link ItemFactory} 或 {@link ItemHolder}
-     */
     @Nullable
     public ItemFactory getItemFactoryByViewType(int viewType) {
         Object value = viewTypeManager.get(viewType);
@@ -536,21 +392,9 @@ public class ItemStorage {
         }
     }
 
-    public int getItemCount() {
-        int headerItemCount = getHeaderItemCount();
-        int dataCount = getDataCount();
-        int footerItemCount = getFooterItemCount();
-
-        if (dataCount > 0) {
-            return headerItemCount + dataCount + footerItemCount + (hasMoreFooter() ? 1 : 0);
-        } else {
-            return headerItemCount + footerItemCount;
-        }
-    }
-
-    @Nullable
+    @NonNull
     public ItemFactory getItemFactoryByPosition(int position) {
-        int headerItemCount = getHeaderItemCount();
+        int headerItemCount = headerItemManager.getEnabledItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
 
@@ -558,10 +402,7 @@ public class ItemStorage {
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
             //noinspection UnnecessaryLocalVariable
             int positionInHeaderList = position;
-            ItemHolder itemHolder = headerItemHolderManager.getItem(positionInHeaderList);
-            if (itemHolder == null)
-                throw new IllegalArgumentException("Not found header item by positionInHeaderList: " + position);
-            return itemHolder.getItemFactory();
+            return headerItemManager.getItemInEnabledList(positionInHeaderList).getItemFactory();
         }
 
         // data
@@ -581,15 +422,12 @@ public class ItemStorage {
         }
 
         // footer
-        int footerItemCount = getFooterItemCount();
+        int footerItemCount = footerItemManager.getEnabledItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
             int positionInFooterList = position - headerItemCount - dataCount;
-            ItemHolder itemHolder = footerItemHolderManager.getItem(positionInFooterList);
-            if (itemHolder == null)
-                throw new IllegalArgumentException("Not found footer item by positionInFooterList: " + position);
-            return itemHolder.getItemFactory();
+            return footerItemManager.getItemInEnabledList(positionInFooterList).getItemFactory();
         }
 
         // more footer
@@ -597,12 +435,50 @@ public class ItemStorage {
             return moreItemHolder.getItemFactory();
         }
 
-        return null;
+        throw new IllegalStateException("Not found ItemFactory by position: " + position);
+    }
+
+    @Nullable
+    public Object getItemDataByPosition(int position) {
+        // header
+        int headerItemCount = headerItemManager.getEnabledItemCount();
+        int headerStartPosition = 0;
+        int headerEndPosition = headerItemCount - 1;
+        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
+            //noinspection UnnecessaryLocalVariable
+            int positionInHeaderList = position;
+            return headerItemManager.getItemInEnabledList(positionInHeaderList).getData();
+        }
+
+        // body
+        int dataCount = getDataCount();
+        int dataStartPosition = headerEndPosition + 1;
+        int dataEndPosition = headerEndPosition + dataCount;
+        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
+            int positionInDataList = position - headerItemCount;
+            return getData(positionInDataList);
+        }
+
+        // footer
+        int footerItemCount = footerItemManager.getEnabledItemCount();
+        int footerStartPosition = dataEndPosition + 1;
+        int footerEndPosition = dataEndPosition + footerItemCount;
+        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
+            int positionInFooterList = position - headerItemCount - dataCount;
+            return footerItemManager.getItemInEnabledList(positionInFooterList).getData();
+        }
+
+        // more footer
+        if (dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1) {
+            return moreItemHolder != null ? moreItemHolder.getData() : null;
+        }
+
+        throw new IllegalArgumentException("Not found item data by position: " + position);
     }
 
     public int getPositionInPart(int position) {
         // header
-        int headerItemCount = getHeaderItemCount();
+        int headerItemCount = headerItemManager.getEnabledItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
         if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
@@ -618,7 +494,7 @@ public class ItemStorage {
         }
 
         // footer
-        int footerItemCount = getFooterItemCount();
+        int footerItemCount = footerItemManager.getEnabledItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
         if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
@@ -633,53 +509,15 @@ public class ItemStorage {
         throw new IllegalArgumentException("Illegal position: " + position);
     }
 
-    @Nullable
-    public Object getItem(int position) {
-        // header
-        int headerItemCount = getHeaderItemCount();
-        int headerStartPosition = 0;
-        int headerEndPosition = headerItemCount - 1;
-        if (position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0) {
-            //noinspection UnnecessaryLocalVariable
-            int positionInHeaderList = position;
-            return getHeaderData(positionInHeaderList);
-        }
-
-        // body
-        int dataCount = getDataCount();
-        int dataStartPosition = headerEndPosition + 1;
-        int dataEndPosition = headerEndPosition + dataCount;
-        if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
-            int positionInDataList = position - headerItemCount;
-            return getData(positionInDataList);
-        }
-
-        // footer
-        int footerItemCount = getFooterItemCount();
-        int footerStartPosition = dataEndPosition + 1;
-        int footerEndPosition = dataEndPosition + footerItemCount;
-        if (position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0) {
-            int positionInFooterList = position - headerItemCount - dataCount;
-            return getFooterData(positionInFooterList);
-        }
-
-        // more footer
-        if (dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1) {
-            return moreItemHolder != null ? moreItemHolder.getData() : null;
-        }
-
-        return null;
-    }
-
-    public boolean isHeaderItem(int position){
-        int headerItemCount = getHeaderItemCount();
+    public boolean isHeaderItem(int position) {
+        int headerItemCount = headerItemManager.getEnabledItemCount();
         int headerStartPosition = 0;
         int headerEndPosition = headerItemCount - 1;
         return position >= headerStartPosition && position <= headerEndPosition && headerItemCount > 0;
     }
 
-    public boolean isBodyItem(int position){
-        int headerItemCount = getHeaderItemCount();
+    public boolean isBodyItem(int position) {
+        int headerItemCount = headerItemManager.getEnabledItemCount();
         int headerEndPosition = headerItemCount - 1;
         int dataCount = getDataCount();
         int dataStartPosition = headerEndPosition + 1;
@@ -687,18 +525,18 @@ public class ItemStorage {
         return position >= dataStartPosition && position <= dataEndPosition && dataCount > 0;
     }
 
-    public boolean isFooterItem(int position){
-        int headerItemCount = getHeaderItemCount();
+    public boolean isFooterItem(int position) {
+        int headerItemCount = headerItemManager.getEnabledItemCount();
         int headerEndPosition = headerItemCount - 1;
         int dataCount = getDataCount();
         int dataEndPosition = headerEndPosition + dataCount;
-        int footerItemCount = getFooterItemCount();
+        int footerItemCount = footerItemManager.getEnabledItemCount();
         int footerStartPosition = dataEndPosition + 1;
         int footerEndPosition = dataEndPosition + footerItemCount;
         return position >= footerStartPosition && position <= footerEndPosition && footerItemCount > 0;
     }
 
-    public boolean isMoreFooterItem(int position){
+    public boolean isMoreFooterItem(int position) {
         int dataCount = getDataCount();
         return dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1;
     }

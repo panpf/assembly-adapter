@@ -16,12 +16,13 @@
 
 package me.panpf.adapter.pager;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.viewpager.widget.PagerAdapter;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * 通用组合式 {@link PagerAdapter}，支持组合式多类型 item，支持头、尾巴
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+// todo 独立成一个 model
 public class AssemblyPagerAdapter extends PagerAdapter {
 
     @NonNull

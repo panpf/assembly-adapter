@@ -31,292 +31,259 @@ import me.panpf.adapter.more.MoreItemHolder;
 import me.panpf.adapter.recycler.RecyclerItemWrapper;
 
 /**
- * 通用组合式 {@link RecyclerView.Adapter}，支持组合式多类型 item，支持头、尾巴以及加载更多
+ * Combined {@link RecyclerView.Adapter}, support to combine multiple items, support head, tail and load more
  */
 public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements AssemblyAdapter {
 
     @NonNull
-    private ItemStorage storage;
+    private ItemManager itemManager;
+
 
     public AssemblyRecyclerAdapter() {
-        this.storage = new ItemStorage(this);
+        this.itemManager = new ItemManager(this);
     }
 
     public AssemblyRecyclerAdapter(@Nullable List dataList) {
-        this.storage = new ItemStorage(this, dataList);
+        this.itemManager = new ItemManager(this, dataList);
     }
 
     public AssemblyRecyclerAdapter(@Nullable Object[] dataArray) {
-        this.storage = new ItemStorage(this, dataArray);
+        this.itemManager = new ItemManager(this, dataArray);
     }
 
-
-    /* ************************ 数据 ItemFactory *************************** */
 
     @Override
     public <DATA> void addItemFactory(@NonNull ItemFactory<DATA> itemFactory) {
-        storage.addItemFactory(itemFactory.setInRecycler(true));
+        itemManager.addItemFactory(itemFactory.setInRecycler(true));
     }
 
-    @Nullable
-    @Override
-    public List<ItemFactory> getItemFactoryList() {
-        return storage.getItemFactoryList();
-    }
-
-    @Override
-    public int getItemFactoryCount() {
-        return storage.getItemFactoryCount();
-    }
-
-
-    /* ************************ 头部 ItemFactory *************************** */
 
     @NonNull
     @Override
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return storage.addHeaderItem(itemFactory.setInRecycler(true), data);
+        return itemManager.addHeaderItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return storage.addHeaderItem(itemFactory.setInRecycler(true));
+        return itemManager.addHeaderItem(itemFactory.setInRecycler(true));
     }
 
     @NonNull
     @Override
     public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder) {
         itemHolder.getItemFactory().setInRecycler(true);
-        return storage.addHeaderItem(itemHolder);
+        return itemManager.addHeaderItem(itemHolder);
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public List<ItemHolder> getHeaderItemList() {
-        return storage.getHeaderItemHolderManager().getItemList();
+    public ItemHolderManager getHeaderItemManager() {
+        return itemManager.getHeaderItemManager();
     }
 
     @Override
-    public int getHeaderItemCount() {
-        return storage.getHeaderItemCount();
+    public int getHeaderEnabledItemCount() {
+        return itemManager.getHeaderItemManager().getEnabledItemCount();
     }
 
-    @Nullable
-    @Override
-    public Object getHeaderData(int positionInHeaderList) {
-        return storage.getHeaderData(positionInHeaderList);
-    }
-
-
-    /* ************************ 尾巴 ItemFactory *************************** */
 
     @NonNull
     @Override
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return storage.addFooterItem(itemFactory.setInRecycler(true), data);
+        return itemManager.addFooterItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return storage.addFooterItem(itemFactory.setInRecycler(true));
+        return itemManager.addFooterItem(itemFactory.setInRecycler(true));
     }
 
     @NonNull
     @Override
     public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder) {
         itemHolder.getItemFactory().setInRecycler(true);
-        return storage.addFooterItem(itemHolder);
+        return itemManager.addFooterItem(itemHolder);
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public List<ItemHolder> getFooterItemList() {
-        return storage.getFooterItemHolderManager().getItemList();
+    public ItemHolderManager getFooterItemManager() {
+        return itemManager.getFooterItemManager();
     }
 
     @Override
-    public int getFooterItemCount() {
-        return storage.getFooterItemCount();
+    public int getFooterEnabledItemCount() {
+        return itemManager.getFooterItemManager().getEnabledItemCount();
     }
 
-    @Nullable
-    @Override
-    public Object getFooterData(int positionInFooterList) {
-        return storage.getFooterData(positionInFooterList);
-    }
-
-
-    /* ************************ 加载更多 *************************** */
 
     @NonNull
     @Override
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return storage.setMoreItem(itemFactory.setInRecycler(true), data);
+        return itemManager.setMoreItem(itemFactory.setInRecycler(true), data);
     }
 
     @NonNull
     @Override
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
-        return storage.setMoreItem(itemFactory.setInRecycler(true));
+        return itemManager.setMoreItem(itemFactory.setInRecycler(true));
     }
 
     @NonNull
     @Override
     public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> itemHolder) {
         itemHolder.getItemFactory().setInRecycler(true);
-        return storage.setMoreItem(itemHolder);
+        return itemManager.setMoreItem(itemHolder);
     }
 
     @Nullable
     @Override
     public MoreItemHolder getMoreItemHolder() {
-        return storage.getMoreItemHolder();
+        return itemManager.getMoreItemHolder();
     }
 
     @Override
     public boolean hasMoreFooter() {
-        return storage.hasMoreFooter();
+        return itemManager.hasMoreFooter();
     }
 
     @Override
     public void setEnabledMoreItem(boolean enabledMoreItem) {
-        storage.setEnabledMoreItem(enabledMoreItem);
+        MoreItemHolder moreItemHolder = itemManager.getMoreItemHolder();
+        if (moreItemHolder != null) {
+            moreItemHolder.setEnabled(enabledMoreItem);
+        }
     }
 
     @Override
     public void loadMoreFinished(boolean loadMoreEnd) {
-        storage.loadMoreFinished(loadMoreEnd);
+        MoreItemHolder moreItemHolder = itemManager.getMoreItemHolder();
+        if (moreItemHolder != null) {
+            moreItemHolder.loadMoreFinished(loadMoreEnd);
+        }
     }
 
     @Override
     public void loadMoreFailed() {
-        storage.loadMoreFailed();
+        MoreItemHolder moreItemHolder = itemManager.getMoreItemHolder();
+        if (moreItemHolder != null) {
+            moreItemHolder.loadMoreFailed();
+        }
     }
 
-
-    /* ************************ 数据列表 *************************** */
 
     @Nullable
     @Override
     public List getDataList() {
-        return storage.getDataList();
+        return itemManager.getDataList();
     }
 
     @Override
     public void setDataList(@Nullable List dataList) {
-        storage.setDataList(dataList);
+        itemManager.setDataList(dataList);
     }
 
     @Override
     public void addAll(@Nullable Collection collection) {
-        storage.addAll(collection);
+        itemManager.addAll(collection);
     }
 
     @Override
     public void addAll(@Nullable Object... items) {
-        storage.addAll(items);
+        itemManager.addAll(items);
     }
 
     @Override
     public void insert(@NonNull Object object, int index) {
-        storage.insert(object, index);
+        itemManager.insert(object, index);
     }
 
     @Override
     public void remove(@NonNull Object object) {
-        storage.remove(object);
+        itemManager.remove(object);
     }
 
     @Override
     public void clear() {
-        storage.clear();
+        itemManager.clear();
     }
 
     @Override
     public void sort(@NonNull Comparator comparator) {
-        storage.sort(comparator);
+        itemManager.sort(comparator);
     }
 
     @Override
     public int getDataCount() {
-        return storage.getDataCount();
+        return itemManager.getDataCount();
     }
 
-    @Nullable
-    @Override
-    public Object getData(int positionInDataList) {
-        return storage.getData(positionInDataList);
-    }
-
-    /* ************************ 完整列表 *************************** */
 
     @Override
     public int getItemCount() {
-        return storage.getItemCount();
+        return itemManager.getItemCount();
     }
 
     @Nullable
     @Override
     public Object getItem(int position) {
-        return storage.getItem(position);
+        return itemManager.getItemDataByPosition(position);
     }
 
     @Override
     public int getPositionInPart(int position) {
-        return storage.getPositionInPart(position);
+        return itemManager.getPositionInPart(position);
     }
 
 
-    /* ************************ 其它 *************************** */
-
     @Override
     public boolean isNotifyOnChange() {
-        return storage.isNotifyOnChange();
+        return itemManager.isNotifyOnChange();
     }
 
     @Override
     public void setNotifyOnChange(boolean notifyOnChange) {
-        storage.setNotifyOnChange(notifyOnChange);
+        itemManager.setNotifyOnChange(notifyOnChange);
     }
 
     @Override
     public int getSpanSize(int position) {
-        ItemFactory itemFactory = storage.getItemFactoryByPosition(position);
-        return itemFactory != null ? itemFactory.getSpanSize() : 1;
+        return itemManager.getItemFactoryByPosition(position).getSpanSize();
     }
 
     @Nullable
     @Override
     public ItemFactory getItemFactoryByViewType(int viewType) {
-        return storage.getItemFactoryByViewType(viewType);
+        return itemManager.getItemFactoryByViewType(viewType);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public ItemFactory getItemFactoryByPosition(int position) {
-        return storage.getItemFactoryByPosition(position);
+        return itemManager.getItemFactoryByPosition(position);
     }
 
     @Override
     public boolean isHeaderItem(int position) {
-        return storage.isHeaderItem(position);
+        return itemManager.isHeaderItem(position);
     }
 
     @Override
     public boolean isBodyItem(int position) {
-        return storage.isBodyItem(position);
+        return itemManager.isBodyItem(position);
     }
 
     @Override
     public boolean isFooterItem(int position) {
-        return storage.isFooterItem(position);
+        return itemManager.isFooterItem(position);
     }
 
     @Override
     public boolean isMoreFooterItem(int position) {
-        return storage.isMoreFooterItem(position);
+        return itemManager.isMoreFooterItem(position);
     }
 
     @Override
@@ -326,19 +293,14 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
     @Override
     public int getItemViewType(int position) {
-        ItemFactory itemFactory = storage.getItemFactoryByPosition(position);
-        if (itemFactory != null) {
-            return itemFactory.getViewType();
-        } else {
-            throw new IllegalStateException("Not found viewType by position: " + position);
-        }
+        return itemManager.getItemFactoryByPosition(position).getViewType();
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         @Nullable
-        ItemFactory itemFactory = storage.getItemFactoryByViewType(viewType);
+        ItemFactory itemFactory = itemManager.getItemFactoryByViewType(viewType);
         if (itemFactory != null) {
             Item item = itemFactory.dispatchCreateItem(parent);
             if (item instanceof RecyclerItemWrapper) {

@@ -3,24 +3,22 @@ package me.panpf.adapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
-// todo 可以通过 adapter 方便的查找 Holder 或设置 data
+// todo rename to FixedItem
 public class ItemHolder<DATA> {
 
     @Nullable
-    private ItemStorage itemStorage;
+    private ItemManager itemManager;
     @NonNull
     private ItemFactory<DATA> itemFactory;
     @Nullable
     private DATA data;
-    private int position;
     private boolean header;
 
     private boolean enabled = true;
 
     @Deprecated
-    protected ItemHolder(@NonNull ItemStorage itemStorage, @NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
-        this.itemStorage = itemStorage;
+    protected ItemHolder(@NonNull ItemManager itemManager, @NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
+        this.itemManager = itemManager;
         this.itemFactory = itemFactory;
         this.data = data;
         this.header = header;
@@ -54,9 +52,8 @@ public class ItemHolder<DATA> {
         return itemFactory;
     }
 
-    @Nullable
-    public ItemStorage getItemStorage() {
-        return itemStorage;
+    public boolean isAttached() {
+        return itemManager != null;
     }
 
     public boolean isEnabled() {
@@ -71,27 +68,15 @@ public class ItemHolder<DATA> {
         enableChanged();
     }
 
-    void attachToAdapter(@NonNull ItemStorage itemStorage, boolean header) {
-        this.itemStorage = itemStorage;
+    void attachToAdapter(@NonNull ItemManager itemManager, boolean header) {
+        this.itemManager = itemManager;
         this.header = header;
     }
 
     protected void enableChanged() {
-        if (itemStorage != null) {
-            if (header) {
-                itemStorage.headerEnabledChanged(this);
-            } else {
-                itemStorage.footerEnabledChanged(this);
-            }
+        if (itemManager != null) {
+            itemManager.itemHolderEnabledChanged(this);
         }
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public boolean isHeader() {

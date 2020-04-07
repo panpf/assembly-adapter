@@ -84,17 +84,6 @@ public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
 //        return mDiffer.getItemCount();
 //    }
 
-//    @Override
-//    public int getDataCount() {
-//        return mDiffer.getItemCount();
-//    }
-//
-//    @Nullable
-//    @Override
-//    public Object getData(int positionInDataList) {
-//        return mDiffer.getItem(positionInDataList);
-//    }
-
     /**
      * Returns the PagedList currently being displayed by the Adapter.
      * <p>

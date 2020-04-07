@@ -9,7 +9,13 @@ AssemblyAdapter:
 * improve: ItemHolder's generics can now be inferred from ItemFactory in the constructor
 * new: ItemHolder adds only ItemFactory constructor
 * new: AssemblyItem adds context, resources, application protected filed
-* bug: Fixed an issue where IndexOutOfBoundsException might be thrown in the getSpanSize () method of ItemActor when using AssemblyGridLayoutManager
+* bug: Fixed an issue where IndexOutOfBoundsException might be thrown in the getSpanSize() method of ItemActor when using AssemblyGridLayoutManager
+* remove: Remove AssemblyAdapter's getItemFactoryList(), getItemFactoryCount(), getData(int) methods
+* remove: Remove AssemblyAdapter's getHeaderItemList(), getHeaderData(), getFooterItemList(), getFooterData() methods
+* change: Rename AssemblyAdapter's getHeaderItemCount() to getHeaderEnabledItemCount()
+* change: Rename AssemblyAdapter's getFooterItemCount() to getFooterEnabledItemCount()
+* new: AssemblyAdapter's adds getHeaderItemManager() and getFooterItemManager() methods
+* remove: Remove ItemHolder's getItemStorage(), getPosition(), setPosition(int) methods
 
 # v3.4.0
 
@@ -39,8 +45,8 @@ assembly-paged-list-adapter:
 * 新增了 [ArrayPagerAdapter] 和 [FragmentArrayStatePagerAdapter]
 * 所有 PagerAdapter 的子类支持调用 notifyDataSetChanged() 方法时 getItemPosition(Object) 方法返回 POSITION_NONE，只需通过 setEnabledPositionNoneOnNotifyDataSetChanged(boolean) 方法开启即可
 
-[ArrayPagerAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/ArrayPagerAdapter.java
-[FragmentArrayStatePagerAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/FragmentArrayStatePagerAdapter.java
+[ArrayPagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/ArrayPagerAdapter.java
+[FragmentArrayStatePagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/FragmentArrayStatePagerAdapter.java
 
 
 # v3.1.0
@@ -48,7 +54,7 @@ assembly-paged-list-adapter:
 新功能：
 * 支持 [Paging]，[了解如何使用][paged_list]
 
-[paged_list]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/paged_list.md
+[paged_list]: docs/wiki/paged_list.md
 [Paging]: https://developer.android.google.cn/topic/libraries/architecture/paging/
 
 
@@ -110,38 +116,38 @@ assembly-paged-list-adapter:
 #### 2.3 Kotlin 支持
 * 新增 assembly-adapter-ktx 模块，提供了 [Item] 的 bindview 功能，详情请参见 [在 Kotlin 中使用 bindview][ktx]
 
-[AssemblyAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
-[AssemblyListAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyListAdapter.java
-[AssemblyItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyItemFactory.java
-[AssemblyItem]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyItem.java
+[AssemblyAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
+[AssemblyListAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyListAdapter.java
+[AssemblyItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyItemFactory.java
+[AssemblyItem]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyItem.java
 
-[ItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ItemFactory.java
-[Item]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/Item.java
-[ItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ItemHolder.java
+[ItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/ItemFactory.java
+[Item]: assembly-adapter/src/main/java/me/panpf/adapter/Item.java
+[ItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/ItemHolder.java
 
-[AssemblyGroup]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/expandable/AssemblyGroup.java
+[AssemblyGroup]: assembly-adapter/src/main/java/me/panpf/adapter/expandable/AssemblyGroup.java
 
-[AssemblyMoreItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItemFactory.java
-[AssemblyMoreItem]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItem.java
-[MoreItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/MoreItemHolder.java
-[OnLoadMoreListener]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/more/OnLoadMoreListener.java
+[AssemblyMoreItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItemFactory.java
+[AssemblyMoreItem]: assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItem.java
+[MoreItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/more/MoreItemHolder.java
+[OnLoadMoreListener]: assembly-adapter/src/main/java/me/panpf/adapter/more/OnLoadMoreListener.java
 
-[AssemblyPagerItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerItemFactory.java
-[FragmentItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/FragmentItemHolder.java
-[PagerItemHolder]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/PagerItemHolder.java
-[AssemblyPagerAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerAdapter.java
-[AssemblyFragmentPagerAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyFragmentPagerAdapter.java
+[AssemblyPagerItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerItemFactory.java
+[FragmentItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/pager/FragmentItemHolder.java
+[PagerItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/pager/PagerItemHolder.java
+[AssemblyPagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerAdapter.java
+[AssemblyFragmentPagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyFragmentPagerAdapter.java
 
-[AssemblyRecyclerLinerDivider]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyRecyclerLinerDivider.java
-[AssemblyGridLayoutManager]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyGridLayoutManager.java
+[AssemblyRecyclerLinerDivider]: assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyRecyclerLinerDivider.java
+[AssemblyGridLayoutManager]: assembly-adapter/src/main/java/me/panpf/adapter/recycler/AssemblyGridLayoutManager.java
 
-[ViewItemFactory]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/ViewItemFactory.java
+[ViewItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/ViewItemFactory.java
 
-[header_footer]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/header_footer.md
-[grid_span]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/grid_span.md
-[load_more]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/load_more.md
-[ktx]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/ktx.md
-[view_item_factory]: https://github.com/panpf/assembly-adapter/blob/master/docs/wiki/view_item_factory.md
+[header_footer]: docs/wiki/header_footer.md
+[grid_span]: docs/wiki/grid_span.md
+[load_more]: docs/wiki/load_more.md
+[ktx]: docs/wiki/ktx.md
+[view_item_factory]: docs/wiki/view_item_factory.md
 
 
 # v2.5.1

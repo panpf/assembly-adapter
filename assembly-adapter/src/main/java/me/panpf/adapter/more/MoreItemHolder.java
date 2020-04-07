@@ -20,17 +20,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import me.panpf.adapter.ItemHolder;
-import me.panpf.adapter.ItemStorage;
+import me.panpf.adapter.ItemManager;
 
-/**
- * 加载更多专用的固定尾巴
- */
-@SuppressWarnings({"unused"})
 public class MoreItemHolder<DATA> extends ItemHolder<DATA> {
 
     @Deprecated
-    public MoreItemHolder(@NonNull ItemStorage storage, @NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
-        super(storage, itemFactory, data, header);
+    public MoreItemHolder(@NonNull ItemManager itemManager, @NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
+        super(itemManager, itemFactory, data, header);
     }
 
     public MoreItemHolder(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {

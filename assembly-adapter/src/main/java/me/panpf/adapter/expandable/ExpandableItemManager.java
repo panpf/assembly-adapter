@@ -8,26 +8,25 @@ import java.util.List;
 
 import me.panpf.adapter.AssemblyAdapter;
 import me.panpf.adapter.ItemFactory;
-import me.panpf.adapter.ItemHolder;
-import me.panpf.adapter.ItemStorage;
+import me.panpf.adapter.ItemManager;
 import me.panpf.adapter.ViewTypeManager;
 
-public class ExpandableItemStorage extends ItemStorage {
+public class ExpandableItemManager extends ItemManager {
 
     @NonNull
     private ViewTypeManager childViewTypeManager = new ViewTypeManager();
     @NonNull
     private ArrayList<ItemFactory> childItemFactoryList = new ArrayList<>();
 
-    public ExpandableItemStorage(@NonNull AssemblyAdapter adapter) {
+    public ExpandableItemManager(@NonNull AssemblyAdapter adapter) {
         super(adapter);
     }
 
-    public ExpandableItemStorage(@NonNull AssemblyAdapter adapter, @Nullable List dataList) {
+    public ExpandableItemManager(@NonNull AssemblyAdapter adapter, @Nullable List dataList) {
         super(adapter, dataList);
     }
 
-    public ExpandableItemStorage(@NonNull AssemblyAdapter adapter, @Nullable Object[] dataArray) {
+    public ExpandableItemManager(@NonNull AssemblyAdapter adapter, @Nullable Object[] dataArray) {
         super(adapter, dataArray);
     }
 
@@ -46,21 +45,6 @@ public class ExpandableItemStorage extends ItemStorage {
         childItemFactory.attachToAdapter(getAdapter(), viewType);
     }
 
-    /**
-     * 获取 child {@link ItemFactory} 列表
-     */
-    @Nullable
-    public List<ItemFactory> getChildItemFactoryList() {
-        return childItemFactoryList;
-    }
-
-    /**
-     * 获取 child {@link ItemFactory} 的个数
-     */
-    public int getChildItemFactoryCount() {
-        return childItemFactoryList.size();
-    }
-
     public int getChildTypeCount() {
         if (!childViewTypeManager.isLocked()) {
             childViewTypeManager.lock();
@@ -68,19 +52,13 @@ public class ExpandableItemStorage extends ItemStorage {
         return childViewTypeManager.getCount();
     }
 
-    /**
-     * 根据 view 类型获取 {@link ItemFactory} 或 {@link ItemHolder}
-     *
-     * @param viewType view 类型
-     * @return null：没有；{@link ItemFactory} 或 {@link ItemHolder}
-     */
     @Nullable
     public Object getChildItemFactoryByViewType(int viewType) {
         return childViewTypeManager.get(viewType);
     }
 
     public int getChildrenCount(int groupPosition) {
-        Object groupObject = getItem(groupPosition);
+        Object groupObject = getItemDataByPosition(groupPosition);
         if (groupObject instanceof AssemblyGroup) {
             return ((AssemblyGroup) groupObject).getChildCount();
         }
@@ -88,10 +66,10 @@ public class ExpandableItemStorage extends ItemStorage {
     }
 
     @Nullable
-    public Object getChild(int groupPosition, int childPosition) {
-        Object groupDataObject = getItem(groupPosition);
+    public Object getChildDataByPosition(int groupPosition, int childPosition) {
+        Object groupDataObject = getItemDataByPosition(groupPosition);
         if (groupDataObject == null) {
-            return null;
+            throw new IllegalArgumentException("Not found group item data by group position: " + groupPosition);
         }
         if (!(groupDataObject instanceof AssemblyGroup)) {
             throw new IllegalArgumentException(String.format(
@@ -102,20 +80,17 @@ public class ExpandableItemStorage extends ItemStorage {
     }
 
     public int getChildViewType(int groupPosition, int childPosition) {
-        if (getChildItemFactoryCount() <= 0) {
+        if (childItemFactoryList.size() <= 0) {
             throw new IllegalStateException("You need to configure ItemFactory use addChildItemFactory method");
         }
 
-        Object childDataObject = getChild(groupPosition, childPosition);
+        Object childDataObject = getChildDataByPosition(groupPosition, childPosition);
 
-        List<ItemFactory> childItemFactoryList = getChildItemFactoryList();
-        if (childItemFactoryList != null) {
-            ItemFactory childItemFactory;
-            for (int w = 0, size = childItemFactoryList.size(); w < size; w++) {
-                childItemFactory = childItemFactoryList.get(w);
-                if (childItemFactory.match(childDataObject)) {
-                    return childItemFactory.getViewType();
-                }
+        ItemFactory childItemFactory;
+        for (int w = 0, size = childItemFactoryList.size(); w < size; w++) {
+            childItemFactory = childItemFactoryList.get(w);
+            if (childItemFactory.match(childDataObject)) {
+                return childItemFactory.getViewType();
             }
         }
 

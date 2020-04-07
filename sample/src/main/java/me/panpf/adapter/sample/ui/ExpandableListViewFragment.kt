@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.fm_expandable.*
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyExpandableAdapter
-import me.panpf.adapter.ItemHolder
 import me.panpf.adapter.more.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
@@ -26,10 +25,6 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
     val childSize = 5
 
     var adapter: AssemblyExpandableAdapter? = null
-    var headerItemHolder: ItemHolder<String>? = null
-    var footerItemHolder: ItemHolder<String>? = null
-    var headerItemHolder2: ItemHolder<String>? = null
-    var footerItemHolder2: ItemHolder<String>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fm_expandable, container, false)
@@ -79,7 +74,6 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
                     }
-
                 }
                 dataList
             } ?: arrayListOf()
@@ -136,28 +130,27 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = AssemblyExpandableAdapter(objects)
 
-                    headerItemHolder = adapter!!.addHeaderItem(HeaderGroupItem.Factory(), "我是小额头呀！")
-                    headerItemHolder2 = adapter!!.addHeaderItem(HeaderGroupItem.Factory(), "唉，我的小额头呢？")
+                    adapter!!.addHeaderItem(HeaderGroupItem.Factory(), "我是小额头呀！")
+                    adapter!!.addHeaderItem(HeaderGroupItem.Factory(), "唉，我的小额头呢？")
                     adapter!!.addGroupItemFactory(GameGroupItem.Factory())
                     adapter!!.addGroupItemFactory(UserGroupItem.Factory())
                     adapter!!.addChildItemFactory(GameChildItem.Factory())
                     adapter!!.addChildItemFactory(UserChildItem.Factory())
                     adapter!!.setMoreItem(LoadMoreItem.Factory(this))
-                    footerItemHolder = adapter!!.addFooterItem(HeaderGroupItem.Factory(), "我是小尾巴呀！")
-                    footerItemHolder2 = adapter!!.addFooterItem(HeaderGroupItem.Factory(), "唉，我的小尾巴呢？")
+                    adapter!!.addFooterItem(HeaderGroupItem.Factory(), "我是小尾巴呀！")
+                    adapter!!.addFooterItem(HeaderGroupItem.Factory(), "唉，我的小尾巴呢？")
 
                     expandableFm_expandableList.setAdapter(adapter)
                 } else {
                     adapter!!.addAll(objects)
-
-                    headerItemHolder2!!.isEnabled = !headerItemHolder2!!.isEnabled
-                    footerItemHolder2!!.isEnabled = !footerItemHolder2!!.isEnabled
+                    adapter!!.headerItemManager.switchItemEnabled(1)
+                    adapter!!.footerItemManager.switchItemEnabled(1)
                 }
 
                 val loadMoreEnd = nextStart >= 100
                 if (loadMoreEnd) {
-                    headerItemHolder!!.isEnabled = false
-                    footerItemHolder!!.isEnabled = false
+                    adapter!!.headerItemManager.setItemEnabled(0, false)
+                    adapter!!.footerItemManager.setItemEnabled(0, false)
                 }
                 adapter!!.moreItemHolder?.loadMoreFinished(loadMoreEnd)
             }
