@@ -31,7 +31,6 @@ import java.util.List;
 /**
  * General combination type {@link PagerAdapter}, support combining multiple items, support head and tail
  */
-// todo 独立成一个 model
 public class AssemblyPagerAdapter extends PagerAdapter {
 
     @NonNull

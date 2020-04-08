@@ -18,6 +18,7 @@ package me.panpf.adapter.pager;
 
 import android.util.SparseIntArray;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,6 +26,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -39,15 +42,32 @@ public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     private SparseIntArray notifyNumberPool;
 
-    // todo 增加对 behavior i支持
+    public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @Behavior int behavior, @NonNull Fragment[] fragments) {
+        super(fm, behavior);
+        this.fragments = fragments;
+    }
+
+    /**
+     * @deprecated use {@link #FragmentArrayPagerAdapter(FragmentManager, int, Fragment[])} with
+     * {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}
+     */
     public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
         super(fm);
         this.fragments = fragments;
     }
 
-    // todo 增加对 behavior i支持
+    public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @Behavior int behavior, @NonNull List<Fragment> fragments) {
+        super(fm, behavior);
+        this.fragments = fragments.toArray(new Fragment[0]);
+    }
+
+    /**
+     * @deprecated use {@link #FragmentArrayPagerAdapter(FragmentManager, int, List)} with
+     * {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}
+     */
     public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Fragment> fragments) {
-        this(fm, fragments.toArray(new Fragment[fragments.size()]));
+        super(fm);
+        this.fragments = fragments.toArray(new Fragment[0]);
     }
 
     @NonNull
@@ -97,5 +117,10 @@ public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
             return PagerAdapter.POSITION_NONE;
         }
         return super.getItemPosition(object);
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({BEHAVIOR_SET_USER_VISIBLE_HINT, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT})
+    private @interface Behavior {
     }
 }

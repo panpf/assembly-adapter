@@ -21,13 +21,6 @@ class RecyclerGridLayoutSampleFragment : BaseFragment() {
 
     private val appsViewModel by bindViewModel(AppsViewModel::class)
 
-    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
-        val attachActivity = activity
-        if (isVisibleToUser && attachActivity is AppCompatActivity) {
-            attachActivity.supportActionBar?.subtitle = "RecyclerView - GridLayoutManager"
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fm_recycler_sticky, container, false)
     }
@@ -73,5 +66,10 @@ class RecyclerGridLayoutSampleFragment : BaseFragment() {
         })
 
         appsViewModel.load()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "RecyclerView - GridLayoutManager"
     }
 }

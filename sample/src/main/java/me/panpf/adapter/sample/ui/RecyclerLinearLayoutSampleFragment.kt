@@ -35,13 +35,6 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
         setMoreItem(LoadMoreItem.Factory(this@RecyclerLinearLayoutSampleFragment))
     }
 
-    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
-        val attachActivity = activity
-        if (isVisibleToUser && attachActivity is AppCompatActivity) {
-            attachActivity.supportActionBar?.subtitle = "RecyclerView - LinearLayoutManager"
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fm_recycler, container, false)
     }
@@ -55,6 +48,11 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
         recyclerFm_recycler.layoutManager = LinearLayoutManager(activity)
 
         if (adapter.dataCount <= 0) loadData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "RecyclerView - LinearLayoutManager"
     }
 
     private fun loadData() {

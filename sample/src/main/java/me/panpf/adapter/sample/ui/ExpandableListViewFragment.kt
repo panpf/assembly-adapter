@@ -40,11 +40,9 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
         }
     }
 
-    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
-        val attachActivity = activity
-        if (isVisibleToUser && attachActivity is AppCompatActivity) {
-            attachActivity.supportActionBar?.subtitle = "ExpandableListView"
-        }
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "ExpandableListView"
     }
 
     private fun loadData() {

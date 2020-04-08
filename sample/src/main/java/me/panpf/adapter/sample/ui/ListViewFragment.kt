@@ -52,11 +52,9 @@ class ListViewFragment : BaseFragment(), OnLoadMoreListener {
         loadData()
     }
 
-    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
-        val attachActivity = activity
-        if (isVisibleToUser && attachActivity is AppCompatActivity) {
-            attachActivity.supportActionBar?.subtitle = "ListView"
-        }
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "ListView"
     }
 
     class LoadDataTask(private val fragmentRef: WeakReference<ListViewFragment>) : AsyncTask<String, String, List<Any>>() {

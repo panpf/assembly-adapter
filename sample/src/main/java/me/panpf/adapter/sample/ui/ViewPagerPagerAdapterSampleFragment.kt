@@ -15,13 +15,6 @@ import me.panpf.adapter.sample.item.ImagePagerItemFactory
 import me.panpf.adapter.sample.item.TextPagerItemFactory
 
 class ViewPagerPagerAdapterSampleFragment : BaseFragment() {
-    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
-        val attachActivity = activity
-        if (isVisibleToUser && attachActivity is AppCompatActivity) {
-            attachActivity.supportActionBar?.subtitle = "ViewPager - PagerAdapter"
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fm_pager, container, false)
     }
@@ -54,5 +47,10 @@ class ViewPagerPagerAdapterSampleFragment : BaseFragment() {
                 viewPager.adapter = this
             }, Header("我是小尾巴呀！\n你敢戳我，我也敢消失！哼！", "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-004.jpg"))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "ViewPager - PagerAdapter"
     }
 }

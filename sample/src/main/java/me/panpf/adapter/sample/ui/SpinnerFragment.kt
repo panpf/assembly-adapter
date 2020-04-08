@@ -37,10 +37,8 @@ class SpinnerFragment : BaseFragment() {
         spinnerFm_spinner.adapter = adapter
     }
 
-    override fun onUserVisibleChanged(isVisibleToUser: Boolean) {
-        val attachActivity = activity
-        if (isVisibleToUser && attachActivity is AppCompatActivity) {
-            attachActivity.supportActionBar?.subtitle = "Spinner"
-        }
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "Spinner"
     }
 }
