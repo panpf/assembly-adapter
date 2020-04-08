@@ -16,20 +16,20 @@
 
 package me.panpf.adapter.pager;
 
+import android.util.SparseIntArray;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
-import android.util.SparseIntArray;
 
 import java.util.List;
 
 /**
  * {@link Fragment} 数组 {@link FragmentPagerAdapter}
  */
-@SuppressWarnings("unused")
 public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
 
     @NonNull
@@ -39,11 +39,13 @@ public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     private SparseIntArray notifyNumberPool;
 
+    // todo 增加对 behavior i支持
     public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
         super(fm);
         this.fragments = fragments;
     }
 
+    // todo 增加对 behavior i支持
     public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Fragment> fragments) {
         this(fm, fragments.toArray(new Fragment[fragments.size()]));
     }

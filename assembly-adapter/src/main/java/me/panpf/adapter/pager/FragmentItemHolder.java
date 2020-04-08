@@ -23,7 +23,6 @@ import androidx.viewpager.widget.PagerAdapter;
 /**
  * {@link AssemblyFragmentPagerAdapter} 和 {@link AssemblyFragmentStatePagerAdapter} 专用的固定位置 item 管理器
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
 public class FragmentItemHolder<DATA> {
 
     @NonNull
@@ -32,7 +31,11 @@ public class FragmentItemHolder<DATA> {
     private DATA data;
 
     public FragmentItemHolder(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable DATA data) {
+        this.itemFactory = itemFactory;
         this.data = data;
+    }
+
+    public FragmentItemHolder(@NonNull AssemblyFragmentItemFactory itemFactory) {
         this.itemFactory = itemFactory;
     }
 

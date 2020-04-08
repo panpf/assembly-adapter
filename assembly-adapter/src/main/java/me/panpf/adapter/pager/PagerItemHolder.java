@@ -23,22 +23,31 @@ import androidx.annotation.Nullable;
  * {@link AssemblyPagerAdapter} 专用的固定位置 item 管理器
  */
 public class PagerItemHolder<DATA> {
+    @Nullable
+    private PagerItemManager itemManager;
     @NonNull
-    private PagerItemStorage storage;
-    @NonNull
-    private AssemblyPagerItemFactory itemFactory;
+    private AssemblyPagerItemFactory<DATA> itemFactory;
     @Nullable
     private DATA data;
     private boolean header;
 
-    private int position;
     private boolean enabled = true;
 
-    public PagerItemHolder(@NonNull PagerItemStorage storage, @NonNull AssemblyPagerItemFactory itemFactory, @Nullable DATA data, boolean header) {
-        this.storage = storage;
+    @Deprecated
+    public PagerItemHolder(@NonNull PagerItemManager itemManager, @NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
+        this.itemManager = itemManager;
         this.itemFactory = itemFactory;
         this.data = data;
         this.header = header;
+    }
+
+    public PagerItemHolder(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
+        this.itemFactory = itemFactory;
+        this.data = data;
+    }
+
+    public PagerItemHolder(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
+        this.itemFactory = itemFactory;
     }
 
     @Nullable
@@ -56,8 +65,12 @@ public class PagerItemHolder<DATA> {
     }
 
     @NonNull
-    public AssemblyPagerItemFactory getItemFactory() {
+    public AssemblyPagerItemFactory<DATA> getItemFactory() {
         return itemFactory;
+    }
+
+    public boolean isAttached() {
+        return itemManager != null;
     }
 
     public boolean isEnabled() {
@@ -72,20 +85,15 @@ public class PagerItemHolder<DATA> {
         enableChanged();
     }
 
-    protected void enableChanged() {
-        if (header) {
-            storage.headerEnabledChanged(this);
-        } else {
-            storage.footerEnabledChanged(this);
+    void attachToAdapter(@NonNull PagerItemManager itemManager, boolean header) {
+        this.itemManager = itemManager;
+        this.header = header;
+    }
+
+    private void enableChanged() {
+        if (itemManager != null) {
+            itemManager.itemHolderEnabledChanged(this);
         }
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    void setPosition(int position) {
-        this.position = position;
     }
 
     public boolean isHeader() {

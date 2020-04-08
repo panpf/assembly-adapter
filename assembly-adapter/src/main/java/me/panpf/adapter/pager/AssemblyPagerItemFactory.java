@@ -27,12 +27,6 @@ import androidx.annotation.Nullable;
 import me.panpf.adapter.OnClickListener;
 import me.panpf.adapter.OnLongClickListener;
 
-/**
- * {@link AssemblyPagerAdapter} 专用的 item factory，负责匹配数据和创建 item
- *
- * @param <DATA> 指定数据类型
- */
-// todo 参照 ItemFactory 优化一下
 public abstract class AssemblyPagerItemFactory<DATA> {
 
     @Nullable
@@ -40,27 +34,15 @@ public abstract class AssemblyPagerItemFactory<DATA> {
     @Nullable
     private PagerClickListenerManager<DATA> clickListenerManager;
 
-    /**
-     * 获取 {@link AssemblyPagerAdapter}
-     */
     @Nullable
     public AssemblyPagerAdapter getAdapter() {
         return adapter;
     }
 
-    /**
-     * 设置 {@link AssemblyPagerAdapter}，此方法由 Adapter 调用
-     */
-    void setAdapter(@Nullable AssemblyPagerAdapter adapter) {
+    void attachToAdapter(@Nullable AssemblyPagerAdapter adapter) {
         this.adapter = adapter;
     }
 
-    /**
-     * 监听指定 id 的 view 的点击事件
-     *
-     * @param viewId          view 的 id
-     * @param onClickListener 点击监听
-     */
     public AssemblyPagerItemFactory<DATA> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
             clickListenerManager = new PagerClickListenerManager<DATA>();
@@ -69,11 +51,6 @@ public abstract class AssemblyPagerItemFactory<DATA> {
         return this;
     }
 
-    /**
-     * 监听 item 的点击事件
-     *
-     * @param onClickListener 点击监听
-     */
     public AssemblyPagerItemFactory<DATA> setOnItemClickListener(@NonNull OnClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
             clickListenerManager = new PagerClickListenerManager<DATA>();
@@ -82,12 +59,6 @@ public abstract class AssemblyPagerItemFactory<DATA> {
         return this;
     }
 
-    /**
-     * 监听指定 id 的 view 的长按事件
-     *
-     * @param viewId          view 的 id
-     * @param onClickListener 长按监听
-     */
     public AssemblyPagerItemFactory<DATA> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
             clickListenerManager = new PagerClickListenerManager<DATA>();
@@ -96,11 +67,6 @@ public abstract class AssemblyPagerItemFactory<DATA> {
         return this;
     }
 
-    /**
-     * 监听 item 的长按事件
-     *
-     * @param onClickListener 长按监听
-     */
     public AssemblyPagerItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener) {
         if (clickListenerManager == null) {
             clickListenerManager = new PagerClickListenerManager<DATA>();

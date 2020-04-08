@@ -30,7 +30,6 @@ class ViewPagerFragmentStatePagerAdapterSampleFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val header = Header("我是小额头呀！", "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-004.jpg")
         val dataArray = arrayOf(
                 "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-007.jpg",
                 "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-005.jpg",
@@ -38,13 +37,11 @@ class ViewPagerFragmentStatePagerAdapterSampleFragment : BaseFragment() {
                 "https://img.ivsky.com/img/tupian/pre/201910/17/yujia-012.jpg",
                 "https://img.ivsky.com/img/tupian/pre/201910/17/yujia-016.jpg"
         )
-        val footer = Header("我是小尾巴呀！", "https://img.ivsky.com/img/tupian/pre/201910/17/yujia-013.jpg")
-
-        val adapter = AssemblyFragmentStatePagerAdapter(childFragmentManager, dataArray)
-        adapter.addHeaderItem(HeaderFragmentItemFactory(), header)
-        adapter.addItemFactory(ImageFragmentItemFactory())
-        adapter.addItemFactory(TextFragmentItemFactory())
-        adapter.addFooterItem(HeaderFragmentItemFactory(), footer)
-        pagerFm_pager.adapter = adapter
+        pagerFm_pager.adapter = AssemblyFragmentStatePagerAdapter(childFragmentManager, dataArray).apply {
+            addHeaderItem(HeaderFragmentItemFactory(), Header("我是小额头呀！", "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-004.jpg"))
+            addItemFactory(ImageFragmentItemFactory())
+            addItemFactory(TextFragmentItemFactory())
+            addFooterItem(HeaderFragmentItemFactory(), Header("我是小尾巴呀！", "https://img.ivsky.com/img/tupian/pre/201910/17/yujia-013.jpg"))
+        }
     }
 }

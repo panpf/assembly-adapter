@@ -16,168 +16,152 @@
 
 package me.panpf.adapter.pager;
 
+import android.util.SparseIntArray;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
-import android.util.SparseIntArray;
 
 import java.util.List;
 
 /**
- * 通用组合式 {@link FragmentPagerAdapter}，支持组合式多类型 item，支持头、尾巴
+ * Combined {@link FragmentPagerAdapter}, supports combining many types of items, supports head and tail
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implements AssemblyFragmentAdapter {
 
     @NonNull
-    private FragmentItemStorage storage;
-    @NonNull
-    private FragmentItemActor actor = new FragmentItemActor(this);
+    private FragmentItemManager itemManager;
 
     private int notifyNumber = 0;
     @Nullable
     private SparseIntArray notifyNumberPool;
 
+    // todo 增加对 behavior i支持
     public AssemblyFragmentPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
-        this.storage = new FragmentItemStorage(this);
+        this.itemManager = new FragmentItemManager(this);
     }
 
+    // todo 增加对 behavior i支持
     public AssemblyFragmentPagerAdapter(@NonNull FragmentManager fm, @NonNull List dataList) {
         super(fm);
-        this.storage = new FragmentItemStorage(this, dataList);
+        this.itemManager = new FragmentItemManager(this, dataList);
     }
 
+    // todo 增加对 behavior i支持
     public AssemblyFragmentPagerAdapter(@NonNull FragmentManager fm, @Nullable Object[] dataArray) {
         super(fm);
-        this.storage = new FragmentItemStorage(this, dataArray);
+        this.itemManager = new FragmentItemManager(this, dataArray);
     }
 
-
-    /* ************************ 数据 ItemFactory *************************** */
 
     @Override
     public void addItemFactory(@NonNull AssemblyFragmentItemFactory itemFactory) {
-        storage.addItemFactory(itemFactory);
+        itemManager.addItemFactory(itemFactory);
     }
 
-    @Nullable
-    @Override
-    public List<AssemblyFragmentItemFactory> getItemFactoryList() {
-        return storage.getItemFactoryList();
-    }
-
-    @Override
-    public int getItemFactoryCount() {
-        return storage.getItemFactoryCount();
-    }
-
-
-    /* ************************ 头部 ItemFactory *************************** */
 
     @Override
     public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory, @Nullable Object data) {
-        storage.addHeaderItem(headerFactory, data);
+        itemManager.addHeaderItem(headerFactory, data);
     }
 
     @Override
     public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory) {
-        storage.addHeaderItem(headerFactory);
+        itemManager.addHeaderItem(headerFactory);
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public List<FragmentItemHolder> getHeaderItemList() {
-        return storage.getHeaderItemList();
+    public FragmentItemHolderManager getHeaderItemManager() {
+        return itemManager.getHeaderItemManager();
     }
 
     @Override
     public int getHeaderItemCount() {
-        return storage.getHeaderItemCount();
+        return itemManager.getHeaderItemManager().getItemCount();
     }
 
-    @Nullable
-    @Override
-    public Object getHeaderData(int positionInHeaderList) {
-        return storage.getHeaderData(positionInHeaderList);
-    }
-
-
-    /* ************************ 尾巴 ItemFactory *************************** */
 
     @Override
     public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @Nullable Object data) {
-        storage.addFooterItem(footerFactory, data);
+        itemManager.addFooterItem(footerFactory, data);
     }
 
     @Override
     public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory) {
-        storage.addFooterItem(footerFactory);
+        itemManager.addFooterItem(footerFactory);
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public List<FragmentItemHolder> getFooterItemList() {
-        return storage.getFooterItemList();
+    public FragmentItemHolderManager getFooterItemManager() {
+        return itemManager.getFooterItemManager();
     }
 
     @Override
     public int getFooterItemCount() {
-        return storage.getFooterItemCount();
+        return itemManager.getFooterItemManager().getItemCount();
     }
 
-    @Nullable
-    @Override
-    public Object getFooterData(int positionInFooterList) {
-        return storage.getFooterData(positionInFooterList);
-    }
-
-
-    /* ************************ 数据列表 *************************** */
 
     @Nullable
     @Override
     public List getDataList() {
-        return storage.getDataList();
+        return itemManager.getDataList();
     }
 
-    /**
-     * 设置数据列表
-     */
     public void setDataList(@Nullable List dataList) {
-        storage.setDataList(dataList);
+        itemManager.setDataList(dataList);
     }
 
     @Override
     public int getDataCount() {
-        return storage.getDataCount();
+        return itemManager.getDataCount();
     }
 
-    @Nullable
-    @Override
-    public Object getData(int positionInDataList) {
-        return storage.getData(positionInDataList);
-    }
-
-
-    /* ************************ 完整列表 *************************** */
 
     @Override
     public int getPositionInPart(int position) {
-        return actor.getPositionInPart(position);
+        return itemManager.getPositionInPart(position);
     }
 
     @Override
     public int getCount() {
-        return actor.getItemCount();
+        return itemManager.getItemCount();
+    }
+
+    @NonNull
+    @Override
+    public Fragment getItem(int position) {
+        AssemblyFragmentItemFactory itemFactory = itemManager.getItemFactoryByPosition(position);
+        Object itemData = itemManager.getItemDataByPosition(position);
+        //noinspection unchecked
+        return itemFactory.dispatchCreateFragment(position, itemData);
+    }
+
+    @NonNull
+    @Override
+    public AssemblyFragmentItemFactory getItemFactoryByPosition(int position) {
+        return itemManager.getItemFactoryByPosition(position);
     }
 
     @Override
-    public Fragment getItem(int position) {
-        return actor.getItem(position);
+    public boolean isHeaderItem(int position) {
+        return itemManager.isHeaderItem(position);
+    }
+
+    @Override
+    public boolean isBodyItem(int position) {
+        return itemManager.isBodyItem(position);
+    }
+
+    @Override
+    public boolean isFooterItem(int position) {
+        return itemManager.isFooterItem(position);
     }
 
     public boolean isEnabledPositionNoneOnNotifyDataSetChanged() {

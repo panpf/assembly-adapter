@@ -19,112 +19,52 @@ package me.panpf.adapter.pager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
-/**
- * 通用组合式 {@link FragmentStatePagerAdapter}，支持组合式多类型 item，支持头、尾巴以及加载更多
- */
-@SuppressWarnings({"unused", "WeakerAccess"})
 public interface AssemblyFragmentAdapter {
-
-
-    /* ************************ 数据 ItemFactory *************************** */
 
     void addItemFactory(@NonNull AssemblyFragmentItemFactory itemFactory);
 
-    /**
-     * 获取 {@link me.panpf.adapter.ItemFactory} 列表
-     */
-    @Nullable
-    List<AssemblyFragmentItemFactory> getItemFactoryList();
 
-    /**
-     * 获取 {@link me.panpf.adapter.ItemFactory} 的个数
-     */
-    int getItemFactoryCount();
-
-
-    /* ************************ 头部 ItemFactory *************************** */
-
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
-     */
     void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data);
 
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyFragmentItemFactory}
-     */
     void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory);
 
-    /**
-     * 获取 header 列表
-     */
-    @Nullable
-    List<FragmentItemHolder> getHeaderItemList();
+    @NonNull
+    FragmentItemHolderManager getHeaderItemManager();
 
-    /**
-     * 获取列表头的个数
-     */
     int getHeaderItemCount();
 
-    @Nullable
-    Object getHeaderData(int positionInHeaderList);
 
-
-    /* ************************ 尾巴 ItemFactory *************************** */
-
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
-     */
     void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data);
 
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyFragmentItemFactory}
-     */
     void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory);
 
-    /**
-     * 获取 footer 列表
-     */
-    @Nullable
-    List<FragmentItemHolder> getFooterItemList();
+    @NonNull
+    FragmentItemHolderManager getFooterItemManager();
 
-    /**
-     * 获取列表头的个数
-     */
     int getFooterItemCount();
 
-    @Nullable
-    Object getFooterData(int positionInFooterList);
 
-
-    /* ************************ 数据列表 *************************** */
-
-    /**
-     * 获取数据列表
-     */
     @Nullable
     List getDataList();
 
-    /**
-     * 获取数据列表的长度
-     */
     int getDataCount();
 
-    @Nullable
-    Object getData(int positionInDataList);
 
-
-    /* ************************ 完整列表 *************************** */
-
-    /**
-     * 获取在各自区域的位置
-     */
     int getPositionInPart(int position);
 
     int getCount();
 
     Fragment getItem(int position);
+
+    @NonNull
+    AssemblyFragmentItemFactory getItemFactoryByPosition(int position);
+
+    boolean isHeaderItem(int position);
+
+    boolean isBodyItem(int position);
+
+    boolean isFooterItem(int position);
 }

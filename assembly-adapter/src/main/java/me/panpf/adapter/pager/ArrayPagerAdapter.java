@@ -16,19 +16,16 @@
 
 package me.panpf.adapter.pager;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.viewpager.widget.PagerAdapter;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.PagerAdapter;
+
 import java.util.List;
 
-/**
- * {@link View} 数组 {@link PagerAdapter}
- */
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class ArrayPagerAdapter extends PagerAdapter {
 
     @NonNull
@@ -43,7 +40,7 @@ public class ArrayPagerAdapter extends PagerAdapter {
     }
 
     public ArrayPagerAdapter(@NonNull List<View> views) {
-        this(views.toArray(new View[views.size()]));
+        this(views.toArray(new View[0]));
     }
 
     @NonNull

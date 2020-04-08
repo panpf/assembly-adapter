@@ -21,28 +21,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 
-/**
- * {@link AssemblyFragmentPagerAdapter} 和 {@link AssemblyFragmentStatePagerAdapter} 专用的 item factory 负责匹配数据和创建 {@link Fragment}
- *
- * @param <DATA> 指定数据类型
- */
 public abstract class AssemblyFragmentItemFactory<DATA> {
 
     @Nullable
     private PagerAdapter adapter;
 
-    /**
-     * 获取 {@link PagerAdapter}
-     */
     @Nullable
     public PagerAdapter getAdapter() {
         return adapter;
     }
 
-    /**
-     * 设置 {@link PagerAdapter}，此方法由 Adapter 调用
-     */
-    void setAdapter(@NonNull PagerAdapter adapter) {
+    void attachToAdapter(@NonNull PagerAdapter adapter) {
         this.adapter = adapter;
     }
 

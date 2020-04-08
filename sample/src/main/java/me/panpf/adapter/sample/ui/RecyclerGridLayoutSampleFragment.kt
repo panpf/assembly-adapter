@@ -46,7 +46,7 @@ class RecyclerGridLayoutSampleFragment : BaseFragment() {
         stickyRecyclerFm_recycler.addItemDecoration(StickyRecyclerItemDecoration(stickyRecyclerFm_frame))
         stickyRecyclerFm_recycler.adapter = adapter
 
-        appsViewModel.apps.observe(this, androidx.lifecycle.Observer {
+        appsViewModel.apps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it ?: return@Observer
 
             val systemAppList = it[0]

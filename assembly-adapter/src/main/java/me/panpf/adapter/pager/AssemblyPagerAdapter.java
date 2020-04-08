@@ -29,221 +29,122 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * 通用组合式 {@link PagerAdapter}，支持组合式多类型 item，支持头、尾巴
+ * General combination type {@link PagerAdapter}, support combining multiple items, support head and tail
  */
 // todo 独立成一个 model
 public class AssemblyPagerAdapter extends PagerAdapter {
 
     @NonNull
-    private PagerItemStorage storage;
-    @NonNull
-    private PagerItemActor actor = new PagerItemActor(this);
+    private PagerItemManager itemManager;
 
     private int notifyNumber = 0;
     @Nullable
     private SparseIntArray notifyNumberPool;
 
     public AssemblyPagerAdapter() {
-        this.storage = new PagerItemStorage(this);
+        this.itemManager = new PagerItemManager(this);
     }
 
     public AssemblyPagerAdapter(@Nullable List dataList) {
-        this.storage = new PagerItemStorage(this, dataList);
+        this.itemManager = new PagerItemManager(this, dataList);
     }
 
     public AssemblyPagerAdapter(@Nullable Object[] dataArray) {
-        this.storage = new PagerItemStorage(this, dataArray);
+        this.itemManager = new PagerItemManager(this, dataArray);
     }
 
-
-    /* ************************ 数据 ItemFactory *************************** */
 
     public void addItemFactory(@NonNull AssemblyPagerItemFactory itemFactory) {
-        storage.addItemFactory(itemFactory);
-    }
-
-    /**
-     * 获取 {@link AssemblyPagerItemFactory} 列表
-     */
-    @Nullable
-    public List<AssemblyPagerItemFactory> getItemFactoryList() {
-        return storage.getItemFactoryList();
-    }
-
-    /**
-     * 获取 {@link AssemblyPagerItemFactory} 的个数
-     */
-    public int getItemFactoryCount() {
-        return storage.getItemFactoryCount();
+        itemManager.addItemFactory(itemFactory);
     }
 
 
-    /* ************************ 头部 ItemFactory *************************** */
-
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
-     */
     @NonNull
     public PagerItemHolder addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
-        return storage.addHeaderItem(itemFactory, data);
+        return itemManager.addHeaderItem(itemFactory, data);
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表头部的 {@link AssemblyPagerItemFactory}
-     */
     @NonNull
     public PagerItemHolder addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
-        return storage.addHeaderItem(itemFactory);
+        return itemManager.addHeaderItem(itemFactory);
     }
 
-    /**
-     * 获取 header 列表
-     */
-    @Nullable
-    public List<PagerItemHolder> getHeaderItemList() {
-        return storage.getHeaderItemList();
+    @NonNull
+    public PagerItemHolderManager getHeaderItemManager() {
+        return itemManager.getHeaderItemManager();
     }
 
-    /**
-     * 获取列表头的个数
-     */
-    public int getHeaderItemCount() {
-        return storage.getHeaderItemCount();
-    }
-
-    @Nullable
-    public Object getHeaderData(int positionInHeaderList) {
-        return storage.getHeaderData(positionInHeaderList);
+    public int getHeaderEnabledItemCount() {
+        return itemManager.getHeaderItemManager().getEnabledItemCount();
     }
 
 
-    /* ************************ 尾巴 ItemFactory *************************** */
-
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
-     */
     @NonNull
     public PagerItemHolder addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
-        return storage.addFooterItem(itemFactory, data);
+        return itemManager.addFooterItem(itemFactory, data);
     }
 
-    /**
-     * 添加一个将按添加顺序显示在列表尾部的 {@link AssemblyPagerItemFactory}
-     */
     @NonNull
     public PagerItemHolder addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
-        return storage.addFooterItem(itemFactory);
+        return itemManager.addFooterItem(itemFactory);
     }
 
-    /**
-     * 获取 footer 列表
-     */
-    @Nullable
-    public List<PagerItemHolder> getFooterItemList() {
-        return storage.getFooterItemList();
+    @NonNull
+    public PagerItemHolderManager getFooterItemManager() {
+        return itemManager.getFooterItemManager();
     }
 
-    /**
-     * 获取列表头的个数
-     */
-    public int getFooterItemCount() {
-        return storage.getFooterItemCount();
-    }
-
-    @Nullable
-    public Object getFooterData(int positionInFooterList) {
-        return storage.getFooterData(positionInFooterList);
+    public int getFooterEnabledItemCount() {
+        return itemManager.getFooterItemManager().getEnabledItemCount();
     }
 
 
-    /* ************************ 数据列表 *************************** */
-
-    /**
-     * 获取数据列表
-     */
     @Nullable
     public List getDataList() {
-        return storage.getDataList();
+        return itemManager.getDataList();
     }
 
-    /**
-     * 设置数据列表
-     */
     public void setDataList(@Nullable List dataList) {
-        storage.setDataList(dataList);
+        itemManager.setDataList(dataList);
     }
 
-    /**
-     * 批量添加数据
-     */
     public void addAll(@Nullable Collection collection) {
-        storage.addAll(collection);
+        itemManager.addAll(collection);
     }
 
-    /**
-     * 批量添加数据
-     */
     public void addAll(@Nullable Object... items) {
-        storage.addAll(items);
+        itemManager.addAll(items);
     }
 
-    /**
-     * 插入一条数据
-     */
     public void insert(@NonNull Object object, int index) {
-        storage.insert(object, index);
+        itemManager.insert(object, index);
     }
 
-    /**
-     * 删除一条数据
-     */
     public void remove(@NonNull Object object) {
-        storage.remove(object);
+        itemManager.remove(object);
     }
 
-    /**
-     * 清空数据
-     */
     public void clear() {
-        storage.clear();
+        itemManager.clear();
     }
 
-    /**
-     * 对数据排序
-     */
     public void sort(@NonNull Comparator comparator) {
-        storage.sort(comparator);
+        itemManager.sort(comparator);
     }
 
-    /**
-     * 获取数据列表的长度
-     */
     public int getDataCount() {
-        return storage.getDataCount();
+        return itemManager.getDataCount();
     }
-
-    @Nullable
-    public Object getData(int positionInDataList) {
-        return storage.getData(positionInDataList);
-    }
-
-
-    /* ************************ 完整列表 *************************** */
 
     @Override
     public int getCount() {
-        return actor.getItemCount();
+        return itemManager.getItemCount();
     }
 
-    /**
-     * 获取在各自区域的位置
-     */
     public int getPositionInPart(int position) {
-        return actor.getPositionInPart(position);
+        return itemManager.getPositionInPart(position);
     }
 
-
-    /* ************************ 其它 *************************** */
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
@@ -258,22 +159,20 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        return actor.getItem(container, position);
+        AssemblyPagerItemFactory itemFactory = itemManager.getItemFactoryByPosition(position);
+        Object itemData = itemManager.getItemDataByPosition(position);
+        //noinspection unchecked
+        View itemView = itemFactory.dispatchCreateView(container.getContext(), container, position, itemData);
+        container.addView(itemView);
+        return itemView;
     }
 
-    /**
-     * 数据变更时是否立即刷新列表
-     */
     public boolean isNotifyOnChange() {
-        return storage.isNotifyOnChange();
+        return itemManager.isNotifyOnChange();
     }
 
-    /**
-     * 设置当数据源发生改变时是否立即调用 notifyDataSetChanged() 刷新列表，默认 true。
-     * 当你需要连续多次修改数据的时候，你应该将 notifyOnChange 设为 false，然后在最后主动调用 notifyDataSetChanged() 刷新列表，最后再将 notifyOnChange 设为 true
-     */
     public void setNotifyOnChange(boolean notifyOnChange) {
-        storage.setNotifyOnChange(notifyOnChange);
+        itemManager.setNotifyOnChange(notifyOnChange);
     }
 
     public boolean isEnabledPositionNoneOnNotifyDataSetChanged() {
@@ -302,5 +201,22 @@ public class AssemblyPagerAdapter extends PagerAdapter {
             return PagerAdapter.POSITION_NONE;
         }
         return super.getItemPosition(object);
+    }
+
+    @NonNull
+    public AssemblyPagerItemFactory getItemFactoryByPosition(int position) {
+        return itemManager.getItemFactoryByPosition(position);
+    }
+
+    public boolean isHeaderItem(int position) {
+        return itemManager.isHeaderItem(position);
+    }
+
+    public boolean isBodyItem(int position) {
+        return itemManager.isBodyItem(position);
+    }
+
+    public boolean isFooterItem(int position) {
+        return itemManager.isFooterItem(position);
     }
 }
