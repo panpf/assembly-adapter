@@ -12,13 +12,14 @@ public class FixedItemManager {
     @Nullable
     private ArrayList<FixedItem> enabledItemList;
 
-    public void add(@NonNull FixedItem item) {
+    public void add(@NonNull FixedItem fixedItem) {
         ArrayList<FixedItem> allList = this.itemList;
         if (allList == null) {
             allList = new ArrayList<>();
             this.itemList = allList;
         }
-        allList.add(item);
+        fixedItem.setPositionInPartItemList(allList.size());
+        allList.add(fixedItem);
         refreshEnabledList();
     }
 
@@ -34,6 +35,7 @@ public class FixedItemManager {
             }
             for (FixedItem fixedItem : allList) {
                 if (fixedItem.isEnabled()) {
+                    fixedItem.setPositionInPartList(enabledList.size());
                     enabledList.add(fixedItem);
                 }
             }
@@ -91,11 +93,6 @@ public class FixedItemManager {
 
     public void setItemEnabled(int index, boolean enabled) {
         getItem(index).setEnabled(enabled);
-    }
-
-    public void switchItemEnabled(int index) {
-        FixedItem fixedItem = getItem(index);
-        fixedItem.setEnabled(!fixedItem.isEnabled());
     }
 
 

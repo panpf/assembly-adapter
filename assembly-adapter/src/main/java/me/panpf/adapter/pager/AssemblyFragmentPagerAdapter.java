@@ -93,21 +93,57 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
         itemManager.addItemFactory(itemFactory);
     }
 
-
+    @NonNull
     @Override
-    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory, @Nullable Object data) {
-        itemManager.addHeaderItem(headerFactory, data);
-    }
-
-    @Override
-    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory headerFactory) {
-        itemManager.addHeaderItem(headerFactory);
+    public List<AssemblyFragmentItemFactory> getItemFactoryList() {
+        return itemManager.getItemFactoryList();
     }
 
     @NonNull
     @Override
-    public FragmentFixedItemManager getHeaderItemManager() {
-        return itemManager.getHeaderItemManager();
+    public <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull FragmentFixedItem<DATA> fixedItem) {
+        return itemManager.addHeaderItem(fixedItem);
+    }
+
+    @NonNull
+    @Override
+    public <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull AssemblyFragmentItemFactory<DATA> headerFactory, @Nullable DATA data) {
+        return itemManager.addHeaderItem(headerFactory, data);
+    }
+
+    @NonNull
+    @Override
+    public <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull AssemblyFragmentItemFactory<DATA> headerFactory) {
+        return itemManager.addHeaderItem(headerFactory);
+    }
+
+    @NonNull
+    @Override
+    public FragmentFixedItem getHeaderItemByClass(@NonNull Class clazz, int number) {
+        return itemManager.getHeaderItemManager().getItemByClass(clazz, number);
+    }
+
+    @NonNull
+    @Override
+    public FragmentFixedItem getHeaderItemByClass(@NonNull Class clazz) {
+        return itemManager.getHeaderItemManager().getItemByClass(clazz);
+    }
+
+    @NonNull
+    @Override
+    public FragmentFixedItem getHeaderItem(int positionInHeaderItemList) {
+        return itemManager.getHeaderItemManager().getItem(positionInHeaderItemList);
+    }
+
+    @Nullable
+    @Override
+    public Object getHeaderItemData(int positionInHeaderItemList) {
+        return itemManager.getHeaderItemManager().getItem(positionInHeaderItemList).getData();
+    }
+
+    @Override
+    public void setHeaderItemData(int positionInHeaderItemList, @Nullable Object data) {
+        itemManager.getHeaderItemManager().setItemData(positionInHeaderItemList, data);
     }
 
     @Override
@@ -115,26 +151,68 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
         return itemManager.getHeaderItemManager().getItemCount();
     }
 
-
+    @Nullable
     @Override
-    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory, @Nullable Object data) {
-        itemManager.addFooterItem(footerFactory, data);
-    }
-
-    @Override
-    public void addFooterItem(@NonNull AssemblyFragmentItemFactory footerFactory) {
-        itemManager.addFooterItem(footerFactory);
+    public Object getHeaderData(int positionInHeaderList) {
+        return itemManager.getHeaderItemManager().getItem(positionInHeaderList).getData();
     }
 
     @NonNull
     @Override
-    public FragmentFixedItemManager getFooterItemManager() {
-        return itemManager.getFooterItemManager();
+    public <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull FragmentFixedItem<DATA> fixedItem) {
+        return itemManager.addHeaderItem(fixedItem);
+    }
+
+    @NonNull
+    @Override
+    public <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull AssemblyFragmentItemFactory<DATA> footerFactory, @Nullable DATA data) {
+        return itemManager.addFooterItem(footerFactory, data);
+    }
+
+    @NonNull
+    @Override
+    public <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull AssemblyFragmentItemFactory<DATA> footerFactory) {
+        return itemManager.addFooterItem(footerFactory);
+    }
+
+    @NonNull
+    @Override
+    public FragmentFixedItem getFooterItemByClass(@NonNull Class clazz, int number) {
+        return itemManager.getFooterItemManager().getItemByClass(clazz, number);
+    }
+
+    @NonNull
+    @Override
+    public FragmentFixedItem getFooterItemByClass(@NonNull Class clazz) {
+        return itemManager.getFooterItemManager().getItemByClass(clazz);
+    }
+
+    @NonNull
+    @Override
+    public FragmentFixedItem getFooterItem(int positionInFooterItemList) {
+        return itemManager.getFooterItemManager().getItem(positionInFooterItemList);
+    }
+
+    @Nullable
+    @Override
+    public Object getFooterItemData(int positionInFooterItemList) {
+        return itemManager.getFooterItemManager().getItem(positionInFooterItemList).getData();
+    }
+
+    @Override
+    public void setFooterItemData(int positionInFooterItemList, @Nullable Object data) {
+        itemManager.getFooterItemManager().setItemData(positionInFooterItemList, data);
     }
 
     @Override
     public int getFooterCount() {
         return itemManager.getFooterItemManager().getItemCount();
+    }
+
+    @Nullable
+    @Override
+    public Object getFooterData(int positionInFooterList) {
+        return itemManager.getFooterItemManager().getItem(positionInFooterList).getData();
     }
 
 
@@ -144,6 +222,7 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
         return itemManager.getDataList();
     }
 
+    @Override
     public void setDataList(@Nullable List dataList) {
         itemManager.setDataList(dataList);
     }
@@ -153,31 +232,12 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
         return itemManager.getDataCount();
     }
 
-
+    @Nullable
     @Override
-    public int getPositionInPart(int position) {
-        return itemManager.getPositionInPart(position);
+    public Object getData(int positionInDataList) {
+        return itemManager.getData(positionInDataList);
     }
 
-    @Override
-    public int getCount() {
-        return itemManager.getItemCount();
-    }
-
-    @NonNull
-    @Override
-    public Fragment getItem(int position) {
-        AssemblyFragmentItemFactory itemFactory = itemManager.getItemFactoryByPosition(position);
-        Object itemData = itemManager.getItemDataByPosition(position);
-        //noinspection unchecked
-        return itemFactory.dispatchCreateFragment(position, itemData);
-    }
-
-    @NonNull
-    @Override
-    public AssemblyFragmentItemFactory getItemFactoryByPosition(int position) {
-        return itemManager.getItemFactoryByPosition(position);
-    }
 
     @Override
     public boolean isHeaderItem(int position) {
@@ -192,6 +252,32 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
     @Override
     public boolean isFooterItem(int position) {
         return itemManager.isFooterItem(position);
+    }
+
+    @Override
+    public int getPositionInPart(int position) {
+        return itemManager.getPositionInPart(position);
+    }
+
+    @NonNull
+    @Override
+    public AssemblyFragmentItemFactory getItemFactoryByPosition(int position) {
+        return itemManager.getItemFactoryByPosition(position);
+    }
+
+
+    @Override
+    public int getCount() {
+        return itemManager.getItemCount();
+    }
+
+    @NonNull
+    @Override
+    public Fragment getItem(int position) {
+        AssemblyFragmentItemFactory itemFactory = itemManager.getItemFactoryByPosition(position);
+        Object itemData = itemManager.getItemDataByPosition(position);
+        //noinspection unchecked
+        return itemFactory.dispatchCreateFragment(position, itemData);
     }
 
     public boolean isEnabledPositionNoneOnNotifyDataSetChanged() {

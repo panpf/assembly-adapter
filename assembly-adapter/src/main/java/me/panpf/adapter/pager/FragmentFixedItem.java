@@ -23,16 +23,21 @@ import androidx.viewpager.widget.PagerAdapter;
 public class FragmentFixedItem<DATA> {
 
     @NonNull
-    private AssemblyFragmentItemFactory itemFactory;
+    private AssemblyFragmentItemFactory<DATA> itemFactory;
     @Nullable
     private DATA data;
 
-    public FragmentFixedItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable DATA data) {
+    @Nullable
+    private FragmentItemManager itemManager;
+    private boolean header;
+    private int positionInPartItemList;
+
+    public FragmentFixedItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory, @Nullable DATA data) {
         this.itemFactory = itemFactory;
         this.data = data;
     }
 
-    public FragmentFixedItem(@NonNull AssemblyFragmentItemFactory itemFactory) {
+    public FragmentFixedItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory) {
         this.itemFactory = itemFactory;
     }
 
@@ -51,7 +56,28 @@ public class FragmentFixedItem<DATA> {
     }
 
     @NonNull
-    public AssemblyFragmentItemFactory getItemFactory() {
+    public AssemblyFragmentItemFactory<DATA> getItemFactory() {
         return itemFactory;
+    }
+
+    public boolean isAttached() {
+        return itemManager != null;
+    }
+
+    public boolean isHeader() {
+        return header;
+    }
+
+    void attachToAdapter(@NonNull FragmentItemManager itemManager, boolean header) {
+        this.itemManager = itemManager;
+        this.header = header;
+    }
+
+    public int getPositionInPartItemList() {
+        return positionInPartItemList;
+    }
+
+    void setPositionInPartItemList(int positionInPartItemList) {
+        this.positionInPartItemList = positionInPartItemList;
     }
 }

@@ -12,13 +12,14 @@ public class PagerFixedItemManager {
     @Nullable
     private ArrayList<PagerFixedItem> enabledItemList;
 
-    public void add(@NonNull PagerFixedItem item) {
+    public void add(@NonNull PagerFixedItem fixedItem) {
         ArrayList<PagerFixedItem> allList = this.itemList;
         if (allList == null) {
             allList = new ArrayList<>();
             this.itemList = allList;
         }
-        allList.add(item);
+        fixedItem.setPositionInPartItemList(allList.size());
+        allList.add(fixedItem);
         refreshEnabledList();
     }
 
@@ -32,9 +33,10 @@ public class PagerFixedItemManager {
             } else {
                 enabledList.clear();
             }
-            for (PagerFixedItem item : allList) {
-                if (item.isEnabled()) {
-                    enabledList.add(item);
+            for (PagerFixedItem fixedItem : allList) {
+                if (fixedItem.isEnabled()) {
+                    fixedItem.setPositionInPartList(enabledList.size());
+                    enabledList.add(fixedItem);
                 }
             }
         }

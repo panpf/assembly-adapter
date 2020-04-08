@@ -15,8 +15,8 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.item.GameItem
-import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.LoadMoreItem
+import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.UserItem
 import java.lang.ref.WeakReference
 
@@ -110,15 +110,15 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
             fragment.apply {
                 nextStart += size
                 adapter.addAll(objects)
-                adapter.headerItemManager.switchItemEnabled(1)
-                adapter.footerItemManager.switchItemEnabled(1)
+                adapter.setHeaderItemEnabled(1, !adapter.isHeaderItemEnabled(1))
+                adapter.setFooterItemEnabled(1, !adapter.isFooterItemEnabled(1))
 
                 val loadMoreEnd = nextStart >= 100
                 if (loadMoreEnd) {
-                    adapter.headerItemManager.setItemEnabled(0, false)
-                    adapter.footerItemManager.setItemEnabled(0, false)
+                    adapter.setHeaderItemEnabled(0, false)
+                    adapter.setFooterItemEnabled(0, false)
                 }
-                adapter.moreItem?.isEnabled = !loadMoreEnd
+                adapter.setMoreItemEnabled(!loadMoreEnd)
             }
         }
     }

@@ -21,15 +21,18 @@ import androidx.annotation.Nullable;
 
 public class PagerFixedItem<DATA> {
 
-    @Nullable
-    private PagerItemManager itemManager;
     @NonNull
     private AssemblyPagerItemFactory<DATA> itemFactory;
     @Nullable
     private DATA data;
+
+    @Nullable
+    private PagerItemManager itemManager;
     private boolean header;
 
     private boolean enabled = true;
+    private int positionInPartList;
+    private int positionInPartItemList;
 
     public PagerFixedItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
         this.itemFactory = itemFactory;
@@ -88,5 +91,21 @@ public class PagerFixedItem<DATA> {
 
     public boolean isHeader() {
         return header;
+    }
+
+    public int getPositionInPartList() {
+        return positionInPartList;
+    }
+
+    public void setPositionInPartList(int positionInPartList) {
+        this.positionInPartList = positionInPartList;
+    }
+
+    public int getPositionInPartItemList() {
+        return positionInPartItemList;
+    }
+
+    public void setPositionInPartItemList(int positionInPartItemList) {
+        this.positionInPartItemList = positionInPartItemList;
     }
 }

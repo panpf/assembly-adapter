@@ -34,7 +34,7 @@ class ViewPagerPagerAdapterSampleFragment : BaseFragment() {
         )
         viewPager.adapter = AssemblyPagerAdapter(dataArray).apply {
             addHeaderItem(HeaderPagerItemFactory().setOnItemClickListener { _, _, _, _, _ ->
-                this.headerItemManager.setItemEnabled(0, false)
+                this.setHeaderItemEnabled(0, false)
                 viewPager.adapter = null
                 viewPager.adapter = this
             }, Header("我是小额头呀！\n你敢戳我，我就敢消失！哼！", "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-008.jpg"))
@@ -43,7 +43,7 @@ class ViewPagerPagerAdapterSampleFragment : BaseFragment() {
             addItemFactory(TextPagerItemFactory())
 
             addFooterItem(HeaderPagerItemFactory().setOnItemClickListener { _, _, _, _, _ ->
-                this.footerItemManager.setItemEnabled(0, false)
+                this.setFooterItemEnabled(0, false)
                 viewPager.adapter = this
             }, Header("我是小尾巴呀！\n你敢戳我，我也敢消失！哼！", "https://img.ivsky.com/img/tupian/pre/201909/19/oumei_meinv-004.jpg"))
         }

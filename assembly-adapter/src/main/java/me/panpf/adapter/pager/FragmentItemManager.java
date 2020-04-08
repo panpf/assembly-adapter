@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class FragmentItemManager {
+class FragmentItemManager {
 
     @NonNull
     private PagerAdapter adapter;
@@ -39,16 +39,16 @@ public class FragmentItemManager {
     @Nullable
     private List dataList;
 
-    public FragmentItemManager(@NonNull PagerAdapter adapter) {
+    FragmentItemManager(@NonNull PagerAdapter adapter) {
         this.adapter = adapter;
     }
 
-    public FragmentItemManager(@NonNull PagerAdapter adapter, @NonNull List dataList) {
+    FragmentItemManager(@NonNull PagerAdapter adapter, @NonNull List dataList) {
         this.adapter = adapter;
         this.dataList = dataList;
     }
 
-    public FragmentItemManager(@NonNull PagerAdapter adapter, @Nullable Object[] dataArray) {
+    FragmentItemManager(@NonNull PagerAdapter adapter, @Nullable Object[] dataArray) {
         this.adapter = adapter;
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
@@ -68,45 +68,65 @@ public class FragmentItemManager {
         itemFactory.attachToAdapter(adapter);
     }
 
-
-    public <DATA> void addHeaderItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory, @Nullable Object data) {
-        //noinspection ConstantConditions
-        if (itemFactory == null) {
-            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
-        }
-
-        headerItemManager.add(new FragmentFixedItem<>(itemFactory, data));
-
-        itemFactory.attachToAdapter(adapter);
-    }
-
-    public void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory) {
-        addHeaderItem(itemFactory, null);
+    @NonNull
+    public ArrayList<AssemblyFragmentItemFactory> getItemFactoryList() {
+        return itemFactoryList;
     }
 
     @NonNull
-    public FragmentFixedItemManager getHeaderItemManager() {
+    public <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull FragmentFixedItem<DATA> fixedItem) {
+        if (fixedItem.isAttached()) {
+            throw new IllegalArgumentException("Cannot be added repeatedly");
+        }
+
+        headerItemManager.add(fixedItem);
+
+        fixedItem.getItemFactory().attachToAdapter(adapter);
+        fixedItem.attachToAdapter(this, true);
+        return fixedItem;
+    }
+
+    @NonNull
+    public <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory, @Nullable DATA data) {
+        return addHeaderItem(new FragmentFixedItem<>(itemFactory, data));
+    }
+
+    @NonNull
+    public <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull AssemblyFragmentItemFactory<DATA>  itemFactory) {
+        return addHeaderItem(new FragmentFixedItem<>(itemFactory, null));
+    }
+
+    @NonNull
+    FragmentFixedItemManager getHeaderItemManager() {
         return headerItemManager;
     }
 
 
-    public <DATA> void addFooterItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory, @Nullable Object data) {
-        //noinspection ConstantConditions
-        if (itemFactory == null) {
-            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
+    @NonNull
+    public <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull FragmentFixedItem<DATA> fixedItem) {
+        if (fixedItem.isAttached()) {
+            throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
-        footerItemManager.add(new FragmentFixedItem<>(itemFactory, data));
+        footerItemManager.add(fixedItem);
 
-        itemFactory.attachToAdapter(adapter);
-    }
-
-    public void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory) {
-        addFooterItem(itemFactory, null);
+        fixedItem.getItemFactory().attachToAdapter(adapter);
+        fixedItem.attachToAdapter(this, false);
+        return fixedItem;
     }
 
     @NonNull
-    public FragmentFixedItemManager getFooterItemManager() {
+    public <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory, @Nullable DATA data) {
+        return addFooterItem(new FragmentFixedItem<>(itemFactory, data));
+    }
+
+    @NonNull
+    public <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull AssemblyFragmentItemFactory<DATA>  itemFactory) {
+        return addFooterItem(new FragmentFixedItem<>(itemFactory, null));
+    }
+
+    @NonNull
+    FragmentFixedItemManager getFooterItemManager() {
         return footerItemManager;
     }
 

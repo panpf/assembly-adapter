@@ -68,6 +68,28 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         itemManager.addChildItemFactory(childItemFactory);
     }
 
+    @NonNull
+    @Override
+    public List<ItemFactory> getItemFactoryList() {
+        return itemManager.getItemFactoryList();
+    }
+
+    @NonNull
+    public List<ItemFactory> getGroupItemFactoryList() {
+        return itemManager.getItemFactoryList();
+    }
+
+    @NonNull
+    public List<ItemFactory> getChildItemFactoryList() {
+        return itemManager.getChildItemFactoryList();
+    }
+
+
+    @NonNull
+    @Override
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem) {
+        return itemManager.addHeaderItem(fixedItem);
+    }
 
     @NonNull
     @Override
@@ -83,14 +105,41 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem) {
-        return itemManager.addHeaderItem(fixedItem);
+    public FixedItem getHeaderItemByClass(@NonNull Class clazz, int number) {
+        return itemManager.getHeaderItemManager().getItemByClass(clazz, number);
     }
 
     @NonNull
     @Override
-    public FixedItemManager getHeaderItemManager() {
-        return itemManager.getHeaderItemManager();
+    public FixedItem getHeaderItemByClass(@NonNull Class clazz) {
+        return itemManager.getHeaderItemManager().getItemByClass(clazz);
+    }
+
+    @NonNull
+    @Override
+    public FixedItem getHeaderItem(int positionInHeaderItemList) {
+        return itemManager.getHeaderItemManager().getItem(positionInHeaderItemList);
+    }
+
+    @Nullable
+    @Override
+    public Object getHeaderItemData(int positionInHeaderItemList) {
+        return itemManager.getHeaderItemManager().getItem(positionInHeaderItemList).getData();
+    }
+
+    @Override
+    public void setHeaderItemData(int positionInHeaderItemList, @Nullable Object data) {
+        itemManager.getHeaderItemManager().setItemData(positionInHeaderItemList, data);
+    }
+
+    @Override
+    public boolean isHeaderItemEnabled(int positionInHeaderItemList) {
+        return itemManager.getHeaderItemManager().isItemEnabled(positionInHeaderItemList);
+    }
+
+    @Override
+    public void setHeaderItemEnabled(int positionInHeaderItemList, boolean enabled) {
+        itemManager.getHeaderItemManager().setItemEnabled(positionInHeaderItemList, enabled);
     }
 
     @Override
@@ -98,6 +147,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return itemManager.getHeaderItemManager().getEnabledItemCount();
     }
 
+    @Nullable
+    @Override
+    public Object getHeaderData(int positionInHeaderList) {
+        return itemManager.getHeaderItemManager().getItemInEnabledList(positionInHeaderList).getData();
+    }
+
+
+    @NonNull
+    @Override
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem) {
+        return itemManager.addFooterItem(fixedItem);
+    }
 
     @NonNull
     @Override
@@ -113,19 +174,52 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem) {
-        return itemManager.addFooterItem(fixedItem);
+    public FixedItem getFooterItemByClass(@NonNull Class clazz, int number) {
+        return itemManager.getFooterItemManager().getItemByClass(clazz, number);
     }
 
     @NonNull
     @Override
-    public FixedItemManager getFooterItemManager() {
-        return itemManager.getFooterItemManager();
+    public FixedItem getFooterItemByClass(@NonNull Class clazz) {
+        return itemManager.getFooterItemManager().getItemByClass(clazz);
+    }
+
+    @NonNull
+    @Override
+    public FixedItem getFooterItem(int positionInFooterItemList) {
+        return itemManager.getFooterItemManager().getItem(positionInFooterItemList);
+    }
+
+    @Nullable
+    @Override
+    public Object getFooterItemData(int positionInFooterItemList) {
+        return itemManager.getFooterItemManager().getItem(positionInFooterItemList).getData();
+    }
+
+    @Override
+    public void setFooterItemData(int positionInFooterItemList, @Nullable Object data) {
+        itemManager.getFooterItemManager().setItemData(positionInFooterItemList, data);
+    }
+
+    @Override
+    public boolean isFooterItemEnabled(int positionInFooterItemList) {
+        return itemManager.getFooterItemManager().isItemEnabled(positionInFooterItemList);
+    }
+
+    @Override
+    public void setFooterItemEnabled(int positionInFooterItemList, boolean enabled) {
+        itemManager.getFooterItemManager().setItemEnabled(positionInFooterItemList, enabled);
     }
 
     @Override
     public int getFooterCount() {
         return itemManager.getFooterItemManager().getEnabledItemCount();
+    }
+
+    @Nullable
+    @Override
+    public Object getFooterData(int positionInFooterList) {
+        return itemManager.getFooterItemManager().getItemInEnabledList(positionInFooterList).getData();
     }
 
 
@@ -159,18 +253,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     @Override
-    public void setEnabledMoreItem(boolean enabledMoreItem) {
+    public void setMoreItemEnabled(boolean enabled) {
         MoreFixedItem moreFixedItem = itemManager.getMoreFixedItem();
         if (moreFixedItem != null) {
-            moreFixedItem.setEnabled(enabledMoreItem);
+            moreFixedItem.setEnabled(enabled);
         }
     }
 
     @Override
-    public void loadMoreFinished(boolean loadMoreEnd) {
+    public void loadMoreFinished(boolean end) {
         MoreFixedItem moreFixedItem = itemManager.getMoreFixedItem();
         if (moreFixedItem != null) {
-            moreFixedItem.loadMoreFinished(loadMoreEnd);
+            moreFixedItem.loadMoreFinished(end);
         }
     }
 
@@ -228,6 +322,12 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         return itemManager.getDataCount();
     }
 
+    @Nullable
+    @Override
+    public Object getData(int positionInDataList) {
+        return itemManager.getData(positionInDataList);
+    }
+
 
     @Override
     public int getItemCount() {
@@ -238,39 +338,6 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     @Override
     public Object getItem(int position) {
         return itemManager.getItemDataByPosition(position);
-    }
-
-    @Override
-    public int getPositionInPart(int position) {
-        return itemManager.getPositionInPart(position);
-    }
-
-
-    @Override
-    public boolean isNotifyOnChange() {
-        return itemManager.isNotifyOnChange();
-    }
-
-    @Override
-    public void setNotifyOnChange(boolean notifyOnChange) {
-        itemManager.setNotifyOnChange(notifyOnChange);
-    }
-
-    @Override
-    public int getSpanSize(int position) {
-        return itemManager.getItemFactoryByPosition(position).getSpanSize();
-    }
-
-    @Nullable
-    @Override
-    public ItemFactory getItemFactoryByViewType(int viewType) {
-        return itemManager.getItemFactoryByViewType(viewType);
-    }
-
-    @NonNull
-    @Override
-    public ItemFactory getItemFactoryByPosition(int position) {
-        return itemManager.getItemFactoryByPosition(position);
     }
 
     @Override
@@ -292,6 +359,40 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     public boolean isMoreFooterItem(int position) {
         return itemManager.isMoreFooterItem(position);
     }
+
+    @Override
+    public int getPositionInPart(int position) {
+        return itemManager.getPositionInPart(position);
+    }
+
+    @Override
+    public int getSpanSize(int position) {
+        return itemManager.getItemFactoryByPosition(position).getSpanSize();
+    }
+
+    @NonNull
+    @Override
+    public ItemFactory getItemFactoryByPosition(int position) {
+        return itemManager.getItemFactoryByPosition(position);
+    }
+
+    @NonNull
+    @Override
+    public ItemFactory getItemFactoryByViewType(int viewType) {
+        return itemManager.getItemFactoryByViewType(viewType);
+    }
+
+
+    @Override
+    public boolean isNotifyOnChange() {
+        return itemManager.isNotifyOnChange();
+    }
+
+    @Override
+    public void setNotifyOnChange(boolean notifyOnChange) {
+        itemManager.setNotifyOnChange(notifyOnChange);
+    }
+
 
     @Override
     public int getGroupCount() {
@@ -371,13 +472,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     private Item createGroupItem(@NonNull ViewGroup parent, int viewType) {
-        @Nullable
         ItemFactory itemFactory = itemManager.getItemFactoryByViewType(viewType);
-        if (itemFactory != null) {
-            return itemFactory.dispatchCreateItem(parent);
-        } else {
-            throw new IllegalStateException(String.format("Not found ItemFactory by groupViewType: %d", viewType));
-        }
+        return itemFactory.dispatchCreateItem(parent);
     }
 
     private void bindGroupItem(@NonNull Item groupItem, boolean isExpanded, int groupPosition) {
@@ -403,15 +499,8 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     private Item createChildItem(@NonNull ViewGroup parent, int viewType) {
-        @Nullable
-        Object itemObject = itemManager.getChildItemFactoryByViewType(viewType);
-        if (itemObject instanceof ItemFactory) {
-            ItemFactory itemFactory = (ItemFactory) itemObject;
-            return itemFactory.dispatchCreateItem(parent);
-        } else {
-            throw new IllegalStateException(String.format("Unknown childViewType: %d, itemFactory: %s",
-                    viewType, itemObject != null ? itemObject.getClass().getName() : "null"));
-        }
+        ItemFactory itemFactory = itemManager.getChildItemFactoryByViewType(viewType);
+        return itemFactory.dispatchCreateItem(parent);
     }
 
     private void bindChildItem(@NonNull Item childItem, int groupPosition, int childPosition, boolean isLastChild) {

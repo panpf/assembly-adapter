@@ -51,18 +51,10 @@ public class MoreFixedItem<DATA> extends FixedItem<DATA> {
         }
     }
 
-    /**
-     * 加载更多完成
-     *
-     * @param end 已全部加载完毕，切换至结束状态
-     */
     public void loadMoreFinished(boolean end) {
         getItemFactory().loadMoreFinished(end);
     }
 
-    /**
-     * 加载更多失败
-     */
     public void loadMoreFailed() {
         getItemFactory().loadMoreFailed();
     }

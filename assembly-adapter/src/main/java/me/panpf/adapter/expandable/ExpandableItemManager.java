@@ -14,7 +14,7 @@ import me.panpf.adapter.ViewTypeManager;
 public class ExpandableItemManager extends ItemManager {
 
     @NonNull
-    private ViewTypeManager childViewTypeManager = new ViewTypeManager();
+    private ViewTypeManager<ItemFactory> childViewTypeManager = new ViewTypeManager<>();
     @NonNull
     private ArrayList<ItemFactory> childItemFactoryList = new ArrayList<>();
 
@@ -45,6 +45,11 @@ public class ExpandableItemManager extends ItemManager {
         childItemFactory.attachToAdapter(getAdapter(), viewType);
     }
 
+    @NonNull
+    public ArrayList<ItemFactory> getChildItemFactoryList() {
+        return childItemFactoryList;
+    }
+
     public int getChildTypeCount() {
         if (!childViewTypeManager.isLocked()) {
             childViewTypeManager.lock();
@@ -52,9 +57,14 @@ public class ExpandableItemManager extends ItemManager {
         return childViewTypeManager.getCount();
     }
 
-    @Nullable
-    public Object getChildItemFactoryByViewType(int viewType) {
-        return childViewTypeManager.get(viewType);
+    @NonNull
+    public ItemFactory getChildItemFactoryByViewType(int viewType) {
+        ItemFactory itemFactory = childViewTypeManager.get(viewType);
+        if (itemFactory != null) {
+            return itemFactory;
+        } else {
+            throw new IllegalArgumentException("Unknown child viewType. viewType=" + viewType);
+        }
     }
 
     public int getChildrenCount(int groupPosition) {

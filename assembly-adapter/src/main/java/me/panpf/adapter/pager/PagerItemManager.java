@@ -40,16 +40,16 @@ public class PagerItemManager {
     private List dataList;
     private boolean notifyOnChange = true;
 
-    public PagerItemManager(@NonNull AssemblyPagerAdapter adapter) {
+    PagerItemManager(@NonNull AssemblyPagerAdapter adapter) {
         this.adapter = adapter;
     }
 
-    public PagerItemManager(@NonNull AssemblyPagerAdapter adapter, @Nullable List dataList) {
+    PagerItemManager(@NonNull AssemblyPagerAdapter adapter, @Nullable List dataList) {
         this.adapter = adapter;
         this.dataList = dataList;
     }
 
-    public PagerItemManager(@NonNull AssemblyPagerAdapter adapter, @Nullable Object[] dataArray) {
+    PagerItemManager(@NonNull AssemblyPagerAdapter adapter, @Nullable Object[] dataArray) {
         this.adapter = adapter;
         if (dataArray != null && dataArray.length > 0) {
             this.dataList = new ArrayList(dataArray.length);
@@ -69,55 +69,65 @@ public class PagerItemManager {
         itemFactory.attachToAdapter(adapter);
     }
 
+    @NonNull
+    public ArrayList<AssemblyPagerItemFactory> getItemFactoryList() {
+        return itemFactoryList;
+    }
 
     @NonNull
-    public <DATA> PagerFixedItem<DATA> addHeaderItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        //noinspection ConstantConditions
-        if (itemFactory == null) {
-            throw new IllegalArgumentException("itemFactory is null");
+    public <DATA> PagerFixedItem<DATA> addHeaderItem(@NonNull PagerFixedItem<DATA> fixedItem) {
+        if (fixedItem.isAttached()) {
+            throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
-        PagerFixedItem<DATA> fixedItem = new PagerFixedItem<>(itemFactory, data);
         headerItemManager.add(fixedItem);
 
-        itemFactory.attachToAdapter(adapter);
+        fixedItem.getItemFactory().attachToAdapter(adapter);
         fixedItem.attachToAdapter(this, true);
         return fixedItem;
     }
 
     @NonNull
-    public <DATA> PagerFixedItem<DATA> addHeaderItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
-        return addHeaderItem(itemFactory, null);
+    public <DATA> PagerFixedItem<DATA> addHeaderItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
+        return addHeaderItem(new PagerFixedItem<>(itemFactory, data));
     }
 
     @NonNull
-    public PagerFixedItemManager getHeaderItemManager() {
+    public <DATA> PagerFixedItem<DATA> addHeaderItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
+        return addHeaderItem(new PagerFixedItem<>(itemFactory, null));
+    }
+
+    @NonNull
+    PagerFixedItemManager getHeaderItemManager() {
         return headerItemManager;
     }
 
 
     @NonNull
-    public <DATA> PagerFixedItem<DATA> addFooterItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        //noinspection ConstantConditions
-        if (itemFactory == null) {
-            throw new IllegalArgumentException("itemFactory is null");
+    public <DATA> PagerFixedItem<DATA> addFooterItem(@NonNull PagerFixedItem<DATA> fixedItem) {
+        if (fixedItem.isAttached()) {
+            throw new IllegalArgumentException("Cannot be added repeatedly");
         }
 
-        PagerFixedItem<DATA> fixedItem = new PagerFixedItem<>(itemFactory, data);
         footerItemManager.add(fixedItem);
 
-        itemFactory.attachToAdapter(adapter);
+        fixedItem.getItemFactory().attachToAdapter(adapter);
         fixedItem.attachToAdapter(this, false);
         return fixedItem;
     }
 
     @NonNull
-    public <DATA> PagerFixedItem<DATA> addFooterItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
-        return addFooterItem(itemFactory, null);
+    public <DATA> PagerFixedItem<DATA> addFooterItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
+        return addFooterItem(new PagerFixedItem<>(itemFactory, data));
     }
 
     @NonNull
-    public PagerFixedItemManager getFooterItemManager() {
+    public <DATA> PagerFixedItem<DATA> addFooterItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
+        return addFooterItem(new PagerFixedItem<>(itemFactory, null));
+    }
+
+    @NonNull
+    PagerFixedItemManager getFooterItemManager() {
         return footerItemManager;
     }
 
@@ -187,7 +197,7 @@ public class PagerItemManager {
         }
     }
 
-    public void insert(@NonNull Object object, int index) {
+    void insert(@NonNull Object object, int index) {
         //noinspection ConstantConditions
         if (object == null) {
             return;
@@ -205,7 +215,7 @@ public class PagerItemManager {
         }
     }
 
-    public void remove(@NonNull Object object) {
+    void remove(@NonNull Object object) {
         //noinspection ConstantConditions
         if (object == null) {
             return;
@@ -221,7 +231,7 @@ public class PagerItemManager {
         }
     }
 
-    public void clear() {
+    void clear() {
         synchronized (this) {
             if (dataList != null) {
                 dataList.clear();
@@ -233,7 +243,7 @@ public class PagerItemManager {
         }
     }
 
-    public void sort(@NonNull Comparator comparator) {
+    void sort(@NonNull Comparator comparator) {
         synchronized (this) {
             if (dataList != null) {
                 Collections.sort(dataList, comparator);
@@ -255,11 +265,11 @@ public class PagerItemManager {
     }
 
 
-    public boolean isNotifyOnChange() {
+    boolean isNotifyOnChange() {
         return notifyOnChange;
     }
 
-    public void setNotifyOnChange(boolean notifyOnChange) {
+    void setNotifyOnChange(boolean notifyOnChange) {
         this.notifyOnChange = notifyOnChange;
     }
 

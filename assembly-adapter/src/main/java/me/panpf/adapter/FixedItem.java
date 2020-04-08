@@ -5,15 +5,17 @@ import androidx.annotation.Nullable;
 
 public class FixedItem<DATA> {
 
-    @Nullable
-    private ItemManager itemManager;
     @NonNull
     private ItemFactory<DATA> itemFactory;
     @Nullable
     private DATA data;
-    private boolean header;
 
+    @Nullable
+    private ItemManager itemManager;
+    private boolean header;
     private boolean enabled = true;
+    private int positionInPartList;
+    private int positionInPartItemList;
 
     public FixedItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         this.itemFactory = itemFactory;
@@ -72,5 +74,21 @@ public class FixedItem<DATA> {
 
     public boolean isHeader() {
         return header;
+    }
+
+    public int getPositionInPartList() {
+        return positionInPartList;
+    }
+
+    public void setPositionInPartList(int positionInPartList) {
+        this.positionInPartList = positionInPartList;
+    }
+
+    public int getPositionInPartItemList() {
+        return positionInPartItemList;
+    }
+
+    public void setPositionInPartItemList(int positionInPartItemList) {
+        this.positionInPartItemList = positionInPartItemList;
     }
 }

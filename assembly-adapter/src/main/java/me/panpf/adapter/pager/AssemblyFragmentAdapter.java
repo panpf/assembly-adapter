@@ -26,32 +26,83 @@ public interface AssemblyFragmentAdapter {
 
     void addItemFactory(@NonNull AssemblyFragmentItemFactory itemFactory);
 
+    @NonNull
+    List<AssemblyFragmentItemFactory> getItemFactoryList();
 
-    void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data);
-
-    void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory);
 
     @NonNull
-    FragmentFixedItemManager getHeaderItemManager();
+    <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull FragmentFixedItem<DATA> fixedItem);
+
+    @NonNull
+    <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory, @Nullable DATA data);
+
+    @NonNull
+    <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory);
+
+    @NonNull
+    FragmentFixedItem getHeaderItemByClass(@NonNull Class clazz, int number);
+
+    @NonNull
+    FragmentFixedItem getHeaderItemByClass(@NonNull Class clazz);
+
+    @NonNull
+    FragmentFixedItem getHeaderItem(int positionInHeaderItemList);
+
+    @Nullable
+    Object getHeaderItemData(int positionInHeaderItemList);
+
+    void setHeaderItemData(int positionInHeaderItemList, @Nullable Object data);
 
     int getHeaderCount();
 
+    @Nullable
+    Object getHeaderData(int positionInHeaderList);
 
-    void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data);
-
-    void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory);
 
     @NonNull
-    FragmentFixedItemManager getFooterItemManager();
+    <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull FragmentFixedItem<DATA> fixedItem);
+
+    @NonNull
+    <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory, @Nullable DATA data);
+
+    @NonNull
+    <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory);
+
+    @NonNull
+    FragmentFixedItem getFooterItemByClass(@NonNull Class clazz, int number);
+
+    @NonNull
+    FragmentFixedItem getFooterItemByClass(@NonNull Class clazz);
+
+    @NonNull
+    FragmentFixedItem getFooterItem(int positionInFooterItemList);
+
+    @Nullable
+    Object getFooterItemData(int positionInFooterItemList);
+
+    void setFooterItemData(int positionInFooterItemList, @Nullable Object data);
 
     int getFooterCount();
+
+    @Nullable
+    Object getFooterData(int positionFooterList);
 
 
     @Nullable
     List getDataList();
 
+    void setDataList(@Nullable List dataList);
+
     int getDataCount();
 
+    @Nullable
+    Object getData(int positionInDataList);
+
+    boolean isHeaderItem(int position);
+
+    boolean isBodyItem(int position);
+
+    boolean isFooterItem(int position);
 
     int getPositionInPart(int position);
 
@@ -61,10 +112,4 @@ public interface AssemblyFragmentAdapter {
 
     @NonNull
     AssemblyFragmentItemFactory getItemFactoryByPosition(int position);
-
-    boolean isHeaderItem(int position);
-
-    boolean isBodyItem(int position);
-
-    boolean isFooterItem(int position);
 }

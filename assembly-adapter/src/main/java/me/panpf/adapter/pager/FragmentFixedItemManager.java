@@ -10,13 +10,14 @@ public class FragmentFixedItemManager {
     @Nullable
     private ArrayList<FragmentFixedItem> itemList;
 
-    public void add(@NonNull FragmentFixedItem item) {
+    public void add(@NonNull FragmentFixedItem fixedItem) {
         ArrayList<FragmentFixedItem> allList = this.itemList;
         if (allList == null) {
             allList = new ArrayList<>();
             this.itemList = allList;
         }
-        allList.add(item);
+        fixedItem.setPositionInPartItemList(allList.size());
+        allList.add(fixedItem);
     }
 
     public int getItemCount() {

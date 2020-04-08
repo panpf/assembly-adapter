@@ -49,15 +49,7 @@ public interface MoreItemFactory<DATA> extends ItemFactory<DATA> {
     @Override
     MoreItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener);
 
-    /**
-     * 加载更多完成
-     *
-     * @param end 已全部加载完毕，切换至结束状态
-     */
     void loadMoreFinished(boolean end);
 
-    /**
-     * 加载更多失败
-     */
     void loadMoreFailed();
 }

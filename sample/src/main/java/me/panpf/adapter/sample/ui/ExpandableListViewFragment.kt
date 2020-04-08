@@ -24,7 +24,17 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
     val groupSize = 20
     val childSize = 5
 
-    var adapter: AssemblyExpandableAdapter? = null
+    val adapter: AssemblyExpandableAdapter = AssemblyExpandableAdapter().apply {
+        addHeaderItem(TextItem.Factory(), "我是小额头呀！")
+        addHeaderItem(TextItem.Factory(), "唉，我的小额头呢？")
+        addGroupItemFactory(GameGroupItem.Factory())
+        addGroupItemFactory(UserGroupItem.Factory())
+        addChildItemFactory(GameChildItem.Factory())
+        addChildItemFactory(UserChildItem.Factory())
+        setMoreItem(LoadMoreItem.Factory(this@ExpandableListViewFragment))
+        addFooterItem(TextItem.Factory(), "我是小尾巴呀！")
+        addFooterItem(TextItem.Factory(), "唉，我的小尾巴呢？")
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fm_expandable, container, false)
@@ -33,9 +43,9 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (adapter != null) {
-            expandableFm_expandableList.setAdapter(adapter)
-        } else {
+        expandableFm_expandableList.setAdapter(adapter)
+
+        if (adapter.dataCount <= 0) {
             loadData()
         }
     }
@@ -125,32 +135,16 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
                 context ?: return
 
                 nextStart += groupSize
-                if (adapter == null) {
-                    adapter = AssemblyExpandableAdapter(objects)
-
-                    adapter!!.addHeaderItem(TextItem.Factory(), "我是小额头呀！")
-                    adapter!!.addHeaderItem(TextItem.Factory(), "唉，我的小额头呢？")
-                    adapter!!.addGroupItemFactory(GameGroupItem.Factory())
-                    adapter!!.addGroupItemFactory(UserGroupItem.Factory())
-                    adapter!!.addChildItemFactory(GameChildItem.Factory())
-                    adapter!!.addChildItemFactory(UserChildItem.Factory())
-                    adapter!!.setMoreItem(LoadMoreItem.Factory(this))
-                    adapter!!.addFooterItem(TextItem.Factory(), "我是小尾巴呀！")
-                    adapter!!.addFooterItem(TextItem.Factory(), "唉，我的小尾巴呢？")
-
-                    expandableFm_expandableList.setAdapter(adapter)
-                } else {
-                    adapter!!.addAll(objects)
-                    adapter!!.headerItemManager.switchItemEnabled(1)
-                    adapter!!.footerItemManager.switchItemEnabled(1)
-                }
+                adapter.addAll(objects)
+                adapter.setHeaderItemEnabled(1, !adapter.isHeaderItemEnabled(1))
+                adapter.setFooterItemEnabled(1, !adapter.isFooterItemEnabled(1))
 
                 val loadMoreEnd = nextStart >= 100
                 if (loadMoreEnd) {
-                    adapter!!.headerItemManager.setItemEnabled(0, false)
-                    adapter!!.footerItemManager.setItemEnabled(0, false)
+                    adapter.setHeaderItemEnabled(0, false)
+                    adapter.setFooterItemEnabled(0, false)
                 }
-                adapter!!.moreItem?.loadMoreFinished(loadMoreEnd)
+                adapter.loadMoreFinished(loadMoreEnd)
             }
         }
     }

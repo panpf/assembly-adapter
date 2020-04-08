@@ -57,44 +57,122 @@ public class AssemblyPagerAdapter extends PagerAdapter {
         itemManager.addItemFactory(itemFactory);
     }
 
+    @NonNull
+    public List<AssemblyPagerItemFactory> getItemFactoryList() {
+        return itemManager.getItemFactoryList();
+    }
+
 
     @NonNull
-    public PagerFixedItem addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
+    public <DATA> PagerFixedItem<DATA> addHeaderItem(@NonNull PagerFixedItem<DATA> fixedItem) {
+        return itemManager.addHeaderItem(fixedItem);
+    }
+    @NonNull
+    public <DATA> PagerFixedItem<DATA> addHeaderItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return itemManager.addHeaderItem(itemFactory, data);
     }
 
     @NonNull
-    public PagerFixedItem addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+    public <DATA> PagerFixedItem<DATA> addHeaderItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
         return itemManager.addHeaderItem(itemFactory);
     }
 
     @NonNull
-    public PagerFixedItemManager getHeaderItemManager() {
-        return itemManager.getHeaderItemManager();
+    public PagerFixedItem getHeaderItemByClass(@NonNull Class clazz, int number) {
+        return itemManager.getHeaderItemManager().getItemByClass(clazz, number);
+    }
+
+    @NonNull
+    public PagerFixedItem getHeaderItemByClass(@NonNull Class clazz) {
+        return itemManager.getHeaderItemManager().getItemByClass(clazz);
+    }
+
+    @NonNull
+    public PagerFixedItem getHeaderItem(int positionInHeaderItemList) {
+        return itemManager.getHeaderItemManager().getItem(positionInHeaderItemList);
+    }
+
+    @Nullable
+    public Object getHeaderItemData(int positionInHeaderItemList) {
+        return itemManager.getHeaderItemManager().getItem(positionInHeaderItemList).getData();
+    }
+
+    public void setHeaderItemData(int positionInHeaderItemList, @Nullable Object data) {
+        itemManager.getHeaderItemManager().setItemData(positionInHeaderItemList, data);
+    }
+
+    public boolean isHeaderItemEnabled(int positionInHeaderItemList) {
+        return itemManager.getHeaderItemManager().isItemEnabled(positionInHeaderItemList);
+    }
+
+    public void setHeaderItemEnabled(int positionInHeaderItemList, boolean enabled) {
+        itemManager.getHeaderItemManager().setItemEnabled(positionInHeaderItemList, enabled);
     }
 
     public int getHeaderCount() {
         return itemManager.getHeaderItemManager().getEnabledItemCount();
     }
 
+    @Nullable
+    public Object getHeaderData(int positionInHeaderList) {
+        return itemManager.getHeaderItemManager().getItemInEnabledList(positionInHeaderList).getData();
+    }
+
 
     @NonNull
-    public PagerFixedItem addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
+    public <DATA> PagerFixedItem<DATA> addFooterItem(@NonNull PagerFixedItem<DATA> fixedItem) {
+        return itemManager.addFooterItem(fixedItem);
+    }
+
+    @NonNull
+    public <DATA> PagerFixedItem<DATA> addFooterItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return itemManager.addFooterItem(itemFactory, data);
     }
 
     @NonNull
-    public PagerFixedItem addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+    public <DATA> PagerFixedItem<DATA> addFooterItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
         return itemManager.addFooterItem(itemFactory);
     }
 
     @NonNull
-    public PagerFixedItemManager getFooterItemManager() {
-        return itemManager.getFooterItemManager();
+    public PagerFixedItem getFooterItemByClass(@NonNull Class clazz, int number) {
+        return itemManager.getFooterItemManager().getItemByClass(clazz, number);
+    }
+
+    @NonNull
+    public PagerFixedItem getFooterItemByClass(@NonNull Class clazz) {
+        return itemManager.getFooterItemManager().getItemByClass(clazz);
+    }
+
+    @NonNull
+    public PagerFixedItem getFooterItem(int positionInFooterItemList) {
+        return itemManager.getFooterItemManager().getItem(positionInFooterItemList);
+    }
+
+    @Nullable
+    public Object getFooterItemData(int positionInFooterItemList) {
+        return itemManager.getFooterItemManager().getItem(positionInFooterItemList).getData();
+    }
+
+    public void setFooterItemData(int positionInFooterItemList, @Nullable Object data) {
+        itemManager.getFooterItemManager().setItemData(positionInFooterItemList, data);
+    }
+
+    public boolean isFooterItemEnabled(int positionInFooterItemList) {
+        return itemManager.getFooterItemManager().isItemEnabled(positionInFooterItemList);
+    }
+
+    public void setFooterItemEnabled(int positionInFooterItemList, boolean enabled) {
+        itemManager.getFooterItemManager().setItemEnabled(positionInFooterItemList, enabled);
     }
 
     public int getFooterCount() {
         return itemManager.getFooterItemManager().getEnabledItemCount();
+    }
+
+    @Nullable
+    public Object getFooterData(int positionInFooterList) {
+        return itemManager.getFooterItemManager().getItemInEnabledList(positionInFooterList).getData();
     }
 
 
@@ -135,15 +213,37 @@ public class AssemblyPagerAdapter extends PagerAdapter {
         return itemManager.getDataCount();
     }
 
-    @Override
-    public int getCount() {
-        return itemManager.getItemCount();
+    @Nullable
+    public Object getData(int positionInDataList) {
+        return itemManager.getData(positionInDataList);
+    }
+
+    public boolean isHeaderItem(int position) {
+        return itemManager.isHeaderItem(position);
+    }
+
+    public boolean isBodyItem(int position) {
+        return itemManager.isBodyItem(position);
+    }
+
+    public boolean isFooterItem(int position) {
+        return itemManager.isFooterItem(position);
     }
 
     public int getPositionInPart(int position) {
         return itemManager.getPositionInPart(position);
     }
 
+    @NonNull
+    public AssemblyPagerItemFactory getItemFactoryByPosition(int position) {
+        return itemManager.getItemFactoryByPosition(position);
+    }
+
+
+    @Override
+    public int getCount() {
+        return itemManager.getItemCount();
+    }
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
@@ -200,22 +300,5 @@ public class AssemblyPagerAdapter extends PagerAdapter {
             return PagerAdapter.POSITION_NONE;
         }
         return super.getItemPosition(object);
-    }
-
-    @NonNull
-    public AssemblyPagerItemFactory getItemFactoryByPosition(int position) {
-        return itemManager.getItemFactoryByPosition(position);
-    }
-
-    public boolean isHeaderItem(int position) {
-        return itemManager.isHeaderItem(position);
-    }
-
-    public boolean isBodyItem(int position) {
-        return itemManager.isBodyItem(position);
-    }
-
-    public boolean isFooterItem(int position) {
-        return itemManager.isFooterItem(position);
     }
 }

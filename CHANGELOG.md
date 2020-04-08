@@ -5,20 +5,27 @@ Dependencies:
 * upgrade: RecyclerView upgraded to 1.1.0
 * upgrade: Paging upgraded to 2.1.1
 
-AssemblyAdapter: 
-* improve: ItemHolder's generics can now be inferred from ItemFactory in the constructor
-* new: ItemHolder adds only ItemFactory constructor
+Item: 
 * new: AssemblyItem adds context, resources, application protected filed
-* bug: Fixed an issue where IndexOutOfBoundsException might be thrown in the getSpanSize() method of ItemActor when using AssemblyGridLayoutManager
-* remove: Remove AssemblyAdapter's getItemFactoryList(), getItemFactoryCount(), getData(int) methods
-* remove: Remove AssemblyAdapter's getHeaderItemList(), getHeaderData(), getFooterItemList(), getFooterData() methods
-* change: Rename AssemblyAdapter's getHeaderItemCount() to getHeaderCount()
-* change: Rename AssemblyAdapter's getFooterItemCount() to getFooterCount()
-* change: Rename AssemblyAdapter's getMoreItemHolder() to getMoreItem()
-* new: AssemblyAdapter's adds getHeaderItemManager() and getFooterItemManager() methods
-* remove: Remove ItemHolder's getItemStorage(), getPosition(), setPosition(int) methods
-* new: \*Fragment\*Adapter now supports setting BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+
+ItemHolder: 
+* improve: ItemHolder's generics can now be inferred from ItemFactory in the constructor
+* remove: Remove ItemHolder's getItemStorage(), setPosition(int) methods
+* rename: ItemHolder's getPosition() rename to getPositionInPartList()
+* new: ItemHolder adds only ItemFactory constructor
 * rename: \*ItemHolder rename to \*FixedItem
+
+AssemblyAdapter: 
+* remove: Remove AssemblyAdapter's getItemFactoryCount(), getHeaderItemList(), getFooterItemList(), methods
+* rename: Rename AssemblyAdapter's getHeaderItemCount() rename to getHeaderCount(), getFooterItemCount() rename to getFooterCount()
+* new: AssemblyAdapter's adds getHeaderItemByClass(), getHeaderItem(), getHeaderItemData(), setHeaderItemData(), isHeaderItemEnabled(), setHeaderItemEnabled() methods 
+* new: AssemblyAdapter's adds getFooterItemByClass(), getFooterItem(), getFooterItemData(), setFooterItemData(), isFooterItemEnabled(), setFooterItemEnabled() methods 
+* bug: Fixed an issue where IndexOutOfBoundsException might be thrown in the getSpanSize() method of ItemActor when using AssemblyGridLayoutManager
+* new: \*Fragment\*Adapter now supports setting BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+
+More:
+* rename: AssemblyAdapter's getMoreItemHolder() rename to getMoreItem(), setEnabledMoreItem() rename to setMoreItemEnabled()
+
 
 # v3.4.0
 

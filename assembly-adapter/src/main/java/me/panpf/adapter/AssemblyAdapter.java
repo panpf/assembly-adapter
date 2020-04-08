@@ -16,9 +16,14 @@ import me.panpf.adapter.more.MoreItemFactory;
  */
 public interface AssemblyAdapter {
 
-
     <DATA> void addItemFactory(@NonNull ItemFactory<DATA> itemFactory);
 
+    @NonNull
+    List<ItemFactory> getItemFactoryList();
+
+
+    @NonNull
+    <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem);
 
     @NonNull
     <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data);
@@ -27,13 +32,31 @@ public interface AssemblyAdapter {
     <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory);
 
     @NonNull
-    <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem);
+    FixedItem getHeaderItemByClass(@NonNull Class clazz, int number);
 
     @NonNull
-    FixedItemManager getHeaderItemManager();
+    FixedItem getHeaderItemByClass(@NonNull Class clazz);
+
+    @NonNull
+    FixedItem getHeaderItem(int positionInHeaderItemList);
+
+    @Nullable
+    Object getHeaderItemData(int positionInHeaderItemList);
+
+    void setHeaderItemData(int positionInHeaderItemList, @Nullable Object data);
+
+    boolean isHeaderItemEnabled(int positionInHeaderItemList);
+
+    void setHeaderItemEnabled(int positionInHeaderItemList, boolean enabled);
 
     int getHeaderCount();
 
+    @Nullable
+    Object getHeaderData(int positionInHeaderList);
+
+
+    @NonNull
+    <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem);
 
     @NonNull
     <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data);
@@ -42,12 +65,27 @@ public interface AssemblyAdapter {
     <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory);
 
     @NonNull
-    <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem);
+    FixedItem getFooterItemByClass(@NonNull Class clazz, int number);
 
     @NonNull
-    FixedItemManager getFooterItemManager();
+    FixedItem getFooterItemByClass(@NonNull Class clazz);
+
+    @NonNull
+    FixedItem getFooterItem(int positionInFooterItemList);
+
+    @Nullable
+    Object getFooterItemData(int positionInFooterItemList);
+
+    void setFooterItemData(int positionInFooterItemList, @Nullable Object data);
+
+    boolean isFooterItemEnabled(int positionInFooterItemList);
+
+    void setFooterItemEnabled(int positionInFooterItemList, boolean enabled);
 
     int getFooterCount();
+
+    @Nullable
+    Object getFooterData(int positionFooterList);
 
 
     @NonNull
@@ -64,9 +102,9 @@ public interface AssemblyAdapter {
 
     boolean hasMoreFooter();
 
-    void setEnabledMoreItem(boolean enabledMoreItem);
+    void setMoreItemEnabled(boolean enabled);
 
-    void loadMoreFinished(boolean loadMoreEnd);
+    void loadMoreFinished(boolean end);
 
     void loadMoreFailed();
 
@@ -90,31 +128,14 @@ public interface AssemblyAdapter {
 
     int getDataCount();
 
+    @Nullable
+    Object getData(int positionInDataList);
+
 
     int getItemCount();
 
     @Nullable
     Object getItem(int position);
-
-    int getPositionInPart(int position);
-
-
-    boolean isNotifyOnChange();
-
-    void setNotifyOnChange(boolean notifyOnChange);
-
-    void notifyDataSetChanged();
-
-    /**
-     * Get a few columns in the specified location, reserved for {@link RecyclerView}
-     */
-    int getSpanSize(int position);
-
-    @Nullable
-    ItemFactory getItemFactoryByViewType(int viewType);
-
-    @NonNull
-    ItemFactory getItemFactoryByPosition(int position);
 
     boolean isHeaderItem(int position);
 
@@ -123,4 +144,24 @@ public interface AssemblyAdapter {
     boolean isFooterItem(int position);
 
     boolean isMoreFooterItem(int position);
+
+    int getPositionInPart(int position);
+
+    /**
+     * Get a few columns in the specified location, reserved for {@link RecyclerView}
+     */
+    int getSpanSize(int position);
+
+    @NonNull
+    ItemFactory getItemFactoryByPosition(int position);
+
+    @NonNull
+    ItemFactory getItemFactoryByViewType(int viewType);
+
+
+    boolean isNotifyOnChange();
+
+    void setNotifyOnChange(boolean notifyOnChange);
+
+    void notifyDataSetChanged();
 }

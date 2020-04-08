@@ -17,7 +17,7 @@ public class ItemManager {
     @NonNull
     private AssemblyAdapter adapter;
     @NonNull
-    private ViewTypeManager viewTypeManager = new ViewTypeManager();
+    private ViewTypeManager<Object> viewTypeManager = new ViewTypeManager<>();
     @NonNull
     private FixedItemManager headerItemManager = new FixedItemManager();
     @NonNull
@@ -66,26 +66,9 @@ public class ItemManager {
         itemFactory.attachToAdapter(adapter, viewType);
     }
 
-
     @NonNull
-    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        //noinspection ConstantConditions
-        if (itemFactory == null || viewTypeManager.isLocked()) {
-            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
-        }
-
-        FixedItem<DATA> fixedItem = new FixedItem<>(itemFactory, data);
-        int viewType = viewTypeManager.add(fixedItem);
-        headerItemManager.add(fixedItem);
-
-        itemFactory.attachToAdapter(adapter, viewType);
-        fixedItem.attachToAdapter(this, true);
-        return fixedItem;
-    }
-
-    @NonNull
-    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return addHeaderItem(itemFactory, null);
+    public ArrayList<ItemFactory> getItemFactoryList() {
+        return itemFactoryList;
     }
 
     @NonNull
@@ -108,36 +91,24 @@ public class ItemManager {
     }
 
     @NonNull
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
+        return addHeaderItem(new FixedItem<>(itemFactory, data));
+    }
+
+    @NonNull
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
+        return addHeaderItem(new FixedItem<>(itemFactory, null));
+    }
+
+    @NonNull
     public FixedItemManager getHeaderItemManager() {
         return headerItemManager;
     }
 
 
     @NonNull
-    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        //noinspection ConstantConditions
-        if (itemFactory == null || viewTypeManager.isLocked()) {
-            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
-        }
-
-        FixedItem<DATA> fixedItem = new FixedItem<>(itemFactory, data);
-        int viewType = viewTypeManager.add(fixedItem);
-        footerItemManager.add(fixedItem);
-
-        itemFactory.attachToAdapter(adapter, viewType);
-        fixedItem.attachToAdapter(this, false);
-        return fixedItem;
-    }
-
-    @NonNull
-    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return addFooterItem(itemFactory, null);
-    }
-
-    @NonNull
     public <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem) {
-        //noinspection ConstantConditions
-        if (fixedItem == null || viewTypeManager.isLocked()) {
+        if (viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("item is null or item factory list locked");
         }
         if (fixedItem.isAttached()) {
@@ -154,11 +125,21 @@ public class ItemManager {
     }
 
     @NonNull
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
+        return addFooterItem(new FixedItem<>(itemFactory, data));
+    }
+
+    @NonNull
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
+        return addFooterItem(new FixedItem<>(itemFactory, null));
+    }
+
+    @NonNull
     public FixedItemManager getFooterItemManager() {
         return footerItemManager;
     }
 
-    
+
     void fixedItemEnabledChanged(@NonNull FixedItem fixedItem) {
         //noinspection ConstantConditions
         if (fixedItem == null || fixedItem.getItemFactory().getAdapter() != adapter) {
@@ -178,50 +159,35 @@ public class ItemManager {
 
 
     @NonNull
-    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        //noinspection ConstantConditions
-        if (itemFactory == null || viewTypeManager.isLocked()) {
-            throw new IllegalArgumentException("itemFactory is null or item factory list locked");
+    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreFixedItem<DATA> fixedItem) {
+        if (viewTypeManager.isLocked()) {
+            throw new IllegalArgumentException("item is null or item factory list locked");
         }
-
+        if (fixedItem.isAttached()) {
+            throw new IllegalArgumentException("Cannot be added repeatedly");
+        }
         if (this.moreFixedItem != null) {
             throw new IllegalStateException("MoreItem cannot be set repeatedly");
         }
 
+        int viewType = viewTypeManager.add(fixedItem);
+        MoreItemFactory itemFactory = fixedItem.getItemFactory();
         itemFactory.loadMoreFinished(false);
-        MoreFixedItem<DATA> moreFixedItem = new MoreFixedItem<>(itemFactory, data);
-        int viewType = viewTypeManager.add(moreFixedItem);
 
         itemFactory.attachToAdapter(adapter, viewType);
-        ((FixedItem) moreFixedItem).attachToAdapter(this, false);
-        this.moreFixedItem = moreFixedItem;
-        return moreFixedItem;
+        ((FixedItem) fixedItem).attachToAdapter(this, false);
+        this.moreFixedItem = fixedItem;
+        return fixedItem;
+    }
+
+    @NonNull
+    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
+        return setMoreItem(new MoreFixedItem<>(itemFactory, data));
     }
 
     @NonNull
     public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
-        return setMoreItem(itemFactory, null);
-    }
-
-    @NonNull
-    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreFixedItem<DATA> moreFixedItem) {
-        //noinspection ConstantConditions
-        if (moreFixedItem == null || viewTypeManager.isLocked()) {
-            throw new IllegalArgumentException("item is null or item factory list locked");
-        }
-
-        if (this.moreFixedItem != null) {
-            throw new IllegalStateException("MoreItem cannot be set repeatedly");
-        }
-
-        int viewType = viewTypeManager.add(moreFixedItem);
-        MoreItemFactory itemFactory = moreFixedItem.getItemFactory();
-        itemFactory.loadMoreFinished(false);
-
-        itemFactory.attachToAdapter(adapter, viewType);
-        ((FixedItem) moreFixedItem).attachToAdapter(this, false);
-        this.moreFixedItem = moreFixedItem;
-        return moreFixedItem;
+        return setMoreItem(new MoreFixedItem<>(itemFactory, null));
     }
 
     @Nullable
@@ -378,7 +344,7 @@ public class ItemManager {
         return viewTypeManager.getCount();
     }
 
-    @Nullable
+    @NonNull
     public ItemFactory getItemFactoryByViewType(int viewType) {
         Object value = viewTypeManager.get(viewType);
         if (value instanceof ItemFactory) {
@@ -388,7 +354,7 @@ public class ItemManager {
         } else if (value != null) {
             throw new IllegalArgumentException("Unknown viewType value. viewType=" + viewType + ", value=" + value);
         } else {
-            return null;
+            throw new IllegalArgumentException("Unknown viewType. viewType=" + viewType);
         }
     }
 
