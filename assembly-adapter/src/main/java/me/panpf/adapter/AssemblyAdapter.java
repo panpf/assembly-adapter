@@ -32,7 +32,7 @@ public interface AssemblyAdapter {
     @NonNull
     FixedItemManager getHeaderItemManager();
 
-    int getHeaderEnabledItemCount();
+    int getHeaderCount();
 
 
     @NonNull
@@ -47,7 +47,7 @@ public interface AssemblyAdapter {
     @NonNull
     FixedItemManager getFooterItemManager();
 
-    int getFooterEnabledItemCount();
+    int getFooterCount();
 
 
     @NonNull

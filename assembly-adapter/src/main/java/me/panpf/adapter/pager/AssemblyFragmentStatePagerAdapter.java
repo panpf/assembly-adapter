@@ -111,7 +111,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     }
 
     @Override
-    public int getHeaderItemCount() {
+    public int getHeaderCount() {
         return itemManager.getHeaderItemManager().getItemCount();
     }
 
@@ -133,7 +133,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
     }
 
     @Override
-    public int getFooterItemCount() {
+    public int getFooterCount() {
         return itemManager.getFooterItemManager().getItemCount();
     }
 

@@ -34,7 +34,7 @@ public interface AssemblyFragmentAdapter {
     @NonNull
     FragmentFixedItemManager getHeaderItemManager();
 
-    int getHeaderItemCount();
+    int getHeaderCount();
 
 
     void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable Object data);
@@ -44,7 +44,7 @@ public interface AssemblyFragmentAdapter {
     @NonNull
     FragmentFixedItemManager getFooterItemManager();
 
-    int getFooterItemCount();
+    int getFooterCount();
 
 
     @Nullable

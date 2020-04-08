@@ -84,7 +84,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     }
 
     @Override
-    public int getHeaderEnabledItemCount() {
+    public int getHeaderCount() {
         return itemManager.getHeaderItemManager().getEnabledItemCount();
     }
 
@@ -115,7 +115,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
     }
 
     @Override
-    public int getFooterEnabledItemCount() {
+    public int getFooterCount() {
         return itemManager.getFooterItemManager().getEnabledItemCount();
     }
 

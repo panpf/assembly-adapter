@@ -73,7 +73,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
         return itemManager.getHeaderItemManager();
     }
 
-    public int getHeaderEnabledItemCount() {
+    public int getHeaderCount() {
         return itemManager.getHeaderItemManager().getEnabledItemCount();
     }
 
@@ -93,7 +93,7 @@ public class AssemblyPagerAdapter extends PagerAdapter {
         return itemManager.getFooterItemManager();
     }
 
-    public int getFooterEnabledItemCount() {
+    public int getFooterCount() {
         return itemManager.getFooterItemManager().getEnabledItemCount();
     }
 

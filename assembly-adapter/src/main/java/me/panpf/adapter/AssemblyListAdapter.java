@@ -83,7 +83,7 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     }
 
     @Override
-    public int getHeaderEnabledItemCount() {
+    public int getHeaderCount() {
         return itemManager.getHeaderItemManager().getEnabledItemCount();
     }
 
@@ -113,7 +113,7 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     }
 
     @Override
-    public int getFooterEnabledItemCount() {
+    public int getFooterCount() {
         return itemManager.getFooterItemManager().getEnabledItemCount();
     }
 

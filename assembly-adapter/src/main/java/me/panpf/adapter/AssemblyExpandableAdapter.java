@@ -94,7 +94,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     @Override
-    public int getHeaderEnabledItemCount() {
+    public int getHeaderCount() {
         return itemManager.getHeaderItemManager().getEnabledItemCount();
     }
 
@@ -124,7 +124,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     @Override
-    public int getFooterEnabledItemCount() {
+    public int getFooterCount() {
         return itemManager.getFooterItemManager().getEnabledItemCount();
     }
 

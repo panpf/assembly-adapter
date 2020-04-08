@@ -58,7 +58,7 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
         if (adapter instanceof AssemblyRecyclerAdapter) {
             recyclerAdapter = (AssemblyRecyclerAdapter) adapter;
             itemPosition = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            firstDataItemPosition = recyclerAdapter.getHeaderEnabledItemCount();
+            firstDataItemPosition = recyclerAdapter.getHeaderCount();
             lastDataItemPosition = firstDataItemPosition + (recyclerAdapter.getDataCount() - 1);
         }
 
@@ -95,7 +95,7 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
         AssemblyRecyclerAdapter recyclerAdapter = null;
         if (adapter instanceof AssemblyRecyclerAdapter) {
             recyclerAdapter = (AssemblyRecyclerAdapter) adapter;
-            firstDataItemPosition = recyclerAdapter.getHeaderEnabledItemCount();
+            firstDataItemPosition = recyclerAdapter.getHeaderCount();
             lastDataItemPosition = firstDataItemPosition + (recyclerAdapter.getDataCount() - 1);
         }
 
@@ -124,7 +124,7 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
         AssemblyRecyclerAdapter recyclerAdapter = null;
         if (adapter instanceof AssemblyRecyclerAdapter) {
             recyclerAdapter = (AssemblyRecyclerAdapter) adapter;
-            firstDataItemPosition = recyclerAdapter.getHeaderEnabledItemCount();
+            firstDataItemPosition = recyclerAdapter.getHeaderCount();
             lastDataItemPosition = firstDataItemPosition + (recyclerAdapter.getDataCount() - 1);
         }
         final int top = parent.getPaddingTop();
