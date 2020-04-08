@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package me.panpf.args.ktx
 
 import android.app.Activity

@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.MoreItemHolder;
+import me.panpf.adapter.more.MoreFixedItem;
 import me.panpf.adapter.more.MoreItemFactory;
 
 /**
@@ -21,46 +21,46 @@ public interface AssemblyAdapter {
 
 
     @NonNull
-    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data);
+    <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     @NonNull
-    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory);
+    <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory);
 
     @NonNull
-    <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder);
+    <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem);
 
     @NonNull
-    ItemHolderManager getHeaderItemManager();
+    FixedItemManager getHeaderItemManager();
 
     int getHeaderEnabledItemCount();
 
 
     @NonNull
-    <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data);
+    <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     @NonNull
-    <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory);
+    <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory);
 
     @NonNull
-    <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder);
+    <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem);
 
     @NonNull
-    ItemHolderManager getFooterItemManager();
+    FixedItemManager getFooterItemManager();
 
     int getFooterEnabledItemCount();
 
 
     @NonNull
-    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data);
+    <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data);
 
     @NonNull
-    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory);
+    <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory);
 
     @NonNull
-    <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> itemHolder);
+    <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreFixedItem<DATA> moreFixedItem);
 
     @Nullable
-    MoreItemHolder getMoreItemHolder();
+    MoreFixedItem getMoreItem();
 
     boolean hasMoreFooter();
 

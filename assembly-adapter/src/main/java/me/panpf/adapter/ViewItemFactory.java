@@ -1,13 +1,13 @@
 package me.panpf.adapter;
 
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class ViewItemFactory extends AssemblyItemFactory<Object> {
 
     @NonNull

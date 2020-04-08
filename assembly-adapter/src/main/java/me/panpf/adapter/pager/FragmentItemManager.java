@@ -30,11 +30,11 @@ public class FragmentItemManager {
     private PagerAdapter adapter;
 
     @NonNull
-    private FragmentItemHolderManager headerItemManager = new FragmentItemHolderManager();
+    private FragmentFixedItemManager headerItemManager = new FragmentFixedItemManager();
     @NonNull
     private ArrayList<AssemblyFragmentItemFactory> itemFactoryList = new ArrayList<>();
     @NonNull
-    private FragmentItemHolderManager footerItemManager = new FragmentItemHolderManager();
+    private FragmentFixedItemManager footerItemManager = new FragmentFixedItemManager();
 
     @Nullable
     private List dataList;
@@ -75,7 +75,7 @@ public class FragmentItemManager {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        headerItemManager.add(new FragmentItemHolder<>(itemFactory, data));
+        headerItemManager.add(new FragmentFixedItem<>(itemFactory, data));
 
         itemFactory.attachToAdapter(adapter);
     }
@@ -85,7 +85,7 @@ public class FragmentItemManager {
     }
 
     @NonNull
-    public FragmentItemHolderManager getHeaderItemManager() {
+    public FragmentFixedItemManager getHeaderItemManager() {
         return headerItemManager;
     }
 
@@ -96,7 +96,7 @@ public class FragmentItemManager {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
         }
 
-        footerItemManager.add(new FragmentItemHolder<>(itemFactory, data));
+        footerItemManager.add(new FragmentFixedItem<>(itemFactory, data));
 
         itemFactory.attachToAdapter(adapter);
     }
@@ -106,7 +106,7 @@ public class FragmentItemManager {
     }
 
     @NonNull
-    public FragmentItemHolderManager getFooterItemManager() {
+    public FragmentFixedItemManager getFooterItemManager() {
         return footerItemManager;
     }
 

@@ -10,12 +10,10 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
-@Suppress("unused")
 public fun <V : ViewModel> Fragment.bindViewModel(clazz: KClass<V>): ReadOnlyProperty<Fragment, V> {
     return ViewModelLazy { ref, _: KProperty<*> -> ViewModelProvider(this, defaultViewModelProviderFactory).get(clazz.java) }
 }
 
-@Suppress("unused")
 public fun <V : ViewModel> FragmentActivity.bindViewModel(clazz: KClass<V>): ReadOnlyProperty<FragmentActivity, V> {
     return ViewModelLazy { ref, _: KProperty<*> -> ViewModelProvider(this, defaultViewModelProviderFactory).get(clazz.java) }
 }

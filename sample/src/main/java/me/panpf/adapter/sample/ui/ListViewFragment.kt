@@ -14,7 +14,7 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.item.GameItem
-import me.panpf.adapter.sample.item.HeaderItem
+import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.LoadMoreItem
 import me.panpf.adapter.sample.item.UserItem
 import java.lang.ref.WeakReference
@@ -25,10 +25,10 @@ class ListViewFragment : BaseFragment(), OnLoadMoreListener {
     val size = 20
 
     val listAdapter = AssemblyListAdapter().apply {
-        addHeaderItem(HeaderItem.Factory(), "我是小额头呀！")
+        addHeaderItem(TextItem.Factory(), "我是小额头呀！")
         addItemFactory(UserItem.Factory())
         addItemFactory(GameItem.Factory())
-        addFooterItem(HeaderItem.Factory(), "我是小尾巴呀！")
+        addFooterItem(TextItem.Factory(), "我是小尾巴呀！")
         setMoreItem(LoadMoreItem.Factory(this@ListViewFragment))
     }
 
@@ -104,7 +104,7 @@ class ListViewFragment : BaseFragment(), OnLoadMoreListener {
             fragment.run {
                 nextStart += size
                 listAdapter.addAll(objects)
-                listAdapter.moreItemHolder?.loadMoreFinished(nextStart >= 100)
+                listAdapter.moreItem?.loadMoreFinished(nextStart >= 100)
             }
         }
     }

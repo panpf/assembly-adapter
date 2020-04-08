@@ -19,21 +19,15 @@ package me.panpf.adapter.more;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import me.panpf.adapter.ItemHolder;
-import me.panpf.adapter.ItemManager;
+import me.panpf.adapter.FixedItem;
 
-public class MoreItemHolder<DATA> extends ItemHolder<DATA> {
+public class MoreFixedItem<DATA> extends FixedItem<DATA> {
 
-    @Deprecated
-    public MoreItemHolder(@NonNull ItemManager itemManager, @NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
-        super(itemManager, itemFactory, data, header);
-    }
-
-    public MoreItemHolder(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public MoreFixedItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         super(itemFactory, data);
     }
 
-    public MoreItemHolder(@NonNull MoreItemFactory<DATA> itemFactory) {
+    public MoreFixedItem(@NonNull MoreItemFactory<DATA> itemFactory) {
         super(itemFactory, null);
     }
 

@@ -1,15 +1,15 @@
 package me.panpf.adapter.more;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import me.panpf.adapter.AssemblyAdapter;
 import me.panpf.adapter.AssemblyItem;
 
-@SuppressWarnings("unused")
 public abstract class AssemblyMoreItem<DATA> extends AssemblyItem<DATA> implements MoreItem<DATA> {
 
     @NonNull

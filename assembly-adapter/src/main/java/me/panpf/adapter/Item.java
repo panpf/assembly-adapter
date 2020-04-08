@@ -1,13 +1,12 @@
 package me.panpf.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-@SuppressWarnings("unused")
 public interface Item<DATA> {
 
     /**

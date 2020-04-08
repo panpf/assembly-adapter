@@ -128,15 +128,15 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
                 if (adapter == null) {
                     adapter = AssemblyExpandableAdapter(objects)
 
-                    adapter!!.addHeaderItem(HeaderGroupItem.Factory(), "我是小额头呀！")
-                    adapter!!.addHeaderItem(HeaderGroupItem.Factory(), "唉，我的小额头呢？")
+                    adapter!!.addHeaderItem(TextItem.Factory(), "我是小额头呀！")
+                    adapter!!.addHeaderItem(TextItem.Factory(), "唉，我的小额头呢？")
                     adapter!!.addGroupItemFactory(GameGroupItem.Factory())
                     adapter!!.addGroupItemFactory(UserGroupItem.Factory())
                     adapter!!.addChildItemFactory(GameChildItem.Factory())
                     adapter!!.addChildItemFactory(UserChildItem.Factory())
                     adapter!!.setMoreItem(LoadMoreItem.Factory(this))
-                    adapter!!.addFooterItem(HeaderGroupItem.Factory(), "我是小尾巴呀！")
-                    adapter!!.addFooterItem(HeaderGroupItem.Factory(), "唉，我的小尾巴呢？")
+                    adapter!!.addFooterItem(TextItem.Factory(), "我是小尾巴呀！")
+                    adapter!!.addFooterItem(TextItem.Factory(), "唉，我的小尾巴呢？")
 
                     expandableFm_expandableList.setAdapter(adapter)
                 } else {
@@ -150,7 +150,7 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
                     adapter!!.headerItemManager.setItemEnabled(0, false)
                     adapter!!.footerItemManager.setItemEnabled(0, false)
                 }
-                adapter!!.moreItemHolder?.loadMoreFinished(loadMoreEnd)
+                adapter!!.moreItem?.loadMoreFinished(loadMoreEnd)
             }
         }
     }

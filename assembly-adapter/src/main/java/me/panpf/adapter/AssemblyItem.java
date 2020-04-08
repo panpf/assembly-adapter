@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 // todo 搞一个不为空的 Item 和一个可空的 item
-@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class AssemblyItem<DATA> implements Item<DATA> {
 
     @NonNull

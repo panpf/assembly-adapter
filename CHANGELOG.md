@@ -16,7 +16,8 @@ AssemblyAdapter:
 * change: Rename AssemblyAdapter's getFooterItemCount() to getFooterEnabledItemCount()
 * new: AssemblyAdapter's adds getHeaderItemManager() and getFooterItemManager() methods
 * remove: Remove ItemHolder's getItemStorage(), getPosition(), setPosition(int) methods
-* new: Fragment\*Adapter now supports setting BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+* new: \*Fragment\*Adapter now supports setting BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+* rename: \*ItemHolder rename to \*FixedItem
 
 # v3.4.0
 

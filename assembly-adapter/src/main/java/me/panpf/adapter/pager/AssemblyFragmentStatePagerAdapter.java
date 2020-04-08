@@ -106,7 +106,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
 
     @NonNull
     @Override
-    public FragmentItemHolderManager getHeaderItemManager() {
+    public FragmentFixedItemManager getHeaderItemManager() {
         return itemManager.getHeaderItemManager();
     }
 
@@ -128,7 +128,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
 
     @NonNull
     @Override
-    public FragmentItemHolderManager getFooterItemManager() {
+    public FragmentFixedItemManager getFooterItemManager() {
         return itemManager.getFooterItemManager();
     }
 

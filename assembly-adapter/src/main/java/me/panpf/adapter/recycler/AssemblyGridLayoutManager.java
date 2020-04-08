@@ -1,12 +1,12 @@
 package me.panpf.adapter.recycler;
 
 import android.content.Context;
+import android.util.AttributeSet;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.AttributeSet;
 
-@SuppressWarnings("unused")
 public class AssemblyGridLayoutManager extends GridLayoutManager {
 
     public AssemblyGridLayoutManager(@NonNull Context context, @NonNull AttributeSet attrs,

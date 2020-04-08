@@ -59,17 +59,17 @@ public class AssemblyPagerAdapter extends PagerAdapter {
 
 
     @NonNull
-    public PagerItemHolder addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
+    public PagerFixedItem addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
         return itemManager.addHeaderItem(itemFactory, data);
     }
 
     @NonNull
-    public PagerItemHolder addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+    public PagerFixedItem addHeaderItem(@NonNull AssemblyPagerItemFactory itemFactory) {
         return itemManager.addHeaderItem(itemFactory);
     }
 
     @NonNull
-    public PagerItemHolderManager getHeaderItemManager() {
+    public PagerFixedItemManager getHeaderItemManager() {
         return itemManager.getHeaderItemManager();
     }
 
@@ -79,17 +79,17 @@ public class AssemblyPagerAdapter extends PagerAdapter {
 
 
     @NonNull
-    public PagerItemHolder addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
+    public PagerFixedItem addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory, @Nullable Object data) {
         return itemManager.addFooterItem(itemFactory, data);
     }
 
     @NonNull
-    public PagerItemHolder addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
+    public PagerFixedItem addFooterItem(@NonNull AssemblyPagerItemFactory itemFactory) {
         return itemManager.addFooterItem(itemFactory);
     }
 
     @NonNull
-    public PagerItemHolderManager getFooterItemManager() {
+    public PagerFixedItemManager getFooterItemManager() {
         return itemManager.getFooterItemManager();
     }
 

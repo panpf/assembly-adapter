@@ -1,5 +1,3 @@
-@file:Suppress("RedundantVisibilityModifier", "unused", "UNCHECKED_CAST")
-
 package me.panpf.adapter.ktx
 
 import android.view.View
@@ -21,7 +19,6 @@ private fun <T, V : View> required(ids: IntArray, finder: T.(Int) -> View?) = La
 }
 
 private fun <T, V : View> optional(ids: IntArray, finder: T.(Int) -> View?) = Lazy { t: T, _ ->
-    @Suppress("SimplifiableCallChain")
     ids.map { t.finder(it) as V? }.filterNotNull()
 }
 
@@ -35,7 +32,6 @@ private class Lazy<T, V>(private val initializer: (T, KProperty<*>) -> V) : Read
         if (value == EMPTY) {
             value = initializer(thisRef, property)
         }
-        @Suppress("UNCHECKED_CAST")
         return value as V
     }
 }

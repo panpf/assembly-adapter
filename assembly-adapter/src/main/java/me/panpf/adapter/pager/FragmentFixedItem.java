@@ -20,22 +20,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 
-/**
- * {@link AssemblyFragmentPagerAdapter} 和 {@link AssemblyFragmentStatePagerAdapter} 专用的固定位置 item 管理器
- */
-public class FragmentItemHolder<DATA> {
+public class FragmentFixedItem<DATA> {
 
     @NonNull
     private AssemblyFragmentItemFactory itemFactory;
     @Nullable
     private DATA data;
 
-    public FragmentItemHolder(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable DATA data) {
+    public FragmentFixedItem(@NonNull AssemblyFragmentItemFactory itemFactory, @Nullable DATA data) {
         this.itemFactory = itemFactory;
         this.data = data;
     }
 
-    public FragmentItemHolder(@NonNull AssemblyFragmentItemFactory itemFactory) {
+    public FragmentFixedItem(@NonNull AssemblyFragmentItemFactory itemFactory) {
         this.itemFactory = itemFactory;
     }
 

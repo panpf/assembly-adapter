@@ -32,7 +32,7 @@ public interface AssemblyFragmentAdapter {
     void addHeaderItem(@NonNull AssemblyFragmentItemFactory itemFactory);
 
     @NonNull
-    FragmentItemHolderManager getHeaderItemManager();
+    FragmentFixedItemManager getHeaderItemManager();
 
     int getHeaderItemCount();
 
@@ -42,7 +42,7 @@ public interface AssemblyFragmentAdapter {
     void addFooterItem(@NonNull AssemblyFragmentItemFactory itemFactory);
 
     @NonNull
-    FragmentItemHolderManager getFooterItemManager();
+    FragmentFixedItemManager getFooterItemManager();
 
     int getFooterItemCount();
 

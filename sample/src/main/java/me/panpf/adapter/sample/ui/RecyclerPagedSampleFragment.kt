@@ -12,7 +12,7 @@ import me.panpf.adapter.paged.AssemblyPagedListAdapter
 import me.panpf.adapter.paged.DiffableDiffCallback
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.item.GameItem
-import me.panpf.adapter.sample.item.HeaderItem
+import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.LoadMoreItem
 import me.panpf.adapter.sample.item.UserItem
 import me.panpf.adapter.sample.vm.End
@@ -24,10 +24,10 @@ class RecyclerPagedSampleFragment : BaseFragment() {
     private val viewModel by bindViewModel(ListViewModel::class)
 
     private val adapter = AssemblyPagedListAdapter<Any>(DiffableDiffCallback()).apply {
-        addHeaderItem(HeaderItem.Factory(), "我是小额头呀！")
+        addHeaderItem(TextItem.Factory(), "我是小额头呀！")
         addItemFactory(UserItem.Factory())
         addItemFactory(GameItem.Factory())
-        addFooterItem(HeaderItem.Factory(), "我是小尾巴呀！")
+        addFooterItem(TextItem.Factory(), "我是小尾巴呀！")
         setMoreItem(LoadMoreItem.Factory())
     }
 

@@ -1,41 +1,40 @@
-package me.panpf.adapter;
+package me.panpf.adapter.pager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-// todo rename to FixedItemManager
-public class ItemHolderManager {
+public class PagerFixedItemManager {
 
     @Nullable
-    private ArrayList<ItemHolder> itemHolderList;
+    private ArrayList<PagerFixedItem> itemList;
     @Nullable
-    private ArrayList<ItemHolder> enabledItemHolderList;
+    private ArrayList<PagerFixedItem> enabledItemList;
 
-    public void add(@NonNull ItemHolder itemHolder) {
-        ArrayList<ItemHolder> allList = this.itemHolderList;
+    public void add(@NonNull PagerFixedItem item) {
+        ArrayList<PagerFixedItem> allList = this.itemList;
         if (allList == null) {
             allList = new ArrayList<>();
-            this.itemHolderList = allList;
+            this.itemList = allList;
         }
-        allList.add(itemHolder);
+        allList.add(item);
         refreshEnabledList();
     }
 
     private void refreshEnabledList() {
-        final ArrayList<ItemHolder> allList = this.itemHolderList;
+        final ArrayList<PagerFixedItem> allList = this.itemList;
         if (allList != null) {
-            ArrayList<ItemHolder> enabledList = this.enabledItemHolderList;
+            ArrayList<PagerFixedItem> enabledList = this.enabledItemList;
             if (enabledList == null) {
                 enabledList = new ArrayList<>();
-                this.enabledItemHolderList = enabledList;
+                this.enabledItemList = enabledList;
             } else {
                 enabledList.clear();
             }
-            for (ItemHolder itemHolder : allList) {
-                if (itemHolder.isEnabled()) {
-                    enabledList.add(itemHolder);
+            for (PagerFixedItem item : allList) {
+                if (item.isEnabled()) {
+                    enabledList.add(item);
                 }
             }
         }
@@ -47,26 +46,26 @@ public class ItemHolderManager {
     }
 
     public int getItemCount() {
-        return itemHolderList != null ? itemHolderList.size() : 0;
+        return itemList != null ? itemList.size() : 0;
     }
 
     @NonNull
-    public ItemHolder getItem(int index) {
-        if (itemHolderList != null) {
-            return itemHolderList.get(index);
+    public PagerFixedItem getItem(int index) {
+        if (itemList != null) {
+            return itemList.get(index);
         } else {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: 0");
         }
     }
 
     @NonNull
-    public ItemHolder getItemByClass(@NonNull Class clazz, int number) {
-        if (itemHolderList != null) {
+    public PagerFixedItem getItemByClass(@NonNull Class clazz, int number) {
+        if (itemList != null) {
             int currentNumber = 0;
-            for (ItemHolder itemHolder : itemHolderList) {
-                if (clazz.equals(itemHolder.getItemFactory().getClass())) {
+            for (PagerFixedItem item : itemList) {
+                if (clazz.equals(item.getItemFactory().getClass())) {
                     if (currentNumber == number) {
-                        return itemHolder;
+                        return item;
                     } else {
                         currentNumber++;
                     }
@@ -77,7 +76,7 @@ public class ItemHolderManager {
     }
 
     @NonNull
-    public ItemHolder getItemByClass(@NonNull Class clazz) {
+    public PagerFixedItem getItemByClass(@NonNull Class clazz) {
         return getItemByClass(clazz, 0);
     }
 
@@ -95,19 +94,19 @@ public class ItemHolderManager {
     }
 
     public void switchItemEnabled(int index) {
-        ItemHolder itemHolder = getItem(index);
-        itemHolder.setEnabled(!itemHolder.isEnabled());
+        PagerFixedItem item = getItem(index);
+        item.setEnabled(!item.isEnabled());
     }
 
 
     public int getEnabledItemCount() {
-        return enabledItemHolderList != null ? enabledItemHolderList.size() : 0;
+        return enabledItemList != null ? enabledItemList.size() : 0;
     }
 
     @NonNull
-    ItemHolder getItemInEnabledList(int index) {
-        if (enabledItemHolderList != null) {
-            return enabledItemHolderList.get(index);
+    PagerFixedItem getItemInEnabledList(int index) {
+        if (enabledItemList != null) {
+            return enabledItemList.get(index);
         } else {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: 0");
         }

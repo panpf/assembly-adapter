@@ -49,7 +49,7 @@ dependencies {
 * Adapter：负责维护数据、viewType 以及加载更多，只需使用提供的几种 Adapter 即可
 * [Item]：负责创建 itemView、设置数据，每个 item layout 都要有单独的 [Item]
 * [ItemFactory]：负责匹配数据类型、创建 [Item] 以及监听并处理点击事件，每个 [Item] 都要有单独的 [ItemFactory]
-* [ItemHolder]：当 [Item] 用于 header 或 footer 的时候会返回一个对应的 [ItemHolder]，你可以通过 [ItemHolder] 控制 [Item] 或更新其数据
+* [FixedItem]：当 [Item] 用于 header 或 footer 的时候会返回一个对应的 [FixedItem]，你可以通过 [FixedItem] 控制 [Item] 或更新其数据
 
 AssemblyAdapter 与其它万能 Adapter 最根本的不同就是其把 item 相关的处理全部定义在了一对 [Item] 和 [ItemFactory] 类里面，在使用的时候只需通过 Adapter 的 addItemFactory(ItemFactory) 方法将 [ItemFactory] 加到 Adapter 中即可
 
@@ -59,17 +59,34 @@ AssemblyAdapter 与其它万能 Adapter 最根本的不同就是其把 item 相�
 
 ### 3. 定义 Item 和 ItemFactory
 
-继承自 [AssemblyItem] 定义 [Item] 如下：
+继承 [AssemblyItem] 定义 Item，继承 [AssemblyItemFactory] 定义 Factory 如下：
 
 ```kotlin
-/*
- * 初始化 item layout 并设置数据
- */
-class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLayoutId, parent) {
+data class User(val name: String, val sex: String, val age: String, val job: String)
+
+class UserItem(parent: ViewGroup) : AssemblyItem<User>(R.layout.list_item_user, parent) {
+
     private val nameTextView: TextView by bindView(R.id.text_userListItem_name)
     private val sexTextView: TextView by bindView(R.id.text_userListItem_sex)
     private val ageTextView: TextView by bindView(R.id.text_userListItem_age)
     private val jobTextView: TextView by bindView(R.id.text_userListItem_job)
+
+//    override fun onFindViews() {
+//        nameTextView = findViewById(R.id.text_userListItem_name)
+//        sexTextView = findViewById(R.id.text_userListItem_sex)
+//        ageTextView = findViewById(R.id.text_userListItem_age)
+//        jobTextView = findViewById(R.id.text_userListItem_job)
+//    }
+
+    override fun onConfigViews(context: Context) {
+        /*
+         * Configure view properties and listeners...
+         */
+        nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30)
+        nameTextView.setOnClickListener {
+            // ...
+        }
+    }
 
     override fun onSetData(position: Int, user: User?) {
         user ?: return
@@ -78,53 +95,32 @@ class UserItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<User>(itemLa
         ageTextView.text = user.age
         jobTextView.text = user.job
     }
+    
+    class Factory : AssemblyItemFactory<User>() {
+    
+        override fun match(data: Any?) = data is User
+    
+        override fun createAssemblyItem(parent: ViewGroup) = UserItem(parent)
+    }
 }
 ```
 
-自定义 [Item] 详解：
-* Item 的泛型用来指定对应的数据类型
+自定义 Item 详解：
+* 泛型用来指定对应的数据类型
+* onFindViews(View) 方法用来 find View（如示例中的注掉的那部分所示）只会在创建的时候执行一次。但在 Kotlin 里你可以使用 bindView 扩展方法来初始化 View，这样就不需要 onFindViews(View) 方法了
+* onConfigViews(Context) 方法用老初始化 View，设置属性或监听，只会在创建的时候执行一次
 * onSetData() 方法用来设置数据，在每次 getView() 的时候都会执行
-* 还有 onFindViews(View) 和 onConfigViews(Context) 方法可分别用来初始化 View 和配置 View，只会在创建的时候执行一次
 * 通过 getPosition() 和 getData() 方法可获取当前 item 的位置和数据，因此你在处理 click 的时候不再需要通过 setTag() 来绑定位置和数据了，直接获取即可
 * 通过 getItemView() 方法可获取当前的 itemView
-* 在 [Item] 中使用 bindView 请参考 [在 Kotlin 中使用 bindView][ktx]
+* 在 Item 中使用 bindView 请参考 [在 Kotlin 中使用 bindView][ktx]
 
-继承自 [AssemblyItemFactory] 定义 [ItemFactory] 如下：
-
-```kotlin
-/*
- * match 方法匹配数据，createAssemblyItem 方法创建 UserItem，在 init 块中设置并处理点击监听
- */
-class UserItemFactory : AssemblyItemFactory<User>() {
-    init {
-        setOnViewClickListener(R.id.text_userListItem_name) { view, position, positionInPart, data ->
-            Toast.makeText(view.context, "我叫 " + data?.name, Toast.LENGTH_SHORT).show()
-        }
-        setOnViewClickListener(R.id.text_userListItem_job) { view, position, positionInPart, data ->
-            Toast.makeText(view.context, "我是名光荣的 " + data?.job, Toast.LENGTH_SHORT).show()
-        }
-        setOnItemClickListener { view, position, positionInPart, data ->
-            // 点击 item 跳转到用户详情页面
-        }
-    }
-
-    override fun match(data: Any?): Boolean {
-        return data is User
-    }
-
-    override fun createAssemblyItem(parent: ViewGroup): AssemblyItem<User> {
-        return UserItem(R.layout.list_item_user, parent)
-    }
-}
-```
-
-自定义 [ItemFactory] 详解：
+自定义 Factory 详解：
 * 泛型用来指定对应的数据类型
-* match(Object) 方法用来匹配数据列表中的数据，返回 true 就用当前 [ItemFactory] 处理当前这条数据
-* createAssemblyItem(ViewGroup) 方法用来创建 [Item]
-* 可以通过 setOnItemClickListener()、setOnViewClickListener() 方法监听点击事件
+* match(Object) 方法用来匹配数据列表中的数据，返回 true 表示使用当前 Factory 处理这条数据
+* createAssemblyItem(ViewGroup) 方法用来创建 Item
+* 还可以在 Factory 中通过 setOnItemClickListener()、setOnViewClickListener() 方法监听点击事件
 
-### 4. 使用 ItemFactory
+### 4. 使用  Item 和 ItemFactory
 
 使用的时候只需通过 [AssemblyAdapter] 的 addItemFactory(ItemFactory) 方法将 [ItemFactory] 添加到 [AssemblyAdapter] 中即可，如下：
 
@@ -146,7 +142,7 @@ val recyclerView: RecyclerView = ...
 recyclerView.adapter = adapter
 ```
 
-`GameItem.Factory` 的实现跟 `UserItem.Factory` 类似，这里就不贴出来了
+`GameItem.Factory` 的实现跟 `UserItem.Factory` 类似，这里就不写示例了
 
 ### 5. 更多高级功能
 
@@ -202,19 +198,19 @@ Please view the [CHANGELOG.md] file
 
 [ItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/ItemFactory.java
 [Item]: assembly-adapter/src/main/java/me/panpf/adapter/Item.java
-[ItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/ItemHolder.java
+[FixedItem]: assembly-adapter/src/main/java/me/panpf/adapter/FixedItem.java
 
-[AssemblyExpandableAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/expandable/AssemblyExpandableAdapter.java
+[AssemblyExpandableAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyExpandableAdapter.java
 [AssemblyGroup]: assembly-adapter/src/main/java/me/panpf/adapter/expandable/AssemblyGroup.java
 
 [AssemblyMoreItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItemFactory.java
 [AssemblyMoreItem]: assembly-adapter/src/main/java/me/panpf/adapter/more/AssemblyMoreItem.java
-[MoreItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/more/MoreItemHolder.java
+[MoreFixedItem]: assembly-adapter/src/main/java/me/panpf/adapter/more/MoreFixedItem.java
 [OnLoadMoreListener]: assembly-adapter/src/main/java/me/panpf/adapter/more/OnLoadMoreListener.java
 
 [AssemblyPagerItemFactory]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerItemFactory.java
-[FragmentItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/pager/FragmentItemHolder.java
-[PagerItemHolder]: assembly-adapter/src/main/java/me/panpf/adapter/pager/PagerItemHolder.java
+[FragmentFixedItem]: assembly-adapter/src/main/java/me/panpf/adapter/pager/FragmentFixedItem.java
+[PagerFixedItem]: assembly-adapter/src/main/java/me/panpf/adapter/pager/PagerFixedItem.java
 [AssemblyPagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyPagerAdapter.java
 [AssemblyFragmentPagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyFragmentPagerAdapter.java
 [AssemblyFragmentStatePagerAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/pager/AssemblyFragmentStatePagerAdapter.java

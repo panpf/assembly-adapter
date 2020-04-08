@@ -28,7 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import me.panpf.adapter.more.MoreItemFactory;
-import me.panpf.adapter.more.MoreItemHolder;
+import me.panpf.adapter.more.MoreFixedItem;
 
 /**
  * Combined {@link BaseAdapter}, supports combination of multiple items, supports head, tail and more
@@ -60,25 +60,25 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return itemManager.addHeaderItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
         return itemManager.addHeaderItem(itemFactory);
     }
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addHeaderItem(@NonNull ItemHolder<DATA> itemHolder) {
-        return itemManager.addHeaderItem(itemHolder);
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem) {
+        return itemManager.addHeaderItem(fixedItem);
     }
 
     @NonNull
     @Override
-    public ItemHolderManager getHeaderItemManager() {
+    public FixedItemManager getHeaderItemManager() {
         return itemManager.getHeaderItemManager();
     }
 
@@ -90,25 +90,25 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return itemManager.addFooterItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
         return itemManager.addFooterItem(itemFactory);
     }
 
     @NonNull
     @Override
-    public <DATA> ItemHolder<DATA> addFooterItem(@NonNull ItemHolder<DATA> itemHolder) {
-        return itemManager.addFooterItem(itemHolder);
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem) {
+        return itemManager.addFooterItem(fixedItem);
     }
 
     @NonNull
     @Override
-    public ItemHolderManager getFooterItemManager() {
+    public FixedItemManager getFooterItemManager() {
         return itemManager.getFooterItemManager();
     }
 
@@ -120,26 +120,26 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @NonNull
     @Override
-    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
         return itemManager.setMoreItem(itemFactory, data);
     }
 
     @NonNull
     @Override
-    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
+    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
         return itemManager.setMoreItem(itemFactory);
     }
 
     @NonNull
     @Override
-    public <DATA> MoreItemHolder<DATA> setMoreItem(@NonNull MoreItemHolder<DATA> itemHolder) {
-        return itemManager.setMoreItem(itemHolder);
+    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreFixedItem<DATA> moreFixedItem) {
+        return itemManager.setMoreItem(moreFixedItem);
     }
 
     @Nullable
     @Override
-    public MoreItemHolder getMoreItemHolder() {
-        return itemManager.getMoreItemHolder();
+    public MoreFixedItem getMoreItem() {
+        return itemManager.getMoreFixedItem();
     }
 
     @Override
@@ -149,25 +149,25 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @Override
     public void setEnabledMoreItem(boolean enabledMoreItem) {
-        MoreItemHolder moreItemHolder = itemManager.getMoreItemHolder();
-        if (moreItemHolder != null) {
-            moreItemHolder.setEnabled(enabledMoreItem);
+        MoreFixedItem moreFixedItem = itemManager.getMoreFixedItem();
+        if (moreFixedItem != null) {
+            moreFixedItem.setEnabled(enabledMoreItem);
         }
     }
 
     @Override
     public void loadMoreFinished(boolean loadMoreEnd) {
-        MoreItemHolder moreItemHolder = itemManager.getMoreItemHolder();
-        if (moreItemHolder != null) {
-            moreItemHolder.loadMoreFinished(loadMoreEnd);
+        MoreFixedItem moreFixedItem = itemManager.getMoreFixedItem();
+        if (moreFixedItem != null) {
+            moreFixedItem.loadMoreFinished(loadMoreEnd);
         }
     }
 
     @Override
     public void loadMoreFailed() {
-        MoreItemHolder moreItemHolder = itemManager.getMoreItemHolder();
-        if (moreItemHolder != null) {
-            moreItemHolder.loadMoreFailed();
+        MoreFixedItem moreFixedItem = itemManager.getMoreFixedItem();
+        if (moreFixedItem != null) {
+            moreFixedItem.loadMoreFailed();
         }
     }
 

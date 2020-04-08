@@ -3,8 +3,7 @@ package me.panpf.adapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-// todo rename to FixedItem
-public class ItemHolder<DATA> {
+public class FixedItem<DATA> {
 
     @Nullable
     private ItemManager itemManager;
@@ -16,20 +15,12 @@ public class ItemHolder<DATA> {
 
     private boolean enabled = true;
 
-    @Deprecated
-    protected ItemHolder(@NonNull ItemManager itemManager, @NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
-        this.itemManager = itemManager;
-        this.itemFactory = itemFactory;
-        this.data = data;
-        this.header = header;
-    }
-
-    public ItemHolder(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public FixedItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
         this.itemFactory = itemFactory;
         this.data = data;
     }
 
-    public ItemHolder(@NonNull ItemFactory<DATA> itemFactory) {
+    public FixedItem(@NonNull ItemFactory<DATA> itemFactory) {
         this.itemFactory = itemFactory;
     }
 
@@ -75,7 +66,7 @@ public class ItemHolder<DATA> {
 
     protected void enableChanged() {
         if (itemManager != null) {
-            itemManager.itemHolderEnabledChanged(this);
+            itemManager.fixedItemEnabledChanged(this);
         }
     }
 

@@ -19,10 +19,8 @@ package me.panpf.adapter.pager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-/**
- * {@link AssemblyPagerAdapter} 专用的固定位置 item 管理器
- */
-public class PagerItemHolder<DATA> {
+public class PagerFixedItem<DATA> {
+
     @Nullable
     private PagerItemManager itemManager;
     @NonNull
@@ -33,20 +31,12 @@ public class PagerItemHolder<DATA> {
 
     private boolean enabled = true;
 
-    @Deprecated
-    public PagerItemHolder(@NonNull PagerItemManager itemManager, @NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data, boolean header) {
-        this.itemManager = itemManager;
-        this.itemFactory = itemFactory;
-        this.data = data;
-        this.header = header;
-    }
-
-    public PagerItemHolder(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
+    public PagerFixedItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory, @Nullable DATA data) {
         this.itemFactory = itemFactory;
         this.data = data;
     }
 
-    public PagerItemHolder(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
+    public PagerFixedItem(@NonNull AssemblyPagerItemFactory<DATA> itemFactory) {
         this.itemFactory = itemFactory;
     }
 
@@ -92,7 +82,7 @@ public class PagerItemHolder<DATA> {
 
     private void enableChanged() {
         if (itemManager != null) {
-            itemManager.itemHolderEnabledChanged(this);
+            itemManager.fixedItemEnabledChanged(this);
         }
     }
 

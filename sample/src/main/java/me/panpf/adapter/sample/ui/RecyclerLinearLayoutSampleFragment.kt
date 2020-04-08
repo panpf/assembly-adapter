@@ -15,7 +15,7 @@ import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.item.GameItem
-import me.panpf.adapter.sample.item.HeaderItem
+import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.LoadMoreItem
 import me.panpf.adapter.sample.item.UserItem
 import java.lang.ref.WeakReference
@@ -26,12 +26,12 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
     var size = 20
 
     private val adapter = AssemblyRecyclerAdapter().apply {
-        addHeaderItem(HeaderItem.Factory(), "我是小额头呀！")
-        addHeaderItem(HeaderItem.Factory(), "唉，我的小额头呢？")
+        addHeaderItem(TextItem.Factory(), "我是小额头呀！")
+        addHeaderItem(TextItem.Factory(), "唉，我的小额头呢？")
         addItemFactory(UserItem.Factory())
         addItemFactory(GameItem.Factory())
-        addFooterItem(HeaderItem.Factory(), "我是小尾巴呀！")
-        addFooterItem(HeaderItem.Factory(), "唉，我的小尾巴呢？")
+        addFooterItem(TextItem.Factory(), "我是小尾巴呀！")
+        addFooterItem(TextItem.Factory(), "唉，我的小尾巴呢？")
         setMoreItem(LoadMoreItem.Factory(this@RecyclerLinearLayoutSampleFragment))
     }
 
@@ -118,7 +118,7 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
                     adapter.headerItemManager.setItemEnabled(0, false)
                     adapter.footerItemManager.setItemEnabled(0, false)
                 }
-                adapter.moreItemHolder?.isEnabled = !loadMoreEnd
+                adapter.moreItem?.isEnabled = !loadMoreEnd
             }
         }
     }

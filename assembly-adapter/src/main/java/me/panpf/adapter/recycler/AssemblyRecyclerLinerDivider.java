@@ -16,7 +16,6 @@ import me.panpf.adapter.AssemblyRecyclerAdapter;
 /**
  * {@link RecyclerView} 专用 divider，头和尾巴不显示 divider
  */
-@SuppressWarnings("unused")
 public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
@@ -24,7 +23,6 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
     private RecyclerView recyclerView;
 
-    @SuppressWarnings("unused")
     public AssemblyRecyclerLinerDivider(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
 
@@ -33,13 +31,11 @@ public class AssemblyRecyclerLinerDivider extends RecyclerView.ItemDecoration {
         a.recycle();
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
     public AssemblyRecyclerLinerDivider(RecyclerView recyclerView, Drawable dividerDrawable) {
         this.recyclerView = recyclerView;
         this.mDivider = dividerDrawable;
     }
 
-    @SuppressWarnings("unused")
     public AssemblyRecyclerLinerDivider(RecyclerView recyclerView, @DrawableRes int dividerDrawableResId) {
         this(recyclerView, recyclerView.getResources().getDrawable(dividerDrawableResId));
     }

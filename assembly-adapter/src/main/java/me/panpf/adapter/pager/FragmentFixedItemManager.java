@@ -5,40 +5,41 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class FragmentItemHolderManager {
-    @Nullable
-    private ArrayList<FragmentItemHolder> itemHolderList;
+public class FragmentFixedItemManager {
 
-    public void add(@NonNull FragmentItemHolder itemHolder) {
-        ArrayList<FragmentItemHolder> allList = this.itemHolderList;
+    @Nullable
+    private ArrayList<FragmentFixedItem> itemList;
+
+    public void add(@NonNull FragmentFixedItem item) {
+        ArrayList<FragmentFixedItem> allList = this.itemList;
         if (allList == null) {
             allList = new ArrayList<>();
-            this.itemHolderList = allList;
+            this.itemList = allList;
         }
-        allList.add(itemHolder);
+        allList.add(item);
     }
 
     public int getItemCount() {
-        return itemHolderList != null ? itemHolderList.size() : 0;
+        return itemList != null ? itemList.size() : 0;
     }
 
     @NonNull
-    public FragmentItemHolder getItem(int index) {
-        if (itemHolderList != null) {
-            return itemHolderList.get(index);
+    public FragmentFixedItem getItem(int index) {
+        if (itemList != null) {
+            return itemList.get(index);
         } else {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: 0");
         }
     }
 
     @NonNull
-    public FragmentItemHolder getItemByClass(@NonNull Class clazz, int number) {
-        if (itemHolderList != null) {
+    public FragmentFixedItem getItemByClass(@NonNull Class clazz, int number) {
+        if (itemList != null) {
             int currentNumber = 0;
-            for (FragmentItemHolder itemHolder : itemHolderList) {
-                if (clazz.equals(itemHolder.getItemFactory().getClass())) {
+            for (FragmentFixedItem item : itemList) {
+                if (clazz.equals(item.getItemFactory().getClass())) {
                     if (currentNumber == number) {
-                        return itemHolder;
+                        return item;
                     } else {
                         currentNumber++;
                     }
@@ -49,7 +50,7 @@ public class FragmentItemHolderManager {
     }
 
     @NonNull
-    public FragmentItemHolder getItemByClass(@NonNull Class clazz) {
+    public FragmentFixedItem getItemByClass(@NonNull Class clazz) {
         return getItemByClass(clazz, 0);
     }
 
