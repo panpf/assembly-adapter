@@ -10,6 +10,5 @@ dependencies {
 
 `$lastVersionName`：[![Release Version][release_icon]][release_link]
 
-
 [release_icon]: https://api.bintray.com/packages/panpf/maven/assembly-adapter-ktx/images/download.svg
 [release_link]: https://bintray.com/panpf/maven/assembly-adapter-ktx/_latestVersion#files

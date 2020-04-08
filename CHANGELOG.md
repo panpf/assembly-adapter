@@ -14,6 +14,7 @@ AssemblyAdapter:
 * remove: Remove AssemblyAdapter's getHeaderItemList(), getHeaderData(), getFooterItemList(), getFooterData() methods
 * change: Rename AssemblyAdapter's getHeaderItemCount() to getHeaderEnabledItemCount()
 * change: Rename AssemblyAdapter's getFooterItemCount() to getFooterEnabledItemCount()
+* change: Rename AssemblyAdapter's getMoreItemHolder() to getMoreItem()
 * new: AssemblyAdapter's adds getHeaderItemManager() and getFooterItemManager() methods
 * remove: Remove ItemHolder's getItemStorage(), getPosition(), setPosition(int) methods
 * new: \*Fragment\*Adapter now supports setting BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT

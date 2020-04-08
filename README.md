@@ -187,7 +187,6 @@ Please view the [CHANGELOG.md] file
 [grid_span]: docs/wiki/grid_span.md
 [load_more]: docs/wiki/load_more.md
 [ktx]: docs/wiki/ktx.md
-[view_item_factory]: docs/wiki/view_item_factory.md
 [paged_list]: docs/wiki/paged_list.md
 
 [AssemblyAdapter]: assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java

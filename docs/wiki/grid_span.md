@@ -34,8 +34,7 @@ val adapter = AssemblyRecyclerAdapter(dataList).apply {
 recyclerView.setAdapter(adapter);
 ```
 
-
 [RecyclerView]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView
 [GridLayoutManager]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/GridLayoutManager
 [StaggeredGridLayoutManager]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/StaggeredGridLayoutManager
-[AssemblyAdapter]: https://github.com/panpf/assembly-adapter/blob/master/assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
+[AssemblyAdapter]: ../../assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
