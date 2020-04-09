@@ -1,3 +1,11 @@
+# v
+
+ItemHolder: 
+* new: FixedItem setEnabled (boolean) method now returns FixedItem
+
+Other:
+* change: ViewItemFactory change to ViewItem.Factory
+
 # v3.5.0-alpha01
 
 Dependencies: 

@@ -70,12 +70,13 @@ public class PagerFixedItem<DATA> {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        if (this.enabled == enabled) {
-            return;
+    @NonNull
+    public PagerFixedItem setEnabled(boolean enabled) {
+        if (this.enabled != enabled) {
+            this.enabled = enabled;
+            enableChanged();
         }
-        this.enabled = enabled;
-        enableChanged();
+        return this;
     }
 
     void attachToAdapter(@NonNull PagerItemManager itemManager, boolean header) {

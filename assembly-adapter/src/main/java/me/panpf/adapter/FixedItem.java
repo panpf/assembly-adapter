@@ -53,12 +53,13 @@ public class FixedItem<DATA> {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        if (this.enabled == enabled) {
-            return;
+    @NonNull
+    public FixedItem setEnabled(boolean enabled) {
+        if (this.enabled != enabled) {
+            this.enabled = enabled;
+            enableChanged();
         }
-        this.enabled = enabled;
-        enableChanged();
+        return this;
     }
 
     void attachToAdapter(@NonNull ItemManager itemManager, boolean header) {

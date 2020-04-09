@@ -43,12 +43,14 @@ public class MoreFixedItem<DATA> extends FixedItem<DATA> {
         // no refresh
     }
 
+    @NonNull
     @Override
-    public void setEnabled(boolean enabled) {
+    public MoreFixedItem setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         if (enabled) {
             loadMoreFinished(false);
         }
+        return this;
     }
 
     public void loadMoreFinished(boolean end) {

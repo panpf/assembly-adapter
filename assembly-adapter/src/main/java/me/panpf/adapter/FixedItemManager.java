@@ -61,7 +61,7 @@ public class FixedItemManager {
     }
 
     @NonNull
-    public FixedItem getItemByClass(@NonNull Class clazz, int number) {
+    FixedItem getItemByClass(@NonNull Class clazz, int number) {
         if (itemList != null) {
             int currentNumber = 0;
             for (FixedItem fixedItem : itemList) {
@@ -78,25 +78,25 @@ public class FixedItemManager {
     }
 
     @NonNull
-    public FixedItem getItemByClass(@NonNull Class clazz) {
+    FixedItem getItemByClass(@NonNull Class clazz) {
         return getItemByClass(clazz, 0);
     }
 
-    public void setItemData(int index, @Nullable Object data) {
+    void setItemData(int index, @Nullable Object data) {
         //noinspection unchecked
         getItem(index).setData(data);
     }
 
-    public boolean isItemEnabled(int index) {
+    boolean isItemEnabled(int index) {
         return getItem(index).isEnabled();
     }
 
-    public void setItemEnabled(int index, boolean enabled) {
+    void setItemEnabled(int index, boolean enabled) {
         getItem(index).setEnabled(enabled);
     }
 
 
-    public int getEnabledItemCount() {
+    int getEnabledItemCount() {
         return enabledItemList != null ? enabledItemList.size() : 0;
     }
 
