@@ -43,16 +43,16 @@ adapter.addFooterItem(TextItem.Factory(), "我是小尾巴 1 呀！")
 adapter.addFooterItem(TextItem.Factory(), "我是小尾巴 2 呀！")
 
 // 隐藏 header1 和 footer 2
-adapter.headerItemManager.setItemEnabled(0, false)
-adapter.footerItemManager.setItemEnabled(1, false)
+adapter.setHeaderItemEnabled(0, false)
+adapter.setFooterItemEnabled(1, false)
 
 // 显示 header1 和 footer 2
-adapter.headerItemManager.setItemEnabled(0, true)
-adapter.footerItemManager.setItemEnabled(1, true)
+adapter.setHeaderItemEnabled(0, true)
+adapter.setFooterItemEnabled(1, true)
 
 // 更新 header2 和 footer 1 的数据
-adapter.headerItemManager.setItemData(1, "我不是小额头 2 呀！")
-adapter.footerItemManager.setItemData(0, "我不是小尾巴 1 呀！")
+adapter.setHeaderItemData(1, "我不是小额头 2 呀！")
+adapter.setFooterItemData(0, "我不是小尾巴 1 呀！")
 ```
 
 [AssemblyAdapter]: ../../assembly-adapter/src/main/java/me/panpf/adapter/AssemblyAdapter.java
