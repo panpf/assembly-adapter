@@ -1,3 +1,7 @@
+# vnew
+
+* improve: All get\*ItemByFactoryClass() method supports generics
+
 # v3.5.0-alpha02
 
 ItemHolder: 

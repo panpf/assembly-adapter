@@ -40,10 +40,10 @@ public interface AssemblyFragmentAdapter {
     <DATA> FragmentFixedItem<DATA> addHeaderItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory);
 
     @NonNull
-    FragmentFixedItem getHeaderItemByClass(@NonNull Class clazz, int number);
+    <DATA> FragmentFixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz, int number);
 
     @NonNull
-    FragmentFixedItem getHeaderItemByClass(@NonNull Class clazz);
+    <DATA> FragmentFixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz);
 
     @NonNull
     FragmentFixedItem getHeaderItem(int positionInHeaderItemList);
@@ -69,10 +69,10 @@ public interface AssemblyFragmentAdapter {
     <DATA> FragmentFixedItem<DATA> addFooterItem(@NonNull AssemblyFragmentItemFactory<DATA> itemFactory);
 
     @NonNull
-    FragmentFixedItem getFooterItemByClass(@NonNull Class clazz, int number);
+    <DATA> FragmentFixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz, int number);
 
     @NonNull
-    FragmentFixedItem getFooterItemByClass(@NonNull Class clazz);
+    <DATA> FragmentFixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz);
 
     @NonNull
     FragmentFixedItem getFooterItem(int positionInFooterItemList);

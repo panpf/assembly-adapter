@@ -78,13 +78,13 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     }
 
     @NonNull
-    public PagerFixedItem getHeaderItemByClass(@NonNull Class clazz, int number) {
-        return itemManager.getHeaderItemManager().getItemByClass(clazz, number);
+    public <DATA> PagerFixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends AssemblyPagerItemFactory<DATA>> clazz, int number) {
+        return itemManager.getHeaderItemManager().getItemByFactoryClass(clazz, number);
     }
 
     @NonNull
-    public PagerFixedItem getHeaderItemByClass(@NonNull Class clazz) {
-        return itemManager.getHeaderItemManager().getItemByClass(clazz);
+    public <DATA> PagerFixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends AssemblyPagerItemFactory<DATA>> clazz) {
+        return itemManager.getHeaderItemManager().getItemByFactoryClass(clazz);
     }
 
     @NonNull
@@ -135,13 +135,13 @@ public class AssemblyPagerAdapter extends PagerAdapter {
     }
 
     @NonNull
-    public PagerFixedItem getFooterItemByClass(@NonNull Class clazz, int number) {
-        return itemManager.getFooterItemManager().getItemByClass(clazz, number);
+    public <DATA> PagerFixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends AssemblyPagerItemFactory<DATA>> clazz, int number) {
+        return itemManager.getFooterItemManager().getItemByFactoryClass(clazz, number);
     }
 
     @NonNull
-    public PagerFixedItem getFooterItemByClass(@NonNull Class clazz) {
-        return itemManager.getFooterItemManager().getItemByClass(clazz);
+    public <DATA> PagerFixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends AssemblyPagerItemFactory<DATA>> clazz) {
+        return itemManager.getFooterItemManager().getItemByFactoryClass(clazz);
     }
 
     @NonNull

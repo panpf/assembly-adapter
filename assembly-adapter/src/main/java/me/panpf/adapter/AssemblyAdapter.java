@@ -32,10 +32,10 @@ public interface AssemblyAdapter {
     <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory);
 
     @NonNull
-    FixedItem getHeaderItemByClass(@NonNull Class clazz, int number);
+    <DATA> FixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz, int number);
 
     @NonNull
-    FixedItem getHeaderItemByClass(@NonNull Class clazz);
+    <DATA>FixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz);
 
     @NonNull
     FixedItem getHeaderItem(int positionInHeaderItemList);
@@ -65,10 +65,10 @@ public interface AssemblyAdapter {
     <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory);
 
     @NonNull
-    FixedItem getFooterItemByClass(@NonNull Class clazz, int number);
+    <DATA> FixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz, int number);
 
     @NonNull
-    FixedItem getFooterItemByClass(@NonNull Class clazz);
+    <DATA> FixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz);
 
     @NonNull
     FixedItem getFooterItem(int positionInFooterItemList);

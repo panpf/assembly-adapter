@@ -33,6 +33,7 @@ import java.util.List;
 /**
  * Combined {@link FragmentPagerAdapter}, supports combining many types of items, supports head and tail
  */
+// todo support title
 public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implements AssemblyFragmentAdapter {
 
     @NonNull
@@ -119,14 +120,14 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
 
     @NonNull
     @Override
-    public FragmentFixedItem getHeaderItemByClass(@NonNull Class clazz, int number) {
-        return itemManager.getHeaderItemManager().getItemByClass(clazz, number);
+    public <DATA> FragmentFixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz, int number) {
+        return itemManager.getHeaderItemManager().getItemByFactoryClass(clazz, number);
     }
 
     @NonNull
     @Override
-    public FragmentFixedItem getHeaderItemByClass(@NonNull Class clazz) {
-        return itemManager.getHeaderItemManager().getItemByClass(clazz);
+    public <DATA> FragmentFixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz) {
+        return itemManager.getHeaderItemManager().getItemByFactoryClass(clazz);
     }
 
     @NonNull
@@ -177,14 +178,14 @@ public class AssemblyFragmentPagerAdapter extends FragmentPagerAdapter implement
 
     @NonNull
     @Override
-    public FragmentFixedItem getFooterItemByClass(@NonNull Class clazz, int number) {
-        return itemManager.getFooterItemManager().getItemByClass(clazz, number);
+    public <DATA> FragmentFixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz, int number) {
+        return itemManager.getFooterItemManager().getItemByFactoryClass(clazz, number);
     }
 
     @NonNull
     @Override
-    public FragmentFixedItem getFooterItemByClass(@NonNull Class clazz) {
-        return itemManager.getFooterItemManager().getItemByClass(clazz);
+    public <DATA> FragmentFixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz) {
+        return itemManager.getFooterItemManager().getItemByFactoryClass(clazz);
     }
 
     @NonNull

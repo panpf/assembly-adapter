@@ -34,7 +34,7 @@ public class FragmentFixedItemManager {
     }
 
     @NonNull
-    public FragmentFixedItem getItemByClass(@NonNull Class clazz, int number) {
+    public <DATA> FragmentFixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz, int number) {
         if (itemList != null) {
             int currentNumber = 0;
             for (FragmentFixedItem item : itemList) {
@@ -51,8 +51,8 @@ public class FragmentFixedItemManager {
     }
 
     @NonNull
-    public FragmentFixedItem getItemByClass(@NonNull Class clazz) {
-        return getItemByClass(clazz, 0);
+    public <DATA> FragmentFixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends AssemblyFragmentItemFactory<DATA>> clazz) {
+        return getItemByFactoryClass(clazz, 0);
     }
 
     public void setItemData(int index, @Nullable Object data) {

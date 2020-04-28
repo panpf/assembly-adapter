@@ -26,6 +26,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.List;
 
+// todo support title
 public class ArrayPagerAdapter extends PagerAdapter {
 
     @NonNull

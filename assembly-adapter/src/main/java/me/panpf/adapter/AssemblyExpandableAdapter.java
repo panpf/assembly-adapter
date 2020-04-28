@@ -105,14 +105,14 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public FixedItem getHeaderItemByClass(@NonNull Class clazz, int number) {
-        return itemManager.getHeaderItemManager().getItemByClass(clazz, number);
+    public <DATA> FixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz, int number) {
+        return itemManager.getHeaderItemManager().getItemByFactoryClass(clazz, number);
     }
 
     @NonNull
     @Override
-    public FixedItem getHeaderItemByClass(@NonNull Class clazz) {
-        return itemManager.getHeaderItemManager().getItemByClass(clazz);
+    public <DATA> FixedItem<DATA> getHeaderItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz) {
+        return itemManager.getHeaderItemManager().getItemByFactoryClass(clazz);
     }
 
     @NonNull
@@ -174,14 +174,14 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @NonNull
     @Override
-    public FixedItem getFooterItemByClass(@NonNull Class clazz, int number) {
-        return itemManager.getFooterItemManager().getItemByClass(clazz, number);
+    public <DATA> FixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz, int number) {
+        return itemManager.getFooterItemManager().getItemByFactoryClass(clazz, number);
     }
 
     @NonNull
     @Override
-    public FixedItem getFooterItemByClass(@NonNull Class clazz) {
-        return itemManager.getFooterItemManager().getItemByClass(clazz);
+    public <DATA> FixedItem<DATA> getFooterItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz) {
+        return itemManager.getFooterItemManager().getItemByFactoryClass(clazz);
     }
 
     @NonNull

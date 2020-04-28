@@ -61,7 +61,7 @@ public class FixedItemManager {
     }
 
     @NonNull
-    FixedItem getItemByClass(@NonNull Class clazz, int number) {
+    <DATA> FixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz, int number) {
         if (itemList != null) {
             int currentNumber = 0;
             for (FixedItem fixedItem : itemList) {
@@ -78,8 +78,8 @@ public class FixedItemManager {
     }
 
     @NonNull
-    FixedItem getItemByClass(@NonNull Class clazz) {
-        return getItemByClass(clazz, 0);
+    <DATA> FixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz) {
+        return getItemByFactoryClass(clazz, 0);
     }
 
     void setItemData(int index, @Nullable Object data) {

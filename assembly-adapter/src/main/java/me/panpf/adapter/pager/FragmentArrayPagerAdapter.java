@@ -33,6 +33,7 @@ import java.util.List;
 /**
  * {@link Fragment} 数组 {@link FragmentPagerAdapter}
  */
+// todo support title
 public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
 
     @NonNull
@@ -51,6 +52,7 @@ public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
      * @deprecated use {@link #FragmentArrayPagerAdapter(FragmentManager, int, Fragment[])} with
      * {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}
      */
+    @Deprecated
     public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
         super(fm);
         this.fragments = fragments;
@@ -65,6 +67,7 @@ public class FragmentArrayPagerAdapter extends FragmentPagerAdapter {
      * @deprecated use {@link #FragmentArrayPagerAdapter(FragmentManager, int, List)} with
      * {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}
      */
+    @Deprecated
     public FragmentArrayPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Fragment> fragments) {
         super(fm);
         this.fragments = fragments.toArray(new Fragment[0]);

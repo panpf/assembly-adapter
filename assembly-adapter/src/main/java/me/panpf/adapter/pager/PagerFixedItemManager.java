@@ -61,7 +61,7 @@ public class PagerFixedItemManager {
     }
 
     @NonNull
-    PagerFixedItem getItemByClass(@NonNull Class clazz, int number) {
+    <DATA> PagerFixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends AssemblyPagerItemFactory<DATA>> clazz, int number) {
         if (itemList != null) {
             int currentNumber = 0;
             for (PagerFixedItem item : itemList) {
@@ -78,8 +78,8 @@ public class PagerFixedItemManager {
     }
 
     @NonNull
-    PagerFixedItem getItemByClass(@NonNull Class clazz) {
-        return getItemByClass(clazz, 0);
+    <DATA> PagerFixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends AssemblyPagerItemFactory<DATA>> clazz) {
+        return getItemByFactoryClass(clazz, 0);
     }
 
     void setItemData(int index, @Nullable Object data) {
