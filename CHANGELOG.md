@@ -1,6 +1,6 @@
 # vnew
 
-* improve: All get\*ItemByFactoryClass() method supports generics
+* improve: All get\*ItemByClass() change to get\*ItemByFactoryClass
 
 # v3.5.0-alpha02
 
