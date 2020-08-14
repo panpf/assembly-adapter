@@ -58,7 +58,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
         this.itemManager = new FragmentItemManager(this);
     }
 
-    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @Behavior int behavior, @NonNull List dataList) {
+    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @Behavior int behavior, @Nullable List dataList) {
         super(fm, behavior);
         this.itemManager = new FragmentItemManager(this, dataList);
     }
@@ -68,7 +68,7 @@ public class AssemblyFragmentStatePagerAdapter extends FragmentStatePagerAdapter
      * {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}
      */
     @Deprecated
-    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @NonNull List dataList) {
+    public AssemblyFragmentStatePagerAdapter(@NonNull FragmentManager fm, @Nullable List dataList) {
         super(fm);
         this.itemManager = new FragmentItemManager(this, dataList);
     }

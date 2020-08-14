@@ -43,7 +43,7 @@ class FragmentItemManager {
         this.adapter = adapter;
     }
 
-    FragmentItemManager(@NonNull PagerAdapter adapter, @NonNull List dataList) {
+    FragmentItemManager(@NonNull PagerAdapter adapter, @Nullable List dataList) {
         this.adapter = adapter;
         this.dataList = dataList;
     }
