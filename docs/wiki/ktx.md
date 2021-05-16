@@ -1,14 +1,11 @@
 # 在 Kotlin 中使用 bindview
 
-从 JCenter 导入 Kotlin 扩展即可：
+首先需要额外导入 assemblyadapeter-ktx，模块，请参考首页 README
 
-```groovy
-dependencies {
-    implementation 'me.panpf:assembly-adapter-ktx:$lastVersionName'
+然后就可以使用了，如下：
+```kotlin
+class AppItem(itemLayoutId: Int, parent: ViewGroup) : AssemblyItem<AppInfo>(itemLayoutId, parent) {
+    private val iconImageView: SketchImageView by bindView(R.id.appItem_iconImage)
+    private val nameTextView: TextView by bindView(R.id.appItem_nameText)
 }
-```
-
-`$lastVersionName`：[![Release Version][release_icon]][release_link]
-
-[release_icon]: https://api.bintray.com/packages/panpf/maven/assembly-adapter-ktx/images/download.svg
-[release_link]: https://bintray.com/panpf/maven/assembly-adapter-ktx/_latestVersion#files
+``` 

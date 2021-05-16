@@ -1,5 +1,5 @@
-import com.novoda.gradle.release.PublishExtension
-import java.util.Properties
+//import com.novoda.gradle.release.PublishExtension
+//import java.util.Properties
 
 plugins {
     id("com.android.library")
@@ -33,18 +33,18 @@ dependencies {
     api(project(":assembly-adapter"))
 }
 
-Properties().apply { project.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) } }.takeIf { !it.isEmpty }?.let { localProperties ->
-    apply { plugin("com.novoda.bintray-release") }
+/**
+ * publish config, The following properties are generally configured in the ~/.gradle/gradle.properties file
+ */
+if (hasProperty("signing.keyId")
+    && hasProperty("signing.password")
+    && hasProperty("signing.secretKeyRingFile")
+    && hasProperty("mavenCentralUsername")
+    && hasProperty("mavenCentralPassword")
+) {
+    apply { plugin("com.vanniktech.maven.publish") }
 
-    configure<PublishExtension> {
-        groupId = "me.panpf"
-        artifactId = "assembly-adapter-ktx"
-        publishVersion = property("VERSION_NAME").toString()
-        desc = "Adnroid, Adapter, Assembly, KTX"
-        website = "https://github.com/panpf/assembly-adapter"
-        userOrg = localProperties.getProperty("bintray.userOrg")
-        bintrayUser = localProperties.getProperty("bintray.user")
-        bintrayKey = localProperties.getProperty("bintray.apikey")
+    configure<com.vanniktech.maven.publish.MavenPublishPluginExtension> {
+        sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
     }
 }
-

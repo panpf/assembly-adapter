@@ -21,15 +21,17 @@
 
 ## 使用指南
 
-### 1. 从 JCenter 导入
+### 1. 从 mavenCentral 导入
 
-```groovy
+```kotlin
 dependencies {
-    implementation 'me.panpf:assembly-adapter:$lastVersionName'
+    implementation("io.panpf.assemblyadapter:assemblyadapter:${lastVersionName}")
+    implementation("io.panpf.assemblyadapter:assemblyadapter-ktx:${lastVersionName}") // Optional
+    implementation("io.panpf.assemblyadapter:assemblyadapter-paing:${lastVersionName}") // Optional
 }
 ```
 
-`$lastVersionName`：[![Release Version][release_icon]][release_link]
+`${lastVersionName}`：[![Release Version][release_icon]][release_link] (no include 'v')
 
 ### 2. 简介
 
@@ -95,11 +97,11 @@ class UserItem(parent: ViewGroup) : AssemblyItem<User>(R.layout.list_item_user, 
         ageTextView.text = user.age
         jobTextView.text = user.job
     }
-    
+
     class Factory : AssemblyItemFactory<User>() {
-    
+
         override fun match(data: Any?) = data is User
-    
+
         override fun createAssemblyItem(parent: ViewGroup) = UserItem(parent)
     }
 }
@@ -176,8 +178,8 @@ Please view the [CHANGELOG.md] file
 [android_arsenal_link]: https://android-arsenal.com/details/1/4152
 [api_image]: https://img.shields.io/badge/API-14%2B-orange.svg
 [api_link]: https://android-arsenal.com/api?level=14
-[release_icon]: https://api.bintray.com/packages/panpf/maven/assembly-adapter/images/download.svg
-[release_link]: https://bintray.com/panpf/maven/assembly-adapter/_latestVersion#files
+[release_icon]: https://img.shields.io/maven-central/v/io.github.panpf.assemblyadapter/assemblyadapter
+[release_link]: https://repo1.maven.org/maven2/io/github/panpf/assemblyadapter/
 [license_image]: https://img.shields.io/badge/License-Apache%202-blue.svg
 [license_link]: https://www.apache.org/licenses/LICENSE-2.0
 
