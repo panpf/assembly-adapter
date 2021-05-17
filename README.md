@@ -27,7 +27,7 @@
 dependencies {
     implementation("io.panpf.assemblyadapter:assemblyadapter:${lastVersionName}")
     implementation("io.panpf.assemblyadapter:assemblyadapter-ktx:${lastVersionName}") // Optional
-    implementation("io.panpf.assemblyadapter:assemblyadapter-paing:${lastVersionName}") // Optional
+    implementation("io.panpf.assemblyadapter:assemblyadapter-paging:${lastVersionName}") // Optional
 }
 ```
 
