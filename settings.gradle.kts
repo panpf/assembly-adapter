@@ -1,1 +1,1 @@
-include(":sample", ":assembly-adapter", ":assembly-adapter-ktx", ":assembly-paged-list-adapter")
+include(":sample", ":assembly-adapter", ":assembly-adapter-ktx", ":assembly-adapter-paging")

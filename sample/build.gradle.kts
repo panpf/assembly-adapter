@@ -39,5 +39,5 @@ dependencies {
 
     implementation(project(":assembly-adapter"))
     implementation(project(":assembly-adapter-ktx"))
-    implementation(project(":assembly-paged-list-adapter"))
+    implementation(project(":assembly-adapter-paging"))
 }
