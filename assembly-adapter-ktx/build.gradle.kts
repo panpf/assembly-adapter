@@ -1,6 +1,3 @@
-//import com.novoda.gradle.release.PublishExtension
-//import java.util.Properties
-
 plugins {
     id("com.android.library")
     id("kotlin-android")

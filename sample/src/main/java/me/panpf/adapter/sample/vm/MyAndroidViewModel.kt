@@ -17,7 +17,7 @@ open class MyAndroidViewModel(application: Application) : AndroidViewModel(appli
                 setEnablePlaceholders(false)
             }.build()
 
-    fun <Key, Value> makePagedList(dataSourceFactory: DataSource.Factory<Key, Value>,
+    fun <Key: Any, Value: Any> makePagedList(dataSourceFactory: DataSource.Factory<Key, Value>,
                                    listStatus: MutableLiveData<ListStatus>, pageSize: Int = 20): LiveData<PagedList<Value>> =
             LivePagedListBuilder<Key, Value>(dataSourceFactory, makePagedListConfig(pageSize))
                     .setBoundaryCallback(ListBoundaryCallback(listStatus))

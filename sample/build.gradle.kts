@@ -31,11 +31,11 @@ dependencies {
     implementation("androidx.appcompat:appcompat:${property("ANDROIDX_APPCOMPAT")}")
     implementation("androidx.fragment:fragment:${property("ANDROIDX_FRAGMENT")}")
     implementation("androidx.constraintlayout:constraintlayout:${property("ANDROIDX_CONSTRAINTLAYOUT")}")
-    implementation("com.google.android.material:material:${property("MATERIAL")}")
+    implementation("com.google.android.material:material:${property("GOOGLE_MATERIAL")}")
 
-    implementation("me.panpf:pager-indicator:${property("PAGER_INDICATOR")}")
-    implementation("me.panpf:sketch:${property("SKETCH_VERSION")}")
-    implementation("me.panpf:sticky-recycler-item-decoration:${property("STICKY_RECYCLER_ITEM_DECORATION")}")
+    implementation("io.github.panpf.pagerindicator:pagerindicator:${property("PAGER_INDICATOR")}")
+    implementation("io.github.panpf.sketch:sketch:${property("SKETCH_VERSION")}")
+    implementation("io.github.panpf.stickyrecycleritemdecoration:stickyrecycleritemdecoration:${property("STICKY_RECYCLER_ITEM_DECORATION")}")
 
     implementation(project(":assembly-adapter"))
     implementation(project(":assembly-adapter-ktx"))

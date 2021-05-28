@@ -15,7 +15,7 @@ class Empty : ListStatus()
 class End : ListStatus()
 class EndAtFront : ListStatus()
 
-class ListBoundaryCallback<Value>(private val listBoundaryLiveData: MutableLiveData<ListStatus>) : PagedList.BoundaryCallback<Value>() {
+class ListBoundaryCallback<Value: Any>(private val listBoundaryLiveData: MutableLiveData<ListStatus>) : PagedList.BoundaryCallback<Value>() {
     override fun onZeroItemsLoaded() {
         super.onZeroItemsLoaded()
         listBoundaryLiveData.value = Empty()
