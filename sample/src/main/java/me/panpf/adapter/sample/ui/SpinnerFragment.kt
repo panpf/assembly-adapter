@@ -2,24 +2,20 @@ package me.panpf.adapter.sample.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.fm_spinner.*
 import me.panpf.adapter.AssemblyListAdapter
-import me.panpf.adapter.sample.R
+import me.panpf.adapter.sample.databinding.FmSpinnerBinding
 import me.panpf.adapter.sample.item.SpinnerItem
 import java.util.*
 
-class SpinnerFragment : BaseFragment() {
+class SpinnerFragment : BaseBindingFragment<FmSpinnerBinding>() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fm_spinner, container, false)
+    override fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup?): FmSpinnerBinding {
+        return FmSpinnerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onInitData(binding: FmSpinnerBinding, savedInstanceState: Bundle?) {
         val stringList = ArrayList<String>(10)
         stringList.add("1")
         stringList.add("2")
@@ -34,7 +30,7 @@ class SpinnerFragment : BaseFragment() {
 
         val adapter = AssemblyListAdapter(stringList)
         adapter.addItemFactory(SpinnerItem.Factory())
-        spinnerFm_spinner.adapter = adapter
+        binding.spinnerFmSpinner.adapter = adapter
     }
 
     override fun onResume() {

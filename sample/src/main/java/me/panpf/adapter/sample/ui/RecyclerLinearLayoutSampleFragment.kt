@@ -3,24 +3,24 @@ package me.panpf.adapter.sample.ui
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fm_recycler.*
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyRecyclerAdapter
 import me.panpf.adapter.more.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
+import me.panpf.adapter.sample.databinding.FmRecyclerBinding
 import me.panpf.adapter.sample.item.GameItem
 import me.panpf.adapter.sample.item.LoadMoreItem
 import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.UserItem
 import java.lang.ref.WeakReference
 
-class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
+class RecyclerLinearLayoutSampleFragment : BaseBindingFragment<FmRecyclerBinding>(),
+    OnLoadMoreListener {
 
     var nextStart: Int = 0
     var size = 20
@@ -35,24 +35,26 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
         setMoreItem(LoadMoreItem.Factory(this@RecyclerLinearLayoutSampleFragment))
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fm_recycler, container, false)
+    override fun createViewBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup?
+    ): FmRecyclerBinding {
+        return FmRecyclerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onInitData(binding: FmRecyclerBinding, savedInstanceState: Bundle?) {
+        binding.recyclerFmRecycler.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerFmRecycler.adapter = adapter
 
-        recyclerFm_recycler.layoutManager = LinearLayoutManager(activity)
-        recyclerFm_recycler.adapter = adapter
-
-        recyclerFm_recycler.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerFmRecycler.layoutManager = LinearLayoutManager(activity)
 
         if (adapter.dataCount <= 0) loadData()
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "RecyclerView - LinearLayoutManager"
+        (activity as AppCompatActivity?)?.supportActionBar?.subtitle =
+            "RecyclerView - LinearLayoutManager"
     }
 
     private fun loadData() {
@@ -63,7 +65,8 @@ class RecyclerLinearLayoutSampleFragment : BaseFragment(), OnLoadMoreListener {
         loadData()
     }
 
-    class LoadDataTask(private val fragmentRef: WeakReference<RecyclerLinearLayoutSampleFragment>) : AsyncTask<String, String, List<Any>?>() {
+    class LoadDataTask(private val fragmentRef: WeakReference<RecyclerLinearLayoutSampleFragment>) :
+        AsyncTask<String, String, List<Any>?>() {
 
         override fun doInBackground(vararg params: String): List<Any>? {
             val fragment = fragmentRef.get() ?: return null

@@ -3,24 +3,23 @@ package me.panpf.adapter.sample.ui
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.fm_list.*
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyListAdapter
 import me.panpf.adapter.more.OnLoadMoreListener
 import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.User
+import me.panpf.adapter.sample.databinding.FmListBinding
 import me.panpf.adapter.sample.item.GameItem
-import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.LoadMoreItem
+import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.UserItem
 import java.lang.ref.WeakReference
 import java.util.*
 
-class ListViewFragment : BaseFragment(), OnLoadMoreListener {
+class ListViewFragment : BaseBindingFragment<FmListBinding>(), OnLoadMoreListener {
     var nextStart = 0
     val size = 20
 
@@ -32,14 +31,12 @@ class ListViewFragment : BaseFragment(), OnLoadMoreListener {
         setMoreItem(LoadMoreItem.Factory(this@ListViewFragment))
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fm_list, container, false)
+    override fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup?): FmListBinding {
+        return FmListBinding.inflate(inflater, parent, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        listFm_list.adapter = listAdapter
+    override fun onInitData(binding: FmListBinding, savedInstanceState: Bundle?) {
+        binding.listFmList.adapter = listAdapter
         loadData()
     }
 
@@ -57,7 +54,8 @@ class ListViewFragment : BaseFragment(), OnLoadMoreListener {
         (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "ListView"
     }
 
-    class LoadDataTask(private val fragmentRef: WeakReference<ListViewFragment>) : AsyncTask<String, String, List<Any>>() {
+    class LoadDataTask(private val fragmentRef: WeakReference<ListViewFragment>) :
+        AsyncTask<String, String, List<Any>>() {
 
         override fun doInBackground(vararg params: String): List<Any>? {
             val fragment = fragmentRef.get() ?: return null

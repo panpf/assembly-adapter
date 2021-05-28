@@ -3,10 +3,8 @@ package me.panpf.adapter.sample.ui
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.fm_expandable.*
 import me.panpf.adapter.AssemblyAdapter
 import me.panpf.adapter.AssemblyExpandableAdapter
 import me.panpf.adapter.more.OnLoadMoreListener
@@ -15,11 +13,12 @@ import me.panpf.adapter.sample.bean.Game
 import me.panpf.adapter.sample.bean.GameGroup
 import me.panpf.adapter.sample.bean.User
 import me.panpf.adapter.sample.bean.UserGroup
+import me.panpf.adapter.sample.databinding.FmExpandableBinding
 import me.panpf.adapter.sample.item.*
 import java.lang.ref.WeakReference
 import java.util.*
 
-class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
+class ExpandableListViewFragment : BaseBindingFragment<FmExpandableBinding>(), OnLoadMoreListener {
     var nextStart = 0
     val groupSize = 20
     val childSize = 5
@@ -36,14 +35,14 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
         addFooterItem(TextItem.Factory(), "唉，我的小尾巴呢？")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fm_expandable, container, false)
+    override fun createViewBinding(
+        inflater: LayoutInflater, parent: ViewGroup?
+    ): FmExpandableBinding {
+        return FmExpandableBinding.inflate(inflater, parent, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        expandableFm_expandableList.setAdapter(adapter)
+    override fun onInitData(binding: FmExpandableBinding, savedInstanceState: Bundle?) {
+        binding.expandableFmExpandableList.setAdapter(adapter)
 
         if (adapter.dataCount <= 0) {
             loadData()
@@ -63,7 +62,8 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
         loadData()
     }
 
-    class LoadTask constructor(private val refre: WeakReference<ExpandableListViewFragment>) : AsyncTask<String, String, List<Any>>() {
+    class LoadTask constructor(private val refre: WeakReference<ExpandableListViewFragment>) :
+        AsyncTask<String, String, List<Any>>() {
         override fun doInBackground(vararg params: String): List<Any> {
             return refre.get()?.run {
                 val dataList = ArrayList<Any>(groupSize)
@@ -87,14 +87,18 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
             } ?: arrayListOf()
         }
 
-        private fun createUserGroup(groupPosition: Int, fragment: ExpandableListViewFragment): UserGroup {
+        private fun createUserGroup(
+            groupPosition: Int,
+            fragment: ExpandableListViewFragment
+        ): UserGroup {
             return fragment.run {
                 val userGroup = UserGroup()
                 userGroup.userList = ArrayList(childSize)
                 for (childPosition in 0 until childSize) {
                     userGroup.userList!!.add(createUser(groupPosition, childPosition))
                 }
-                userGroup.title = "用户组 " + (groupPosition + 1) + "(" + userGroup.userList!!.size + ")"
+                userGroup.title =
+                    "用户组 " + (groupPosition + 1) + "(" + userGroup.userList!!.size + ")"
                 userGroup
             }
         }
@@ -110,14 +114,18 @@ class ExpandableListViewFragment : BaseFragment(), OnLoadMoreListener {
             return user
         }
 
-        private fun createGameGroup(groupPosition: Int, fragment: ExpandableListViewFragment): GameGroup {
+        private fun createGameGroup(
+            groupPosition: Int,
+            fragment: ExpandableListViewFragment
+        ): GameGroup {
             return fragment.run {
                 val gameGroup = GameGroup()
                 gameGroup.gameList = ArrayList(childSize)
                 for (childPosition in 0 until childSize) {
                     gameGroup.gameList!!.add(createGame(groupPosition, childPosition))
                 }
-                gameGroup.title = "游戏组 " + (groupPosition + 1) + "(" + gameGroup.gameList!!.size + ")"
+                gameGroup.title =
+                    "游戏组 " + (groupPosition + 1) + "(" + gameGroup.gameList!!.size + ")"
                 gameGroup
             }
         }

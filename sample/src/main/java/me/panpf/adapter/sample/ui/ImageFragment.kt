@@ -1,29 +1,25 @@
 package me.panpf.adapter.sample.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fm_image.*
-import me.panpf.adapter.sample.R
+import me.panpf.adapter.sample.databinding.FmImageBinding
 import me.panpf.args.ktx.bindStringArg
 
-class ImageFragment : Fragment() {
+class ImageFragment : BaseBindingFragment<FmImageBinding>() {
 
     private val imageUrl by bindStringArg("imageUrl")
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fm_image, container, false)
+    override fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup?): FmImageBinding {
+        return FmImageBinding.inflate(inflater, parent, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        imageFm_image.displayImage(imageUrl)
+    override fun onInitData(binding: FmImageBinding, savedInstanceState: Bundle?) {
+        binding.imageFmImage.displayImage(imageUrl)
     }
 
     companion object {
-        fun buildParams(imageUrl: String): Bundle? = Bundle().apply { putString("imageUrl", imageUrl) }
+        fun buildParams(imageUrl: String): Bundle? =
+            Bundle().apply { putString("imageUrl", imageUrl) }
     }
 }

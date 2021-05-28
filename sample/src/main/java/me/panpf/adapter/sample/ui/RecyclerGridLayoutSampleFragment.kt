@@ -2,14 +2,12 @@ package me.panpf.adapter.sample.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.fm_recycler_sticky.*
 import me.panpf.adapter.recycler.AssemblyGridLayoutManager
-import me.panpf.adapter.sample.R
 import me.panpf.adapter.sample.adapter.AssemblyStickyRecyclerAdapter
 import me.panpf.adapter.sample.bean.AppsTitle
+import me.panpf.adapter.sample.databinding.FmRecyclerStickyBinding
 import me.panpf.adapter.sample.item.AppItem
 import me.panpf.adapter.sample.item.AppListHeaderItem
 import me.panpf.adapter.sample.vm.AppsViewModel
@@ -17,27 +15,29 @@ import me.panpf.arch.ktx.bindViewModel
 import me.panpf.recycler.sticky.StickyRecyclerItemDecoration
 import java.util.*
 
-class RecyclerGridLayoutSampleFragment : BaseFragment() {
+class RecyclerGridLayoutSampleFragment : BaseBindingFragment<FmRecyclerStickyBinding>() {
 
     private val appsViewModel by bindViewModel(AppsViewModel::class)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fm_recycler_sticky, container, false)
+    override fun createViewBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup?
+    ): FmRecyclerStickyBinding {
+        return FmRecyclerStickyBinding.inflate(inflater, parent, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onInitData(binding: FmRecyclerStickyBinding, savedInstanceState: Bundle?) {
         val context = context ?: return
-        stickyRecyclerFm_recycler.layoutManager = AssemblyGridLayoutManager(context, 3, stickyRecyclerFm_recycler)
+        binding.stickyRecyclerFmRecycler.layoutManager =
+            AssemblyGridLayoutManager(context, 3, binding.stickyRecyclerFmRecycler)
 
         val adapter = AssemblyStickyRecyclerAdapter().apply {
             addItemFactory(AppItem.Factory())
-            addItemFactory(AppListHeaderItem.Factory().fullSpan(stickyRecyclerFm_recycler))
+            addItemFactory(AppListHeaderItem.Factory().fullSpan(binding.stickyRecyclerFmRecycler))
         }
 
-        stickyRecyclerFm_recycler.addItemDecoration(StickyRecyclerItemDecoration(stickyRecyclerFm_frame))
-        stickyRecyclerFm_recycler.adapter = adapter
+        binding.stickyRecyclerFmRecycler.addItemDecoration(StickyRecyclerItemDecoration(binding.stickyRecyclerFmFrame))
+        binding.stickyRecyclerFmRecycler.adapter = adapter
 
         appsViewModel.apps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it ?: return@Observer
@@ -62,7 +62,7 @@ class RecyclerGridLayoutSampleFragment : BaseFragment() {
             }
 
             adapter.dataList = dataList
-            stickyRecyclerFm_recycler.scheduleLayoutAnimation()
+            binding.stickyRecyclerFmRecycler.scheduleLayoutAnimation()
         })
 
         appsViewModel.load()
@@ -70,6 +70,7 @@ class RecyclerGridLayoutSampleFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity?)?.supportActionBar?.subtitle = "RecyclerView - GridLayoutManager"
+        (activity as AppCompatActivity?)?.supportActionBar?.subtitle =
+            "RecyclerView - GridLayoutManager"
     }
 }

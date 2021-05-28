@@ -2,24 +2,21 @@ package me.panpf.adapter.sample.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fm_recycler.*
 import me.panpf.adapter.paged.AssemblyPagedListAdapter
 import me.panpf.adapter.paged.DiffableDiffCallback
-import me.panpf.adapter.sample.R
+import me.panpf.adapter.sample.databinding.FmRecyclerBinding
 import me.panpf.adapter.sample.item.GameItem
-import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.LoadMoreItem
+import me.panpf.adapter.sample.item.TextItem
 import me.panpf.adapter.sample.item.UserItem
 import me.panpf.adapter.sample.vm.End
 import me.panpf.adapter.sample.vm.ListViewModel
 import me.panpf.arch.ktx.bindViewModel
 
-class RecyclerPagedSampleFragment : BaseFragment() {
+class RecyclerPagedSampleFragment : BaseBindingFragment<FmRecyclerBinding>() {
 
     private val viewModel by bindViewModel(ListViewModel::class)
 
@@ -31,21 +28,20 @@ class RecyclerPagedSampleFragment : BaseFragment() {
         setMoreItem(LoadMoreItem.Factory())
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fm_recycler, container, false)
+    override fun createViewBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup?
+    ): FmRecyclerBinding {
+        return FmRecyclerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onInitData(binding: FmRecyclerBinding, savedInstanceState: Bundle?) {
+        binding.recyclerFmRecycler.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerFmRecycler.adapter = adapter
 
-        recyclerFm_recycler.layoutManager = LinearLayoutManager(activity)
-        recyclerFm_recycler.adapter = adapter
-
-        viewModel.list.observe(viewLifecycleOwner, androidx.lifecycle.Observer { adapter.submitList(it) })
-        viewModel.listStatus.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is End -> adapter.loadMoreFinished(true)
-            }
+        viewModel.list.observe(viewLifecycleOwner, { adapter.submitList(it) })
+        viewModel.listStatus.observe(viewLifecycleOwner, {
+            if (it is End) adapter.loadMoreFinished(true)
         })
     }
 
