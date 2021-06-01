@@ -29,28 +29,44 @@ class MainActivity : AppCompatActivity() {
 
         binding.mainAtNavigation.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_recyclerLinear -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.mainAt_frame_container, RecyclerLinearLayoutSampleFragment())
-                    .commit()
-                R.id.nav_recyclerGrid -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.mainAt_frame_container, RecyclerGridLayoutSampleFragment())
-                    .commit()
-                R.id.nav_recyclerPaged -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.mainAt_frame_container, RecyclerPagedSampleFragment()).commit()
-                R.id.nav_fragmentStatePagerAdapter -> supportFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.mainAt_frame_container,
-                        ViewPagerFragmentStatePagerAdapterSampleFragment()
-                    ).commit()
-                R.id.nav_pagerAdapter -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.mainAt_frame_container, ViewPagerPagerAdapterSampleFragment())
-                    .commit()
-                R.id.nav_list -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.mainAt_frame_container, ListViewFragment()).commit()
-                R.id.nav_expandableList -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.mainAt_frame_container, ExpandableListViewFragment()).commit()
-                R.id.nav_spinner -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.mainAt_frame_container, SpinnerFragment()).commit()
+                R.id.nav_recyclerLinear ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainAt_frame_container, RecyclerLinearLayoutSampleFragment())
+                        .commit()
+                R.id.nav_recyclerGrid ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainAt_frame_container, RecyclerGridLayoutSampleFragment())
+                        .commit()
+                R.id.nav_recyclerPaged ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainAt_frame_container, RecyclerPagedSampleFragment())
+                        .commit()
+                R.id.nav_recyclerPagingData ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainAt_frame_container, PagingDataAdapterSampleFragment())
+                        .commit()
+                R.id.nav_fragmentStatePagerAdapter ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.mainAt_frame_container,
+                            ViewPagerFragmentStatePagerAdapterSampleFragment()
+                        ).commit()
+                R.id.nav_pagerAdapter ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainAt_frame_container, ViewPagerPagerAdapterSampleFragment())
+                        .commit()
+                R.id.nav_list ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainAt_frame_container, ListViewFragment())
+                        .commit()
+                R.id.nav_expandableList ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainAt_frame_container, ExpandableListViewFragment())
+                        .commit()
+                R.id.nav_spinner ->
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainAt_frame_container, SpinnerFragment())
+                        .commit()
                 else -> throw IllegalArgumentException()
             }
             binding.mainAtDrawer.closeDrawers()

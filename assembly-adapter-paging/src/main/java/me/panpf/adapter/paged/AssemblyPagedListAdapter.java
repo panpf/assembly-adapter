@@ -24,9 +24,9 @@ import androidx.recyclerview.widget.AdapterListUpdateCallback;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 
-import me.panpf.adapter.AssemblyRecyclerAdapter;
+import java.util.List;
 
-public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
+public class AssemblyPagedListAdapter<T> extends BasePagingAssemblyRecyclerAdapter<T> {
 
     private final AsyncPagedListDiffer<T> mDiffer;
     private final AsyncPagedListDiffer.PagedListListener<T> mListener = new AsyncPagedListDiffer.PagedListListener<T>() {
@@ -56,6 +56,24 @@ public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
         mDiffer.addPagedListListener(mListener);
     }
 
+
+    @Nullable
+    @Override
+    public List getDataList() {
+        return mDiffer.getCurrentList();
+    }
+
+    @Override
+    public int getDataCount() {
+        return mDiffer.getItemCount();
+    }
+
+    @Nullable
+    @Override
+    public Object getData(int positionInDataList) {
+        return mDiffer.getItem(positionInDataList);
+    }
+
     /**
      * Set the new list to be displayed.
      * <p>
@@ -65,24 +83,8 @@ public class AssemblyPagedListAdapter<T> extends AssemblyRecyclerAdapter {
      * @param pagedList The new list to be displayed.
      */
     public void submitList(PagedList<T> pagedList) {
-        setDataList(pagedList);
         mDiffer.submitList(pagedList);
     }
-
-    @Nullable
-    public Object getItem(int position) {
-        Object item = super.getItem(position);
-        // Trigger loadAfter or loadBefore
-        if (isBodyItem(position)) {
-            mDiffer.getItem(getPositionInPart(position));
-        }
-        return item;
-    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return mDiffer.getItemCount();
-//    }
 
     /**
      * Returns the PagedList currently being displayed by the Adapter.

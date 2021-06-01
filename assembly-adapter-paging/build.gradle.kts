@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library")
+    id("kotlin-android")
 }
 
 android {
@@ -25,6 +26,7 @@ android {
 }
 
 dependencies {
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
     api(project(":assembly-adapter"))
     api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
     api("androidx.paging:paging-runtime:${property("ANDROIDX_PAGING")}")

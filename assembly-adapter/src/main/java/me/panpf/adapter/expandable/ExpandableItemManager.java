@@ -4,36 +4,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.panpf.adapter.AssemblyAdapter;
 import me.panpf.adapter.ItemFactory;
 import me.panpf.adapter.ItemManager;
 import me.panpf.adapter.ViewTypeManager;
 
+@SuppressWarnings("rawtypes")
 public class ExpandableItemManager extends ItemManager {
 
     @NonNull
-    private ViewTypeManager<ItemFactory> childViewTypeManager = new ViewTypeManager<>();
+    private final ViewTypeManager<ItemFactory> childViewTypeManager = new ViewTypeManager<>();
     @NonNull
-    private ArrayList<ItemFactory> childItemFactoryList = new ArrayList<>();
+    private final ArrayList<ItemFactory> childItemFactoryList = new ArrayList<>();
 
-    public ExpandableItemManager(@NonNull AssemblyAdapter adapter) {
-        super(adapter);
-    }
-
-    public ExpandableItemManager(@NonNull AssemblyAdapter adapter, @Nullable List dataList) {
-        super(adapter, dataList);
-    }
-
-    public ExpandableItemManager(@NonNull AssemblyAdapter adapter, @Nullable Object[] dataArray) {
-        super(adapter, dataArray);
+    public ExpandableItemManager(@NonNull Callback callback) {
+        super(callback);
     }
 
     /**
      * 添加一个用来处理并显示 dataList 中的 child 数据的 {@link ItemFactory}
      */
-    public void addChildItemFactory(@NonNull ItemFactory childItemFactory) {
+    public void addChildItemFactory(@NonNull ItemFactory childItemFactory, @NonNull AssemblyAdapter adapter) {
         //noinspection ConstantConditions
         if (childItemFactory == null || childViewTypeManager.isLocked()) {
             throw new IllegalStateException("childItemFactory is null or item factory list locked");
@@ -42,7 +34,7 @@ public class ExpandableItemManager extends ItemManager {
         childItemFactoryList.add(childItemFactory);
         int viewType = childViewTypeManager.add(childItemFactory);
 
-        childItemFactory.attachToAdapter(getAdapter(), viewType);
+        childItemFactory.attachToAdapter(adapter, viewType);
     }
 
     @NonNull

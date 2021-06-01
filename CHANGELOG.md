@@ -1,3 +1,6 @@
+# new
+* new: Support paging 3.0.0
+
 # v3.5.0
 * Release stable 3.5.0
 
