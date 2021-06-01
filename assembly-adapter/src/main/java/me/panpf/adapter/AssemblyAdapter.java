@@ -14,6 +14,7 @@ import me.panpf.adapter.more.MoreItemFactory;
 /**
  * Support to combine multiple items, support head, tail and load more
  */
+@SuppressWarnings("rawtypes")
 public interface AssemblyAdapter {
 
     <DATA> void addItemFactory(@NonNull ItemFactory<DATA> itemFactory);

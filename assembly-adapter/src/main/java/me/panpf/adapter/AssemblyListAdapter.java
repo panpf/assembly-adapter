@@ -33,28 +33,61 @@ import me.panpf.adapter.more.MoreItemFactory;
 /**
  * Combined {@link BaseAdapter}, supports combination of multiple items, supports head, tail and more
  */
+@SuppressWarnings("rawtypes")
 public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter {
 
     @NonNull
-    private ItemManager itemManager;
+    private final ItemManager itemManager;
+    @NonNull
+    private final DataManager dataManager;
 
+    private boolean notifyOnChange = true;
+
+    private final ItemManager.Callback itemCallback = new ItemManager.Callback() {
+        @Override
+        public void onItemEnabledChanged() {
+            if (isNotifyOnChange()) {
+                notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public int getDataCount() {
+            return dataManager.getDataCount();
+        }
+
+        @Override
+        public Object getData(int position) {
+            return dataManager.getData(position);
+        }
+    };
+
+    private final DataManager.Callback dataCallback = () -> {
+        if (isNotifyOnChange()) {
+            notifyDataSetChanged();
+        }
+    };
 
     public AssemblyListAdapter() {
-        this.itemManager = new ItemManager(this);
+        this.itemManager = new ItemManager(itemCallback);
+        this.dataManager = new DataManager(dataCallback);
     }
 
     public AssemblyListAdapter(@Nullable List dataList) {
-        this.itemManager = new ItemManager(this, dataList);
+        this.itemManager = new ItemManager(itemCallback);
+        this.dataManager = new DataManager(dataCallback, dataList);
     }
 
+    @SuppressWarnings("unused")
     public AssemblyListAdapter(@Nullable Object[] dataArray) {
-        this.itemManager = new ItemManager(this, dataArray);
+        this.itemManager = new ItemManager(itemCallback);
+        this.dataManager = new DataManager(dataCallback, dataArray);
     }
 
 
     @Override
     public <DATA> void addItemFactory(@NonNull ItemFactory<DATA> itemFactory) {
-        itemManager.addItemFactory(itemFactory);
+        itemManager.addItemFactory(itemFactory, this);
     }
 
     @NonNull
@@ -67,19 +100,19 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem) {
-        return itemManager.addHeaderItem(fixedItem);
+        return itemManager.addHeaderItem(fixedItem, this);
     }
 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return itemManager.addHeaderItem(itemFactory, data);
+        return itemManager.addHeaderItem(itemFactory, data, this);
     }
 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return itemManager.addHeaderItem(itemFactory);
+        return itemManager.addHeaderItem(itemFactory, this);
     }
 
     @NonNull
@@ -136,19 +169,19 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem) {
-        return itemManager.addFooterItem(fixedItem);
+        return itemManager.addFooterItem(fixedItem, this);
     }
 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return itemManager.addFooterItem(itemFactory, data);
+        return itemManager.addFooterItem(itemFactory, data, this);
     }
 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return itemManager.addFooterItem(itemFactory);
+        return itemManager.addFooterItem(itemFactory, this);
     }
 
     @NonNull
@@ -205,19 +238,19 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     @NonNull
     @Override
     public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return itemManager.setMoreItem(itemFactory, data);
+        return itemManager.setMoreItem(itemFactory, data, this);
     }
 
     @NonNull
     @Override
     public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
-        return itemManager.setMoreItem(itemFactory);
+        return itemManager.setMoreItem(itemFactory, this);
     }
 
     @NonNull
     @Override
     public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreFixedItem<DATA> moreFixedItem) {
-        return itemManager.setMoreItem(moreFixedItem);
+        return itemManager.setMoreItem(moreFixedItem, this);
     }
 
     @Nullable
@@ -259,59 +292,59 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
     @Nullable
     @Override
     public List getDataList() {
-        return itemManager.getDataList();
+        return dataManager.getDataList();
     }
 
     @Override
     public void setDataList(@Nullable List dataList) {
-        itemManager.setDataList(dataList);
+        dataManager.setDataList(dataList);
     }
 
     @Override
     public void addAll(@Nullable Collection collection) {
-        itemManager.addAll(collection);
+        dataManager.addAll(collection);
     }
 
     @Override
     public void addAll(@Nullable Object... items) {
-        itemManager.addAll(items);
+        dataManager.addAll(items);
     }
 
     @Override
     public void insert(@NonNull Object object, int index) {
-        itemManager.insert(object, index);
+        dataManager.insert(object, index);
     }
 
     @Override
     public void remove(@NonNull Object object) {
-        itemManager.remove(object);
+        dataManager.remove(object);
     }
 
     @Override
     public void clear() {
-        itemManager.clear();
+        dataManager.clear();
     }
 
     @Override
     public void sort(@NonNull Comparator comparator) {
-        itemManager.sort(comparator);
+        dataManager.sort(comparator);
     }
 
     @Override
     public int getDataCount() {
-        return itemManager.getDataCount();
+        return dataManager.getDataCount();
     }
 
     @Nullable
     @Override
     public Object getData(int positionInDataList) {
-        return itemManager.getData(positionInDataList);
+        return dataManager.getData(positionInDataList);
     }
 
 
     @Override
     public int getItemCount() {
-        return itemManager.getItemCount();
+        return getDataCount() + itemManager.getHeaderAndFooterCount();
     }
 
     @Nullable
@@ -365,18 +398,18 @@ public class AssemblyListAdapter extends BaseAdapter implements AssemblyAdapter 
 
     @Override
     public boolean isNotifyOnChange() {
-        return itemManager.isNotifyOnChange();
+        return notifyOnChange;
     }
 
     @Override
     public void setNotifyOnChange(boolean notifyOnChange) {
-        itemManager.setNotifyOnChange(notifyOnChange);
+        this.notifyOnChange = notifyOnChange;
     }
 
 
     @Override
     public int getCount() {
-        return itemManager.getItemCount();
+        return getItemCount();
     }
 
     @Override

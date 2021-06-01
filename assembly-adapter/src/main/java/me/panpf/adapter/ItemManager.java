@@ -4,57 +4,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import me.panpf.adapter.more.MoreFixedItem;
 import me.panpf.adapter.more.MoreItemFactory;
 
+@SuppressWarnings("rawtypes")
 public class ItemManager {
 
     @NonNull
-    private AssemblyAdapter adapter;
+    private final Callback callback;
     @NonNull
-    private ViewTypeManager<Object> viewTypeManager = new ViewTypeManager<>();
+    private final ViewTypeManager<Object> viewTypeManager = new ViewTypeManager<>();
     @NonNull
-    private FixedItemManager headerItemManager = new FixedItemManager();
+    private final FixedItemManager headerItemManager = new FixedItemManager();
     @NonNull
-    private ArrayList<ItemFactory> itemFactoryList = new ArrayList<>();
+    private final ArrayList<ItemFactory> itemFactoryList = new ArrayList<>();
     @NonNull
-    private FixedItemManager footerItemManager = new FixedItemManager();
+    private final FixedItemManager footerItemManager = new FixedItemManager();
     @Nullable
     private MoreFixedItem moreFixedItem;
 
-    @Nullable
-    private List dataList;
-    private boolean notifyOnChange = true;
-
-    public ItemManager(@NonNull AssemblyAdapter adapter) {
-        this.adapter = adapter;
-    }
-
-    public ItemManager(@NonNull AssemblyAdapter adapter, @Nullable List dataList) {
-        this.adapter = adapter;
-        this.dataList = dataList;
-    }
-
-    public ItemManager(@NonNull AssemblyAdapter adapter, @Nullable Object[] dataArray) {
-        this.adapter = adapter;
-        if (dataArray != null && dataArray.length > 0) {
-            this.dataList = new ArrayList(dataArray.length);
-            Collections.addAll(dataList, dataArray);
-        }
-    }
-
-    @NonNull
-    public AssemblyAdapter getAdapter() {
-        return adapter;
+    public ItemManager(@NonNull Callback callback) {
+        this.callback = callback;
     }
 
 
-    public void addItemFactory(@NonNull ItemFactory itemFactory) {
+    public void addItemFactory(@NonNull ItemFactory itemFactory, @NonNull AssemblyAdapter adapter) {
         //noinspection ConstantConditions
         if (itemFactory == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("itemFactory is null or item factory list locked");
@@ -72,7 +47,7 @@ public class ItemManager {
     }
 
     @NonNull
-    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem) {
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem, @NonNull AssemblyAdapter adapter) {
         //noinspection ConstantConditions
         if (fixedItem == null || viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("item is null or item factory list locked");
@@ -91,13 +66,13 @@ public class ItemManager {
     }
 
     @NonNull
-    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return addHeaderItem(new FixedItem<>(itemFactory, data));
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data, @NonNull AssemblyAdapter adapter) {
+        return addHeaderItem(new FixedItem<>(itemFactory, data), adapter);
     }
 
     @NonNull
-    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return addHeaderItem(new FixedItem<>(itemFactory, null));
+    public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @NonNull AssemblyAdapter adapter) {
+        return addHeaderItem(new FixedItem<>(itemFactory, null), adapter);
     }
 
     @NonNull
@@ -107,7 +82,7 @@ public class ItemManager {
 
 
     @NonNull
-    public <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem) {
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem, @NonNull AssemblyAdapter adapter) {
         if (viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("item is null or item factory list locked");
         }
@@ -125,13 +100,13 @@ public class ItemManager {
     }
 
     @NonNull
-    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return addFooterItem(new FixedItem<>(itemFactory, data));
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data, @NonNull AssemblyAdapter adapter) {
+        return addFooterItem(new FixedItem<>(itemFactory, data), adapter);
     }
 
     @NonNull
-    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return addFooterItem(new FixedItem<>(itemFactory, null));
+    public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @NonNull AssemblyAdapter adapter) {
+        return addFooterItem(new FixedItem<>(itemFactory, null), adapter);
     }
 
     @NonNull
@@ -141,25 +116,17 @@ public class ItemManager {
 
 
     void fixedItemEnabledChanged(@NonNull FixedItem fixedItem) {
-        //noinspection ConstantConditions
-        if (fixedItem == null || fixedItem.getItemFactory().getAdapter() != adapter) {
-            return;
-        }
-
         if (fixedItem.isHeader()) {
-            if (headerItemManager.itemEnabledChanged() && notifyOnChange) {
-                adapter.notifyDataSetChanged();
-            }
+            headerItemManager.itemEnabledChanged();
         } else {
-            if (footerItemManager.itemEnabledChanged() && notifyOnChange) {
-                adapter.notifyDataSetChanged();
-            }
+            footerItemManager.itemEnabledChanged();
         }
+        callback.onItemEnabledChanged();
     }
 
 
     @NonNull
-    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreFixedItem<DATA> fixedItem) {
+    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreFixedItem<DATA> fixedItem, @NonNull AssemblyAdapter adapter) {
         if (viewTypeManager.isLocked()) {
             throw new IllegalArgumentException("item is null or item factory list locked");
         }
@@ -181,13 +148,13 @@ public class ItemManager {
     }
 
     @NonNull
-    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return setMoreItem(new MoreFixedItem<>(itemFactory, data));
+    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data, @NonNull AssemblyAdapter adapter) {
+        return setMoreItem(new MoreFixedItem<>(itemFactory, data), adapter);
     }
 
     @NonNull
-    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
-        return setMoreItem(new MoreFixedItem<>(itemFactory, null));
+    public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @NonNull AssemblyAdapter adapter) {
+        return setMoreItem(new MoreFixedItem<>(itemFactory, null), adapter);
     }
 
     @Nullable
@@ -199,140 +166,11 @@ public class ItemManager {
         return moreFixedItem != null && moreFixedItem.isEnabled();
     }
 
-
-    @Nullable
-    public List getDataList() {
-        return dataList;
-    }
-
-    public void setDataList(@Nullable List dataList) {
-        synchronized (this) {
-            this.dataList = dataList;
-        }
-
-        if (notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public void addAll(@Nullable Collection collection) {
-        if (collection == null || collection.size() == 0) {
-            return;
-        }
-        synchronized (this) {
-            if (dataList == null) {
-                dataList = new ArrayList(collection.size());
-            }
-            //noinspection unchecked
-            dataList.addAll(collection);
-        }
-
-        if (notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public void addAll(@Nullable Object... items) {
-        if (items == null || items.length == 0) {
-            return;
-        }
-        synchronized (this) {
-            if (dataList == null) {
-                dataList = new ArrayList(items.length);
-            }
-            Collections.addAll(dataList, items);
-        }
-
-        if (notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public void insert(@Nullable Object object, int index) {
-        if (object == null) {
-            return;
-        }
-        synchronized (this) {
-            if (dataList == null) {
-                dataList = new ArrayList();
-            }
-            //noinspection unchecked
-            dataList.add(index, object);
-        }
-
-        if (notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public void remove(@NonNull Object object) {
-        //noinspection ConstantConditions
-        if (object == null) {
-            return;
-        }
-        synchronized (this) {
-            if (dataList != null) {
-                dataList.remove(object);
-            }
-        }
-
-        if (notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public void clear() {
-        synchronized (this) {
-            if (dataList != null) {
-                dataList.clear();
-            }
-        }
-
-        if (notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public void sort(@NonNull Comparator comparator) {
-        synchronized (this) {
-            if (dataList != null) {
-                Collections.sort(dataList, comparator);
-            }
-        }
-
-        if (notifyOnChange) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public int getDataCount() {
-        return dataList != null ? dataList.size() : 0;
-    }
-
-    @Nullable
-    public Object getData(int positionInDataList) {
-        return dataList != null ? dataList.get(positionInDataList) : null;
-    }
-
-
-    public boolean isNotifyOnChange() {
-        return notifyOnChange;
-    }
-
-    public void setNotifyOnChange(boolean notifyOnChange) {
-        this.notifyOnChange = notifyOnChange;
-    }
-
-    public int getItemCount() {
+    public int getHeaderAndFooterCount() {
         int headerItemCount = headerItemManager.getEnabledItemCount();
-        int dataCount = getDataCount();
+        int dataCount = callback.getDataCount();
         int footerItemCount = footerItemManager.getEnabledItemCount();
-
-        if (dataCount > 0) {
-            return headerItemCount + dataCount + footerItemCount + (hasMoreFooter() ? 1 : 0);
-        } else {
-            return headerItemCount + footerItemCount;
-        }
+        return headerItemCount + footerItemCount + (dataCount > 0 && hasMoreFooter() ? 1 : 0);
     }
 
     public int getViewTypeCount() {
@@ -372,12 +210,12 @@ public class ItemManager {
         }
 
         // data
-        int dataCount = getDataCount();
+        int dataCount = callback.getDataCount();
         int dataStartPosition = headerEndPosition + 1;
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            Object dataObject = getData(positionInDataList);
+            Object dataObject = callback.getData(positionInDataList);
             for (ItemFactory itemFactory : itemFactoryList) {
                 if (itemFactory.match(dataObject)) {
                     return itemFactory;
@@ -397,8 +235,11 @@ public class ItemManager {
         }
 
         // more footer
-        if (moreFixedItem != null && dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1) {
-            return moreFixedItem.getItemFactory();
+        if (hasMoreFooter()) {
+            int morePosition = headerItemCount + dataCount + footerItemCount + (dataCount > 0 ? 1 : 0) - 1;
+            if (moreFixedItem != null && dataCount > 0 && position == morePosition) {
+                return moreFixedItem.getItemFactory();
+            }
         }
 
         throw new IllegalStateException("Not found ItemFactory by position: " + position);
@@ -417,12 +258,12 @@ public class ItemManager {
         }
 
         // body
-        int dataCount = getDataCount();
+        int dataCount = callback.getDataCount();
         int dataStartPosition = headerEndPosition + 1;
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
             int positionInDataList = position - headerItemCount;
-            return getData(positionInDataList);
+            return callback.getData(positionInDataList);
         }
 
         // footer
@@ -435,8 +276,11 @@ public class ItemManager {
         }
 
         // more footer
-        if (dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1) {
-            return moreFixedItem != null ? moreFixedItem.getData() : null;
+        if (hasMoreFooter()) {
+            int morePosition = headerItemCount + dataCount + footerItemCount + (dataCount > 0 ? 1 : 0) - 1;
+            if (dataCount > 0 && position == morePosition) {
+                return moreFixedItem != null ? moreFixedItem.getData() : null;
+            }
         }
 
         throw new IllegalArgumentException("Not found item data by position: " + position);
@@ -452,7 +296,7 @@ public class ItemManager {
         }
 
         // body
-        int dataCount = getDataCount();
+        int dataCount = callback.getDataCount();
         int dataStartPosition = headerEndPosition + 1;
         int dataEndPosition = headerEndPosition + dataCount;
         if (position >= dataStartPosition && position <= dataEndPosition && dataCount > 0) {
@@ -468,8 +312,11 @@ public class ItemManager {
         }
 
         // more footer
-        if (dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1) {
-            return 0;
+        if (hasMoreFooter()) {
+            int morePosition = headerItemCount + dataCount + footerItemCount + (dataCount > 0 ? 1 : 0) - 1;
+            if (dataCount > 0 && position == morePosition) {
+                return 0;
+            }
         }
 
         throw new IllegalArgumentException("Illegal position: " + position);
@@ -485,7 +332,7 @@ public class ItemManager {
     public boolean isBodyItem(int position) {
         int headerItemCount = headerItemManager.getEnabledItemCount();
         int headerEndPosition = headerItemCount - 1;
-        int dataCount = getDataCount();
+        int dataCount = callback.getDataCount();
         int dataStartPosition = headerEndPosition + 1;
         int dataEndPosition = headerEndPosition + dataCount;
         return position >= dataStartPosition && position <= dataEndPosition && dataCount > 0;
@@ -494,7 +341,7 @@ public class ItemManager {
     public boolean isFooterItem(int position) {
         int headerItemCount = headerItemManager.getEnabledItemCount();
         int headerEndPosition = headerItemCount - 1;
-        int dataCount = getDataCount();
+        int dataCount = callback.getDataCount();
         int dataEndPosition = headerEndPosition + dataCount;
         int footerItemCount = footerItemManager.getEnabledItemCount();
         int footerStartPosition = dataEndPosition + 1;
@@ -503,7 +350,22 @@ public class ItemManager {
     }
 
     public boolean isMoreFooterItem(int position) {
-        int dataCount = getDataCount();
-        return dataCount > 0 && hasMoreFooter() && position == getItemCount() - 1;
+        if (hasMoreFooter()) {
+            int headerItemCount = headerItemManager.getEnabledItemCount();
+            int dataCount = callback.getDataCount();
+            int footerItemCount = footerItemManager.getEnabledItemCount();
+            int morePosition = headerItemCount + dataCount + footerItemCount + (dataCount > 0 ? 1 : 0) - 1;
+            return dataCount > 0 && position == morePosition;
+        } else {
+            return false;
+        }
+    }
+
+    public interface Callback {
+        void onItemEnabledChanged();
+
+        int getDataCount();
+
+        Object getData(int position);
     }
 }

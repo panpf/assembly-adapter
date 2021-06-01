@@ -11,6 +11,9 @@
             <item
                 android:id="@+id/nav_recyclerPaged"
                 android:title="PagedList" />
+            <item
+                android:id="@+id/nav_recyclerPagingData"
+                android:title="PagingDataAdapter" />
         </menu>
     </item>
 

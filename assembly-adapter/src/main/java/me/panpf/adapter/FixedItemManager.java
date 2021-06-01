@@ -61,7 +61,7 @@ public class FixedItemManager {
     }
 
     @NonNull
-    <DATA> FixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz, int number) {
+    public <DATA> FixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz, int number) {
         if (itemList != null) {
             int currentNumber = 0;
             for (FixedItem fixedItem : itemList) {
@@ -78,30 +78,30 @@ public class FixedItemManager {
     }
 
     @NonNull
-    <DATA> FixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz) {
+    public <DATA> FixedItem<DATA> getItemByFactoryClass(@NonNull Class<? extends ItemFactory<DATA>> clazz) {
         return getItemByFactoryClass(clazz, 0);
     }
 
-    void setItemData(int index, @Nullable Object data) {
+    public void setItemData(int index, @Nullable Object data) {
         //noinspection unchecked
         getItem(index).setData(data);
     }
 
-    boolean isItemEnabled(int index) {
+    public boolean isItemEnabled(int index) {
         return getItem(index).isEnabled();
     }
 
-    void setItemEnabled(int index, boolean enabled) {
+    public void setItemEnabled(int index, boolean enabled) {
         getItem(index).setEnabled(enabled);
     }
 
 
-    int getEnabledItemCount() {
+    public int getEnabledItemCount() {
         return enabledItemList != null ? enabledItemList.size() : 0;
     }
 
     @NonNull
-    FixedItem getItemInEnabledList(int index) {
+    public FixedItem getItemInEnabledList(int index) {
         if (enabledItemList != null) {
             return enabledItemList.get(index);
         } else {

@@ -34,38 +34,73 @@ import me.panpf.adapter.more.MoreFixedItem;
 /**
  * Combined {@link BaseExpandableListAdapter}, support to combine multiple items, support head, tail and load more
  */
+@SuppressWarnings("rawtypes")
 public class AssemblyExpandableAdapter extends BaseExpandableListAdapter implements AssemblyAdapter {
 
     @NonNull
-    private ExpandableItemManager itemManager;
+    private final ExpandableItemManager itemManager;
+    @NonNull
+    private final DataManager dataManager;
     @Nullable
     private ExpandCallback expandCallback;
 
+    private boolean notifyOnChange = true;
+
+    private final ItemManager.Callback itemCallback = new ItemManager.Callback() {
+        @Override
+        public void onItemEnabledChanged() {
+            if (isNotifyOnChange()) {
+                notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public int getDataCount() {
+            return dataManager.getDataCount();
+        }
+
+        @Override
+        public Object getData(int position) {
+            return dataManager.getData(position);
+        }
+    };
+
+    private final DataManager.Callback dataCallback = () -> {
+        if (isNotifyOnChange()) {
+            notifyDataSetChanged();
+        }
+    };
+
 
     public AssemblyExpandableAdapter() {
-        this.itemManager = new ExpandableItemManager(this);
+        this.itemManager = new ExpandableItemManager(itemCallback);
+        this.dataManager = new DataManager(dataCallback);
     }
 
+    @SuppressWarnings("unused")
     public AssemblyExpandableAdapter(@Nullable List dataList) {
-        this.itemManager = new ExpandableItemManager(this, dataList);
+        this.itemManager = new ExpandableItemManager(itemCallback);
+        this.dataManager = new DataManager(dataCallback, dataList);
     }
 
+    @SuppressWarnings("unused")
     public AssemblyExpandableAdapter(@Nullable Object[] dataArray) {
-        this.itemManager = new ExpandableItemManager(this, dataArray);
+        this.itemManager = new ExpandableItemManager(itemCallback);
+        this.dataManager = new DataManager(dataCallback, dataArray);
     }
 
 
     @Override
     public <DATA> void addItemFactory(@NonNull ItemFactory<DATA> itemFactory) {
-        itemManager.addItemFactory(itemFactory);
+        itemManager.addItemFactory(itemFactory, this);
     }
 
     public <DATA> void addGroupItemFactory(@NonNull ItemFactory<DATA> groupItemFactory) {
-        itemManager.addItemFactory(groupItemFactory);
+        itemManager.addItemFactory(groupItemFactory, this);
     }
 
     public <DATA> void addChildItemFactory(@NonNull ItemFactory<DATA> childItemFactory) {
-        itemManager.addChildItemFactory(childItemFactory);
+        itemManager.addChildItemFactory(childItemFactory, this);
     }
 
     @NonNull
@@ -80,6 +115,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
     @NonNull
+    @SuppressWarnings("unused")
     public List<ItemFactory> getChildItemFactoryList() {
         return itemManager.getChildItemFactoryList();
     }
@@ -88,19 +124,19 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addHeaderItem(@NonNull FixedItem<DATA> fixedItem) {
-        return itemManager.addHeaderItem(fixedItem);
+        return itemManager.addHeaderItem(fixedItem, this);
     }
 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return itemManager.addHeaderItem(itemFactory, data);
+        return itemManager.addHeaderItem(itemFactory, data, this);
     }
 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addHeaderItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return itemManager.addHeaderItem(itemFactory);
+        return itemManager.addHeaderItem(itemFactory, this);
     }
 
     @NonNull
@@ -157,19 +193,19 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addFooterItem(@NonNull FixedItem<DATA> fixedItem) {
-        return itemManager.addFooterItem(fixedItem);
+        return itemManager.addFooterItem(fixedItem, this);
     }
 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return itemManager.addFooterItem(itemFactory, data);
+        return itemManager.addFooterItem(itemFactory, data, this);
     }
 
     @NonNull
     @Override
     public <DATA> FixedItem<DATA> addFooterItem(@NonNull ItemFactory<DATA> itemFactory) {
-        return itemManager.addHeaderItem(itemFactory);
+        return itemManager.addHeaderItem(itemFactory, this);
     }
 
     @NonNull
@@ -226,19 +262,19 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     @NonNull
     @Override
     public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory, @Nullable DATA data) {
-        return itemManager.setMoreItem(itemFactory, data);
+        return itemManager.setMoreItem(itemFactory, data, this);
     }
 
     @NonNull
     @Override
     public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreItemFactory<DATA> itemFactory) {
-        return itemManager.setMoreItem(itemFactory);
+        return itemManager.setMoreItem(itemFactory, this);
     }
 
     @NonNull
     @Override
     public <DATA> MoreFixedItem<DATA> setMoreItem(@NonNull MoreFixedItem<DATA> moreFixedItem) {
-        return itemManager.setMoreItem(moreFixedItem);
+        return itemManager.setMoreItem(moreFixedItem, this);
     }
 
     @Nullable
@@ -277,61 +313,62 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
     }
 
 
+    @Nullable
     @Override
     public List getDataList() {
-        return itemManager.getDataList();
+        return dataManager.getDataList();
     }
 
     @Override
     public void setDataList(@Nullable List dataList) {
-        itemManager.setDataList(dataList);
+        dataManager.setDataList(dataList);
     }
 
     @Override
     public void addAll(@Nullable Collection collection) {
-        itemManager.addAll(collection);
+        dataManager.addAll(collection);
     }
 
     @Override
     public void addAll(@Nullable Object... items) {
-        itemManager.addAll(items);
+        dataManager.addAll(items);
     }
 
     @Override
     public void insert(@NonNull Object object, int index) {
-        itemManager.insert(object, index);
+        dataManager.insert(object, index);
     }
 
     @Override
     public void remove(@NonNull Object object) {
-        itemManager.remove(object);
+        dataManager.remove(object);
     }
 
     @Override
     public void clear() {
-        itemManager.clear();
+        dataManager.clear();
     }
 
     @Override
     public void sort(@NonNull Comparator comparator) {
-        itemManager.sort(comparator);
+        dataManager.sort(comparator);
     }
 
     @Override
     public int getDataCount() {
-        return itemManager.getDataCount();
+        return dataManager.getDataCount();
     }
 
     @Nullable
     @Override
     public Object getData(int positionInDataList) {
-        return itemManager.getData(positionInDataList);
+        return dataManager.getData(positionInDataList);
     }
 
 
     @Override
     public int getItemCount() {
-        return itemManager.getItemCount();
+        return getDataCount() + itemManager.getHeaderAndFooterCount();
     }
 
     @Nullable
@@ -385,18 +422,18 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
 
     @Override
     public boolean isNotifyOnChange() {
-        return itemManager.isNotifyOnChange();
+        return notifyOnChange;
     }
 
     @Override
     public void setNotifyOnChange(boolean notifyOnChange) {
-        itemManager.setNotifyOnChange(notifyOnChange);
+        this.notifyOnChange = notifyOnChange;
     }
 
 
     @Override
     public int getGroupCount() {
-        return itemManager.getItemCount();
+        return getItemCount();
     }
 
     @Nullable
@@ -511,6 +548,7 @@ public class AssemblyExpandableAdapter extends BaseExpandableListAdapter impleme
         childItem.setData(childPosition, child);
     }
 
+    @SuppressWarnings("unused")
     public void setExpandCallback(@Nullable ExpandCallback expandCallback) {
         this.expandCallback = expandCallback;
     }

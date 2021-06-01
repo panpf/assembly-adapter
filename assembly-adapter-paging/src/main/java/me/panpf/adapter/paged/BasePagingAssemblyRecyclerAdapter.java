@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.panpf.adapter;
+package me.panpf.adapter.paged;
 
 import android.view.ViewGroup;
 
@@ -26,24 +26,19 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import me.panpf.adapter.more.MoreItemFactory;
+import me.panpf.adapter.AssemblyAdapter;
+import me.panpf.adapter.FixedItem;
+import me.panpf.adapter.Item;
+import me.panpf.adapter.ItemFactory;
+import me.panpf.adapter.ItemManager;
 import me.panpf.adapter.more.MoreFixedItem;
+import me.panpf.adapter.more.MoreItemFactory;
 import me.panpf.adapter.recycler.RecyclerItemWrapper;
 
-/**
- * Combined {@link RecyclerView.Adapter}, support to combine multiple items, support head, tail and load more
- */
-@SuppressWarnings("rawtypes")
-public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements AssemblyAdapter {
+public abstract class BasePagingAssemblyRecyclerAdapter<T> extends RecyclerView.Adapter implements AssemblyAdapter {
 
     @NonNull
-    private final ItemManager itemManager;
-    @NonNull
-    private final DataManager dataManager;
-
-    private boolean notifyOnChange = true;
-
-    private final ItemManager.Callback itemCallback = new ItemManager.Callback() {
+    private final ItemManager itemManager = new ItemManager(new ItemManager.Callback() {
         @Override
         public void onItemEnabledChanged() {
             if (isNotifyOnChange()) {
@@ -53,38 +48,16 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
 
         @Override
         public int getDataCount() {
-            return dataManager.getDataCount();
+            return BasePagingAssemblyRecyclerAdapter.this.getDataCount();
         }
 
         @Override
         public Object getData(int position) {
-            return dataManager.getData(position);
+            return BasePagingAssemblyRecyclerAdapter.this.getData(position);
         }
-    };
+    });
 
-    private final DataManager.Callback dataCallback = () -> {
-        if (isNotifyOnChange()) {
-            notifyDataSetChanged();
-        }
-    };
-
-
-    public AssemblyRecyclerAdapter() {
-        this.itemManager = new ItemManager(itemCallback);
-        this.dataManager = new DataManager(dataCallback);
-    }
-
-    @SuppressWarnings("unused")
-    public AssemblyRecyclerAdapter(@Nullable List dataList) {
-        this.itemManager = new ItemManager(itemCallback);
-        this.dataManager = new DataManager(dataCallback, dataList);
-    }
-
-    @SuppressWarnings("unused")
-    public AssemblyRecyclerAdapter(@Nullable Object[] dataArray) {
-        this.itemManager = new ItemManager(itemCallback);
-        this.dataManager = new DataManager(dataCallback, dataArray);
-    }
+    private boolean notifyOnChange = true;
 
 
     @Override
@@ -293,57 +266,39 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter implements Ass
         }
     }
 
-
-    @Nullable
-    @Override
-    public List getDataList() {
-        return dataManager.getDataList();
-    }
-
     @Override
     public void setDataList(@Nullable List dataList) {
-        dataManager.setDataList(dataList);
+        throw new UnsupportedOperationException("setDataList unsupported in AssemblyPagedListAdapter");
     }
 
     @Override
     public void addAll(@Nullable Collection collection) {
-        dataManager.addAll(collection);
+        throw new UnsupportedOperationException("addAll unsupported in AssemblyPagedListAdapter");
     }
 
     @Override
     public void addAll(@Nullable Object... items) {
-        dataManager.addAll(items);
+        throw new UnsupportedOperationException("addAll unsupported in AssemblyPagedListAdapter");
     }
 
     @Override
     public void insert(@NonNull Object object, int index) {
-        dataManager.insert(object, index);
+        throw new UnsupportedOperationException("insert unsupported in AssemblyPagedListAdapter");
     }
 
     @Override
     public void remove(@NonNull Object object) {
-        dataManager.remove(object);
+        throw new UnsupportedOperationException("remove unsupported in AssemblyPagedListAdapter");
     }
 
     @Override
     public void clear() {
-        dataManager.clear();
+        throw new UnsupportedOperationException("clear unsupported in AssemblyPagedListAdapter");
     }
 
     @Override
     public void sort(@NonNull Comparator comparator) {
-        dataManager.sort(comparator);
-    }
-
-    @Override
-    public int getDataCount() {
-        return dataManager.getDataCount();
-    }
-
-    @Nullable
-    @Override
-    public Object getData(int positionInDataList) {
-        return dataManager.getData(positionInDataList);
+        throw new UnsupportedOperationException("sort unsupported in AssemblyPagedListAdapter");
     }
 
 
