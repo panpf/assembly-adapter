@@ -45,5 +45,6 @@ if (hasProperty("signing.keyId")    // configured in the ~/.gradle/gradle.proper
 
     configure<com.vanniktech.maven.publish.MavenPublishPluginExtension> {
         sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
+        disableAndroidJavaDocsAddReferencesLinks = true
     }
 }

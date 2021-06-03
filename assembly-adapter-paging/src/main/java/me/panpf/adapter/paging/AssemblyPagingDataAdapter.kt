@@ -16,8 +16,8 @@ import me.panpf.adapter.paged.BasePagingAssemblyRecyclerAdapter
 /**
  * Copied from PagingDataAdapter v3.0.0
  */
-class AssemblyPagingDataAdapter<T> @JvmOverloads constructor(
-    diffCallback: DiffUtil.ItemCallback<Any>,
+class AssemblyPagingDataAdapter<T: Any> @JvmOverloads constructor(
+    diffCallback: DiffUtil.ItemCallback<T>,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : BasePagingAssemblyRecyclerAdapter<T>() {
@@ -27,7 +27,7 @@ class AssemblyPagingDataAdapter<T> @JvmOverloads constructor(
      */
     private var userSetRestorationPolicy = false
 
-    private val differ = AsyncPagingDataDiffer(
+    private val differ = AsyncPagingDataDiffer<T>(
         diffCallback = diffCallback,
         updateCallback = AdapterListUpdateCallback(this),
         mainDispatcher = mainDispatcher,
@@ -79,7 +79,7 @@ class AssemblyPagingDataAdapter<T> @JvmOverloads constructor(
         super.setStateRestorationPolicy(strategy)
     }
 
-    override fun getDataList(): MutableList<Any?> {
+    override fun getDataList(): MutableList<T?> {
         throw UnsupportedOperationException("getDataList unsupported in AssemblyPagingDataAdapter");
     }
 
@@ -87,7 +87,7 @@ class AssemblyPagingDataAdapter<T> @JvmOverloads constructor(
         return differ.itemCount
     }
 
-    override fun getData(positionInDataList: Int): Any? {
+    override fun getData(positionInDataList: Int): T? {
         return differ.getItem(positionInDataList)
     }
 
@@ -138,7 +138,7 @@ class AssemblyPagingDataAdapter<T> @JvmOverloads constructor(
      *
      * @see [Pager]
      */
-    suspend fun submitData(pagingData: PagingData<Any>) {
+    suspend fun submitData(pagingData: PagingData<T>) {
         differ.submitData(pagingData)
     }
 
@@ -156,7 +156,7 @@ class AssemblyPagingDataAdapter<T> @JvmOverloads constructor(
      * @see submitData
      * @see [Pager]
      */
-    fun submitData(lifecycle: Lifecycle, pagingData: PagingData<Any>) {
+    fun submitData(lifecycle: Lifecycle, pagingData: PagingData<T>) {
         differ.submitData(lifecycle, pagingData)
     }
 
@@ -217,7 +217,7 @@ class AssemblyPagingDataAdapter<T> @JvmOverloads constructor(
      * Returns a new [ItemSnapshotList] representing the currently presented items, including any
      * placeholders if they are enabled.
      */
-    fun snapshot(): ItemSnapshotList<Any> = differ.snapshot()
+    fun snapshot(): ItemSnapshotList<T> = differ.snapshot()
 
 //    override fun getItemCount() = differ.itemCount
 
