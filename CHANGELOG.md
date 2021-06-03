@@ -1,4 +1,4 @@
-# new
+# v3.6.0
 * new: Support paging 3.0.0
 
 # v3.5.0
