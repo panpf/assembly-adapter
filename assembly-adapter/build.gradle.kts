@@ -41,10 +41,10 @@ if (hasProperty("signing.keyId")    // configured in the ~/.gradle/gradle.proper
     && hasProperty("GROUP")    // configured in the rootProject/gradle.properties file
     && hasProperty("POM_ARTIFACT_ID")    // configured in the project/gradle.properties file
 ) {
-    apply { plugin("com.vanniktech.maven.publish") }
+    apply { plugin("com.github.panpf.maven.publish") }
 
-    configure<com.vanniktech.maven.publish.MavenPublishPluginExtension> {
-        sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
+    configure<com.github.panpf.maven.publish.MavenPublishPluginExtension> {
+        sonatypeHost = com.github.panpf.maven.publish.SonatypeHost.S01
         disableAndroidJavaDocsAddReferencesLinks = true
     }
 }
