@@ -1,5 +1,3 @@
 <resources>
-    <string name="app_name">AssemblyAdapterSample</string>
-    <string name="drawer_open_desc">Opened</string>
-    <string name="drawer_close_desc">Closed</string>
+    <string name="app_name">AssemblyAdapter</string>
 </resources>

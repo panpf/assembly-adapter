@@ -2,6 +2,7 @@ buildscript {
     repositories {
         mavenCentral()
         google()
+        maven { setUrl("https://maven.aliyun.com/repository/jcenter") }
     }
 
     dependencies {
@@ -15,6 +16,7 @@ allprojects {
     repositories {
         mavenCentral()
         google()
+        maven { setUrl("https://maven.aliyun.com/repository/jcenter") }
     }
 }
 

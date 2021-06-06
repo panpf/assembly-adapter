@@ -2,4 +2,5 @@
 <resources>
     <color name="colorPrimary">#6E75A4</color>
     <color name="colorPrimaryDark">#6E75A4</color>
+    <color name="app_icon_stroke">#DDDDDD</color>
 </resources>
