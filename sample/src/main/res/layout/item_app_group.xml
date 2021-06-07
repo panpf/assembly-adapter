@@ -3,31 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:background="?android:windowBackground">
 
-    <TextView
-        android:id="@+id/pinyinGroupItemTitleText"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/appGroupItemTitleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="center_vertical"
+        android:textColor="@android:color/black"
+        android:textSize="16dp"
+        app:drawableEndCompat="@drawable/ic_arrow_down"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="我是小尾巴" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/pinyinGroupItemTitleText"
-        app:layout_constraintStart_toStartOf="@id/pinyinGroupItemTitleText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

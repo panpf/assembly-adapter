@@ -47,10 +47,9 @@ class AppGridItemFactory : BindingAssemblyItemFactory<AppInfo, ItemAppGridBindin
     }
 
     override fun bindData(
-        context: Context,
-        binding: ItemAppGridBinding,
-        position: Int,
-        data: AppInfo?
+        context: Context, binding: ItemAppGridBinding,
+        item: BindingAssemblyItem<AppInfo, ItemAppGridBinding>,
+        position: Int, data: AppInfo?
     ) {
         data ?: return
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)

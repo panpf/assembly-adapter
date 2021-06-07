@@ -1,13 +1,12 @@
 package com.github.panpf.assemblyadapter.sample.base
 
-import com.github.panpf.assemblyadapter.AssemblyItemFactory
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.AssemblyRecyclerAdapter
 import me.panpf.recycler.sticky.StickyRecyclerAdapter
 
 class StickyAssemblyRecyclerAdapter<DATA> : AssemblyRecyclerAdapter<DATA>, StickyRecyclerAdapter {
 
-    constructor(itemFactoryList: List<AssemblyItemFactory<*>>) : super(itemFactoryList)
+    constructor(itemFactoryList: List<ItemFactory<*>>) : super(itemFactoryList)
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>, dataList: MutableList<DATA>?

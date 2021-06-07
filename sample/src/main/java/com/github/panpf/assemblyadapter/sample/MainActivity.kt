@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.AcivityMainBinding
 import com.github.panpf.assemblyadapter.sample.ui.*
@@ -25,26 +25,13 @@ class MainActivity : AppCompatActivity() {
             adapter = AssemblyRecyclerAdapter(
                 listOf(LinkItemFactory()),
                 listOf(
-                    Link(
-                        "RecyclerView - Linear",
-                        RecyclerViewLinearFragment()
-                    ),
-                    Link(
-                        "RecyclerView - Linear - Sticky",
-                        RecyclerViewLinearStickyFragment()
-                    ),
-                    Link(
-                        "RecyclerView - Grid",
-                        RecyclerViewGridFragment()
-                    ),
-                    Link(
-                        "RecyclerView - Grid - Sticky",
-                        RecyclerViewGridStickyFragment()
-                    ),
-//                    Link(
-//                        "ListView",
-//                        ListViewFragment()
-//                    ),
+                    Link("RecyclerView - Linear", RecyclerViewLinearFragment()),
+                    Link("RecyclerView - Linear - Sticky", RecyclerViewLinearStickyFragment()),
+                    Link("RecyclerView - Grid", RecyclerViewGridFragment()),
+                    Link("RecyclerView - Grid - Sticky", RecyclerViewGridStickyFragment()),
+                    Link("RecyclerView - StaggeredGrid", RecyclerViewStaggeredGridFragment()),
+                    Link("ListView", ListViewFragment()),
+                    Link("ExpandableListView", ExpandableListViewFragment()),
 //                    Link("AssemblyPagingDataAdapter", PagingDataAdapterSampleFragment()),
 //                    Link("AssemblyBaseAdapter - ListView", ListViewFragment()),
 //                    Link("AssemblyBaseAdapter - Spinner", SpinnerFragment()),

@@ -21,8 +21,7 @@ class LinkItemFactory : BindingAssemblyItemFactory<Link, ItemLinkBinding>() {
     }
 
     override fun initItem(
-        context: Context,
-        binding: ItemLinkBinding,
+        context: Context, binding: ItemLinkBinding,
         item: BindingAssemblyItem<Link, ItemLinkBinding>
     ) {
         super.initItem(context, binding, item)
@@ -37,7 +36,9 @@ class LinkItemFactory : BindingAssemblyItemFactory<Link, ItemLinkBinding>() {
     }
 
     override fun bindData(
-        context: Context, binding: ItemLinkBinding, position: Int, data: Link?
+        context: Context, binding: ItemLinkBinding,
+        item: BindingAssemblyItem<Link, ItemLinkBinding>,
+        position: Int, data: Link?
     ) {
         binding.linkItemTitleText.text = data?.title
     }
