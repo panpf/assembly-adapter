@@ -33,7 +33,7 @@ open class AssemblyRecyclerAdapter<DATA>(
     private var gridLayoutItemSpanMap: MutableMap<Class<out ItemFactory<*>>, ItemSpan>? = null
 
     var stopNotifyDataSetChanged = false
-    val dataListSnapshot: List<DATA?>
+    val dataListSnapshot: List<DATA>
         get() = dataManager.dataListSnapshot
 
     constructor(
@@ -133,24 +133,24 @@ open class AssemblyRecyclerAdapter<DATA>(
         dataManager.setDataList(datas)
     }
 
-    fun addData(data: DATA?): Boolean {
+    fun addData(data: DATA): Boolean {
         return dataManager.addData(data)
     }
 
-    fun addData(index: Int, data: DATA?) {
+    fun addData(index: Int, data: DATA) {
         dataManager.addData(index, data)
     }
 
-    fun addAllData(datas: Collection<DATA?>?): Boolean {
+    fun addAllData(datas: Collection<DATA>?): Boolean {
         return dataManager.addAllData(datas)
     }
 
     @SafeVarargs
-    fun addAllData(vararg datas: DATA?): Boolean {
+    fun addAllData(vararg datas: DATA): Boolean {
         return dataManager.addAllData(*datas)
     }
 
-    fun removeData(data: DATA?): Boolean {
+    fun removeData(data: DATA): Boolean {
         return dataManager.removeData(data)
     }
 
@@ -158,7 +158,7 @@ open class AssemblyRecyclerAdapter<DATA>(
         return dataManager.removeData(index)
     }
 
-    fun removeAllData(datas: Collection<DATA?>): Boolean {
+    fun removeAllData(datas: Collection<DATA>): Boolean {
         return dataManager.removeAllData(datas)
     }
 
@@ -166,7 +166,7 @@ open class AssemblyRecyclerAdapter<DATA>(
         dataManager.clearData()
     }
 
-    fun sortData(comparator: Comparator<DATA?>) {
+    fun sortData(comparator: Comparator<DATA>) {
         dataManager.sortData(comparator)
     }
 

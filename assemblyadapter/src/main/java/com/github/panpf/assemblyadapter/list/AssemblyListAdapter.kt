@@ -31,7 +31,7 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
     private val dataManager = DataManager<DATA> { tryNotifyDataSetChanged() }
 
     var stopNotifyDataSetChanged = false
-    val dataListSnapshot: List<DATA?>
+    val dataListSnapshot: List<DATA>
         get() = dataManager.dataListSnapshot
 
     constructor(
@@ -71,6 +71,7 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
             .dispatchCreateItem(parent).apply {
                 getItemView().setTag(R.id.aa_tag_item, this)
             }.getItemView()
+
         @Suppress("UNCHECKED_CAST")
         val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
         item.dispatchBindData(position, data)
@@ -81,24 +82,24 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
         dataManager.setDataList(datas)
     }
 
-    fun addData(data: DATA?): Boolean {
+    fun addData(data: DATA): Boolean {
         return dataManager.addData(data)
     }
 
-    fun addData(index: Int, data: DATA?) {
+    fun addData(index: Int, data: DATA) {
         dataManager.addData(index, data)
     }
 
-    fun addAllData(datas: Collection<DATA?>?): Boolean {
+    fun addAllData(datas: Collection<DATA>?): Boolean {
         return dataManager.addAllData(datas)
     }
 
     @SafeVarargs
-    fun addAllData(vararg datas: DATA?): Boolean {
+    fun addAllData(vararg datas: DATA): Boolean {
         return dataManager.addAllData(*datas)
     }
 
-    fun removeData(data: DATA?): Boolean {
+    fun removeData(data: DATA): Boolean {
         return dataManager.removeData(data)
     }
 
@@ -106,7 +107,7 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
         return dataManager.removeData(index)
     }
 
-    fun removeAllData(datas: Collection<DATA?>): Boolean {
+    fun removeAllData(datas: Collection<DATA>): Boolean {
         return dataManager.removeAllData(datas)
     }
 
@@ -114,7 +115,7 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
         dataManager.clearData()
     }
 
-    fun sortData(comparator: Comparator<DATA?>) {
+    fun sortData(comparator: Comparator<DATA>) {
         dataManager.sortData(comparator)
     }
 

@@ -34,7 +34,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     private var callback: Callback? = null
 
     var stopNotifyDataSetChanged = false
-    val dataListSnapshot: List<GROUP_DATA?>
+    val dataListSnapshot: List<GROUP_DATA>
         get() = dataManager.dataListSnapshot
 
     constructor(
@@ -148,24 +148,24 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         dataManager.setDataList(datas)
     }
 
-    fun addData(data: GROUP_DATA?): Boolean {
+    fun addData(data: GROUP_DATA): Boolean {
         return dataManager.addData(data)
     }
 
-    fun addData(index: Int, data: GROUP_DATA?) {
+    fun addData(index: Int, data: GROUP_DATA) {
         dataManager.addData(index, data)
     }
 
-    fun addAllData(datas: Collection<GROUP_DATA?>?): Boolean {
+    fun addAllData(datas: Collection<GROUP_DATA>?): Boolean {
         return dataManager.addAllData(datas)
     }
 
     @SafeVarargs
-    fun addAllData(vararg datas: GROUP_DATA?): Boolean {
+    fun addAllData(vararg datas: GROUP_DATA): Boolean {
         return dataManager.addAllData(*datas)
     }
 
-    fun removeData(data: GROUP_DATA?): Boolean {
+    fun removeData(data: GROUP_DATA): Boolean {
         return dataManager.removeData(data)
     }
 
@@ -173,7 +173,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return dataManager.removeData(index)
     }
 
-    fun removeAllData(datas: Collection<GROUP_DATA?>): Boolean {
+    fun removeAllData(datas: Collection<GROUP_DATA>): Boolean {
         return dataManager.removeAllData(datas)
     }
 
@@ -181,7 +181,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         dataManager.clearData()
     }
 
-    fun sortData(comparator: Comparator<GROUP_DATA?>) {
+    fun sortData(comparator: Comparator<GROUP_DATA>) {
         dataManager.sortData(comparator)
     }
 

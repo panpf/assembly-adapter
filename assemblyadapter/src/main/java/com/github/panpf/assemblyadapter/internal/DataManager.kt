@@ -4,11 +4,11 @@ import java.util.*
 
 class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
 
-    private val dataList: MutableList<DATA?> = ArrayList()
+    private val dataList: MutableList<DATA> = ArrayList()
 
     val dataCount: Int
         get() = dataList.size
-    val dataListSnapshot: List<DATA?>
+    val dataListSnapshot: List<DATA>
         get() = ArrayList(dataList)
 
     fun setDataList(datas: List<DATA>?) {
@@ -19,7 +19,7 @@ class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
         onDataListChanged()
     }
 
-    fun addData(data: DATA?): Boolean {
+    fun addData(data: DATA): Boolean {
         val result = dataList.add(data)
         if (result) {
             onDataListChanged()
@@ -27,12 +27,12 @@ class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
         return result
     }
 
-    fun addData(index: Int, data: DATA?) {
+    fun addData(index: Int, data: DATA) {
         dataList.add(index, data)
         onDataListChanged()
     }
 
-    fun addAllData(datas: Collection<DATA?>?): Boolean {
+    fun addAllData(datas: Collection<DATA>?): Boolean {
         var result = false
         if (datas != null && datas.isNotEmpty()) {
             result = dataList.addAll(datas)
@@ -44,7 +44,7 @@ class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
     }
 
     @SafeVarargs
-    fun addAllData(vararg datas: DATA?): Boolean {
+    fun addAllData(vararg datas: DATA): Boolean {
         var result = false
         if (datas.isNotEmpty()) {
             Collections.addAll(dataList, *datas)
@@ -56,7 +56,7 @@ class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
         return result
     }
 
-    fun removeData(data: DATA?): Boolean {
+    fun removeData(data: DATA): Boolean {
         val result: Boolean = dataList.remove(data)
         if (result) {
             onDataListChanged()
@@ -70,7 +70,7 @@ class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
         return data
     }
 
-    fun removeAllData(datas: Collection<DATA?>?): Boolean {
+    fun removeAllData(datas: Collection<DATA>?): Boolean {
         var result = false
         if (datas != null && datas.isNotEmpty()) {
             result = dataList.removeAll(datas)
@@ -86,7 +86,7 @@ class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
         onDataListChanged()
     }
 
-    fun sortData(comparator: Comparator<DATA?>) {
+    fun sortData(comparator: Comparator<DATA>) {
         Collections.sort(dataList, comparator)
         onDataListChanged()
     }
