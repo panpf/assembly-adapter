@@ -1,60 +1,38 @@
-package com.github.panpf.assemblyadapter;
+package com.github.panpf.assemblyadapter
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+abstract class AssemblyItem<DATA>(
+    @JvmField val itemView: View
+) : Item<DATA> {
 
-public abstract class AssemblyItem<DATA> implements Item<DATA> {
+    @JvmField
+    val context: Context = itemView.context
 
-    @NonNull
-    public final Context context;
-    @NonNull
-    public final Resources resources;
-    @NonNull
-    public final View itemView;
+    @JvmField
+    var data: DATA? = null
 
-    @Nullable
-    private DATA data;
-    private int position = -1;
+    @JvmField
+    var position = -1
 
-    public AssemblyItem(@NonNull View itemView) {
-        this.itemView = itemView;
-        this.context = itemView.getContext();
-        this.resources = itemView.getResources();
+    constructor(itemLayoutId: Int, parent: ViewGroup) : this(
+        LayoutInflater.from(parent.context).inflate(itemLayoutId, parent, false)
+    )
+
+    override fun dispatchBindData(position: Int, data: DATA?) {
+        this.position = position
+        this.data = data
+        bindData(position, data)
     }
 
-    public AssemblyItem(int itemLayoutId, @NonNull ViewGroup parent) {
-        this(LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false));
-    }
+    protected abstract fun bindData(position: Int, data: DATA?)
 
-    @Override
-    public void dispatchBindData(int position, @Nullable DATA data) {
-        this.position = position;
-        this.data = data;
-        bindData(position, data);
-    }
+    override fun getData(): DATA? = data
 
-    protected abstract void bindData(int position, @Nullable DATA data);
+    override fun getItemView(): View = itemView
 
-    @NonNull
-    @Override
-    public final View getItemView() {
-        return this.itemView;
-    }
-
-    @Nullable
-    @Override
-    public DATA getData() {
-        return data;
-    }
-
-    @Override
-    public int getPosition() {
-        return position;
-    }
+    override fun getPosition(): Int = position
 }

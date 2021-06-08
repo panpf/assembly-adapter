@@ -1,24 +1,17 @@
-package com.github.panpf.assemblyadapter;
+package com.github.panpf.assemblyadapter
 
-import android.content.Context;
-import android.util.AttributeSet;
+import android.content.Context
+import android.util.AttributeSet
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager {
 
-public class AssemblyStaggeredGridLayoutManager extends StaggeredGridLayoutManager {
+    constructor(
+        context: Context, attrs: AttributeSet?,
+        defStyleAttr: Int, defStyleRes: Int
+    ) : super(context, attrs, defStyleAttr, defStyleRes)
 
-    public AssemblyStaggeredGridLayoutManager(@NonNull Context context, @Nullable AttributeSet attrs,
-                                              int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+    constructor(spanCount: Int, orientation: Int) : super(spanCount, orientation) {}
 
-    public AssemblyStaggeredGridLayoutManager(int spanCount, int orientation) {
-        super(spanCount, orientation);
-    }
-
-    public AssemblyStaggeredGridLayoutManager(int spanCount) {
-        super(spanCount, StaggeredGridLayoutManager.VERTICAL);
-    }
+    constructor(spanCount: Int) : super(spanCount, VERTICAL)
 }

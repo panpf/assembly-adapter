@@ -13,215 +13,174 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter
 
-package com.github.panpf.assemblyadapter;
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.internal.AssemblyRecyclerItem
+import com.github.panpf.assemblyadapter.internal.DataManager
+import com.github.panpf.assemblyadapter.internal.ItemManager
+import java.util.*
 
-import android.view.View;
-import android.view.ViewGroup;
+open class AssemblyRecyclerAdapter<DATA>(
+    itemFactoryList: List<ItemFactory<*>>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+    private val itemManager = ItemManager(itemFactoryList)
+    private val dataManager = DataManager<DATA> { tryNotifyDataSetChanged() }
+    private var gridLayoutItemSpanMap: MutableMap<Class<out ItemFactory<*>>, ItemSpan>? = null
 
-import com.github.panpf.assemblyadapter.internal.AssemblyRecyclerItem;
-import com.github.panpf.assemblyadapter.internal.DataManager;
-import com.github.panpf.assemblyadapter.internal.ItemManager;
+    var stopNotifyDataSetChanged = false
+    val dataListSnapshot: List<DATA?>
+        get() = dataManager.dataListSnapshot
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class AssemblyRecyclerAdapter<DATA> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    @NonNull
-    private final ItemManager<ItemFactory<?>> itemManager;
-    @NonNull
-    private final DataManager<DATA> dataManager;
-
-    @Nullable
-    private Map<Class<? extends ItemFactory<?>>, ItemSpan> itemSpanMapInGridLayoutManager;
-    private boolean notifyOnChange = true;
-
-    @NonNull
-    private final DataManager.Callback dataCallback = () -> {
-        if (notifyOnChange) {
-            notifyDataSetChanged();
-        }
-    };
-
-
-    public AssemblyRecyclerAdapter(@NonNull List<ItemFactory<?>> itemFactoryList) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback);
+    constructor(
+        itemFactoryList: List<ItemFactory<*>>,
+        dataList: List<DATA>?
+    ) : this(itemFactoryList) {
+        dataManager.setDataList(dataList)
     }
 
-    public AssemblyRecyclerAdapter(@NonNull List<ItemFactory<?>> itemFactoryList, @Nullable List<DATA> dataList) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback, dataList);
+    override fun getItemCount(): Int {
+        return dataManager.dataCount
     }
 
-    public AssemblyRecyclerAdapter(@NonNull List<ItemFactory<?>> itemFactoryList, @Nullable DATA[] dataArray) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback, dataArray);
+    fun getItem(position: Int): DATA? {
+        return dataManager.getData(position)
     }
 
-
-    @Override
-    public int getItemCount() {
-        return dataManager.getDataCount();
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
-    @Nullable
-    public DATA getItem(int position) {
-        return dataManager.getData(position);
+    override fun getItemViewType(position: Int): Int {
+        return itemManager.getItemTypeByData(getItem(position))
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val itemFactory = itemManager.getItemFactoryByItemType(viewType)
+        val item = itemFactory.dispatchCreateItem(parent)
+        val recyclerItem: AssemblyRecyclerItem<*> = AssemblyRecyclerItem(item)
+        applyItemSpanInGridLayoutManager(parent, itemFactory, recyclerItem)
+        return recyclerItem
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return itemManager.getItemTypeByData(getItem(position));
-    }
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemFactory<?> recyclerItemFactory = itemManager.getItemFactoryByItemType(viewType);
-        Item<?> item = recyclerItemFactory.dispatchCreateItem(parent);
-        AssemblyRecyclerItem<?> recyclerItem = new AssemblyRecyclerItem<>(item);
-        applyItemSpanInGridLayoutManager(parent, recyclerItemFactory, recyclerItem);
-        return recyclerItem;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        if (viewHolder instanceof AssemblyRecyclerItem) {
-            //noinspection unchecked
-            ((AssemblyRecyclerItem<Object>) viewHolder).dispatchBindData(position, getItem(position));
+    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
+        if (viewHolder is AssemblyRecyclerItem<*>) {
+            @Suppress("UNCHECKED_CAST")
+            (viewHolder as AssemblyRecyclerItem<Any?>).dispatchBindData(position, getItem(position))
         }
     }
 
-
-    @NonNull
-    public AssemblyRecyclerAdapter<DATA> setItemSpanInGridLayoutManager(@NonNull Class<? extends ItemFactory<?>> itemFactoryClass, @NonNull ItemSpan itemSpan) {
-        if (itemSpanMapInGridLayoutManager == null) {
-            itemSpanMapInGridLayoutManager = new HashMap<>();
-        }
-        itemSpanMapInGridLayoutManager.put(itemFactoryClass, itemSpan);
-        if (notifyOnChange) {
-            notifyDataSetChanged();
-        }
-        return this;
+    fun setGridLayoutItemSpan(
+        itemFactoryClass: Class<out ItemFactory<*>>, itemSpan: ItemSpan
+    ): AssemblyRecyclerAdapter<DATA> {
+        val gridLayoutItemSpanMap =
+            (gridLayoutItemSpanMap ?: (HashMap<Class<out ItemFactory<*>>, ItemSpan>().apply {
+                this@AssemblyRecyclerAdapter.gridLayoutItemSpanMap = this
+            }))
+        gridLayoutItemSpanMap[itemFactoryClass] = itemSpan
+        tryNotifyDataSetChanged()
+        return this
     }
 
-    @NonNull
-    public AssemblyRecyclerAdapter<DATA> setItemSpanMapInGridLayoutManager(@Nullable Map<Class<? extends ItemFactory<?>>, ItemSpan> itemSpanMap) {
-        this.itemSpanMapInGridLayoutManager = itemSpanMap;
-        if (notifyOnChange) {
-            notifyDataSetChanged();
+    fun setGridLayoutItemSpanMap(itemSpanMap: Map<Class<out ItemFactory<*>>, ItemSpan>?): AssemblyRecyclerAdapter<DATA> {
+        val gridLayoutItemSpanMap =
+            (gridLayoutItemSpanMap ?: (HashMap<Class<out ItemFactory<*>>, ItemSpan>().apply {
+                this@AssemblyRecyclerAdapter.gridLayoutItemSpanMap = this
+            }))
+        gridLayoutItemSpanMap.clear()
+        if (itemSpanMap != null) {
+            gridLayoutItemSpanMap.putAll(itemSpanMap)
         }
-        return this;
+        tryNotifyDataSetChanged()
+        return this
     }
 
-    @Nullable
-    public Map<Class<? extends ItemFactory<?>>, ItemSpan> getItemSpanMapInGridLayoutManager() {
-        return itemSpanMapInGridLayoutManager;
+    fun getGridLayoutItemSpanMap(): Map<Class<out ItemFactory<*>>, ItemSpan>? {
+        return gridLayoutItemSpanMap
     }
 
-    private void applyItemSpanInGridLayoutManager(@NonNull ViewGroup parent,
-                                                  @NonNull ItemFactory<?> recyclerItemFactory,
-                                                  @NonNull AssemblyRecyclerItem<?> recyclerItem) {
-        if (itemSpanMapInGridLayoutManager != null && !itemSpanMapInGridLayoutManager.isEmpty() && parent instanceof RecyclerView) {
-            RecyclerView.LayoutManager layoutManager = ((RecyclerView) parent).getLayoutManager();
-            //noinspection StatementWithEmptyBody
-            if (layoutManager instanceof AssemblyGridLayoutManager) {
+    private fun applyItemSpanInGridLayoutManager(
+        parent: ViewGroup,
+        recyclerItemFactory: ItemFactory<*>,
+        recyclerItem: AssemblyRecyclerItem<*>
+    ) {
+        val itemSpanMapInGridLayoutManager = gridLayoutItemSpanMap
+        if (itemSpanMapInGridLayoutManager?.isNotEmpty() == true && parent is RecyclerView) {
+            val layoutManager = parent.layoutManager
+            if (layoutManager is AssemblyGridLayoutManager) {
                 // No need to do
-            } else if (layoutManager instanceof AssemblyStaggeredGridLayoutManager) {
-                ItemSpan itemSpan = itemSpanMapInGridLayoutManager.get(recyclerItemFactory.getClass());
+            } else if (layoutManager is AssemblyStaggeredGridLayoutManager) {
+                val itemSpan = itemSpanMapInGridLayoutManager[recyclerItemFactory.javaClass]
                 if (itemSpan != null && itemSpan.span < 0) {
-                    View itemView = recyclerItem.getItemView();
-                    ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
-                    if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
-                        ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
-                        itemView.setLayoutParams(layoutParams);
+                    val itemView: View = recyclerItem.getItemView()
+                    val layoutParams = itemView.layoutParams
+                    if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
+                        layoutParams.isFullSpan = true
+                        itemView.layoutParams = layoutParams
                     }
                 }
             } else {
-                throw new IllegalArgumentException("Since itemSpan is set, the layoutManager of RecyclerView must be AssemblyGridLayoutManager or AssemblyStaggeredGridLayoutManager");
+                throw IllegalArgumentException("Since itemSpan is set, the layoutManager of RecyclerView must be AssemblyGridLayoutManager or AssemblyStaggeredGridLayoutManager")
             }
         }
     }
 
-
-    @NonNull
-    public List<DATA> getDataListSnapshot() {
-        return dataManager.getDataListSnapshot();
+    fun setDataList(datas: List<DATA>?) {
+        dataManager.setDataList(datas)
     }
 
-    public void setDataList(@Nullable List<DATA> datas) {
-        dataManager.setDataList(datas);
+    fun addData(data: DATA?): Boolean {
+        return dataManager.addData(data)
     }
 
-    public boolean addData(@Nullable DATA data) {
-        return dataManager.addData(data);
+    fun addData(index: Int, data: DATA?) {
+        dataManager.addData(index, data)
     }
 
-    public void addData(int index, @Nullable DATA data) {
-        dataManager.addData(index, data);
-    }
-
-    public boolean addAllData(@Nullable Collection<DATA> datas) {
-        return dataManager.addAllData(datas);
+    fun addAllData(datas: Collection<DATA?>?): Boolean {
+        return dataManager.addAllData(datas)
     }
 
     @SafeVarargs
-    public final boolean addAllData(@Nullable DATA... datas) {
-        return dataManager.addAllData(datas);
+    fun addAllData(vararg datas: DATA?): Boolean {
+        return dataManager.addAllData(*datas)
     }
 
-    public boolean removeData(@Nullable DATA data) {
-        return dataManager.removeData(data);
+    fun removeData(data: DATA?): Boolean {
+        return dataManager.removeData(data)
     }
 
-    public DATA removeData(int index) {
-        return dataManager.removeData(index);
+    fun removeData(index: Int): DATA? {
+        return dataManager.removeData(index)
     }
 
-    public boolean removeAllData(@NonNull Collection<DATA> datas) {
-        return dataManager.removeAllData(datas);
+    fun removeAllData(datas: Collection<DATA?>): Boolean {
+        return dataManager.removeAllData(datas)
     }
 
-    public void clearData() {
-        dataManager.clearData();
+    fun clearData() {
+        dataManager.clearData()
     }
 
-    public void sortData(@NonNull Comparator<DATA> comparator) {
-        dataManager.sortData(comparator);
+    fun sortData(comparator: Comparator<DATA?>) {
+        dataManager.sortData(comparator)
     }
 
-
-    public boolean isNotifyOnChange() {
-        return notifyOnChange;
+    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
+        return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    public void setNotifyOnChange(boolean notifyOnChange) {
-        this.notifyOnChange = notifyOnChange;
+    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
     }
 
-
-    @NonNull
-    public ItemFactory<?> getItemFactoryByItemType(int itemType) {
-        return itemManager.getItemFactoryByItemType(itemType);
-    }
-
-    @NonNull
-    public ItemFactory<?> getItemFactoryByPosition(int position) {
-        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)));
+    private fun tryNotifyDataSetChanged() {
+        if (!stopNotifyDataSetChanged) {
+            notifyDataSetChanged()
+        }
     }
 }

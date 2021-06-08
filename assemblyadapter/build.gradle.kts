@@ -32,9 +32,9 @@ android {
 dependencies {
     api("androidx.annotation:annotation:${property("ANDROIDX_ANNOTATION")}")
     api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
 
     testImplementation("junit:junit:${property("JUNIT")}")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
     androidTestImplementation("androidx.test:rules:${property("ANDROIDX_TEST_RULES")}")
 }

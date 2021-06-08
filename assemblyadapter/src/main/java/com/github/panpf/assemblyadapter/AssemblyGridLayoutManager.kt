@@ -1,78 +1,66 @@
-package com.github.panpf.assemblyadapter;
+package com.github.panpf.assemblyadapter
 
-import android.content.Context;
-import android.util.AttributeSet;
+import android.content.Context
+import android.util.AttributeSet
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class AssemblyGridLayoutManager : GridLayoutManager {
 
-import java.util.Map;
+    private var recyclerView: RecyclerView? = null
 
-public class AssemblyGridLayoutManager extends GridLayoutManager {
-
-    @Nullable
-    private RecyclerView recyclerView;
-
-    public AssemblyGridLayoutManager(@NonNull Context context, @Nullable AttributeSet attrs,
-                                     int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setSpanSizeLookup(new AssemblySpanSizeLookup(this));
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int
+    ) : super(context, attrs, defStyleAttr, defStyleRes) {
+        super.setSpanSizeLookup(AssemblySpanSizeLookup(this))
     }
 
-    public AssemblyGridLayoutManager(@NonNull Context context, int spanCount, int orientation,
-                                     boolean reverseLayout) {
-        super(context, spanCount, orientation, reverseLayout);
-        setSpanSizeLookup(new AssemblySpanSizeLookup(this));
+    constructor(
+        context: Context,
+        spanCount: Int,
+        orientation: Int,
+        reverseLayout: Boolean
+    ) : super(context, spanCount, orientation, reverseLayout) {
+        super.setSpanSizeLookup(AssemblySpanSizeLookup(this))
     }
 
-    public AssemblyGridLayoutManager(@NonNull Context context, int spanCount) {
-        super(context, spanCount);
-        setSpanSizeLookup(new AssemblySpanSizeLookup(this));
+    constructor(context: Context, spanCount: Int) : super(context, spanCount) {
+        super.setSpanSizeLookup(AssemblySpanSizeLookup(this))
     }
 
-    @Override
-    public void onAttachedToWindow(RecyclerView view) {
-        super.onAttachedToWindow(view);
-        this.recyclerView = view;
+    override fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
+//        super.setSpanSizeLookup(spanSizeLookup)
+        throw UnsupportedOperationException("AssemblyGridLayoutManager does not support setSpanSizeLookup() method")
     }
 
-    @Nullable
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
+    override fun onAttachedToWindow(view: RecyclerView) {
+        super.onAttachedToWindow(view)
+        recyclerView = view
     }
 
-    public static class AssemblySpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
+    private class AssemblySpanSizeLookup(
+        private val assemblyGridLayoutManager: AssemblyGridLayoutManager
+    ) : SpanSizeLookup() {
+        override fun getSpanSize(position: Int): Int {
+            val recyclerView = assemblyGridLayoutManager.recyclerView ?: return 1
 
-        @NonNull
-        private final AssemblyGridLayoutManager assemblyGridLayoutManager;
+            val adapter = recyclerView.adapter
+            if (adapter !is AssemblyRecyclerAdapter<*>) return 1
 
-        public AssemblySpanSizeLookup(@NonNull AssemblyGridLayoutManager assemblyGridLayoutManager) {
-            this.assemblyGridLayoutManager = assemblyGridLayoutManager;
-        }
+            val itemSpanMap = adapter.getGridLayoutItemSpanMap()
+            if (itemSpanMap == null || itemSpanMap.isEmpty()) return 1
 
-        @Override
-        public int getSpanSize(int position) {
-            RecyclerView recyclerView = assemblyGridLayoutManager.getRecyclerView();
-            if (recyclerView != null) {
-                RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
-                if (adapter instanceof AssemblyRecyclerAdapter<?>) {
-                    AssemblyRecyclerAdapter<?> assemblyRecyclerAdapter = (AssemblyRecyclerAdapter<?>) adapter;
-                    Map<Class<? extends ItemFactory<?>>, ItemSpan> itemSpanMap = assemblyRecyclerAdapter.getItemSpanMapInGridLayoutManager();
-                    if (itemSpanMap != null && !itemSpanMap.isEmpty()) {
-                        ItemFactory<?> itemFactory = assemblyRecyclerAdapter.getItemFactoryByPosition(position);
-                        ItemSpan itemSpan = itemSpanMap.get(itemFactory.getClass());
-                        int spanSize = itemSpan != null ? itemSpan.span : 1;
-                        if (spanSize < 0) {
-                            return assemblyGridLayoutManager.getSpanCount();
-                        } else {
-                            return Math.max(spanSize, 1);
-                        }
-                    }
-                }
+            val itemFactory = adapter.getItemFactoryByPosition(position)
+            val itemSpan = itemSpanMap[itemFactory.javaClass]
+            val spanSize = itemSpan?.span ?: 1
+            return if (spanSize < 0) {
+                assemblyGridLayoutManager.spanCount
+            } else {
+                spanSize.coerceAtLeast(1)
             }
-            return 1;
         }
     }
 }

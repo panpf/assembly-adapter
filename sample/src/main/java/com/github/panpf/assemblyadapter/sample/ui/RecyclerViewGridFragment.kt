@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
 import com.github.panpf.assemblyadapter.AssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.ItemSpan
@@ -32,7 +31,7 @@ class RecyclerViewGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() 
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true))
         ).apply {
-            setItemSpanInGridLayoutManager(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
+            setGridLayoutItemSpan(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
         }
         binding.recyclerRecycler.apply {
             updatePadding(left = 20.dp2px, right = 20.dp2px)

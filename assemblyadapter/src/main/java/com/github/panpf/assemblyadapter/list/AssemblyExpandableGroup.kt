@@ -13,14 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter.list
 
-package com.github.panpf.assemblyadapter.list;
-
-import androidx.annotation.Nullable;
-
-public interface AssemblyExpandableGroup {
-    int getChildCount();
-
-    @Nullable
-    Object getChild(int childPosition);
+interface AssemblyExpandableGroup {
+    fun getChildCount(): Int
+    fun getChild(childPosition: Int): Any?
 }

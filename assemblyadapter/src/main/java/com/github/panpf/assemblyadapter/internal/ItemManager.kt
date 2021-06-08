@@ -1,86 +1,45 @@
-package com.github.panpf.assemblyadapter.internal;
+package com.github.panpf.assemblyadapter.internal
 
-import android.util.SparseArray;
+import android.util.SparseArray
+import com.github.panpf.assemblyadapter.ItemFactory
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+class ItemManager<FACTORY : ItemFactory<*>>(itemFactoryListParam: List<FACTORY>) {
 
-import com.github.panpf.assemblyadapter.ItemFactory;
+    val itemTypeCount: Int = itemFactoryListParam.size
+    private val itemFactoryList: List<FACTORY> = ArrayList(itemFactoryListParam)
+    private val getItemFactoryByItemTypeArray: SparseArray<FACTORY>
+    private val getItemTypeByItemFactoryMap: MutableMap<FACTORY, Int>
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+    init {
+        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
 
-public class ItemManager<FACTORY extends ItemFactory<?>> {
-
-    private final int itemTypeCount;
-    @NonNull
-    private final List<FACTORY> itemFactoryList;
-    @NonNull
-    private final SparseArray<FACTORY> getItemFactoryByItemTypeArray;
-    @NonNull
-    private final Map<FACTORY, Integer> getItemTypeByItemFactoryArray;
-
-    public ItemManager(@NonNull List<FACTORY> itemFactoryList) {
-        if (itemFactoryList.size() == 0) {
-            throw new IllegalArgumentException("itemFactoryList Can not be empty");
+        getItemFactoryByItemTypeArray = SparseArray()
+        getItemTypeByItemFactoryMap = HashMap()
+        itemFactoryList.forEachIndexed { index, itemFactory ->
+            getItemFactoryByItemTypeArray.append(index, itemFactory)
+            getItemTypeByItemFactoryMap[itemFactory] = index
         }
-        this.itemFactoryList = new ArrayList<>(itemFactoryList);
-        this.getItemFactoryByItemTypeArray = new SparseArray<>();
-        this.getItemTypeByItemFactoryArray = new HashMap<>();
-        for (int i = 0; i < itemFactoryList.size(); i++) {
-            //noinspection UnnecessaryLocalVariable
-            final int itemType = i;
-            final FACTORY itemFactory = itemFactoryList.get(i);
-            getItemFactoryByItemTypeArray.append(itemType, itemFactory);
-            getItemTypeByItemFactoryArray.put(itemFactory, itemType);
-        }
-        itemTypeCount = itemFactoryList.size();
     }
 
-    @NonNull
-    public List<FACTORY> getItemFactoryList() {
-        return itemFactoryList;
+    fun matchItemFactoryByData(data: Any?): FACTORY {
+        return itemFactoryList.find { it.match(data) }
+            ?: throw IllegalStateException("Not found item factory by data: $data")
     }
 
-    public int getItemTypeCount() {
-        return itemTypeCount;
+    fun getItemFactoryByItemType(itemType: Int): FACTORY {
+        return getItemFactoryByItemTypeArray[itemType]
+            ?: throw IllegalArgumentException("Unknown item type: $itemType")
     }
 
-    @NonNull
-    public FACTORY matchItemFactoryByData(@Nullable Object data) {
-        for (FACTORY itemFactory : itemFactoryList) {
-            if (itemFactory.match(data)) {
-                return itemFactory;
-            }
-        }
-        throw new IllegalStateException("Not found item factory by data: " + data);
+    fun getItemTypeByData(data: Any?): Int {
+        val itemFactory = matchItemFactoryByData(data)
+        return getItemTypeByItemFactoryMap[itemFactory]
+            ?: throw IllegalStateException("Not found item type by item factory: $itemFactory")
     }
 
-    @NonNull
-    public FACTORY getItemFactoryByItemType(int itemType) {
-        FACTORY itemFactory = getItemFactoryByItemTypeArray.get(itemType);
-        if (itemFactory == null) {
-            throw new IllegalArgumentException("Unknown item type: " + itemType);
-        }
-        return itemFactory;
-    }
-
-    public int getItemTypeByData(@Nullable Object data) {
-        FACTORY itemFactory = matchItemFactoryByData(data);
-        Integer itemType = getItemTypeByItemFactoryArray.get(itemFactory);
-        if (itemType == null) {
-            throw new IllegalStateException("Not found item type by item factory: " + itemFactory);
-        }
-        return itemType;
-    }
-
-    public int getItemTypeByItemFactory(@NonNull FACTORY itemFactory) {
-        Integer itemType = getItemTypeByItemFactoryArray.get(itemFactory);
-        if (itemType == null) {
-            throw new IllegalStateException("Not found item type by item factory: " + itemFactory);
-        }
-        return itemType;
+    fun getItemTypeByItemFactory(itemFactory: FACTORY): Int {
+        return getItemTypeByItemFactoryMap[itemFactory]
+            ?: throw IllegalStateException("Not found item type by item factory: $itemFactory")
     }
 }

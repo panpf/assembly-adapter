@@ -1,104 +1,82 @@
-package com.github.panpf.assemblyadapter;
+package com.github.panpf.assemblyadapter
 
-import android.view.View;
+import android.view.View
+import androidx.annotation.IdRes
+import java.util.*
 
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
+class ClickListenerManager<DATA> {
 
-import com.github.panpf.assemblyadapter.R;
+    private val holders: MutableList<Any> = LinkedList()
 
-import java.util.LinkedList;
-import java.util.List;
-
-public class ClickListenerManager<DATA> {
-
-    @NonNull
-    private final List<Object> holders = new LinkedList<>();
-
-    public void add(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener) {
-        holders.add(new ClickListenerHolder<>(viewId, onClickListener));
+    fun add(@IdRes viewId: Int, onClickListener: OnClickListener<DATA>) {
+        holders.add(ClickListenerHolder(viewId, onClickListener))
     }
 
-    public void add(@NonNull OnClickListener<DATA> onClickListener) {
-        holders.add(new ClickListenerHolder<>(onClickListener));
+    fun add(onClickListener: OnClickListener<DATA>) {
+        holders.add(ClickListenerHolder(onClickListener))
     }
 
-    public void add(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener) {
-        holders.add(new LongClickListenerHolder<>(viewId, onClickListener));
+    fun add(@IdRes viewId: Int, onClickListener: OnLongClickListener<DATA>) {
+        holders.add(LongClickListenerHolder(viewId, onClickListener))
     }
 
-    public void add(@NonNull OnLongClickListener<DATA> onClickListener) {
-        holders.add(new LongClickListenerHolder<>(onClickListener));
+    fun add(onClickListener: OnLongClickListener<DATA>) {
+        holders.add(LongClickListenerHolder(onClickListener))
     }
 
-    public void register(@NonNull Item<DATA> item, @NonNull View itemView) {
-        for (final Object holder : holders) {
-            if (holder instanceof ClickListenerHolder) {
-                //noinspection unchecked
-                final ClickListenerHolder<DATA> clickListenerHolder = (ClickListenerHolder<DATA>) holder;
-                final int viewId = clickListenerHolder.viewId;
-                final View targetView = viewId > 0 ? itemView.findViewById(viewId) : itemView;
-                if (targetView == null) {
-                    throw new IllegalArgumentException("Not found click bind target view by id " + viewId);
+    fun register(item: Item<DATA>, itemView: View) {
+        for (holder in holders) {
+            if (holder is ClickListenerHolder<*>) {
+                @Suppress("UNCHECKED_CAST")
+                val clickListenerHolder = holder as ClickListenerHolder<DATA>
+                val viewId = clickListenerHolder.viewId
+                val targetView = if (viewId > 0) {
+                    itemView.findViewById(viewId)
+                        ?: throw IllegalArgumentException("Not found click bind target view by id $viewId")
+                } else {
+                    itemView
                 }
-
-                targetView.setTag(R.id.aa_tag_item, item);
-                targetView.setOnClickListener(view -> {
-                    //noinspection unchecked
-                    Item<DATA> item1 = (Item<DATA>) targetView.getTag(R.id.aa_tag_item);
-                    clickListenerHolder.listener.onViewClick(view.getContext(), view, item1.getPosition(), item1.getData());
-                });
-            } else if (holder instanceof LongClickListenerHolder) {
-                //noinspection unchecked
-                final LongClickListenerHolder<DATA> longClickListenerHolder = (LongClickListenerHolder<DATA>) holder;
-                final int viewId = longClickListenerHolder.viewId;
-                final View targetView = viewId > 0 ? itemView.findViewById(viewId) : itemView;
-                if (targetView == null) {
-                    throw new IllegalArgumentException("Not found long click bind target view by id " + viewId);
+                targetView.setTag(R.id.aa_tag_item, item)
+                targetView.setOnClickListener { view ->
+                    @Suppress("UNCHECKED_CAST")
+                    val bindItem = targetView.getTag(R.id.aa_tag_item) as Item<DATA>
+                    clickListenerHolder.listener.onViewClick(
+                        view.context, view, bindItem.getPosition(), bindItem.getData()
+                    )
                 }
-
-                targetView.setTag(R.id.aa_tag_item, item);
-                targetView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        //noinspection unchecked
-                        Item<DATA> item = (Item<DATA>) targetView.getTag(R.id.aa_tag_item);
-                        return longClickListenerHolder.listener.onViewLongClick(v.getContext(), v, item.getPosition(), item.getData());
-                    }
-                });
+            } else if (holder is LongClickListenerHolder<*>) {
+                @Suppress("UNCHECKED_CAST")
+                val longClickListenerHolder = holder as LongClickListenerHolder<DATA>
+                val viewId = longClickListenerHolder.viewId
+                val targetView = if (viewId > 0) {
+                    itemView.findViewById(viewId)
+                        ?: throw IllegalArgumentException("Not found long click bind target view by id $viewId")
+                } else {
+                    itemView
+                }
+                targetView.setTag(R.id.aa_tag_item, item)
+                targetView.setOnLongClickListener { view ->
+                    @Suppress("UNCHECKED_CAST")
+                    val bindItem = targetView.getTag(R.id.aa_tag_item) as Item<DATA>
+                    longClickListenerHolder.listener.onViewLongClick(
+                        view.context, view, bindItem.getPosition(), bindItem.getData()
+                    )
+                }
             }
         }
     }
 
-    public static class ClickListenerHolder<DATA> {
-        @IdRes
-        public final int viewId;
-        @NonNull
-        public final OnClickListener<DATA> listener;
-
-        public ClickListenerHolder(@IdRes int viewId, @NonNull OnClickListener<DATA> listener) {
-            this.viewId = viewId;
-            this.listener = listener;
-        }
-
-        public ClickListenerHolder(@NonNull OnClickListener<DATA> listener) {
-            this(0, listener);
-        }
+    class ClickListenerHolder<DATA>(
+        @field:IdRes @param:IdRes @get:IdRes val viewId: Int,
+        val listener: OnClickListener<DATA>
+    ) {
+        constructor(listener: OnClickListener<DATA>) : this(0, listener)
     }
 
-    public static class LongClickListenerHolder<DATA> {
-        @IdRes
-        public final int viewId;
-        @NonNull
-        public final OnLongClickListener<DATA> listener;
-
-        public LongClickListenerHolder(@IdRes int viewId, @NonNull OnLongClickListener<DATA> listener) {
-            this.viewId = viewId;
-            this.listener = listener;
-        }
-
-        public LongClickListenerHolder(@NonNull OnLongClickListener<DATA> listener) {
-            this(0, listener);
-        }
+    class LongClickListenerHolder<DATA>(
+        @field:IdRes @param:IdRes @get:IdRes val viewId: Int,
+        val listener: OnLongClickListener<DATA>
+    ) {
+        constructor(listener: OnLongClickListener<DATA>) : this(0, listener)
     }
 }

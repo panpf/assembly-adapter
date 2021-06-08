@@ -10,7 +10,7 @@ import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.panpf.assemblyadapter.AssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter.ItemSpan
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.StickyAssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupStickyItemFactory
@@ -29,19 +29,20 @@ class RecyclerViewGridStickyFragment : BaseBindingFragment<FragmentRecyclerBindi
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val recyclerAdapter = StickyAssemblyRecyclerAdapter<Any>(
+        val recyclerAdapter = AssemblyStickyRecyclerAdapter<Any>(
             listOf(AppGridCardItemFactory(), PinyinGroupStickyItemFactory(true))
         ).apply {
-            setItemSpanInGridLayoutManager(
+            setGridLayoutItemSpan(
                 PinyinGroupStickyItemFactory::class.java, ItemSpan.fullSpan()
             )
         }
         binding.recyclerRecycler.apply {
-            updatePadding(left = 20.dp2px, right = 20.dp2px)
-            clipChildren = false
             adapter = recyclerAdapter
             layoutManager = AssemblyGridLayoutManager(requireContext(), 3)
             addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
+
+            clipChildren = false
+            updatePadding(left = 20.dp2px, right = 20.dp2px)
             addItemDecoration(
                 context.dividerBuilder().asSpace().size(20.dp2px).build()
             )

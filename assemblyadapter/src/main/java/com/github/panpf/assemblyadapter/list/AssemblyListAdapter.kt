@@ -13,170 +13,122 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter.list
 
-package com.github.panpf.assemblyadapter.list;
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.R
+import com.github.panpf.assemblyadapter.internal.DataManager
+import com.github.panpf.assemblyadapter.internal.ItemManager
+import java.util.*
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAdapter() {
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+    private val itemManager = ItemManager(itemFactoryList)
+    private val dataManager = DataManager<DATA> { tryNotifyDataSetChanged() }
 
-import com.github.panpf.assemblyadapter.Item;
-import com.github.panpf.assemblyadapter.ItemFactory;
-import com.github.panpf.assemblyadapter.R;
-import com.github.panpf.assemblyadapter.internal.DataManager;
-import com.github.panpf.assemblyadapter.internal.ItemManager;
+    var stopNotifyDataSetChanged = false
+    val dataListSnapshot: List<DATA?>
+        get() = dataManager.dataListSnapshot
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-
-public class AssemblyListAdapter<DATA> extends BaseAdapter {
-
-    @NonNull
-    private final ItemManager<ItemFactory<?>> itemManager;
-    @NonNull
-    private final DataManager<DATA> dataManager;
-
-    private boolean notifyOnChange = true;
-
-    @NonNull
-    private final DataManager.Callback dataCallback = () -> {
-        if (isNotifyOnChange()) {
-            notifyDataSetChanged();
-        }
-    };
-
-
-    public AssemblyListAdapter(@NonNull List<ItemFactory<?>> itemFactoryList) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback);
+    constructor(
+        itemFactoryList: List<ItemFactory<*>>,
+        dataList: List<DATA>?
+    ) : this(itemFactoryList) {
+        dataManager.setDataList(dataList)
     }
 
-    public AssemblyListAdapter(@NonNull List<ItemFactory<?>> itemFactoryList, @Nullable List<DATA> dataList) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback, dataList);
+    fun getItemCount(): Int {
+        return dataManager.dataCount
     }
 
-    public AssemblyListAdapter(@NonNull List<ItemFactory<?>> itemFactoryList, @Nullable DATA[] dataArray) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback, dataArray);
+    override fun getItem(position: Int): DATA? {
+        return dataManager.getData(position)
     }
 
-
-    public int getItemCount() {
-        return dataManager.getDataCount();
+    override fun getCount(): Int {
+        return dataManager.dataCount
     }
 
-    @Nullable
-    @Override
-    public DATA getItem(int position) {
-        return dataManager.getData(position);
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
-    @Override
-    public int getCount() {
-        return getItemCount();
+    override fun getViewTypeCount(): Int {
+        return itemManager.itemTypeCount
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
+    override fun getItemViewType(position: Int): Int {
+        return itemManager.getItemTypeByData(getItem(position))
     }
 
-    @Override
-    public int getViewTypeCount() {
-        return itemManager.getItemTypeCount();
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val data = getItem(position)
+        val itemView = convertView ?: itemManager.matchItemFactoryByData(data)
+            .dispatchCreateItem(parent).apply {
+                getItemView().setTag(R.id.aa_tag_item, this)
+            }.getItemView()
+        @Suppress("UNCHECKED_CAST")
+        val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
+        item.dispatchBindData(position, data)
+        return itemView
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return itemManager.getItemTypeByData(getItem(position));
+    fun setDataList(datas: List<DATA>?) {
+        dataManager.setDataList(datas)
     }
 
-    @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        DATA data = getItem(position);
-        Item<Object> item;
-        if (convertView == null) {
-            //noinspection unchecked
-            item = (Item<Object>) itemManager.matchItemFactoryByData(data).dispatchCreateItem(parent);
-            convertView = item.getItemView();
-            convertView.setTag(R.id.aa_tag_item, item);
-        } else {
-            //noinspection unchecked
-            item = (Item<Object>) convertView.getTag(R.id.aa_tag_item);
-        }
-        item.dispatchBindData(position, data);
-        return convertView;
+    fun addData(data: DATA?): Boolean {
+        return dataManager.addData(data)
     }
 
-
-    @NonNull
-    public List<DATA> getDataListSnapshot() {
-        return dataManager.getDataListSnapshot();
+    fun addData(index: Int, data: DATA?) {
+        dataManager.addData(index, data)
     }
 
-    public void setDataList(@Nullable List<DATA> datas) {
-        dataManager.setDataList(datas);
-    }
-
-    public boolean addData(@Nullable DATA data) {
-        return dataManager.addData(data);
-    }
-
-    public void addData(int index, @Nullable DATA data) {
-        dataManager.addData(index, data);
-    }
-
-    public boolean addAllData(@Nullable Collection<DATA> datas) {
-        return dataManager.addAllData(datas);
+    fun addAllData(datas: Collection<DATA?>?): Boolean {
+        return dataManager.addAllData(datas)
     }
 
     @SafeVarargs
-    public final boolean addAllData(@Nullable DATA... datas) {
-        return dataManager.addAllData(datas);
+    fun addAllData(vararg datas: DATA?): Boolean {
+        return dataManager.addAllData(*datas)
     }
 
-    public boolean removeData(@Nullable DATA data) {
-        return dataManager.removeData(data);
+    fun removeData(data: DATA?): Boolean {
+        return dataManager.removeData(data)
     }
 
-    public DATA removeData(int index) {
-        return dataManager.removeData(index);
+    fun removeData(index: Int): DATA? {
+        return dataManager.removeData(index)
     }
 
-    public boolean removeAllData(@NonNull Collection<DATA> datas) {
-        return dataManager.removeAllData(datas);
+    fun removeAllData(datas: Collection<DATA?>): Boolean {
+        return dataManager.removeAllData(datas)
     }
 
-    public void clearData() {
-        dataManager.clearData();
+    fun clearData() {
+        dataManager.clearData()
     }
 
-    public void sortData(@NonNull Comparator<DATA> comparator) {
-        dataManager.sortData(comparator);
+    fun sortData(comparator: Comparator<DATA?>) {
+        dataManager.sortData(comparator)
     }
 
-
-    public boolean isNotifyOnChange() {
-        return notifyOnChange;
+    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
+        return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    public void setNotifyOnChange(boolean notifyOnChange) {
-        this.notifyOnChange = notifyOnChange;
+    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
     }
 
-
-    @NonNull
-    public ItemFactory<?> getItemFactoryByItemType(int itemType) {
-        return itemManager.getItemFactoryByItemType(itemType);
-    }
-
-    @NonNull
-    public ItemFactory<?> getItemFactoryByPosition(int position) {
-        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)));
+    private fun tryNotifyDataSetChanged() {
+        if (!stopNotifyDataSetChanged) {
+            notifyDataSetChanged()
+        }
     }
 }

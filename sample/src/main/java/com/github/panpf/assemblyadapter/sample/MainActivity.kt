@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
                     Link("RecyclerView - Grid", RecyclerViewGridFragment()),
                     Link("RecyclerView - Grid - Sticky", RecyclerViewGridStickyFragment()),
                     Link("RecyclerView - StaggeredGrid", RecyclerViewStaggeredGridFragment()),
+                    Link("RecyclerView - StaggeredGrid - Sticky", RecyclerViewStaggeredGridStickyFragment()),
                     Link("ListView", ListViewFragment()),
                     Link("ExpandableListView", ExpandableListViewFragment()),
 //                    Link("AssemblyPagingDataAdapter", PagingDataAdapterSampleFragment()),

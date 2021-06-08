@@ -23,4 +23,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="我是小尾巴" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/appGroupItemTitleText"
+        app:layout_constraintStart_toStartOf="@id/appGroupItemTitleText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

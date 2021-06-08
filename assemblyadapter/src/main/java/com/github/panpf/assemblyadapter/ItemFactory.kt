@@ -1,27 +1,23 @@
-package com.github.panpf.assemblyadapter;
+package com.github.panpf.assemblyadapter
 
-import android.view.ViewGroup;
+import android.view.ViewGroup
+import androidx.annotation.IdRes
 
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+interface ItemFactory<DATA> {
+    fun match(data: Any?): Boolean
 
-public interface ItemFactory<DATA> {
+    fun dispatchCreateItem(parent: ViewGroup): Item<DATA>
 
-    boolean match(@Nullable Object data);
+    fun setOnViewClickListener(
+        @IdRes viewId: Int,
+        onClickListener: OnClickListener<DATA>
+    ): ItemFactory<DATA>
 
-    @NonNull
-    Item<DATA> dispatchCreateItem(@NonNull ViewGroup parent);
+    fun setOnViewLongClickListener(
+        @IdRes viewId: Int, onLongClickListener: OnLongClickListener<DATA>
+    ): ItemFactory<DATA>
 
-    @NonNull
-    ItemFactory<DATA> setOnViewClickListener(@IdRes int viewId, @NonNull OnClickListener<DATA> onClickListener);
+    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA>
 
-    @NonNull
-    ItemFactory<DATA> setOnViewLongClickListener(@IdRes int viewId, @NonNull OnLongClickListener<DATA> onClickListener);
-
-    @NonNull
-    ItemFactory<DATA> setOnItemClickListener(@NonNull OnClickListener<DATA> onClickListener);
-
-    @NonNull
-    ItemFactory<DATA> setOnItemLongClickListener(@NonNull OnLongClickListener<DATA> onClickListener);
+    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA>
 }

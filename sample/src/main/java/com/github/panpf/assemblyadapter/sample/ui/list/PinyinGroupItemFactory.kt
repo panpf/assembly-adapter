@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
-import com.github.panpf.assemblyadapter.sample.base.StickyAssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemPinyinGroupBinding
 
 open class PinyinGroupItemFactory(private val hideStartMargin: Boolean = false) :
     BindingAssemblyItemFactory<PinyinGroup, ItemPinyinGroupBinding>(),
-    StickyAssemblyRecyclerAdapter.StickyItemFactory {
+    AssemblyStickyRecyclerAdapter.StickyItemFactory {
 
     override fun match(data: Any?): Boolean {
         return data is PinyinGroup

@@ -1,65 +1,21 @@
-package com.github.panpf.assemblyadapter.list;
+package com.github.panpf.assemblyadapter.list
 
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.View
+import android.view.ViewGroup
+import com.github.panpf.assemblyadapter.AssemblyItem
 
-import androidx.annotation.NonNull;
+abstract class AssemblyExpandableItem<DATA> : AssemblyItem<DATA> {
 
-import com.github.panpf.assemblyadapter.AssemblyItem;
+    var groupPosition = -1
+    var childPosition = -1
+    var isExpanded = false
+    var isLastChild = false
 
-public abstract class AssemblyExpandableItem<DATA> extends AssemblyItem<DATA> {
+    constructor(itemView: View) : super(itemView)
+    constructor(itemLayoutId: Int, parent: ViewGroup) : super(itemLayoutId, parent)
 
-    private int groupPosition = -1;
-    private int childPosition = -1;
-    private boolean isExpanded;
-    private boolean isLastChild;
-
-    public AssemblyExpandableItem(@NonNull View itemView) {
-        super(itemView);
-    }
-
-    public AssemblyExpandableItem(int itemLayoutId, @NonNull ViewGroup parent) {
-        super(itemLayoutId, parent);
-    }
-
-    void setGroupPosition(int groupPosition) {
-        this.groupPosition = groupPosition;
-    }
-
-    void setChildPosition(int childPosition) {
-        this.childPosition = childPosition;
-    }
-
-    void setExpanded(boolean expanded) {
-        isExpanded = expanded;
-    }
-
-    void setLastChild(boolean lastChild) {
-        isLastChild = lastChild;
-    }
-
-
-    public int getGroupPosition() {
-        return groupPosition;
-    }
-
-    public int getChildPosition() {
-        return childPosition;
-    }
-
-    public boolean isExpanded() {
-        return isExpanded;
-    }
-
-    public boolean isLastChild() {
-        return isLastChild;
-    }
-
-    public boolean isGroup() {
-        return childPosition == -1;
-    }
-
-    public boolean isChild() {
-        return childPosition != -1;
-    }
+    val isGroup: Boolean
+        get() = childPosition == -1
+    val isChild: Boolean
+        get() = childPosition != -1
 }

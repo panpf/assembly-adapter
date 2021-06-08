@@ -13,259 +13,198 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter.list
 
-package com.github.panpf.assemblyadapter.list;
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseExpandableListAdapter
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.R
+import com.github.panpf.assemblyadapter.internal.DataManager
+import com.github.panpf.assemblyadapter.internal.ItemManager
+import java.util.*
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
+    itemFactoryList: List<ItemFactory<*>>
+) : BaseExpandableListAdapter() {
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+    private val itemManager = ItemManager(itemFactoryList)
+    private val dataManager = DataManager<GROUP_DATA> { tryNotifyDataSetChanged() }
+    private var callback: Callback? = null
 
-import com.github.panpf.assemblyadapter.Item;
-import com.github.panpf.assemblyadapter.ItemFactory;
-import com.github.panpf.assemblyadapter.R;
-import com.github.panpf.assemblyadapter.internal.DataManager;
-import com.github.panpf.assemblyadapter.internal.ItemManager;
+    var stopNotifyDataSetChanged = false
+    val dataListSnapshot: List<GROUP_DATA?>
+        get() = dataManager.dataListSnapshot
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+    constructor(
+        itemFactoryList: List<ItemFactory<*>>,
+        dataList: List<GROUP_DATA>?
+    ) : this(itemFactoryList) {
+        dataManager.setDataList(dataList)
+    }
 
-public class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA> extends BaseExpandableListAdapter {
+    fun getItemCount(): Int {
+        return dataManager.dataCount
+    }
 
-    @NonNull
-    private final ItemManager<ItemFactory<?>> itemManager;
-    @NonNull
-    private final DataManager<GROUP_DATA> dataManager;
-    @Nullable
-    private Callback callback;
+    fun getItem(position: Int): GROUP_DATA? {
+        return dataManager.getData(position)
+    }
 
-    private boolean notifyOnChange = true;
+    override fun getGroupCount(): Int {
+        return getItemCount()
+    }
 
-    private final DataManager.Callback dataCallback = () -> {
-        if (isNotifyOnChange()) {
-            notifyDataSetChanged();
+    override fun getGroup(groupPosition: Int): GROUP_DATA? {
+        return getItem(groupPosition)
+    }
+
+    override fun getGroupId(groupPosition: Int): Long {
+        return groupPosition.toLong()
+    }
+
+    override fun getGroupTypeCount(): Int {
+        return itemManager.itemTypeCount
+    }
+
+    override fun getGroupType(groupPosition: Int): Int {
+        return itemManager.getItemTypeByData(getGroup(groupPosition))
+    }
+
+    override fun getChildrenCount(groupPosition: Int): Int {
+        val group = getGroup(groupPosition)
+        return if (group is AssemblyExpandableGroup) group.getChildCount() else 0
+    }
+
+    override fun getChild(groupPosition: Int, childPosition: Int): CHILD_DATA? {
+        val group = getGroup(groupPosition)
+        @Suppress("UNCHECKED_CAST")
+        return if (group is AssemblyExpandableGroup) group.getChild(childPosition) as CHILD_DATA? else null
+    }
+
+    override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+        return childPosition.toLong()
+    }
+
+    override fun getChildTypeCount(): Int {
+        return itemManager.itemTypeCount
+    }
+
+    override fun getChildType(groupPosition: Int, childPosition: Int): Int {
+        return itemManager.getItemTypeByData(getChild(groupPosition, childPosition))
+    }
+
+    override fun hasStableIds(): Boolean {
+        return callback != null && callback!!.hasStableIds()
+    }
+
+    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+        return callback != null && callback!!.isChildSelectable(groupPosition, childPosition)
+    }
+
+    override fun getGroupView(
+        groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
+    ): View {
+        val groupData = getGroup(groupPosition)
+        val groupItemView = convertView ?: itemManager.matchItemFactoryByData(groupData)
+            .dispatchCreateItem(parent).apply {
+                getItemView().setTag(R.id.aa_tag_item, this)
+            }.getItemView()
+        @Suppress("UNCHECKED_CAST")
+        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<Any>
+        if (groupItem is AssemblyExpandableItem<*>) {
+            groupItem.groupPosition = groupPosition
+            groupItem.isExpanded = isExpanded
+            groupItem.childPosition = -1
+            groupItem.isLastChild = false
         }
-    };
-
-
-    public AssemblyExpandableListAdapter(@NonNull List<ItemFactory<?>> itemFactoryList) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback);
+        groupItem.dispatchBindData(groupPosition, groupData)
+        return groupItemView
     }
 
-    public AssemblyExpandableListAdapter(@NonNull List<ItemFactory<?>> itemFactoryList, @Nullable List<GROUP_DATA> dataList) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback, dataList);
-    }
-
-    public AssemblyExpandableListAdapter(@NonNull List<ItemFactory<?>> itemFactoryList, @Nullable GROUP_DATA[] dataArray) {
-        this.itemManager = new ItemManager<>(itemFactoryList);
-        this.dataManager = new DataManager<>(dataCallback, dataArray);
-    }
-
-
-    public int getItemCount() {
-        return dataManager.getDataCount();
-    }
-
-    @Nullable
-    public GROUP_DATA getItem(int position) {
-        return dataManager.getData(position);
-    }
-
-
-    @Override
-    public int getGroupCount() {
-        return getItemCount();
-    }
-
-    @Nullable
-    @Override
-    public GROUP_DATA getGroup(int groupPosition) {
-        return getItem(groupPosition);
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public int getGroupTypeCount() {
-        return itemManager.getItemTypeCount();
-    }
-
-    @Override
-    public int getGroupType(int groupPosition) {
-        return itemManager.getItemTypeByData(getGroup(groupPosition));
-    }
-
-
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        GROUP_DATA group = getGroup(groupPosition);
-        return group instanceof AssemblyExpandableGroup ? ((AssemblyExpandableGroup) group).getChildCount() : 0;
-    }
-
-    @Nullable
-    @Override
-    public CHILD_DATA getChild(int groupPosition, int childPosition) {
-        GROUP_DATA group = getGroup(groupPosition);
-        //noinspection unchecked
-        return group instanceof AssemblyExpandableGroup ? (CHILD_DATA) ((AssemblyExpandableGroup) group).getChild(childPosition) : null;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
-
-    @Override
-    public int getChildTypeCount() {
-        return itemManager.getItemTypeCount();
-    }
-
-    @Override
-    public int getChildType(int groupPosition, int childPosition) {
-        return itemManager.getItemTypeByData(getChild(groupPosition, childPosition));
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return callback != null && callback.hasStableIds();
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return callback != null && callback.isChildSelectable(groupPosition, childPosition);
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        GROUP_DATA groupData = getGroup(groupPosition);
-        Item<Object> item;
-        if (convertView == null) {
-            //noinspection unchecked
-            item = (Item<Object>) itemManager.matchItemFactoryByData(groupData).dispatchCreateItem(parent);
-            convertView = item.getItemView();
-            convertView.setTag(R.id.aa_tag_item, item);
-        } else {
-            //noinspection unchecked
-            item = (Item<Object>) convertView.getTag(R.id.aa_tag_item);
+    override fun getChildView(
+        groupPosition: Int, childPosition: Int, isLastChild: Boolean,
+        convertView: View?, parent: ViewGroup
+    ): View {
+        val childData = getChild(groupPosition, childPosition)
+        val childItemView = convertView ?: itemManager.matchItemFactoryByData(childData)
+            .dispatchCreateItem(parent).apply {
+                getItemView().setTag(R.id.aa_tag_item, this)
+            }.getItemView()
+        @Suppress("UNCHECKED_CAST")
+        val childItem = childItemView.getTag(R.id.aa_tag_item) as Item<Any>
+        if (childItem is AssemblyExpandableItem<*>) {
+            childItem.groupPosition = groupPosition
+            childItem.isExpanded = false
+            childItem.childPosition = childPosition
+            childItem.isLastChild = isLastChild
         }
-        if (item instanceof AssemblyExpandableItem) {
-            AssemblyExpandableItem<Object> assemblyExpandableItem = (AssemblyExpandableItem<Object>) item;
-            assemblyExpandableItem.setGroupPosition(groupPosition);
-            assemblyExpandableItem.setExpanded(isExpanded);
-            assemblyExpandableItem.setChildPosition(-1);
-            assemblyExpandableItem.setLastChild(false);
-        }
-        item.dispatchBindData(groupPosition, groupData);
-        return convertView;
+        childItem.dispatchBindData(childPosition, childData)
+        return childItemView
     }
 
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, @Nullable View convertView, @NonNull ViewGroup parent) {
-        CHILD_DATA childData = getChild(groupPosition, childPosition);
-        Item<Object> item;
-        if (convertView == null) {
-            //noinspection unchecked
-            item = (Item<Object>) itemManager.matchItemFactoryByData(childData).dispatchCreateItem(parent);
-            convertView = item.getItemView();
-            convertView.setTag(R.id.aa_tag_item, item);
-        } else {
-            //noinspection unchecked
-            item = (Item<Object>) convertView.getTag(R.id.aa_tag_item);
-        }
-        if (item instanceof AssemblyExpandableItem) {
-            AssemblyExpandableItem<Object> assemblyExpandableItem = (AssemblyExpandableItem<Object>) item;
-            assemblyExpandableItem.setGroupPosition(groupPosition);
-            assemblyExpandableItem.setExpanded(false);
-            assemblyExpandableItem.setChildPosition(childPosition);
-            assemblyExpandableItem.setLastChild(isLastChild);
-        }
-        item.dispatchBindData(childPosition, childData);
-        return convertView;
+    fun setDataList(datas: List<GROUP_DATA>?) {
+        dataManager.setDataList(datas)
     }
 
-
-    @NonNull
-    public List<GROUP_DATA> getDataListSnapshot() {
-        return dataManager.getDataListSnapshot();
+    fun addData(data: GROUP_DATA?): Boolean {
+        return dataManager.addData(data)
     }
 
-    public void setDataList(@Nullable List<GROUP_DATA> datas) {
-        dataManager.setDataList(datas);
+    fun addData(index: Int, data: GROUP_DATA?) {
+        dataManager.addData(index, data)
     }
 
-    public boolean addData(@Nullable GROUP_DATA data) {
-        return dataManager.addData(data);
-    }
-
-    public void addData(int index, @Nullable GROUP_DATA data) {
-        dataManager.addData(index, data);
-    }
-
-    public boolean addAllData(@Nullable Collection<GROUP_DATA> datas) {
-        return dataManager.addAllData(datas);
+    fun addAllData(datas: Collection<GROUP_DATA?>?): Boolean {
+        return dataManager.addAllData(datas)
     }
 
     @SafeVarargs
-    public final boolean addAllData(@Nullable GROUP_DATA... datas) {
-        return dataManager.addAllData(datas);
+    fun addAllData(vararg datas: GROUP_DATA?): Boolean {
+        return dataManager.addAllData(*datas)
     }
 
-    public boolean removeData(@Nullable GROUP_DATA data) {
-        return dataManager.removeData(data);
+    fun removeData(data: GROUP_DATA?): Boolean {
+        return dataManager.removeData(data)
     }
 
-    public GROUP_DATA removeData(int index) {
-        return dataManager.removeData(index);
+    fun removeData(index: Int): GROUP_DATA? {
+        return dataManager.removeData(index)
     }
 
-    public boolean removeAllData(@NonNull Collection<GROUP_DATA> datas) {
-        return dataManager.removeAllData(datas);
+    fun removeAllData(datas: Collection<GROUP_DATA?>): Boolean {
+        return dataManager.removeAllData(datas)
     }
 
-    public void clearData() {
-        dataManager.clearData();
+    fun clearData() {
+        dataManager.clearData()
     }
 
-    public void sortData(@NonNull Comparator<GROUP_DATA> comparator) {
-        dataManager.sortData(comparator);
+    fun sortData(comparator: Comparator<GROUP_DATA?>) {
+        dataManager.sortData(comparator)
     }
 
-
-    public boolean isNotifyOnChange() {
-        return notifyOnChange;
+    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
+        return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    public void setNotifyOnChange(boolean notifyOnChange) {
-        this.notifyOnChange = notifyOnChange;
+    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
     }
 
-
-    @NonNull
-    public ItemFactory<?> getItemFactoryByItemType(int itemType) {
-        return itemManager.getItemFactoryByItemType(itemType);
+    private fun tryNotifyDataSetChanged() {
+        if (!stopNotifyDataSetChanged) {
+            notifyDataSetChanged()
+        }
     }
 
-    @NonNull
-    public ItemFactory<?> getItemFactoryByPosition(int position) {
-        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)));
+    fun setCallback(callback: Callback?) {
+        this.callback = callback
     }
 
-
-    public void setCallback(@Nullable Callback callback) {
-        this.callback = callback;
-    }
-
-    public interface Callback {
-        boolean hasStableIds();
-
-        boolean isChildSelectable(int groupPosition, int childPosition);
+    interface Callback {
+        fun hasStableIds(): Boolean
+        fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean
     }
 }

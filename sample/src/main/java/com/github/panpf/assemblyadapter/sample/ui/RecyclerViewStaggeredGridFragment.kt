@@ -30,7 +30,7 @@ class RecyclerViewStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBi
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true))
         ).apply {
-            setItemSpanInGridLayoutManager(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
+            setGridLayoutItemSpan(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
         }
         binding.recyclerRecycler.apply {
             adapter = recyclerAdapter

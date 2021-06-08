@@ -1,21 +1,16 @@
-package com.github.panpf.assemblyadapter;
+package com.github.panpf.assemblyadapter
 
-import android.view.View;
+import android.view.View
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+interface Item<DATA> {
 
-public interface Item<DATA> {
+    fun dispatchBindData(position: Int, data: DATA?)
 
-    void dispatchBindData(int position, @Nullable DATA data);
+    fun getData(): DATA?
 
-    @Nullable
-    DATA getData();
+    fun getItemView(): View
 
-    @NonNull
-    View getItemView();
+    fun getPosition(): Int
 
-    int getPosition();
-
-    // todo getPosition 、getAdapterPosition、getLayoutPosition、getBindingAdapterPosition、getAbsoluteAdapterPosition
+// todo getPosition 、getAdapterPosition、getLayoutPosition、getBindingAdapterPosition、getAbsoluteAdapterPosition
 }

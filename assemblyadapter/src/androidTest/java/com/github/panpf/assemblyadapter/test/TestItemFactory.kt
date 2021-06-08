@@ -25,7 +25,7 @@ class TestItemFactory<DATA> : ItemFactory<DATA> {
 
     override fun setOnViewLongClickListener(
         viewId: Int,
-        onClickListener: OnLongClickListener<DATA>
+        onLongClickListener: OnLongClickListener<DATA>
     ): ItemFactory<DATA> {
         return this
     }
@@ -34,7 +34,7 @@ class TestItemFactory<DATA> : ItemFactory<DATA> {
         return this
     }
 
-    override fun setOnItemLongClickListener(onClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
+    override fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
         return this
     }
 }

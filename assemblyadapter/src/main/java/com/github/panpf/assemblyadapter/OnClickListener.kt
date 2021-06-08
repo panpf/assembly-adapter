@@ -1,11 +1,8 @@
-package com.github.panpf.assemblyadapter;
+package com.github.panpf.assemblyadapter
 
-import android.content.Context;
-import android.view.View;
+import android.content.Context
+import android.view.View
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-public interface OnClickListener<DATA> {
-    void onViewClick(@NonNull Context context, @NonNull View view, int position, @Nullable DATA data);
+fun interface OnClickListener<DATA> {
+    fun onViewClick(context: Context, view: View, position: Int, data: DATA?)
 }

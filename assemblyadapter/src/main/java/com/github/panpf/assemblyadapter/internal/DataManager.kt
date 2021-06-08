@@ -1,158 +1,97 @@
-package com.github.panpf.assemblyadapter.internal;
+package com.github.panpf.assemblyadapter.internal
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
 
-public class DataManager<DATA> {
+    private val dataList: MutableList<DATA?> = ArrayList()
 
-    @NonNull
-    private final Callback callback;
-    @NonNull
-    private final List<DATA> dataList = new ArrayList<>();
+    val dataCount: Int
+        get() = dataList.size
+    val dataListSnapshot: List<DATA?>
+        get() = ArrayList(dataList)
 
-    public DataManager(@NonNull Callback callback) {
-        this.callback = callback;
-    }
-
-    public DataManager(@NonNull Callback callback, @Nullable List<DATA> dataList) {
-        this.callback = callback;
-        if (dataList != null && dataList.size() > 0) {
-            this.dataList.addAll(dataList);
+    fun setDataList(datas: List<DATA>?) {
+        dataList.clear()
+        if (datas != null && datas.isNotEmpty()) {
+            dataList.addAll(datas)
         }
+        onDataListChanged()
     }
 
-    public DataManager(@NonNull Callback callback, @Nullable DATA[] dataArray) {
-        this.callback = callback;
-        if (dataArray != null && dataArray.length > 0) {
-            Collections.addAll(this.dataList, dataArray);
+    fun addData(data: DATA?): Boolean {
+        val result = dataList.add(data)
+        if (result) {
+            onDataListChanged()
         }
+        return result
     }
 
-    @NonNull
-    public List<DATA> getDataListSnapshot() {
-        return new ArrayList<>(dataList);
+    fun addData(index: Int, data: DATA?) {
+        dataList.add(index, data)
+        onDataListChanged()
     }
 
-    public void setDataList(@Nullable List<DATA> datas) {
-        synchronized (this) {
-            this.dataList.clear();
-            if (datas != null) {
-                this.dataList.addAll(datas);
-            }
-        }
-        callback.onDataListChanged();
-    }
-
-    public boolean addData(@Nullable DATA data) {
-        boolean result;
-        synchronized (this) {
-            result = dataList.add(data);
+    fun addAllData(datas: Collection<DATA?>?): Boolean {
+        var result = false
+        if (datas != null && datas.isNotEmpty()) {
+            result = dataList.addAll(datas)
         }
         if (result) {
-            callback.onDataListChanged();
+            onDataListChanged()
         }
-        return result;
-    }
-
-    public void addData(int index, @Nullable DATA data) {
-        synchronized (this) {
-            dataList.add(index, data);
-        }
-        callback.onDataListChanged();
-    }
-
-    public boolean addAllData(@Nullable Collection<DATA> datas) {
-        boolean result = false;
-        if (datas != null && datas.size() != 0) {
-            synchronized (this) {
-                result = dataList.addAll(datas);
-            }
-        }
-        if (result) {
-            callback.onDataListChanged();
-        }
-        return result;
+        return result
     }
 
     @SafeVarargs
-    public final boolean addAllData(@Nullable DATA... datas) {
-        boolean result = false;
-        if (datas != null && datas.length != 0) {
-            synchronized (this) {
-                Collections.addAll(dataList, datas);
-            }
-            result = true;
+    fun addAllData(vararg datas: DATA?): Boolean {
+        var result = false
+        if (datas.isNotEmpty()) {
+            Collections.addAll(dataList, *datas)
+            result = true
         }
         if (result) {
-            callback.onDataListChanged();
+            onDataListChanged()
         }
-        return result;
+        return result
     }
 
-    public boolean removeData(@Nullable DATA data) {
-        boolean result;
-        synchronized (this) {
-            result = dataList.remove(data);
+    fun removeData(data: DATA?): Boolean {
+        val result: Boolean = dataList.remove(data)
+        if (result) {
+            onDataListChanged()
+        }
+        return result
+    }
+
+    fun removeData(index: Int): DATA? {
+        val data: DATA? = dataList.removeAt(index)
+        onDataListChanged()
+        return data
+    }
+
+    fun removeAllData(datas: Collection<DATA?>?): Boolean {
+        var result = false
+        if (datas != null && datas.isNotEmpty()) {
+            result = dataList.removeAll(datas)
         }
         if (result) {
-            callback.onDataListChanged();
+            onDataListChanged()
         }
-        return result;
+        return result
     }
 
-    @Nullable
-    public DATA removeData(int index) {
-        DATA data;
-        synchronized (this) {
-            data = dataList.remove(index);
-        }
-        callback.onDataListChanged();
-        return data;
+    fun clearData() {
+        dataList.clear()
+        onDataListChanged()
     }
 
-    public boolean removeAllData(@Nullable Collection<DATA> datas) {
-        boolean result = false;
-        if (datas != null && datas.size() > 0) {
-            synchronized (this) {
-                result = dataList.removeAll(datas);
-            }
-        }
-        if (result) {
-            callback.onDataListChanged();
-        }
-        return result;
+    fun sortData(comparator: Comparator<DATA?>) {
+        Collections.sort(dataList, comparator)
+        onDataListChanged()
     }
 
-    public void clearData() {
-        synchronized (this) {
-            dataList.clear();
-        }
-        callback.onDataListChanged();
-    }
-
-    public void sortData(@NonNull Comparator<DATA> comparator) {
-        synchronized (this) {
-            Collections.sort(dataList, comparator);
-        }
-        callback.onDataListChanged();
-    }
-
-    public int getDataCount() {
-        return dataList.size();
-    }
-
-    @Nullable
-    public DATA getData(int position) {
-        return position >= 0 && position < dataList.size() ? dataList.get(position) : null;
-    }
-
-    public interface Callback {
-        void onDataListChanged();
+    fun getData(position: Int): DATA? {
+        return dataList.getOrNull(position)
     }
 }
