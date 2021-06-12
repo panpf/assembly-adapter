@@ -1,6 +1,7 @@
 package com.github.panpf.assemblyadapter.sample.vm
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
@@ -9,8 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-open class BaseInstalledAppPinyinFlatViewModel(application: Application) :
-    BaseInstalledAppViewModel(application) {
+class InstalledAppPinyinFlatViewModel(application: Application) : AndroidViewModel(application) {
 
     val pinyinFlatAppListData = MutableLiveData<List<Any>>()
     val loadingData = MutableLiveData<Boolean>()
@@ -23,16 +23,22 @@ open class BaseInstalledAppPinyinFlatViewModel(application: Application) :
         }
     }
 
+    private suspend fun loadInstalledAppList(): List<AppInfo> = withContext(Dispatchers.IO) {
+        val appContext = getApplication<Application>()
+        appContext.packageManager.getInstalledPackages(0).mapNotNull { packageInfo ->
+            AppInfo.fromPackageInfo(appContext, packageInfo)
+        }
+    }
+
     private suspend fun flatByPinyin(appList: List<AppInfo>): List<Any> =
         withContext(Dispatchers.IO) {
-            val sortedAppList = appList.sortedBy { it.namePinyin }
+            val sortedAppList = appList.sortedBy { it.namePinyinLowerCase }
             ArrayList<Any>().apply {
                 var lastPinyinFirstChar: Char? = null
                 sortedAppList.forEach { app ->
-                    val namePinyinFirstChar = app.namePinyin.first()
+                    val namePinyinFirstChar = app.namePinyin.first().uppercaseChar()
                     if (lastPinyinFirstChar == null || namePinyinFirstChar != lastPinyinFirstChar) {
-                        val namePinyinFirstCharUppercase = namePinyinFirstChar.uppercaseChar()
-                        add(PinyinGroup(namePinyinFirstCharUppercase.toString()))
+                        add(PinyinGroup(namePinyinFirstChar.toString()))
                         lastPinyinFirstChar = namePinyinFirstChar
                     }
                     add(app)

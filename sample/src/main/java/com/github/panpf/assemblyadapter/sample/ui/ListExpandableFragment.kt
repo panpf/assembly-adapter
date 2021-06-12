@@ -12,11 +12,11 @@ import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentExpandableListBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.ListExpandableViewModel
+import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinGroupViewModel
 
 class ListExpandableFragment : BaseBindingFragment<FragmentExpandableListBinding>() {
 
-    private val viewModel by viewModels<ListExpandableViewModel>()
+    private val viewModel by viewModels<InstalledAppPinyinGroupViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?

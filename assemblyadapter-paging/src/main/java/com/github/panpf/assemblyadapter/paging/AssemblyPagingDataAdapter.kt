@@ -1,66 +1,32 @@
-/*
- * Copyright (C) 2017 Peng fei Pan <sky@panpf.me>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.github.panpf.assemblyadapter
+package com.github.panpf.assemblyadapter.paging
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.*
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.AssemblyRecyclerItem
-import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import java.util.*
 
-open class AssemblyRecyclerAdapter<DATA>(
-    itemFactoryList: List<ItemFactory<*>>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), GridLayoutItemSpanAdapter {
+open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
+    itemFactoryList: List<ItemFactory<*>>,
+    diffCallback: DiffUtil.ItemCallback<DATA>,
+    mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
+) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
+    diffCallback, mainDispatcher, workerDispatcher
+), GridLayoutItemSpanAdapter {
 
     private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<DATA> {
-        if (!stopNotifyDataSetChanged) {
-            notifyDataSetChanged()
-        }
-    }
     private var gridLayoutItemSpanMap: MutableMap<Class<out ItemFactory<*>>, ItemSpan>? = null
 
-    var stopNotifyDataSetChanged = false
-    val dataListSnapshot: List<DATA>
-        get() = dataManager.dataListSnapshot
-
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        dataList: List<DATA>?
-    ) : this(itemFactoryList) {
-        dataManager.setDataList(dataList)
-    }
-
-    override fun getItemCount(): Int {
-        return dataManager.dataCount
-    }
-
-    fun getItem(position: Int): DATA? {
-        return dataManager.getData(position)
-    }
-
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
     override fun getItemViewType(position: Int): Int {
-        return itemManager.getItemTypeByData(getItem(position))
+        return itemManager.getItemTypeByData(peek(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -78,57 +44,16 @@ open class AssemblyRecyclerAdapter<DATA>(
         }
     }
 
-    fun setDataList(datas: List<DATA>?) {
-        dataManager.setDataList(datas)
-    }
-
-    fun addData(data: DATA): Boolean {
-        return dataManager.addData(data)
-    }
-
-    fun addData(index: Int, data: DATA) {
-        dataManager.addData(index, data)
-    }
-
-    fun addAllData(datas: Collection<DATA>?): Boolean {
-        return dataManager.addAllData(datas)
-    }
-
-    @SafeVarargs
-    fun addAllData(vararg datas: DATA): Boolean {
-        return dataManager.addAllData(*datas)
-    }
-
-    fun removeData(data: DATA): Boolean {
-        return dataManager.removeData(data)
-    }
-
-    fun removeData(index: Int): DATA? {
-        return dataManager.removeData(index)
-    }
-
-    fun removeAllData(datas: Collection<DATA>): Boolean {
-        return dataManager.removeAllData(datas)
-    }
-
-    fun clearData() {
-        dataManager.clearData()
-    }
-
-    fun sortData(comparator: Comparator<DATA>) {
-        dataManager.sortData(comparator)
-    }
-
     fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
     override fun setGridLayoutItemSpan(
         itemFactoryClass: Class<out ItemFactory<*>>, itemSpan: ItemSpan
-    ): AssemblyRecyclerAdapter<DATA> {
+    ): AssemblyPagingDataAdapter<DATA> {
         val gridLayoutItemSpanMap =
             (gridLayoutItemSpanMap ?: (HashMap<Class<out ItemFactory<*>>, ItemSpan>().apply {
-                this@AssemblyRecyclerAdapter.gridLayoutItemSpanMap = this
+                this@AssemblyPagingDataAdapter.gridLayoutItemSpanMap = this
             }))
         gridLayoutItemSpanMap[itemFactoryClass] = itemSpan
         return this
@@ -136,10 +61,10 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     override fun setGridLayoutItemSpanMap(
         itemSpanMap: Map<Class<out ItemFactory<*>>, ItemSpan>?
-    ): AssemblyRecyclerAdapter<DATA> {
+    ): AssemblyPagingDataAdapter<DATA> {
         val gridLayoutItemSpanMap =
             (gridLayoutItemSpanMap ?: (HashMap<Class<out ItemFactory<*>>, ItemSpan>().apply {
-                this@AssemblyRecyclerAdapter.gridLayoutItemSpanMap = this
+                this@AssemblyPagingDataAdapter.gridLayoutItemSpanMap = this
             }))
         gridLayoutItemSpanMap.clear()
         if (itemSpanMap != null) {
@@ -179,6 +104,6 @@ open class AssemblyRecyclerAdapter<DATA>(
     }
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
+        return getItemFactoryByItemType(itemManager.getItemTypeByData(peek(position)))
     }
 }

@@ -12,7 +12,8 @@
     <FrameLayout
         android:id="@+id/recyclerStickyContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="?android:windowBackground"/>
 
     <ProgressBar
         android:id="@+id/recyclerProgressBar"

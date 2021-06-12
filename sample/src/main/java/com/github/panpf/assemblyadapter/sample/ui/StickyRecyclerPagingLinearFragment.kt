@@ -5,18 +5,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyRecyclerAdapter
+import com.github.panpf.assemblyadapter.paging.KeyDiffItemCallback
+import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupStickyItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.RecyclerLinearStickyViewModel
+import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import me.panpf.recycler.sticky.StickyRecyclerItemDecoration
 
-class RecyclerLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class StickyRecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
-    private val viewModel by viewModels<RecyclerLinearStickyViewModel>()
+    private val viewModel by viewModels<InstalledAppPinyinFlatPagingViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -25,21 +30,26 @@ class RecyclerLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val recyclerAdapter = AssemblyStickyRecyclerAdapter<Any>(
-            listOf(AppItemFactory(), PinyinGroupStickyItemFactory())
+        val pagingDataAdapter = AssemblyStickyPagingDataAdapter(
+            listOf(AppItemFactory(), PinyinGroupStickyItemFactory()),
+            KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
-            adapter = recyclerAdapter
+            adapter = pagingDataAdapter
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
         }
 
-        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
-            recyclerAdapter.setDataList(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.pinyinFlatAppListDataFlow.collect {
+                pagingDataAdapter.submitData(it)
+            }
         }
 
-        viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.recyclerProgressBar.isVisible = it == true
+        viewLifecycleOwner.lifecycleScope.launch {
+            pagingDataAdapter.loadStateFlow.collect {
+                binding.recyclerProgressBar.isVisible = it.refresh is LoadState.Loading
+            }
         }
     }
 }

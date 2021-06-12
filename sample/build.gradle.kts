@@ -37,6 +37,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${property("ANDROIDX_LIFECYCLE")}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${property("ANDROIDX_LIFECYCLE")}")
     implementation("com.google.android.material:material:${property("GOOGLE_MATERIAL")}")
+    implementation("androidx.paging:paging-common:${property("ANDROIDX_PAGING")}")
+    implementation("androidx.paging:paging-runtime:${property("ANDROIDX_PAGING")}")
 
     implementation("io.github.panpf.pagerindicator:pagerindicator:${property("PAGER_INDICATOR")}")
     implementation("io.github.panpf.sketch:sketch:${property("SKETCH_VERSION")}")
@@ -47,4 +49,5 @@ dependencies {
 
     implementation(project(":assemblyadapter"))
     implementation(project(":assemblyadapter-list"))
+    implementation(project(":assemblyadapter-paging"))
 }

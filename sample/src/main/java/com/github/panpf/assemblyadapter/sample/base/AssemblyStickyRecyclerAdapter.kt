@@ -14,6 +14,4 @@ class AssemblyStickyRecyclerAdapter<DATA> : AssemblyRecyclerAdapter<DATA>, Stick
     override fun isStickyItemByType(type: Int): Boolean {
         return getItemFactoryByItemType(type) is StickyItemFactory
     }
-
-    interface StickyItemFactory
 }

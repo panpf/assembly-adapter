@@ -11,11 +11,11 @@ import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.RecyclerLinearViewModel
+import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatViewModel
 
 class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
-    private val viewModel by viewModels<RecyclerLinearViewModel>()
+    private val viewModel by viewModels<InstalledAppPinyinFlatViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?

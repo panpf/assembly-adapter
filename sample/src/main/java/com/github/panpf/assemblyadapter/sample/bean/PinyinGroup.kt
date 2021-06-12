@@ -1,3 +1,8 @@
 package com.github.panpf.assemblyadapter.sample.bean
 
-data class PinyinGroup(val title: String)
+import com.github.panpf.assemblyadapter.paging.DiffKey
+
+data class PinyinGroup(val title: String) : DiffKey {
+
+    override val diffKey: String = title
+}

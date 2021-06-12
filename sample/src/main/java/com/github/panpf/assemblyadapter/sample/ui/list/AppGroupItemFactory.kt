@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.list.BindingAssemblyExpandableItemFactory
 import com.github.panpf.assemblyadapter.sample.R
-import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyRecyclerAdapter
+import com.github.panpf.assemblyadapter.sample.base.StickyItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGroupBinding
 
 open class AppGroupItemFactory :
     BindingAssemblyExpandableItemFactory<AppGroup, ItemAppGroupBinding>(),
-    AssemblyStickyRecyclerAdapter.StickyItemFactory {
+    StickyItemFactory {
 
     override fun match(data: Any?): Boolean {
         return data is AppGroup
