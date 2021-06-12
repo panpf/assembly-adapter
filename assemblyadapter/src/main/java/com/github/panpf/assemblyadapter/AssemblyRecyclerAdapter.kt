@@ -29,7 +29,11 @@ open class AssemblyRecyclerAdapter<DATA>(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<DATA> { tryNotifyDataSetChanged() }
+    private val dataManager = DataManager<DATA> {
+        if (!stopNotifyDataSetChanged) {
+            notifyDataSetChanged()
+        }
+    }
     private var gridLayoutItemSpanMap: MutableMap<Class<out ItemFactory<*>>, ItemSpan>? = null
 
     var stopNotifyDataSetChanged = false
@@ -63,7 +67,7 @@ open class AssemblyRecyclerAdapter<DATA>(
         val itemFactory = itemManager.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         val recyclerItem: AssemblyRecyclerItem<*> = AssemblyRecyclerItem(item)
-        applyItemSpanInGridLayoutManager(parent, itemFactory, recyclerItem)
+        applyGridLayoutItemSpan(parent, itemFactory, recyclerItem)
         return recyclerItem
     }
 
@@ -82,7 +86,6 @@ open class AssemblyRecyclerAdapter<DATA>(
                 this@AssemblyRecyclerAdapter.gridLayoutItemSpanMap = this
             }))
         gridLayoutItemSpanMap[itemFactoryClass] = itemSpan
-        tryNotifyDataSetChanged()
         return this
     }
 
@@ -95,7 +98,6 @@ open class AssemblyRecyclerAdapter<DATA>(
         if (itemSpanMap != null) {
             gridLayoutItemSpanMap.putAll(itemSpanMap)
         }
-        tryNotifyDataSetChanged()
         return this
     }
 
@@ -103,18 +105,18 @@ open class AssemblyRecyclerAdapter<DATA>(
         return gridLayoutItemSpanMap
     }
 
-    private fun applyItemSpanInGridLayoutManager(
+    private fun applyGridLayoutItemSpan(
         parent: ViewGroup,
         recyclerItemFactory: ItemFactory<*>,
         recyclerItem: AssemblyRecyclerItem<*>
     ) {
-        val itemSpanMapInGridLayoutManager = gridLayoutItemSpanMap
-        if (itemSpanMapInGridLayoutManager?.isNotEmpty() == true && parent is RecyclerView) {
+        val gridLayoutItemSpanMap = gridLayoutItemSpanMap
+        if (gridLayoutItemSpanMap?.isNotEmpty() == true && parent is RecyclerView) {
             val layoutManager = parent.layoutManager
             if (layoutManager is AssemblyGridLayoutManager) {
                 // No need to do
             } else if (layoutManager is AssemblyStaggeredGridLayoutManager) {
-                val itemSpan = itemSpanMapInGridLayoutManager[recyclerItemFactory.javaClass]
+                val itemSpan = gridLayoutItemSpanMap[recyclerItemFactory.javaClass]
                 if (itemSpan != null && itemSpan.span < 0) {
                     val itemView: View = recyclerItem.getItemView()
                     val layoutParams = itemView.layoutParams
@@ -176,11 +178,5 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
-    }
-
-    private fun tryNotifyDataSetChanged() {
-        if (!stopNotifyDataSetChanged) {
-            notifyDataSetChanged()
-        }
     }
 }

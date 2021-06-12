@@ -10,11 +10,11 @@ import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppListPinyinFlatViewModel
+import com.github.panpf.assemblyadapter.sample.vm.ListViewModel
 
-class ListViewFragment : BaseBindingFragment<FragmentListBinding>() {
+class ListFragment : BaseBindingFragment<FragmentListBinding>() {
 
-    private val installedAppListPinyinFlatViewModel by viewModels<InstalledAppListPinyinFlatViewModel>()
+    private val viewModel by viewModels<ListViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -29,11 +29,11 @@ class ListViewFragment : BaseBindingFragment<FragmentListBinding>() {
             )
         binding.listList.adapter = listAdapter
 
-        installedAppListPinyinFlatViewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
         }
 
-        installedAppListPinyinFlatViewModel.loadingData.observe(viewLifecycleOwner) {
+        viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.listProgressBar.isVisible = it == true
         }
     }

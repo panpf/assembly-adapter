@@ -12,5 +12,5 @@ interface Item<DATA> {
 
     fun getPosition(): Int
 
-// todo getPosition 、getAdapterPosition、getLayoutPosition、getBindingAdapterPosition、getAbsoluteAdapterPosition
+    // todo getPosition 、getAdapterPosition、getLayoutPosition、getBindingAdapterPosition、getAbsoluteAdapterPosition
 }

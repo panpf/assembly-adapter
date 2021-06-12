@@ -46,4 +46,5 @@ dependencies {
     implementation("com.github.fondesa:recycler-view-divider:${property("RECYCLER_VIEW_DIVIDER")}")
 
     implementation(project(":assemblyadapter"))
+    implementation(project(":assemblyadapter-list"))
 }

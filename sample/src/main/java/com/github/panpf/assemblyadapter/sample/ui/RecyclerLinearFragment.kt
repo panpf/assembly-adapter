@@ -11,11 +11,11 @@ import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppListPinyinFlatViewModel
+import com.github.panpf.assemblyadapter.sample.vm.RecyclerLinearViewModel
 
-class RecyclerViewLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
-    private val installedAppListPinyinFlatViewModel by viewModels<InstalledAppListPinyinFlatViewModel>()
+    private val viewModel by viewModels<RecyclerLinearViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -33,11 +33,11 @@ class RecyclerViewLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>(
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        installedAppListPinyinFlatViewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             recyclerAdapter.setDataList(it)
         }
 
-        installedAppListPinyinFlatViewModel.loadingData.observe(viewLifecycleOwner) {
+        viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.recyclerProgressBar.isVisible = it == true
         }
     }

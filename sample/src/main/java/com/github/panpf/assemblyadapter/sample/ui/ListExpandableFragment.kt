@@ -12,11 +12,11 @@ import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentExpandableListBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppListPinyinGroupViewModel
+import com.github.panpf.assemblyadapter.sample.vm.ListExpandableViewModel
 
-class ExpandableListViewFragment : BaseBindingFragment<FragmentExpandableListBinding>() {
+class ListExpandableFragment : BaseBindingFragment<FragmentExpandableListBinding>() {
 
-    private val installedAppListPinyinGroupViewModel by viewModels<InstalledAppListPinyinGroupViewModel>()
+    private val viewModel by viewModels<ListExpandableViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -31,11 +31,11 @@ class ExpandableListViewFragment : BaseBindingFragment<FragmentExpandableListBin
             )
         binding.expandableListList.setAdapter(listAdapter)
 
-        installedAppListPinyinGroupViewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
         }
 
-        installedAppListPinyinGroupViewModel.loadingData.observe(viewLifecycleOwner) {
+        viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.expandableListProgressBar.isVisible = it == true
         }
     }

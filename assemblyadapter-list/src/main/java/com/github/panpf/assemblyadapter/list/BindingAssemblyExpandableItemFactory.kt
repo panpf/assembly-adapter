@@ -7,6 +7,7 @@ import androidx.viewbinding.ViewBinding
 
 abstract class BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
     AssemblyExpandableItemFactory<DATA>() {
+
     override fun createItem(parent: ViewGroup): AssemblyExpandableItem<DATA> {
         val binding = createViewBinding(LayoutInflater.from(parent.context), parent)
         val item = BindingAssemblyExpandableItem(this, binding)

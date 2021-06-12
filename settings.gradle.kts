@@ -2,6 +2,7 @@
 //include(":assemblyadapter-pager2")
 //include(":assemblyadapter-paging")
 include(":assemblyadapter")
+include(":assemblyadapter-list")
 include(":assembly-adapter")
 include(":assembly-adapter-ktx")
 include(":assembly-adapter-paging")

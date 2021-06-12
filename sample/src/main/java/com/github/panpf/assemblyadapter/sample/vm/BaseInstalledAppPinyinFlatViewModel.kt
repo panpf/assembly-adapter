@@ -9,8 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class InstalledAppListPinyinFlatViewModel(application: Application) :
-    BaseInstalledAppListViewModel(application) {
+open class BaseInstalledAppPinyinFlatViewModel(application: Application) :
+    BaseInstalledAppViewModel(application) {
 
     val pinyinFlatAppListData = MutableLiveData<List<Any>>()
     val loadingData = MutableLiveData<Boolean>()

@@ -28,7 +28,11 @@ import java.util.*
 class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAdapter() {
 
     private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<DATA> { tryNotifyDataSetChanged() }
+    private val dataManager = DataManager<DATA> {
+        if (!stopNotifyDataSetChanged) {
+            notifyDataSetChanged()
+        }
+    }
 
     var stopNotifyDataSetChanged = false
     val dataListSnapshot: List<DATA>
@@ -127,9 +131,4 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
         return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
     }
 
-    private fun tryNotifyDataSetChanged() {
-        if (!stopNotifyDataSetChanged) {
-            notifyDataSetChanged()
-        }
-    }
 }

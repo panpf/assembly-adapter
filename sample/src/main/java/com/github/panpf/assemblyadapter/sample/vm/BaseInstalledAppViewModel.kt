@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
-open class BaseInstalledAppListViewModel(application: Application) :
+open class BaseInstalledAppViewModel(application: Application) :
     AndroidViewModel(application) {
 
     suspend fun loadInstalledAppList(): List<AppInfo> = withContext(Dispatchers.IO) {

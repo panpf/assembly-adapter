@@ -9,8 +9,7 @@ interface ItemFactory<DATA> {
     fun dispatchCreateItem(parent: ViewGroup): Item<DATA>
 
     fun setOnViewClickListener(
-        @IdRes viewId: Int,
-        onClickListener: OnClickListener<DATA>
+        @IdRes viewId: Int, onClickListener: OnClickListener<DATA>
     ): ItemFactory<DATA>
 
     fun setOnViewLongClickListener(

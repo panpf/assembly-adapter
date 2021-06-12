@@ -30,7 +30,11 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 ) : BaseExpandableListAdapter() {
 
     private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<GROUP_DATA> { tryNotifyDataSetChanged() }
+    private val dataManager = DataManager<GROUP_DATA> {
+        if (!stopNotifyDataSetChanged) {
+            notifyDataSetChanged()
+        }
+    }
     private var callback: Callback? = null
 
     var stopNotifyDataSetChanged = false
@@ -191,12 +195,6 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
-    }
-
-    private fun tryNotifyDataSetChanged() {
-        if (!stopNotifyDataSetChanged) {
-            notifyDataSetChanged()
-        }
     }
 
     fun setCallback(callback: Callback?) {
