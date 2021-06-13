@@ -1,7 +1,7 @@
 package com.github.panpf.assemblyadapter.sample.bean
 
 import androidx.fragment.app.Fragment
-import com.github.panpf.assemblyadapter.paging.DiffKey
+import com.github.panpf.assemblyadapter.recycler.paging.DiffKey
 
 data class Link(val title: String, val fragment: Fragment) : DiffKey {
 

@@ -1,6 +1,6 @@
 package com.github.panpf.assemblyadapter.sample.bean
 
-import com.github.panpf.assemblyadapter.paging.DiffKey
+import com.github.panpf.assemblyadapter.recycler.paging.DiffKey
 
 data class PinyinGroup(val title: String) : DiffKey {
 

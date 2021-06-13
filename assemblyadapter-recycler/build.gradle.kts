@@ -30,10 +30,13 @@ android {
 }
 
 dependencies {
+    api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
     api(project(":assemblyadapter-core"))
-    api(project(":assemblyadapter-list"))
-    api(project(":assemblyadapter-recycler"))
-    api(project(":assemblyadapter-recycler-paging"))
+
+    testImplementation("junit:junit:${property("JUNIT")}")
+    androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
+    androidTestImplementation("androidx.test:rules:${property("ANDROIDX_TEST_RULES")}")
 }
 
 /**

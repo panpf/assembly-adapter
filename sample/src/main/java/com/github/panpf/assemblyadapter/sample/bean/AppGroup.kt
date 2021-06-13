@@ -1,7 +1,7 @@
 package com.github.panpf.assemblyadapter.sample.bean
 
 import com.github.panpf.assemblyadapter.list.AssemblyExpandableGroup
-import com.github.panpf.assemblyadapter.paging.DiffKey
+import com.github.panpf.assemblyadapter.recycler.paging.DiffKey
 
 data class AppGroup(
     val title: String, val appList: List<AppInfo>

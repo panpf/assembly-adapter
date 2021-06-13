@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.panpf.assemblyadapter.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.AcivityMainBinding
 import com.github.panpf.assemblyadapter.sample.ui.*

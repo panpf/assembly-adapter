@@ -8,10 +8,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.github.panpf.assemblyadapter.AssemblyGridLayoutManager
-import com.github.panpf.assemblyadapter.ItemSpan
-import com.github.panpf.assemblyadapter.paging.AssemblyPagingDataAdapter
-import com.github.panpf.assemblyadapter.paging.KeyDiffItemCallback
+import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.ItemSpan
+import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
+import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory

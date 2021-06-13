@@ -1,6 +1,6 @@
 package com.github.panpf.assemblyadapter.sample.base
 
-import com.github.panpf.assemblyadapter.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import me.panpf.recycler.sticky.StickyRecyclerAdapter
 

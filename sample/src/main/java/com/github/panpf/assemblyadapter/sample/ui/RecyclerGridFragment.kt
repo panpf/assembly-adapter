@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.github.panpf.assemblyadapter.AssemblyGridLayoutManager
-import com.github.panpf.assemblyadapter.AssemblyRecyclerAdapter
-import com.github.panpf.assemblyadapter.ItemSpan
+import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory

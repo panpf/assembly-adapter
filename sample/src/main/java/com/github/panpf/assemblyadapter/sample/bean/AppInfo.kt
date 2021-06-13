@@ -3,7 +3,7 @@ package com.github.panpf.assemblyadapter.sample.bean
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
-import com.github.panpf.assemblyadapter.paging.DiffKey
+import com.github.panpf.assemblyadapter.recycler.paging.DiffKey
 import com.github.promeg.pinyinhelper.Pinyin
 import java.io.File
 import java.util.*

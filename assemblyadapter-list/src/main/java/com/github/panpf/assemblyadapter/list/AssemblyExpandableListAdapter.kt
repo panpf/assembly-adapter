@@ -20,7 +20,6 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.R
 import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import java.util.*
