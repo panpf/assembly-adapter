@@ -1,18 +1,18 @@
 package com.github.panpf.assemblyadapter.recycler
 
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.internal.BaseItemFactory
 
-interface GridLayoutItemSpanAdapter {
+interface GridLayoutItemSpanAdapter<ITEM_FACTORY : BaseItemFactory> {
 
-    fun getItemFactoryByPosition(position: Int): ItemFactory<*>
+    fun getItemFactoryByPosition(position: Int): ITEM_FACTORY
 
     fun setGridLayoutItemSpan(
-        itemFactoryClass: Class<out ItemFactory<*>>, itemSpan: ItemSpan
-    ): GridLayoutItemSpanAdapter
+        itemFactoryClass: Class<out ITEM_FACTORY>, itemSpan: ItemSpan
+    ): GridLayoutItemSpanAdapter<ITEM_FACTORY>
 
     fun setGridLayoutItemSpanMap(
-        itemSpanMap: Map<Class<out ItemFactory<*>>, ItemSpan>?
-    ): GridLayoutItemSpanAdapter
+        itemSpanMap: Map<Class<out ITEM_FACTORY>, ItemSpan>?
+    ): GridLayoutItemSpanAdapter<ITEM_FACTORY>
 
-    fun getGridLayoutItemSpanMap(): Map<Class<out ItemFactory<*>>, ItemSpan>?
+    fun getGridLayoutItemSpanMap(): Map<Class<out ITEM_FACTORY>, ItemSpan>?
 }

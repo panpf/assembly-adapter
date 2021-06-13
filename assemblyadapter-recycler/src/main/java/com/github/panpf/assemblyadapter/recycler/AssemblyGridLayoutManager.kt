@@ -48,7 +48,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
             val recyclerView = assemblyGridLayoutManager.recyclerView ?: return 1
 
             val adapter = recyclerView.adapter
-            if (adapter !is GridLayoutItemSpanAdapter) return 1
+            if (adapter !is GridLayoutItemSpanAdapter<*>) return 1
 
             val itemSpanMap = adapter.getGridLayoutItemSpanMap()
             if (itemSpanMap == null || itemSpanMap.isEmpty()) return 1

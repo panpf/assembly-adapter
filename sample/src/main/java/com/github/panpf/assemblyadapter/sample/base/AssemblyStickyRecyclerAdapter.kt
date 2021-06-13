@@ -1,7 +1,7 @@
 package com.github.panpf.assemblyadapter.sample.base
 
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import me.panpf.recycler.sticky.StickyRecyclerAdapter
 
 class AssemblyStickyRecyclerAdapter<DATA> : AssemblyRecyclerAdapter<DATA>, StickyRecyclerAdapter {

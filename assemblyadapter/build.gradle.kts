@@ -30,8 +30,10 @@ android {
 }
 
 dependencies {
-    api(project(":assemblyadapter-core"))
     api(project(":assemblyadapter-list"))
+    api(project(":assemblyadapter-pager"))
+    api(project(":assemblyadapter-pager2"))
+    api(project(":assemblyadapter-pager2-paging"))
     api(project(":assemblyadapter-recycler"))
     api(project(":assemblyadapter-recycler-paging"))
 }

@@ -18,34 +18,24 @@ package com.github.panpf.assemblyadapter.list
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import java.util.*
 
-class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAdapter() {
+class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAdapter(),
+    DataAdapter<DATA> {
 
     private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<DATA> {
-        if (!stopNotifyDataSetChanged) {
-            notifyDataSetChanged()
-        }
-    }
-
-    var stopNotifyDataSetChanged = false
-    val dataListSnapshot: List<DATA>
-        get() = dataManager.dataListSnapshot
+    private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(itemFactoryList) {
         dataManager.setDataList(dataList)
-    }
-
-    fun getItemCount(): Int {
-        return dataManager.dataCount
     }
 
     override fun getItem(position: Int): DATA? {
@@ -69,8 +59,8 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val data = getItem(position)
-        val itemView = convertView ?: itemManager.matchItemFactoryByData(data)
+        val data = dataManager.getData(position)
+        val itemView = convertView ?: itemManager.getItemFactoryByData(data)
             .dispatchCreateItem(parent).apply {
                 getItemView().setTag(R.id.aa_tag_item, this)
             }.getItemView()
@@ -81,53 +71,64 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
         return itemView
     }
 
-    fun setDataList(datas: List<DATA>?) {
+
+    override val dataCount: Int
+        get() = dataManager.dataCount
+
+    override val dataListSnapshot: List<DATA>
+        get() = dataManager.dataListSnapshot
+
+    override fun getData(position: Int): DATA? {
+        return dataManager.getData(position)
+    }
+
+    override fun setDataList(datas: List<DATA>?) {
         dataManager.setDataList(datas)
     }
 
-    fun addData(data: DATA): Boolean {
+    override fun addData(data: DATA): Boolean {
         return dataManager.addData(data)
     }
 
-    fun addData(index: Int, data: DATA) {
+    override fun addData(index: Int, data: DATA) {
         dataManager.addData(index, data)
     }
 
-    fun addAllData(datas: Collection<DATA>?): Boolean {
+    override fun addAllData(datas: Collection<DATA>?): Boolean {
         return dataManager.addAllData(datas)
     }
 
     @SafeVarargs
-    fun addAllData(vararg datas: DATA): Boolean {
+    override fun addAllData(vararg datas: DATA): Boolean {
         return dataManager.addAllData(*datas)
     }
 
-    fun removeData(data: DATA): Boolean {
+    override fun removeData(data: DATA): Boolean {
         return dataManager.removeData(data)
     }
 
-    fun removeData(index: Int): DATA? {
+    override fun removeData(index: Int): DATA? {
         return dataManager.removeData(index)
     }
 
-    fun removeAllData(datas: Collection<DATA>): Boolean {
+    override fun removeAllData(datas: Collection<DATA>): Boolean {
         return dataManager.removeAllData(datas)
     }
 
-    fun clearData() {
+    override fun clearData() {
         dataManager.clearData()
     }
 
-    fun sortData(comparator: Comparator<DATA>) {
+    override fun sortData(comparator: Comparator<DATA>) {
         dataManager.sortData(comparator)
     }
+
 
     fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
     fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
+        return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
-
 }

@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.list
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.DataManager
@@ -26,19 +27,11 @@ import java.util.*
 
 class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>
-) : BaseExpandableListAdapter() {
+) : BaseExpandableListAdapter(), DataAdapter<GROUP_DATA> {
 
     private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<GROUP_DATA> {
-        if (!stopNotifyDataSetChanged) {
-            notifyDataSetChanged()
-        }
-    }
+    private val dataManager = DataManager<GROUP_DATA> { notifyDataSetChanged() }
     private var callback: Callback? = null
-
-    var stopNotifyDataSetChanged = false
-    val dataListSnapshot: List<GROUP_DATA>
-        get() = dataManager.dataListSnapshot
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
@@ -47,20 +40,12 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         dataManager.setDataList(dataList)
     }
 
-    fun getItemCount(): Int {
+    override fun getGroupCount(): Int {
         return dataManager.dataCount
     }
 
-    fun getItem(position: Int): GROUP_DATA? {
-        return dataManager.getData(position)
-    }
-
-    override fun getGroupCount(): Int {
-        return getItemCount()
-    }
-
     override fun getGroup(groupPosition: Int): GROUP_DATA? {
-        return getItem(groupPosition)
+        return dataManager.getData(groupPosition)
     }
 
     override fun getGroupId(groupPosition: Int): Long {
@@ -110,7 +95,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
         val groupData = getGroup(groupPosition)
-        val groupItemView = convertView ?: itemManager.matchItemFactoryByData(groupData)
+        val groupItemView = convertView ?: itemManager.getItemFactoryByData(groupData)
             .dispatchCreateItem(parent).apply {
                 getItemView().setTag(R.id.aa_tag_item, this)
             }.getItemView()
@@ -131,7 +116,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         convertView: View?, parent: ViewGroup
     ): View {
         val childData = getChild(groupPosition, childPosition)
-        val childItemView = convertView ?: itemManager.matchItemFactoryByData(childData)
+        val childItemView = convertView ?: itemManager.getItemFactoryByData(childData)
             .dispatchCreateItem(parent).apply {
                 getItemView().setTag(R.id.aa_tag_item, this)
             }.getItemView()
@@ -147,58 +132,71 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return childItemView
     }
 
-    fun setDataList(datas: List<GROUP_DATA>?) {
+    fun setCallback(callback: Callback?) {
+        this.callback = callback
+    }
+
+
+    override val dataCount: Int
+        get() = dataManager.dataCount
+
+    override val dataListSnapshot: List<GROUP_DATA>
+        get() = dataManager.dataListSnapshot
+
+    override fun getData(position: Int): GROUP_DATA? {
+        return dataManager.getData(position)
+    }
+
+    override fun setDataList(datas: List<GROUP_DATA>?) {
         dataManager.setDataList(datas)
     }
 
-    fun addData(data: GROUP_DATA): Boolean {
+    override fun addData(data: GROUP_DATA): Boolean {
         return dataManager.addData(data)
     }
 
-    fun addData(index: Int, data: GROUP_DATA) {
+    override fun addData(index: Int, data: GROUP_DATA) {
         dataManager.addData(index, data)
     }
 
-    fun addAllData(datas: Collection<GROUP_DATA>?): Boolean {
+    override fun addAllData(datas: Collection<GROUP_DATA>?): Boolean {
         return dataManager.addAllData(datas)
     }
 
     @SafeVarargs
-    fun addAllData(vararg datas: GROUP_DATA): Boolean {
+    override fun addAllData(vararg datas: GROUP_DATA): Boolean {
         return dataManager.addAllData(*datas)
     }
 
-    fun removeData(data: GROUP_DATA): Boolean {
+    override fun removeData(data: GROUP_DATA): Boolean {
         return dataManager.removeData(data)
     }
 
-    fun removeData(index: Int): GROUP_DATA? {
+    override fun removeData(index: Int): GROUP_DATA? {
         return dataManager.removeData(index)
     }
 
-    fun removeAllData(datas: Collection<GROUP_DATA>): Boolean {
+    override fun removeAllData(datas: Collection<GROUP_DATA>): Boolean {
         return dataManager.removeAllData(datas)
     }
 
-    fun clearData() {
+    override fun clearData() {
         dataManager.clearData()
     }
 
-    fun sortData(comparator: Comparator<GROUP_DATA>) {
+    override fun sortData(comparator: Comparator<GROUP_DATA>) {
         dataManager.sortData(comparator)
     }
+
 
     fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
     fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return getItemFactoryByItemType(itemManager.getItemTypeByData(getItem(position)))
+        return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
 
-    fun setCallback(callback: Callback?) {
-        this.callback = callback
-    }
 
     interface Callback {
         fun hasStableIds(): Boolean

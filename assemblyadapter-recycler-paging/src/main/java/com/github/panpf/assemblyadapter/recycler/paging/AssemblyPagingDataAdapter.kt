@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.*
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.GridLayoutItemSpanAdapter
 import com.github.panpf.assemblyadapter.recycler.ItemSpan
+import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import java.util.*
@@ -24,7 +24,7 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
     diffCallback, mainDispatcher, workerDispatcher
-), GridLayoutItemSpanAdapter {
+), GridLayoutItemSpanAdapter<ItemFactory<*>> {
 
     private val itemManager = ItemManager(itemFactoryList)
     private var gridLayoutItemSpanMap: MutableMap<Class<out ItemFactory<*>>, ItemSpan>? = null
@@ -48,9 +48,6 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
         }
     }
 
-    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
-        return itemManager.getItemFactoryByItemType(itemType)
-    }
 
     override fun setGridLayoutItemSpan(
         itemFactoryClass: Class<out ItemFactory<*>>, itemSpan: ItemSpan
@@ -107,7 +104,12 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
         }
     }
 
+
+    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
+        return itemManager.getItemFactoryByItemType(itemType)
+    }
+
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return getItemFactoryByItemType(itemManager.getItemTypeByData(peek(position)))
+        return itemManager.getItemFactoryByData(peek(position))
     }
 }
