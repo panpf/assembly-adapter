@@ -21,8 +21,8 @@ import androidx.viewpager.widget.PagerAdapter
 
 class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
 
-    private val viewList = ArrayList<View>(views)
-    private var pageTitleList = ArrayList<CharSequence>()
+    private var viewList: List<View> = views.toList()
+    private var pageTitleList: List<CharSequence>? = null
     private val notifyCountHelper = PagerAdapterNotifyCountHelper()
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
@@ -31,20 +31,6 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
             notifyCountHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
         }
 
-    fun getViews(): List<View> {
-        return viewList.toList()
-    }
-
-    fun setViews(views: List<View>?) {
-        viewList.clear()
-        views?.let { viewList.addAll(it) }
-        notifyDataSetChanged()
-    }
-
-    fun setPageTitles(pageTitles: List<CharSequence>?) {
-        pageTitleList.clear()
-        pageTitles?.let { pageTitleList.addAll(it) }
-    }
 
     override fun getCount(): Int {
         return viewList.size
@@ -74,6 +60,25 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return pageTitleList.getOrNull(position)
+        return pageTitleList?.getOrNull(position)
+    }
+
+
+
+    fun getViewsSnapshot(): List<View> {
+        return viewList.toList()
+    }
+
+    fun setViews(views: List<View>?) {
+        viewList = views?.toList() ?: emptyList()
+        notifyDataSetChanged()
+    }
+
+    fun getPageTitlesSnapshot(): List<CharSequence> {
+        return pageTitleList?.toList() ?: emptyList()
+    }
+
+    fun setPageTitles(pageTitles: List<CharSequence>?) {
+        pageTitleList = pageTitles?.toList() ?: emptyList()
     }
 }

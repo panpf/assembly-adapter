@@ -21,10 +21,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
 @Deprecated("Switch to {@link androidx.viewpager2.widget.ViewPager2} and use {@link com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter} instead.")
-class FragmentArrayStatePagerAdapter : FragmentStatePagerAdapter {
+class ArrayFragmentStatePagerAdapter : FragmentStatePagerAdapter {
 
-    private val fragmentList = ArrayList<Fragment>()
-    private var pageTitleList = ArrayList<CharSequence>()
+    private var fragmentList: List<Fragment>
+    private var pageTitleList: List<CharSequence>? = null
     private val notifyCountHelper = PagerAdapterNotifyCountHelper()
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
@@ -36,7 +36,7 @@ class FragmentArrayStatePagerAdapter : FragmentStatePagerAdapter {
     constructor(
         fm: FragmentManager, @Behavior behavior: Int, fragments: List<Fragment>
     ) : super(fm, behavior) {
-        fragmentList.addAll(fragments)
+        fragmentList = fragments.toList()
     }
 
     @Deprecated(
@@ -44,23 +44,9 @@ class FragmentArrayStatePagerAdapter : FragmentStatePagerAdapter {
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
     )
     constructor(fm: FragmentManager, fragments: List<Fragment>) : super(fm) {
-        fragmentList.addAll(fragments)
+        fragmentList = fragments.toList()
     }
 
-    fun getFragments(): List<Fragment> {
-        return fragmentList
-    }
-
-    fun setFragments(fragments: List<Fragment>?) {
-        fragmentList.clear()
-        fragments?.let { fragmentList.addAll(it) }
-        notifyDataSetChanged()
-    }
-
-    fun setPageTitles(pageTitles: List<CharSequence>?) {
-        pageTitleList.clear()
-        pageTitles?.let { pageTitleList.addAll(it) }
-    }
 
     override fun getCount(): Int {
         return fragmentList.size
@@ -78,6 +64,29 @@ class FragmentArrayStatePagerAdapter : FragmentStatePagerAdapter {
     override fun getItemPosition(item: Any): Int {
         return notifyCountHelper.getItemPosition(this, item)
     }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return pageTitleList?.getOrNull(position)
+    }
+
+
+    fun getFragmentsSnapshot(): List<Fragment> {
+        return fragmentList.toList()
+    }
+
+    fun setFragments(fragments: List<Fragment>?) {
+        fragmentList = fragments?.toList() ?: emptyList()
+        notifyDataSetChanged()
+    }
+
+    fun getPageTitlesSnapshot(): List<CharSequence> {
+        return pageTitleList?.toList() ?: emptyList()
+    }
+
+    fun setPageTitles(pageTitles: List<CharSequence>?) {
+        pageTitleList = pageTitles?.toList() ?: emptyList()
+    }
+
 
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     @IntDef(BEHAVIOR_SET_USER_VISIBLE_HINT, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
