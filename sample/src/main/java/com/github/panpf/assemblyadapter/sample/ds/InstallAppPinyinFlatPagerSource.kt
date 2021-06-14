@@ -12,17 +12,17 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.ArrayList
 
-class InstallAppPagerSource private constructor(
+class InstallAppPinyinFlatPagerSource private constructor(
     private val context: Context, private val factory: Factory
 ) : PagingSource<Int, Any>() {
 
-    class Factory(val context: Context) : Function0<InstallAppPagerSource> {
+    class Factory(val context: Context) : Function0<InstallAppPinyinFlatPagerSource> {
 
         var appPackageList: List<Pair<String, String>>? = null
         var lastPinyinFirstChar: Char? = null
 
-        override fun invoke(): InstallAppPagerSource {
-            return InstallAppPagerSource(context, this)
+        override fun invoke(): InstallAppPinyinFlatPagerSource {
+            return InstallAppPinyinFlatPagerSource(context, this)
         }
     }
 
@@ -62,7 +62,7 @@ class InstallAppPagerSource private constructor(
     private suspend fun loadApps(start: Int, size: Int): List<AppInfo> =
         withContext(Dispatchers.IO) {
             val appPackageList = factory.appPackageList!!
-            val toIndex = (start + size).coerceAtMost(appPackageList.size - 1)
+            val toIndex = (start + size - 1).coerceAtMost(appPackageList.size - 1)
             if (start < appPackageList.size && toIndex < appPackageList.size) {
                 appPackageList.slice(start.rangeTo(toIndex)).map { packageName ->
                     val packageInfo = context.packageManager.getPackageInfo(packageName.first, 0)

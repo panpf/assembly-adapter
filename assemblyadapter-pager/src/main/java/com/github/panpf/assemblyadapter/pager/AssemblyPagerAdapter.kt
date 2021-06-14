@@ -57,10 +57,9 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val data = dataManager.getData(position)
-        val itemFactory = itemManager.getItemFactoryByData(data)
-        val itemView = itemFactory.dispatchCreateView(
-            container.context, container, position, data as Nothing?
-        )
+        @Suppress("UNCHECKED_CAST")
+        val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyPagerItemFactory<Any>
+        val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
         container.addView(itemView)
         return itemView
     }

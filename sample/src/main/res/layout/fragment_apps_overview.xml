@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appsOverviewContentText"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:lineSpacingExtra="8dp"
+    android:padding="50dp"
+    android:text="@string/apps_overview"
+    android:textColor="@android:color/black"
+    android:textSize="18sp" />

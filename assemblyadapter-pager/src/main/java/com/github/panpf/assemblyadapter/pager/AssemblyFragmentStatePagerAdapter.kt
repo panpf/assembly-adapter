@@ -80,8 +80,9 @@ class AssemblyFragmentStatePagerAdapter<DATA> : FragmentStatePagerAdapter, DataA
 
     override fun getItem(position: Int): Fragment {
         val data = dataManager.getData(position)
-        val itemFactory = itemManager.getItemFactoryByData(data)
-        return itemFactory.dispatchCreateFragment(position, data as Nothing?)
+        @Suppress("UNCHECKED_CAST")
+        val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
+        return itemFactory.dispatchCreateFragment(position, data)
     }
 
     override fun notifyDataSetChanged() {

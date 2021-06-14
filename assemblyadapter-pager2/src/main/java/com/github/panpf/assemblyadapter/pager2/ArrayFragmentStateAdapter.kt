@@ -50,7 +50,12 @@ class ArrayFragmentStateAdapter : FragmentStateAdapter {
     }
 
     override fun createFragment(position: Int): Fragment {
-        return fragmentList[position]
+        // https://developer.android.com/training/animation/vp2-migration
+        // The official document clearly states that it is necessary to ensure that the new instance returned by this method each time is not reusable
+        val templateFragment = fragmentList[position]
+        return templateFragment::class.java.newInstance().apply {
+            arguments = templateFragment.arguments
+        }
     }
 
 

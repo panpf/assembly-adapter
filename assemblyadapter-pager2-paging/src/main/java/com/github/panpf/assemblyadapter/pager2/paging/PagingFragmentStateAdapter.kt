@@ -15,53 +15,38 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
-abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder> :
-    FragmentStateAdapter {
+abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle,
+    diffCallback: DiffUtil.ItemCallback<T>,
+    mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    workerDispatcher: CoroutineDispatcher = Dispatchers.Default
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     constructor(
         fragmentActivity: FragmentActivity,
         diffCallback: DiffUtil.ItemCallback<T>,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default
-    ) : super(fragmentActivity) {
-        differ = AsyncPagingDataDiffer(
-            diffCallback = diffCallback,
-            updateCallback = AdapterListUpdateCallback(this),
-            mainDispatcher = mainDispatcher,
-            workerDispatcher = workerDispatcher
-        )
-    }
+    ) : this(
+        fragmentActivity.supportFragmentManager,
+        fragmentActivity.lifecycle,
+        diffCallback,
+        mainDispatcher,
+        workerDispatcher
+    )
 
     constructor(
         fragment: Fragment, diffCallback: DiffUtil.ItemCallback<T>,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default
-    ) : super(fragment) {
-        differ = AsyncPagingDataDiffer(
-            diffCallback = diffCallback,
-            updateCallback = AdapterListUpdateCallback(this),
-            mainDispatcher = mainDispatcher,
-            workerDispatcher = workerDispatcher
-        )
-    }
-
-    constructor(
-        fragmentManager: FragmentManager,
-        lifecycle: Lifecycle,
-        diffCallback: DiffUtil.ItemCallback<T>,
-        mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-        workerDispatcher: CoroutineDispatcher = Dispatchers.Default
-    ) : super(
-        fragmentManager,
-        lifecycle
-    ) {
-        differ = AsyncPagingDataDiffer(
-            diffCallback = diffCallback,
-            updateCallback = AdapterListUpdateCallback(this),
-            mainDispatcher = mainDispatcher,
-            workerDispatcher = workerDispatcher
-        )
-    }
+    ) : this(
+        fragment.childFragmentManager,
+        fragment.lifecycle,
+        diffCallback,
+        mainDispatcher,
+        workerDispatcher
+    )
 
     /**
      * Track whether developer called [setStateRestorationPolicy] or not to decide whether the
@@ -69,16 +54,21 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
      */
     private var userSetRestorationPolicy = false
 
-    override fun setStateRestorationPolicy(strategy: RecyclerView.Adapter.StateRestorationPolicy) {
+    override fun setStateRestorationPolicy(strategy: StateRestorationPolicy) {
         userSetRestorationPolicy = true
         super.setStateRestorationPolicy(strategy)
     }
 
-    private val differ: AsyncPagingDataDiffer<T>
+    private val differ = AsyncPagingDataDiffer(
+        diffCallback = diffCallback,
+        updateCallback = AdapterListUpdateCallback(this),
+        mainDispatcher = mainDispatcher,
+        workerDispatcher = workerDispatcher
+    )
 
     init {
         // Wait on state restoration until the first insert event.
-        super.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT)
+        super.setStateRestorationPolicy(StateRestorationPolicy.PREVENT)
 
         fun considerAllowingStateRestoration() {
             if (stateRestorationPolicy == StateRestorationPolicy.PREVENT && !userSetRestorationPolicy) {

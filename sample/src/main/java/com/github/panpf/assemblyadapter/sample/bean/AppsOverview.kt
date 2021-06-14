@@ -6,8 +6,8 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class PinyinGroup(val title: String) : DiffKey, Parcelable {
+data class AppsOverview(val count: Int, val userAppCount: Int, val groupCount: Int) : Parcelable, DiffKey {
 
     @IgnoredOnParcel
-    override val diffKey: String = title
+    override val diffKey: String = "AppsOverview"
 }

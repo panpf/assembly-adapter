@@ -3,11 +3,15 @@ package com.github.panpf.assemblyadapter.sample.bean
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
+import android.os.Parcelable
 import com.github.panpf.assemblyadapter.recycler.paging.DiffKey
 import com.github.promeg.pinyinhelper.Pinyin
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.util.*
 
+@Parcelize
 data class AppInfo constructor(
     val packageName: String,
     val name: String,
@@ -17,10 +21,12 @@ data class AppInfo constructor(
     val apkFilePath: String,
     val apkSize: Long,
     val systemApp: Boolean,
-) : DiffKey {
+) : DiffKey, Parcelable {
 
+    @IgnoredOnParcel
     override val diffKey: String = packageName
 
+    @IgnoredOnParcel
     val namePinyinLowerCase by lazy { namePinyin.lowercase(Locale.getDefault()) }
 
     companion object {

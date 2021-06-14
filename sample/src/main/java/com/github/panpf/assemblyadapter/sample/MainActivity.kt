@@ -26,32 +26,26 @@ class MainActivity : AppCompatActivity() {
                 listOf(LinkItemFactory()),
                 listOf(
                     Link("RecyclerView - Linear", RecyclerLinearFragment()),
+                    Link("RecyclerView - Linear - Sticky", StickyRecyclerLinearFragment()),
                     Link("RecyclerView - Grid", RecyclerGridFragment()),
                     Link("RecyclerView - StaggeredGrid", RecyclerStaggeredGridFragment()),
                     Link("RecyclerView - Paging - Linear", RecyclerPagingLinearFragment()),
+                    Link(
+                        "RecyclerView - Paging - Linear - Sticky",
+                        StickyRecyclerPagingLinearFragment()
+                    ),
                     Link("RecyclerView - Paging - Grid", RecyclerPagingGridFragment()),
-                    Link("RecyclerView - Paging - StaggeredGrid", RecyclerPagingStaggeredGridFragment()),
-                    Link("Sticky - RecyclerView - Linear", StickyRecyclerLinearFragment()),
-//                    Link("RecyclerView - Grid - Sticky", RecyclerGridStickyFragment()),
-//                    Link("RecyclerView - StaggeredGrid - Sticky", RecyclerStaggeredGridStickyFragment()),
-                    Link("Sticky - RecyclerView - Paging - Linear", StickyRecyclerPagingLinearFragment()),
-//                    Link("RecyclerView - Paging - Grid - Sticky", RecyclerPagingGridStickyFragment()),
-//                    Link("RecyclerView - Paging - StaggeredGrid - Sticky", RecyclerPagingStaggeredGridStickyFragment()),
+                    Link(
+                        "RecyclerView - Paging - StaggeredGrid",
+                        RecyclerPagingStaggeredGridFragment()
+                    ),
                     Link("ListView", ListFragment()),
                     Link("ExpandableListView", ListExpandableFragment()),
-//                    Link("AssemblyPagingDataAdapter", PagingDataAdapterSampleFragment()),
-//                    Link("AssemblyBaseAdapter - ListView", ListViewFragment()),
-//                    Link("AssemblyBaseAdapter - Spinner", SpinnerFragment()),
-//                    Link("AssemblyBaseExpandableListAdapter", ExpandableListViewFragment()),
-//                    Link("AssemblyPagerAdapter", ViewPagerPagerAdapterSampleFragment()),
-//                    Link(
-//                        "AssemblyFragmentPagerAdapter",
-//                        ViewPagerFragmentStatePagerAdapterSampleFragment()
-//                    ),
-//                    Link(
-//                        "AssemblyFragmentStatePagerAdapter",
-//                        ViewPagerFragmentStatePagerAdapterSampleFragment()
-//                    ),
+                    Link("ViewPager - View", PagerFragment()),
+                    Link("ViewPager - Fragment", PagerFragmentFragment()),
+                    Link("ViewPager - FragmentState", PagerFragmentStateFragment()),
+                    Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
+                    Link("ViewPager2 - Fragment - Paging", Pager2FragmentPagingFragment()),
                 )
             )
         }

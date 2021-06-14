@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager2Pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:groupIndicator="@null"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/pager2PageNumberText"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right|end|bottom"
+        android:layout_margin="40dp"
+        android:background="@drawable/bg_page_number"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        tools:text="1/23" />
+
+    <ProgressBar
+        android:id="@+id/pager2ProgressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center" />
+</FrameLayout>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AssemblyAdapter</string>
+    <string name="apps_overview">总共 %d 个可启动 App\n其中 %d 个用户 App\n按拼音首字母可分为 %d 个组</string>
 </resources>

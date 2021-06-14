@@ -55,8 +55,9 @@ class AssemblyFragmentStateAdapter<DATA> : FragmentStateAdapter, DataAdapter<DAT
 
     override fun createFragment(position: Int): Fragment {
         val data = dataManager.getData(position)
-        val itemFactory = itemManager.getItemFactoryByData(data)
-        return itemFactory.dispatchCreateFragment(position, data as Nothing?)
+        @Suppress("UNCHECKED_CAST")
+        val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
+        return itemFactory.dispatchCreateFragment(position, data)
     }
 
 

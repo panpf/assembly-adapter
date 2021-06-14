@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.github.panpf.assemblyadapter.sample.ds.InstallAppPagerSource
+import com.github.panpf.assemblyadapter.sample.ds.InstallAppPinyinFlatPagerSource
 
 class InstalledAppPinyinFlatPagingViewModel(application: Application) :
     AndroidViewModel(application) {
@@ -13,6 +13,6 @@ class InstalledAppPinyinFlatPagingViewModel(application: Application) :
         Pager(
             PagingConfig(20, 5, false, 40),
             0,
-            InstallAppPagerSource.Factory(getApplication())
+            InstallAppPinyinFlatPagerSource.Factory(getApplication())
         ).flow
 }

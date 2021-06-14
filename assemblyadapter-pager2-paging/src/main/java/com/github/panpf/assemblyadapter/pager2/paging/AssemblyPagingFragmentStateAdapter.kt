@@ -26,10 +26,22 @@ import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-class AssemblyPagingFragmentStateAdapter<DATA : Any> :
-    PagingFragmentStateAdapter<DATA, RecyclerView.ViewHolder> {
+class AssemblyPagingFragmentStateAdapter<DATA : Any>(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle,
+    diffCallback: DiffUtil.ItemCallback<DATA>,
+    itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+    mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
+) : PagingFragmentStateAdapter<DATA, RecyclerView.ViewHolder>(
+    fragmentManager,
+    lifecycle,
+    diffCallback,
+    mainDispatcher,
+    workerDispatcher
+) {
 
-    private val itemManager: ItemManager<AssemblyFragmentItemFactory<*>>
+    private val itemManager = ItemManager(itemFactoryList)
 
     constructor(
         fragmentActivity: FragmentActivity,
@@ -37,9 +49,14 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any> :
         itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) : super(fragmentActivity, diffCallback, mainDispatcher, workerDispatcher) {
-        itemManager = ItemManager(itemFactoryList)
-    }
+    ) : this(
+        fragmentActivity.supportFragmentManager,
+        fragmentActivity.lifecycle,
+        diffCallback,
+        itemFactoryList,
+        mainDispatcher,
+        workerDispatcher
+    )
 
     constructor(
         fragment: Fragment,
@@ -47,25 +64,21 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any> :
         itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) : super(fragment, diffCallback, mainDispatcher, workerDispatcher) {
-        itemManager = ItemManager(itemFactoryList)
-    }
-
-    constructor(
-        fragmentManager: FragmentManager,
-        lifecycle: Lifecycle,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-        workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) : super(fragmentManager, lifecycle, diffCallback, mainDispatcher, workerDispatcher) {
-        itemManager = ItemManager(itemFactoryList)
-    }
+    ) : this(
+        fragment.childFragmentManager,
+        fragment.lifecycle,
+        diffCallback,
+        itemFactoryList,
+        mainDispatcher,
+        workerDispatcher
+    )
 
     override fun createFragment(position: Int): Fragment {
         val data = getItem(position)
-        val itemFactory = itemManager.getItemFactoryByData(data)
-        return itemFactory.dispatchCreateFragment(position, data as Nothing?)
+
+        @Suppress("UNCHECKED_CAST")
+        val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
+        return itemFactory.dispatchCreateFragment(position, data)
     }
 
 
