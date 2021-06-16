@@ -1,11 +1,9 @@
 package com.github.panpf.assemblyadapter.recycler.paging
 
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.BaseItemFactory
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
@@ -22,9 +20,9 @@ open class AssemblyLoadStateAdapter(
         parent: ViewGroup, loadState: LoadState
     ): RecyclerView.ViewHolder {
         val item = itemFactory.dispatchCreateItem(parent)
-        val recyclerItem: AssemblyRecyclerItem<*> = AssemblyRecyclerItem(item)
-        applyGridLayoutItemSpan(parent, recyclerItem)
-        return recyclerItem
+        return AssemblyRecyclerItem(item).apply {
+            applyGridLayoutItemSpan(parent, this, getStateViewType(loadState))
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, loadState: LoadState) {
@@ -35,6 +33,10 @@ open class AssemblyLoadStateAdapter(
     }
 
     override fun getItemSpanByPosition(position: Int): ItemSpan? {
+        return itemSpan
+    }
+
+    override fun getItemSpanByItemType(itemType: Int): ItemSpan? {
         return itemSpan
     }
 
@@ -52,21 +54,22 @@ open class AssemblyLoadStateAdapter(
     }
 
     private fun applyGridLayoutItemSpan(
-        parent: ViewGroup,
-        recyclerItem: AssemblyRecyclerItem<*>
+        parent: ViewGroup, recyclerItem: AssemblyRecyclerItem<*>, itemType: Int,
     ) {
         if (parent is RecyclerView) {
             val layoutManager = parent.layoutManager
             if (layoutManager is AssemblyStaggeredGridLayoutManager) {
-                if (getItemSpanByPosition(0)?.isFullSpan() == true) {
-                    val itemView: View = recyclerItem.itemView
-                    val layoutParams = itemView.layoutParams
-                    if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-                        layoutParams.isFullSpan = true
-                        itemView.layoutParams = layoutParams
-                    }
-                }
+                layoutManager.setSpanSize(this, recyclerItem, itemType)
             }
         }
+    }
+
+
+    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
+        return itemFactory
+    }
+
+    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        return itemFactory
     }
 }

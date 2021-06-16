@@ -36,9 +36,9 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemFactory = itemManager.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
-        val recyclerItem: AssemblyRecyclerItem<*> = AssemblyRecyclerItem(item)
-        applyGridLayoutItemSpan(parent, itemFactory, recyclerItem)
-        return recyclerItem
+        return AssemblyRecyclerItem(item).apply {
+            applyGridLayoutItemSpan(parent, this, viewType)
+        }
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
@@ -80,28 +80,29 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
         return gridLayoutItemSpanMap[itemFactory.javaClass]
     }
 
+    override fun getItemSpanByItemType(itemType: Int): ItemSpan? {
+        val gridLayoutItemSpanMap = gridLayoutItemSpanMap ?: return null
+        val itemFactory = itemManager.getItemFactoryByItemType(itemType)
+        return gridLayoutItemSpanMap[itemFactory.javaClass]
+    }
+
     private fun applyGridLayoutItemSpan(
         parent: ViewGroup,
-        recyclerItemFactory: ItemFactory<*>,
-        recyclerItem: AssemblyRecyclerItem<*>
+        recyclerItem: AssemblyRecyclerItem<*>,
+        itemType: Int,
     ) {
         val gridLayoutItemSpanMap = gridLayoutItemSpanMap
         if (gridLayoutItemSpanMap?.isNotEmpty() == true && parent is RecyclerView) {
-            val layoutManager = parent.layoutManager
-            if (layoutManager is AssemblyGridLayoutManager) {
-                // No need to do
-            } else if (layoutManager is AssemblyStaggeredGridLayoutManager) {
-                val itemSpan = gridLayoutItemSpanMap[recyclerItemFactory.javaClass]
-                if (itemSpan != null && itemSpan.isFullSpan()) {
-                    val itemView: View = recyclerItem.getItemView()
-                    val layoutParams = itemView.layoutParams
-                    if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-                        layoutParams.isFullSpan = true
-                        itemView.layoutParams = layoutParams
-                    }
+            when (val layoutManager = parent.layoutManager) {
+                is AssemblyGridLayoutManager -> {
+                    // No need to do
                 }
-            } else {
-                throw IllegalArgumentException("Since itemSpan is set, the layoutManager of RecyclerView must be AssemblyGridLayoutManager or AssemblyStaggeredGridLayoutManager")
+                is AssemblyStaggeredGridLayoutManager -> {
+                    layoutManager.setSpanSize(this, recyclerItem, itemType)
+                }
+                else -> {
+                    throw IllegalArgumentException("Since itemSpan is set, the layoutManager of RecyclerView must be AssemblyGridLayoutManager or AssemblyStaggeredGridLayoutManager")
+                }
             }
         }
     }

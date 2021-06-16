@@ -2,7 +2,9 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 
 class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager {
 
@@ -15,5 +17,19 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager {
 
     constructor(spanCount: Int) : super(spanCount, VERTICAL)
 
-    // todo 设置 itemSpan 的放到这里来，这样就更加直观了
+    fun setSpanSize(
+        gridLayoutItemSpanAdapter: GridLayoutItemSpanAdapter<*>,
+        recyclerItem: AssemblyRecyclerItem<*>,
+        itemType: Int
+    ) {
+        val itemSpan = gridLayoutItemSpanAdapter.getItemSpanByItemType(itemType)
+        if (itemSpan != null && itemSpan.isFullSpan()) {
+            val itemView: View = recyclerItem.getItemView()
+            val layoutParams = itemView.layoutParams
+            if (layoutParams is LayoutParams) {
+                layoutParams.isFullSpan = true
+                itemView.layoutParams = layoutParams
+            }
+        }
+    }
 }
