@@ -9,7 +9,7 @@ class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
     val dataCount: Int
         get() = dataList.size
     val dataListSnapshot: List<DATA>
-        get() = ArrayList(dataList)
+        get() = Collections.unmodifiableList(dataList)
 
     fun setDataList(datas: List<DATA>?) {
         dataList.clear()
