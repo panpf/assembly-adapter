@@ -183,4 +183,8 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
     fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
+
+    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        return itemManager.getItemFactoryByData(dataManager.getData(position))
+    }
 }

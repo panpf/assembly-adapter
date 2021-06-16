@@ -110,4 +110,8 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
     fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
+
+    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        return itemManager.getItemFactoryByData(peek(position))
+    }
 }
