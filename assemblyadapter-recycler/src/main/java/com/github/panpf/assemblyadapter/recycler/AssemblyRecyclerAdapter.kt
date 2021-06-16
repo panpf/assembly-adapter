@@ -95,8 +95,10 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
         return this
     }
 
-    override fun getGridLayoutItemSpanMap(): Map<Class<out ItemFactory<*>>, ItemSpan>? {
-        return gridLayoutItemSpanMap
+    override fun getItemSpanByPosition(position: Int): ItemSpan? {
+        val gridLayoutItemSpanMap = gridLayoutItemSpanMap ?: return null
+        val itemFactory = itemManager.getItemFactoryByData(dataManager.getData(position))
+        return gridLayoutItemSpanMap[itemFactory.javaClass]
     }
 
     private fun applyGridLayoutItemSpan(
@@ -111,7 +113,7 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
                 // No need to do
             } else if (layoutManager is AssemblyStaggeredGridLayoutManager) {
                 val itemSpan = gridLayoutItemSpanMap[recyclerItemFactory.javaClass]
-                if (itemSpan != null && itemSpan.span < 0) {
+                if (itemSpan != null && itemSpan.size < 0) {
                     val itemView: View = recyclerItem.getItemView()
                     val layoutParams = itemView.layoutParams
                     if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
@@ -180,9 +182,5 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
 
     fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
-    }
-
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
 }

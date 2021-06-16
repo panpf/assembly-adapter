@@ -1,6 +1,6 @@
 package com.github.panpf.assemblyadapter.recycler
 
-data class ItemSpan constructor(val span: Int) {
+data class ItemSpan constructor(val size: Int) {
 
     companion object {
         @JvmStatic
