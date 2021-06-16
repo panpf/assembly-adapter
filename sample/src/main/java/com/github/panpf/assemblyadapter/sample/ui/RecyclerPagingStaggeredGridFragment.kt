@@ -9,12 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
@@ -36,12 +36,13 @@ class RecyclerPagingStaggeredGridFragment : BaseBindingFragment<FragmentRecycler
         val pagingDataAdapter = AssemblyPagingDataAdapter(
             listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true)),
             KeyDiffItemCallback()
-        ).apply {
-            setGridLayoutItemSpan(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
-        }
+        )
         binding.recyclerRecycler.apply {
             adapter = pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
-            layoutManager = AssemblyStaggeredGridLayoutManager(3)
+            layoutManager = AssemblyStaggeredGridLayoutManager(
+                3,
+                listOf(PinyinGroupItemFactory::class, LoadStateItemFactory::class)
+            )
             addItemDecoration(context.staggeredDividerBuilder().asSpace().size(20.dp2px).build())
         }
 

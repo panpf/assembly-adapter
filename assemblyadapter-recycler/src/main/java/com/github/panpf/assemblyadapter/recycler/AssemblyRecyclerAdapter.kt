@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.DataManager
@@ -25,12 +26,10 @@ import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 import java.util.*
 
 open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(), DataAdapter<DATA>,
-    GridLayoutItemSpanAdapter<ItemFactory<*>> {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter, DataAdapter<DATA> {
 
     private val itemManager = ItemManager(itemFactoryList)
     private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
-    private var gridLayoutItemSpanMap: MutableMap<Class<out ItemFactory<*>>, ItemSpan>? = null
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
@@ -55,7 +54,11 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
         val itemFactory = itemManager.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         return AssemblyRecyclerItem(item).apply {
-            applyGridLayoutItemSpan(parent, this, viewType)
+            val layoutManager =
+                (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
+            if (layoutManager is AssemblyStaggeredGridLayoutManager) {
+                layoutManager.setFullSpan(itemView, itemFactory)
+            }
         }
     }
 
@@ -66,64 +69,6 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
                 position,
                 dataManager.getData(position)
             )
-        }
-    }
-
-    override fun setGridLayoutItemSpan(
-        itemFactoryClass: Class<out ItemFactory<*>>, itemSpan: ItemSpan
-    ): AssemblyRecyclerAdapter<DATA> {
-        val gridLayoutItemSpanMap =
-            (gridLayoutItemSpanMap ?: (HashMap<Class<out ItemFactory<*>>, ItemSpan>().apply {
-                this@AssemblyRecyclerAdapter.gridLayoutItemSpanMap = this
-            }))
-        gridLayoutItemSpanMap[itemFactoryClass] = itemSpan
-        return this
-    }
-
-    override fun setGridLayoutItemSpanMap(
-        itemSpanMap: Map<Class<out ItemFactory<*>>, ItemSpan>?
-    ): AssemblyRecyclerAdapter<DATA> {
-        val gridLayoutItemSpanMap =
-            (gridLayoutItemSpanMap ?: (HashMap<Class<out ItemFactory<*>>, ItemSpan>().apply {
-                this@AssemblyRecyclerAdapter.gridLayoutItemSpanMap = this
-            }))
-        gridLayoutItemSpanMap.clear()
-        if (itemSpanMap != null) {
-            gridLayoutItemSpanMap.putAll(itemSpanMap)
-        }
-        return this
-    }
-
-    override fun getItemSpanByPosition(position: Int): ItemSpan? {
-        val gridLayoutItemSpanMap = gridLayoutItemSpanMap ?: return null
-        val itemFactory = itemManager.getItemFactoryByData(dataManager.getData(position))
-        return gridLayoutItemSpanMap[itemFactory.javaClass]
-    }
-
-    override fun getItemSpanByItemType(itemType: Int): ItemSpan? {
-        val gridLayoutItemSpanMap = gridLayoutItemSpanMap ?: return null
-        val itemFactory = itemManager.getItemFactoryByItemType(itemType)
-        return gridLayoutItemSpanMap[itemFactory.javaClass]
-    }
-
-    private fun applyGridLayoutItemSpan(
-        parent: ViewGroup,
-        recyclerItem: AssemblyRecyclerItem<*>,
-        itemType: Int,
-    ) {
-        val gridLayoutItemSpanMap = gridLayoutItemSpanMap
-        if (gridLayoutItemSpanMap?.isNotEmpty() == true && parent is RecyclerView) {
-            when (val layoutManager = parent.layoutManager) {
-                is AssemblyGridLayoutManager -> {
-                    // No need to do
-                }
-                is AssemblyStaggeredGridLayoutManager -> {
-                    layoutManager.setSpanSize(this, recyclerItem, itemType)
-                }
-                else -> {
-                    throw IllegalArgumentException("Since itemSpan is set, the layoutManager of RecyclerView must be AssemblyGridLayoutManager or AssemblyStaggeredGridLayoutManager")
-                }
-            }
         }
     }
 
@@ -180,11 +125,11 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
     }
 
 
-    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
+    override fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
 }

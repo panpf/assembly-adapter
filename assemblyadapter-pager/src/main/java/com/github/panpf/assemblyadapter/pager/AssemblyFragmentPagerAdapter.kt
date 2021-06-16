@@ -19,13 +19,15 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import java.util.*
 
 @Deprecated("Switch to {@link androidx.viewpager2.widget.ViewPager2} and use {@link com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter} instead.")
-class AssemblyFragmentPagerAdapter<DATA> : FragmentPagerAdapter, DataAdapter<DATA> {
+class AssemblyFragmentPagerAdapter<DATA>
+    : FragmentPagerAdapter, AssemblyAdapter, DataAdapter<DATA> {
 
     private val itemManager: ItemManager<AssemblyFragmentItemFactory<*>>
     private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
@@ -147,11 +149,11 @@ class AssemblyFragmentPagerAdapter<DATA> : FragmentPagerAdapter, DataAdapter<DAT
     }
 
 
-    fun getItemFactoryByItemType(itemType: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByItemType(itemType: Int): AssemblyFragmentItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
 

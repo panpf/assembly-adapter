@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
 import kotlinx.coroutines.CoroutineDispatcher
@@ -39,7 +40,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     diffCallback,
     mainDispatcher,
     workerDispatcher
-) {
+), AssemblyAdapter {
 
     private val itemManager = ItemManager(itemFactoryList)
 
@@ -82,11 +83,11 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     }
 
 
-    fun getItemFactoryByItemType(itemType: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByItemType(itemType: Int): AssemblyFragmentItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
         return itemManager.getItemFactoryByData(peek(position))
     }
 }

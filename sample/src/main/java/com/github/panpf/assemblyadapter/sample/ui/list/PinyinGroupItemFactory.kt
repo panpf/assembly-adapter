@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.updateLayoutParams
 import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
@@ -37,6 +38,12 @@ open class PinyinGroupItemFactory(private val hideStartMargin: Boolean = false) 
                     marginEnd = 0
                 }
             }
+        }
+
+        binding.root.setOnClickListener {
+            val data = item.data ?: return@setOnClickListener
+            val position = item.position
+            Toast.makeText(context, "${data}: $position", Toast.LENGTH_LONG).show()
         }
     }
 

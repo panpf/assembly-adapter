@@ -19,13 +19,15 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import java.util.*
 
 @Deprecated("Switch to {@link androidx.viewpager2.widget.ViewPager2} and use {@link com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter} instead.")
-class AssemblyFragmentStatePagerAdapter<DATA> : FragmentStatePagerAdapter, DataAdapter<DATA> {
+class AssemblyFragmentStatePagerAdapter<DATA> :
+    FragmentStatePagerAdapter, AssemblyAdapter, DataAdapter<DATA> {
 
     private val itemManager: ItemManager<AssemblyFragmentItemFactory<*>>
     private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
@@ -80,6 +82,7 @@ class AssemblyFragmentStatePagerAdapter<DATA> : FragmentStatePagerAdapter, DataA
 
     override fun getItem(position: Int): Fragment {
         val data = dataManager.getData(position)
+
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(position, data)
@@ -147,11 +150,11 @@ class AssemblyFragmentStatePagerAdapter<DATA> : FragmentStatePagerAdapter, DataA
     }
 
 
-    fun getItemFactoryByItemType(itemType: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByItemType(itemType: Int): AssemblyFragmentItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
 

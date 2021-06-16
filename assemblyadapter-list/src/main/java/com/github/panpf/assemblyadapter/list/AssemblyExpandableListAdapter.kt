@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.list
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
@@ -27,7 +28,7 @@ import java.util.*
 
 class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>
-) : BaseExpandableListAdapter(), DataAdapter<GROUP_DATA> {
+) : BaseExpandableListAdapter(), AssemblyAdapter, DataAdapter<GROUP_DATA> {
 
     private val itemManager = ItemManager(itemFactoryList)
     private val dataManager = DataManager<GROUP_DATA> { notifyDataSetChanged() }
@@ -189,11 +190,11 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
 
-    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
+    override fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
 

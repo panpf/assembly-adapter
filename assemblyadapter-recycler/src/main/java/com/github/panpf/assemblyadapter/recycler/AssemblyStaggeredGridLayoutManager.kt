@@ -4,32 +4,40 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.internal.BaseItemFactory
+import kotlin.reflect.KClass
 
 class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager {
 
+    private val fullSpanItemFactoryList: List<KClass<out BaseItemFactory>>
+
     constructor(
         context: Context, attrs: AttributeSet?,
-        defStyleAttr: Int, defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes)
+        defStyleAttr: Int, defStyleRes: Int,
+        fullSpanItemFactoryList: List<KClass<out BaseItemFactory>>
+    ) : super(context, attrs, defStyleAttr, defStyleRes) {
+        this.fullSpanItemFactoryList = fullSpanItemFactoryList
+    }
 
-    constructor(spanCount: Int, orientation: Int) : super(spanCount, orientation) {}
+    constructor(
+        spanCount: Int, orientation: Int,
+        fullSpanItemFactoryList: List<KClass<out BaseItemFactory>>
+    ) : super(spanCount, orientation) {
+        this.fullSpanItemFactoryList = fullSpanItemFactoryList
+    }
 
-    constructor(spanCount: Int) : super(spanCount, VERTICAL)
+    constructor(
+        spanCount: Int,
+        fullSpanItemFactoryList: List<KClass<out BaseItemFactory>>
+    ) : super(spanCount, VERTICAL) {
+        this.fullSpanItemFactoryList = fullSpanItemFactoryList
+    }
 
-    fun setSpanSize(
-        gridLayoutItemSpanAdapter: GridLayoutItemSpanAdapter<*>,
-        recyclerItem: AssemblyRecyclerItem<*>,
-        itemType: Int
-    ) {
-        val itemSpan = gridLayoutItemSpanAdapter.getItemSpanByItemType(itemType)
-        if (itemSpan != null && itemSpan.isFullSpan()) {
-            val itemView: View = recyclerItem.getItemView()
-            val layoutParams = itemView.layoutParams
-            if (layoutParams is LayoutParams) {
-                layoutParams.isFullSpan = true
-                itemView.layoutParams = layoutParams
-            }
+    fun setFullSpan(itemView: View, itemFactory: ItemFactory<*>) {
+        val layoutParams = itemView.layoutParams
+        if (layoutParams is LayoutParams && fullSpanItemFactoryList.contains(itemFactory::class)) {
+            layoutParams.isFullSpan = true
         }
     }
 }

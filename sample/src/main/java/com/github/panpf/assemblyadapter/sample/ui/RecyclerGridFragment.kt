@@ -29,12 +29,13 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true))
-        ).apply {
-            setGridLayoutItemSpan(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
-        }
+        )
         binding.recyclerRecycler.apply {
             adapter = recyclerAdapter
-            layoutManager = AssemblyGridLayoutManager(requireContext(), 3)
+            layoutManager = AssemblyGridLayoutManager(
+                requireContext(), 3,
+                mapOf(PinyinGroupItemFactory::class to ItemSpan.fullSpan())
+            )
             addItemDecoration(
                 context.dividerBuilder().asSpace()
                     .showSideDividers().showLastDivider()

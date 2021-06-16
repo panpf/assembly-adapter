@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.list
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
@@ -25,8 +26,8 @@ import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import java.util.*
 
-class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAdapter(),
-    DataAdapter<DATA> {
+class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
+    BaseAdapter(), AssemblyAdapter, DataAdapter<DATA> {
 
     private val itemManager = ItemManager(itemFactoryList)
     private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
@@ -124,11 +125,11 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) : BaseAda
     }
 
 
-    fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
+    override fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
 }

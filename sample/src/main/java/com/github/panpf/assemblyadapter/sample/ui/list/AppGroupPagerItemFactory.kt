@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.panpf.assemblyadapter.pager.AssemblyPagerItemFactory
-import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppGroupBinding
@@ -26,11 +26,10 @@ class AppGroupPagerItemFactory : AssemblyPagerItemFactory<AppGroup>() {
             appGroupAppCountText.text = data?.appList?.size?.toString()
             appGroupRecycler.apply {
                 adapter = AssemblyRecyclerAdapter<Any>(
-                    listOf(AppGridCardItemFactory())
-                ).apply {
-                    setDataList(data?.appList)
-                }
-                layoutManager = AssemblyGridLayoutManager(context, 3)
+                    listOf(AppGridCardItemFactory()),
+                    data?.appList
+                )
+                layoutManager = GridLayoutManager(context, 3)
                 addItemDecoration(
                     context.dividerBuilder().asSpace()
                         .showSideDividers().showLastDivider()

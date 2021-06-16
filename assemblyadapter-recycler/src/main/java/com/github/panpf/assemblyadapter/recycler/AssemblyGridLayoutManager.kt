@@ -5,31 +5,49 @@ import android.util.AttributeSet
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.internal.BaseItemFactory
+import kotlin.reflect.KClass
 
 class AssemblyGridLayoutManager : GridLayoutManager {
 
     private var recyclerView: RecyclerView? = null
+    private val gridLayoutItemSpanMap: Map<KClass<out BaseItemFactory>, ItemSpan>
+    private val spanSizeLookup = object : SpanSizeLookup() {
+        override fun getSpanSize(position: Int): Int {
+            return getSpanSizeImpl(position)
+        }
+    }
 
     constructor(
         context: Context,
         attrs: AttributeSet?,
         defStyleAttr: Int,
-        defStyleRes: Int
+        defStyleRes: Int,
+        gridLayoutItemSpanMap: Map<KClass<out BaseItemFactory>, ItemSpan>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
-        super.setSpanSizeLookup(AssemblySpanSizeLookup(this))
+        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
+        super.setSpanSizeLookup(spanSizeLookup)
     }
 
     constructor(
         context: Context,
         spanCount: Int,
         orientation: Int,
-        reverseLayout: Boolean
+        reverseLayout: Boolean,
+        gridLayoutItemSpanMap: Map<KClass<out BaseItemFactory>, ItemSpan>
     ) : super(context, spanCount, orientation, reverseLayout) {
-        super.setSpanSizeLookup(AssemblySpanSizeLookup(this))
+        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
+        super.setSpanSizeLookup(spanSizeLookup)
     }
 
-    constructor(context: Context, spanCount: Int) : super(context, spanCount) {
-        super.setSpanSizeLookup(AssemblySpanSizeLookup(this))
+    constructor(
+        context: Context,
+        spanCount: Int,
+        gridLayoutItemSpanMap: Map<KClass<out BaseItemFactory>, ItemSpan>
+    ) : super(context, spanCount) {
+        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
+        super.setSpanSizeLookup(spanSizeLookup)
     }
 
     override fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
@@ -42,52 +60,46 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         recyclerView = view
     }
 
-    private class AssemblySpanSizeLookup(
-        private val assemblyGridLayoutManager: AssemblyGridLayoutManager
-    ) : SpanSizeLookup() {
-        override fun getSpanSize(position: Int): Int {
-            val adapter = assemblyGridLayoutManager.recyclerView?.adapter
-            if (adapter != null && position >= 0 && position < adapter.itemCount) {
-                val itemSpan = findItemSpan(adapter, position)
-                if (itemSpan != null) {
-                    return if (itemSpan.isFullSpan()) {
-                        assemblyGridLayoutManager.spanCount
+    private fun getSpanSizeImpl(position: Int): Int {
+        val adapter = recyclerView?.adapter
+        val gridLayoutItemSpanMap = gridLayoutItemSpanMap
+        if (adapter != null && position >= 0 && position < adapter.itemCount) {
+            val itemFactory = findItemFactory(adapter, position)
+            val itemSpan = gridLayoutItemSpanMap[itemFactory::class]
+            if (itemSpan != null) {
+                return if (itemSpan.isFullSpan()) spanCount else itemSpan.size.coerceAtLeast(1)
+            }
+        }
+        return 1
+    }
+
+    private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): BaseItemFactory {
+        return when (adapter) {
+            is AssemblyAdapter -> {
+                adapter.getItemFactoryByPosition(position)
+            }
+            is ConcatAdapter -> {
+                var childAdapterStartPosition = 0
+                val childAdapter = adapter.adapters.find { childAdapter ->
+                    val childAdapterEndPosition =
+                        childAdapterStartPosition + childAdapter.itemCount - 1
+                    @Suppress("ConvertTwoComparisonsToRangeCheck")
+                    if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
+                        true
                     } else {
-                        itemSpan.size.coerceAtLeast(1)
+                        childAdapterStartPosition = childAdapterEndPosition + 1
+                        false
                     }
+                }
+                if (childAdapter != null) {
+                    val childPosition = position - childAdapterStartPosition
+                    findItemFactory(childAdapter, childPosition)
+                } else {
+                    throw IndexOutOfBoundsException("Index: $position, Size: ${adapter.itemCount}")
                 }
             }
-            return 1
-        }
-
-        private fun findItemSpan(adapter: RecyclerView.Adapter<*>, position: Int): ItemSpan? {
-            return when (adapter) {
-                is GridLayoutItemSpanAdapter<*> -> {
-                    adapter.getItemSpanByPosition(position)
-                }
-                is ConcatAdapter -> {
-                    var childAdapterStartPosition = 0
-                    val childAdapter = adapter.adapters.find { childAdapter ->
-                        val childAdapterEndPosition =
-                            childAdapterStartPosition + childAdapter.itemCount - 1
-                        @Suppress("ConvertTwoComparisonsToRangeCheck")
-                        if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
-                            true
-                        } else {
-                            childAdapterStartPosition = childAdapterEndPosition + 1
-                            false
-                        }
-                    }
-                    if (childAdapter != null) {
-                        val childPosition = position - childAdapterStartPosition
-                        findItemSpan(childAdapter, childPosition)
-                    } else {
-                        throw IndexOutOfBoundsException("Index: $position, Size: ${adapter.itemCount}")
-                    }
-                }
-                else -> {
-                    null
-                }
+            else -> {
+                throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass}")
             }
         }
     }

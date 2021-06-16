@@ -18,13 +18,14 @@ package com.github.panpf.assemblyadapter.pager
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
+import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import java.util.*
 
 class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<*>>) :
-    PagerAdapter(), DataAdapter<DATA> {
+    PagerAdapter(), AssemblyAdapter, DataAdapter<DATA> {
 
     private val itemManager = ItemManager(itemFactoryList)
     private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
@@ -57,6 +58,7 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val data = dataManager.getData(position)
+
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyPagerItemFactory<Any>
         val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
@@ -126,11 +128,11 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
     }
 
 
-    fun getItemFactoryByItemType(itemType: Int): AssemblyPagerItemFactory<*> {
+    override fun getItemFactoryByItemType(itemType: Int): AssemblyPagerItemFactory<*> {
         return itemManager.getItemFactoryByItemType(itemType)
     }
 
-    fun getItemFactoryByPosition(position: Int): AssemblyPagerItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): AssemblyPagerItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }
 }

@@ -15,6 +15,7 @@ import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
@@ -36,12 +37,16 @@ class RecyclerPagingGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
         val pagingDataAdapter = AssemblyPagingDataAdapter(
             listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true)),
             KeyDiffItemCallback()
-        ).apply {
-            setGridLayoutItemSpan(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
-        }
+        )
         binding.recyclerRecycler.apply {
             adapter = pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
-            layoutManager = AssemblyGridLayoutManager(requireContext(), 3)
+            layoutManager = AssemblyGridLayoutManager(
+                requireContext(), 3,
+                mapOf(
+                    PinyinGroupItemFactory::class to ItemSpan.fullSpan(),
+                    LoadStateItemFactory::class to ItemSpan.fullSpan()
+                )
+            )
             addItemDecoration(
                 context.dividerBuilder().asSpace()
                     .showSideDividers().showLastDivider()

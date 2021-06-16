@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="60dp"
     android:background="?android:windowBackground">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/appGroupItemTitleText"
         android:layout_width="0dp"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
@@ -27,7 +28,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@android:color/darker_gray"
+        android:background="#EAEAEA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/appGroupItemTitleText"
         app:layout_constraintStart_toStartOf="@id/appGroupItemTitleText" />

@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory
@@ -29,12 +28,11 @@ class RecyclerStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBindin
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true))
-        ).apply {
-            setGridLayoutItemSpan(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
-        }
+        )
         binding.recyclerRecycler.apply {
             adapter = recyclerAdapter
-            layoutManager = AssemblyStaggeredGridLayoutManager(3)
+            layoutManager =
+                AssemblyStaggeredGridLayoutManager(3, listOf(PinyinGroupItemFactory::class))
             addItemDecoration(context.staggeredDividerBuilder().asSpace().size(20.dp2px).build())
         }
 

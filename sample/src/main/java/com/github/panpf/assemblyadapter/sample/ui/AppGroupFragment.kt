@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.recyclerview.widget.GridLayoutManager
 import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
@@ -32,12 +32,8 @@ class AppGroupFragment : BaseBindingFragment<FragmentAppGroupBinding>() {
         binding.appGroupGroupNameText.text = data?.title
         binding.appGroupAppCountText.text = data?.appList?.size?.toString()
         binding.appGroupRecycler.apply {
-            adapter = AssemblyRecyclerAdapter<Any>(
-                listOf(AppGridCardItemFactory())
-            ).apply {
-                setDataList(data?.appList)
-            }
-            layoutManager = AssemblyGridLayoutManager(context, 3)
+            adapter = AssemblyRecyclerAdapter<Any>(listOf(AppGridCardItemFactory()), data?.appList)
+            layoutManager = GridLayoutManager(context, 3)
             addItemDecoration(
                 context.dividerBuilder().asSpace()
                     .showSideDividers().showLastDivider()
