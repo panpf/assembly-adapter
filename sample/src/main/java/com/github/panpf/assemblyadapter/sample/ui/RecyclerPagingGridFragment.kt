@@ -15,6 +15,7 @@ import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
@@ -39,7 +40,7 @@ class RecyclerPagingGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
             setGridLayoutItemSpan(PinyinGroupItemFactory::class.java, ItemSpan.fullSpan())
         }
         binding.recyclerRecycler.apply {
-            adapter = pagingDataAdapter
+            adapter = pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
             layoutManager = AssemblyGridLayoutManager(requireContext(), 3)
             addItemDecoration(
                 context.dividerBuilder().asSpace()

@@ -50,7 +50,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
             if (adapter != null && position >= 0 && position < adapter.itemCount) {
                 val itemSpan = findItemSpan(adapter, position)
                 if (itemSpan != null) {
-                    return if (itemSpan.size < 0) {
+                    return if (itemSpan.isFullSpan()) {
                         assemblyGridLayoutManager.spanCount
                     } else {
                         itemSpan.size.coerceAtLeast(1)
@@ -66,35 +66,28 @@ class AssemblyGridLayoutManager : GridLayoutManager {
                     adapter.getItemSpanByPosition(position)
                 }
                 is ConcatAdapter -> {
-                    val (childAdapter, childPosition) =
-                        findChildAdapterAndChildPosition(adapter, position)
-                    findItemSpan(childAdapter, childPosition)
+                    var childAdapterStartPosition = 0
+                    val childAdapter = adapter.adapters.find { childAdapter ->
+                        val childAdapterEndPosition =
+                            childAdapterStartPosition + childAdapter.itemCount - 1
+                        @Suppress("ConvertTwoComparisonsToRangeCheck")
+                        if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
+                            true
+                        } else {
+                            childAdapterStartPosition = childAdapterEndPosition + 1
+                            false
+                        }
+                    }
+                    if (childAdapter != null) {
+                        val childPosition = position - childAdapterStartPosition
+                        findItemSpan(childAdapter, childPosition)
+                    } else {
+                        throw IndexOutOfBoundsException("Index: $position, Size: ${adapter.itemCount}")
+                    }
                 }
                 else -> {
                     null
                 }
-            }
-        }
-
-        private fun findChildAdapterAndChildPosition(
-            concatAdapter: ConcatAdapter, position: Int
-        ): Pair<RecyclerView.Adapter<*>, Int> {
-            var childAdapterStartPosition = 0
-            val childAdapter = concatAdapter.adapters.find { childAdapter ->
-                val childAdapterEndPosition = childAdapterStartPosition + childAdapter.itemCount - 1
-                @Suppress("ConvertTwoComparisonsToRangeCheck")
-                if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
-                    true
-                } else {
-                    childAdapterStartPosition = childAdapterEndPosition + 1
-                    false
-                }
-            }
-            if (childAdapter != null) {
-                val childPosition = position - childAdapterStartPosition
-                return childAdapter to childPosition
-            } else {
-                throw IndexOutOfBoundsException("Index: $position, Size: ${concatAdapter.itemCount}")
             }
         }
     }

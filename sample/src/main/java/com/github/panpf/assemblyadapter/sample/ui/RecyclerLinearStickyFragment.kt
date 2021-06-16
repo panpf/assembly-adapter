@@ -11,10 +11,10 @@ import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupStickyItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.sticky.StickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatViewModel
-import me.panpf.recycler.sticky.StickyRecyclerItemDecoration
 
-class StickyRecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<InstalledAppPinyinFlatViewModel>()
 

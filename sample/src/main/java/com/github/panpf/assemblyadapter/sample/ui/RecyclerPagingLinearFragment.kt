@@ -13,6 +13,7 @@ import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
 import kotlinx.coroutines.flow.collect
@@ -34,7 +35,7 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
-            adapter = pagingDataAdapter
+            adapter = pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
             layoutManager = LinearLayoutManager(requireContext())
         }
 

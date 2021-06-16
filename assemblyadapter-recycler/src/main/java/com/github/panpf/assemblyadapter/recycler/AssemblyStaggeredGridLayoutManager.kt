@@ -14,4 +14,6 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager {
     constructor(spanCount: Int, orientation: Int) : super(spanCount, orientation) {}
 
     constructor(spanCount: Int) : super(spanCount, VERTICAL)
+
+    // todo 设置 itemSpan 的放到这里来，这样就更加直观了
 }

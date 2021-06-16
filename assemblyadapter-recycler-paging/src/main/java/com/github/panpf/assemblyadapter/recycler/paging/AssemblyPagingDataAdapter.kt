@@ -92,7 +92,7 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
                 // No need to do
             } else if (layoutManager is AssemblyStaggeredGridLayoutManager) {
                 val itemSpan = gridLayoutItemSpanMap[recyclerItemFactory.javaClass]
-                if (itemSpan != null && itemSpan.size < 0) {
+                if (itemSpan != null && itemSpan.isFullSpan()) {
                     val itemView: View = recyclerItem.getItemView()
                     val layoutParams = itemView.layoutParams
                     if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {

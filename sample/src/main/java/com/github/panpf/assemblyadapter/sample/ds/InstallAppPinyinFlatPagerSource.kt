@@ -33,11 +33,17 @@ class InstallAppPinyinFlatPagerSource private constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Any> {
+        if (params !is LoadParams.Refresh) {
+            withContext(Dispatchers.IO) {
+                Thread.sleep(1500)
+            }
+        }
         preparationAppPackageList()
+        val result = flatByPinyin(loadApps(params.key!!, params.loadSize))
         return LoadResult.Page(
-            flatByPinyin(loadApps(params.key!!, params.loadSize)),
+            result,
             null,
-            params.key!! + params.loadSize
+            if (result.isNotEmpty()) params.key!! + params.loadSize else null
         )
     }
 

@@ -30,6 +30,11 @@ class OverviewInstallAppPinyinGroupPagerSource private constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Any> {
+        if (params !is LoadParams.Refresh) {
+            withContext(Dispatchers.IO) {
+                Thread.sleep(1500)
+            }
+        }
         preparationAppPackageList()
         val loadedAppGroupList = loadAppGroups(params.key!!, params.loadSize).let {
             if (params is LoadParams.Refresh<*>) {
@@ -38,7 +43,11 @@ class OverviewInstallAppPinyinGroupPagerSource private constructor(
                 it
             }
         }
-        return LoadResult.Page(loadedAppGroupList, null, params.key!! + params.loadSize)
+        return LoadResult.Page(
+            loadedAppGroupList,
+            null,
+            if (loadedAppGroupList.isNotEmpty()) params.key!! + params.loadSize else null
+        )
     }
 
     private suspend fun loadAppGroups(start: Int, size: Int): List<AppGroup> =

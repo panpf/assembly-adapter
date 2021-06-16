@@ -2,10 +2,16 @@ package com.github.panpf.assemblyadapter.recycler
 
 data class ItemSpan constructor(val size: Int) {
 
+    fun isFullSpan(): Boolean = size < 0
+
     companion object {
+
+        @JvmStatic
+        val FULL_SPAN = ItemSpan(-1)
+
         @JvmStatic
         fun fullSpan(): ItemSpan {
-            return ItemSpan(-1)
+            return FULL_SPAN
         }
 
         @JvmStatic

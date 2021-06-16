@@ -3,9 +3,9 @@ package com.github.panpf.assemblyadapter.sample.base
 import androidx.recyclerview.widget.DiffUtil
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
+import com.github.panpf.assemblyadapter.sample.ui.sticky.StickyRecyclerAdapter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import me.panpf.recycler.sticky.StickyRecyclerAdapter
 
 class AssemblyStickyPagingDataAdapter<DATA : Any>(
     itemFactoryList: List<ItemFactory<*>>,
@@ -16,7 +16,7 @@ class AssemblyStickyPagingDataAdapter<DATA : Any>(
     itemFactoryList, diffCallback, mainDispatcher, workerDispatcher
 ), StickyRecyclerAdapter {
 
-    override fun isStickyItemByType(type: Int): Boolean {
-        return getItemFactoryByItemType(type) is StickyItemFactory
+    override fun isStickyItemByPosition(position: Int): Boolean {
+        return getItemFactoryByPosition(position) is StickyItemFactory
     }
 }

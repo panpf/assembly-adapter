@@ -60,10 +60,10 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
         return recyclerItem
     }
 
-    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        if (viewHolder is AssemblyRecyclerItem<*>) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is AssemblyRecyclerItem<*>) {
             @Suppress("UNCHECKED_CAST")
-            (viewHolder as AssemblyRecyclerItem<Any?>).dispatchBindData(
+            (holder as AssemblyRecyclerItem<Any?>).dispatchBindData(
                 position,
                 dataManager.getData(position)
             )
@@ -113,7 +113,7 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
                 // No need to do
             } else if (layoutManager is AssemblyStaggeredGridLayoutManager) {
                 val itemSpan = gridLayoutItemSpanMap[recyclerItemFactory.javaClass]
-                if (itemSpan != null && itemSpan.size < 0) {
+                if (itemSpan != null && itemSpan.isFullSpan()) {
                     val itemView: View = recyclerItem.getItemView()
                     val layoutParams = itemView.layoutParams
                     if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {

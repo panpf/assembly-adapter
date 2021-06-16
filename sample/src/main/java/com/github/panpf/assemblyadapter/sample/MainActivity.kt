@@ -26,13 +26,13 @@ class MainActivity : AppCompatActivity() {
                 listOf(LinkItemFactory()),
                 listOf(
                     Link("RecyclerView - Linear", RecyclerLinearFragment()),
-                    Link("RecyclerView - Linear - Sticky", StickyRecyclerLinearFragment()),
+                    Link("RecyclerView - Linear - Sticky", RecyclerLinearStickyFragment()),
                     Link("RecyclerView - Grid", RecyclerGridFragment()),
                     Link("RecyclerView - StaggeredGrid", RecyclerStaggeredGridFragment()),
                     Link("RecyclerView - Paging - Linear", RecyclerPagingLinearFragment()),
                     Link(
                         "RecyclerView - Paging - Linear - Sticky",
-                        StickyRecyclerPagingLinearFragment()
+                        RecyclerPagingLinearStickyFragment()
                     ),
                     Link("RecyclerView - Paging - Grid", RecyclerPagingGridFragment()),
                     Link(

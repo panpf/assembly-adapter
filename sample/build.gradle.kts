@@ -43,7 +43,6 @@ dependencies {
 
     implementation("io.github.panpf.pagerindicator:pagerindicator:${property("PAGER_INDICATOR")}")
     implementation("io.github.panpf.sketch:sketch:${property("SKETCH_VERSION")}")
-    implementation("io.github.panpf.stickyrecycleritemdecoration:stickyrecycleritemdecoration:${property("STICKY_RECYCLER_ITEM_DECORATION")}")
     implementation("io.github.panpf.tools4a:tools4a-dimen-ktx:${property("TOOLS4A")}")
     implementation("com.github.promeg:tinypinyin:${property("TINYPINYIN")}")
     implementation("com.github.fondesa:recycler-view-divider:${property("RECYCLER_VIEW_DIVIDER")}")

@@ -11,7 +11,7 @@ class InstalledAppPinyinFlatPagingViewModel(application: Application) :
 
     val pinyinFlatAppListDataFlow =
         Pager(
-            PagingConfig(20, 5, false, 40),
+            PagingConfig(20, 5, false, 20),
             0,
             InstallAppPinyinFlatPagerSource.Factory(getApplication())
         ).flow

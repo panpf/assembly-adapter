@@ -13,13 +13,14 @@ import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyPagingDataAdap
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupStickyItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.sticky.StickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import me.panpf.recycler.sticky.StickyRecyclerItemDecoration
 
-class StickyRecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerPagingLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<InstalledAppPinyinFlatPagingViewModel>()
 
@@ -35,7 +36,7 @@ class StickyRecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerB
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
-            adapter = pagingDataAdapter
+            adapter = pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
         }
