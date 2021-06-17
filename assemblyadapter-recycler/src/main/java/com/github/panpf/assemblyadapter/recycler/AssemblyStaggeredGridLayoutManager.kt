@@ -6,9 +6,11 @@ import android.view.View
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.BaseItemFactory
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import kotlin.reflect.KClass
 
-class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager {
+class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
+    FullSpanStaggeredGridLayoutManager {
 
     private val fullSpanItemFactoryList: List<KClass<out BaseItemFactory>>
 
@@ -34,7 +36,7 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList
     }
 
-    fun setFullSpan(itemView: View, itemFactory: ItemFactory<*>) {
+    override fun setFullSpan(itemView: View, itemFactory: ItemFactory<*>) {
         val layoutParams = itemView.layoutParams
         if (layoutParams is LayoutParams && fullSpanItemFactoryList.contains(itemFactory::class)) {
             layoutParams.isFullSpan = true

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemManager
-import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +33,7 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
         return AssemblyRecyclerItem(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
-            if (layoutManager is AssemblyStaggeredGridLayoutManager) {
+            if (layoutManager is FullSpanStaggeredGridLayoutManager) {
                 layoutManager.setFullSpan(itemView, itemFactory)
             }
         }

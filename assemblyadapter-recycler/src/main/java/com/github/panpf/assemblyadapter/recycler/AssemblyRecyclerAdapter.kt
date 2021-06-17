@@ -23,6 +23,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import java.util.*
 
 open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
@@ -56,7 +57,7 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
         return AssemblyRecyclerItem(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
-            if (layoutManager is AssemblyStaggeredGridLayoutManager) {
+            if (layoutManager is FullSpanStaggeredGridLayoutManager) {
                 layoutManager.setFullSpan(itemView, itemFactory)
             }
         }
