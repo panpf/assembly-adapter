@@ -21,28 +21,21 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ArrayFragmentStateAdapter : FragmentStateAdapter {
+class ArrayFragmentStateAdapter(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle,
+    fragments: List<Fragment>
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    private var fragmentList: List<Fragment>
+    private var fragmentList = fragments.toList()
 
     constructor(
         fragmentActivity: FragmentActivity, fragments: List<Fragment>
-    ) : super(fragmentActivity) {
-        fragmentList = fragments.toList()
-    }
+    ) : this(fragmentActivity.supportFragmentManager, fragmentActivity.lifecycle, fragments)
 
     constructor(
         fragment: Fragment, fragments: List<Fragment>
-    ) : super(fragment) {
-        fragmentList = fragments.toList()
-    }
-
-    constructor(
-        fragmentManager: FragmentManager, lifecycle: Lifecycle,
-        fragments: List<Fragment>
-    ) : super(fragmentManager, lifecycle) {
-        fragmentList = fragments.toList()
-    }
+    ) : this(fragment.childFragmentManager, fragment.lifecycle, fragments)
 
 
     override fun getItemCount(): Int {

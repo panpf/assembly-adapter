@@ -26,30 +26,22 @@ import com.github.panpf.assemblyadapter.internal.DataManager
 import com.github.panpf.assemblyadapter.internal.ItemManager
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
 
-class AssemblyFragmentStateAdapter<DATA> :
-    FragmentStateAdapter, AssemblyAdapter, DataAdapter<DATA> {
+class AssemblyFragmentStateAdapter<DATA>(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle,
+    itemFactoryList: List<AssemblyFragmentItemFactory<*>>
+) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter, DataAdapter<DATA> {
 
-    private val itemManager: ItemManager<AssemblyFragmentItemFactory<*>>
+    private val itemManager = ItemManager(itemFactoryList)
     private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
 
     constructor(
         fragmentActivity: FragmentActivity, itemFactoryList: List<AssemblyFragmentItemFactory<*>>
-    ) : super(fragmentActivity) {
-        itemManager = ItemManager(itemFactoryList)
-    }
+    ) : this(fragmentActivity.supportFragmentManager, fragmentActivity.lifecycle, itemFactoryList)
 
     constructor(
         fragment: Fragment, itemFactoryList: List<AssemblyFragmentItemFactory<*>>
-    ) : super(fragment) {
-        itemManager = ItemManager(itemFactoryList)
-    }
-
-    constructor(
-        fragmentManager: FragmentManager, lifecycle: Lifecycle,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>
-    ) : super(fragmentManager, lifecycle) {
-        itemManager = ItemManager(itemFactoryList)
-    }
+    ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactoryList)
 
     override fun getItemCount(): Int {
         return dataManager.dataCount

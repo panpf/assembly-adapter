@@ -272,56 +272,70 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [LoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
      * [LoadType.PREPEND] [LoadState] as a list item at the end of the presented list.
      *
-     * @see LoadStateAdapter
+     * @see FragmentLoadStateAdapter
      * @see withLoadStateHeaderAndFooter
      * @see withLoadStateFooter
      */
-    fun withLoadStateHeader(
-        header: LoadStateAdapter<*>
-    ): ConcatAdapter {
+    fun withLoadStateHeader(header: FragmentLoadStateAdapter): ConcatAdapter {
         addLoadStateListener { loadStates ->
             header.loadState = loadStates.prepend
         }
-        return ConcatAdapter(header, this)
+        return ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setIsolateViewTypes(true)
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            header, this
+        )
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [LoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
      * [LoadType.APPEND] [LoadState] as a list item at the start of the presented list.
      *
-     * @see LoadStateAdapter
+     * @see FragmentLoadStateAdapter
      * @see withLoadStateHeaderAndFooter
      * @see withLoadStateHeader
      */
-    fun withLoadStateFooter(
-        footer: LoadStateAdapter<*>
-    ): ConcatAdapter {
+    fun withLoadStateFooter(footer: FragmentLoadStateAdapter): ConcatAdapter {
         addLoadStateListener { loadStates ->
             footer.loadState = loadStates.append
         }
-        return ConcatAdapter(this, footer)
+        return ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setIsolateViewTypes(true)
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            this, footer
+        )
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [LoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
      * [LoadType.PREPEND] and [LoadType.APPEND] [LoadState]s as list items at the start and end
      * respectively.
      *
-     * @see LoadStateAdapter
+     * @see FragmentLoadStateAdapter
      * @see withLoadStateHeader
      * @see withLoadStateFooter
      */
     fun withLoadStateHeaderAndFooter(
-        header: LoadStateAdapter<*>,
-        footer: LoadStateAdapter<*>
+        header: FragmentLoadStateAdapter,
+        footer: FragmentLoadStateAdapter
     ): ConcatAdapter {
         addLoadStateListener { loadStates ->
             header.loadState = loadStates.prepend
             footer.loadState = loadStates.append
         }
-        return ConcatAdapter(header, this, footer)
+        return ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setIsolateViewTypes(true)
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            header, this, footer
+        )
     }
 }

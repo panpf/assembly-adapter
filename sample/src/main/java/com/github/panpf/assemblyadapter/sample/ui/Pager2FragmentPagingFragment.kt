@@ -9,12 +9,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.viewpager2.widget.ViewPager2
+import com.github.panpf.assemblyadapter.pager2.paging.AssemblyFragmentLoadStateAdapter
 import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingFragmentStateAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.FragmentLoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.OverviewInstalledAppPinyinGroupPagingViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -35,6 +37,9 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
             listOf(AppGroupFragmentItemFactory(), AppsOverviewFragmentItemFactory())
         )
         binding.pager2Pager.adapter = pagingDataAdapter
+        binding.pager2Pager.adapter = pagingDataAdapter.withLoadStateFooter(
+            AssemblyFragmentLoadStateAdapter(this, FragmentLoadStateItemFactory())
+        )
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.pinyinGroupAppListDataFlow.collect {
