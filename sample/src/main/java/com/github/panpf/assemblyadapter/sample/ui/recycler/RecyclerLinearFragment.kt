@@ -3,7 +3,6 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +37,9 @@ class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter)
             layoutManager = LinearLayoutManager(requireContext())
         }
+        binding.recyclerRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
@@ -48,7 +50,7 @@ class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         }
 
         viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.recyclerProgressBar.isVisible = it == true
+            binding.recyclerRefreshLayout.isRefreshing = it == true
         }
     }
 }

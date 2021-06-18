@@ -3,7 +3,6 @@ package com.github.panpf.assemblyadapter.sample.ui.list
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.github.panpf.assemblyadapter.list.AssemblyExpandableListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
@@ -25,18 +24,21 @@ class ListExpandableFragment : BaseBindingFragment<FragmentExpandableListBinding
     }
 
     override fun onInitData(binding: FragmentExpandableListBinding, savedInstanceState: Bundle?) {
-        val listAdapter =
-            AssemblyExpandableListAdapter<AppGroup, AppInfo>(
-                listOf(AppGroupItemFactory(), AppItemFactory())
-            )
+        val listAdapter = AssemblyExpandableListAdapter<AppGroup, AppInfo>(
+            listOf(AppGroupItemFactory(), AppItemFactory())
+        )
         binding.expandableListList.setAdapter(listAdapter)
+
+        binding.expandableListRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
 
         viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
         }
 
         viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.expandableListProgressBar.isVisible = it == true
+            binding.expandableListRefreshLayout.isRefreshing = it == true
         }
     }
 }

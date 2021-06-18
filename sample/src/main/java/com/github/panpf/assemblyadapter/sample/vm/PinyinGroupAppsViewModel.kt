@@ -16,6 +16,10 @@ class PinyinGroupAppsViewModel(application: Application) : AndroidViewModel(appl
     val loadingData = MutableLiveData<Boolean>()
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
         viewModelScope.launch {
             loadingData.postValue(true)
             val list = withContext(Dispatchers.IO) {

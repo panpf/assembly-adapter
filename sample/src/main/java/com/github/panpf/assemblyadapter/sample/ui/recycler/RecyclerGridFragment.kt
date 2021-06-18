@@ -49,6 +49,9 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                     .size(20.dp2px).build()
             )
         }
+        binding.recyclerRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
@@ -59,7 +62,7 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         }
 
         viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.recyclerProgressBar.isVisible = it == true
+            binding.recyclerRefreshLayout.isRefreshing = it == true
         }
     }
 }

@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ExpandableListView
-        android:id="@+id/expandableListList"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/expandableListRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:scrollbars="vertical"
-        android:groupIndicator="@null"/>
+        android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/expandableListProgressBar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center" />
+        <ExpandableListView
+            android:id="@+id/expandableListList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:groupIndicator="@null"
+            android:scrollbars="vertical" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

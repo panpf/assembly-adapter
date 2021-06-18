@@ -1,9 +1,7 @@
 package com.github.panpf.assemblyadapter.sample.vm
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -13,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PinyinFlatPagingAppsViewModel(application: Application) :
@@ -28,10 +27,21 @@ class PinyinFlatPagingAppsViewModel(application: Application) :
             PinyinFlatAppsPagerSource.Factory(getApplication())
         ).flow
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val appsOverviewData: LiveData<AppsOverview> = channelFlow {
-        withContext(Dispatchers.IO) {
-            send(AppsOverview.build(getApplication()))
+    val appsOverviewData = MutableLiveData<AppsOverview>()
+
+    init {
+        refresh()
+    }
+
+    fun refresh() {
+        refreshAppsOverview()
+    }
+
+    private fun refreshAppsOverview() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                appsOverviewData.postValue(AppsOverview.build(getApplication()))
+            }
         }
-    }.asLiveData()
+    }
 }

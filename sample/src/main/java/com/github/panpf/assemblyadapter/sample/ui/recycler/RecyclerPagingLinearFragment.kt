@@ -48,6 +48,10 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
             )
             layoutManager = LinearLayoutManager(requireContext())
         }
+        binding.recyclerRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+            pagingDataAdapter.refresh()
+        }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
@@ -61,7 +65,7 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
 
         viewLifecycleOwner.lifecycleScope.launch {
             pagingDataAdapter.loadStateFlow.collect {
-                binding.recyclerProgressBar.isVisible = it.refresh is LoadState.Loading
+                binding.recyclerRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
             }
         }
     }

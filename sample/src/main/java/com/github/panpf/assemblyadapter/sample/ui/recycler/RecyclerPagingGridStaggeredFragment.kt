@@ -52,6 +52,10 @@ class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecycler
             )
             addItemDecoration(context.staggeredDividerBuilder().asSpace().size(20.dp2px).build())
         }
+        binding.recyclerRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+            pagingDataAdapter.refresh()
+        }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
@@ -65,7 +69,7 @@ class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecycler
 
         viewLifecycleOwner.lifecycleScope.launch {
             pagingDataAdapter.loadStateFlow.collect {
-                binding.recyclerProgressBar.isVisible = it.refresh is LoadState.Loading
+                binding.recyclerRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
             }
         }
     }

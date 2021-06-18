@@ -49,6 +49,10 @@ class RecyclerPagingLinearStickyFragment : BaseBindingFragment<FragmentRecyclerB
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
         }
+        binding.recyclerRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+            pagingDataAdapter.refresh()
+        }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
@@ -62,7 +66,7 @@ class RecyclerPagingLinearStickyFragment : BaseBindingFragment<FragmentRecyclerB
 
         viewLifecycleOwner.lifecycleScope.launch {
             pagingDataAdapter.loadStateFlow.collect {
-                binding.recyclerProgressBar.isVisible = it.refresh is LoadState.Loading
+                binding.recyclerRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
             }
         }
     }

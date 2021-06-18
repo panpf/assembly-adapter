@@ -3,7 +3,6 @@ package com.github.panpf.assemblyadapter.sample.ui.list
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
@@ -23,18 +22,21 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
     }
 
     override fun onInitData(binding: FragmentListBinding, savedInstanceState: Bundle?) {
-        val listAdapter =
-            AssemblyListAdapter<Any>(
-                listOf(AppItemFactory(), PinyinGroupItemFactory())
-            )
+        val listAdapter = AssemblyListAdapter<Any>(
+            listOf(AppItemFactory(), PinyinGroupItemFactory())
+        )
         binding.listList.adapter = listAdapter
+
+        binding.listRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
 
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
         }
 
         viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.listProgressBar.isVisible = it == true
+            binding.listRefreshLayout.isRefreshing = it == true
         }
     }
 }
