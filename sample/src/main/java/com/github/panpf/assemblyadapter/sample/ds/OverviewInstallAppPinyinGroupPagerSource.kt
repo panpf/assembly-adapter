@@ -38,7 +38,10 @@ class OverviewInstallAppPinyinGroupPagerSource private constructor(
         preparationAppPackageList()
         val loadedAppGroupList = loadAppGroups(params.key!!, params.loadSize).let {
             if (params is LoadParams.Refresh<*>) {
-                insertOverview(createAppsOverview(factory.appGroupList!!), it)
+                insertOverview(
+                    AppsOverview.createAppsOverviewByAppGroup(factory.appGroupList!!),
+                    it
+                )
             } else {
                 it
             }
@@ -86,20 +89,10 @@ class OverviewInstallAppPinyinGroupPagerSource private constructor(
     private suspend fun insertOverview(
         appsOverview: AppsOverview,
         appGroupList: List<AppGroup>
-    ): List<Any> =
-        withContext(Dispatchers.IO) {
-            ArrayList<Any>().apply {
-                add(appsOverview)
-                addAll(appGroupList)
-            }
+    ): List<Any> = withContext(Dispatchers.IO) {
+        ArrayList<Any>().apply {
+            add(appsOverview)
+            addAll(appGroupList)
         }
-
-    private fun createAppsOverview(appGroupList: List<AppGroup>): AppsOverview {
-        val count = appGroupList.sumOf { it.appList.size }
-        val userAppCount = appGroupList.sumOf { appGroup ->
-            appGroup.appList.count { app -> !app.systemApp }
-        }
-        val groupCount = appGroupList.size
-        return AppsOverview(count, userAppCount, groupCount)
     }
 }

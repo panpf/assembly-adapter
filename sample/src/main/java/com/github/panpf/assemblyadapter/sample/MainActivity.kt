@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                     Link("RecyclerView - Linear", RecyclerLinearFragment()),
                     Link("RecyclerView - Linear - Sticky", RecyclerLinearStickyFragment()),
                     Link("RecyclerView - Grid", RecyclerGridFragment()),
-                    Link("RecyclerView - StaggeredGrid", RecyclerStaggeredGridFragment()),
+                    Link("RecyclerView - Grid - Staggered", RecyclerGridStaggeredFragment()),
                     Link("RecyclerView - Paging - Linear", RecyclerPagingLinearFragment()),
                     Link(
                         "RecyclerView - Paging - Linear - Sticky",
@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
                     ),
                     Link("RecyclerView - Paging - Grid", RecyclerPagingGridFragment()),
                     Link(
-                        "RecyclerView - Paging - StaggeredGrid",
-                        RecyclerPagingStaggeredGridFragment()
+                        "RecyclerView - Paging - Grid - Staggered",
+                        RecyclerPagingGridStaggeredFragment()
                     ),
                     Link("ListView", ListFragment()),
                     Link("ExpandableListView", ListExpandableFragment()),

@@ -43,17 +43,8 @@ class OverviewInstalledAppPinyinGroupViewModel(application: Application) :
     private suspend fun insertOverview(appGroupList: List<AppGroup>): List<Any> =
         withContext(Dispatchers.IO) {
             ArrayList<Any>().apply {
-                add(createAppsOverview(appGroupList))
+                add(AppsOverview.createAppsOverviewByAppGroup(appGroupList))
                 addAll(appGroupList)
             }
         }
-
-    private fun createAppsOverview(appGroupList: List<AppGroup>): AppsOverview {
-        val count = appGroupList.sumOf { it.appList.size }
-        val userAppCount = appGroupList.sumOf { appGroup ->
-            appGroup.appList.count { app -> !app.systemApp }
-        }
-        val groupCount = appGroupList.size
-        return AppsOverview(count, userAppCount, groupCount)
-    }
 }

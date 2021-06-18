@@ -7,12 +7,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
@@ -30,13 +34,23 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
+        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter<AppsOverview>(
+            AppsOverviewItemFactory()
+        )
         val pagingDataAdapter = AssemblyPagingDataAdapter(
             listOf(AppItemFactory(), PinyinGroupItemFactory()),
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
-            adapter = pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
+            adapter = ConcatAdapter(
+                appsOverviewAdapter,
+                pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
+            )
             layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

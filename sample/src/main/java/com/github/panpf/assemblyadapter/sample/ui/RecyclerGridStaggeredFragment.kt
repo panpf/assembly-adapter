@@ -5,17 +5,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
-class RecyclerStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerGridStaggeredFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<InstalledAppPinyinFlatViewModel>()
 
@@ -26,14 +30,24 @@ class RecyclerStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBindin
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
+        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter<AppsOverview>(
+            AppsOverviewItemFactory(true)
+        )
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true))
         )
         binding.recyclerRecycler.apply {
-            adapter = recyclerAdapter
+            adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter)
             layoutManager =
-                AssemblyStaggeredGridLayoutManager(3, listOf(PinyinGroupItemFactory::class))
+                AssemblyStaggeredGridLayoutManager(
+                    3,
+                    listOf(AppsOverviewItemFactory::class, PinyinGroupItemFactory::class)
+                )
             addItemDecoration(context.staggeredDividerBuilder().asSpace().size(20.dp2px).build())
+        }
+
+        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
         }
 
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {

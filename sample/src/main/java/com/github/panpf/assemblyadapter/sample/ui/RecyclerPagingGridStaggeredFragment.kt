@@ -7,22 +7,22 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.ConcatAdapter
 import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
+import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory
-import com.github.panpf.assemblyadapter.sample.ui.list.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.ui.list.MyLoadStateAdapter
-import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.*
 import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class RecyclerPagingStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<InstalledAppPinyinFlatPagingViewModel>()
 
@@ -33,17 +33,27 @@ class RecyclerPagingStaggeredGridFragment : BaseBindingFragment<FragmentRecycler
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
+        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter<AppsOverview>(
+            AppsOverviewItemFactory(true)
+        )
         val pagingDataAdapter = AssemblyPagingDataAdapter(
             listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true)),
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
-            adapter = pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
+            adapter = ConcatAdapter(
+                appsOverviewAdapter,
+                pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
+            )
             layoutManager = AssemblyStaggeredGridLayoutManager(
                 3,
-                listOf(PinyinGroupItemFactory::class, LoadStateItemFactory::class)
+                listOf(AppsOverviewItemFactory::class, PinyinGroupItemFactory::class, LoadStateItemFactory::class)
             )
             addItemDecoration(context.staggeredDividerBuilder().asSpace().size(20.dp2px).build())
+        }
+
+        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
