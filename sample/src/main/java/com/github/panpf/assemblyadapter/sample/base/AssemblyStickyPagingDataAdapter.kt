@@ -3,7 +3,7 @@ package com.github.panpf.assemblyadapter.sample.base
 import androidx.recyclerview.widget.DiffUtil
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
-import com.github.panpf.assemblyadapter.sample.ui.sticky.StickyRecyclerAdapter
+import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerAdapter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

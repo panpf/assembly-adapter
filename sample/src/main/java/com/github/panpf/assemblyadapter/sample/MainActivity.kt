@@ -7,8 +7,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.AcivityMainBinding
-import com.github.panpf.assemblyadapter.sample.ui.*
-import com.github.panpf.assemblyadapter.sample.ui.list.LinkItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LinkItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.ListExpandableFragment
+import com.github.panpf.assemblyadapter.sample.ui.list.ListFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentStateFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager.PagerViewFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPagingFragment
+import com.github.panpf.assemblyadapter.sample.ui.recycler.*
 
 class MainActivity : AppCompatActivity() {
 
