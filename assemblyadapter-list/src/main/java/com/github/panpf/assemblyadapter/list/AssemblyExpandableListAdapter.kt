@@ -22,31 +22,31 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.internal.DataManager
-import com.github.panpf.assemblyadapter.internal.ItemManager
+import com.github.panpf.assemblyadapter.internal.ItemDataStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
 class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>
 ) : BaseExpandableListAdapter(), AssemblyAdapter, DataAdapter<GROUP_DATA> {
 
-    private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<GROUP_DATA> { notifyDataSetChanged() }
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val itemDataStorage = ItemDataStorage<GROUP_DATA> { notifyDataSetChanged() }
     private var callback: Callback? = null
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         dataList: List<GROUP_DATA>?
     ) : this(itemFactoryList) {
-        dataManager.setDataList(dataList)
+        itemDataStorage.setDataList(dataList)
     }
 
     override fun getGroupCount(): Int {
-        return dataManager.dataCount
+        return itemDataStorage.dataCount
     }
 
     override fun getGroup(groupPosition: Int): GROUP_DATA? {
-        return dataManager.getData(groupPosition)
+        return itemDataStorage.getData(groupPosition)
     }
 
     override fun getGroupId(groupPosition: Int): Long {
@@ -54,11 +54,11 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
     override fun getGroupTypeCount(): Int {
-        return itemManager.itemTypeCount
+        return itemFactoryStorage.itemTypeCount
     }
 
     override fun getGroupType(groupPosition: Int): Int {
-        return itemManager.getItemTypeByData(getGroup(groupPosition))
+        return itemFactoryStorage.getItemTypeByData(getGroup(groupPosition))
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
@@ -77,11 +77,11 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
     override fun getChildTypeCount(): Int {
-        return itemManager.itemTypeCount
+        return itemFactoryStorage.itemTypeCount
     }
 
     override fun getChildType(groupPosition: Int, childPosition: Int): Int {
-        return itemManager.getItemTypeByData(getChild(groupPosition, childPosition))
+        return itemFactoryStorage.getItemTypeByData(getChild(groupPosition, childPosition))
     }
 
     override fun hasStableIds(): Boolean {
@@ -96,7 +96,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
         val groupData = getGroup(groupPosition)
-        val groupItemView = convertView ?: itemManager.getItemFactoryByData(groupData)
+        val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(groupData)
             .dispatchCreateItem(parent).apply {
                 getItemView().setTag(R.id.aa_tag_item, this)
             }.getItemView()
@@ -117,7 +117,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         convertView: View?, parent: ViewGroup
     ): View {
         val childData = getChild(groupPosition, childPosition)
-        val childItemView = convertView ?: itemManager.getItemFactoryByData(childData)
+        val childItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(childData)
             .dispatchCreateItem(parent).apply {
                 getItemView().setTag(R.id.aa_tag_item, this)
             }.getItemView()
@@ -139,59 +139,59 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
 
     override val dataCount: Int
-        get() = dataManager.dataCount
+        get() = itemDataStorage.dataCount
 
     override val dataListSnapshot: List<GROUP_DATA>
-        get() = dataManager.dataListSnapshot
+        get() = itemDataStorage.dataListSnapshot
 
     override fun getData(position: Int): GROUP_DATA? {
-        return dataManager.getData(position)
+        return itemDataStorage.getData(position)
     }
 
     override fun setDataList(datas: List<GROUP_DATA>?) {
-        dataManager.setDataList(datas)
+        itemDataStorage.setDataList(datas)
     }
 
     override fun addData(data: GROUP_DATA): Boolean {
-        return dataManager.addData(data)
+        return itemDataStorage.addData(data)
     }
 
     override fun addData(index: Int, data: GROUP_DATA) {
-        dataManager.addData(index, data)
+        itemDataStorage.addData(index, data)
     }
 
     override fun addAllData(datas: Collection<GROUP_DATA>?): Boolean {
-        return dataManager.addAllData(datas)
+        return itemDataStorage.addAllData(datas)
     }
 
     @SafeVarargs
     override fun addAllData(vararg datas: GROUP_DATA): Boolean {
-        return dataManager.addAllData(*datas)
+        return itemDataStorage.addAllData(*datas)
     }
 
     override fun removeData(data: GROUP_DATA): Boolean {
-        return dataManager.removeData(data)
+        return itemDataStorage.removeData(data)
     }
 
     override fun removeData(index: Int): GROUP_DATA? {
-        return dataManager.removeData(index)
+        return itemDataStorage.removeData(index)
     }
 
     override fun removeAllData(datas: Collection<GROUP_DATA>): Boolean {
-        return dataManager.removeAllData(datas)
+        return itemDataStorage.removeAllData(datas)
     }
 
     override fun clearData() {
-        dataManager.clearData()
+        itemDataStorage.clearData()
     }
 
     override fun sortData(comparator: Comparator<GROUP_DATA>) {
-        dataManager.sortData(comparator)
+        itemDataStorage.sortData(comparator)
     }
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return itemManager.getItemFactoryByData(dataManager.getData(position))
+        return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
     }
 
 

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.internal.ItemManager
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,14 +21,14 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
     diffCallback, mainDispatcher, workerDispatcher
 ), AssemblyAdapter {
 
-    private val itemManager = ItemManager(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
 
     override fun getItemViewType(position: Int): Int {
-        return itemManager.getItemTypeByData(peek(position))
+        return itemFactoryStorage.getItemTypeByData(peek(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemFactory = itemManager.getItemFactoryByItemType(viewType)
+        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         return AssemblyRecyclerItem(item).apply {
             val layoutManager =
@@ -48,6 +48,6 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return itemManager.getItemFactoryByData(peek(position))
+        return itemFactoryStorage.getItemFactoryByData(peek(position))
     }
 }

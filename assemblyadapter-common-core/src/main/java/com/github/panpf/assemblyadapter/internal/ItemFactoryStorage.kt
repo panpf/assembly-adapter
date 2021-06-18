@@ -3,7 +3,7 @@ package com.github.panpf.assemblyadapter.internal
 import android.util.SparseArray
 import java.util.*
 
-class ItemManager<FACTORY : BaseItemFactory>(itemFactoryListParam: List<FACTORY>) {
+class ItemFactoryStorage<FACTORY : BaseItemFactory>(itemFactoryListParam: List<FACTORY>) {
 
     val itemTypeCount: Int = itemFactoryListParam.size
     private val itemFactoryList: List<FACTORY> = ArrayList(itemFactoryListParam)

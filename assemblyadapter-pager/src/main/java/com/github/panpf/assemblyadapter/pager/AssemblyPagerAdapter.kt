@@ -20,15 +20,15 @@ import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
-import com.github.panpf.assemblyadapter.internal.DataManager
-import com.github.panpf.assemblyadapter.internal.ItemManager
+import com.github.panpf.assemblyadapter.internal.ItemDataStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
 class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<*>>) :
     PagerAdapter(), AssemblyAdapter, DataAdapter<DATA> {
 
-    private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
     private val notifyCountHelper = PagerAdapterNotifyCountHelper()
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
@@ -41,11 +41,11 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
         itemFactoryList: List<AssemblyPagerItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(itemFactoryList) {
-        dataManager.setDataList(dataList)
+        itemDataStorage.setDataList(dataList)
     }
 
     override fun getCount(): Int {
-        return dataManager.dataCount
+        return itemDataStorage.dataCount
     }
 
     override fun isViewFromObject(view: View, item: Any): Boolean {
@@ -57,10 +57,10 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val data = dataManager.getData(position)
+        val data = itemDataStorage.getData(position)
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyPagerItemFactory<Any>
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as AssemblyPagerItemFactory<Any>
         val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
         container.addView(itemView)
         return itemView
@@ -77,58 +77,58 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
 
 
     override val dataCount: Int
-        get() = dataManager.dataCount
+        get() = itemDataStorage.dataCount
 
     override val dataListSnapshot: List<DATA>
-        get() = dataManager.dataListSnapshot
+        get() = itemDataStorage.dataListSnapshot
 
     override fun getData(position: Int): DATA? {
-        return dataManager.getData(position)
+        return itemDataStorage.getData(position)
     }
 
     override fun setDataList(datas: List<DATA>?) {
-        dataManager.setDataList(datas)
+        itemDataStorage.setDataList(datas)
     }
 
     override fun addData(data: DATA): Boolean {
-        return dataManager.addData(data)
+        return itemDataStorage.addData(data)
     }
 
     override fun addData(index: Int, data: DATA) {
-        dataManager.addData(index, data)
+        itemDataStorage.addData(index, data)
     }
 
     override fun addAllData(datas: Collection<DATA>?): Boolean {
-        return dataManager.addAllData(datas)
+        return itemDataStorage.addAllData(datas)
     }
 
     @SafeVarargs
     override fun addAllData(vararg datas: DATA): Boolean {
-        return dataManager.addAllData(*datas)
+        return itemDataStorage.addAllData(*datas)
     }
 
     override fun removeData(data: DATA): Boolean {
-        return dataManager.removeData(data)
+        return itemDataStorage.removeData(data)
     }
 
     override fun removeData(index: Int): DATA? {
-        return dataManager.removeData(index)
+        return itemDataStorage.removeData(index)
     }
 
     override fun removeAllData(datas: Collection<DATA>): Boolean {
-        return dataManager.removeAllData(datas)
+        return itemDataStorage.removeAllData(datas)
     }
 
     override fun clearData() {
-        dataManager.clearData()
+        itemDataStorage.clearData()
     }
 
     override fun sortData(comparator: Comparator<DATA>) {
-        dataManager.sortData(comparator)
+        itemDataStorage.sortData(comparator)
     }
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyPagerItemFactory<*> {
-        return itemManager.getItemFactoryByData(dataManager.getData(position))
+        return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
     }
 }

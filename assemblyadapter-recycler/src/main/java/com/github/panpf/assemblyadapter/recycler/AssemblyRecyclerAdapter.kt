@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.internal.DataManager
-import com.github.panpf.assemblyadapter.internal.ItemManager
+import com.github.panpf.assemblyadapter.internal.ItemDataStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import java.util.*
@@ -29,18 +29,18 @@ import java.util.*
 open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter, DataAdapter<DATA> {
 
-    private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(itemFactoryList) {
-        dataManager.setDataList(dataList)
+        itemDataStorage.setDataList(dataList)
     }
 
     override fun getItemCount(): Int {
-        return dataManager.dataCount
+        return itemDataStorage.dataCount
     }
 
     override fun getItemId(position: Int): Long {
@@ -48,11 +48,11 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
     }
 
     override fun getItemViewType(position: Int): Int {
-        return itemManager.getItemTypeByData(dataManager.getData(position))
+        return itemFactoryStorage.getItemTypeByData(itemDataStorage.getData(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemFactory = itemManager.getItemFactoryByItemType(viewType)
+        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         return AssemblyRecyclerItem(item).apply {
             val layoutManager =
@@ -68,65 +68,65 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
             @Suppress("UNCHECKED_CAST")
             (holder as AssemblyRecyclerItem<Any?>).dispatchBindData(
                 position,
-                dataManager.getData(position)
+                itemDataStorage.getData(position)
             )
         }
     }
 
 
     override val dataCount: Int
-        get() = dataManager.dataCount
+        get() = itemDataStorage.dataCount
 
     override val dataListSnapshot: List<DATA>
-        get() = dataManager.dataListSnapshot
+        get() = itemDataStorage.dataListSnapshot
 
     override fun getData(position: Int): DATA? {
-        return dataManager.getData(position)
+        return itemDataStorage.getData(position)
     }
 
     override fun setDataList(datas: List<DATA>?) {
-        dataManager.setDataList(datas)
+        itemDataStorage.setDataList(datas)
     }
 
     override fun addData(data: DATA): Boolean {
-        return dataManager.addData(data)
+        return itemDataStorage.addData(data)
     }
 
     override fun addData(index: Int, data: DATA) {
-        dataManager.addData(index, data)
+        itemDataStorage.addData(index, data)
     }
 
     override fun addAllData(datas: Collection<DATA>?): Boolean {
-        return dataManager.addAllData(datas)
+        return itemDataStorage.addAllData(datas)
     }
 
     @SafeVarargs
     override fun addAllData(vararg datas: DATA): Boolean {
-        return dataManager.addAllData(*datas)
+        return itemDataStorage.addAllData(*datas)
     }
 
     override fun removeData(data: DATA): Boolean {
-        return dataManager.removeData(data)
+        return itemDataStorage.removeData(data)
     }
 
     override fun removeData(index: Int): DATA? {
-        return dataManager.removeData(index)
+        return itemDataStorage.removeData(index)
     }
 
     override fun removeAllData(datas: Collection<DATA>): Boolean {
-        return dataManager.removeAllData(datas)
+        return itemDataStorage.removeAllData(datas)
     }
 
     override fun clearData() {
-        dataManager.clearData()
+        itemDataStorage.clearData()
     }
 
     override fun sortData(comparator: Comparator<DATA>) {
-        dataManager.sortData(comparator)
+        itemDataStorage.sortData(comparator)
     }
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return itemManager.getItemFactoryByData(dataManager.getData(position))
+        return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
     }
 }

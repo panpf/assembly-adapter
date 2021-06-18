@@ -22,8 +22,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
-import com.github.panpf.assemblyadapter.internal.DataManager
-import com.github.panpf.assemblyadapter.internal.ItemManager
+import com.github.panpf.assemblyadapter.internal.ItemDataStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
 
 class AssemblyFragmentStateAdapter<DATA>(
@@ -32,8 +32,8 @@ class AssemblyFragmentStateAdapter<DATA>(
     itemFactoryList: List<AssemblyFragmentItemFactory<*>>
 ) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter, DataAdapter<DATA> {
 
-    private val itemManager = ItemManager(itemFactoryList)
-    private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
 
     constructor(
         fragmentActivity: FragmentActivity, itemFactoryList: List<AssemblyFragmentItemFactory<*>>
@@ -44,71 +44,71 @@ class AssemblyFragmentStateAdapter<DATA>(
     ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactoryList)
 
     override fun getItemCount(): Int {
-        return dataManager.dataCount
+        return itemDataStorage.dataCount
     }
 
     override fun createFragment(position: Int): Fragment {
-        val data = dataManager.getData(position)
+        val data = itemDataStorage.getData(position)
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(position, data)
     }
 
 
     override val dataCount: Int
-        get() = dataManager.dataCount
+        get() = itemDataStorage.dataCount
 
     override val dataListSnapshot: List<DATA>
-        get() = dataManager.dataListSnapshot
+        get() = itemDataStorage.dataListSnapshot
 
     override fun getData(position: Int): DATA? {
-        return dataManager.getData(position)
+        return itemDataStorage.getData(position)
     }
 
     override fun setDataList(datas: List<DATA>?) {
-        dataManager.setDataList(datas)
+        itemDataStorage.setDataList(datas)
     }
 
     override fun addData(data: DATA): Boolean {
-        return dataManager.addData(data)
+        return itemDataStorage.addData(data)
     }
 
     override fun addData(index: Int, data: DATA) {
-        dataManager.addData(index, data)
+        itemDataStorage.addData(index, data)
     }
 
     override fun addAllData(datas: Collection<DATA>?): Boolean {
-        return dataManager.addAllData(datas)
+        return itemDataStorage.addAllData(datas)
     }
 
     @SafeVarargs
     override fun addAllData(vararg datas: DATA): Boolean {
-        return dataManager.addAllData(*datas)
+        return itemDataStorage.addAllData(*datas)
     }
 
     override fun removeData(data: DATA): Boolean {
-        return dataManager.removeData(data)
+        return itemDataStorage.removeData(data)
     }
 
     override fun removeData(index: Int): DATA? {
-        return dataManager.removeData(index)
+        return itemDataStorage.removeData(index)
     }
 
     override fun removeAllData(datas: Collection<DATA>): Boolean {
-        return dataManager.removeAllData(datas)
+        return itemDataStorage.removeAllData(datas)
     }
 
     override fun clearData() {
-        dataManager.clearData()
+        itemDataStorage.clearData()
     }
 
     override fun sortData(comparator: Comparator<DATA>) {
-        dataManager.sortData(comparator)
+        itemDataStorage.sortData(comparator)
     }
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
-        return itemManager.getItemFactoryByData(dataManager.getData(position))
+        return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
     }
 }

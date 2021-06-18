@@ -21,16 +21,16 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
-import com.github.panpf.assemblyadapter.internal.DataManager
-import com.github.panpf.assemblyadapter.internal.ItemManager
+import com.github.panpf.assemblyadapter.internal.ItemDataStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
 @Deprecated("Switch to {@link androidx.viewpager2.widget.ViewPager2} and use {@link com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter} instead.")
 class AssemblyFragmentPagerAdapter<DATA>
     : FragmentPagerAdapter, AssemblyAdapter, DataAdapter<DATA> {
 
-    private val itemManager: ItemManager<AssemblyFragmentItemFactory<*>>
-    private val dataManager = DataManager<DATA> { notifyDataSetChanged() }
+    private val itemFactoryStorage: ItemFactoryStorage<AssemblyFragmentItemFactory<*>>
+    private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
     private val notifyCountHelper = PagerAdapterNotifyCountHelper()
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
@@ -43,7 +43,7 @@ class AssemblyFragmentPagerAdapter<DATA>
         fm: FragmentManager, @Behavior behavior: Int,
         itemFactoryList: List<AssemblyFragmentItemFactory<*>>
     ) : super(fm, behavior) {
-        itemManager = ItemManager(itemFactoryList)
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     }
 
     @Deprecated(
@@ -53,15 +53,15 @@ class AssemblyFragmentPagerAdapter<DATA>
     constructor(
         fm: FragmentManager, itemFactoryList: List<AssemblyFragmentItemFactory<*>>
     ) : super(fm) {
-        itemManager = ItemManager(itemFactoryList)
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     }
 
     constructor(
         fm: FragmentManager, @Behavior behavior: Int,
         itemFactoryList: List<AssemblyFragmentItemFactory<*>>, dataList: List<DATA>?
     ) : super(fm, behavior) {
-        itemManager = ItemManager(itemFactoryList)
-        dataManager.setDataList(dataList)
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+        itemDataStorage.setDataList(dataList)
     }
 
     @Deprecated(
@@ -72,18 +72,18 @@ class AssemblyFragmentPagerAdapter<DATA>
         fm: FragmentManager,
         itemFactoryList: List<AssemblyFragmentItemFactory<*>>, dataList: List<DATA>?
     ) : super(fm) {
-        itemManager = ItemManager(itemFactoryList)
-        dataManager.setDataList(dataList)
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+        itemDataStorage.setDataList(dataList)
     }
 
     override fun getCount(): Int {
-        return dataManager.dataCount
+        return itemDataStorage.dataCount
     }
 
     override fun getItem(position: Int): Fragment {
-        val data = dataManager.getData(position)
+        val data = itemDataStorage.getData(position)
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(position, data)
     }
 
@@ -98,59 +98,59 @@ class AssemblyFragmentPagerAdapter<DATA>
 
 
     override val dataCount: Int
-        get() = dataManager.dataCount
+        get() = itemDataStorage.dataCount
 
     override val dataListSnapshot: List<DATA>
-        get() = dataManager.dataListSnapshot
+        get() = itemDataStorage.dataListSnapshot
 
     override fun getData(position: Int): DATA? {
-        return dataManager.getData(position)
+        return itemDataStorage.getData(position)
     }
 
     override fun setDataList(datas: List<DATA>?) {
-        dataManager.setDataList(datas)
+        itemDataStorage.setDataList(datas)
     }
 
     override fun addData(data: DATA): Boolean {
-        return dataManager.addData(data)
+        return itemDataStorage.addData(data)
     }
 
     override fun addData(index: Int, data: DATA) {
-        dataManager.addData(index, data)
+        itemDataStorage.addData(index, data)
     }
 
     override fun addAllData(datas: Collection<DATA>?): Boolean {
-        return dataManager.addAllData(datas)
+        return itemDataStorage.addAllData(datas)
     }
 
     @SafeVarargs
     override fun addAllData(vararg datas: DATA): Boolean {
-        return dataManager.addAllData(*datas)
+        return itemDataStorage.addAllData(*datas)
     }
 
     override fun removeData(data: DATA): Boolean {
-        return dataManager.removeData(data)
+        return itemDataStorage.removeData(data)
     }
 
     override fun removeData(index: Int): DATA? {
-        return dataManager.removeData(index)
+        return itemDataStorage.removeData(index)
     }
 
     override fun removeAllData(datas: Collection<DATA>): Boolean {
-        return dataManager.removeAllData(datas)
+        return itemDataStorage.removeAllData(datas)
     }
 
     override fun clearData() {
-        dataManager.clearData()
+        itemDataStorage.clearData()
     }
 
     override fun sortData(comparator: Comparator<DATA>) {
-        dataManager.sortData(comparator)
+        itemDataStorage.sortData(comparator)
     }
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
-        return itemManager.getItemFactoryByData(dataManager.getData(position))
+        return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
     }
 
 

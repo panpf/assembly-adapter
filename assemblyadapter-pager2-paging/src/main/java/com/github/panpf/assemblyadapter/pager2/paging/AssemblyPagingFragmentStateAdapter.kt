@@ -22,7 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.internal.ItemManager
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +42,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     workerDispatcher
 ), AssemblyAdapter {
 
-    private val itemManager = ItemManager(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
 
     constructor(
         fragmentActivity: FragmentActivity,
@@ -78,12 +78,12 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         val data = getItem(position)
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemManager.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(position, data)
     }
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
-        return itemManager.getItemFactoryByData(peek(position))
+        return itemFactoryStorage.getItemFactoryByData(peek(position))
     }
 }

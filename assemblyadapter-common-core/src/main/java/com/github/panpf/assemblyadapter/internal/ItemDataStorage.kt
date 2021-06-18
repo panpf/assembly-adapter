@@ -2,7 +2,7 @@ package com.github.panpf.assemblyadapter.internal
 
 import java.util.*
 
-class DataManager<DATA>(private val onDataListChanged: () -> Unit) {
+class ItemDataStorage<DATA>(private val onDataListChanged: () -> Unit) {
 
     private val dataList: MutableList<DATA> = ArrayList()
 
