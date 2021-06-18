@@ -128,10 +128,6 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
     }
 
 
-    override fun getItemFactoryByItemType(itemType: Int): AssemblyPagerItemFactory<*> {
-        return itemManager.getItemFactoryByItemType(itemType)
-    }
-
     override fun getItemFactoryByPosition(position: Int): AssemblyPagerItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }

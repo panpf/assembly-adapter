@@ -62,10 +62,6 @@ open class AssemblySingleDataRecyclerAdapter<DATA> @JvmOverloads constructor(
     }
 
 
-    override fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
-        return itemFactory
-    }
-
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemFactory
     }

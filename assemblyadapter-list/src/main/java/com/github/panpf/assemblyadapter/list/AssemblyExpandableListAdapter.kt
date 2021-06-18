@@ -190,10 +190,6 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
 
-    override fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
-        return itemManager.getItemFactoryByItemType(itemType)
-    }
-
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }

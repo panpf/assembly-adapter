@@ -125,10 +125,6 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
     }
 
 
-    override fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
-        return itemManager.getItemFactoryByItemType(itemType)
-    }
-
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }

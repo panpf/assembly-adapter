@@ -149,10 +149,6 @@ class AssemblyFragmentPagerAdapter<DATA>
     }
 
 
-    override fun getItemFactoryByItemType(itemType: Int): AssemblyFragmentItemFactory<*> {
-        return itemManager.getItemFactoryByItemType(itemType)
-    }
-
     override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
         return itemManager.getItemFactoryByData(dataManager.getData(position))
     }

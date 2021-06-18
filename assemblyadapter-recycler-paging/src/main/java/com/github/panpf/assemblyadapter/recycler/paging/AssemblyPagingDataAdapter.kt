@@ -47,10 +47,6 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
     }
 
 
-    override fun getItemFactoryByItemType(itemType: Int): ItemFactory<*> {
-        return itemManager.getItemFactoryByItemType(itemType)
-    }
-
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemManager.getItemFactoryByData(peek(position))
     }
