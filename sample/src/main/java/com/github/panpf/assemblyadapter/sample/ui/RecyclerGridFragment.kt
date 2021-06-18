@@ -14,15 +14,15 @@ import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.ui.list.AppGridCardItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
-    private val viewModel by viewModels<InstalledAppPinyinFlatViewModel>()
+    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -35,7 +35,7 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
             AppsOverviewItemFactory(true)
         )
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
-            listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true))
+            listOf(AppCardGridItemFactory(), PinyinGroupItemFactory(true))
         )
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter)

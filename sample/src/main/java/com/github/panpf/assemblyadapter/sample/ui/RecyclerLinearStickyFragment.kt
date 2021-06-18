@@ -16,11 +16,11 @@ import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupStickyItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.sticky.StickyRecyclerItemDecoration
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
 class RecyclerLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
-    private val viewModel by viewModels<InstalledAppPinyinFlatViewModel>()
+    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?

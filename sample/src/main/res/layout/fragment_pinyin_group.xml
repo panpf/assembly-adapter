@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pinyinGroupTitleLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/pinyinGroupGroupNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/pinyinGroupAppCountText"
+        app:layout_constraintEnd_toStartOf="@id/pinyinGroupGroupNameSuffixText"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="A" />
+
+    <TextView
+        android:id="@+id/pinyinGroupGroupNameSuffixText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" 组"
+        android:textColor="@android:color/black"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/pinyinGroupGroupNameText"
+        app:layout_constraintTop_toTopOf="@id/pinyinGroupGroupNameText" />
+
+    <TextView
+        android:id="@+id/pinyinGroupAppCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/pinyinGroupAppCountSuffixText"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pinyinGroupGroupNameText"
+        tools:text="88" />
+
+    <TextView
+        android:id="@+id/pinyinGroupAppCountSuffixText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" 个 App"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/pinyinGroupAppCountText"
+        app:layout_constraintTop_toTopOf="@id/pinyinGroupAppCountText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,7 @@ class MyFragmentLoadStateAdapter(
 ) : AssemblyFragmentLoadStateAdapter(
     fragmentManager,
     lifecycle,
-    FragmentLoadStateItemFactory(),
+    LoadStateFragmentItemFactory(),
     true
 ) {
     constructor(

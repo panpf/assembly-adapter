@@ -11,7 +11,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGridCardBindin
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
-class AppGridCardItemFactory : BindingAssemblyItemFactory<AppInfo, ItemAppGridCardBinding>() {
+class AppCardGridItemFactory : BindingAssemblyItemFactory<AppInfo, ItemAppGridCardBinding>() {
 
     override fun match(data: Any?): Boolean {
         return data is AppInfo

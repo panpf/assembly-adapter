@@ -18,14 +18,14 @@ import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.*
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RecyclerPagingGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
-    private val viewModel by viewModels<InstalledAppPinyinFlatPagingViewModel>()
+    private val viewModel by viewModels<PinyinFlatPagingAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -38,7 +38,7 @@ class RecyclerPagingGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
             AppsOverviewItemFactory(true)
         )
         val pagingDataAdapter = AssemblyPagingDataAdapter(
-            listOf(AppGridCardItemFactory(), PinyinGroupItemFactory(true)),
+            listOf(AppCardGridItemFactory(), PinyinGroupItemFactory(true)),
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {

@@ -6,19 +6,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter
+import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
-import com.github.panpf.assemblyadapter.sample.ui.list.AppGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.AppsFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinGroupViewModel
-import com.github.panpf.assemblyadapter.sample.vm.OverviewInstalledAppPinyinGroupViewModel
+import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatChunkedAppsViewModel
 
 class Pager2FragmentFragment : BaseBindingFragment<FragmentPager2Binding>() {
 
-    private val viewModel by viewModels<OverviewInstalledAppPinyinGroupViewModel>()
+    private val viewModel by viewModels<PinyinFlatChunkedAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -27,14 +28,34 @@ class Pager2FragmentFragment : BaseBindingFragment<FragmentPager2Binding>() {
     }
 
     override fun onInitData(binding: FragmentPager2Binding, savedInstanceState: Bundle?) {
+        val appsOverviewAdapter = AssemblySingleDataFragmentStateAdapter(
+            this,
+            AppsOverviewFragmentItemFactory()
+        )
         val listAdapter = AssemblyFragmentStateAdapter<Any>(
             this,
-            listOf(AppGroupFragmentItemFactory(), AppsOverviewFragmentItemFactory())
+            listOf(
+                AppsFragmentItemFactory(),
+                PinyinGroupFragmentItemFactory(),
+                AppsOverviewFragmentItemFactory()
+            )
         )
-        binding.pager2Pager.adapter = listAdapter
+        binding.pager2Pager.adapter = ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setIsolateViewTypes(true)
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            appsOverviewAdapter,
+            listAdapter
+        )
 
-        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinFlatChunkedAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
+            updatePageNumber(binding)
+        }
+
+        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
             updatePageNumber(binding)
         }
 

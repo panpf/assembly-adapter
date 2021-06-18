@@ -5,7 +5,7 @@ import androidx.paging.LoadState
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.LoadStateFragment
 
-class FragmentLoadStateItemFactory : AssemblyFragmentItemFactory<LoadState>() {
+class LoadStateFragmentItemFactory : AssemblyFragmentItemFactory<LoadState>() {
 
     override fun match(data: Any?): Boolean {
         return data is LoadState

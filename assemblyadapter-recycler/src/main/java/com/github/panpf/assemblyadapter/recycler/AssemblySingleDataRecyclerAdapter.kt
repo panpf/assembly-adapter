@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 
 open class AssemblySingleDataRecyclerAdapter<DATA> @JvmOverloads constructor(
-    private val itemFactory: ItemFactory<*>,
+    private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter {
 

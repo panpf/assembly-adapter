@@ -8,21 +8,24 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter
 import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingFragmentStateAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
-import com.github.panpf.assemblyadapter.sample.ui.list.AppGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.AppsFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.MyFragmentLoadStateAdapter
-import com.github.panpf.assemblyadapter.sample.vm.OverviewInstalledAppPinyinGroupPagingViewModel
+import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatChunkedPagingAppsViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>() {
 
-    private val viewModel by viewModels<OverviewInstalledAppPinyinGroupPagingViewModel>()
+    private val viewModel by viewModels<PinyinFlatChunkedPagingAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -31,20 +34,39 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
     }
 
     override fun onInitData(binding: FragmentPager2Binding, savedInstanceState: Bundle?) {
+        val appsOverviewAdapter = AssemblySingleDataFragmentStateAdapter(
+            this,
+            AppsOverviewFragmentItemFactory()
+        )
         val pagingDataAdapter = AssemblyPagingFragmentStateAdapter(
             this, KeyDiffItemCallback(),
-            listOf(AppGroupFragmentItemFactory(), AppsOverviewFragmentItemFactory())
+            listOf(
+                AppsFragmentItemFactory(),
+                PinyinGroupFragmentItemFactory(),
+                AppsOverviewFragmentItemFactory()
+            )
         )
-        binding.pager2Pager.adapter = pagingDataAdapter
-        binding.pager2Pager.adapter = pagingDataAdapter.withLoadStateFooter(
-            MyFragmentLoadStateAdapter(this)
+        binding.pager2Pager.adapter = ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setIsolateViewTypes(true)
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            appsOverviewAdapter,
+            pagingDataAdapter.withLoadStateFooter(
+                MyFragmentLoadStateAdapter(this)
+            )
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.pinyinGroupAppListDataFlow.collect {
+            viewModel.pinyinFlatChunkedAppListDataFlow.collect {
                 pagingDataAdapter.submitData(it)
                 updatePageNumber(binding)
             }
+        }
+
+        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
+            updatePageNumber(binding)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

@@ -11,13 +11,14 @@ import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
-import com.github.panpf.assemblyadapter.sample.ui.list.AppGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.AppsFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.OverviewInstalledAppPinyinGroupViewModel
+import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatChunkedAppsViewModel
 
 class PagerFragmentStateFragment : BaseBindingFragment<FragmentPagerBinding>() {
 
-    private val viewModel by viewModels<OverviewInstalledAppPinyinGroupViewModel>()
+    private val viewModel by viewModels<PinyinFlatChunkedAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -29,11 +30,15 @@ class PagerFragmentStateFragment : BaseBindingFragment<FragmentPagerBinding>() {
         val listAdapter = AssemblyFragmentStatePagerAdapter<Any>(
             childFragmentManager,
             FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-            listOf(AppGroupFragmentItemFactory(), AppsOverviewFragmentItemFactory())
+            listOf(
+                AppsFragmentItemFactory(),
+                PinyinGroupFragmentItemFactory(),
+                AppsOverviewFragmentItemFactory()
+            )
         )
         binding.pagerPager.adapter = listAdapter
 
-        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinFlatChunkedAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
             updatePageNumber(binding)
         }

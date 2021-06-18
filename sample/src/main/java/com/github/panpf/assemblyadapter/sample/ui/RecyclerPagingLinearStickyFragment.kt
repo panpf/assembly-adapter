@@ -20,13 +20,13 @@ import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupStickyItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.sticky.StickyRecyclerItemDecoration
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatPagingViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RecyclerPagingLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
-    private val viewModel by viewModels<InstalledAppPinyinFlatPagingViewModel>()
+    private val viewModel by viewModels<PinyinFlatPagingAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?

@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
@@ -30,14 +31,7 @@ class AppsOverviewItemFactory(private val hideStartMargin: Boolean = false) :
     ) {
         super.initItem(context, binding, item)
         if (hideStartMargin) {
-            binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                leftMargin = 0
-                rightMargin = 0
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    marginStart = 0
-                    marginEnd = 0
-                }
-            }
+            binding.root.updatePadding(left = 0, right = 0)
         }
     }
 

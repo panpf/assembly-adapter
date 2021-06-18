@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                     ),
                     Link("ListView", ListFragment()),
                     Link("ExpandableListView", ListExpandableFragment()),
-                    Link("ViewPager - View", PagerFragment()),
+                    Link("ViewPager - View", PagerViewFragment()),
                     Link("ViewPager - Fragment", PagerFragmentFragment()),
                     Link("ViewPager - FragmentState", PagerFragmentStateFragment()),
                     Link("ViewPager2 - Fragment", Pager2FragmentFragment()),

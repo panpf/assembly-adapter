@@ -10,16 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentPagerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
-import com.github.panpf.assemblyadapter.sample.ui.list.AppGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.ui.list.AppsFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.AppsOverviewFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinGroupViewModel
-import com.github.panpf.assemblyadapter.sample.vm.OverviewInstalledAppPinyinGroupViewModel
+import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatChunkedAppsViewModel
 
 class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
 
-    private val viewModel by viewModels<OverviewInstalledAppPinyinGroupViewModel>()
+    private val viewModel by viewModels<PinyinFlatChunkedAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -31,11 +30,15 @@ class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
         val listAdapter = AssemblyFragmentPagerAdapter<Any>(
             childFragmentManager,
             FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-            listOf(AppGroupFragmentItemFactory(), AppsOverviewFragmentItemFactory())
+            listOf(
+                AppsFragmentItemFactory(),
+                PinyinGroupFragmentItemFactory(),
+                AppsOverviewFragmentItemFactory()
+            )
         )
         binding.pagerPager.adapter = listAdapter
 
-        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinFlatChunkedAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
             updatePageNumber(binding)
         }

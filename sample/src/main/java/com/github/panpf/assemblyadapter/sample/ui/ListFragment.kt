@@ -10,11 +10,11 @@ import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding
 import com.github.panpf.assemblyadapter.sample.ui.list.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.PinyinGroupItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.InstalledAppPinyinFlatViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
 class ListFragment : BaseBindingFragment<FragmentListBinding>() {
 
-    private val viewModel by viewModels<InstalledAppPinyinFlatViewModel>()
+    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
