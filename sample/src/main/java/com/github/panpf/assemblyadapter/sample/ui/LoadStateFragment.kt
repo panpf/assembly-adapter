@@ -29,5 +29,6 @@ class LoadStateFragment : BaseBindingFragment<FragmentLoadStateBinding>() {
             arguments?.getParcelable<LoadStateParcelable>("loadStateParcelable")?.toLoadState()
         binding.loadStateLoadingLayout.isVisible = data is LoadState.Loading
         binding.loadStateErrorText.isVisible = data is LoadState.Error
+        binding.loadStateEndText.isVisible = data is LoadState.NotLoading && data.endOfPaginationReached
     }
 }

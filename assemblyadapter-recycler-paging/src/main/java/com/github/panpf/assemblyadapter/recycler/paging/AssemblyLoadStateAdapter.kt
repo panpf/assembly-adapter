@@ -11,6 +11,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridL
 
 open class AssemblyLoadStateAdapter(
     private val itemFactory: ItemFactory<LoadState>,
+    private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
 ) : LoadStateAdapter<RecyclerView.ViewHolder>(), AssemblyAdapter {
 
     override fun onCreateViewHolder(
@@ -31,6 +32,12 @@ open class AssemblyLoadStateAdapter(
             @Suppress("UNCHECKED_CAST")
             (holder as AssemblyRecyclerItem<Any?>).dispatchBindData(0, loadState)
         }
+    }
+
+    override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
+        return loadState is LoadState.Loading
+                || loadState is LoadState.Error
+                || (alwaysShowWhenEndOfPaginationReached && loadState is LoadState.NotLoading && loadState.endOfPaginationReached)
     }
 
 

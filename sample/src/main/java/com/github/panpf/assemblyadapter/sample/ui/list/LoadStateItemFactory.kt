@@ -26,5 +26,6 @@ class LoadStateItemFactory : BindingAssemblyItemFactory<LoadState, ItemLoadState
     ) {
         binding.loadStateItemLoadingLayout.isVisible = data is LoadState.Loading
         binding.loadStateItemErrorText.isVisible = data is LoadState.Error
+        binding.loadStateItemEndText.isVisible = data is LoadState.NotLoading && data.endOfPaginationReached
     }
 }

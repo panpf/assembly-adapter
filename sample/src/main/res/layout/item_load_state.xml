@@ -29,4 +29,12 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="加载失败，点击重新加载" />
+
+    <TextView
+        android:id="@+id/loadStateItemEndText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="已全部加载" />
 </FrameLayout>
