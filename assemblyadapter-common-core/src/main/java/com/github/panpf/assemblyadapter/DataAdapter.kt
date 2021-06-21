@@ -18,8 +18,7 @@ interface DataAdapter<DATA> {
 
     fun addAllData(datas: Collection<DATA>?): Boolean
 
-    @SafeVarargs
-    fun addAllData(vararg datas: DATA): Boolean
+    fun addAllData(index: Int, datas: Collection<DATA>?): Boolean
 
     fun removeData(data: DATA): Boolean
 

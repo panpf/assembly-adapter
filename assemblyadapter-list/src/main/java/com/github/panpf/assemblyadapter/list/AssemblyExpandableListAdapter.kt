@@ -164,9 +164,8 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return itemDataStorage.addAllData(datas)
     }
 
-    @SafeVarargs
-    override fun addAllData(vararg datas: GROUP_DATA): Boolean {
-        return itemDataStorage.addAllData(*datas)
+    override fun addAllData(index: Int, datas: Collection<GROUP_DATA>?): Boolean {
+        return itemDataStorage.addAllData(index, datas)
     }
 
     override fun removeData(data: GROUP_DATA): Boolean {

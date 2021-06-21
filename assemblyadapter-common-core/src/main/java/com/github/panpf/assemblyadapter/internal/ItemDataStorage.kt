@@ -43,6 +43,17 @@ class ItemDataStorage<DATA>(private val onDataListChanged: () -> Unit) {
         return result
     }
 
+    fun addAllData(index: Int, datas: Collection<DATA>?): Boolean {
+        var result = false
+        if (datas != null && datas.isNotEmpty()) {
+            result = dataList.addAll(index, datas)
+        }
+        if (result) {
+            onDataListChanged()
+        }
+        return result
+    }
+
     @SafeVarargs
     fun addAllData(vararg datas: DATA): Boolean {
         var result = false

@@ -123,9 +123,8 @@ class AssemblyFragmentPagerAdapter<DATA>
         return itemDataStorage.addAllData(datas)
     }
 
-    @SafeVarargs
-    override fun addAllData(vararg datas: DATA): Boolean {
-        return itemDataStorage.addAllData(*datas)
+    override fun addAllData(index: Int, datas: Collection<DATA>?): Boolean {
+        return itemDataStorage.addAllData(index, datas)
     }
 
     override fun removeData(data: DATA): Boolean {
