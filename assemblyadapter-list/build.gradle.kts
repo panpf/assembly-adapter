@@ -30,13 +30,14 @@ android {
 }
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
     api(project(":assemblyadapter-common-item"))
+    api("androidx.core:core:${property("ANDROIDX_CORE_KTX")}")
     api("androidx.collection:collection:${property("ANDROIDX_COLLECTION")}")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
 
     testImplementation("junit:junit:${property("JUNIT")}")
-    androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
     androidTestImplementation("androidx.test:rules:${property("ANDROIDX_TEST_RULES")}")
+    androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
 }
 
 /**
