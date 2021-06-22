@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter
@@ -14,6 +15,7 @@ import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.item.pager.LoadStateFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.PinyinGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatChunkedAppsViewModel
 
@@ -40,17 +42,23 @@ class Pager2FragmentFragment : BaseBindingFragment<FragmentPager2Binding>() {
                 AppsOverviewFragmentItemFactory()
             )
         )
+        val footerLoadStateAdapter = AssemblySingleDataFragmentStateAdapter(
+            this,
+            LoadStateFragmentItemFactory()
+        )
         binding.pager2Pager.adapter = ConcatAdapter(
             ConcatAdapter.Config.Builder()
                 .setIsolateViewTypes(true)
                 .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
                 .build(),
             appsOverviewAdapter,
-            listAdapter
+            listAdapter,
+            footerLoadStateAdapter
         )
 
         viewModel.pinyinFlatChunkedAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
             updatePageNumber(binding)
         }
 

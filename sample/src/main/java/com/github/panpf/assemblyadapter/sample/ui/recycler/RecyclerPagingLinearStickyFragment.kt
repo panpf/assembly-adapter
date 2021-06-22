@@ -3,7 +3,6 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -13,13 +12,12 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
+import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
+import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
-import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.item.PinyinGroupStickyItemFactory
-import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -35,17 +33,17 @@ class RecyclerPagingLinearStickyFragment : BaseBindingFragment<FragmentRecyclerB
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter<AppsOverview>(
-            AppsOverviewItemFactory()
-        )
+        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory())
         val pagingDataAdapter = AssemblyStickyPagingDataAdapter(
             listOf(AppItemFactory(), PinyinGroupStickyItemFactory()),
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
-            adapter = ConcatAdapter(appsOverviewAdapter, pagingDataAdapter.withLoadStateFooter(
-                MyLoadStateAdapter()
-            ))
+            adapter = ConcatAdapter(
+                appsOverviewAdapter, pagingDataAdapter.withLoadStateFooter(
+                    MyLoadStateAdapter()
+                )
+            )
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
         }

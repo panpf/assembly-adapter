@@ -3,7 +3,6 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -34,9 +33,7 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter<AppsOverview>(
-            AppsOverviewItemFactory()
-        )
+        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory())
         val pagingDataAdapter = AssemblyPagingDataAdapter(
             listOf(AppItemFactory(), PinyinGroupItemFactory()),
             KeyDiffItemCallback()

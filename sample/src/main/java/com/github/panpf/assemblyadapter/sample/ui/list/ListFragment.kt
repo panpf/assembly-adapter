@@ -31,9 +31,9 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
         val listAdapter = AssemblyListAdapter<Any>(
             listOf(AppItemFactory(), PinyinGroupItemFactory())
         )
-        val loadFooterAdapter = AssemblySingleDataListAdapter(LoadStateItemFactory())
+        val footerLoadStateAdapter = AssemblySingleDataListAdapter(LoadStateItemFactory())
         binding.listList.adapter =
-            ConcatListAdapter(appsOverviewAdapter, listAdapter, loadFooterAdapter)
+            ConcatListAdapter(appsOverviewAdapter, listAdapter, footerLoadStateAdapter)
 
         binding.listRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
@@ -41,7 +41,7 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
 
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
-            loadFooterAdapter.data = LoadState.NotLoading(true)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {

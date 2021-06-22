@@ -3,7 +3,6 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -16,9 +15,11 @@ import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapte
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
-import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
+import com.github.panpf.assemblyadapter.sample.item.PinyinGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 import kotlinx.coroutines.flow.collect
@@ -35,9 +36,7 @@ class RecyclerPagingGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter<AppsOverview>(
-            AppsOverviewItemFactory(true)
-        )
+        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(true))
         val pagingDataAdapter = AssemblyPagingDataAdapter(
             listOf(AppCardGridItemFactory(), PinyinGroupItemFactory(true)),
             KeyDiffItemCallback()
