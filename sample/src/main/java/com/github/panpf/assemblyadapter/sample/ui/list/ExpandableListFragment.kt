@@ -4,16 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
+import com.github.panpf.assemblyadapter.list.concat.expandable.ConcatExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableListAdapter
+import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpandableListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentExpandableListBinding
 import com.github.panpf.assemblyadapter.sample.item.AppGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinGroupAppsViewModel
 
-class ListExpandableFragment : BaseBindingFragment<FragmentExpandableListBinding>() {
+class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding>() {
 
     private val viewModel by viewModels<PinyinGroupAppsViewModel>()
 
@@ -24,21 +29,34 @@ class ListExpandableFragment : BaseBindingFragment<FragmentExpandableListBinding
     }
 
     override fun onInitData(binding: FragmentExpandableListBinding, savedInstanceState: Bundle?) {
+        val appsOverviewAdapter = AssemblySingleDataExpandableListAdapter(AppsOverviewItemFactory())
         val listAdapter = AssemblyExpandableListAdapter<AppGroup, AppInfo>(
             listOf(AppGroupItemFactory(), AppItemFactory())
         )
-        binding.expandableListList.setAdapter(listAdapter)
+        val footerLoadStateAdapter = AssemblySingleDataExpandableListAdapter(LoadStateItemFactory())
+        binding.expandableListList.setAdapter(
+            ConcatExpandableListAdapter(
+                appsOverviewAdapter,
+                listAdapter,
+                footerLoadStateAdapter
+            )
+        )
 
         binding.expandableListRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }
 
-        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-            listAdapter.setDataList(it)
-        }
-
         viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.expandableListRefreshLayout.isRefreshing = it == true
+        }
+
+        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
+        }
+
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+            listAdapter.setDataList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
     }
 }

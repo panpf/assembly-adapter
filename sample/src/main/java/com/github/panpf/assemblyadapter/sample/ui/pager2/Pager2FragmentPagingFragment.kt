@@ -58,9 +58,9 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.pinyinFlatChunkedAppListDataFlow.collect {
-                pagingDataAdapter.submitData(it)
-                updatePageNumber(binding)
+            pagingDataAdapter.loadStateFlow.collect {
+                binding.pager2ProgressBar.isVisible = it.refresh is LoadState.Loading
+                binding.pager2PageNumberText.isVisible = it.refresh !is LoadState.Loading
             }
         }
 
@@ -70,9 +70,9 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            pagingDataAdapter.loadStateFlow.collect {
-                binding.pager2ProgressBar.isVisible = it.refresh is LoadState.Loading
-                binding.pager2PageNumberText.isVisible = it.refresh !is LoadState.Loading
+            viewModel.pinyinFlatChunkedAppListDataFlow.collect {
+                pagingDataAdapter.submitData(it)
+                updatePageNumber(binding)
             }
         }
 

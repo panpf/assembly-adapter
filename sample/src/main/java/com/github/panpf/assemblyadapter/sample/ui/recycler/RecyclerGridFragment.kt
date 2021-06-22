@@ -56,6 +56,10 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
             viewModel.refresh()
         }
 
+        viewModel.loadingData.observe(viewLifecycleOwner) {
+            binding.recyclerRefreshLayout.isRefreshing = it == true
+        }
+
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
@@ -63,10 +67,6 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             recyclerAdapter.setDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
-        }
-
-        viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.recyclerRefreshLayout.isRefreshing = it == true
         }
     }
 }

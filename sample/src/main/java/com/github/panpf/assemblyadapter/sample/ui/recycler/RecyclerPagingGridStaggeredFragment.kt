@@ -60,6 +60,12 @@ class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecycler
             pagingDataAdapter.refresh()
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            pagingDataAdapter.loadStateFlow.collect {
+                binding.recyclerRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
+            }
+        }
+
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
@@ -67,12 +73,6 @@ class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecycler
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.pinyinFlatAppListDataFlow.collect {
                 pagingDataAdapter.submitData(it)
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            pagingDataAdapter.loadStateFlow.collect {
-                binding.recyclerRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
             }
         }
     }

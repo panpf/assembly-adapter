@@ -32,20 +32,14 @@ open class AssemblySingleDataListAdapter<DATA>(
             field = value
             notifyDataSetChanged()
         }
-    val dataCount: Int
-        get() = if (data != null) 1 else 0
 
     override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun getItem(position: Int): Any? = data
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+    override fun getItemId(position: Int): Long = position.toLong()
 
-    override fun getViewTypeCount(): Int {
-        return 1
-    }
+    override fun getViewTypeCount(): Int = 1
 
     override fun getItemViewType(position: Int): Int = 0
 
@@ -63,7 +57,5 @@ open class AssemblySingleDataListAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        return itemFactory
-    }
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> = itemFactory
 }

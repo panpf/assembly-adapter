@@ -32,8 +32,6 @@ open class AssemblySingleDataRecyclerAdapter<DATA> @JvmOverloads constructor(
             field = value
             notifyDataSetChanged()
         }
-    val dataCount: Int
-        get() = if (data != null) 1 else 0
 
     override fun getItemCount(): Int = if (data != null) 1 else 0
 

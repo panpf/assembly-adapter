@@ -33,7 +33,9 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage<GROUP_DATA> { notifyDataSetChanged() }
-    private var callback: Callback? = null
+
+    var hasStableIds = false
+    var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
@@ -41,6 +43,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     ) : this(itemFactoryList) {
         itemDataStorage.setDataList(dataList)
     }
+
 
     override fun getGroupCount(): Int {
         return itemDataStorage.dataCount
@@ -61,6 +64,27 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     override fun getGroupType(groupPosition: Int): Int {
         return itemFactoryStorage.getItemTypeByData(getGroup(groupPosition))
     }
+
+    override fun getGroupView(
+        groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
+    ): View {
+        val groupData = getGroup(groupPosition)
+        val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(groupData)
+            .dispatchCreateItem(parent).apply {
+                getItemView().setTag(R.id.aa_tag_item, this)
+            }.getItemView()
+        @Suppress("UNCHECKED_CAST")
+        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<Any>
+        if (groupItem is AssemblyExpandableItem<*>) {
+            groupItem.groupPosition = groupPosition
+            groupItem.isExpanded = isExpanded
+            groupItem.childPosition = -1
+            groupItem.isLastChild = false
+        }
+        groupItem.dispatchBindData(groupPosition, groupData)
+        return groupItemView
+    }
+
 
     override fun getChildrenCount(groupPosition: Int): Int {
         val group = getGroup(groupPosition)
@@ -85,34 +109,6 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return itemFactoryStorage.getItemTypeByData(getChild(groupPosition, childPosition))
     }
 
-    override fun hasStableIds(): Boolean {
-        return callback != null && callback!!.hasStableIds()
-    }
-
-    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
-        return callback != null && callback!!.isChildSelectable(groupPosition, childPosition)
-    }
-
-    override fun getGroupView(
-        groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
-    ): View {
-        val groupData = getGroup(groupPosition)
-        val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(groupData)
-            .dispatchCreateItem(parent).apply {
-                getItemView().setTag(R.id.aa_tag_item, this)
-            }.getItemView()
-        @Suppress("UNCHECKED_CAST")
-        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<Any>
-        if (groupItem is AssemblyExpandableItem<*>) {
-            groupItem.groupPosition = groupPosition
-            groupItem.isExpanded = isExpanded
-            groupItem.childPosition = -1
-            groupItem.isLastChild = false
-        }
-        groupItem.dispatchBindData(groupPosition, groupData)
-        return groupItemView
-    }
-
     override fun getChildView(
         groupPosition: Int, childPosition: Int, isLastChild: Boolean,
         convertView: View?, parent: ViewGroup
@@ -134,8 +130,11 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return childItemView
     }
 
-    fun setCallback(callback: Callback?) {
-        this.callback = callback
+
+    override fun hasStableIds(): Boolean = hasStableIds
+
+    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+        return isChildSelectable?.invoke(groupPosition, childPosition) == true
     }
 
 
@@ -192,11 +191,5 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
-    }
-
-
-    interface Callback {
-        fun hasStableIds(): Boolean
-        fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean
     }
 }

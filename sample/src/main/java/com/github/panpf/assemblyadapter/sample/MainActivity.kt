@@ -8,7 +8,7 @@ import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.AcivityMainBinding
 import com.github.panpf.assemblyadapter.sample.item.LinkItemFactory
-import com.github.panpf.assemblyadapter.sample.ui.list.ListExpandableFragment
+import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentStateFragment
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                         RecyclerPagingGridStaggeredFragment()
                     ),
                     Link("ListView", ListFragment()),
-                    Link("ExpandableListView", ListExpandableFragment()),
+                    Link("ExpandableListView", ExpandableListFragment()),
                     Link("ViewPager - View", PagerViewFragment()),
                     Link("ViewPager - Fragment", PagerFragmentFragment()),
                     Link("ViewPager - FragmentState", PagerFragmentStateFragment()),

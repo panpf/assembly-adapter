@@ -28,19 +28,21 @@ import androidx.annotation.Nullable;
  * Wrapper for each adapter in {@link ConcatListAdapter}.
  */
 class ListNestedAdapterWrapper {
+
+    public final BaseAdapter adapter;
+
+    private final Callback mCallback;
     @NonNull
     private final ListViewTypeStorage.ViewTypeLookup mViewTypeLookup;
     @NonNull
     private final ListStableIdStorage.StableIdLookup mStableIdLookup;
-    public final BaseAdapter adapter;
-    @SuppressWarnings("WeakerAccess")
-    final Callback mCallback;
-    // we cache this value so that we can know the previous size when change happens
-    // this is also important as getting real size while an adapter is dispatching possibly a
-    // a chain of events might create inconsistencies (as it happens in DiffUtil).
-    // Instead, we always calculate this value based on notify events.
-    @SuppressWarnings("WeakerAccess")
-    int mCachedItemCount;
+    /**
+     * we cache this value so that we can know the previous size when change happens
+     * this is also important as getting real size while an adapter is dispatching possibly a
+     * a chain of events might create inconsistencies (as it happens in DiffUtil).
+     * Instead, we always calculate this value based on notify events.
+     */
+    private int mCachedItemCount;
 
     private final DataSetObserver mAdapterObserver = new DataSetObserver() {
         @Override
@@ -51,15 +53,16 @@ class ListNestedAdapterWrapper {
     };
 
     ListNestedAdapterWrapper(
-            BaseAdapter adapter,
-            final Callback callback,
-            ListViewTypeStorage viewTypeStorage,
+            @NonNull BaseAdapter adapter,
+            @NonNull Callback callback,
+            @NonNull ListViewTypeStorage viewTypeStorage,
             @NonNull ListStableIdStorage.StableIdLookup stableIdLookup) {
         this.adapter = adapter;
-        mCallback = callback;
-        mViewTypeLookup = viewTypeStorage.createViewTypeWrapper(this);
-        mStableIdLookup = stableIdLookup;
-        mCachedItemCount = this.adapter.getCount();
+        this.mCallback = callback;
+        this.mViewTypeLookup = viewTypeStorage.createViewTypeWrapper(this);
+        this.mStableIdLookup = stableIdLookup;
+
+        this.mCachedItemCount = this.adapter.getCount();
         this.adapter.registerDataSetObserver(mAdapterObserver);
     }
 

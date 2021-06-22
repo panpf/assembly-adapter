@@ -56,14 +56,19 @@ class Pager2FragmentFragment : BaseBindingFragment<FragmentPager2Binding>() {
             footerLoadStateAdapter
         )
 
-        viewModel.pinyinFlatChunkedAppListData.observe(viewLifecycleOwner) {
-            listAdapter.setDataList(it)
-            footerLoadStateAdapter.data = LoadState.NotLoading(true)
-            updatePageNumber(binding)
+        viewModel.loadingData.observe(viewLifecycleOwner) {
+            binding.pager2ProgressBar.isVisible = it == true
+            binding.pager2PageNumberText.isVisible = it != true
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
+            updatePageNumber(binding)
+        }
+
+        viewModel.pinyinFlatChunkedAppListData.observe(viewLifecycleOwner) {
+            listAdapter.setDataList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
             updatePageNumber(binding)
         }
 
@@ -74,11 +79,6 @@ class Pager2FragmentFragment : BaseBindingFragment<FragmentPager2Binding>() {
                 updatePageNumber(binding)
             }
         })
-
-        viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.pager2ProgressBar.isVisible = it == true
-            binding.pager2PageNumberText.isVisible = it != true
-        }
     }
 
     @SuppressLint("SetTextI18n")

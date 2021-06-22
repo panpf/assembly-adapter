@@ -50,6 +50,12 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
             pagingDataAdapter.refresh()
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            pagingDataAdapter.loadStateFlow.collect {
+                binding.recyclerRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
+            }
+        }
+
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
@@ -57,12 +63,6 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.pinyinFlatAppListDataFlow.collect {
                 pagingDataAdapter.submitData(it)
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            pagingDataAdapter.loadStateFlow.collect {
-                binding.recyclerRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
             }
         }
     }

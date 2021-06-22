@@ -39,17 +39,17 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
             viewModel.refresh()
         }
 
-        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
-            listAdapter.setDataList(it)
-            footerLoadStateAdapter.data = LoadState.NotLoading(true)
+        viewModel.loadingData.observe(viewLifecycleOwner) {
+            binding.listRefreshLayout.isRefreshing = it == true
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
 
-        viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.listRefreshLayout.isRefreshing = it == true
+        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+            listAdapter.setDataList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
     }
 }

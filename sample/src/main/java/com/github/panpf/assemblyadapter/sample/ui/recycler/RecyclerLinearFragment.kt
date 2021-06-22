@@ -37,8 +37,13 @@ class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
         }
+
         binding.recyclerRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
+        }
+
+        viewModel.loadingData.observe(viewLifecycleOwner) {
+            binding.recyclerRefreshLayout.isRefreshing = it == true
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -48,10 +53,6 @@ class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             recyclerAdapter.setDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
-        }
-
-        viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.recyclerRefreshLayout.isRefreshing = it == true
         }
     }
 }

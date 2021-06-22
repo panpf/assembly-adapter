@@ -39,8 +39,13 @@ class RecyclerLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
         }
+
         binding.recyclerRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
+        }
+
+        viewModel.loadingData.observe(viewLifecycleOwner) {
+            binding.recyclerRefreshLayout.isRefreshing = it == true
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -50,10 +55,6 @@ class RecyclerLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             recyclerAdapter.setDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
-        }
-
-        viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.recyclerRefreshLayout.isRefreshing = it == true
         }
     }
 }

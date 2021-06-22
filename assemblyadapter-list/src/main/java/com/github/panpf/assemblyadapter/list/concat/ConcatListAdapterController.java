@@ -181,6 +181,14 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
         return total;
     }
 
+    @Nullable
+    public Object getItem(int globalPosition) {
+        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
+        Object item = wrapperAndPos.mWrapper.getItem(wrapperAndPos.mLocalPosition);
+        releaseWrapperAndLocalPosition(wrapperAndPos);
+        return item;
+    }
+
     public int getItemViewTypeCount() {
         if (itemViewTypeCount == -1) {
             itemViewTypeCount = 0;
@@ -204,6 +212,10 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
         View itemView = wrapperAndPos.mWrapper.getView(wrapperAndPos.mLocalPosition, convertView, parent);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return itemView;
+    }
+
+    public boolean hasStableIds() {
+        return mStableIdMode != ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS;
     }
 
     /**
@@ -260,15 +272,5 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
             adapters.add(wrapper.adapter);
         }
         return adapters;
-    }
-
-    public boolean hasStableIds() {
-        return mStableIdMode != ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS;
-    }
-
-    @Nullable
-    public Object getItem(int globalPosition) {
-        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
-        return wrapperAndPos.mWrapper.getItem(wrapperAndPos.mLocalPosition);
     }
 }
