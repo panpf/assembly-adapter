@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.list
+package com.github.panpf.assemblyadapter.list.expandable
 
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +24,7 @@ import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.list.R
 import java.util.*
 
 class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(

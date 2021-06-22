@@ -22,12 +22,12 @@ import androidx.collection.LongSparseArray;
 /**
  * Used by {@link ConcatListAdapter} to isolate item ids between nested adapters, if necessary.
  */
-interface StableIdStorage {
+interface ListStableIdStorage {
     @NonNull
     StableIdLookup createStableIdLookup();
 
     /**
-     * Interface that provides {@link NestedAdapterWrapper}s a way to map their local stable ids
+     * Interface that provides {@link ListNestedAdapterWrapper}s a way to map their local stable ids
      * into global stable ids, based on the configuration of the {@link ConcatListAdapter}.
      */
     interface StableIdLookup {
@@ -38,7 +38,7 @@ interface StableIdStorage {
      * Returns {@link ConcatListAdapter#NO_ID} for all positions. In other words, stable ids are not
      * supported.
      */
-    class NoStableIdStorage implements StableIdStorage {
+    class NoStableIdStorage implements ListStableIdStorage {
         private final StableIdLookup mNoIdLookup = new StableIdLookup() {
             @Override
             public long localToGlobal(long localId) {
@@ -56,7 +56,7 @@ interface StableIdStorage {
     /**
      * A pass-through implementation that reports the stable id in sub adapters as is.
      */
-    class SharedPoolStableIdStorage implements StableIdStorage {
+    class SharedPoolStableIdStorage implements ListStableIdStorage {
         private final StableIdLookup mSameIdLookup = new StableIdLookup() {
             @Override
             public long localToGlobal(long localId) {
@@ -76,7 +76,7 @@ interface StableIdStorage {
      * each-other. It keeps a mapping for each adapter from its local stable ids to a global domain
      * and always replaces the local id w/ a globally available ID to be consistent.
      */
-    class IsolatedStableIdStorage implements StableIdStorage {
+    class IsolatedStableIdStorage implements ListStableIdStorage {
         long mNextStableId = 0;
 
         long obtainId() {

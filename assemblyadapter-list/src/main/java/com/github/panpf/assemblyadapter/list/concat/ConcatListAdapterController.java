@@ -30,26 +30,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.github.panpf.assemblyadapter.list.concat.ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS;
-import static com.github.panpf.assemblyadapter.list.concat.ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS;
-import static com.github.panpf.assemblyadapter.list.concat.ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS;
-
 /**
  * All logic for the {@link ConcatListAdapter} is here so that we can clearly see a separation
  * between an adapter implementation and merging logic.
  */
-class ConcatAdapterController implements NestedAdapterWrapper.Callback {
+class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
     private final ConcatListAdapter mConcatAdapter;
 
     /**
      * Holds the mapping from the view type to the adapter which reported that type.
      */
-    private final ViewTypeStorage mViewTypeStorage;
+    private final ListViewTypeStorage mViewTypeStorage;
 
-    private final List<NestedAdapterWrapper> mWrappers = new ArrayList<>();
+    private final List<ListNestedAdapterWrapper> mWrappers = new ArrayList<>();
 
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
-    private WrapperAndLocalPosition mReusableHolder = new WrapperAndLocalPosition();
+    private ListWrapperAndLocalPosition mReusableHolder = new ListWrapperAndLocalPosition();
 
     @NonNull
     private final ConcatListAdapter.Config.StableIdMode mStableIdMode;
@@ -57,37 +53,37 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
     /**
      * This is where we keep stable ids, if supported
      */
-    private final StableIdStorage mStableIdStorage;
+    private final ListStableIdStorage mStableIdStorage;
 
     private int itemViewTypeCount = -1;
 
-    ConcatAdapterController(
+    ConcatListAdapterController(
             ConcatListAdapter concatAdapter,
             ConcatListAdapter.Config config) {
         mConcatAdapter = concatAdapter;
 
         // setup view type handling
         if (config.isolateViewTypes) {
-            mViewTypeStorage = new ViewTypeStorage.IsolatedViewTypeStorage();
+            mViewTypeStorage = new ListViewTypeStorage.IsolatedViewTypeStorage();
         } else {
-            mViewTypeStorage = new ViewTypeStorage.SharedIdRangeViewTypeStorage();
+            mViewTypeStorage = new ListViewTypeStorage.SharedIdRangeViewTypeStorage();
         }
 
         // setup stable id handling
         mStableIdMode = config.stableIdMode;
-        if (config.stableIdMode == NO_STABLE_IDS) {
-            mStableIdStorage = new StableIdStorage.NoStableIdStorage();
-        } else if (config.stableIdMode == ISOLATED_STABLE_IDS) {
-            mStableIdStorage = new StableIdStorage.IsolatedStableIdStorage();
-        } else if (config.stableIdMode == SHARED_STABLE_IDS) {
-            mStableIdStorage = new StableIdStorage.SharedPoolStableIdStorage();
+        if (config.stableIdMode == ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS) {
+            mStableIdStorage = new ListStableIdStorage.NoStableIdStorage();
+        } else if (config.stableIdMode == ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS) {
+            mStableIdStorage = new ListStableIdStorage.IsolatedStableIdStorage();
+        } else if (config.stableIdMode == ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS) {
+            mStableIdStorage = new ListStableIdStorage.SharedPoolStableIdStorage();
         } else {
             throw new IllegalArgumentException("unknown stable id mode");
         }
     }
 
     @Nullable
-    private NestedAdapterWrapper findWrapperFor(BaseAdapter adapter) {
+    private ListNestedAdapterWrapper findWrapperFor(BaseAdapter adapter) {
         final int index = indexOfWrapper(adapter);
         if (index == -1) {
             return null;
@@ -136,11 +132,11 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
                         + " ConcatListAdapter is configured not to have stable ids");
             }
         }
-        NestedAdapterWrapper existing = findWrapperFor(adapter);
+        ListNestedAdapterWrapper existing = findWrapperFor(adapter);
         if (existing != null) {
             return false;
         }
-        NestedAdapterWrapper wrapper = new NestedAdapterWrapper(adapter, this,
+        ListNestedAdapterWrapper wrapper = new ListNestedAdapterWrapper(adapter, this,
                 mViewTypeStorage, mStableIdStorage.createStableIdLookup());
         mWrappers.add(index, wrapper);
         itemViewTypeCount = -1;
@@ -156,7 +152,7 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
         if (index == -1) {
             return false;
         }
-        NestedAdapterWrapper wrapper = mWrappers.get(index);
+        ListNestedAdapterWrapper wrapper = mWrappers.get(index);
         mWrappers.remove(index);
         itemViewTypeCount = -1;
         mConcatAdapter.notifyDataSetChanged();
@@ -165,21 +161,21 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
     }
 
     public long getItemId(int globalPosition) {
-        WrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
+        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
         long globalItemId = wrapperAndPos.mWrapper.getItemId(wrapperAndPos.mLocalPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return globalItemId;
     }
 
     @Override
-    public void onChanged(@NonNull NestedAdapterWrapper wrapper) {
+    public void onChanged(@NonNull ListNestedAdapterWrapper wrapper) {
         mConcatAdapter.notifyDataSetChanged();
     }
 
     public int getTotalCount() {
         // should we cache this as well ?
         int total = 0;
-        for (NestedAdapterWrapper wrapper : mWrappers) {
+        for (ListNestedAdapterWrapper wrapper : mWrappers) {
             total += wrapper.getCachedItemCount();
         }
         return total;
@@ -188,7 +184,7 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
     public int getItemViewTypeCount() {
         if (itemViewTypeCount == -1) {
             itemViewTypeCount = 0;
-            for (NestedAdapterWrapper mWrapper : mWrappers) {
+            for (ListNestedAdapterWrapper mWrapper : mWrappers) {
                 itemViewTypeCount += mWrapper.getItemViewTypeCount();
             }
         }
@@ -196,7 +192,7 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
     }
 
     public int getItemViewType(int globalPosition) {
-        WrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
+        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
         int itemViewType = wrapperAndPos.mWrapper.getItemViewType(wrapperAndPos.mLocalPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return itemViewType;
@@ -204,20 +200,20 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
 
     @NonNull
     public View getView(int globalPosition, @Nullable View convertView, @NonNull ViewGroup parent) {
-        WrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
+        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
         View itemView = wrapperAndPos.mWrapper.getView(wrapperAndPos.mLocalPosition, convertView, parent);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return itemView;
     }
 
     /**
-     * Always call {@link #releaseWrapperAndLocalPosition(WrapperAndLocalPosition)} when you are
+     * Always call {@link #releaseWrapperAndLocalPosition(ListWrapperAndLocalPosition)} when you are
      * done with it
      */
     @NonNull
-    public WrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition, WrapperAndLocalPosition wrapperAndLocalPosition) {
+    public ListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition, ListWrapperAndLocalPosition wrapperAndLocalPosition) {
         int localPosition = globalPosition;
-        for (NestedAdapterWrapper wrapper : mWrappers) {
+        for (ListNestedAdapterWrapper wrapper : mWrappers) {
             if (wrapper.getCachedItemCount() > localPosition) {
                 wrapperAndLocalPosition.mWrapper = wrapper;
                 wrapperAndLocalPosition.mLocalPosition = localPosition;
@@ -232,14 +228,14 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
     }
 
     /**
-     * Always call {@link #releaseWrapperAndLocalPosition(WrapperAndLocalPosition)} when you are
+     * Always call {@link #releaseWrapperAndLocalPosition(ListWrapperAndLocalPosition)} when you are
      * done with it
      */
     @NonNull
-    public WrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition) {
-        WrapperAndLocalPosition result;
+    public ListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition) {
+        ListWrapperAndLocalPosition result;
         if (mReusableHolder.mInUse) {
-            result = new WrapperAndLocalPosition();
+            result = new ListWrapperAndLocalPosition();
         } else {
             mReusableHolder.mInUse = true;
             result = mReusableHolder;
@@ -247,7 +243,7 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
         return findWrapperAndLocalPosition(globalPosition, result);
     }
 
-    private void releaseWrapperAndLocalPosition(WrapperAndLocalPosition wrapperAndLocalPosition) {
+    private void releaseWrapperAndLocalPosition(ListWrapperAndLocalPosition wrapperAndLocalPosition) {
         wrapperAndLocalPosition.mInUse = false;
         wrapperAndLocalPosition.mWrapper = null;
         wrapperAndLocalPosition.mLocalPosition = -1;
@@ -260,19 +256,19 @@ class ConcatAdapterController implements NestedAdapterWrapper.Callback {
             return Collections.emptyList();
         }
         List<BaseAdapter> adapters = new ArrayList<>(mWrappers.size());
-        for (NestedAdapterWrapper wrapper : mWrappers) {
+        for (ListNestedAdapterWrapper wrapper : mWrappers) {
             adapters.add(wrapper.adapter);
         }
         return adapters;
     }
 
     public boolean hasStableIds() {
-        return mStableIdMode != NO_STABLE_IDS;
+        return mStableIdMode != ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS;
     }
 
     @Nullable
     public Object getItem(int globalPosition) {
-        WrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
+        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
         return wrapperAndPos.mWrapper.getItem(wrapperAndPos.mLocalPosition);
     }
 }

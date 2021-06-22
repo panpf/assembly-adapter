@@ -27,17 +27,17 @@ import java.util.List;
 /**
  * Used by {@link ConcatListAdapter} to isolate view types between nested adapters, if necessary.
  */
-interface ViewTypeStorage {
+interface ListViewTypeStorage {
     @NonNull
-    NestedAdapterWrapper getWrapperForGlobalType(int globalViewType);
+    ListNestedAdapterWrapper getWrapperForGlobalType(int globalViewType);
 
     @NonNull
     ViewTypeLookup createViewTypeWrapper(
-            @NonNull NestedAdapterWrapper wrapper
+            @NonNull ListNestedAdapterWrapper wrapper
     );
 
     /**
-     * Api given to {@link NestedAdapterWrapper}s.
+     * Api given to {@link ListNestedAdapterWrapper}s.
      */
     interface ViewTypeLookup {
         int localToGlobal(int localType);
@@ -47,15 +47,15 @@ interface ViewTypeStorage {
         void dispose();
     }
 
-    class SharedIdRangeViewTypeStorage implements ViewTypeStorage {
+    class SharedIdRangeViewTypeStorage implements ListViewTypeStorage {
         // we keep a list of nested wrappers here even though we only need 1 to create because
         // they might be removed.
-        SparseArray<List<NestedAdapterWrapper>> mGlobalTypeToWrapper = new SparseArray<>();
+        SparseArray<List<ListNestedAdapterWrapper>> mGlobalTypeToWrapper = new SparseArray<>();
 
         @NonNull
         @Override
-        public NestedAdapterWrapper getWrapperForGlobalType(int globalViewType) {
-            List<NestedAdapterWrapper> nestedAdapterWrappers = mGlobalTypeToWrapper.get(
+        public ListNestedAdapterWrapper getWrapperForGlobalType(int globalViewType) {
+            List<ListNestedAdapterWrapper> nestedAdapterWrappers = mGlobalTypeToWrapper.get(
                     globalViewType);
             if (nestedAdapterWrappers == null || nestedAdapterWrappers.isEmpty()) {
                 throw new IllegalArgumentException("Cannot find the wrapper for global view"
@@ -68,13 +68,13 @@ interface ViewTypeStorage {
         @NonNull
         @Override
         public ViewTypeLookup createViewTypeWrapper(
-                @NonNull NestedAdapterWrapper wrapper) {
+                @NonNull ListNestedAdapterWrapper wrapper) {
             return new WrapperViewTypeLookup(wrapper);
         }
 
-        void removeWrapper(@NonNull NestedAdapterWrapper wrapper) {
+        void removeWrapper(@NonNull ListNestedAdapterWrapper wrapper) {
             for (int i = mGlobalTypeToWrapper.size() - 1; i >= 0; i--) {
-                List<NestedAdapterWrapper> wrappers = mGlobalTypeToWrapper.valueAt(i);
+                List<ListNestedAdapterWrapper> wrappers = mGlobalTypeToWrapper.valueAt(i);
                 if (wrappers.remove(wrapper)) {
                     if (wrappers.isEmpty()) {
                         mGlobalTypeToWrapper.removeAt(i);
@@ -84,16 +84,16 @@ interface ViewTypeStorage {
         }
 
         class WrapperViewTypeLookup implements ViewTypeLookup {
-            final NestedAdapterWrapper mWrapper;
+            final ListNestedAdapterWrapper mWrapper;
 
-            WrapperViewTypeLookup(NestedAdapterWrapper wrapper) {
+            WrapperViewTypeLookup(ListNestedAdapterWrapper wrapper) {
                 mWrapper = wrapper;
             }
 
             @Override
             public int localToGlobal(int localType) {
                 // register it first
-                List<NestedAdapterWrapper> wrappers = mGlobalTypeToWrapper.get(
+                List<ListNestedAdapterWrapper> wrappers = mGlobalTypeToWrapper.get(
                         localType);
                 if (wrappers == null) {
                     wrappers = new ArrayList<>();
@@ -117,12 +117,12 @@ interface ViewTypeStorage {
         }
     }
 
-    class IsolatedViewTypeStorage implements ViewTypeStorage {
-        SparseArray<NestedAdapterWrapper> mGlobalTypeToWrapper = new SparseArray<>();
+    class IsolatedViewTypeStorage implements ListViewTypeStorage {
+        SparseArray<ListNestedAdapterWrapper> mGlobalTypeToWrapper = new SparseArray<>();
 
         int mNextViewType = 0;
 
-        int obtainViewType(NestedAdapterWrapper wrapper) {
+        int obtainViewType(ListNestedAdapterWrapper wrapper) {
             int nextId = mNextViewType++;
             mGlobalTypeToWrapper.put(nextId, wrapper);
             return nextId;
@@ -130,8 +130,8 @@ interface ViewTypeStorage {
 
         @NonNull
         @Override
-        public NestedAdapterWrapper getWrapperForGlobalType(int globalViewType) {
-            NestedAdapterWrapper wrapper = mGlobalTypeToWrapper.get(
+        public ListNestedAdapterWrapper getWrapperForGlobalType(int globalViewType) {
+            ListNestedAdapterWrapper wrapper = mGlobalTypeToWrapper.get(
                     globalViewType);
             if (wrapper == null) {
                 throw new IllegalArgumentException("Cannot find the wrapper for global"
@@ -143,13 +143,13 @@ interface ViewTypeStorage {
         @Override
         @NonNull
         public ViewTypeLookup createViewTypeWrapper(
-                @NonNull NestedAdapterWrapper wrapper) {
+                @NonNull ListNestedAdapterWrapper wrapper) {
             return new WrapperViewTypeLookup(wrapper);
         }
 
-        void removeWrapper(@NonNull NestedAdapterWrapper wrapper) {
+        void removeWrapper(@NonNull ListNestedAdapterWrapper wrapper) {
             for (int i = mGlobalTypeToWrapper.size() - 1; i >= 0; i--) {
-                NestedAdapterWrapper existingWrapper = mGlobalTypeToWrapper.valueAt(i);
+                ListNestedAdapterWrapper existingWrapper = mGlobalTypeToWrapper.valueAt(i);
                 if (existingWrapper == wrapper) {
                     mGlobalTypeToWrapper.removeAt(i);
                 }
@@ -159,9 +159,9 @@ interface ViewTypeStorage {
         class WrapperViewTypeLookup implements ViewTypeLookup {
             private SparseIntArray mLocalToGlobalMapping = new SparseIntArray(1);
             private SparseIntArray mGlobalToLocalMapping = new SparseIntArray(1);
-            final NestedAdapterWrapper mWrapper;
+            final ListNestedAdapterWrapper mWrapper;
 
-            WrapperViewTypeLookup(NestedAdapterWrapper wrapper) {
+            WrapperViewTypeLookup(ListNestedAdapterWrapper wrapper) {
                 mWrapper = wrapper;
             }
 

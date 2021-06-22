@@ -3,7 +3,7 @@ package com.github.panpf.assemblyadapter.sample.item
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.github.panpf.assemblyadapter.list.BindingAssemblyExpandableItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.BindingAssemblyExpandableItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGroupBinding

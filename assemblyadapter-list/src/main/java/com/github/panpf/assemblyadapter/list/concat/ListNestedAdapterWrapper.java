@@ -27,11 +27,11 @@ import androidx.annotation.Nullable;
 /**
  * Wrapper for each adapter in {@link ConcatListAdapter}.
  */
-class NestedAdapterWrapper {
+class ListNestedAdapterWrapper {
     @NonNull
-    private final ViewTypeStorage.ViewTypeLookup mViewTypeLookup;
+    private final ListViewTypeStorage.ViewTypeLookup mViewTypeLookup;
     @NonNull
-    private final StableIdStorage.StableIdLookup mStableIdLookup;
+    private final ListStableIdStorage.StableIdLookup mStableIdLookup;
     public final BaseAdapter adapter;
     @SuppressWarnings("WeakerAccess")
     final Callback mCallback;
@@ -46,15 +46,15 @@ class NestedAdapterWrapper {
         @Override
         public void onChanged() {
             mCachedItemCount = adapter.getCount();
-            mCallback.onChanged(NestedAdapterWrapper.this);
+            mCallback.onChanged(ListNestedAdapterWrapper.this);
         }
     };
 
-    NestedAdapterWrapper(
+    ListNestedAdapterWrapper(
             BaseAdapter adapter,
             final Callback callback,
-            ViewTypeStorage viewTypeStorage,
-            @NonNull StableIdStorage.StableIdLookup stableIdLookup) {
+            ListViewTypeStorage viewTypeStorage,
+            @NonNull ListStableIdStorage.StableIdLookup stableIdLookup) {
         this.adapter = adapter;
         mCallback = callback;
         mViewTypeLookup = viewTypeStorage.createViewTypeWrapper(this);
@@ -97,6 +97,6 @@ class NestedAdapterWrapper {
     }
 
     interface Callback {
-        void onChanged(@NonNull NestedAdapterWrapper wrapper);
+        void onChanged(@NonNull ListNestedAdapterWrapper wrapper);
     }
 }

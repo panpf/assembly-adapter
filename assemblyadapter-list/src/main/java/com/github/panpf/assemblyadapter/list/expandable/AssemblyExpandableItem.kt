@@ -1,4 +1,4 @@
-package com.github.panpf.assemblyadapter.list
+package com.github.panpf.assemblyadapter.list.expandable
 
 import android.view.View
 import android.view.ViewGroup

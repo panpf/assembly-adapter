@@ -34,7 +34,7 @@ public final class ConcatListAdapter extends BaseAdapter {
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
-    private final ConcatAdapterController mController;
+    private final ConcatListAdapterController mController;
 
     /**
      * Creates a ConcatListAdapter with {@link Config#DEFAULT} and the given adapters in the given
@@ -79,7 +79,7 @@ public final class ConcatListAdapter extends BaseAdapter {
     public ConcatListAdapter(
             @NonNull Config config,
             @NonNull List<? extends BaseAdapter> adapters) {
-        mController = new ConcatAdapterController(this, config);
+        mController = new ConcatListAdapterController(this, config);
         for (BaseAdapter adapter : adapters) {
             addAdapter(adapter);
         }
@@ -170,8 +170,14 @@ public final class ConcatListAdapter extends BaseAdapter {
         return mController.getItem(position);
     }
 
+    @Override
+    public boolean hasStableIds() {
+        return mController.hasStableIds();
+    }
+
+
     @NonNull
-    public WrapperAndLocalPosition findWrapperAndLocalPosition(int position, WrapperAndLocalPosition wrapperAndLocalPosition) {
+    public ListWrapperAndLocalPosition findWrapperAndLocalPosition(int position, ListWrapperAndLocalPosition wrapperAndLocalPosition) {
         return mController.findWrapperAndLocalPosition(position, wrapperAndLocalPosition);
     }
 
