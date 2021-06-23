@@ -27,7 +27,13 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.PagerAdapterItemPositionChangedHelper
 import java.util.*
 
-@Deprecated("Switch to {@link androidx.viewpager2.widget.ViewPager2} and use {@link com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter} instead.")
+@Deprecated(
+    message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter' instead.",
+    replaceWith = ReplaceWith(
+        "AssemblyFragmentStateAdapter(itemFactoryList)",
+        "com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter"
+    )
+)
 class AssemblyFragmentPagerAdapter<DATA>
     : FragmentPagerAdapter, AssemblyAdapter, DataAdapter<DATA> {
 
@@ -84,8 +90,10 @@ class AssemblyFragmentPagerAdapter<DATA>
 
     override fun getItem(position: Int): Fragment {
         val data = itemDataStorage.getData(position)
+
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
+        val itemFactory =
+            itemFactoryStorage.getItemFactoryByData(data) as AssemblyFragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(position, data)
     }
 

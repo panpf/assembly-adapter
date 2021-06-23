@@ -23,7 +23,13 @@ import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.PagerAdapterItemPositionChangedHelper
 
-@Deprecated("Switch to {@link androidx.viewpager2.widget.ViewPager2} and use {@link com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter} instead.")
+@Deprecated(
+    message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter' instead.",
+    replaceWith = ReplaceWith(
+        "AssemblySingleDataFragmentStateAdapter(itemFactory)",
+        "com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter"
+    )
+)
 class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     FragmentStatePagerAdapter, AssemblyAdapter {
 

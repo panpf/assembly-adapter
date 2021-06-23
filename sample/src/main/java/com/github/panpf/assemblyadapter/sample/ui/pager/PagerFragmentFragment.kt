@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
+import com.github.panpf.assemblyadapter.pager.concat.fragment.ConcatFragmentPagerAdapter
 import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentPagerAdapter
 import com.github.panpf.assemblyadapter.pager.fragment.AssemblySingleDataFragmentPagerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
@@ -29,17 +30,29 @@ class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
     }
 
     override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
+        val appsOverviewAdapter = AssemblySingleDataFragmentPagerAdapter(
+            childFragmentManager,
+            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            AppsOverviewFragmentItemFactory()
+        )
         val listAdapter = AssemblyFragmentPagerAdapter<Any>(
             childFragmentManager,
             FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-            listOf(
-                AppGroupFragmentItemFactory(),
-                AppsOverviewFragmentItemFactory(),
-                LoadStateFragmentItemFactory()
-            )
+            listOf(AppGroupFragmentItemFactory())
+        )
+        val footerLoadStateAdapter = AssemblySingleDataFragmentPagerAdapter(
+            childFragmentManager,
+            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            LoadStateFragmentItemFactory()
         )
         binding.pagerPager.apply {
-            adapter = listAdapter
+            adapter = ConcatFragmentPagerAdapter(
+                childFragmentManager,
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+                appsOverviewAdapter,
+                listAdapter,
+                footerLoadStateAdapter
+            )
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -53,10 +66,14 @@ class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
             binding.pagerPageNumberText.isVisible = it != true
         }
 
+        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
+            updatePageNumber(binding)
+        }
+
         viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-            listAdapter.setDataList(it.plus(LoadState.NotLoading(true)).toMutableList().apply {
-                add(0, viewModel.appsOverviewData.value!!)
-            })
+            listAdapter.setDataList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
             updatePageNumber(binding)
         }
     }

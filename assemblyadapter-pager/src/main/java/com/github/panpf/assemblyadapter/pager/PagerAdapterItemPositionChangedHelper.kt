@@ -10,6 +10,7 @@ class PagerAdapterItemPositionChangedHelper {
     private var notifyNumber = 0
     private var notifyNumberPool: SparseIntArray? = null
 
+    // todo 改为开启时才创建 helper
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
         get() = notifyNumberPool != null
         set(enabled) {
