@@ -18,6 +18,8 @@ class AssemblyGridLayoutManager : GridLayoutManager {
             return getSpanSizeImpl(position)
         }
     }
+    private val concatAdapterAdaptersCacheMap =
+        HashMap<ConcatAdapter, ConcatAdapterWrapperAdaptersCache>()
 
     constructor(
         context: Context,
@@ -79,8 +81,11 @@ class AssemblyGridLayoutManager : GridLayoutManager {
                 adapter.getItemFactoryByPosition(position)
             }
             is ConcatAdapter -> {
+                val wrapperAdapters = concatAdapterAdaptersCacheMap.getOrPut(adapter) {
+                    ConcatAdapterWrapperAdaptersCache(adapter)
+                }.getCachedAdapters()
                 var childAdapterStartPosition = 0
-                val childAdapter = adapter.adapters.find { childAdapter ->
+                val childAdapter = wrapperAdapters.find { childAdapter ->
                     val childAdapterEndPosition =
                         childAdapterStartPosition + childAdapter.itemCount - 1
                     @Suppress("ConvertTwoComparisonsToRangeCheck")
@@ -101,6 +106,64 @@ class AssemblyGridLayoutManager : GridLayoutManager {
             else -> {
                 throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass}")
             }
+        }
+    }
+
+    private class ConcatAdapterWrapperAdaptersCache(val concatAdapter: ConcatAdapter) {
+
+        private var cachedAdapters: List<RecyclerView.Adapter<*>>? = null
+        private val cachedAdapterDataSetChangedCallback = AnyAdapterDataObserver {
+            cachedAdapters = null
+        }
+
+        init {
+            try {
+                concatAdapter.registerAdapterDataObserver(cachedAdapterDataSetChangedCallback)
+            } catch (e: IllegalStateException) {
+                // already registered
+            }
+        }
+
+        fun getCachedAdapters(): List<RecyclerView.Adapter<*>> {
+            /*
+             * Because concatAdapter.adapters creates a new List every time it is called, consider caching it for list sliding performance
+             */
+            return cachedAdapters ?: concatAdapter.adapters.apply {
+                this@ConcatAdapterWrapperAdaptersCache.cachedAdapters = this
+            }
+        }
+    }
+
+    class AnyAdapterDataObserver(val onAnyChanged: () -> Unit) :
+        RecyclerView.AdapterDataObserver() {
+        override fun onChanged() {
+            super.onChanged()
+            onAnyChanged()
+        }
+
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+            super.onItemRangeChanged(positionStart, itemCount)
+            onAnyChanged()
+        }
+
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
+            super.onItemRangeChanged(positionStart, itemCount, payload)
+            onAnyChanged()
+        }
+
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            super.onItemRangeInserted(positionStart, itemCount)
+            onAnyChanged()
+        }
+
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+            super.onItemRangeRemoved(positionStart, itemCount)
+            onAnyChanged()
+        }
+
+        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+            super.onItemRangeMoved(fromPosition, toPosition, itemCount)
+            onAnyChanged()
         }
     }
 }
