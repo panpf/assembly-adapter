@@ -1,12 +1,11 @@
 package com.github.panpf.assemblyadapter.pager
 
 import android.util.SparseIntArray
-import androidx.viewpager.widget.PagerAdapter
 
 /**
  * Realize that PagerAdapter can refresh correctly when calling notifyDataSetChanged
  */
-class PagerAdapterNotifyCountHelper {
+class PagerAdapterItemPositionChangedHelper {
 
     private var notifyNumber = 0
     private var notifyNumberPool: SparseIntArray? = null
@@ -28,14 +27,13 @@ class PagerAdapterNotifyCountHelper {
         }
     }
 
-    fun getItemPosition(pagerAdapter: PagerAdapter, item: Any): Int {
-        val notifyNumberPool = notifyNumberPool
+    fun isItemPositionChanged(item: Any): Boolean {
+        val notifyNumberPool = notifyNumberPool ?: return false
         val key = item.hashCode()
-        return if (notifyNumberPool != null && notifyNumberPool[key] != notifyNumber) {
+        val changed = notifyNumberPool[key] != notifyNumber
+        if (changed) {
             notifyNumberPool.put(key, notifyNumber)
-            PagerAdapter.POSITION_NONE
-        } else {
-            pagerAdapter.getItemPosition(item)
         }
+        return changed
     }
 }

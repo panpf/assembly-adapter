@@ -29,12 +29,12 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
-    private val notifyCountHelper = PagerAdapterNotifyCountHelper()
+    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = notifyCountHelper.isEnabledPositionNoneOnNotifyDataSetChanged
+        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
         set(enabled) {
-            notifyCountHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
+            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
         }
 
     constructor(
@@ -67,12 +67,16 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
     }
 
     override fun notifyDataSetChanged() {
-        notifyCountHelper.onNotifyDataSetChanged()
+        itemPositionChangedHelper.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
     override fun getItemPosition(item: Any): Int {
-        return notifyCountHelper.getItemPosition(this, item)
+        return if (itemPositionChangedHelper.isItemPositionChanged(item)) {
+            POSITION_NONE
+        } else {
+            super.getItemPosition(item)
+        }
     }
 
 

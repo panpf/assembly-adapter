@@ -19,6 +19,7 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
@@ -31,12 +32,12 @@ class AssemblyFragmentPagerAdapter<DATA>
 
     private val itemFactoryStorage: ItemFactoryStorage<AssemblyFragmentItemFactory<*>>
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
-    private val notifyCountHelper = PagerAdapterNotifyCountHelper()
+    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = notifyCountHelper.isEnabledPositionNoneOnNotifyDataSetChanged
+        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
         set(enabled) {
-            notifyCountHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
+            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
         }
 
     constructor(
@@ -88,12 +89,16 @@ class AssemblyFragmentPagerAdapter<DATA>
     }
 
     override fun notifyDataSetChanged() {
-        notifyCountHelper.onNotifyDataSetChanged()
+        itemPositionChangedHelper.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
     override fun getItemPosition(item: Any): Int {
-        return notifyCountHelper.getItemPosition(this, item)
+        return if (itemPositionChangedHelper.isItemPositionChanged(item)) {
+            PagerAdapter.POSITION_NONE
+        } else {
+            super.getItemPosition(item)
+        }
     }
 
 

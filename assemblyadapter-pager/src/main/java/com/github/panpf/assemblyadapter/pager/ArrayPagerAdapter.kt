@@ -23,12 +23,12 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
 
     private var viewList: List<View> = views.toList()
     private var pageTitleList: List<CharSequence>? = null
-    private val notifyCountHelper = PagerAdapterNotifyCountHelper()
+    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = notifyCountHelper.isEnabledPositionNoneOnNotifyDataSetChanged
+        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
         set(enabled) {
-            notifyCountHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
+            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
         }
 
 
@@ -51,12 +51,16 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
     }
 
     override fun notifyDataSetChanged() {
-        notifyCountHelper.onNotifyDataSetChanged()
+        itemPositionChangedHelper.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
     override fun getItemPosition(item: Any): Int {
-        return notifyCountHelper.getItemPosition(this, item)
+        return if (itemPositionChangedHelper.isItemPositionChanged(item)) {
+            POSITION_NONE
+        } else {
+            super.getItemPosition(item)
+        }
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
