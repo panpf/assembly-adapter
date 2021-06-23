@@ -34,7 +34,7 @@ public final class ConcatExpandableListAdapter extends BaseExpandableListAdapter
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
-    private final ConcatExpandableAdapterController mController;
+    private final ConcatExpandableListAdapterController mController;
 
     /**
      * Creates a ConcatExpandableListAdapter with {@link Config#DEFAULT} and the given adapters in the given
@@ -79,7 +79,7 @@ public final class ConcatExpandableListAdapter extends BaseExpandableListAdapter
     public ConcatExpandableListAdapter(
             @NonNull Config config,
             @NonNull List<? extends BaseExpandableListAdapter> adapters) {
-        mController = new ConcatExpandableAdapterController(this, config);
+        mController = new ConcatExpandableListAdapterController(this, config);
         for (BaseExpandableListAdapter adapter : adapters) {
             addAdapter(adapter);
         }
@@ -225,7 +225,7 @@ public final class ConcatExpandableListAdapter extends BaseExpandableListAdapter
 
 
     @NonNull
-    public ExpandableWrapperAndLocalPosition findWrapperAndLocalPosition(int position, ExpandableWrapperAndLocalPosition wrapperAndLocalPosition) {
+    public ExpandableListWrapperAndLocalPosition findWrapperAndLocalPosition(int position, ExpandableListWrapperAndLocalPosition wrapperAndLocalPosition) {
         return mController.findWrapperAndLocalPosition(position, wrapperAndLocalPosition);
     }
 

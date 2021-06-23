@@ -27,7 +27,7 @@ import androidx.annotation.Nullable;
 /**
  * Wrapper for each adapter in {@link ConcatListAdapter}.
  */
-class ListNestedAdapterWrapper {
+class NestedListAdapterWrapper {
 
     public final BaseAdapter adapter;
 
@@ -48,11 +48,11 @@ class ListNestedAdapterWrapper {
         @Override
         public void onChanged() {
             mCachedItemCount = adapter.getCount();
-            mCallback.onChanged(ListNestedAdapterWrapper.this);
+            mCallback.onChanged(NestedListAdapterWrapper.this);
         }
     };
 
-    ListNestedAdapterWrapper(
+    NestedListAdapterWrapper(
             @NonNull BaseAdapter adapter,
             @NonNull Callback callback,
             @NonNull ListViewTypeStorage viewTypeStorage,
@@ -100,6 +100,6 @@ class ListNestedAdapterWrapper {
     }
 
     interface Callback {
-        void onChanged(@NonNull ListNestedAdapterWrapper wrapper);
+        void onChanged(@NonNull NestedListAdapterWrapper wrapper);
     }
 }

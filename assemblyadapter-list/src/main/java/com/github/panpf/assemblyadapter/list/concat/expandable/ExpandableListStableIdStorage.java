@@ -22,12 +22,12 @@ import androidx.collection.LongSparseArray;
 /**
  * Used by {@link ConcatExpandableListAdapter} to isolate item ids between nested adapters, if necessary.
  */
-interface ExpandableStableIdStorage {
+interface ExpandableListStableIdStorage {
     @NonNull
     StableIdLookup createStableIdLookup();
 
     /**
-     * Interface that provides {@link ExpandableNestedAdapterWrapper}s a way to map their local stable ids
+     * Interface that provides {@link NestedExpandableListAdapterWrapper}s a way to map their local stable ids
      * into global stable ids, based on the configuration of the {@link ConcatExpandableListAdapter}.
      */
     interface StableIdLookup {
@@ -38,8 +38,8 @@ interface ExpandableStableIdStorage {
      * Returns {@link ConcatExpandableListAdapter#NO_ID} for all positions. In other words, stable ids are not
      * supported.
      */
-    class NoStableIdStorage implements ExpandableStableIdStorage {
-        private final ExpandableStableIdStorage.StableIdLookup mNoIdLookup = new ExpandableStableIdStorage.StableIdLookup() {
+    class NoStableIdStorage implements ExpandableListStableIdStorage {
+        private final ExpandableListStableIdStorage.StableIdLookup mNoIdLookup = new ExpandableListStableIdStorage.StableIdLookup() {
             @Override
             public long localToGlobal(long localId) {
                 return ConcatExpandableListAdapter.NO_ID;
@@ -48,7 +48,7 @@ interface ExpandableStableIdStorage {
 
         @NonNull
         @Override
-        public ExpandableStableIdStorage.StableIdLookup createStableIdLookup() {
+        public ExpandableListStableIdStorage.StableIdLookup createStableIdLookup() {
             return mNoIdLookup;
         }
     }
@@ -56,8 +56,8 @@ interface ExpandableStableIdStorage {
     /**
      * A pass-through implementation that reports the stable id in sub adapters as is.
      */
-    class SharedPoolStableIdStorage implements ExpandableStableIdStorage {
-        private final ExpandableStableIdStorage.StableIdLookup mSameIdLookup = new ExpandableStableIdStorage.StableIdLookup() {
+    class SharedPoolStableIdStorage implements ExpandableListStableIdStorage {
+        private final ExpandableListStableIdStorage.StableIdLookup mSameIdLookup = new ExpandableListStableIdStorage.StableIdLookup() {
             @Override
             public long localToGlobal(long localId) {
                 return localId;
@@ -66,7 +66,7 @@ interface ExpandableStableIdStorage {
 
         @NonNull
         @Override
-        public ExpandableStableIdStorage.StableIdLookup createStableIdLookup() {
+        public ExpandableListStableIdStorage.StableIdLookup createStableIdLookup() {
             return mSameIdLookup;
         }
     }
@@ -76,7 +76,7 @@ interface ExpandableStableIdStorage {
      * each-other. It keeps a mapping for each adapter from its local stable ids to a global domain
      * and always replaces the local id w/ a globally available ID to be consistent.
      */
-    class IsolatedStableIdStorage implements ExpandableStableIdStorage {
+    class IsolatedStableIdStorage implements ExpandableListStableIdStorage {
         long mNextStableId = 0;
 
         long obtainId() {
@@ -85,11 +85,11 @@ interface ExpandableStableIdStorage {
 
         @NonNull
         @Override
-        public ExpandableStableIdStorage.StableIdLookup createStableIdLookup() {
+        public ExpandableListStableIdStorage.StableIdLookup createStableIdLookup() {
             return new WrapperStableIdLookup();
         }
 
-        class WrapperStableIdLookup implements ExpandableStableIdStorage.StableIdLookup {
+        class WrapperStableIdLookup implements ExpandableListStableIdStorage.StableIdLookup {
             private final LongSparseArray<Long> mLocalToGlobalLookup = new LongSparseArray<>();
 
             @Override

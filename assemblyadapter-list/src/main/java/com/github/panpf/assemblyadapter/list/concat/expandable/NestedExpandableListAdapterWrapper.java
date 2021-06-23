@@ -29,7 +29,7 @@ import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableGroup;
 /**
  * Wrapper for each adapter in {@link ConcatExpandableListAdapter}.
  */
-class ExpandableNestedAdapterWrapper {
+class NestedExpandableListAdapterWrapper {
 
     @NonNull
     public final BaseExpandableListAdapter adapter;
@@ -37,13 +37,13 @@ class ExpandableNestedAdapterWrapper {
     @NonNull
     private final Callback mCallback;
     @NonNull
-    private final ExpandableViewTypeStorage.ViewTypeLookup mGroupViewTypeLookup;
+    private final ExpandableListViewTypeStorage.ViewTypeLookup mGroupViewTypeLookup;
     @NonNull
-    private final ExpandableStableIdStorage.StableIdLookup mGroupStableIdLookup;
+    private final ExpandableListStableIdStorage.StableIdLookup mGroupStableIdLookup;
     @NonNull
-    private final ExpandableViewTypeStorage.ViewTypeLookup mChildViewTypeLookup;
+    private final ExpandableListViewTypeStorage.ViewTypeLookup mChildViewTypeLookup;
     @NonNull
-    private final ExpandableStableIdStorage.StableIdLookup mChildStableIdLookup;
+    private final ExpandableListStableIdStorage.StableIdLookup mChildStableIdLookup;
     /**
      * we cache this value so that we can know the previous size when change happens
      * this is also important as getting real size while an adapter is dispatching possibly a
@@ -56,16 +56,16 @@ class ExpandableNestedAdapterWrapper {
         @Override
         public void onChanged() {
             mCachedItemCount = adapter.getGroupCount();
-            mCallback.onChanged(ExpandableNestedAdapterWrapper.this);
+            mCallback.onChanged(NestedExpandableListAdapterWrapper.this);
         }
     };
 
-    ExpandableNestedAdapterWrapper(
+    NestedExpandableListAdapterWrapper(
             @NonNull BaseExpandableListAdapter adapter,
             @NonNull Callback callback,
-            @NonNull ExpandableViewTypeStorage viewTypeStorage,
-            @NonNull ExpandableStableIdStorage.StableIdLookup groupStableIdLookup,
-            @NonNull ExpandableStableIdStorage.StableIdLookup childStableIdLookup) {
+            @NonNull ExpandableListViewTypeStorage viewTypeStorage,
+            @NonNull ExpandableListStableIdStorage.StableIdLookup groupStableIdLookup,
+            @NonNull ExpandableListStableIdStorage.StableIdLookup childStableIdLookup) {
         this.adapter = adapter;
         this.mCallback = callback;
         this.mGroupViewTypeLookup = viewTypeStorage.createViewTypeWrapper(this);
@@ -151,6 +151,6 @@ class ExpandableNestedAdapterWrapper {
     }
 
     interface Callback {
-        void onChanged(@NonNull ExpandableNestedAdapterWrapper wrapper);
+        void onChanged(@NonNull NestedExpandableListAdapterWrapper wrapper);
     }
 }

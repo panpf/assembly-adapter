@@ -5,7 +5,7 @@ package com.github.panpf.assemblyadapter.list.concat;
  * a very common call.
  */
 public class ListWrapperAndLocalPosition {
-    public ListNestedAdapterWrapper mWrapper;
+    public NestedListAdapterWrapper mWrapper;
     public int mLocalPosition;
     public boolean mInUse;
 }

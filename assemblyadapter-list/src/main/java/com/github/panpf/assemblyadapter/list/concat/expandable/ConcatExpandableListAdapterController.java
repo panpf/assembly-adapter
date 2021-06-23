@@ -34,18 +34,18 @@ import java.util.List;
  * All logic for the {@link ConcatExpandableListAdapter} is here so that we can clearly see a separation
  * between an adapter implementation and merging logic.
  */
-class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrapper.Callback {
+class ConcatExpandableListAdapterController implements NestedExpandableListAdapterWrapper.Callback {
     private final ConcatExpandableListAdapter mConcatAdapter;
 
     /**
      * Holds the mapping from the view type to the adapter which reported that type.
      */
-    private final ExpandableViewTypeStorage mViewTypeStorage;
+    private final ExpandableListViewTypeStorage mViewTypeStorage;
 
-    private final List<ExpandableNestedAdapterWrapper> mWrappers = new ArrayList<>();
+    private final List<NestedExpandableListAdapterWrapper> mWrappers = new ArrayList<>();
 
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
-    private ExpandableWrapperAndLocalPosition mReusableHolder = new ExpandableWrapperAndLocalPosition();
+    private ExpandableListWrapperAndLocalPosition mReusableHolder = new ExpandableListWrapperAndLocalPosition();
 
     @NonNull
     private final ConcatExpandableListAdapter.Config.StableIdMode mStableIdMode;
@@ -53,38 +53,38 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
     /**
      * This is where we keep stable ids, if supported
      */
-    private final ExpandableStableIdStorage mStableIdStorage;
+    private final ExpandableListStableIdStorage mStableIdStorage;
 
     private int groupItemViewTypeCount = -1;
     private int childItemViewTypeCount = -1;
 
-    ConcatExpandableAdapterController(
+    ConcatExpandableListAdapterController(
             ConcatExpandableListAdapter concatAdapter,
             ConcatExpandableListAdapter.Config config) {
         mConcatAdapter = concatAdapter;
 
         // setup view type handling
         if (config.isolateViewTypes) {
-            mViewTypeStorage = new ExpandableViewTypeStorage.IsolatedViewTypeStorage();
+            mViewTypeStorage = new ExpandableListViewTypeStorage.IsolatedViewTypeStorage();
         } else {
-            mViewTypeStorage = new ExpandableViewTypeStorage.SharedIdRangeViewTypeStorage();
+            mViewTypeStorage = new ExpandableListViewTypeStorage.SharedIdRangeViewTypeStorage();
         }
 
         // setup stable id handling
         mStableIdMode = config.stableIdMode;
         if (config.stableIdMode == ConcatExpandableListAdapter.Config.StableIdMode.NO_STABLE_IDS) {
-            mStableIdStorage = new ExpandableStableIdStorage.NoStableIdStorage();
+            mStableIdStorage = new ExpandableListStableIdStorage.NoStableIdStorage();
         } else if (config.stableIdMode == ConcatExpandableListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS) {
-            mStableIdStorage = new ExpandableStableIdStorage.IsolatedStableIdStorage();
+            mStableIdStorage = new ExpandableListStableIdStorage.IsolatedStableIdStorage();
         } else if (config.stableIdMode == ConcatExpandableListAdapter.Config.StableIdMode.SHARED_STABLE_IDS) {
-            mStableIdStorage = new ExpandableStableIdStorage.SharedPoolStableIdStorage();
+            mStableIdStorage = new ExpandableListStableIdStorage.SharedPoolStableIdStorage();
         } else {
             throw new IllegalArgumentException("unknown stable id mode");
         }
     }
 
     @Nullable
-    private ExpandableNestedAdapterWrapper findWrapperFor(BaseExpandableListAdapter adapter) {
+    private NestedExpandableListAdapterWrapper findWrapperFor(BaseExpandableListAdapter adapter) {
         final int index = indexOfWrapper(adapter);
         if (index == -1) {
             return null;
@@ -133,11 +133,11 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
                         + " ConcatExpandableListAdapter is configured not to have stable ids");
             }
         }
-        ExpandableNestedAdapterWrapper existing = findWrapperFor(adapter);
+        NestedExpandableListAdapterWrapper existing = findWrapperFor(adapter);
         if (existing != null) {
             return false;
         }
-        ExpandableNestedAdapterWrapper wrapper = new ExpandableNestedAdapterWrapper(adapter, this,
+        NestedExpandableListAdapterWrapper wrapper = new NestedExpandableListAdapterWrapper(adapter, this,
                 mViewTypeStorage, mStableIdStorage.createStableIdLookup(), mStableIdStorage.createStableIdLookup());
         mWrappers.add(index, wrapper);
         groupItemViewTypeCount = -1;
@@ -154,7 +154,7 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
         if (index == -1) {
             return false;
         }
-        ExpandableNestedAdapterWrapper wrapper = mWrappers.get(index);
+        NestedExpandableListAdapterWrapper wrapper = mWrappers.get(index);
         mWrappers.remove(index);
         groupItemViewTypeCount = -1;
         childItemViewTypeCount = -1;
@@ -164,14 +164,14 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
     }
 
     @Override
-    public void onChanged(@NonNull ExpandableNestedAdapterWrapper wrapper) {
+    public void onChanged(@NonNull NestedExpandableListAdapterWrapper wrapper) {
         mConcatAdapter.notifyDataSetChanged();
     }
 
     public int getGroupCount() {
         // should we cache this as well ?
         int total = 0;
-        for (ExpandableNestedAdapterWrapper wrapper : mWrappers) {
+        for (NestedExpandableListAdapterWrapper wrapper : mWrappers) {
             total += wrapper.getCachedItemCount();
         }
         return total;
@@ -179,14 +179,14 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
 
     @Nullable
     public Object getGroup(int globalGroupPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         Object group = wrapperAndPos.mWrapper.getGroup(wrapperAndPos.mLocalPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return group;
     }
 
     public long getGroupId(int globalGroupPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         long globalGroupId = wrapperAndPos.mWrapper.getGroupId(wrapperAndPos.mLocalPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return globalGroupId;
@@ -195,7 +195,7 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
     public int getGroupTypeCount() {
         if (groupItemViewTypeCount == -1) {
             groupItemViewTypeCount = 0;
-            for (ExpandableNestedAdapterWrapper mWrapper : mWrappers) {
+            for (NestedExpandableListAdapterWrapper mWrapper : mWrappers) {
                 groupItemViewTypeCount += mWrapper.getGroupTypeCount();
             }
         }
@@ -203,14 +203,14 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
     }
 
     public int getGroupType(int globalGroupPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         int groupType = wrapperAndPos.mWrapper.getGroupType(wrapperAndPos.mLocalPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return groupType;
     }
 
     public View getGroupView(int globalGroupPosition, boolean isExpanded, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         View groupView = wrapperAndPos.mWrapper.getGroupView(wrapperAndPos.mLocalPosition, isExpanded, convertView, parent);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return groupView;
@@ -218,7 +218,7 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
 
 
     public int getChildrenCount(int globalGroupPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         int childrenCount = wrapperAndPos.mWrapper.getChildrenCount(wrapperAndPos.mLocalPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return childrenCount;
@@ -226,14 +226,14 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
 
     @Nullable
     public Object getChild(int globalGroupPosition, int childPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         Object group = wrapperAndPos.mWrapper.getChild(wrapperAndPos.mLocalPosition, childPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return group;
     }
 
     public long getChildId(int globalGroupPosition, int childPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         long globalChildId = wrapperAndPos.mWrapper.getChildId(wrapperAndPos.mLocalPosition, childPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return globalChildId;
@@ -242,7 +242,7 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
     public int getChildTypeCount() {
         if (childItemViewTypeCount == -1) {
             childItemViewTypeCount = 0;
-            for (ExpandableNestedAdapterWrapper mWrapper : mWrappers) {
+            for (NestedExpandableListAdapterWrapper mWrapper : mWrappers) {
                 childItemViewTypeCount += mWrapper.getChildTypeCount();
             }
         }
@@ -250,34 +250,34 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
     }
 
     public int getChildType(int globalGroupPosition, int childPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         int childType = wrapperAndPos.mWrapper.getChildType(wrapperAndPos.mLocalPosition, childPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return childType;
     }
 
     public View getChildView(int globalGroupPosition, int childPosition, boolean isLastChild, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         View childView = wrapperAndPos.mWrapper.getChildView(wrapperAndPos.mLocalPosition, childPosition, isLastChild, convertView, parent);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return childView;
     }
 
     public boolean isChildSelectable(int globalGroupPosition, int childPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         boolean isChildSelectable = wrapperAndPos.mWrapper.isChildSelectable(wrapperAndPos.mLocalPosition, childPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
         return isChildSelectable;
     }
 
     public void onGroupCollapsed(int globalGroupPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         wrapperAndPos.mWrapper.onGroupCollapsed(wrapperAndPos.mLocalPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
     }
 
     public void onGroupExpanded(int globalGroupPosition) {
-        ExpandableWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
+        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
         wrapperAndPos.mWrapper.onGroupExpanded(wrapperAndPos.mLocalPosition);
         releaseWrapperAndLocalPosition(wrapperAndPos);
     }
@@ -288,13 +288,13 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
 
 
     /**
-     * Always call {@link #releaseWrapperAndLocalPosition(ExpandableWrapperAndLocalPosition)} when you are
+     * Always call {@link #releaseWrapperAndLocalPosition(ExpandableListWrapperAndLocalPosition)} when you are
      * done with it
      */
     @NonNull
-    public ExpandableWrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition, ExpandableWrapperAndLocalPosition wrapperAndLocalPosition) {
+    public ExpandableListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition, ExpandableListWrapperAndLocalPosition wrapperAndLocalPosition) {
         int localPosition = globalPosition;
-        for (ExpandableNestedAdapterWrapper wrapper : mWrappers) {
+        for (NestedExpandableListAdapterWrapper wrapper : mWrappers) {
             if (wrapper.getCachedItemCount() > localPosition) {
                 wrapperAndLocalPosition.mWrapper = wrapper;
                 wrapperAndLocalPosition.mLocalPosition = localPosition;
@@ -309,14 +309,14 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
     }
 
     /**
-     * Always call {@link #releaseWrapperAndLocalPosition(ExpandableWrapperAndLocalPosition)} when you are
+     * Always call {@link #releaseWrapperAndLocalPosition(ExpandableListWrapperAndLocalPosition)} when you are
      * done with it
      */
     @NonNull
-    public ExpandableWrapperAndLocalPosition findWrapperAndLocalPosition(int globalGroupPosition) {
-        ExpandableWrapperAndLocalPosition result;
+    public ExpandableListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalGroupPosition) {
+        ExpandableListWrapperAndLocalPosition result;
         if (mReusableHolder.mInUse) {
-            result = new ExpandableWrapperAndLocalPosition();
+            result = new ExpandableListWrapperAndLocalPosition();
         } else {
             mReusableHolder.mInUse = true;
             result = mReusableHolder;
@@ -324,7 +324,7 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
         return findWrapperAndLocalPosition(globalGroupPosition, result);
     }
 
-    private void releaseWrapperAndLocalPosition(ExpandableWrapperAndLocalPosition wrapperAndLocalPosition) {
+    private void releaseWrapperAndLocalPosition(ExpandableListWrapperAndLocalPosition wrapperAndLocalPosition) {
         wrapperAndLocalPosition.mInUse = false;
         wrapperAndLocalPosition.mWrapper = null;
         wrapperAndLocalPosition.mLocalPosition = -1;
@@ -338,7 +338,7 @@ class ConcatExpandableAdapterController implements ExpandableNestedAdapterWrappe
             return Collections.emptyList();
         }
         List<BaseExpandableListAdapter> adapters = new ArrayList<>(mWrappers.size());
-        for (ExpandableNestedAdapterWrapper wrapper : mWrappers) {
+        for (NestedExpandableListAdapterWrapper wrapper : mWrappers) {
             adapters.add(wrapper.adapter);
         }
         return adapters;

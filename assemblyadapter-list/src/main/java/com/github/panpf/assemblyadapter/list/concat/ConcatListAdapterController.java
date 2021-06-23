@@ -34,7 +34,7 @@ import java.util.List;
  * All logic for the {@link ConcatListAdapter} is here so that we can clearly see a separation
  * between an adapter implementation and merging logic.
  */
-class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
+class ConcatListAdapterController implements NestedListAdapterWrapper.Callback {
     private final ConcatListAdapter mConcatAdapter;
 
     /**
@@ -42,7 +42,7 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
      */
     private final ListViewTypeStorage mViewTypeStorage;
 
-    private final List<ListNestedAdapterWrapper> mWrappers = new ArrayList<>();
+    private final List<NestedListAdapterWrapper> mWrappers = new ArrayList<>();
 
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
     private ListWrapperAndLocalPosition mReusableHolder = new ListWrapperAndLocalPosition();
@@ -83,7 +83,7 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
     }
 
     @Nullable
-    private ListNestedAdapterWrapper findWrapperFor(BaseAdapter adapter) {
+    private NestedListAdapterWrapper findWrapperFor(BaseAdapter adapter) {
         final int index = indexOfWrapper(adapter);
         if (index == -1) {
             return null;
@@ -132,11 +132,11 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
                         + " ConcatListAdapter is configured not to have stable ids");
             }
         }
-        ListNestedAdapterWrapper existing = findWrapperFor(adapter);
+        NestedListAdapterWrapper existing = findWrapperFor(adapter);
         if (existing != null) {
             return false;
         }
-        ListNestedAdapterWrapper wrapper = new ListNestedAdapterWrapper(adapter, this,
+        NestedListAdapterWrapper wrapper = new NestedListAdapterWrapper(adapter, this,
                 mViewTypeStorage, mStableIdStorage.createStableIdLookup());
         mWrappers.add(index, wrapper);
         itemViewTypeCount = -1;
@@ -152,7 +152,7 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
         if (index == -1) {
             return false;
         }
-        ListNestedAdapterWrapper wrapper = mWrappers.get(index);
+        NestedListAdapterWrapper wrapper = mWrappers.get(index);
         mWrappers.remove(index);
         itemViewTypeCount = -1;
         mConcatAdapter.notifyDataSetChanged();
@@ -168,14 +168,14 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
     }
 
     @Override
-    public void onChanged(@NonNull ListNestedAdapterWrapper wrapper) {
+    public void onChanged(@NonNull NestedListAdapterWrapper wrapper) {
         mConcatAdapter.notifyDataSetChanged();
     }
 
     public int getTotalCount() {
         // should we cache this as well ?
         int total = 0;
-        for (ListNestedAdapterWrapper wrapper : mWrappers) {
+        for (NestedListAdapterWrapper wrapper : mWrappers) {
             total += wrapper.getCachedItemCount();
         }
         return total;
@@ -192,7 +192,7 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
     public int getItemViewTypeCount() {
         if (itemViewTypeCount == -1) {
             itemViewTypeCount = 0;
-            for (ListNestedAdapterWrapper mWrapper : mWrappers) {
+            for (NestedListAdapterWrapper mWrapper : mWrappers) {
                 itemViewTypeCount += mWrapper.getItemViewTypeCount();
             }
         }
@@ -225,7 +225,7 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
     @NonNull
     public ListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition, ListWrapperAndLocalPosition wrapperAndLocalPosition) {
         int localPosition = globalPosition;
-        for (ListNestedAdapterWrapper wrapper : mWrappers) {
+        for (NestedListAdapterWrapper wrapper : mWrappers) {
             if (wrapper.getCachedItemCount() > localPosition) {
                 wrapperAndLocalPosition.mWrapper = wrapper;
                 wrapperAndLocalPosition.mLocalPosition = localPosition;
@@ -268,7 +268,7 @@ class ConcatListAdapterController implements ListNestedAdapterWrapper.Callback {
             return Collections.emptyList();
         }
         List<BaseAdapter> adapters = new ArrayList<>(mWrappers.size());
-        for (ListNestedAdapterWrapper wrapper : mWrappers) {
+        for (NestedListAdapterWrapper wrapper : mWrappers) {
             adapters.add(wrapper.adapter);
         }
         return adapters;

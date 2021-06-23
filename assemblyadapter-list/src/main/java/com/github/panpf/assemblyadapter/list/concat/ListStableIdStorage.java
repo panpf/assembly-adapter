@@ -27,7 +27,7 @@ interface ListStableIdStorage {
     StableIdLookup createStableIdLookup();
 
     /**
-     * Interface that provides {@link ListNestedAdapterWrapper}s a way to map their local stable ids
+     * Interface that provides {@link NestedListAdapterWrapper}s a way to map their local stable ids
      * into global stable ids, based on the configuration of the {@link ConcatListAdapter}.
      */
     interface StableIdLookup {

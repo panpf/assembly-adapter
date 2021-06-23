@@ -29,17 +29,17 @@ import java.util.List;
 /**
  * Used by {@link ConcatListAdapter} to isolate view types between nested adapters, if necessary.
  */
-interface ExpandableViewTypeStorage {
+interface ExpandableListViewTypeStorage {
     @NonNull
-    ExpandableNestedAdapterWrapper getWrapperForGlobalType(int globalViewType);
+    NestedExpandableListAdapterWrapper getWrapperForGlobalType(int globalViewType);
 
     @NonNull
     ViewTypeLookup createViewTypeWrapper(
-            @NonNull ExpandableNestedAdapterWrapper wrapper
+            @NonNull NestedExpandableListAdapterWrapper wrapper
     );
 
     /**
-     * Api given to {@link ExpandableNestedAdapterWrapper}s.
+     * Api given to {@link NestedExpandableListAdapterWrapper}s.
      */
     interface ViewTypeLookup {
         int localToGlobal(int localType);
@@ -49,15 +49,15 @@ interface ExpandableViewTypeStorage {
         void dispose();
     }
 
-    class SharedIdRangeViewTypeStorage implements ExpandableViewTypeStorage {
+    class SharedIdRangeViewTypeStorage implements ExpandableListViewTypeStorage {
         // we keep a list of nested wrappers here even though we only need 1 to create because
         // they might be removed.
-        SparseArray<List<ExpandableNestedAdapterWrapper>> mGlobalTypeToWrapper = new SparseArray<>();
+        SparseArray<List<NestedExpandableListAdapterWrapper>> mGlobalTypeToWrapper = new SparseArray<>();
 
         @NonNull
         @Override
-        public ExpandableNestedAdapterWrapper getWrapperForGlobalType(int globalViewType) {
-            List<ExpandableNestedAdapterWrapper> nestedExpandableAdapterWrappers = mGlobalTypeToWrapper.get(
+        public NestedExpandableListAdapterWrapper getWrapperForGlobalType(int globalViewType) {
+            List<NestedExpandableListAdapterWrapper> nestedExpandableAdapterWrappers = mGlobalTypeToWrapper.get(
                     globalViewType);
             if (nestedExpandableAdapterWrappers == null || nestedExpandableAdapterWrappers.isEmpty()) {
                 throw new IllegalArgumentException("Cannot find the wrapper for global view"
@@ -69,14 +69,14 @@ interface ExpandableViewTypeStorage {
 
         @NonNull
         @Override
-        public ExpandableViewTypeStorage.ViewTypeLookup createViewTypeWrapper(
-                @NonNull ExpandableNestedAdapterWrapper wrapper) {
+        public ExpandableListViewTypeStorage.ViewTypeLookup createViewTypeWrapper(
+                @NonNull NestedExpandableListAdapterWrapper wrapper) {
             return new WrapperViewTypeLookup(wrapper);
         }
 
-        void removeWrapper(@NonNull ExpandableNestedAdapterWrapper wrapper) {
+        void removeWrapper(@NonNull NestedExpandableListAdapterWrapper wrapper) {
             for (int i = mGlobalTypeToWrapper.size() - 1; i >= 0; i--) {
-                List<ExpandableNestedAdapterWrapper> wrappers = mGlobalTypeToWrapper.valueAt(i);
+                List<NestedExpandableListAdapterWrapper> wrappers = mGlobalTypeToWrapper.valueAt(i);
                 if (wrappers.remove(wrapper)) {
                     if (wrappers.isEmpty()) {
                         mGlobalTypeToWrapper.removeAt(i);
@@ -85,17 +85,17 @@ interface ExpandableViewTypeStorage {
             }
         }
 
-        class WrapperViewTypeLookup implements ExpandableViewTypeStorage.ViewTypeLookup {
-            final ExpandableNestedAdapterWrapper mWrapper;
+        class WrapperViewTypeLookup implements ExpandableListViewTypeStorage.ViewTypeLookup {
+            final NestedExpandableListAdapterWrapper mWrapper;
 
-            WrapperViewTypeLookup(ExpandableNestedAdapterWrapper wrapper) {
+            WrapperViewTypeLookup(NestedExpandableListAdapterWrapper wrapper) {
                 mWrapper = wrapper;
             }
 
             @Override
             public int localToGlobal(int localType) {
                 // register it first
-                List<ExpandableNestedAdapterWrapper> wrappers = mGlobalTypeToWrapper.get(
+                List<NestedExpandableListAdapterWrapper> wrappers = mGlobalTypeToWrapper.get(
                         localType);
                 if (wrappers == null) {
                     wrappers = new ArrayList<>();
@@ -119,12 +119,12 @@ interface ExpandableViewTypeStorage {
         }
     }
 
-    class IsolatedViewTypeStorage implements ExpandableViewTypeStorage {
-        SparseArray<ExpandableNestedAdapterWrapper> mGlobalTypeToWrapper = new SparseArray<>();
+    class IsolatedViewTypeStorage implements ExpandableListViewTypeStorage {
+        SparseArray<NestedExpandableListAdapterWrapper> mGlobalTypeToWrapper = new SparseArray<>();
 
         int mNextViewType = 0;
 
-        int obtainViewType(ExpandableNestedAdapterWrapper wrapper) {
+        int obtainViewType(NestedExpandableListAdapterWrapper wrapper) {
             int nextId = mNextViewType++;
             mGlobalTypeToWrapper.put(nextId, wrapper);
             return nextId;
@@ -132,8 +132,8 @@ interface ExpandableViewTypeStorage {
 
         @NonNull
         @Override
-        public ExpandableNestedAdapterWrapper getWrapperForGlobalType(int globalViewType) {
-            ExpandableNestedAdapterWrapper wrapper = mGlobalTypeToWrapper.get(
+        public NestedExpandableListAdapterWrapper getWrapperForGlobalType(int globalViewType) {
+            NestedExpandableListAdapterWrapper wrapper = mGlobalTypeToWrapper.get(
                     globalViewType);
             if (wrapper == null) {
                 throw new IllegalArgumentException("Cannot find the wrapper for global"
@@ -144,26 +144,26 @@ interface ExpandableViewTypeStorage {
 
         @Override
         @NonNull
-        public ExpandableViewTypeStorage.ViewTypeLookup createViewTypeWrapper(
-                @NonNull ExpandableNestedAdapterWrapper wrapper) {
+        public ExpandableListViewTypeStorage.ViewTypeLookup createViewTypeWrapper(
+                @NonNull NestedExpandableListAdapterWrapper wrapper) {
             return new WrapperViewTypeLookup(wrapper);
         }
 
-        void removeWrapper(@NonNull ExpandableNestedAdapterWrapper wrapper) {
+        void removeWrapper(@NonNull NestedExpandableListAdapterWrapper wrapper) {
             for (int i = mGlobalTypeToWrapper.size() - 1; i >= 0; i--) {
-                ExpandableNestedAdapterWrapper existingWrapper = mGlobalTypeToWrapper.valueAt(i);
+                NestedExpandableListAdapterWrapper existingWrapper = mGlobalTypeToWrapper.valueAt(i);
                 if (existingWrapper == wrapper) {
                     mGlobalTypeToWrapper.removeAt(i);
                 }
             }
         }
 
-        class WrapperViewTypeLookup implements ExpandableViewTypeStorage.ViewTypeLookup {
+        class WrapperViewTypeLookup implements ExpandableListViewTypeStorage.ViewTypeLookup {
             private SparseIntArray mLocalToGlobalMapping = new SparseIntArray(1);
             private SparseIntArray mGlobalToLocalMapping = new SparseIntArray(1);
-            final ExpandableNestedAdapterWrapper mWrapper;
+            final NestedExpandableListAdapterWrapper mWrapper;
 
-            WrapperViewTypeLookup(ExpandableNestedAdapterWrapper wrapper) {
+            WrapperViewTypeLookup(NestedExpandableListAdapterWrapper wrapper) {
                 mWrapper = wrapper;
             }
 
