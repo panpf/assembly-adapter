@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

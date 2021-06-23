@@ -13,19 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager
+package com.github.panpf.assemblyadapter.pager.fragment
 
 import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.pager.PagerAdapterItemPositionChangedHelper
 
 @Deprecated("Switch to {@link androidx.viewpager2.widget.ViewPager2} and use {@link com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter} instead.")
-class ArrayFragmentStatePagerAdapter : FragmentStatePagerAdapter {
+class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
+    FragmentStatePagerAdapter, AssemblyAdapter {
 
-    private var fragmentList: List<Fragment>
-    private var pageTitleList: List<CharSequence>? = null
+    private val itemFactory: AssemblyFragmentItemFactory<DATA>
+    var data: DATA? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
@@ -35,26 +42,55 @@ class ArrayFragmentStatePagerAdapter : FragmentStatePagerAdapter {
         }
 
     constructor(
-        fm: FragmentManager, @Behavior behavior: Int, fragments: List<Fragment>
+        fm: FragmentManager,
+        @Behavior behavior: Int,
+        itemFactory: AssemblyFragmentItemFactory<DATA>,
     ) : super(fm, behavior) {
-        fragmentList = fragments.toList()
+        this.itemFactory = itemFactory
     }
 
     @Deprecated(
-        """use {@link #FragmentArrayStatePagerAdapter(FragmentManager, int, List)} with
+        """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int)} with
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
     )
-    constructor(fm: FragmentManager, fragments: List<Fragment>) : super(fm) {
-        fragmentList = fragments.toList()
+    constructor(
+        fm: FragmentManager,
+        itemFactory: AssemblyFragmentItemFactory<DATA>,
+    ) : super(fm) {
+        this.itemFactory = itemFactory
     }
 
-
-    override fun getCount(): Int {
-        return fragmentList.size
+    constructor(
+        fm: FragmentManager,
+        @Behavior behavior: Int,
+        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        initData: DATA? = null
+    ) : super(fm, behavior) {
+        this.itemFactory = itemFactory
+        this.data = initData
     }
+
+    @Deprecated(
+        """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List)} with
+      {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
+    )
+    constructor(
+        fm: FragmentManager,
+        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        initData: DATA? = null
+    ) : super(fm) {
+        this.itemFactory = itemFactory
+        this.data = initData
+    }
+
+    override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun getItem(position: Int): Fragment {
-        return fragmentList[position]
+        val data = data
+
+        @Suppress("UNCHECKED_CAST")
+        val itemFactory = itemFactory as AssemblyFragmentItemFactory<Any>
+        return itemFactory.dispatchCreateFragment(position, data)
     }
 
     override fun notifyDataSetChanged() {
@@ -70,26 +106,9 @@ class ArrayFragmentStatePagerAdapter : FragmentStatePagerAdapter {
         }
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return pageTitleList?.getOrNull(position)
-    }
 
-
-    fun getFragmentsSnapshot(): List<Fragment> {
-        return fragmentList.toList()
-    }
-
-    fun setFragments(fragments: List<Fragment>?) {
-        fragmentList = fragments?.toList() ?: emptyList()
-        notifyDataSetChanged()
-    }
-
-    fun getPageTitlesSnapshot(): List<CharSequence> {
-        return pageTitleList?.toList() ?: emptyList()
-    }
-
-    fun setPageTitles(pageTitles: List<CharSequence>?) {
-        pageTitleList = pageTitles?.toList() ?: emptyList()
+    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+        return itemFactory
     }
 
 

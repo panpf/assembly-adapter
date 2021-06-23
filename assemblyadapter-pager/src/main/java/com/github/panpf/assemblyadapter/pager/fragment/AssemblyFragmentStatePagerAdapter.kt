@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager
+package com.github.panpf.assemblyadapter.pager.fragment
 
 import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
@@ -24,6 +24,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.pager.PagerAdapterItemPositionChangedHelper
 import java.util.*
 
 @Deprecated("Switch to {@link androidx.viewpager2.widget.ViewPager2} and use {@link com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter} instead.")

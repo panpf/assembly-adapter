@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFactory
 
 open class AssemblyFragmentLoadStateAdapter(
     fragmentManager: FragmentManager,

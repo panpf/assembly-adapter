@@ -2,7 +2,7 @@ package com.github.panpf.assemblyadapter.sample.item.pager
 
 import androidx.fragment.app.Fragment
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.pager.AssemblyFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFactory
 
 class LoadStateFragmentItemFactory : AssemblyFragmentItemFactory<LoadState>() {
 
