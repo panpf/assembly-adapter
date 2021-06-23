@@ -31,6 +31,7 @@ class PinyinGroupAppsViewModel(application: Application) : AndroidViewModel(appl
         viewModelScope.launch {
             loadingData.postValue(true)
             val list = withContext(Dispatchers.IO) {
+                appsOverviewData.postValue(AppsOverview.build(getApplication()))
                 PinyinGroupAppsHelper(getApplication()).getAll()
             }
             pinyinGroupAppListData.postValue(list)

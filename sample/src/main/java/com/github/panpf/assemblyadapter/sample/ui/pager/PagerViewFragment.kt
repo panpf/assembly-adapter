@@ -6,18 +6,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.pager.AssemblyPagerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
+import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupPagerItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewPagerItemFactory
-import com.github.panpf.assemblyadapter.sample.item.pager.AppsPagerItemFactory
-import com.github.panpf.assemblyadapter.sample.item.pager.PinyinGroupPagerItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatChunkedAppsViewModel
+import com.github.panpf.assemblyadapter.sample.item.pager.LoadStatePagerItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PinyinGroupAppsViewModel
 
 class PagerViewFragment : BaseBindingFragment<FragmentPagerBinding>() {
 
-    private val viewModel by viewModels<PinyinFlatChunkedAppsViewModel>()
+    private val viewModel by viewModels<PinyinGroupAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -28,28 +29,31 @@ class PagerViewFragment : BaseBindingFragment<FragmentPagerBinding>() {
     override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
         val listAdapter = AssemblyPagerAdapter<Any>(
             listOf(
-                AppsPagerItemFactory(),
-                PinyinGroupPagerItemFactory(),
-                AppsOverviewPagerItemFactory()
+                AppGroupPagerItemFactory(),
+                AppsOverviewPagerItemFactory(),
+                LoadStatePagerItemFactory()
             )
         )
-        binding.pagerPager.adapter = listAdapter
-
-        viewModel.pinyinFlatChunkedAppListData.observe(viewLifecycleOwner) {
-            listAdapter.setDataList(it)
-            updatePageNumber(binding)
+        binding.pagerPager.apply {
+            adapter = listAdapter
+            addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    updatePageNumber(binding)
+                }
+            })
         }
-
-        binding.pagerPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                updatePageNumber(binding)
-            }
-        })
 
         viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.pagerProgressBar.isVisible = it == true
             binding.pagerPageNumberText.isVisible = it != true
+        }
+
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+            listAdapter.setDataList(it.plus(LoadState.NotLoading(true)).toMutableList().apply {
+                add(0, viewModel.appsOverviewData.value!!)
+            })
+            updatePageNumber(binding)
         }
     }
 

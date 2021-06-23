@@ -14,18 +14,17 @@ import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAd
 import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingFragmentStateAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
-import com.github.panpf.assemblyadapter.sample.item.pager.AppsFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.base.MyFragmentLoadStateAdapter
-import com.github.panpf.assemblyadapter.sample.item.pager.PinyinGroupFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatChunkedPagingAppsViewModel
+import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
+import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupPagingAppsViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>() {
 
-    private val viewModel by viewModels<PinyinFlatChunkedPagingAppsViewModel>()
+    private val viewModel by viewModels<PagerPinyinGroupPagingAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -40,22 +39,27 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
         )
         val pagingDataAdapter = AssemblyPagingFragmentStateAdapter(
             this, KeyDiffItemCallback(),
-            listOf(
-                AppsFragmentItemFactory(),
-                PinyinGroupFragmentItemFactory(),
-                AppsOverviewFragmentItemFactory()
-            )
+            listOf(AppGroupFragmentItemFactory())
         )
-        binding.pager2Pager.adapter = ConcatAdapter(
-            ConcatAdapter.Config.Builder()
-                .setIsolateViewTypes(true)
-                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
-                .build(),
-            appsOverviewAdapter,
-            pagingDataAdapter.withLoadStateFooter(
-                MyFragmentLoadStateAdapter(this)
+        binding.pager2Pager.apply {
+            adapter = ConcatAdapter(
+                ConcatAdapter.Config.Builder()
+                    .setIsolateViewTypes(true)
+                    .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                    .build(),
+                appsOverviewAdapter,
+                pagingDataAdapter.withLoadStateFooter(
+                    MyFragmentLoadStateAdapter(this@Pager2FragmentPagingFragment)
+                )
             )
-        )
+            registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    updatePageNumber(binding)
+                }
+            })
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             pagingDataAdapter.loadStateFlow.collect {
@@ -75,14 +79,6 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
                 updatePageNumber(binding)
             }
         }
-
-        binding.pager2Pager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                updatePageNumber(binding)
-            }
-        })
     }
 
     @SuppressLint("SetTextI18n")

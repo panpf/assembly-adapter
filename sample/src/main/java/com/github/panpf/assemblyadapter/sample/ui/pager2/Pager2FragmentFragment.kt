@@ -13,15 +13,14 @@ import com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter
 import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
-import com.github.panpf.assemblyadapter.sample.item.pager.AppsFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.LoadStateFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.item.pager.PinyinGroupFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatChunkedAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinGroupAppsViewModel
 
 class Pager2FragmentFragment : BaseBindingFragment<FragmentPager2Binding>() {
 
-    private val viewModel by viewModels<PinyinFlatChunkedAppsViewModel>()
+    private val viewModel by viewModels<PinyinGroupAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -36,25 +35,30 @@ class Pager2FragmentFragment : BaseBindingFragment<FragmentPager2Binding>() {
         )
         val listAdapter = AssemblyFragmentStateAdapter<Any>(
             this,
-            listOf(
-                AppsFragmentItemFactory(),
-                PinyinGroupFragmentItemFactory(),
-                AppsOverviewFragmentItemFactory()
-            )
+            listOf(AppGroupFragmentItemFactory())
         )
         val footerLoadStateAdapter = AssemblySingleDataFragmentStateAdapter(
             this,
             LoadStateFragmentItemFactory()
         )
-        binding.pager2Pager.adapter = ConcatAdapter(
-            ConcatAdapter.Config.Builder()
-                .setIsolateViewTypes(true)
-                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
-                .build(),
-            appsOverviewAdapter,
-            listAdapter,
-            footerLoadStateAdapter
-        )
+        binding.pager2Pager.apply {
+            adapter = ConcatAdapter(
+                ConcatAdapter.Config.Builder()
+                    .setIsolateViewTypes(true)
+                    .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                    .build(),
+                appsOverviewAdapter,
+                listAdapter,
+                footerLoadStateAdapter
+            )
+            registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    updatePageNumber(binding)
+                }
+            })
+        }
 
         viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.pager2ProgressBar.isVisible = it == true
@@ -66,19 +70,11 @@ class Pager2FragmentFragment : BaseBindingFragment<FragmentPager2Binding>() {
             updatePageNumber(binding)
         }
 
-        viewModel.pinyinFlatChunkedAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
             listAdapter.setDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
             updatePageNumber(binding)
         }
-
-        binding.pager2Pager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                updatePageNumber(binding)
-            }
-        })
     }
 
     @SuppressLint("SetTextI18n")
