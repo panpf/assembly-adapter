@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager.concat.fragment
+package com.github.panpf.assemblyadapter.pager.fragment.concat
 
 import android.database.DataSetObserver
 import androidx.fragment.app.FragmentPagerAdapter

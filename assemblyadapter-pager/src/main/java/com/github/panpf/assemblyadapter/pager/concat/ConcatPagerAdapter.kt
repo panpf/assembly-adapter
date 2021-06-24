@@ -28,12 +28,14 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
     private val mController: ConcatPagerAdapterController = ConcatPagerAdapterController(this)
-    private var refreshHelper: PagerAdapterRefreshHelper? = null
+    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
-    var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
+    var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
-        set(enabled) {
-            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
+        set(disable) {
+            if (disable != isDisableItemRefreshWhenDataSetChanged) {
+                refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
+            }
         }
 
     /**
@@ -105,7 +107,9 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        return mController.instantiateItem(container, position)
+        return mController.instantiateItem(container, position).apply {
+            refreshHelper?.bindNotifyDataSetChangedNumber(this as View)
+        }
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
@@ -150,7 +154,7 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
     }
 
     override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item) == true) {
+        if (refreshHelper?.isItemPositionChanged(item as View) == true) {
             return POSITION_NONE
         }
         return super.getItemPosition(item)

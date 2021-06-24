@@ -23,30 +23,33 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
 
     private var viewList: List<View> = views.toList()
     private var pageTitleList: List<CharSequence>? = null
-    private var refreshHelper: PagerAdapterRefreshHelper? = null
+    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
-    var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
+    var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
-        set(enabled) {
-            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
+        set(disable) {
+            if (disable != isDisableItemRefreshWhenDataSetChanged) {
+                refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
+            }
         }
 
     override fun getCount(): Int {
         return viewList.size
     }
 
-    override fun isViewFromObject(view: View, item: Any): Boolean {
-        return view === item
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        return viewList[position].apply {
+            container.addView(this)
+            refreshHelper?.bindNotifyDataSetChangedNumber(this)
+        }
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
         container.removeView(item as View)
     }
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        return viewList[position].apply {
-            container.addView(this)
-        }
+    override fun isViewFromObject(view: View, item: Any): Boolean {
+        return view === item
     }
 
     override fun notifyDataSetChanged() {
@@ -55,7 +58,7 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
     }
 
     override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item) == true) {
+        if (refreshHelper?.isItemPositionChanged(item as View) == true) {
             return POSITION_NONE
         }
         return super.getItemPosition(item)

@@ -3,6 +3,7 @@ package com.github.panpf.assemblyadapter.sample.vm
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -31,7 +32,11 @@ class PagerPinyinGroupPagingAppsViewModel(application: Application) :
     @OptIn(ExperimentalCoroutinesApi::class)
     val appsOverviewData: LiveData<AppsOverview> = channelFlow {
         withContext(Dispatchers.IO) {
-            send(AppsOverview.build(getApplication()))
+            val appsOverview = AppsOverview.build(getApplication())
+            // AppsOverview 数据延迟发放松是为了测试主体数据 pinyinFlatChunkedAppListDataFlow 显示出来以后
+            // 再在列表头部以刷新 FragmentStateAdapter 的方式显示 AppsOverview 时 ViewPager2 能否正确刷新
+            Thread.sleep(2000)
+            send(appsOverview)
         }
     }.asLiveData()
 }

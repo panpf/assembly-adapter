@@ -30,21 +30,17 @@ class AssemblySingleDataPagerAdapter<DATA> @JvmOverloads constructor(
             field = value
             notifyDataSetChanged()
         }
-    private var refreshHelper: PagerAdapterRefreshHelper? = null
+    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
-    var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
+    var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
-        set(enabled) {
-            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
+        set(disable) {
+            if (disable != isDisableItemRefreshWhenDataSetChanged) {
+                refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
+            }
         }
 
     override fun getCount(): Int = if (data != null) 1 else 0
-
-    override fun isViewFromObject(view: View, item: Any): Boolean = view === item
-
-    override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
-        container.removeView(item as View)
-    }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val data = data
@@ -53,8 +49,16 @@ class AssemblySingleDataPagerAdapter<DATA> @JvmOverloads constructor(
         val itemFactory = itemFactory as AssemblyPagerItemFactory<Any>
         val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
         container.addView(itemView)
-        return itemView
+        return itemView.apply {
+            refreshHelper?.bindNotifyDataSetChangedNumber(this)
+        }
     }
+
+    override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
+        container.removeView(item as View)
+    }
+
+    override fun isViewFromObject(view: View, item: Any): Boolean = view === item
 
     override fun notifyDataSetChanged() {
         refreshHelper?.onNotifyDataSetChanged()
@@ -62,7 +66,7 @@ class AssemblySingleDataPagerAdapter<DATA> @JvmOverloads constructor(
     }
 
     override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item) == true) {
+        if (refreshHelper?.isItemPositionChanged(item as View) == true) {
             return POSITION_NONE
         }
         return super.getItemPosition(item)

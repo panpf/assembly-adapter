@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager.concat.fragment.state
+package com.github.panpf.assemblyadapter.pager.fragment.concat
 
 import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
-import com.github.panpf.assemblyadapter.pager.PagerAdapterRefreshHelper
+import androidx.fragment.app.FragmentPagerAdapter
+import com.github.panpf.assemblyadapter.pager.fragment.FragmentPagerAdapterRefreshHelper
 import java.util.*
 
 @Deprecated(
@@ -29,33 +29,36 @@ import java.util.*
         "androidx.recyclerview.widget.ConcatAdapter"
     )
 )
-class ConcatFragmentStatePagerAdapter(
+class ConcatFragmentPagerAdapter(
     fm: FragmentManager,
     @Behavior behavior: Int,
-    adapters: List<FragmentStatePagerAdapter>
-) : FragmentStatePagerAdapter(fm, behavior) {
+    adapters: List<FragmentPagerAdapter>
+) : FragmentPagerAdapter(fm, behavior) {
 
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
-    private val mController: ConcatFragmentStatePagerAdapterController =
-        ConcatFragmentStatePagerAdapterController(this)
-    private var refreshHelper: PagerAdapterRefreshHelper? = null
+    private val mController: ConcatFragmentPagerAdapterController =
+        ConcatFragmentPagerAdapterController(this)
+    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
+        FragmentPagerAdapterRefreshHelper()
 
-    var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
+    var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
-        set(enabled) {
-            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
+        set(disable) {
+            if (disable != isDisableItemRefreshWhenDataSetChanged) {
+                refreshHelper = if (disable) null else FragmentPagerAdapterRefreshHelper()
+            }
         }
 
     /**
-     * Returns an unmodifiable copy of the list of adapters in this [ConcatFragmentStatePagerAdapter].
+     * Returns an unmodifiable copy of the list of adapters in this [ConcatFragmentPagerAdapter].
      * Note that this is a copy hence future changes in the ConcatPagerAdapter are not reflected in
      * this list.
      *
      * @return A copy of the list of adapters in this ConcatPagerAdapter.
      */
-    val adapters: List<FragmentStatePagerAdapter>
+    val adapters: List<FragmentPagerAdapter>
         get() = Collections.unmodifiableList(mController.copyOfAdapters)
 
     /**
@@ -66,7 +69,7 @@ class ConcatFragmentStatePagerAdapter(
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        vararg adapters: FragmentStatePagerAdapter
+        vararg adapters: FragmentPagerAdapter
     ) : this(fm, behavior, adapters.toList())
 
     /**
@@ -76,7 +79,7 @@ class ConcatFragmentStatePagerAdapter(
      */
     constructor(
         fm: FragmentManager,
-        adapters: List<FragmentStatePagerAdapter>
+        adapters: List<FragmentPagerAdapter>
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, adapters)
 
     /**
@@ -86,7 +89,7 @@ class ConcatFragmentStatePagerAdapter(
      */
     constructor(
         fm: FragmentManager,
-        vararg adapters: FragmentStatePagerAdapter
+        vararg adapters: FragmentPagerAdapter
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, adapters.toList())
 
     init {
@@ -97,7 +100,7 @@ class ConcatFragmentStatePagerAdapter(
 
     /**
      * Appends the given adapter to the existing list of adapters and notifies the observers of
-     * this [ConcatFragmentStatePagerAdapter].
+     * this [ConcatFragmentPagerAdapter].
      *
      * @param adapter The new adapter to add
      * @return `true` if the adapter is successfully added because it did not already exist,
@@ -105,7 +108,7 @@ class ConcatFragmentStatePagerAdapter(
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(adapter: FragmentStatePagerAdapter): Boolean {
+    fun addAdapter(adapter: FragmentPagerAdapter): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -121,7 +124,7 @@ class ConcatFragmentStatePagerAdapter(
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(index: Int, adapter: FragmentStatePagerAdapter): Boolean {
+    fun addAdapter(index: Int, adapter: FragmentPagerAdapter): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -132,7 +135,7 @@ class ConcatFragmentStatePagerAdapter(
      * @return `true` if the adapter was previously added to this `ConcatPagerAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    fun removeAdapter(adapter: FragmentStatePagerAdapter): Boolean {
+    fun removeAdapter(adapter: FragmentPagerAdapter): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -141,7 +144,13 @@ class ConcatFragmentStatePagerAdapter(
     }
 
     override fun getItem(position: Int): Fragment {
-        return mController.getItem(position)
+        return mController.getItem(position).apply {
+            refreshHelper?.bindNotifyDataSetChangedNumber(this)
+        }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return mController.getItemId(position)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
@@ -158,13 +167,13 @@ class ConcatFragmentStatePagerAdapter(
     }
 
     override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item) == true) {
+        if (refreshHelper?.isItemPositionChanged(item as Fragment) == true) {
             return POSITION_NONE
         }
         return super.getItemPosition(item)
     }
 
-    fun findLocalAdapterAndPosition(position: Int): Pair<FragmentStatePagerAdapter, Int> {
+    fun findLocalAdapterAndPosition(position: Int): Pair<FragmentPagerAdapter, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 

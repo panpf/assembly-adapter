@@ -1,25 +1,28 @@
 package com.github.panpf.assemblyadapter.pager
 
-import android.util.SparseIntArray
+import android.view.View
 
 /**
  * Realize that PagerAdapter can refresh correctly when calling notifyDataSetChanged
  */
 class PagerAdapterRefreshHelper {
 
-    private var notifyNumber = 0
-    private val notifyNumberPool = SparseIntArray()
+    private var notifyDataSetChangedNumber = 0
 
     fun onNotifyDataSetChanged() {
-        notifyNumber++
+        if (notifyDataSetChangedNumber == Int.MAX_VALUE) {
+            notifyDataSetChangedNumber = 0
+        }
+        notifyDataSetChangedNumber++
     }
 
-    fun isItemPositionChanged(item: Any): Boolean {
-        val key = item.hashCode()
-        val changed = notifyNumberPool[key] != notifyNumber
-        if (changed) {
-            notifyNumberPool.put(key, notifyNumber)
-        }
-        return changed
+    fun bindNotifyDataSetChangedNumber(view: View) {
+        view.setTag(R.id.pagerItem_notifyDataSetChangedNumber, notifyDataSetChangedNumber)
+    }
+
+    fun isItemPositionChanged(view: View): Boolean {
+        val currentNumber = notifyDataSetChangedNumber
+        val bindNumber = view.getTag(R.id.pagerItem_notifyDataSetChangedNumber)?.toString()?.toInt()
+        return bindNumber != currentNumber
     }
 }

@@ -19,9 +19,7 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.pager.PagerAdapterRefreshHelper
 
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter' instead.",
@@ -38,12 +36,15 @@ class AssemblySingleDataFragmentPagerAdapter<DATA> : FragmentPagerAdapter, Assem
             field = value
             notifyDataSetChanged()
         }
-    private var refreshHelper: PagerAdapterRefreshHelper? = null
+    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
+        FragmentPagerAdapterRefreshHelper()
 
-    var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
+    var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
-        set(enabled) {
-            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
+        set(disable) {
+            if (disable != isDisableItemRefreshWhenDataSetChanged) {
+                refreshHelper = if (disable) null else FragmentPagerAdapterRefreshHelper()
+            }
         }
 
     constructor(
@@ -95,7 +96,9 @@ class AssemblySingleDataFragmentPagerAdapter<DATA> : FragmentPagerAdapter, Assem
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as AssemblyFragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(position, data)
+        return itemFactory.dispatchCreateFragment(position, data).apply {
+            refreshHelper?.bindNotifyDataSetChangedNumber(this)
+        }
     }
 
     override fun notifyDataSetChanged() {
@@ -104,7 +107,7 @@ class AssemblySingleDataFragmentPagerAdapter<DATA> : FragmentPagerAdapter, Assem
     }
 
     override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item) == true) {
+        if (refreshHelper?.isItemPositionChanged(item as Fragment) == true) {
             return POSITION_NONE
         }
         return super.getItemPosition(item)

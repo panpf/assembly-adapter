@@ -29,12 +29,14 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
-    private var refreshHelper: PagerAdapterRefreshHelper? = null
+    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
-    var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
+    var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
-        set(enabled) {
-            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
+        set(disable) {
+            if (disable != isDisableItemRefreshWhenDataSetChanged) {
+                refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
+            }
         }
 
     constructor(
@@ -48,22 +50,25 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
         return itemDataStorage.dataCount
     }
 
-    override fun isViewFromObject(view: View, item: Any): Boolean {
-        return view === item
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val data = itemDataStorage.getData(position)
+
+        @Suppress("UNCHECKED_CAST")
+        val itemFactory =
+            itemFactoryStorage.getItemFactoryByData(data) as AssemblyPagerItemFactory<Any>
+        val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
+        container.addView(itemView)
+        return itemView.apply {
+            refreshHelper?.bindNotifyDataSetChangedNumber(this)
+        }
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
         container.removeView(item as View)
     }
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val data = itemDataStorage.getData(position)
-
-        @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as AssemblyPagerItemFactory<Any>
-        val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
-        container.addView(itemView)
-        return itemView
+    override fun isViewFromObject(view: View, item: Any): Boolean {
+        return view === item
     }
 
     override fun notifyDataSetChanged() {
@@ -72,7 +77,7 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
     }
 
     override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item) == true) {
+        if (refreshHelper?.isItemPositionChanged(item as View) == true) {
             return POSITION_NONE
         }
         return super.getItemPosition(item)
