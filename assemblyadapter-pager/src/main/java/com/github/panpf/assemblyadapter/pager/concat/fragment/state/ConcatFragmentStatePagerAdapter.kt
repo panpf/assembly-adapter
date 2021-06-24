@@ -19,7 +19,7 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.github.panpf.assemblyadapter.pager.PagerAdapterItemPositionChangedHelper
+import com.github.panpf.assemblyadapter.pager.PagerAdapterRefreshHelper
 import java.util.*
 
 @Deprecated(
@@ -40,13 +40,12 @@ class ConcatFragmentStatePagerAdapter(
      */
     private val mController: ConcatFragmentStatePagerAdapterController =
         ConcatFragmentStatePagerAdapterController(this)
-    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
+    private var refreshHelper: PagerAdapterRefreshHelper? = null
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
-        set(enabledPositionNoneOnNotifyDataSetChanged) {
-            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged =
-                enabledPositionNoneOnNotifyDataSetChanged
+        get() = refreshHelper != null
+        set(enabled) {
+            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
         }
 
     /**
@@ -154,16 +153,15 @@ class ConcatFragmentStatePagerAdapter(
     }
 
     override fun notifyDataSetChanged() {
-        itemPositionChangedHelper.onNotifyDataSetChanged()
+        refreshHelper?.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
-    override fun getItemPosition(`object`: Any): Int {
-        return if (itemPositionChangedHelper.isItemPositionChanged(`object`)) {
-            POSITION_NONE
-        } else {
-            super.getItemPosition(`object`)
+    override fun getItemPosition(item: Any): Int {
+        if (refreshHelper?.isItemPositionChanged(item) == true) {
+            return POSITION_NONE
         }
+        return super.getItemPosition(item)
     }
 
     fun findLocalAdapterAndPosition(position: Int): Pair<FragmentStatePagerAdapter, Int> {

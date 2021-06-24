@@ -30,12 +30,12 @@ class AssemblySingleDataPagerAdapter<DATA> @JvmOverloads constructor(
             field = value
             notifyDataSetChanged()
         }
-    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
+    private var refreshHelper: PagerAdapterRefreshHelper? = null
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
+        get() = refreshHelper != null
         set(enabled) {
-            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
+            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
         }
 
     override fun getCount(): Int = if (data != null) 1 else 0
@@ -57,16 +57,15 @@ class AssemblySingleDataPagerAdapter<DATA> @JvmOverloads constructor(
     }
 
     override fun notifyDataSetChanged() {
-        itemPositionChangedHelper.onNotifyDataSetChanged()
+        refreshHelper?.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
     override fun getItemPosition(item: Any): Int {
-        return if (itemPositionChangedHelper.isItemPositionChanged(item)) {
-            PagerAdapter.POSITION_NONE
-        } else {
-            super.getItemPosition(item)
+        if (refreshHelper?.isItemPositionChanged(item) == true) {
+            return POSITION_NONE
         }
+        return super.getItemPosition(item)
     }
 
 

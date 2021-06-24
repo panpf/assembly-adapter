@@ -23,14 +23,13 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
 
     private var viewList: List<View> = views.toList()
     private var pageTitleList: List<CharSequence>? = null
-    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
+    private var refreshHelper: PagerAdapterRefreshHelper? = null
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
+        get() = refreshHelper != null
         set(enabled) {
-            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
+            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
         }
-
 
     override fun getCount(): Int {
         return viewList.size
@@ -51,22 +50,20 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
     }
 
     override fun notifyDataSetChanged() {
-        itemPositionChangedHelper.onNotifyDataSetChanged()
+        refreshHelper?.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
     override fun getItemPosition(item: Any): Int {
-        return if (itemPositionChangedHelper.isItemPositionChanged(item)) {
-            POSITION_NONE
-        } else {
-            super.getItemPosition(item)
+        if (refreshHelper?.isItemPositionChanged(item) == true) {
+            return POSITION_NONE
         }
+        return super.getItemPosition(item)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
         return pageTitleList?.getOrNull(position)
     }
-
 
 
     fun getViewsSnapshot(): List<View> {

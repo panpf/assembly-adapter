@@ -19,7 +19,7 @@ import android.os.Parcelable
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
-import com.github.panpf.assemblyadapter.pager.PagerAdapterItemPositionChangedHelper
+import com.github.panpf.assemblyadapter.pager.PagerAdapterRefreshHelper
 import java.util.*
 
 class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
@@ -28,13 +28,12 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
     private val mController: ConcatPagerAdapterController = ConcatPagerAdapterController(this)
-    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
+    private var refreshHelper: PagerAdapterRefreshHelper? = null
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
-        set(enabledPositionNoneOnNotifyDataSetChanged) {
-            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged =
-                enabledPositionNoneOnNotifyDataSetChanged
+        get() = refreshHelper != null
+        set(enabled) {
+            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
         }
 
     /**
@@ -129,7 +128,7 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
         mController.setPrimaryItem(container, position, `object`)
     }
 
-    override fun saveState(): Parcelable? {
+    override fun saveState(): Parcelable {
         return mController.saveState()
     }
 
@@ -146,16 +145,15 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
     }
 
     override fun notifyDataSetChanged() {
-        itemPositionChangedHelper.onNotifyDataSetChanged()
+        refreshHelper?.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
-    override fun getItemPosition(`object`: Any): Int {
-        return if (itemPositionChangedHelper.isItemPositionChanged(`object`)) {
-            POSITION_NONE
-        } else {
-            super.getItemPosition(`object`)
+    override fun getItemPosition(item: Any): Int {
+        if (refreshHelper?.isItemPositionChanged(item) == true) {
+            return POSITION_NONE
         }
+        return super.getItemPosition(item)
     }
 
     fun findLocalAdapterAndPosition(position: Int): Pair<PagerAdapter, Int> {

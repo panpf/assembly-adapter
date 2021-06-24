@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DataAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.pager.PagerAdapterItemPositionChangedHelper
+import com.github.panpf.assemblyadapter.pager.PagerAdapterRefreshHelper
 import java.util.*
 
 @Deprecated(
@@ -39,12 +39,12 @@ class AssemblyFragmentStatePagerAdapter<DATA> :
 
     private val itemFactoryStorage: ItemFactoryStorage<AssemblyFragmentItemFactory<*>>
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
-    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
+    private var refreshHelper: PagerAdapterRefreshHelper? = null
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
+        get() = refreshHelper != null
         set(enabled) {
-            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
+            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
         }
 
     constructor(
@@ -98,16 +98,15 @@ class AssemblyFragmentStatePagerAdapter<DATA> :
     }
 
     override fun notifyDataSetChanged() {
-        itemPositionChangedHelper.onNotifyDataSetChanged()
+        refreshHelper?.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
     override fun getItemPosition(item: Any): Int {
-        return if (itemPositionChangedHelper.isItemPositionChanged(item)) {
-            PagerAdapter.POSITION_NONE
-        } else {
-            super.getItemPosition(item)
+        if (refreshHelper?.isItemPositionChanged(item) == true) {
+            return POSITION_NONE
         }
+        return super.getItemPosition(item)
     }
 
 

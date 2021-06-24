@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
-import com.github.panpf.assemblyadapter.pager.PagerAdapterItemPositionChangedHelper
+import com.github.panpf.assemblyadapter.pager.PagerAdapterRefreshHelper
 
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.ArrayFragmentStateAdapter' instead.",
@@ -33,12 +33,12 @@ class ArrayFragmentPagerAdapter : FragmentPagerAdapter {
 
     private var fragmentList: List<Fragment>
     private var pageTitleList: List<CharSequence>? = null
-    private val itemPositionChangedHelper = PagerAdapterItemPositionChangedHelper()
+    private var refreshHelper: PagerAdapterRefreshHelper? = null
 
     var isEnabledPositionNoneOnNotifyDataSetChanged: Boolean
-        get() = itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged
+        get() = refreshHelper != null
         set(enabled) {
-            itemPositionChangedHelper.isEnabledPositionNoneOnNotifyDataSetChanged = enabled
+            refreshHelper = if (enabled) PagerAdapterRefreshHelper() else null
         }
 
     constructor(
@@ -62,16 +62,15 @@ class ArrayFragmentPagerAdapter : FragmentPagerAdapter {
     }
 
     override fun notifyDataSetChanged() {
-        itemPositionChangedHelper.onNotifyDataSetChanged()
+        refreshHelper?.onNotifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
     override fun getItemPosition(item: Any): Int {
-        return if (itemPositionChangedHelper.isItemPositionChanged(item)) {
-            PagerAdapter.POSITION_NONE
-        } else {
-            super.getItemPosition(item)
+        if (refreshHelper?.isItemPositionChanged(item) == true) {
+            return POSITION_NONE
         }
+        return super.getItemPosition(item)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
