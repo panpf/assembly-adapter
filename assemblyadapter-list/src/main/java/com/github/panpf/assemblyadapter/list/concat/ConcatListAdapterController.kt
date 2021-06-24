@@ -13,264 +13,263 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter.list.concat
 
-package com.github.panpf.assemblyadapter.list.concat;
-
-import android.annotation.SuppressLint;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Preconditions;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import android.annotation.SuppressLint
+import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import java.util.*
 
 /**
- * All logic for the {@link ConcatListAdapter} is here so that we can clearly see a separation
+ * All logic for the [ConcatListAdapter] is here so that we can clearly see a separation
  * between an adapter implementation and merging logic.
  */
-class ConcatListAdapterController implements NestedListAdapterWrapper.Callback {
-    private final ConcatListAdapter mConcatAdapter;
+internal class ConcatListAdapterController(
+    private val mConcatAdapter: ConcatListAdapter,
+    config: ConcatListAdapter.Config
+) : NestedListAdapterWrapper.Callback {
 
     /**
      * Holds the mapping from the view type to the adapter which reported that type.
      */
-    private final ListViewTypeStorage mViewTypeStorage;
-
-    private final List<NestedListAdapterWrapper> mWrappers = new ArrayList<>();
+    private val mViewTypeStorage = if (config.isolateViewTypes) {
+        ListViewTypeStorage.IsolatedViewTypeStorage()
+    } else {
+        ListViewTypeStorage.SharedIdRangeViewTypeStorage()
+    }
+    private val mWrappers = ArrayList<NestedListAdapterWrapper>()
 
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
-    private ListWrapperAndLocalPosition mReusableHolder = new ListWrapperAndLocalPosition();
-
-    @NonNull
-    private final ConcatListAdapter.Config.StableIdMode mStableIdMode;
+    private var mReusableHolder = ListWrapperAndLocalPosition()
+    private val mStableIdMode: ConcatListAdapter.Config.StableIdMode = config.stableIdMode
 
     /**
      * This is where we keep stable ids, if supported
      */
-    private final ListStableIdStorage mStableIdStorage;
-
-    private int itemViewTypeCount = -1;
-
-    ConcatListAdapterController(
-            ConcatListAdapter concatAdapter,
-            ConcatListAdapter.Config config) {
-        mConcatAdapter = concatAdapter;
-
-        // setup view type handling
-        if (config.isolateViewTypes) {
-            mViewTypeStorage = new ListViewTypeStorage.IsolatedViewTypeStorage();
-        } else {
-            mViewTypeStorage = new ListViewTypeStorage.SharedIdRangeViewTypeStorage();
+    private var mStableIdStorage = when {
+        config.stableIdMode === ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS -> {
+            ListStableIdStorage.NoStableIdStorage()
         }
-
-        // setup stable id handling
-        mStableIdMode = config.stableIdMode;
-        if (config.stableIdMode == ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS) {
-            mStableIdStorage = new ListStableIdStorage.NoStableIdStorage();
-        } else if (config.stableIdMode == ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS) {
-            mStableIdStorage = new ListStableIdStorage.IsolatedStableIdStorage();
-        } else if (config.stableIdMode == ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS) {
-            mStableIdStorage = new ListStableIdStorage.SharedPoolStableIdStorage();
-        } else {
-            throw new IllegalArgumentException("unknown stable id mode");
+        config.stableIdMode === ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS -> {
+            ListStableIdStorage.IsolatedStableIdStorage()
+        }
+        config.stableIdMode === ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS -> {
+            ListStableIdStorage.SharedPoolStableIdStorage()
+        }
+        else -> {
+            throw IllegalArgumentException("unknown stable id mode")
         }
     }
 
-    @Nullable
-    private NestedListAdapterWrapper findWrapperFor(BaseAdapter adapter) {
-        final int index = indexOfWrapper(adapter);
-        if (index == -1) {
-            return null;
+    private var itemViewTypeCount = -1
+
+    // should we cache this as well ?
+    val totalCount: Int
+        get() {
+            // should we cache this as well ?
+            var total = 0
+            for (wrapper in mWrappers) {
+                total += wrapper.cachedItemCount
+            }
+            return total
         }
-        return mWrappers.get(index);
+
+    val copyOfAdapters: List<BaseAdapter>
+        get() {
+            if (mWrappers.isEmpty()) {
+                return emptyList()
+            }
+            val adapters: MutableList<BaseAdapter> = ArrayList(mWrappers.size)
+            for (wrapper in mWrappers) {
+                adapters.add(wrapper.adapter)
+            }
+            return adapters
+        }
+
+    private fun findWrapperFor(adapter: BaseAdapter): NestedListAdapterWrapper? {
+        val index = indexOfWrapper(adapter)
+        return if (index == -1) {
+            null
+        } else mWrappers[index]
     }
 
-    private int indexOfWrapper(BaseAdapter adapter) {
-        final int limit = mWrappers.size();
-        for (int i = 0; i < limit; i++) {
-            if (mWrappers.get(i).adapter == adapter) {
-                return i;
+    private fun indexOfWrapper(adapter: BaseAdapter): Int {
+        val limit = mWrappers.size
+        for (i in 0 until limit) {
+            if (mWrappers[i].adapter === adapter) {
+                return i
             }
         }
-        return -1;
+        return -1
     }
 
     /**
      * return true if added, false otherwise.
      *
-     * @see ConcatListAdapter#addAdapter(BaseAdapter)
+     * @see ConcatListAdapter.addAdapter
      */
-    boolean addAdapter(BaseAdapter adapter) {
-        return addAdapter(mWrappers.size(), adapter);
+    fun addAdapter(adapter: BaseAdapter): Boolean {
+        return addAdapter(mWrappers.size, adapter)
     }
 
     /**
      * return true if added, false otherwise.
      * throws exception if index is out of bounds
      *
-     * @see ConcatListAdapter#addAdapter(int, BaseAdapter)
+     * @see ConcatListAdapter.addAdapter
      */
     @SuppressLint("RestrictedApi")
-    boolean addAdapter(int index, BaseAdapter adapter) {
-        if (index < 0 || index > mWrappers.size()) {
-            throw new IndexOutOfBoundsException("Index must be between 0 and "
-                    + mWrappers.size() + ". Given:" + index);
+    fun addAdapter(index: Int, adapter: BaseAdapter): Boolean {
+        if (index < 0 || index > mWrappers.size) {
+            throw IndexOutOfBoundsException(
+                "Index must be between 0 and ${mWrappers.size}. Given:$index"
+            )
         }
         if (hasStableIds()) {
-            Preconditions.checkArgument(adapter.hasStableIds(),
-                    "All sub adapters must have stable ids when stable id mode "
-                            + "is ISOLATED_STABLE_IDS or SHARED_STABLE_IDS");
+            require(adapter.hasStableIds()) {
+                "All sub adapters must have stable ids when stable id mode is ISOLATED_STABLE_IDS or SHARED_STABLE_IDS"
+            }
         } else {
             if (adapter.hasStableIds()) {
-                Log.w(ConcatListAdapter.TAG, "Stable ids in the adapter will be ignored as the"
-                        + " ConcatListAdapter is configured not to have stable ids");
+                Log.w(
+                    ConcatListAdapter.TAG,
+                    "Stable ids in the adapter will be ignored as the ConcatListAdapter is configured not to have stable ids"
+                )
             }
         }
-        NestedListAdapterWrapper existing = findWrapperFor(adapter);
+        val existing = findWrapperFor(adapter)
         if (existing != null) {
-            return false;
+            return false
         }
-        NestedListAdapterWrapper wrapper = new NestedListAdapterWrapper(adapter, this,
-                mViewTypeStorage, mStableIdStorage.createStableIdLookup());
-        mWrappers.add(index, wrapper);
-        itemViewTypeCount = -1;
+        val wrapper = NestedListAdapterWrapper(
+            adapter, this,
+            mViewTypeStorage, mStableIdStorage.createStableIdLookup()
+        )
+        mWrappers.add(index, wrapper)
+        itemViewTypeCount = -1
         // new items, notify add for them
-        if (wrapper.getCachedItemCount() > 0) {
-            mConcatAdapter.notifyDataSetChanged();
+        if (wrapper.cachedItemCount > 0) {
+            mConcatAdapter.notifyDataSetChanged()
         }
-        return true;
+        return true
     }
 
-    boolean removeAdapter(BaseAdapter adapter) {
-        final int index = indexOfWrapper(adapter);
+    fun removeAdapter(adapter: BaseAdapter): Boolean {
+        val index = indexOfWrapper(adapter)
         if (index == -1) {
-            return false;
+            return false
         }
-        NestedListAdapterWrapper wrapper = mWrappers.get(index);
-        mWrappers.remove(index);
-        itemViewTypeCount = -1;
-        mConcatAdapter.notifyDataSetChanged();
-        wrapper.dispose();
-        return true;
+        val wrapper = mWrappers[index]
+        mWrappers.removeAt(index)
+        itemViewTypeCount = -1
+        mConcatAdapter.notifyDataSetChanged()
+        wrapper.dispose()
+        return true
     }
 
-    public long getItemId(int globalPosition) {
-        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
-        long globalItemId = wrapperAndPos.mWrapper.getItemId(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return globalItemId;
+    fun getItemId(globalPosition: Int): Long {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
+        val globalItemId = wrapperAndPos.mWrapper!!.getItemId(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return globalItemId
     }
 
-    @Override
-    public void onChanged(@NonNull NestedListAdapterWrapper wrapper) {
-        mConcatAdapter.notifyDataSetChanged();
+    override fun onChanged(wrapper: NestedListAdapterWrapper) {
+        mConcatAdapter.notifyDataSetChanged()
     }
 
-    public int getTotalCount() {
-        // should we cache this as well ?
-        int total = 0;
-        for (NestedListAdapterWrapper wrapper : mWrappers) {
-            total += wrapper.getCachedItemCount();
-        }
-        return total;
+    fun getItem(globalPosition: Int): Any? {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
+        val item = wrapperAndPos.mWrapper!!.adapter.getItem(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return item
     }
 
-    @Nullable
-    public Object getItem(int globalPosition) {
-        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
-        Object item = wrapperAndPos.mWrapper.getItem(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return item;
-    }
-
-    public int getItemViewTypeCount() {
+    fun getItemViewTypeCount(): Int {
         if (itemViewTypeCount == -1) {
-            itemViewTypeCount = 0;
-            for (NestedListAdapterWrapper mWrapper : mWrappers) {
-                itemViewTypeCount += mWrapper.getItemViewTypeCount();
+            itemViewTypeCount = 0
+            for (mWrapper in mWrappers) {
+                itemViewTypeCount += mWrapper.adapter.viewTypeCount
             }
         }
-        return itemViewTypeCount;
+        return itemViewTypeCount
     }
 
-    public int getItemViewType(int globalPosition) {
-        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
-        int itemViewType = wrapperAndPos.mWrapper.getItemViewType(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return itemViewType;
+    fun getItemViewType(globalPosition: Int): Int {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
+        val itemViewType = wrapperAndPos.mWrapper!!.getItemViewType(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return itemViewType
     }
 
-    @NonNull
-    public View getView(int globalPosition, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalPosition);
-        View itemView = wrapperAndPos.mWrapper.getView(wrapperAndPos.mLocalPosition, convertView, parent);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return itemView;
+    fun getView(globalPosition: Int, convertView: View?, parent: ViewGroup): View {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
+        val itemView =
+            wrapperAndPos.mWrapper!!.adapter.getView(
+                wrapperAndPos.mLocalPosition,
+                convertView,
+                parent
+            )
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return itemView
     }
 
-    public boolean hasStableIds() {
-        return mStableIdMode != ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS;
+    fun hasStableIds(): Boolean {
+        return mStableIdMode !== ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS
+    }
+
+    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<BaseAdapter, Int> {
+        var localPosition = globalPosition
+        for (wrapper in mWrappers) {
+            if (wrapper.cachedItemCount > localPosition) {
+                return wrapper.adapter to localPosition
+            }
+            localPosition -= wrapper.cachedItemCount
+        }
+        throw IllegalArgumentException("Cannot find local adapter for $globalPosition")
     }
 
     /**
-     * Always call {@link #releaseWrapperAndLocalPosition(ListWrapperAndLocalPosition)} when you are
+     * Always call [.releaseWrapperAndLocalPosition] when you are
      * done with it
      */
-    @NonNull
-    public ListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition, ListWrapperAndLocalPosition wrapperAndLocalPosition) {
-        int localPosition = globalPosition;
-        for (NestedListAdapterWrapper wrapper : mWrappers) {
-            if (wrapper.getCachedItemCount() > localPosition) {
-                wrapperAndLocalPosition.mWrapper = wrapper;
-                wrapperAndLocalPosition.mLocalPosition = localPosition;
-                break;
-            }
-            localPosition -= wrapper.getCachedItemCount();
-        }
-        if (wrapperAndLocalPosition.mWrapper == null) {
-            throw new IllegalArgumentException("Cannot find wrapper for " + globalPosition);
-        }
-        return wrapperAndLocalPosition;
-    }
-
-    /**
-     * Always call {@link #releaseWrapperAndLocalPosition(ListWrapperAndLocalPosition)} when you are
-     * done with it
-     */
-    @NonNull
-    public ListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition) {
-        ListWrapperAndLocalPosition result;
+    private fun findWrapperAndLocalPositionInternal(globalPosition: Int): ListWrapperAndLocalPosition {
+        val result: ListWrapperAndLocalPosition
         if (mReusableHolder.mInUse) {
-            result = new ListWrapperAndLocalPosition();
+            result = ListWrapperAndLocalPosition()
         } else {
-            mReusableHolder.mInUse = true;
-            result = mReusableHolder;
+            mReusableHolder.mInUse = true
+            result = mReusableHolder
         }
-        return findWrapperAndLocalPosition(globalPosition, result);
+        var localPosition = globalPosition
+        for (wrapper in mWrappers) {
+            if (wrapper.cachedItemCount > localPosition) {
+                result.mWrapper = wrapper
+                result.mLocalPosition = localPosition
+                break
+            }
+            localPosition -= wrapper.cachedItemCount
+        }
+        requireNotNull(result.mWrapper) { "Cannot find wrapper for $globalPosition" }
+        return result
     }
 
-    private void releaseWrapperAndLocalPosition(ListWrapperAndLocalPosition wrapperAndLocalPosition) {
-        wrapperAndLocalPosition.mInUse = false;
-        wrapperAndLocalPosition.mWrapper = null;
-        wrapperAndLocalPosition.mLocalPosition = -1;
-        mReusableHolder = wrapperAndLocalPosition;
+    private fun releaseWrapperAndLocalPosition(wrapperAndLocalPosition: ListWrapperAndLocalPosition) {
+        wrapperAndLocalPosition.mInUse = false
+        wrapperAndLocalPosition.mWrapper = null
+        wrapperAndLocalPosition.mLocalPosition = -1
+        mReusableHolder = wrapperAndLocalPosition
     }
 
-    @SuppressWarnings("MixedMutabilityReturnType")
-    public List<BaseAdapter> getCopyOfAdapters() {
-        if (mWrappers.isEmpty()) {
-            return Collections.emptyList();
-        }
-        List<BaseAdapter> adapters = new ArrayList<>(mWrappers.size());
-        for (NestedListAdapterWrapper wrapper : mWrappers) {
-            adapters.add(wrapper.adapter);
-        }
-        return adapters;
+    /**
+     * Helper class to hold onto wrapper and local position without allocating objects as this is
+     * a very common call.
+     */
+    class ListWrapperAndLocalPosition {
+        var mWrapper: NestedListAdapterWrapper? = null
+        var mLocalPosition = 0
+        var mInUse = false
     }
 }

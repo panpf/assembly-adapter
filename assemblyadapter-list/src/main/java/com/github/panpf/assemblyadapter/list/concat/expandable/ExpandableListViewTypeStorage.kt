@@ -13,186 +13,144 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter.list.concat.expandable
 
-package com.github.panpf.assemblyadapter.list.concat.expandable;
-
-import android.util.SparseArray;
-import android.util.SparseIntArray;
-
-import androidx.annotation.NonNull;
-
-import com.github.panpf.assemblyadapter.list.concat.ConcatListAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.util.SparseArray
+import android.util.SparseIntArray
+import java.util.*
 
 /**
- * Used by {@link ConcatListAdapter} to isolate view types between nested adapters, if necessary.
+ * Used by [ConcatExpandableListAdapter] to isolate view types between nested adapters, if necessary.
  */
 interface ExpandableListViewTypeStorage {
-    @NonNull
-    NestedExpandableListAdapterWrapper getWrapperForGlobalType(int globalViewType);
-
-    @NonNull
-    ViewTypeLookup createViewTypeWrapper(
-            @NonNull NestedExpandableListAdapterWrapper wrapper
-    );
+    fun getWrapperForGlobalType(globalViewType: Int): NestedExpandableListAdapterWrapper
+    fun createViewTypeWrapper(
+        wrapper: NestedExpandableListAdapterWrapper
+    ): ViewTypeLookup
 
     /**
-     * Api given to {@link NestedExpandableListAdapterWrapper}s.
+     * Api given to [NestedExpandableListAdapterWrapper]s.
      */
     interface ViewTypeLookup {
-        int localToGlobal(int localType);
-
-        int globalToLocal(int globalType);
-
-        void dispose();
+        fun localToGlobal(localType: Int): Int
+        fun globalToLocal(globalType: Int): Int
+        fun dispose()
     }
 
-    class SharedIdRangeViewTypeStorage implements ExpandableListViewTypeStorage {
+    class SharedIdRangeViewTypeStorage : ExpandableListViewTypeStorage {
         // we keep a list of nested wrappers here even though we only need 1 to create because
         // they might be removed.
-        SparseArray<List<NestedExpandableListAdapterWrapper>> mGlobalTypeToWrapper = new SparseArray<>();
-
-        @NonNull
-        @Override
-        public NestedExpandableListAdapterWrapper getWrapperForGlobalType(int globalViewType) {
-            List<NestedExpandableListAdapterWrapper> nestedExpandableAdapterWrappers = mGlobalTypeToWrapper.get(
-                    globalViewType);
-            if (nestedExpandableAdapterWrappers == null || nestedExpandableAdapterWrappers.isEmpty()) {
-                throw new IllegalArgumentException("Cannot find the wrapper for global view"
-                        + " type " + globalViewType);
+        var mGlobalTypeToWrapper = SparseArray<MutableList<NestedExpandableListAdapterWrapper>>()
+        override fun getWrapperForGlobalType(globalViewType: Int): NestedExpandableListAdapterWrapper {
+            val nestedExpandableAdapterWrappers: List<NestedExpandableListAdapterWrapper>? =
+                mGlobalTypeToWrapper[globalViewType]
+            require(!(nestedExpandableAdapterWrappers == null || nestedExpandableAdapterWrappers.isEmpty())) {
+                "Cannot find the wrapper for global view type $globalViewType"
             }
             // just return the first one since they are shared
-            return nestedExpandableAdapterWrappers.get(0);
+            return nestedExpandableAdapterWrappers[0]
         }
 
-        @NonNull
-        @Override
-        public ExpandableListViewTypeStorage.ViewTypeLookup createViewTypeWrapper(
-                @NonNull NestedExpandableListAdapterWrapper wrapper) {
-            return new WrapperViewTypeLookup(wrapper);
+        override fun createViewTypeWrapper(
+            wrapper: NestedExpandableListAdapterWrapper
+        ): ViewTypeLookup {
+            return WrapperViewTypeLookup(wrapper)
         }
 
-        void removeWrapper(@NonNull NestedExpandableListAdapterWrapper wrapper) {
-            for (int i = mGlobalTypeToWrapper.size() - 1; i >= 0; i--) {
-                List<NestedExpandableListAdapterWrapper> wrappers = mGlobalTypeToWrapper.valueAt(i);
+        fun removeWrapper(wrapper: NestedExpandableListAdapterWrapper) {
+            for (i in mGlobalTypeToWrapper.size() - 1 downTo 0) {
+                val wrappers = mGlobalTypeToWrapper.valueAt(i)
                 if (wrappers.remove(wrapper)) {
                     if (wrappers.isEmpty()) {
-                        mGlobalTypeToWrapper.removeAt(i);
+                        mGlobalTypeToWrapper.removeAt(i)
                     }
                 }
             }
         }
 
-        class WrapperViewTypeLookup implements ExpandableListViewTypeStorage.ViewTypeLookup {
-            final NestedExpandableListAdapterWrapper mWrapper;
-
-            WrapperViewTypeLookup(NestedExpandableListAdapterWrapper wrapper) {
-                mWrapper = wrapper;
-            }
-
-            @Override
-            public int localToGlobal(int localType) {
+        internal inner class WrapperViewTypeLookup(private val mWrapper: NestedExpandableListAdapterWrapper) :
+            ViewTypeLookup {
+            override fun localToGlobal(localType: Int): Int {
                 // register it first
-                List<NestedExpandableListAdapterWrapper> wrappers = mGlobalTypeToWrapper.get(
-                        localType);
-                if (wrappers == null) {
-                    wrappers = new ArrayList<>();
-                    mGlobalTypeToWrapper.put(localType, wrappers);
-                }
+                val wrappers = mGlobalTypeToWrapper[localType]
+                    ?: ArrayList<NestedExpandableListAdapterWrapper>().apply {
+                        mGlobalTypeToWrapper.put(localType, this)
+                    }
                 if (!wrappers.contains(mWrapper)) {
-                    wrappers.add(mWrapper);
+                    wrappers.add(mWrapper)
                 }
-                return localType;
+                return localType
             }
 
-            @Override
-            public int globalToLocal(int globalType) {
-                return globalType;
+            override fun globalToLocal(globalType: Int): Int {
+                return globalType
             }
 
-            @Override
-            public void dispose() {
-                removeWrapper(mWrapper);
+            override fun dispose() {
+                removeWrapper(mWrapper)
             }
         }
     }
 
-    class IsolatedViewTypeStorage implements ExpandableListViewTypeStorage {
-        SparseArray<NestedExpandableListAdapterWrapper> mGlobalTypeToWrapper = new SparseArray<>();
+    class IsolatedViewTypeStorage : ExpandableListViewTypeStorage {
 
-        int mNextViewType = 0;
+        private var mGlobalTypeToWrapper = SparseArray<NestedExpandableListAdapterWrapper>()
+        private var mNextViewType = 0
 
-        int obtainViewType(NestedExpandableListAdapterWrapper wrapper) {
-            int nextId = mNextViewType++;
-            mGlobalTypeToWrapper.put(nextId, wrapper);
-            return nextId;
+        fun obtainViewType(wrapper: NestedExpandableListAdapterWrapper): Int {
+            val nextId = mNextViewType++
+            mGlobalTypeToWrapper.put(nextId, wrapper)
+            return nextId
         }
 
-        @NonNull
-        @Override
-        public NestedExpandableListAdapterWrapper getWrapperForGlobalType(int globalViewType) {
-            NestedExpandableListAdapterWrapper wrapper = mGlobalTypeToWrapper.get(
-                    globalViewType);
-            if (wrapper == null) {
-                throw new IllegalArgumentException("Cannot find the wrapper for global"
-                        + " view type " + globalViewType);
-            }
-            return wrapper;
+        override fun getWrapperForGlobalType(globalViewType: Int): NestedExpandableListAdapterWrapper {
+            return mGlobalTypeToWrapper[globalViewType]
+                ?: throw IllegalArgumentException(
+                    "Cannot find the wrapper for global view type $globalViewType"
+                )
         }
 
-        @Override
-        @NonNull
-        public ExpandableListViewTypeStorage.ViewTypeLookup createViewTypeWrapper(
-                @NonNull NestedExpandableListAdapterWrapper wrapper) {
-            return new WrapperViewTypeLookup(wrapper);
+        override fun createViewTypeWrapper(
+            wrapper: NestedExpandableListAdapterWrapper
+        ): ViewTypeLookup {
+            return WrapperViewTypeLookup(wrapper)
         }
 
-        void removeWrapper(@NonNull NestedExpandableListAdapterWrapper wrapper) {
-            for (int i = mGlobalTypeToWrapper.size() - 1; i >= 0; i--) {
-                NestedExpandableListAdapterWrapper existingWrapper = mGlobalTypeToWrapper.valueAt(i);
-                if (existingWrapper == wrapper) {
-                    mGlobalTypeToWrapper.removeAt(i);
+        fun removeWrapper(wrapper: NestedExpandableListAdapterWrapper) {
+            for (i in mGlobalTypeToWrapper.size() - 1 downTo 0) {
+                val existingWrapper = mGlobalTypeToWrapper.valueAt(i)
+                if (existingWrapper === wrapper) {
+                    mGlobalTypeToWrapper.removeAt(i)
                 }
             }
         }
 
-        class WrapperViewTypeLookup implements ExpandableListViewTypeStorage.ViewTypeLookup {
-            private SparseIntArray mLocalToGlobalMapping = new SparseIntArray(1);
-            private SparseIntArray mGlobalToLocalMapping = new SparseIntArray(1);
-            final NestedExpandableListAdapterWrapper mWrapper;
-
-            WrapperViewTypeLookup(NestedExpandableListAdapterWrapper wrapper) {
-                mWrapper = wrapper;
-            }
-
-            @Override
-            public int localToGlobal(int localType) {
-                int index = mLocalToGlobalMapping.indexOfKey(localType);
+        internal inner class WrapperViewTypeLookup(private val mWrapper: NestedExpandableListAdapterWrapper) :
+            ViewTypeLookup {
+            private val mLocalToGlobalMapping = SparseIntArray(1)
+            private val mGlobalToLocalMapping = SparseIntArray(1)
+            override fun localToGlobal(localType: Int): Int {
+                val index = mLocalToGlobalMapping.indexOfKey(localType)
                 if (index > -1) {
-                    return mLocalToGlobalMapping.valueAt(index);
+                    return mLocalToGlobalMapping.valueAt(index)
                 }
                 // get a new key.
-                int globalType = obtainViewType(mWrapper);
-                mLocalToGlobalMapping.put(localType, globalType);
-                mGlobalToLocalMapping.put(globalType, localType);
-                return globalType;
+                val globalType = obtainViewType(mWrapper)
+                mLocalToGlobalMapping.put(localType, globalType)
+                mGlobalToLocalMapping.put(globalType, localType)
+                return globalType
             }
 
-            @Override
-            public int globalToLocal(int globalType) {
-                int index = mGlobalToLocalMapping.indexOfKey(globalType);
-                if (index < 0) {
-                    throw new IllegalStateException("requested global type " + globalType + " does"
-                            + " not belong to the adapter:" + mWrapper.adapter);
+            override fun globalToLocal(globalType: Int): Int {
+                val index = mGlobalToLocalMapping.indexOfKey(globalType)
+                check(index >= 0) {
+                    "requested global type $globalType does not belong to the adapter:${mWrapper.adapter}"
                 }
-                return mGlobalToLocalMapping.valueAt(index);
+                return mGlobalToLocalMapping.valueAt(index)
             }
 
-            @Override
-            public void dispose() {
-                removeWrapper(mWrapper);
+            override fun dispose() {
+                removeWrapper(mWrapper)
             }
         }
     }

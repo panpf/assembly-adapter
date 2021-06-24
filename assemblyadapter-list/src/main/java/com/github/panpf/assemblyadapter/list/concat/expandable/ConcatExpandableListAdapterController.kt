@@ -13,334 +13,347 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter.list.concat.expandable
 
-package com.github.panpf.assemblyadapter.list.concat.expandable;
-
-import android.annotation.SuppressLint;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Preconditions;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import android.annotation.SuppressLint
+import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseExpandableListAdapter
+import java.util.*
 
 /**
- * All logic for the {@link ConcatExpandableListAdapter} is here so that we can clearly see a separation
+ * All logic for the [ConcatExpandableListAdapter] is here so that we can clearly see a separation
  * between an adapter implementation and merging logic.
  */
-class ConcatExpandableListAdapterController implements NestedExpandableListAdapterWrapper.Callback {
-    private final ConcatExpandableListAdapter mConcatAdapter;
+internal class ConcatExpandableListAdapterController(
+    private val mConcatAdapter: ConcatExpandableListAdapter,
+    config: ConcatExpandableListAdapter.Config
+) : NestedExpandableListAdapterWrapper.Callback {
 
     /**
      * Holds the mapping from the view type to the adapter which reported that type.
      */
-    private final ExpandableListViewTypeStorage mViewTypeStorage;
-
-    private final List<NestedExpandableListAdapterWrapper> mWrappers = new ArrayList<>();
+    private val mViewTypeStorage = if (config.isolateViewTypes) {
+        ExpandableListViewTypeStorage.IsolatedViewTypeStorage()
+    } else {
+        ExpandableListViewTypeStorage.SharedIdRangeViewTypeStorage()
+    }
+    private val mWrappers = ArrayList<NestedExpandableListAdapterWrapper>()
 
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
-    private ExpandableListWrapperAndLocalPosition mReusableHolder = new ExpandableListWrapperAndLocalPosition();
-
-    @NonNull
-    private final ConcatExpandableListAdapter.Config.StableIdMode mStableIdMode;
+    private var mReusableHolder = ExpandableListWrapperAndLocalPosition()
+    private val mStableIdMode = config.stableIdMode
 
     /**
      * This is where we keep stable ids, if supported
      */
-    private final ExpandableListStableIdStorage mStableIdStorage;
-
-    private int groupItemViewTypeCount = -1;
-    private int childItemViewTypeCount = -1;
-
-    ConcatExpandableListAdapterController(
-            ConcatExpandableListAdapter concatAdapter,
-            ConcatExpandableListAdapter.Config config) {
-        mConcatAdapter = concatAdapter;
-
-        // setup view type handling
-        if (config.isolateViewTypes) {
-            mViewTypeStorage = new ExpandableListViewTypeStorage.IsolatedViewTypeStorage();
-        } else {
-            mViewTypeStorage = new ExpandableListViewTypeStorage.SharedIdRangeViewTypeStorage();
+    private var mStableIdStorage = when {
+        config.stableIdMode === ConcatExpandableListAdapter.Config.StableIdMode.NO_STABLE_IDS -> {
+            ExpandableListStableIdStorage.NoStableIdStorage()
         }
-
-        // setup stable id handling
-        mStableIdMode = config.stableIdMode;
-        if (config.stableIdMode == ConcatExpandableListAdapter.Config.StableIdMode.NO_STABLE_IDS) {
-            mStableIdStorage = new ExpandableListStableIdStorage.NoStableIdStorage();
-        } else if (config.stableIdMode == ConcatExpandableListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS) {
-            mStableIdStorage = new ExpandableListStableIdStorage.IsolatedStableIdStorage();
-        } else if (config.stableIdMode == ConcatExpandableListAdapter.Config.StableIdMode.SHARED_STABLE_IDS) {
-            mStableIdStorage = new ExpandableListStableIdStorage.SharedPoolStableIdStorage();
-        } else {
-            throw new IllegalArgumentException("unknown stable id mode");
+        config.stableIdMode === ConcatExpandableListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS -> {
+            ExpandableListStableIdStorage.IsolatedStableIdStorage()
+        }
+        config.stableIdMode === ConcatExpandableListAdapter.Config.StableIdMode.SHARED_STABLE_IDS -> {
+            ExpandableListStableIdStorage.SharedPoolStableIdStorage()
+        }
+        else -> {
+            throw IllegalArgumentException("unknown stable id mode")
         }
     }
 
-    @Nullable
-    private NestedExpandableListAdapterWrapper findWrapperFor(BaseExpandableListAdapter adapter) {
-        final int index = indexOfWrapper(adapter);
-        if (index == -1) {
-            return null;
+    private var groupItemViewTypeCount = -1
+    private var childItemViewTypeCount = -1
+
+    // should we cache this as well ?
+    val groupCount: Int
+        get() {
+            // should we cache this as well ?
+            var total = 0
+            for (wrapper in mWrappers) {
+                total += wrapper.cachedItemCount
+            }
+            return total
         }
-        return mWrappers.get(index);
+
+    val groupTypeCount: Int
+        get() {
+            if (groupItemViewTypeCount == -1) {
+                groupItemViewTypeCount = 0
+                for (mWrapper in mWrappers) {
+                    groupItemViewTypeCount += mWrapper.adapter.groupTypeCount
+                }
+            }
+            return groupItemViewTypeCount
+        }
+
+    val childTypeCount: Int
+        get() {
+            if (childItemViewTypeCount == -1) {
+                childItemViewTypeCount = 0
+                for (mWrapper in mWrappers) {
+                    childItemViewTypeCount += mWrapper.adapter.childTypeCount
+                }
+            }
+            return childItemViewTypeCount
+        }
+
+    val copyOfAdapters: List<BaseExpandableListAdapter>
+        get() {
+            if (mWrappers.isEmpty()) {
+                return emptyList()
+            }
+            val adapters: MutableList<BaseExpandableListAdapter> = ArrayList(mWrappers.size)
+            for (wrapper in mWrappers) {
+                adapters.add(wrapper.adapter)
+            }
+            return adapters
+        }
+
+    private fun findWrapperFor(adapter: BaseExpandableListAdapter): NestedExpandableListAdapterWrapper? {
+        val index = indexOfWrapper(adapter)
+        return if (index == -1) {
+            null
+        } else mWrappers[index]
     }
 
-    private int indexOfWrapper(BaseExpandableListAdapter adapter) {
-        final int limit = mWrappers.size();
-        for (int i = 0; i < limit; i++) {
-            if (mWrappers.get(i).adapter == adapter) {
-                return i;
+    private fun indexOfWrapper(adapter: BaseExpandableListAdapter): Int {
+        val limit = mWrappers.size
+        for (i in 0 until limit) {
+            if (mWrappers[i].adapter === adapter) {
+                return i
             }
         }
-        return -1;
+        return -1
     }
 
     /**
      * return true if added, false otherwise.
      *
-     * @see ConcatExpandableListAdapter#addAdapter(BaseExpandableListAdapter)
+     * @see ConcatExpandableListAdapter.addAdapter
      */
-    boolean addAdapter(BaseExpandableListAdapter adapter) {
-        return addAdapter(mWrappers.size(), adapter);
+    fun addAdapter(adapter: BaseExpandableListAdapter): Boolean {
+        return addAdapter(mWrappers.size, adapter)
     }
 
     /**
      * return true if added, false otherwise.
      * throws exception if index is out of bounds
      *
-     * @see ConcatExpandableListAdapter#addAdapter(int, BaseExpandableListAdapter)
+     * @see ConcatExpandableListAdapter.addAdapter
      */
-    @SuppressLint({"RestrictedApi", "LongLogTag"})
-    boolean addAdapter(int index, BaseExpandableListAdapter adapter) {
-        if (index < 0 || index > mWrappers.size()) {
-            throw new IndexOutOfBoundsException("Index must be between 0 and "
-                    + mWrappers.size() + ". Given:" + index);
+    @SuppressLint("RestrictedApi", "LongLogTag")
+    fun addAdapter(index: Int, adapter: BaseExpandableListAdapter): Boolean {
+        if (index < 0 || index > mWrappers.size) {
+            throw IndexOutOfBoundsException(
+                "Index must be between 0 and ${mWrappers.size}. Given:$index"
+            )
         }
         if (hasStableIds()) {
-            Preconditions.checkArgument(adapter.hasStableIds(),
-                    "All sub adapters must have stable ids when stable id mode "
-                            + "is ISOLATED_STABLE_IDS or SHARED_STABLE_IDS");
+            require(adapter.hasStableIds()) {
+                "All sub adapters must have stable ids when stable id mode is ISOLATED_STABLE_IDS or SHARED_STABLE_IDS"
+            }
         } else {
             if (adapter.hasStableIds()) {
-                Log.w(ConcatExpandableListAdapter.TAG, "Stable ids in the adapter will be ignored as the"
-                        + " ConcatExpandableListAdapter is configured not to have stable ids");
+                Log.w(
+                    ConcatExpandableListAdapter.TAG,
+                    "Stable ids in the adapter will be ignored as the ConcatExpandableListAdapter is configured not to have stable ids"
+                )
             }
         }
-        NestedExpandableListAdapterWrapper existing = findWrapperFor(adapter);
+        val existing = findWrapperFor(adapter)
         if (existing != null) {
-            return false;
+            return false
         }
-        NestedExpandableListAdapterWrapper wrapper = new NestedExpandableListAdapterWrapper(adapter, this,
-                mViewTypeStorage, mStableIdStorage.createStableIdLookup(), mStableIdStorage.createStableIdLookup());
-        mWrappers.add(index, wrapper);
-        groupItemViewTypeCount = -1;
-        childItemViewTypeCount = -1;
+        val wrapper = NestedExpandableListAdapterWrapper(
+            adapter,
+            this,
+            mViewTypeStorage,
+            mStableIdStorage.createStableIdLookup(),
+            mStableIdStorage.createStableIdLookup()
+        )
+        mWrappers.add(index, wrapper)
+        groupItemViewTypeCount = -1
+        childItemViewTypeCount = -1
         // new items, notify add for them
-        if (wrapper.getCachedItemCount() > 0) {
-            mConcatAdapter.notifyDataSetChanged();
+        if (wrapper.cachedItemCount > 0) {
+            mConcatAdapter.notifyDataSetChanged()
         }
-        return true;
+        return true
     }
 
-    boolean removeAdapter(BaseExpandableListAdapter adapter) {
-        final int index = indexOfWrapper(adapter);
+    fun removeAdapter(adapter: BaseExpandableListAdapter): Boolean {
+        val index = indexOfWrapper(adapter)
         if (index == -1) {
-            return false;
+            return false
         }
-        NestedExpandableListAdapterWrapper wrapper = mWrappers.get(index);
-        mWrappers.remove(index);
-        groupItemViewTypeCount = -1;
-        childItemViewTypeCount = -1;
-        mConcatAdapter.notifyDataSetChanged();
-        wrapper.dispose();
-        return true;
+        val wrapper = mWrappers[index]
+        mWrappers.removeAt(index)
+        groupItemViewTypeCount = -1
+        childItemViewTypeCount = -1
+        mConcatAdapter.notifyDataSetChanged()
+        wrapper.dispose()
+        return true
     }
 
-    @Override
-    public void onChanged(@NonNull NestedExpandableListAdapterWrapper wrapper) {
-        mConcatAdapter.notifyDataSetChanged();
+    override fun onChanged(wrapper: NestedExpandableListAdapterWrapper) {
+        mConcatAdapter.notifyDataSetChanged()
     }
 
-    public int getGroupCount() {
-        // should we cache this as well ?
-        int total = 0;
-        for (NestedExpandableListAdapterWrapper wrapper : mWrappers) {
-            total += wrapper.getCachedItemCount();
-        }
-        return total;
+    fun getGroup(globalGroupPosition: Int): Any? {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val group = wrapperAndPos.mWrapper!!.adapter.getGroup(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return group
     }
 
-    @Nullable
-    public Object getGroup(int globalGroupPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        Object group = wrapperAndPos.mWrapper.getGroup(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return group;
+    fun getGroupId(globalGroupPosition: Int): Long {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val globalGroupId = wrapperAndPos.mWrapper!!.getGroupId(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return globalGroupId
     }
 
-    public long getGroupId(int globalGroupPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        long globalGroupId = wrapperAndPos.mWrapper.getGroupId(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return globalGroupId;
+    fun getGroupType(globalGroupPosition: Int): Int {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val groupType = wrapperAndPos.mWrapper!!.getGroupType(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return groupType
     }
 
-    public int getGroupTypeCount() {
-        if (groupItemViewTypeCount == -1) {
-            groupItemViewTypeCount = 0;
-            for (NestedExpandableListAdapterWrapper mWrapper : mWrappers) {
-                groupItemViewTypeCount += mWrapper.getGroupTypeCount();
+    fun getGroupView(
+        globalGroupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
+    ): View {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val groupView = wrapperAndPos.mWrapper!!.adapter.getGroupView(
+            wrapperAndPos.mLocalPosition, isExpanded, convertView, parent
+        )
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return groupView
+    }
+
+    fun getChildrenCount(globalGroupPosition: Int): Int {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val childrenCount =
+            wrapperAndPos.mWrapper!!.adapter.getChildrenCount(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return childrenCount
+    }
+
+    fun getChild(globalGroupPosition: Int, childPosition: Int): Any? {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val group =
+            wrapperAndPos.mWrapper!!.adapter.getChild(wrapperAndPos.mLocalPosition, childPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return group
+    }
+
+    fun getChildId(globalGroupPosition: Int, childPosition: Int): Long {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val globalChildId =
+            wrapperAndPos.mWrapper!!.getChildId(wrapperAndPos.mLocalPosition, childPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return globalChildId
+    }
+
+    fun getChildType(globalGroupPosition: Int, childPosition: Int): Int {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val childType =
+            wrapperAndPos.mWrapper!!.getChildType(wrapperAndPos.mLocalPosition, childPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return childType
+    }
+
+    fun getChildView(
+        globalGroupPosition: Int, childPosition: Int, isLastChild: Boolean,
+        convertView: View?, parent: ViewGroup
+    ): View {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val childView = wrapperAndPos.mWrapper!!.adapter.getChildView(
+            wrapperAndPos.mLocalPosition, childPosition, isLastChild, convertView, parent
+        )
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return childView
+    }
+
+    fun isChildSelectable(globalGroupPosition: Int, childPosition: Int): Boolean {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val isChildSelectable =
+            wrapperAndPos.mWrapper!!.adapter.isChildSelectable(
+                wrapperAndPos.mLocalPosition,
+                childPosition
+            )
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+        return isChildSelectable
+    }
+
+    fun onGroupCollapsed(globalGroupPosition: Int) {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        wrapperAndPos.mWrapper!!.adapter.onGroupCollapsed(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+    }
+
+    fun onGroupExpanded(globalGroupPosition: Int) {
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        wrapperAndPos.mWrapper!!.adapter.onGroupExpanded(wrapperAndPos.mLocalPosition)
+        releaseWrapperAndLocalPosition(wrapperAndPos)
+    }
+
+    fun hasStableIds(): Boolean {
+        return mStableIdMode !== ConcatExpandableListAdapter.Config.StableIdMode.NO_STABLE_IDS
+    }
+
+    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<BaseExpandableListAdapter, Int> {
+        var localPosition = globalPosition
+        for (wrapper in mWrappers) {
+            if (wrapper.cachedItemCount > localPosition) {
+                return wrapper.adapter to localPosition
             }
+            localPosition -= wrapper.cachedItemCount
         }
-        return groupItemViewTypeCount;
-    }
-
-    public int getGroupType(int globalGroupPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        int groupType = wrapperAndPos.mWrapper.getGroupType(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return groupType;
-    }
-
-    public View getGroupView(int globalGroupPosition, boolean isExpanded, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        View groupView = wrapperAndPos.mWrapper.getGroupView(wrapperAndPos.mLocalPosition, isExpanded, convertView, parent);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return groupView;
-    }
-
-
-    public int getChildrenCount(int globalGroupPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        int childrenCount = wrapperAndPos.mWrapper.getChildrenCount(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return childrenCount;
-    }
-
-    @Nullable
-    public Object getChild(int globalGroupPosition, int childPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        Object group = wrapperAndPos.mWrapper.getChild(wrapperAndPos.mLocalPosition, childPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return group;
-    }
-
-    public long getChildId(int globalGroupPosition, int childPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        long globalChildId = wrapperAndPos.mWrapper.getChildId(wrapperAndPos.mLocalPosition, childPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return globalChildId;
-    }
-
-    public int getChildTypeCount() {
-        if (childItemViewTypeCount == -1) {
-            childItemViewTypeCount = 0;
-            for (NestedExpandableListAdapterWrapper mWrapper : mWrappers) {
-                childItemViewTypeCount += mWrapper.getChildTypeCount();
-            }
-        }
-        return childItemViewTypeCount;
-    }
-
-    public int getChildType(int globalGroupPosition, int childPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        int childType = wrapperAndPos.mWrapper.getChildType(wrapperAndPos.mLocalPosition, childPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return childType;
-    }
-
-    public View getChildView(int globalGroupPosition, int childPosition, boolean isLastChild, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        View childView = wrapperAndPos.mWrapper.getChildView(wrapperAndPos.mLocalPosition, childPosition, isLastChild, convertView, parent);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return childView;
-    }
-
-    public boolean isChildSelectable(int globalGroupPosition, int childPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        boolean isChildSelectable = wrapperAndPos.mWrapper.isChildSelectable(wrapperAndPos.mLocalPosition, childPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-        return isChildSelectable;
-    }
-
-    public void onGroupCollapsed(int globalGroupPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        wrapperAndPos.mWrapper.onGroupCollapsed(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-    }
-
-    public void onGroupExpanded(int globalGroupPosition) {
-        ExpandableListWrapperAndLocalPosition wrapperAndPos = findWrapperAndLocalPosition(globalGroupPosition);
-        wrapperAndPos.mWrapper.onGroupExpanded(wrapperAndPos.mLocalPosition);
-        releaseWrapperAndLocalPosition(wrapperAndPos);
-    }
-
-    public boolean hasStableIds() {
-        return mStableIdMode != ConcatExpandableListAdapter.Config.StableIdMode.NO_STABLE_IDS;
-    }
-
-
-    /**
-     * Always call {@link #releaseWrapperAndLocalPosition(ExpandableListWrapperAndLocalPosition)} when you are
-     * done with it
-     */
-    @NonNull
-    public ExpandableListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalPosition, ExpandableListWrapperAndLocalPosition wrapperAndLocalPosition) {
-        int localPosition = globalPosition;
-        for (NestedExpandableListAdapterWrapper wrapper : mWrappers) {
-            if (wrapper.getCachedItemCount() > localPosition) {
-                wrapperAndLocalPosition.mWrapper = wrapper;
-                wrapperAndLocalPosition.mLocalPosition = localPosition;
-                break;
-            }
-            localPosition -= wrapper.getCachedItemCount();
-        }
-        if (wrapperAndLocalPosition.mWrapper == null) {
-            throw new IllegalArgumentException("Cannot find wrapper for " + globalPosition);
-        }
-        return wrapperAndLocalPosition;
+        throw IllegalArgumentException("Cannot find local adapter for $globalPosition")
     }
 
     /**
-     * Always call {@link #releaseWrapperAndLocalPosition(ExpandableListWrapperAndLocalPosition)} when you are
+     * Always call [.releaseWrapperAndLocalPosition] when you are
      * done with it
      */
-    @NonNull
-    public ExpandableListWrapperAndLocalPosition findWrapperAndLocalPosition(int globalGroupPosition) {
-        ExpandableListWrapperAndLocalPosition result;
+    private fun findWrapperAndLocalPositionInternal(globalGroupPosition: Int): ExpandableListWrapperAndLocalPosition {
+        val result: ExpandableListWrapperAndLocalPosition
         if (mReusableHolder.mInUse) {
-            result = new ExpandableListWrapperAndLocalPosition();
+            result = ExpandableListWrapperAndLocalPosition()
         } else {
-            mReusableHolder.mInUse = true;
-            result = mReusableHolder;
+            mReusableHolder.mInUse = true
+            result = mReusableHolder
         }
-        return findWrapperAndLocalPosition(globalGroupPosition, result);
+        var localPosition = globalGroupPosition
+        for (wrapper in mWrappers) {
+            if (wrapper.cachedItemCount > localPosition) {
+                result.mWrapper = wrapper
+                result.mLocalPosition = localPosition
+                break
+            }
+            localPosition -= wrapper.cachedItemCount
+        }
+        requireNotNull(result.mWrapper) { "Cannot find wrapper for $globalGroupPosition" }
+        return result
     }
 
-    private void releaseWrapperAndLocalPosition(ExpandableListWrapperAndLocalPosition wrapperAndLocalPosition) {
-        wrapperAndLocalPosition.mInUse = false;
-        wrapperAndLocalPosition.mWrapper = null;
-        wrapperAndLocalPosition.mLocalPosition = -1;
-        mReusableHolder = wrapperAndLocalPosition;
+    private fun releaseWrapperAndLocalPosition(wrapperAndLocalPosition: ExpandableListWrapperAndLocalPosition) {
+        wrapperAndLocalPosition.mInUse = false
+        wrapperAndLocalPosition.mWrapper = null
+        wrapperAndLocalPosition.mLocalPosition = -1
+        mReusableHolder = wrapperAndLocalPosition
     }
 
-    @NonNull
-    @SuppressWarnings("MixedMutabilityReturnType")
-    public List<BaseExpandableListAdapter> getCopyOfAdapters() {
-        if (mWrappers.isEmpty()) {
-            return Collections.emptyList();
-        }
-        List<BaseExpandableListAdapter> adapters = new ArrayList<>(mWrappers.size());
-        for (NestedExpandableListAdapterWrapper wrapper : mWrappers) {
-            adapters.add(wrapper.adapter);
-        }
-        return adapters;
+    /**
+     * Helper class to hold onto wrapper and local position without allocating objects as this is
+     * a very common call.
+     */
+    class ExpandableListWrapperAndLocalPosition {
+        var mWrapper: NestedExpandableListAdapterWrapper? = null
+        var mLocalPosition = 0
+        var mInUse = false
     }
 }

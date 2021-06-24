@@ -13,61 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter.list.concat
 
-package com.github.panpf.assemblyadapter.list.concat;
-
-import androidx.annotation.NonNull;
-import androidx.collection.LongSparseArray;
+import androidx.collection.LongSparseArray
 
 /**
- * Used by {@link ConcatListAdapter} to isolate item ids between nested adapters, if necessary.
+ * Used by [ConcatListAdapter] to isolate item ids between nested adapters, if necessary.
  */
-interface ListStableIdStorage {
-    @NonNull
-    StableIdLookup createStableIdLookup();
+internal interface ListStableIdStorage {
+    fun createStableIdLookup(): StableIdLookup
 
     /**
-     * Interface that provides {@link NestedListAdapterWrapper}s a way to map their local stable ids
-     * into global stable ids, based on the configuration of the {@link ConcatListAdapter}.
+     * Interface that provides [NestedListAdapterWrapper]s a way to map their local stable ids
+     * into global stable ids, based on the configuration of the [ConcatListAdapter].
      */
     interface StableIdLookup {
-        long localToGlobal(long localId);
+        fun localToGlobal(localId: Long): Long
     }
 
     /**
-     * Returns {@link ConcatListAdapter#NO_ID} for all positions. In other words, stable ids are not
+     * Returns [ConcatListAdapter.NO_ID] for all positions. In other words, stable ids are not
      * supported.
      */
-    class NoStableIdStorage implements ListStableIdStorage {
-        private final StableIdLookup mNoIdLookup = new StableIdLookup() {
-            @Override
-            public long localToGlobal(long localId) {
-                return ConcatListAdapter.NO_ID;
+    class NoStableIdStorage : ListStableIdStorage {
+        private val mNoIdLookup: StableIdLookup = object : StableIdLookup {
+            override fun localToGlobal(localId: Long): Long {
+                return ConcatListAdapter.NO_ID
             }
-        };
+        }
 
-        @NonNull
-        @Override
-        public StableIdLookup createStableIdLookup() {
-            return mNoIdLookup;
+        override fun createStableIdLookup(): StableIdLookup {
+            return mNoIdLookup
         }
     }
 
     /**
      * A pass-through implementation that reports the stable id in sub adapters as is.
      */
-    class SharedPoolStableIdStorage implements ListStableIdStorage {
-        private final StableIdLookup mSameIdLookup = new StableIdLookup() {
-            @Override
-            public long localToGlobal(long localId) {
-                return localId;
+    class SharedPoolStableIdStorage : ListStableIdStorage {
+        private val mSameIdLookup: StableIdLookup = object : StableIdLookup {
+            override fun localToGlobal(localId: Long): Long {
+                return localId
             }
-        };
+        }
 
-        @NonNull
-        @Override
-        public StableIdLookup createStableIdLookup() {
-            return mSameIdLookup;
+        override fun createStableIdLookup(): StableIdLookup {
+            return mSameIdLookup
         }
     }
 
@@ -76,30 +67,25 @@ interface ListStableIdStorage {
      * each-other. It keeps a mapping for each adapter from its local stable ids to a global domain
      * and always replaces the local id w/ a globally available ID to be consistent.
      */
-    class IsolatedStableIdStorage implements ListStableIdStorage {
-        long mNextStableId = 0;
-
-        long obtainId() {
-            return mNextStableId++;
+    class IsolatedStableIdStorage : ListStableIdStorage {
+        var mNextStableId: Long = 0
+        fun obtainId(): Long {
+            return mNextStableId++
         }
 
-        @NonNull
-        @Override
-        public StableIdLookup createStableIdLookup() {
-            return new WrapperStableIdLookup();
+        override fun createStableIdLookup(): StableIdLookup {
+            return WrapperStableIdLookup()
         }
 
-        class WrapperStableIdLookup implements StableIdLookup {
-            private final LongSparseArray<Long> mLocalToGlobalLookup = new LongSparseArray<>();
-
-            @Override
-            public long localToGlobal(long localId) {
-                Long globalId = mLocalToGlobalLookup.get(localId);
+        internal inner class WrapperStableIdLookup : StableIdLookup {
+            private val mLocalToGlobalLookup = LongSparseArray<Long>()
+            override fun localToGlobal(localId: Long): Long {
+                var globalId = mLocalToGlobalLookup[localId]
                 if (globalId == null) {
-                    globalId = obtainId();
-                    mLocalToGlobalLookup.put(localId, globalId);
+                    globalId = obtainId()
+                    mLocalToGlobalLookup.put(localId, globalId)
                 }
-                return globalId;
+                return globalId
             }
         }
     }

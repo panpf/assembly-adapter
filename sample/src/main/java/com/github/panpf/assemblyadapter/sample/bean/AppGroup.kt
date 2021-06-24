@@ -1,7 +1,7 @@
 package com.github.panpf.assemblyadapter.sample.bean
 
 import android.os.Parcelable
-import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableGroup
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.recycler.paging.DiffKey
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AppGroup(
     val title: String, val appList: List<AppInfo>
-) : AssemblyExpandableGroup, DiffKey, Parcelable {
+) : ExpandableGroup, DiffKey, Parcelable {
 
     @IgnoredOnParcel
     override val diffKey: String = title

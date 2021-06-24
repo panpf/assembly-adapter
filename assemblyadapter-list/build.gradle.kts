@@ -31,7 +31,6 @@ android {
 
 dependencies {
     api(project(":assemblyadapter-common-item"))
-    api("androidx.core:core:${property("ANDROIDX_CORE_KTX")}")
     api("androidx.collection:collection:${property("ANDROIDX_COLLECTION")}")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
 

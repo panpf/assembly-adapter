@@ -88,13 +88,13 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     override fun getChildrenCount(groupPosition: Int): Int {
         val group = getGroup(groupPosition)
-        return if (group is AssemblyExpandableGroup) group.getChildCount() else 0
+        return if (group is ExpandableGroup) group.getChildCount() else 0
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): CHILD_DATA? {
         val group = getGroup(groupPosition)
         @Suppress("UNCHECKED_CAST")
-        return if (group is AssemblyExpandableGroup) group.getChild(childPosition) as CHILD_DATA? else null
+        return if (group is ExpandableGroup) group.getChild(childPosition) as CHILD_DATA? else null
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {

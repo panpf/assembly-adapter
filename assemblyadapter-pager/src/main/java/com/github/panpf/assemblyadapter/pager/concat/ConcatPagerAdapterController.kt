@@ -29,7 +29,7 @@ import java.util.*
 internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPagerAdapter) :
     NestedPagerAdapterWrapper.Callback {
 
-    private val mWrappers: ArrayList<NestedPagerAdapterWrapper> = ArrayList()
+    private val mWrappers = ArrayList<NestedPagerAdapterWrapper>()
 
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
     private var mReusableHolder = PagerWrapperAndLocalPosition()
@@ -82,8 +82,7 @@ internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPa
     fun addAdapter(index: Int, adapter: PagerAdapter): Boolean {
         if (index < 0 || index > mWrappers.size) {
             throw IndexOutOfBoundsException(
-                "Index must be between 0 and "
-                        + mWrappers.size + ". Given:" + index
+                "Index must be between 0 and ${mWrappers.size}. Given:$index"
             )
         }
         val existing = findWrapperFor(adapter)
@@ -203,6 +202,17 @@ internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPa
         return pageWidth
     }
 
+    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<PagerAdapter, Int> {
+        var localPosition = globalPosition
+        for (wrapper in mWrappers) {
+            if (wrapper.cachedItemCount > localPosition) {
+                return wrapper.adapter to localPosition
+            }
+            localPosition -= wrapper.cachedItemCount
+        }
+        throw IllegalArgumentException("Cannot find local adapter for $globalPosition")
+    }
+
     /**
      * Always call [.releaseWrapperAndLocalPosition] when you are
      * done with it
@@ -228,21 +238,20 @@ internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPa
         return result
     }
 
-    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<PagerAdapter, Int> {
-        var localPosition = globalPosition
-        for (wrapper in mWrappers) {
-            if (wrapper.cachedItemCount > localPosition) {
-                return wrapper.adapter to localPosition
-            }
-            localPosition -= wrapper.cachedItemCount
-        }
-        throw IllegalArgumentException("Cannot find wrapper for $globalPosition")
-    }
-
     private fun releaseWrapperAndLocalPosition(wrapperAndLocalPosition: PagerWrapperAndLocalPosition) {
         wrapperAndLocalPosition.mInUse = false
         wrapperAndLocalPosition.mWrapper = null
         wrapperAndLocalPosition.mLocalPosition = -1
         mReusableHolder = wrapperAndLocalPosition
+    }
+
+    /**
+     * Helper class to hold onto wrapper and local position without allocating objects as this is
+     * a very common call.
+     */
+    class PagerWrapperAndLocalPosition {
+        internal var mWrapper: NestedPagerAdapterWrapper? = null
+        internal var mLocalPosition = 0
+        internal var mInUse = false
     }
 }

@@ -16,9 +16,7 @@
 package com.github.panpf.assemblyadapter.pager.concat
 
 import android.database.DataSetObserver
-import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
-import com.github.panpf.assemblyadapter.pager.concat.NestedPagerAdapterWrapper
 
 /**
  * Wrapper for each adapter in [ConcatPagerAdapter].
@@ -27,6 +25,14 @@ internal class NestedPagerAdapterWrapper(
     val adapter: PagerAdapter,
     private val mCallback: Callback
 ) {
+
+    private val mAdapterObserver: DataSetObserver = object : DataSetObserver() {
+        override fun onChanged() {
+            cachedItemCount = adapter.count
+            mCallback.onChanged(this@NestedPagerAdapterWrapper)
+        }
+    }
+
     /**
      * we cache this value so that we can know the previous size when change happens
      * this is also important as getting real size while an adapter is dispatching possibly a
@@ -35,12 +41,6 @@ internal class NestedPagerAdapterWrapper(
      */
     var cachedItemCount: Int
         private set
-    private val mAdapterObserver: DataSetObserver = object : DataSetObserver() {
-        override fun onChanged() {
-            cachedItemCount = adapter.count
-            mCallback.onChanged(this@NestedPagerAdapterWrapper)
-        }
-    }
 
     init {
         cachedItemCount = adapter.count

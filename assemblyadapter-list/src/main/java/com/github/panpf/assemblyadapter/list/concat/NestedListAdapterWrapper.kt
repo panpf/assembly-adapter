@@ -13,93 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.panpf.assemblyadapter.list.concat
 
-package com.github.panpf.assemblyadapter.list.concat;
-
-import android.database.DataSetObserver;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.database.DataSetObserver
+import android.widget.BaseAdapter
+import com.github.panpf.assemblyadapter.list.concat.NestedListAdapterWrapper
 
 /**
- * Wrapper for each adapter in {@link ConcatListAdapter}.
+ * Wrapper for each adapter in [ConcatListAdapter].
  */
-class NestedListAdapterWrapper {
+internal class NestedListAdapterWrapper(
+    val adapter: BaseAdapter,
+    private val mCallback: Callback,
+    viewTypeStorage: ListViewTypeStorage,
+    private val mStableIdLookup: ListStableIdStorage.StableIdLookup
+) {
 
-    public final BaseAdapter adapter;
+    private val mViewTypeLookup: ListViewTypeStorage.ViewTypeLookup =
+        viewTypeStorage.createViewTypeWrapper(this)
+    private val mAdapterObserver: DataSetObserver = object : DataSetObserver() {
+        override fun onChanged() {
+            cachedItemCount = adapter.count
+            mCallback.onChanged(this@NestedListAdapterWrapper)
+        }
+    }
 
-    private final Callback mCallback;
-    @NonNull
-    private final ListViewTypeStorage.ViewTypeLookup mViewTypeLookup;
-    @NonNull
-    private final ListStableIdStorage.StableIdLookup mStableIdLookup;
     /**
      * we cache this value so that we can know the previous size when change happens
      * this is also important as getting real size while an adapter is dispatching possibly a
      * a chain of events might create inconsistencies (as it happens in DiffUtil).
      * Instead, we always calculate this value based on notify events.
      */
-    private int mCachedItemCount;
+    var cachedItemCount: Int = adapter.count
+        private set
 
-    private final DataSetObserver mAdapterObserver = new DataSetObserver() {
-        @Override
-        public void onChanged() {
-            mCachedItemCount = adapter.getCount();
-            mCallback.onChanged(NestedListAdapterWrapper.this);
-        }
-    };
-
-    NestedListAdapterWrapper(
-            @NonNull BaseAdapter adapter,
-            @NonNull Callback callback,
-            @NonNull ListViewTypeStorage viewTypeStorage,
-            @NonNull ListStableIdStorage.StableIdLookup stableIdLookup) {
-        this.adapter = adapter;
-        this.mCallback = callback;
-        this.mViewTypeLookup = viewTypeStorage.createViewTypeWrapper(this);
-        this.mStableIdLookup = stableIdLookup;
-
-        this.mCachedItemCount = this.adapter.getCount();
-        this.adapter.registerDataSetObserver(mAdapterObserver);
+    init {
+        adapter.registerDataSetObserver(mAdapterObserver)
     }
 
-
-    void dispose() {
-        adapter.unregisterDataSetObserver(mAdapterObserver);
-        mViewTypeLookup.dispose();
+    fun dispose() {
+        adapter.unregisterDataSetObserver(mAdapterObserver)
+        mViewTypeLookup.dispose()
     }
 
-    int getCachedItemCount() {
-        return mCachedItemCount;
+    fun getItemViewType(localPosition: Int): Int {
+        return mViewTypeLookup.localToGlobal(adapter.getItemViewType(localPosition))
     }
 
-    int getItemViewTypeCount() {
-        return adapter.getViewTypeCount();
+    fun getItemId(localPosition: Int): Long {
+        return mStableIdLookup.localToGlobal(adapter.getItemId(localPosition))
     }
 
-    int getItemViewType(int localPosition) {
-        return mViewTypeLookup.localToGlobal(adapter.getItemViewType(localPosition));
-    }
-
-    public long getItemId(int localPosition) {
-        long localItemId = adapter.getItemId(localPosition);
-        return mStableIdLookup.localToGlobal(localItemId);
-    }
-
-    @NonNull
-    View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return adapter.getView(position, convertView, parent);
-    }
-
-    @Nullable
-    public Object getItem(int position) {
-        return adapter.getItem(position);
-    }
-
-    interface Callback {
-        void onChanged(@NonNull NestedListAdapterWrapper wrapper);
+    internal interface Callback {
+        fun onChanged(wrapper: NestedListAdapterWrapper)
     }
 }

@@ -27,7 +27,7 @@ import java.util.*
 internal class ConcatFragmentPagerAdapterController(private val mConcatAdapter: ConcatFragmentPagerAdapter) :
     NestedFragmentPagerAdapterWrapper.Callback {
 
-    private val mWrappers: ArrayList<NestedFragmentPagerAdapterWrapper> = ArrayList()
+    private val mWrappers = ArrayList<NestedFragmentPagerAdapterWrapper>()
 
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
     private var mReusableHolder = FragmentPagerWrapperAndLocalPosition()
@@ -85,8 +85,7 @@ internal class ConcatFragmentPagerAdapterController(private val mConcatAdapter: 
     fun addAdapter(index: Int, adapter: FragmentPagerAdapter): Boolean {
         if (index < 0 || index > mWrappers.size) {
             throw IndexOutOfBoundsException(
-                "Index must be between 0 and "
-                        + mWrappers.size + ". Given:" + index
+                "Index must be between 0 and ${mWrappers.size}. Given:$index"
             )
         }
         val existing = findWrapperFor(adapter)
@@ -161,6 +160,17 @@ internal class ConcatFragmentPagerAdapterController(private val mConcatAdapter: 
         return pageWidth
     }
 
+    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<FragmentPagerAdapter, Int> {
+        var localPosition = globalPosition
+        for (wrapper in mWrappers) {
+            if (wrapper.cachedItemCount > localPosition) {
+                return wrapper.adapter to localPosition
+            }
+            localPosition -= wrapper.cachedItemCount
+        }
+        throw IllegalArgumentException("Cannot find local adapter for $globalPosition")
+    }
+
     /**
      * Always call [.releaseWrapperAndLocalPosition] when you are
      * done with it
@@ -184,17 +194,6 @@ internal class ConcatFragmentPagerAdapterController(private val mConcatAdapter: 
         }
         requireNotNull(result.mWrapper) { "Cannot find wrapper for $globalPosition" }
         return result
-    }
-
-    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<FragmentPagerAdapter, Int> {
-        var localPosition = globalPosition
-        for (wrapper in mWrappers) {
-            if (wrapper.cachedItemCount > localPosition) {
-                return wrapper.adapter to localPosition
-            }
-            localPosition -= wrapper.cachedItemCount
-        }
-        throw IllegalArgumentException("Cannot find wrapper for $globalPosition")
     }
 
     private fun releaseWrapperAndLocalPosition(wrapperAndLocalPosition: FragmentPagerWrapperAndLocalPosition) {

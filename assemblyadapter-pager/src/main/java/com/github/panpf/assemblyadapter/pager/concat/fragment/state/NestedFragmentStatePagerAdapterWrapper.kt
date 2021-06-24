@@ -25,6 +25,14 @@ internal class NestedFragmentStatePagerAdapterWrapper(
     val adapter: FragmentStatePagerAdapter,
     private val mCallback: Callback,
 ) {
+
+    private val mAdapterObserver: DataSetObserver = object : DataSetObserver() {
+        override fun onChanged() {
+            cachedItemCount = adapter.count
+            mCallback.onChanged(this@NestedFragmentStatePagerAdapterWrapper)
+        }
+    }
+
     /**
      * we cache this value so that we can know the previous size when change happens
      * this is also important as getting real size while an adapter is dispatching possibly a
@@ -33,12 +41,6 @@ internal class NestedFragmentStatePagerAdapterWrapper(
      */
     var cachedItemCount: Int
         private set
-    private val mAdapterObserver: DataSetObserver = object : DataSetObserver() {
-        override fun onChanged() {
-            cachedItemCount = adapter.count
-            mCallback.onChanged(this@NestedFragmentStatePagerAdapterWrapper)
-        }
-    }
 
     init {
         cachedItemCount = adapter.count
