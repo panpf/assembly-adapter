@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <item name="aa_item_holder" type="id" />
-    <item name="aa_item_position" type="id" />
-    <item name="aa_item_position_in_port" type="id" />
-    <item name="aa_item_data" type="id" />
-</resources>
