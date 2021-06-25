@@ -45,21 +45,13 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
 
-    override fun getGroupCount(): Int {
-        return itemDataStorage.dataCount
-    }
+    override fun getGroupCount(): Int = itemDataStorage.dataCount
 
-    override fun getGroup(groupPosition: Int): GROUP_DATA? {
-        return itemDataStorage.getData(groupPosition)
-    }
+    override fun getGroup(groupPosition: Int): GROUP_DATA? = itemDataStorage.getData(groupPosition)
 
-    override fun getGroupId(groupPosition: Int): Long {
-        return groupPosition.toLong()
-    }
+    override fun getGroupId(groupPosition: Int): Long = groupPosition.toLong()
 
-    override fun getGroupTypeCount(): Int {
-        return itemFactoryStorage.itemTypeCount
-    }
+    override fun getGroupTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getGroupType(groupPosition: Int): Int {
         return itemFactoryStorage.getItemTypeByData(getGroup(groupPosition))
@@ -114,13 +106,9 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return if (group is ExpandableGroup) group.getChild(childPosition) as CHILD_DATA? else null
     }
 
-    override fun getChildId(groupPosition: Int, childPosition: Int): Long {
-        return childPosition.toLong()
-    }
+    override fun getChildId(groupPosition: Int, childPosition: Int): Long = childPosition.toLong()
 
-    override fun getChildTypeCount(): Int {
-        return itemFactoryStorage.itemTypeCount
-    }
+    override fun getChildTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getChildType(groupPosition: Int, childPosition: Int): Int {
         return itemFactoryStorage.getItemTypeByData(getChild(groupPosition, childPosition))

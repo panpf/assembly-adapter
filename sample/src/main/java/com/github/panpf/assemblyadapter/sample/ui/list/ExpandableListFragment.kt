@@ -11,6 +11,7 @@ import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpand
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
+import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentExpandableListBinding
 import com.github.panpf.assemblyadapter.sample.item.AppGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
@@ -29,13 +30,15 @@ class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding
     }
 
     override fun onInitData(binding: FragmentExpandableListBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter =
-            AssemblySingleDataExpandableListAdapter(AppsOverviewItemFactory(requireActivity()))
+        val appsOverviewAdapter = AssemblySingleDataExpandableListAdapter<AppsOverview, Any>(
+            AppsOverviewItemFactory(requireActivity())
+        )
         val listAdapter = AssemblyExpandableListAdapter<AppGroup, AppInfo>(
             listOf(AppGroupItemFactory(), AppItemFactory(requireActivity()))
         )
-        val footerLoadStateAdapter =
-            AssemblySingleDataExpandableListAdapter(LoadStateItemFactory(requireActivity()))
+        val footerLoadStateAdapter = AssemblySingleDataExpandableListAdapter<LoadState, Any>(
+            LoadStateItemFactory(requireActivity())
+        )
         binding.expandableListList.setAdapter(
             ConcatExpandableListAdapter(
                 appsOverviewAdapter,
