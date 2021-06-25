@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolder
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import java.lang.IllegalArgumentException
 
-open class AssemblySingleDataRecyclerAdapter<DATA> @JvmOverloads constructor(
+open class AssemblySingleDataRecyclerAdapter<DATA>(
     private val itemFactory: AssemblyItemFactory<DATA>,
     initData: DATA? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter {

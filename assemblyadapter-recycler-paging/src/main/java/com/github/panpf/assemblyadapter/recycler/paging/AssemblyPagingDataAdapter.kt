@@ -13,7 +13,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridL
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
+open class AssemblyPagingDataAdapter<DATA : Any>(
     itemFactoryList: List<AssemblyItemFactory<*>>,
     diffCallback: DiffUtil.ItemCallback<DATA>,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
