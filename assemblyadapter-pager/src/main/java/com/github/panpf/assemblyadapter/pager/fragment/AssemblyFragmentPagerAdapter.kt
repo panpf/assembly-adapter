@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DataAdapter
+import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
@@ -33,7 +33,7 @@ import java.util.*
     )
 )
 class AssemblyFragmentPagerAdapter<DATA>
-    : FragmentPagerAdapter, AssemblyAdapter, DataAdapter<DATA> {
+    : FragmentPagerAdapter, AssemblyAdapter, DatasAdapter<DATA>{
 
     private val itemFactoryStorage: ItemFactoryStorage<AssemblyFragmentItemFactory<*>>
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }

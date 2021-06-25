@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DataAdapter
+import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFactory
@@ -30,7 +30,7 @@ class AssemblyFragmentStateAdapter<DATA>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     itemFactoryList: List<AssemblyFragmentItemFactory<*>>
-) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter, DataAdapter<DATA> {
+) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter, DatasAdapter<DATA> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }

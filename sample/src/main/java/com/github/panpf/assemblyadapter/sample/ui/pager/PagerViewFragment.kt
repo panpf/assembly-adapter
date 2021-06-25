@@ -29,7 +29,7 @@ class PagerViewFragment : BaseBindingFragment<FragmentPagerBinding>() {
     override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter = AssemblySingleDataPagerAdapter(AppsOverviewPagerItemFactory())
         val listAdapter = AssemblyPagerAdapter<Any>(
-            listOf(AppGroupPagerItemFactory())
+            listOf(AppGroupPagerItemFactory(requireActivity()))
         )
         val footerLoadStateAdapter = AssemblySingleDataPagerAdapter(LoadStatePagerItemFactory())
         binding.pagerPager.apply {

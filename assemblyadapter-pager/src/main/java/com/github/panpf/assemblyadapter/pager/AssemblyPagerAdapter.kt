@@ -19,13 +19,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DataAdapter
+import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
 class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<*>>) :
-    PagerAdapter(), AssemblyAdapter, DataAdapter<DATA> {
+    PagerAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }

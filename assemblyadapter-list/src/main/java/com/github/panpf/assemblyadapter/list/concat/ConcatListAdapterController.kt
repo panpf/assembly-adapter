@@ -20,6 +20,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.github.panpf.assemblyadapter.list.R
 import java.util.*
 
 /**
@@ -206,12 +207,9 @@ internal class ConcatListAdapterController(
 
     fun getView(globalPosition: Int, convertView: View?, parent: ViewGroup): View {
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
-        val itemView =
-            wrapperAndPos.mWrapper!!.adapter.getView(
-                wrapperAndPos.mLocalPosition,
-                convertView,
-                parent
-            )
+        val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter
+        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalPosition)
+        val itemView = wrapperAdapter.getView(wrapperAndPos.mLocalPosition, convertView, parent)
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return itemView
     }

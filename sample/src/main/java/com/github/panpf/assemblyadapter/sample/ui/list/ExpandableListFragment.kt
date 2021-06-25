@@ -29,11 +29,13 @@ class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding
     }
 
     override fun onInitData(binding: FragmentExpandableListBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataExpandableListAdapter(AppsOverviewItemFactory())
+        val appsOverviewAdapter =
+            AssemblySingleDataExpandableListAdapter(AppsOverviewItemFactory(requireActivity()))
         val listAdapter = AssemblyExpandableListAdapter<AppGroup, AppInfo>(
-            listOf(AppGroupItemFactory(), AppItemFactory())
+            listOf(AppGroupItemFactory(), AppItemFactory(requireActivity()))
         )
-        val footerLoadStateAdapter = AssemblySingleDataExpandableListAdapter(LoadStateItemFactory())
+        val footerLoadStateAdapter =
+            AssemblySingleDataExpandableListAdapter(LoadStateItemFactory(requireActivity()))
         binding.expandableListList.setAdapter(
             ConcatExpandableListAdapter(
                 appsOverviewAdapter,

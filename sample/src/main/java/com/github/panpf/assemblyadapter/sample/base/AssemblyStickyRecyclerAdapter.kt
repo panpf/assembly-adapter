@@ -1,14 +1,14 @@
 package com.github.panpf.assemblyadapter.sample.base
 
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.AssemblyItemFactory
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerAdapter
 
 class AssemblyStickyRecyclerAdapter<DATA> : AssemblyRecyclerAdapter<DATA>, StickyRecyclerAdapter {
 
-    constructor(itemFactoryList: List<ItemFactory<*>>) : super(itemFactoryList)
+    constructor(itemFactoryList: List<AssemblyItemFactory<*>>) : super(itemFactoryList)
 
-    constructor(itemFactoryList: List<ItemFactory<*>>, dataList: List<DATA>?)
+    constructor(itemFactoryList: List<AssemblyItemFactory<*>>, dataList: List<DATA>?)
             : super(itemFactoryList, dataList)
 
     override fun isStickyItemByPosition(position: Int): Boolean {

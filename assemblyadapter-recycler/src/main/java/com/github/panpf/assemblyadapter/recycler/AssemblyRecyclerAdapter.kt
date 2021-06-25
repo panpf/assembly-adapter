@@ -18,22 +18,24 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DataAdapter
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.AssemblyItem
+import com.github.panpf.assemblyadapter.AssemblyItemFactory
+import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
+import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
+import java.lang.IllegalArgumentException
 import java.util.*
 
-open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter, DataAdapter<DATA> {
+open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter, DatasAdapter<DATA> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
 
     constructor(
-        itemFactoryList: List<ItemFactory<*>>,
+        itemFactoryList: List<AssemblyItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(itemFactoryList) {
         itemDataStorage.setDataList(dataList)
@@ -54,7 +56,7 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
-        return AssemblyRecyclerItem(item).apply {
+        return AssemblyItemViewHolderWrapper(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
             if (layoutManager is FullSpanStaggeredGridLayoutManager) {
@@ -64,12 +66,12 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is AssemblyRecyclerItem<*>) {
+        if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            (holder as AssemblyRecyclerItem<Any?>).dispatchBindData(
-                position,
-                itemDataStorage.getData(position)
-            )
+            val item = holder.wrappedItem as AssemblyItem<Any>
+            item.dispatchBindData(position, holder.position, itemDataStorage.getData(position))
+        } else {
+            throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }
     }
 
@@ -125,7 +127,7 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) 
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
         return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
     }
 }

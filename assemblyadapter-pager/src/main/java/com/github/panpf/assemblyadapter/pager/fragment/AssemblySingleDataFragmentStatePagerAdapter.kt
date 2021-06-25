@@ -32,14 +32,14 @@ class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     FragmentStatePagerAdapter, AssemblyAdapter {
 
     private val itemFactory: AssemblyFragmentItemFactory<DATA>
+    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
+        FragmentPagerAdapterRefreshHelper()
+
     var data: DATA? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
-        FragmentPagerAdapterRefreshHelper()
-
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {

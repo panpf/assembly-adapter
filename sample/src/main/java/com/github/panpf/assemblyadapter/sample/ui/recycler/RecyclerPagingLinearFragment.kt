@@ -12,11 +12,10 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
+import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
-import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.item.PinyinGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
 import kotlinx.coroutines.flow.collect
@@ -33,15 +32,16 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory())
+        val appsOverviewAdapter =
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val pagingDataAdapter = AssemblyPagingDataAdapter(
-            listOf(AppItemFactory(), PinyinGroupItemFactory()),
+            listOf(AppItemFactory(requireActivity()), PinyinGroupItemFactory(requireActivity())),
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(
                 appsOverviewAdapter,
-                pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
+                pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter(requireActivity()))
             )
             layoutManager = LinearLayoutManager(requireContext())
         }

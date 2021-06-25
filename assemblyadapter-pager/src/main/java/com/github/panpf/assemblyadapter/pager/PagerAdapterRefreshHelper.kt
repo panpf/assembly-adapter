@@ -17,12 +17,12 @@ class PagerAdapterRefreshHelper {
     }
 
     fun bindNotifyDataSetChangedNumber(view: View) {
-        view.setTag(R.id.pagerItem_notifyDataSetChangedNumber, notifyDataSetChangedNumber)
+        view.setTag(R.id.aa_tag_pagerItem_notifyDataSetChangedNumber, notifyDataSetChangedNumber)
     }
 
     fun isItemPositionChanged(view: View): Boolean {
         val currentNumber = notifyDataSetChangedNumber
-        val bindNumber = view.getTag(R.id.pagerItem_notifyDataSetChangedNumber)?.toString()?.toInt()
+        val bindNumber = view.getTag(R.id.aa_tag_pagerItem_notifyDataSetChangedNumber)?.toString()?.toInt()
         return bindNumber != currentNumber
     }
 }

@@ -1,17 +1,21 @@
 package com.github.panpf.assemblyadapter.sample.item
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.updateLayoutParams
 import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemPinyinGroupBinding
 
-open class PinyinGroupItemFactory(private val hideStartMargin: Boolean = false) :
-    BindingAssemblyItemFactory<PinyinGroup, ItemPinyinGroupBinding>() {
+open class PinyinGroupItemFactory(
+    private val activity: Activity,
+    private val hideStartMargin: Boolean = false
+) : BindingAssemblyItemFactory<PinyinGroup, ItemPinyinGroupBinding>() {
 
     override fun match(data: Any?): Boolean {
         return data is PinyinGroup
@@ -42,15 +46,33 @@ open class PinyinGroupItemFactory(private val hideStartMargin: Boolean = false) 
 
         binding.root.setOnClickListener {
             val data = item.data ?: return@setOnClickListener
-            val position = item.position
-            Toast.makeText(context, "${data}: $position", Toast.LENGTH_LONG).show()
+            val bindingAdapterPosition = item.bindingAdapterPosition
+            val absoluteAdapterPosition = item.absoluteAdapterPosition
+            Toast.makeText(
+                context,
+                "${data}: $bindingAdapterPosition/$absoluteAdapterPosition",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        binding.root.setOnLongClickListener {
+            val data = item.data ?: return@setOnLongClickListener false
+            AlertDialog.Builder(activity).apply {
+                setMessage(buildString {
+                    append("Group（${data.title}）").appendLine()
+                    appendLine()
+                    append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
+                    append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}")
+                })
+            }.show()
+            true
         }
     }
 
     override fun bindData(
         context: Context, binding: ItemPinyinGroupBinding,
         item: BindingAssemblyItem<PinyinGroup, ItemPinyinGroupBinding>,
-        position: Int, data: PinyinGroup?
+        bindingAdapterPosition: Int, data: PinyinGroup?
     ) {
         binding.pinyinGroupItemTitleText.text = data?.title
     }

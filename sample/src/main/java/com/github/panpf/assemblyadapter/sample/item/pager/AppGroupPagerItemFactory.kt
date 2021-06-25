@@ -1,5 +1,6 @@
 package com.github.panpf.assemblyadapter.sample.item.pager
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,8 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppGroupBindi
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
-class AppGroupPagerItemFactory : AssemblyPagerItemFactory<AppGroup>() {
+class AppGroupPagerItemFactory(private val activity: Activity) :
+    AssemblyPagerItemFactory<AppGroup>() {
 
     override fun match(data: Any?): Boolean {
         return data is AppGroup
@@ -27,7 +29,7 @@ class AppGroupPagerItemFactory : AssemblyPagerItemFactory<AppGroup>() {
             appGroupAppCountText.text = data?.appList?.size?.toString()
             appGroupRecycler.apply {
                 adapter = AssemblyRecyclerAdapter<Any>(
-                    listOf(AppCardGridItemFactory()),
+                    listOf(AppCardGridItemFactory(activity)),
                     data?.appList
                 )
                 layoutManager = GridLayoutManager(context, 3)

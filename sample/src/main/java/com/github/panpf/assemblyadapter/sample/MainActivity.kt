@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding.mainRecycler.apply {
             layoutManager = LinearLayoutManager(baseContext)
             adapter = AssemblyRecyclerAdapter(
-                listOf(LinkItemFactory()),
+                listOf(LinkItemFactory(this@MainActivity)),
                 listOf(
                     Link("RecyclerView - Linear", RecyclerLinearFragment()),
                     Link("RecyclerView - Linear - Sticky", RecyclerLinearStickyFragment()),

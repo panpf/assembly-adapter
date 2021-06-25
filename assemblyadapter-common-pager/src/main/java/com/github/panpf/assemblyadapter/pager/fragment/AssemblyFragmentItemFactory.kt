@@ -16,9 +16,9 @@
 package com.github.panpf.assemblyadapter.pager.fragment
 
 import androidx.fragment.app.Fragment
-import com.github.panpf.assemblyadapter.internal.BaseItemFactory
+import com.github.panpf.assemblyadapter.ItemFactory
 
-abstract class AssemblyFragmentItemFactory<DATA> : BaseItemFactory {
+abstract class AssemblyFragmentItemFactory<DATA> : ItemFactory {
 
     abstract override fun match(data: Any?): Boolean
 

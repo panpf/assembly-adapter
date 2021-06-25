@@ -32,6 +32,17 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
     private var mReusableHolder = FragmentStatePagerWrapperAndLocalPosition()
 
+    // should we cache this as well ?
+    val totalCount: Int
+        get() {
+            // should we cache this as well ?
+            var total = 0
+            for (wrapper in mWrappers) {
+                total += wrapper.cachedItemCount
+            }
+            return total
+        }
+
     val copyOfAdapters: List<FragmentStatePagerAdapter>
         get() {
             if (mWrappers.isEmpty()) {
@@ -112,17 +123,6 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
         mConcatAdapter.notifyDataSetChanged()
     }
 
-    // should we cache this as well ?
-    val totalCount: Int
-        get() {
-            // should we cache this as well ?
-            var total = 0
-            for (wrapper in mWrappers) {
-                total += wrapper.cachedItemCount
-            }
-            return total
-        }
-
     fun getPageTitle(globalPosition: Int): CharSequence? {
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
         val pageTitle = wrapperAndPos.mWrapper!!.adapter.getPageTitle(wrapperAndPos.mLocalPosition)
@@ -132,7 +132,8 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
 
     fun getItem(globalPosition: Int): Fragment {
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
-        val fragment = wrapperAndPos.mWrapper!!.adapter.getItem(wrapperAndPos.mLocalPosition)
+        val adapter = wrapperAndPos.mWrapper!!.adapter
+        val fragment = adapter.getItem(wrapperAndPos.mLocalPosition)
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return fragment
     }

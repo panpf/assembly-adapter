@@ -33,15 +33,19 @@ class RecyclerPagingLinearStickyFragment : BaseBindingFragment<FragmentRecyclerB
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory())
+        val appsOverviewAdapter =
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val pagingDataAdapter = AssemblyStickyPagingDataAdapter(
-            listOf(AppItemFactory(), PinyinGroupStickyItemFactory()),
+            listOf(
+                AppItemFactory(requireActivity()),
+                PinyinGroupStickyItemFactory(requireActivity())
+            ),
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(
                 appsOverviewAdapter, pagingDataAdapter.withLoadStateFooter(
-                    MyLoadStateAdapter()
+                    MyLoadStateAdapter(requireActivity())
                 )
             )
             layoutManager = LinearLayoutManager(requireContext())

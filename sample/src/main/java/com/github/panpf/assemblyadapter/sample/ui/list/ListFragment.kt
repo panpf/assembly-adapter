@@ -27,11 +27,13 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
     }
 
     override fun onInitData(binding: FragmentListBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataListAdapter(AppsOverviewItemFactory())
+        val appsOverviewAdapter =
+            AssemblySingleDataListAdapter(AppsOverviewItemFactory(requireActivity()))
         val listAdapter = AssemblyListAdapter<Any>(
-            listOf(AppItemFactory(), PinyinGroupItemFactory())
+            listOf(AppItemFactory(requireActivity()), PinyinGroupItemFactory(requireActivity()))
         )
-        val footerLoadStateAdapter = AssemblySingleDataListAdapter(LoadStateItemFactory())
+        val footerLoadStateAdapter =
+            AssemblySingleDataListAdapter(LoadStateItemFactory(requireActivity()))
         binding.listList.adapter =
             ConcatListAdapter(appsOverviewAdapter, listAdapter, footerLoadStateAdapter)
 

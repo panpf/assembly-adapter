@@ -28,7 +28,7 @@ abstract class BindingAssemblyItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         context: Context,
         binding: VIEW_BINDING,
         item: BindingAssemblyItem<DATA, VIEW_BINDING>,
-        position: Int,
+        bindingAdapterPosition: Int,
         data: DATA?
     )
 
@@ -37,8 +37,8 @@ abstract class BindingAssemblyItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         val binding: VIEW_BINDING
     ) : AssemblyItem<DATA>(binding.root) {
 
-        public override fun bindData(position: Int, data: DATA?) {
-            factory.bindData(context, binding, this, position, data)
+        public override fun bindData(bindingAdapterPosition: Int, data: DATA?) {
+            factory.bindData(context, binding, this, bindingAdapterPosition, data)
         }
     }
 }

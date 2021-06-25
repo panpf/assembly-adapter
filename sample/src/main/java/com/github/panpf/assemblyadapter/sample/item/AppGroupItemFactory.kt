@@ -24,7 +24,7 @@ open class AppGroupItemFactory :
     override fun bindData(
         context: Context, binding: ItemAppGroupBinding,
         item: BindingAssemblyExpandableItem<AppGroup, ItemAppGroupBinding>,
-        position: Int, data: AppGroup?
+        bindingAdapterPosition: Int, data: AppGroup?
     ) {
         binding.appGroupItemTitleText.text = data?.title
         binding.appGroupItemTitleText.setCompoundDrawablesWithIntrinsicBounds(

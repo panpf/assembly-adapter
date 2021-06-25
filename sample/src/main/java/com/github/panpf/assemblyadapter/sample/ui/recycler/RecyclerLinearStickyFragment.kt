@@ -29,11 +29,16 @@ class RecyclerLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory())
+        val appsOverviewAdapter =
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyStickyRecyclerAdapter<Any>(
-            listOf(AppItemFactory(), PinyinGroupStickyItemFactory())
+            listOf(
+                AppItemFactory(requireActivity()),
+                PinyinGroupStickyItemFactory(requireActivity())
+            )
         )
-        val footerLoadStateAdapter = AssemblySingleDataRecyclerAdapter(LoadStateItemFactory())
+        val footerLoadStateAdapter =
+            AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())

@@ -127,11 +127,8 @@ internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPa
 
     fun instantiateItem(container: ViewGroup, globalPosition: Int): Any {
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
-        val itemView =
-            wrapperAndPos.mWrapper!!.adapter.instantiateItem(
-                container,
-                wrapperAndPos.mLocalPosition
-            )
+        val adapter = wrapperAndPos.mWrapper!!.adapter
+        val itemView = adapter.instantiateItem(container, wrapperAndPos.mLocalPosition)
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return itemView
     }

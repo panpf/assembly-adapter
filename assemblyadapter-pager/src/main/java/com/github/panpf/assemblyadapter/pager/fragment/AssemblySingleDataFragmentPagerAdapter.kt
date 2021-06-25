@@ -28,17 +28,17 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
         "com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter"
     )
 )
-class AssemblySingleDataFragmentPagerAdapter<DATA> : FragmentPagerAdapter, AssemblyAdapter {
+class AssemblySingleDataFragmentPagerAdapter<DATA> : FragmentPagerAdapter, AssemblyAdapter{
 
     private val itemFactory: AssemblyFragmentItemFactory<DATA>
+    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
+        FragmentPagerAdapterRefreshHelper()
+
     var data: DATA? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
-        FragmentPagerAdapterRefreshHelper()
-
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {

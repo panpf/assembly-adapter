@@ -5,11 +5,13 @@ import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.internal.ClickListenerManager
 
-abstract class AssemblyItemFactory<DATA> : ItemFactory<DATA> {
+abstract class AssemblyItemFactory<DATA> : ItemFactory {
 
     private var clickListenerManager: ClickListenerManager<DATA>? = null
 
-    open override fun dispatchCreateItem(parent: ViewGroup): AssemblyItem<DATA> {
+    abstract override fun match(data: Any?): Boolean
+
+    open fun dispatchCreateItem(parent: ViewGroup): AssemblyItem<DATA> {
         return createItem(parent).apply {
             registerItemClickListener(this)
         }
@@ -17,7 +19,7 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory<DATA> {
 
     abstract fun createItem(parent: ViewGroup): AssemblyItem<DATA>
 
-    override fun setOnViewClickListener(
+    fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
     ): AssemblyItemFactory<DATA> {
@@ -25,7 +27,7 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory<DATA> {
         return this
     }
 
-    override fun setOnViewLongClickListener(
+    fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
     ): AssemblyItemFactory<DATA> {
@@ -33,12 +35,12 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory<DATA> {
         return this
     }
 
-    override fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): AssemblyItemFactory<DATA> {
+    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): AssemblyItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
 
-    override fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): AssemblyItemFactory<DATA> {
+    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): AssemblyItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }
@@ -49,9 +51,9 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory<DATA> {
         }))
     }
 
-    private fun registerItemClickListener(item: Item<DATA>) {
+    private fun registerItemClickListener(item: AssemblyItem<DATA>) {
         val clickListenerManager = clickListenerManager ?: return
-        val itemView = item.getItemView()
+        val itemView = item.itemView
         for (holder in clickListenerManager.holders) {
             if (holder is ClickListenerManager.ClickListenerHolder<*>) {
                 @Suppress("UNCHECKED_CAST")
@@ -66,9 +68,13 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory<DATA> {
                 targetView.setTag(R.id.aa_tag_item, item)
                 targetView.setOnClickListener { view ->
                     @Suppress("UNCHECKED_CAST")
-                    val bindItem = view.getTag(R.id.aa_tag_item) as Item<DATA>
+                    val bindItem = view.getTag(R.id.aa_tag_item) as AssemblyItem<DATA>
                     clickListenerHolder.listener.onClick(
-                        view.context, view, bindItem.getPosition(), bindItem.getData()
+                        view.context,
+                        view,
+                        bindItem.bindingAdapterPosition,
+                        bindItem.absoluteAdapterPosition,
+                        bindItem.data
                     )
                 }
             } else if (holder is ClickListenerManager.LongClickListenerHolder<*>) {
@@ -85,9 +91,13 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory<DATA> {
                 targetView.setTag(R.id.aa_tag_item, item)
                 targetView.setOnLongClickListener { view ->
                     @Suppress("UNCHECKED_CAST")
-                    val bindItem = view.getTag(R.id.aa_tag_item) as Item<DATA>
+                    val bindItem = view.getTag(R.id.aa_tag_item) as AssemblyItem<DATA>
                     longClickListenerHolder.listener.onLongClick(
-                        view.context, view, bindItem.getPosition(), bindItem.getData()
+                        view.context,
+                        view,
+                        bindItem.bindingAdapterPosition,
+                        bindItem.absoluteAdapterPosition,
+                        bindItem.data
                     )
                 }
             }

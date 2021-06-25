@@ -5,15 +5,16 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.AssemblyItem
+import com.github.panpf.assemblyadapter.AssemblyItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
-    itemFactoryList: List<ItemFactory<*>>,
+    itemFactoryList: List<AssemblyItemFactory<*>>,
     diffCallback: DiffUtil.ItemCallback<DATA>,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
@@ -30,7 +31,7 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
-        return AssemblyRecyclerItem(item).apply {
+        return AssemblyItemViewHolderWrapper(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
             if (layoutManager is FullSpanStaggeredGridLayoutManager) {
@@ -39,15 +40,18 @@ open class AssemblyPagingDataAdapter<DATA : Any> @JvmOverloads constructor(
         }
     }
 
-    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        if (viewHolder is AssemblyRecyclerItem<*>) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            (viewHolder as AssemblyRecyclerItem<Any?>).dispatchBindData(position, getItem(position))
+            val item = holder.wrappedItem as AssemblyItem<Any>
+            item.dispatchBindData(position, holder.position, getItem(position))
+        } else {
+            throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
         return itemFactoryStorage.getItemFactoryByData(peek(position))
     }
 }

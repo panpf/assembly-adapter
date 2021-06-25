@@ -1,38 +1,40 @@
 package com.github.panpf.assemblyadapter
 
 import android.content.Context
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-abstract class AssemblyItem<DATA>(
-    @JvmField val itemView: View
-) : Item<DATA> {
+abstract class AssemblyItem<DATA>(val itemView: View) {
 
-    @JvmField
+    private var _data: DATA? = null
+    private var _bindingAdapterPosition: Int = -1
+    private var _absoluteAdapterPosition: Int = -1
+
     val context: Context = itemView.context
+    val appContext: Context = context.applicationContext
+    val resources: Resources = context.resources
 
-    @JvmField
-    var data: DATA? = null
-
-    @JvmField
-    var position = -1
+    val data: DATA?
+        get() = _data
+    val requireData: DATA
+        get() = _data!!
+    val bindingAdapterPosition: Int
+        get() = _bindingAdapterPosition
+    val absoluteAdapterPosition: Int
+        get() = _absoluteAdapterPosition
 
     constructor(itemLayoutId: Int, parent: ViewGroup) : this(
         LayoutInflater.from(parent.context).inflate(itemLayoutId, parent, false)
     )
 
-    open override fun dispatchBindData(position: Int, data: DATA?) {
-        this.position = position
-        this.data = data
-        bindData(position, data)
+    open fun dispatchBindData(bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA?) {
+        this._data = data
+        this._bindingAdapterPosition = bindingAdapterPosition
+        this._absoluteAdapterPosition = absoluteAdapterPosition
+        bindData(_absoluteAdapterPosition, data)
     }
 
-    protected abstract fun bindData(position: Int, data: DATA?)
-
-    override fun getData(): DATA? = data
-
-    override fun getItemView(): View = itemView
-
-    override fun getPosition(): Int = position
+    protected abstract fun bindData(bindingAdapterPosition: Int, data: DATA?)
 }

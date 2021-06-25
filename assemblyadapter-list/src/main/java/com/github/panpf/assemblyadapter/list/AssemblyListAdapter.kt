@@ -19,21 +19,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DataAdapter
-import com.github.panpf.assemblyadapter.Item
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.AssemblyItem
+import com.github.panpf.assemblyadapter.AssemblyItemFactory
+import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
-class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
-    BaseAdapter(), AssemblyAdapter, DataAdapter<DATA> {
+class AssemblyListAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
+    BaseAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
 
     constructor(
-        itemFactoryList: List<ItemFactory<*>>,
+        itemFactoryList: List<AssemblyItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(itemFactoryList) {
         itemDataStorage.setDataList(dataList)
@@ -63,12 +63,15 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
         val data = itemDataStorage.getData(position)
         val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(data)
             .dispatchCreateItem(parent).apply {
-                getItemView().setTag(R.id.aa_tag_item, this)
-            }.getItemView()
+                itemView.setTag(R.id.aa_tag_item, this)
+            }.itemView
 
+        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
+        val absolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
         @Suppress("UNCHECKED_CAST")
-        val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
-        item.dispatchBindData(position, data)
+        val item = itemView.getTag(R.id.aa_tag_item) as AssemblyItem<Any>
+        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
         return itemView
     }
 
@@ -124,7 +127,7 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<ItemFactory<*>>) :
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
         return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
     }
 }

@@ -18,8 +18,9 @@ abstract class BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING : ViewBin
     abstract fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
 
     @Suppress("MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
-    fun initItem(
-        context: Context, binding: VIEW_BINDING,
+    open fun initItem(
+        context: Context,
+        binding: VIEW_BINDING,
         item: BindingAssemblyExpandableItem<DATA, VIEW_BINDING>
     ) {
     }
@@ -28,17 +29,17 @@ abstract class BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING : ViewBin
         context: Context,
         binding: VIEW_BINDING,
         item: BindingAssemblyExpandableItem<DATA, VIEW_BINDING>,
-        position: Int,
+        bindingAdapterPosition: Int,
         data: DATA?
     )
 
     class BindingAssemblyExpandableItem<DATA, VIEW_BINDING : ViewBinding>(
-        val factory: BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING>,
+        private val factory: BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING>,
         val binding: VIEW_BINDING
     ) : AssemblyExpandableItem<DATA>(binding.root) {
 
-        public override fun bindData(position: Int, data: DATA?) {
-            factory.bindData(context, binding, this, position, data)
+        public override fun bindData(bindingAdapterPosition: Int, data: DATA?) {
+            factory.bindData(context, binding, this, bindingAdapterPosition, data)
         }
     }
 }

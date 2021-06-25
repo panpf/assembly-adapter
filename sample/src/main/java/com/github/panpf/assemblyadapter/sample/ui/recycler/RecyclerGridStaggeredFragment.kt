@@ -30,11 +30,16 @@ class RecyclerGridStaggeredFragment : BaseBindingFragment<FragmentRecyclerBindin
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(true))
+        val appsOverviewAdapter =
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
-            listOf(AppCardGridItemFactory(), PinyinGroupItemFactory(true))
+            listOf(
+                AppCardGridItemFactory(requireActivity()),
+                PinyinGroupItemFactory(requireActivity(), true)
+            )
         )
-        val footerLoadStateAdapter = AssemblySingleDataRecyclerAdapter(LoadStateItemFactory())
+        val footerLoadStateAdapter =
+            AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager =

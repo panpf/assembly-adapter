@@ -2,7 +2,7 @@ package com.github.panpf.assemblyadapter
 
 import java.util.Comparator
 
-interface DataAdapter<DATA> {
+interface DatasAdapter<DATA> {
 
     val dataCount: Int
 

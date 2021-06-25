@@ -19,12 +19,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.AssemblyItem
+import com.github.panpf.assemblyadapter.AssemblyItemFactory
 import com.github.panpf.assemblyadapter.list.R
 
 class AssemblySingleDataExpandableListAdapter<GROUP_DATA> @JvmOverloads constructor(
-    private val itemFactory: ItemFactory<GROUP_DATA>,
+    private val itemFactory: AssemblyItemFactory<GROUP_DATA>,
     initData: GROUP_DATA? = null
 ) : BaseExpandableListAdapter(), AssemblyAdapter {
 
@@ -54,18 +54,34 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA> @JvmOverloads construc
         val groupData = getGroup(groupPosition)
         val groupItemView = convertView ?: itemFactory
             .dispatchCreateItem(parent).apply {
-                getItemView().setTag(R.id.aa_tag_item, this)
-            }.getItemView()
+                itemView.setTag(R.id.aa_tag_item, this)
+            }.itemView
+
+        @Suppress("UnnecessaryVariable") val groupBindingAdapterPosition = groupPosition
+        val groupAbsolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        val groupAbsoluteAdapterPosition =
+            (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<Any>
-        if (groupItem is AssemblyExpandableItem<*>) {
-            groupItem.groupPosition = groupPosition
-            groupItem.isExpanded = isExpanded
-            groupItem.childPosition = -1
-            groupItem.isLastChild = false
+        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as AssemblyItem<Any>
+        if (groupItem is AssemblyExpandableItem<Any>) {
+            groupItem.dispatchBindData(
+                groupBindingAdapterPosition,
+                groupAbsoluteAdapterPosition,
+                groupBindingAdapterPosition,
+                groupAbsoluteAdapterPosition,
+                -1,
+                isExpanded,
+                false,
+                groupData
+            )
+        } else {
+            groupItem.dispatchBindData(
+                groupBindingAdapterPosition,
+                groupAbsoluteAdapterPosition,
+                groupData
+            )
         }
-        groupItem.dispatchBindData(groupPosition, groupData)
         return groupItemView
     }
 
@@ -84,6 +100,7 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA> @JvmOverloads construc
         groupPosition: Int, childPosition: Int, isLastChild: Boolean,
         convertView: View?, parent: ViewGroup
     ): View {
+        // todo 支持 childView
         throw UnsupportedOperationException("getChildView unsupported in AssemblySingleDataExpandableListAdapter")
     }
 
@@ -95,5 +112,5 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA> @JvmOverloads construc
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> = itemFactory
+    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> = itemFactory
 }

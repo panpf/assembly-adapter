@@ -20,6 +20,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import com.github.panpf.assemblyadapter.list.R
 import java.util.*
 
 /**
@@ -226,9 +227,10 @@ internal class ConcatExpandableListAdapterController(
         globalGroupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
-        val groupView = wrapperAndPos.mWrapper!!.adapter.getGroupView(
-            wrapperAndPos.mLocalPosition, isExpanded, convertView, parent
-        )
+        val adapter = wrapperAndPos.mWrapper!!.adapter
+        val localGroupPosition = wrapperAndPos.mLocalPosition
+        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalGroupPosition)
+        val groupView = adapter.getGroupView(localGroupPosition, isExpanded, convertView, parent)
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return groupView
     }
@@ -270,8 +272,11 @@ internal class ConcatExpandableListAdapterController(
         convertView: View?, parent: ViewGroup
     ): View {
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
-        val childView = wrapperAndPos.mWrapper!!.adapter.getChildView(
-            wrapperAndPos.mLocalPosition, childPosition, isLastChild, convertView, parent
+        val adapter = wrapperAndPos.mWrapper!!.adapter
+        val localGroupPosition = wrapperAndPos.mLocalPosition
+        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalGroupPosition)
+        val childView = adapter.getChildView(
+            localGroupPosition, childPosition, isLastChild, convertView, parent
         )
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return childView

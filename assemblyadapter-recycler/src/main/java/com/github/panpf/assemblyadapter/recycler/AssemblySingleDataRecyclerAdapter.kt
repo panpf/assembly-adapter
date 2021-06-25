@@ -18,12 +18,14 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyRecyclerItem
+import com.github.panpf.assemblyadapter.AssemblyItem
+import com.github.panpf.assemblyadapter.AssemblyItemFactory
+import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
+import java.lang.IllegalArgumentException
 
 open class AssemblySingleDataRecyclerAdapter<DATA> @JvmOverloads constructor(
-    private val itemFactory: ItemFactory<DATA>,
+    private val itemFactory: AssemblyItemFactory<DATA>,
     initData: DATA? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter {
 
@@ -43,7 +45,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA> @JvmOverloads constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val item = itemFactory.dispatchCreateItem(parent)
-        return AssemblyRecyclerItem(item).apply {
+        return AssemblyItemViewHolderWrapper(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
             if (layoutManager is FullSpanStaggeredGridLayoutManager) {
@@ -53,14 +55,17 @@ open class AssemblySingleDataRecyclerAdapter<DATA> @JvmOverloads constructor(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is AssemblyRecyclerItem<*>) {
+        if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            (holder as AssemblyRecyclerItem<Any?>).dispatchBindData(position, data)
+            val item = holder.wrappedItem as AssemblyItem<Any>
+            item.dispatchBindData(position, holder.position, data)
+        } else {
+            throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
         return itemFactory
     }
 }

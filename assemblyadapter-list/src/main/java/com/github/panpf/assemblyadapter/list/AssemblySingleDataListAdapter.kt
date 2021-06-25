@@ -19,11 +19,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.AssemblyItem
+import com.github.panpf.assemblyadapter.AssemblyItemFactory
 
 open class AssemblySingleDataListAdapter<DATA>(
-    private val itemFactory: ItemFactory<DATA>,
+    private val itemFactory: AssemblyItemFactory<DATA>,
     initData: DATA? = null
 ) : BaseAdapter(), AssemblyAdapter {
 
@@ -47,15 +47,18 @@ open class AssemblySingleDataListAdapter<DATA>(
         val data = data
         val itemView = convertView ?: itemFactory
             .dispatchCreateItem(parent).apply {
-                getItemView().setTag(R.id.aa_tag_item, this)
-            }.getItemView()
+                itemView.setTag(R.id.aa_tag_item, this)
+            }.itemView
 
+        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
+        val absolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
         @Suppress("UNCHECKED_CAST")
-        val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
-        item.dispatchBindData(position, data)
+        val item = itemView.getTag(R.id.aa_tag_item) as AssemblyItem<Any>
+        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
         return itemView
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> = itemFactory
+    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> = itemFactory
 }

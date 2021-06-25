@@ -35,15 +35,19 @@ class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecycler
     }
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(true))
+        val appsOverviewAdapter =
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
         val pagingDataAdapter = AssemblyPagingDataAdapter(
-            listOf(AppCardGridItemFactory(), PinyinGroupItemFactory(true)),
+            listOf(
+                AppCardGridItemFactory(requireActivity()),
+                PinyinGroupItemFactory(requireActivity(), true)
+            ),
             KeyDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(
                 appsOverviewAdapter,
-                pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter())
+                pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter(requireActivity()))
             )
             layoutManager = AssemblyStaggeredGridLayoutManager(
                 3,
