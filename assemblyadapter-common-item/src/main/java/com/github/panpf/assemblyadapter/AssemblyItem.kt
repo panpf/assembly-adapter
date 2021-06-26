@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
+// todo 直接命名为 Item
 abstract class AssemblyItem<DATA>(val itemView: View) {
 
     private var _data: DATA? = null
@@ -16,7 +17,7 @@ abstract class AssemblyItem<DATA>(val itemView: View) {
     val appContext: Context = context.applicationContext
     val resources: Resources = context.resources
 
-    val data: DATA?
+    val dataOrNull: DATA?
         get() = _data
     val requireData: DATA
         get() = _data!!
@@ -29,12 +30,12 @@ abstract class AssemblyItem<DATA>(val itemView: View) {
         LayoutInflater.from(parent.context).inflate(itemLayoutId, parent, false)
     )
 
-    open fun dispatchBindData(bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA?) {
+    open fun dispatchBindData(bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA) {
         this._data = data
         this._bindingAdapterPosition = bindingAdapterPosition
         this._absoluteAdapterPosition = absoluteAdapterPosition
         bindData(_absoluteAdapterPosition, data)
     }
 
-    protected abstract fun bindData(bindingAdapterPosition: Int, data: DATA?)
+    protected abstract fun bindData(bindingAdapterPosition: Int, data: DATA)
 }

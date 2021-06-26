@@ -93,11 +93,9 @@ class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun getItem(position: Int): Fragment {
-        val data = data
-
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as AssemblyFragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(position, data).apply {
+        return itemFactory.dispatchCreateFragment(position, this.data!!).apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
     }

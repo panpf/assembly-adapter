@@ -11,12 +11,12 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentLoadStateBind
 
 class LoadStatePagerItemFactory : AssemblyPagerItemFactory<LoadState>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is LoadState
     }
 
     override fun createView(
-        context: Context, container: ViewGroup, position: Int, data: LoadState?
+        context: Context, container: ViewGroup, position: Int, data: LoadState
     ): View =
         FragmentLoadStateBinding.inflate(LayoutInflater.from(context), container, false).apply {
             loadStateLoadingLayout.isVisible = data is LoadState.Loading

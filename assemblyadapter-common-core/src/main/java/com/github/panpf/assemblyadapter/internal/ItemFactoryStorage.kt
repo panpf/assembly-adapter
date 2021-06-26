@@ -2,39 +2,50 @@ package com.github.panpf.assemblyadapter.internal
 
 import android.util.SparseArray
 import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Placeholder
 import java.util.*
 
-class ItemFactoryStorage<ITEM_FACTORY : ItemFactory>(itemFactoryListParam: List<ITEM_FACTORY>) {
+class ItemFactoryStorage<ITEM_FACTORY : ItemFactory>(
+    private val itemFactoryList: List<ITEM_FACTORY>,
+) {
 
-    val itemTypeCount: Int = itemFactoryListParam.size
-    private val itemFactoryList: List<ITEM_FACTORY> = ArrayList(itemFactoryListParam)
-    private val getItemFactoryByItemTypeArray: SparseArray<ITEM_FACTORY>
-    private val getItemTypeByItemFactoryMap: MutableMap<ITEM_FACTORY, Int>
-
-    init {
-        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
-
-        getItemFactoryByItemTypeArray = SparseArray()
-        getItemTypeByItemFactoryMap = HashMap()
+    private val getItemFactoryByItemTypeArray = SparseArray<ITEM_FACTORY>().apply {
         itemFactoryList.forEachIndexed { index, itemFactory ->
-            getItemFactoryByItemTypeArray.append(index, itemFactory)
-            getItemTypeByItemFactoryMap[itemFactory] = index
+            append(index, itemFactory)
+        }
+    }
+    private val getItemTypeByItemFactoryMap = HashMap<ITEM_FACTORY, Int>().apply {
+        itemFactoryList.forEachIndexed { index, itemFactory ->
+            this[itemFactory] = index
         }
     }
 
-    fun getItemFactoryByData(data: Any?): ITEM_FACTORY {
-        return itemFactoryList.find { it.match(data) }
-            ?: throw IllegalStateException("Not found matching item factory by data: $data")
+    val itemTypeCount = itemFactoryList.size
+
+    init {
+        require(this.itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
+
+    fun getItemFactoryByData(data: Any): ITEM_FACTORY {
+        val itemFactory = itemFactoryList.find { it.match(data) }
+        if (itemFactory != null) {
+            return itemFactory
+        }
+        if (data is Placeholder) {
+            throw IllegalArgumentException("Need to set the placeholderItemFactory property of Assembly*Adapter")
+        } else {
+            throw IllegalArgumentException("Not found matching item factory by data: $data")
+        }
+    }
+
+    fun getItemTypeByData(data: Any): Int {
+        val itemFactory = getItemFactoryByData(data)
+        return getItemTypeByItemFactoryMap[itemFactory]
+            ?: throw IllegalArgumentException("Not found matching item type by item factory: $itemFactory")
     }
 
     fun getItemFactoryByItemType(itemType: Int): ITEM_FACTORY {
         return getItemFactoryByItemTypeArray[itemType]
             ?: throw IllegalArgumentException("Unknown item type: $itemType")
-    }
-
-    fun getItemTypeByData(data: Any?): Int {
-        val itemFactory = getItemFactoryByData(data)
-        return getItemTypeByItemFactoryMap[itemFactory]
-            ?: throw IllegalStateException("Not found matching item type by item factory: $itemFactory")
     }
 }

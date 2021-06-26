@@ -42,26 +42,28 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     constructor(
         itemFactory: AssemblyItemFactory<GROUP_DATA>,
-        initData: GROUP_DATA? = null
-    ):this(listOf(itemFactory), initData)
+        initData: GROUP_DATA?
+    ) : this(listOf(itemFactory), initData)
+
+    constructor(itemFactory: AssemblyItemFactory<GROUP_DATA>) : this(listOf(itemFactory), null)
 
 
     override fun getGroupCount(): Int = if (data != null) 1 else 0
 
-    override fun getGroup(groupPosition: Int): GROUP_DATA? = data
+    override fun getGroup(groupPosition: Int): GROUP_DATA = data!!
 
     override fun getGroupId(groupPosition: Int): Long = groupPosition.toLong()
 
     override fun getGroupTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getGroupType(groupPosition: Int): Int {
-        return itemFactoryStorage.getItemTypeByData(getGroup(groupPosition))
+        return itemFactoryStorage.getItemTypeByData(data!!)
     }
 
     override fun getGroupView(
         groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
-        val groupData = getGroup(groupPosition)
+        val groupData = data!!
         val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(groupData)
             .dispatchCreateItem(parent).apply {
                 itemView.setTag(R.id.aa_tag_item, this)
@@ -101,10 +103,13 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return if (group is ExpandableGroup) group.getChildCount() else 0
     }
 
-    override fun getChild(groupPosition: Int, childPosition: Int): CHILD_DATA? {
-        val group = getGroup(groupPosition)
-        @Suppress("UNCHECKED_CAST")
-        return if (group is ExpandableGroup) group.getChild(childPosition) as CHILD_DATA? else null
+    override fun getChild(groupPosition: Int, childPosition: Int): CHILD_DATA {
+        val group = getGroup(groupPosition)!!
+        if (group is ExpandableGroup) {
+            @Suppress("UNCHECKED_CAST")
+            return group.getChild(childPosition) as CHILD_DATA
+        }
+        throw IllegalArgumentException("group item must implement ExpandableGroup interface. '${group::class.java.name}'")
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long = childPosition.toLong()
@@ -112,14 +117,14 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     override fun getChildTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getChildType(groupPosition: Int, childPosition: Int): Int {
-        return itemFactoryStorage.getItemTypeByData(getChild(groupPosition, childPosition))
+        return itemFactoryStorage.getItemTypeByData(getChild(groupPosition, childPosition)!!)
     }
 
     override fun getChildView(
         groupPosition: Int, childPosition: Int, isLastChild: Boolean,
         convertView: View?, parent: ViewGroup
     ): View {
-        val childData = getChild(groupPosition, childPosition)
+        val childData = getChild(groupPosition, childPosition)!!
         val childItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(childData)
             .dispatchCreateItem(parent).apply {
                 itemView.setTag(R.id.aa_tag_item, this)
@@ -158,6 +163,6 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
-        return itemFactoryStorage.getItemFactoryByData(data)
+        return itemFactoryStorage.getItemFactoryByData(data!!)
     }
 }

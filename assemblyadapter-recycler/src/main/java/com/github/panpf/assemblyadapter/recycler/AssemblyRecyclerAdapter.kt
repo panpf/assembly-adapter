@@ -17,29 +17,36 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.AssemblyItemFactory
-import com.github.panpf.assemblyadapter.DatasAdapter
+import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
-import java.lang.IllegalArgumentException
 import java.util.*
 
-open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
+open class AssemblyRecyclerAdapter<DATA>(
+    itemFactoryList: List<AssemblyItemFactory<*>>,
+    placeholderItemFactory: AssemblyPlaceholderItemFactory? = null,
+    dataList: List<DATA>? = null
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
+    private val itemFactoryStorage = ItemFactoryStorage(
+        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
+    )
+    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+
+    constructor(
+        itemFactoryList: List<AssemblyItemFactory<*>>,
+        placeholderItemFactory: AssemblyPlaceholderItemFactory?,
+    ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
         itemFactoryList: List<AssemblyItemFactory<*>>,
         dataList: List<DATA>?
-    ) : this(itemFactoryList) {
-        itemDataStorage.setDataList(dataList)
-    }
+    ) : this(itemFactoryList, null, dataList)
+
+    constructor(itemFactoryList: List<AssemblyItemFactory<*>>) : this(itemFactoryList, null, null)
 
     override fun getItemCount(): Int {
         return itemDataStorage.dataCount
@@ -50,7 +57,8 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<AssemblyItemFacto
     }
 
     override fun getItemViewType(position: Int): Int {
-        return itemFactoryStorage.getItemTypeByData(itemDataStorage.getData(position))
+        val matchData = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(matchData)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -69,7 +77,12 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<AssemblyItemFacto
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as AssemblyItem<Any>
-            item.dispatchBindData(position, holder.position, itemDataStorage.getData(position))
+            if (item is AssemblyPlaceholderItem) {
+                item.dispatchBindData(position, holder.position, Placeholder)
+            } else {
+                val data = itemDataStorage.getData(position)!!
+                item.dispatchBindData(position, holder.position, data)
+            }
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }
@@ -82,7 +95,7 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<AssemblyItemFacto
     override val dataListSnapshot: List<DATA>
         get() = itemDataStorage.dataListSnapshot
 
-    override fun getData(position: Int): DATA? {
+    override fun getData(position: Int): DATA {
         return itemDataStorage.getData(position)
     }
 
@@ -98,11 +111,11 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<AssemblyItemFacto
         itemDataStorage.addData(index, data)
     }
 
-    override fun addAllData(datas: Collection<DATA>?): Boolean {
+    override fun addAllData(datas: Collection<DATA>): Boolean {
         return itemDataStorage.addAllData(datas)
     }
 
-    override fun addAllData(index: Int, datas: Collection<DATA>?): Boolean {
+    override fun addAllData(index: Int, datas: Collection<DATA>): Boolean {
         return itemDataStorage.addAllData(index, datas)
     }
 
@@ -110,7 +123,7 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<AssemblyItemFacto
         return itemDataStorage.removeData(data)
     }
 
-    override fun removeData(index: Int): DATA? {
+    override fun removeData(index: Int): DATA {
         return itemDataStorage.removeData(index)
     }
 
@@ -128,6 +141,26 @@ open class AssemblyRecyclerAdapter<DATA>(itemFactoryList: List<AssemblyItemFacto
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
-        return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
+        val matchData = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(matchData)
+    }
+
+
+    class Builder<DATA>(private val itemFactoryList: List<AssemblyItemFactory<*>>) {
+
+        private var dataList: List<DATA>? = null
+        private var placeholderItemFactory: AssemblyPlaceholderItemFactory? = null
+
+        fun setDataList(dataList: List<DATA>?) {
+            this.dataList = dataList
+        }
+
+        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyPlaceholderItemFactory?) {
+            this.placeholderItemFactory = placeholderItemFactory
+        }
+
+        fun build(): AssemblyRecyclerAdapter<DATA> {
+            return AssemblyRecyclerAdapter(itemFactoryList, placeholderItemFactory, dataList)
+        }
     }
 }

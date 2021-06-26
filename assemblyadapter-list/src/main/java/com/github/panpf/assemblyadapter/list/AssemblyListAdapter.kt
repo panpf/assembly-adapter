@@ -18,28 +18,35 @@ package com.github.panpf.assemblyadapter.list
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.AssemblyItemFactory
-import com.github.panpf.assemblyadapter.DatasAdapter
+import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
-class AssemblyListAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
-    BaseAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
+class AssemblyListAdapter<DATA>(
+    itemFactoryList: List<AssemblyItemFactory<*>>,
+    placeholderItemFactory: AssemblyPlaceholderItemFactory? = null,
+    dataList: List<DATA>? = null
+) : BaseAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
+    private val itemFactoryStorage = ItemFactoryStorage(
+        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
+    )
+    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+
+    constructor(
+        itemFactoryList: List<AssemblyItemFactory<*>>,
+        placeholderItemFactory: AssemblyPlaceholderItemFactory?,
+    ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
         itemFactoryList: List<AssemblyItemFactory<*>>,
         dataList: List<DATA>?
-    ) : this(itemFactoryList) {
-        itemDataStorage.setDataList(dataList)
-    }
+    ) : this(itemFactoryList, null, dataList)
 
-    override fun getItem(position: Int): DATA? {
+    constructor(itemFactoryList: List<AssemblyItemFactory<*>>) : this(itemFactoryList, null, null)
+
+    override fun getItem(position: Int): DATA {
         return itemDataStorage.getData(position)
     }
 
@@ -56,12 +63,14 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return itemFactoryStorage.getItemTypeByData(getItem(position))
+        val matchData = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(matchData)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val data = itemDataStorage.getData(position)
-        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(data)
+        val matchData = data ?: Placeholder
+        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(matchData)
             .dispatchCreateItem(parent).apply {
                 itemView.setTag(R.id.aa_tag_item, this)
             }.itemView
@@ -69,9 +78,15 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
+
         @Suppress("UNCHECKED_CAST")
         val item = itemView.getTag(R.id.aa_tag_item) as AssemblyItem<Any>
-        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
+        if (item is AssemblyPlaceholderItem) {
+            item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, Placeholder)
+        } else {
+            item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data!!)
+        }
+
         return itemView
     }
 
@@ -82,7 +97,7 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
     override val dataListSnapshot: List<DATA>
         get() = itemDataStorage.dataListSnapshot
 
-    override fun getData(position: Int): DATA? {
+    override fun getData(position: Int): DATA {
         return itemDataStorage.getData(position)
     }
 
@@ -98,11 +113,11 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
         itemDataStorage.addData(index, data)
     }
 
-    override fun addAllData(datas: Collection<DATA>?): Boolean {
+    override fun addAllData(datas: Collection<DATA>): Boolean {
         return itemDataStorage.addAllData(datas)
     }
 
-    override fun addAllData(index: Int, datas: Collection<DATA>?): Boolean {
+    override fun addAllData(index: Int, datas: Collection<DATA>): Boolean {
         return itemDataStorage.addAllData(index, datas)
     }
 
@@ -110,7 +125,7 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
         return itemDataStorage.removeData(data)
     }
 
-    override fun removeData(index: Int): DATA? {
+    override fun removeData(index: Int): DATA {
         return itemDataStorage.removeData(index)
     }
 
@@ -128,6 +143,26 @@ class AssemblyListAdapter<DATA>(itemFactoryList: List<AssemblyItemFactory<*>>) :
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
-        return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
+        val matchData = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(matchData)
+    }
+
+
+    class Builder<DATA>(private val itemFactoryList: List<AssemblyItemFactory<*>>) {
+
+        private var dataList: List<DATA>? = null
+        private var placeholderItemFactory: AssemblyPlaceholderItemFactory? = null
+
+        fun setDataList(dataList: List<DATA>?) {
+            this.dataList = dataList
+        }
+
+        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyPlaceholderItemFactory?) {
+            this.placeholderItemFactory = placeholderItemFactory
+        }
+
+        fun build(): AssemblyListAdapter<DATA> {
+            return AssemblyListAdapter(itemFactoryList, placeholderItemFactory, dataList)
+        }
     }
 }

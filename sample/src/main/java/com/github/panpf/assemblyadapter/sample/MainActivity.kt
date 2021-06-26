@@ -9,7 +9,9 @@ import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.AcivityMainBinding
 import com.github.panpf.assemblyadapter.sample.item.LinkItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListFragment
+import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListPlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListFragment
+import com.github.panpf.assemblyadapter.sample.ui.list.ListPlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentStateFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager.PagerViewFragment
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                     Link("RecyclerView - Linear - Sticky", RecyclerLinearStickyFragment()),
                     Link("RecyclerView - Grid", RecyclerGridFragment()),
                     Link("RecyclerView - Grid - Staggered", RecyclerGridStaggeredFragment()),
+                    Link("RecyclerView - Placeholder", RecyclerPlaceholderFragment()),
                     Link("RecyclerView - Paging - Linear", RecyclerPagingLinearFragment()),
                     Link(
                         "RecyclerView - Paging - Linear - Sticky",
@@ -47,7 +50,9 @@ class MainActivity : AppCompatActivity() {
                         RecyclerPagingGridStaggeredFragment()
                     ),
                     Link("ListView", ListFragment()),
+                    Link("ListView - Placeholder", ListPlaceholderFragment()),
                     Link("ExpandableListView", ExpandableListFragment()),
+                    Link("ExpandableListView - Placeholder", ExpandableListPlaceholderFragment()),
                     Link("ViewPager - View", PagerViewFragment()),
                     Link("ViewPager - Fragment", PagerFragmentFragment()),
                     Link("ViewPager - Fragment - State", PagerFragmentStateFragment()),

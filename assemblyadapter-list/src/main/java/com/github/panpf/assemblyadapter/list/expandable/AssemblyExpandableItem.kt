@@ -40,7 +40,7 @@ abstract class AssemblyExpandableItem<DATA> : AssemblyItem<DATA> {
         childPosition: Int,
         isExpanded: Boolean,
         isLastChild: Boolean,
-        data: DATA?
+        data: DATA
     ) {
         this._groupBindingAdapterPosition = groupBindingAdapterPosition
         this._groupAbsoluteAdapterPosition = groupAbsoluteAdapterPosition

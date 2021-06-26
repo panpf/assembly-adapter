@@ -44,18 +44,18 @@ open class AssemblySingleDataListAdapter<DATA>(
     override fun getItemViewType(position: Int): Int = 0
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val data = data
         val itemView = convertView ?: itemFactory
             .dispatchCreateItem(parent).apply {
                 itemView.setTag(R.id.aa_tag_item, this)
             }.itemView
 
-        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
+        @Suppress("UnnecessaryVariable")
+        val bindingAdapterPosition = position
         val absolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
         @Suppress("UNCHECKED_CAST")
         val item = itemView.getTag(R.id.aa_tag_item) as AssemblyItem<Any>
-        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
+        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data!!)
         return itemView
     }
 

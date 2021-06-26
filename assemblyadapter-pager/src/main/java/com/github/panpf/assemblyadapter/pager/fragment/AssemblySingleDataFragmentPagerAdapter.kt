@@ -28,7 +28,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
         "com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter"
     )
 )
-class AssemblySingleDataFragmentPagerAdapter<DATA> : FragmentPagerAdapter, AssemblyAdapter{
+class AssemblySingleDataFragmentPagerAdapter<DATA> : FragmentPagerAdapter, AssemblyAdapter {
 
     private val itemFactory: AssemblyFragmentItemFactory<DATA>
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
@@ -92,11 +92,9 @@ class AssemblySingleDataFragmentPagerAdapter<DATA> : FragmentPagerAdapter, Assem
     override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun getItem(position: Int): Fragment {
-        val data = data
-
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as AssemblyFragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(position, data).apply {
+        return itemFactory.dispatchCreateFragment(position, data!!).apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
     }

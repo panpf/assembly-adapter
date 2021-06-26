@@ -20,11 +20,11 @@ import com.github.panpf.assemblyadapter.ItemFactory
 
 abstract class AssemblyFragmentItemFactory<DATA> : ItemFactory {
 
-    abstract override fun match(data: Any?): Boolean
+    abstract override fun match(data: Any): Boolean
 
-    fun dispatchCreateFragment(position: Int, data: DATA?): Fragment {
+    fun dispatchCreateFragment(position: Int, data: DATA): Fragment {
         return createFragment(position, data)
     }
 
-    abstract fun createFragment(position: Int, data: DATA?): Fragment
+    abstract fun createFragment(position: Int, data: DATA): Fragment
 }

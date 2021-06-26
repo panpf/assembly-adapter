@@ -6,11 +6,11 @@ import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFacto
 
 class LoadStateFragmentItemFactory : AssemblyFragmentItemFactory<LoadState>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is LoadState
     }
 
-    override fun createFragment(position: Int, data: LoadState?): Fragment {
-        return LoadStateFragment.createInstance(data!!)
+    override fun createFragment(position: Int, data: LoadState): Fragment {
+        return LoadStateFragment.createInstance(data)
     }
 }

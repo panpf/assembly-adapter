@@ -25,12 +25,12 @@ abstract class BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING : ViewBin
     ) {
     }
 
-    abstract fun bindData(
+    abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: BindingAssemblyExpandableItem<DATA, VIEW_BINDING>,
+        item: AssemblyExpandableItem<DATA>,
         bindingAdapterPosition: Int,
-        data: DATA?
+        data: DATA
     )
 
     class BindingAssemblyExpandableItem<DATA, VIEW_BINDING : ViewBinding>(
@@ -38,8 +38,8 @@ abstract class BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING : ViewBin
         val binding: VIEW_BINDING
     ) : AssemblyExpandableItem<DATA>(binding.root) {
 
-        public override fun bindData(bindingAdapterPosition: Int, data: DATA?) {
-            factory.bindData(context, binding, this, bindingAdapterPosition, data)
+        public override fun bindData(bindingAdapterPosition: Int, data: DATA) {
+            factory.bindItemData(context, binding, this, bindingAdapterPosition, data)
         }
     }
 }

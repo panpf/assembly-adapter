@@ -10,15 +10,15 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentPinyinGroupBi
 
 class PinyinGroupPagerItemFactory : AssemblyPagerItemFactory<PinyinGroup>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is PinyinGroup
     }
 
     override fun createView(
-        context: Context, container: ViewGroup, position: Int, data: PinyinGroup?
+        context: Context, container: ViewGroup, position: Int, data: PinyinGroup
     ): View =
         FragmentPinyinGroupBinding.inflate(LayoutInflater.from(context), container, false).apply {
-            pinyinGroupGroupNameText.text = data?.title
-            pinyinGroupAppCountText.text = data?.childSize?.toString()
+            pinyinGroupGroupNameText.text = data.title
+            pinyinGroupAppCountText.text = data.childSize.toString()
         }.root
 }

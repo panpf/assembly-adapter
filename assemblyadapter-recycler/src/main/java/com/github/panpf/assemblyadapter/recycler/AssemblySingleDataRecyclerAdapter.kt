@@ -58,7 +58,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA>(
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as AssemblyItem<Any>
-            item.dispatchBindData(position, holder.position, data)
+            item.dispatchBindData(position, holder.position, data!!)
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }

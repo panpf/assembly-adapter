@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import com.github.panpf.assemblyadapter.AssemblyItem
 import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
 import com.github.panpf.assemblyadapter.sample.base.FragmentContainerActivity
 import com.github.panpf.assemblyadapter.sample.bean.Link
@@ -13,7 +14,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemLinkBinding
 class LinkItemFactory(private val activity: Activity) :
     BindingAssemblyItemFactory<Link, ItemLinkBinding>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is Link
     }
 
@@ -29,7 +30,7 @@ class LinkItemFactory(private val activity: Activity) :
     ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
-            val data = item.data ?: return@setOnClickListener
+            val data = item.dataOrNull ?: return@setOnClickListener
             val title = data.title.substringBefore(" - ", data.title)
             val subTitle = data.title.substringAfter(" - ", "")
             context.startActivity(
@@ -38,7 +39,7 @@ class LinkItemFactory(private val activity: Activity) :
         }
 
         binding.root.setOnLongClickListener {
-            val data = item.data ?: return@setOnLongClickListener false
+            val data = item.dataOrNull ?: return@setOnLongClickListener false
             AlertDialog.Builder(activity).apply {
                 setMessage(buildString {
                     append("Item（${data.title}）").appendLine()
@@ -51,11 +52,13 @@ class LinkItemFactory(private val activity: Activity) :
         }
     }
 
-    override fun bindData(
-        context: Context, binding: ItemLinkBinding,
-        item: BindingAssemblyItem<Link, ItemLinkBinding>,
-        bindingAdapterPosition: Int, data: Link?
+    override fun bindItemData(
+        context: Context,
+        binding: ItemLinkBinding,
+        item: AssemblyItem<Link>,
+        bindingAdapterPosition: Int,
+        data: Link
     ) {
-        binding.linkItemTitleText.text = data?.title
+        binding.linkItemTitleText.text = data.title
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.updateLayoutParams
+import com.github.panpf.assemblyadapter.AssemblyItem
 import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemPinyinGroupBinding
@@ -17,7 +18,7 @@ open class PinyinGroupItemFactory(
     private val hideStartMargin: Boolean = false
 ) : BindingAssemblyItemFactory<PinyinGroup, ItemPinyinGroupBinding>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is PinyinGroup
     }
 
@@ -45,7 +46,7 @@ open class PinyinGroupItemFactory(
         }
 
         binding.root.setOnClickListener {
-            val data = item.data ?: return@setOnClickListener
+            val data = item.dataOrNull ?: return@setOnClickListener
             val bindingAdapterPosition = item.bindingAdapterPosition
             val absoluteAdapterPosition = item.absoluteAdapterPosition
             Toast.makeText(
@@ -56,7 +57,7 @@ open class PinyinGroupItemFactory(
         }
 
         binding.root.setOnLongClickListener {
-            val data = item.data ?: return@setOnLongClickListener false
+            val data = item.dataOrNull ?: return@setOnLongClickListener false
             AlertDialog.Builder(activity).apply {
                 setMessage(buildString {
                     append("Group（${data.title}）").appendLine()
@@ -69,11 +70,13 @@ open class PinyinGroupItemFactory(
         }
     }
 
-    override fun bindData(
-        context: Context, binding: ItemPinyinGroupBinding,
-        item: BindingAssemblyItem<PinyinGroup, ItemPinyinGroupBinding>,
-        bindingAdapterPosition: Int, data: PinyinGroup?
+    override fun bindItemData(
+        context: Context,
+        binding: ItemPinyinGroupBinding,
+        item: AssemblyItem<PinyinGroup>,
+        bindingAdapterPosition: Int,
+        data: PinyinGroup
     ) {
-        binding.pinyinGroupItemTitleText.text = data?.title
+        binding.pinyinGroupItemTitleText.text = data.title
     }
 }

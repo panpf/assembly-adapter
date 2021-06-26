@@ -2,9 +2,18 @@ package com.github.panpf.assemblyadapter.internal
 
 import java.util.*
 
-class ItemDataStorage<DATA>(private val onDataListChanged: () -> Unit) {
+class ItemDataStorage<DATA>(
+    _dataList: List<DATA>?,
+    private val onDataListChanged: () -> Unit
+) {
 
-    private val dataList: MutableList<DATA> = ArrayList()
+    private val dataList = ArrayList<DATA>()
+
+    init {
+        if (_dataList != null) {
+            dataList.addAll(_dataList)
+        }
+    }
 
     val dataCount: Int
         get() = dataList.size
@@ -13,18 +22,18 @@ class ItemDataStorage<DATA>(private val onDataListChanged: () -> Unit) {
 
     fun setDataList(datas: List<DATA>?) {
         dataList.clear()
-        if (datas != null && datas.isNotEmpty()) {
+        if (datas != null) {
             dataList.addAll(datas)
         }
         onDataListChanged()
     }
 
     fun addData(data: DATA): Boolean {
-        val result = dataList.add(data)
-        if (result) {
-            onDataListChanged()
+        return dataList.add(data).apply {
+            if (this) {
+                onDataListChanged()
+            }
         }
-        return result
     }
 
     fun addData(index: Int, data: DATA) {
@@ -32,64 +41,51 @@ class ItemDataStorage<DATA>(private val onDataListChanged: () -> Unit) {
         onDataListChanged()
     }
 
-    fun addAllData(datas: Collection<DATA>?): Boolean {
-        var result = false
-        if (datas != null && datas.isNotEmpty()) {
-            result = dataList.addAll(datas)
+    fun addAllData(datas: Collection<DATA>): Boolean {
+        return dataList.addAll(datas).apply {
+            if (this) {
+                onDataListChanged()
+            }
         }
-        if (result) {
-            onDataListChanged()
-        }
-        return result
     }
 
-    fun addAllData(index: Int, datas: Collection<DATA>?): Boolean {
-        var result = false
-        if (datas != null && datas.isNotEmpty()) {
-            result = dataList.addAll(index, datas)
+    fun addAllData(index: Int, datas: Collection<DATA>): Boolean {
+        return dataList.addAll(index, datas).apply {
+            if (this) {
+                onDataListChanged()
+            }
         }
-        if (result) {
-            onDataListChanged()
-        }
-        return result
     }
 
     @SafeVarargs
     fun addAllData(vararg datas: DATA): Boolean {
-        var result = false
-        if (datas.isNotEmpty()) {
-            Collections.addAll(dataList, *datas)
-            result = true
+        return Collections.addAll(dataList, *datas).apply {
+            if (this) {
+                onDataListChanged()
+            }
         }
-        if (result) {
-            onDataListChanged()
-        }
-        return result
     }
 
     fun removeData(data: DATA): Boolean {
-        val result: Boolean = dataList.remove(data)
-        if (result) {
-            onDataListChanged()
+        return dataList.remove(data).apply {
+            if (this) {
+                onDataListChanged()
+            }
         }
-        return result
     }
 
-    fun removeData(index: Int): DATA? {
-        val data: DATA? = dataList.removeAt(index)
-        onDataListChanged()
-        return data
-    }
-
-    fun removeAllData(datas: Collection<DATA>?): Boolean {
-        var result = false
-        if (datas != null && datas.isNotEmpty()) {
-            result = dataList.removeAll(datas)
-        }
-        if (result) {
+    fun removeData(index: Int): DATA {
+        return dataList.removeAt(index).apply {
             onDataListChanged()
         }
-        return result
+    }
+
+    fun removeAllData(datas: Collection<DATA>): Boolean {
+        return dataList.removeAll(datas).apply {
+            if (this) {
+                onDataListChanged()
+            }
+        }
     }
 
     fun clearData() {
@@ -102,7 +98,7 @@ class ItemDataStorage<DATA>(private val onDataListChanged: () -> Unit) {
         onDataListChanged()
     }
 
-    fun getData(position: Int): DATA? {
-        return dataList.getOrNull(position)
+    fun getData(position: Int): DATA {
+        return dataList[position]
     }
 }

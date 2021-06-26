@@ -4,9 +4,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.AssemblyItemFactory
+import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
@@ -16,16 +14,43 @@ import kotlinx.coroutines.Dispatchers
 open class AssemblyPagingDataAdapter<DATA : Any>(
     itemFactoryList: List<AssemblyItemFactory<*>>,
     diffCallback: DiffUtil.ItemCallback<DATA>,
+    placeholderItemFactory: AssemblyPlaceholderItemFactory? = null,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
     diffCallback, mainDispatcher, workerDispatcher
 ), AssemblyAdapter {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    constructor(
+        itemFactoryList: List<AssemblyItemFactory<*>>,
+        diffCallback: DiffUtil.ItemCallback<DATA>,
+        placeholderItemFactory: AssemblyPlaceholderItemFactory,
+    ) : this(
+        itemFactoryList,
+        diffCallback,
+        placeholderItemFactory,
+        Dispatchers.Main,
+        Dispatchers.Default
+    )
+
+    constructor(
+        itemFactoryList: List<AssemblyItemFactory<*>>,
+        diffCallback: DiffUtil.ItemCallback<DATA>,
+    ) : this(
+        itemFactoryList,
+        diffCallback,
+        null,
+        Dispatchers.Main,
+        Dispatchers.Default
+    )
+
+    private val itemFactoryStorage = ItemFactoryStorage(
+        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
+    )
 
     override fun getItemViewType(position: Int): Int {
-        return itemFactoryStorage.getItemTypeByData(peek(position))
+        val matchData = peek(position) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(matchData)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -44,7 +69,14 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as AssemblyItem<Any>
-            item.dispatchBindData(position, holder.position, getItem(position))
+            // Here you must use the getItem method to trigger append load
+            // And must be placed in this position
+            val data = getItem(position)
+            if (item is AssemblyPlaceholderItem) {
+                item.dispatchBindData(position, holder.position, Placeholder)
+            } else {
+                item.dispatchBindData(position, holder.position, data!!)
+            }
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }
@@ -52,6 +84,39 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
-        return itemFactoryStorage.getItemFactoryByData(peek(position))
+        val matchData = peek(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(matchData)
+    }
+
+
+    class Builder<DATA : Any>(
+        private val itemFactoryList: List<AssemblyItemFactory<*>>,
+        private val diffCallback: DiffUtil.ItemCallback<DATA>
+    ) {
+        private var placeholderItemFactory: AssemblyPlaceholderItemFactory? = null
+        private var mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+        private var workerDispatcher: CoroutineDispatcher = Dispatchers.Default
+
+        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyPlaceholderItemFactory?) {
+            this.placeholderItemFactory = placeholderItemFactory
+        }
+
+        fun setMainDispatcher(mainDispatcher: CoroutineDispatcher) {
+            this.mainDispatcher = mainDispatcher
+        }
+
+        fun setWorkerDispatcher(workerDispatcher: CoroutineDispatcher) {
+            this.workerDispatcher = workerDispatcher
+        }
+
+        fun build(): AssemblyPagingDataAdapter<DATA> {
+            return AssemblyPagingDataAdapter(
+                itemFactoryList,
+                diffCallback,
+                placeholderItemFactory,
+                mainDispatcher,
+                workerDispatcher
+            )
+        }
     }
 }

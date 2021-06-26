@@ -5,11 +5,12 @@ import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.internal.ClickListenerManager
 
+// todo 直接命名为 ItemFactory
 abstract class AssemblyItemFactory<DATA> : ItemFactory {
 
     private var clickListenerManager: ClickListenerManager<DATA>? = null
 
-    abstract override fun match(data: Any?): Boolean
+    abstract override fun match(data: Any): Boolean
 
     open fun dispatchCreateItem(parent: ViewGroup): AssemblyItem<DATA> {
         return createItem(parent).apply {
@@ -74,7 +75,7 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory {
                         view,
                         bindItem.bindingAdapterPosition,
                         bindItem.absoluteAdapterPosition,
-                        bindItem.data
+                        bindItem.dataOrNull
                     )
                 }
             } else if (holder is ClickListenerManager.LongClickListenerHolder<*>) {
@@ -97,7 +98,7 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory {
                         view,
                         bindItem.bindingAdapterPosition,
                         bindItem.absoluteAdapterPosition,
-                        bindItem.data
+                        bindItem.dataOrNull
                     )
                 }
             }

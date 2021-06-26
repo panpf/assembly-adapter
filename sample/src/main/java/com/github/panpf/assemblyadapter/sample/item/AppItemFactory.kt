@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import com.github.panpf.assemblyadapter.AssemblyItem
 import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
@@ -17,7 +18,7 @@ import me.panpf.sketch.uri.AppIconUriModel
 class AppItemFactory(private val activity: Activity) :
     BindingAssemblyItemFactory<AppInfo, ItemAppBinding>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is AppInfo
     }
 
@@ -33,7 +34,7 @@ class AppItemFactory(private val activity: Activity) :
     ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
-            val data = item.data ?: return@setOnClickListener
+            val data = item.dataOrNull ?: return@setOnClickListener
             val launchIntent =
                 context.packageManager.getLaunchIntentForPackage(data.packageName)
             if (launchIntent != null) {
@@ -42,7 +43,7 @@ class AppItemFactory(private val activity: Activity) :
         }
 
         binding.root.setOnLongClickListener {
-            val data = item.data ?: return@setOnLongClickListener false
+            val data = item.dataOrNull ?: return@setOnLongClickListener false
             AlertDialog.Builder(activity).apply {
                 setMessage(buildString {
                     append("App（${data.name}）").appendLine()
@@ -64,12 +65,13 @@ class AppItemFactory(private val activity: Activity) :
         }
     }
 
-    override fun bindData(
-        context: Context, binding: ItemAppBinding,
-        item: BindingAssemblyItem<AppInfo, ItemAppBinding>,
-        bindingAdapterPosition: Int, data: AppInfo?
+    override fun bindItemData(
+        context: Context,
+        binding: ItemAppBinding,
+        item: AssemblyItem<AppInfo>,
+        bindingAdapterPosition: Int,
+        data: AppInfo
     ) {
-        data ?: return
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
         binding.appItemIconImage.displayImage(appIconUri)
         binding.appItemNameText.text = data.name

@@ -43,11 +43,11 @@ class AssemblySingleDataPagerAdapter<DATA>(
     override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val data = data
-
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as AssemblyPagerItemFactory<Any>
-        val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
+        val itemView = itemFactory.dispatchCreateView(
+            container.context, container, position, data!!
+        )
         container.addView(itemView)
         return itemView.apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)

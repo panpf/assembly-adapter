@@ -17,20 +17,20 @@ import com.github.panpf.tools4a.dimen.ktx.dp2px
 class AppGroupPagerItemFactory(private val activity: Activity) :
     AssemblyPagerItemFactory<AppGroup>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is AppGroup
     }
 
     override fun createView(
-        context: Context, container: ViewGroup, position: Int, data: AppGroup?
+        context: Context, container: ViewGroup, position: Int, data: AppGroup
     ): View =
         FragmentAppGroupBinding.inflate(LayoutInflater.from(context), container, false).apply {
-            appGroupGroupNameText.text = data?.title
-            appGroupAppCountText.text = data?.appList?.size?.toString()
+            appGroupGroupNameText.text = data.title
+            appGroupAppCountText.text = data.appList.size.toString()
             appGroupRecycler.apply {
                 adapter = AssemblyRecyclerAdapter<Any>(
                     listOf(AppCardGridItemFactory(activity)),
-                    data?.appList
+                    data.appList
                 )
                 layoutManager = GridLayoutManager(context, 3)
                 addItemDecoration(

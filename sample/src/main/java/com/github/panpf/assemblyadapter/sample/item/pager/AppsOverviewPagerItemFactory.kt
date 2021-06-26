@@ -11,19 +11,16 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppsOverviewB
 
 class AppsOverviewPagerItemFactory : AssemblyPagerItemFactory<AppsOverview>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is AppsOverview
     }
 
     override fun createView(
-        context: Context, container: ViewGroup, position: Int, data: AppsOverview?
+        context: Context, container: ViewGroup, position: Int, data: AppsOverview
     ): View =
         FragmentAppsOverviewBinding.inflate(LayoutInflater.from(context), container, false).apply {
             appsOverviewContentText.text = context.getString(
-                R.string.apps_overview,
-                data?.count ?: 0,
-                data?.userAppCount ?: 0,
-                data?.groupCount ?: 0
+                R.string.apps_overview, data.count, data.userAppCount, data.groupCount
             )
         }.root
 }

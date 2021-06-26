@@ -6,11 +6,11 @@ import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 
 class AppsOverviewFragmentItemFactory : AssemblyFragmentItemFactory<AppsOverview>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is AppsOverview
     }
 
-    override fun createFragment(position: Int, data: AppsOverview?): Fragment {
-        return AppsOverviewFragment.createInstance(data!!)
+    override fun createFragment(position: Int, data: AppsOverview): Fragment {
+        return AppsOverviewFragment.createInstance(data)
     }
 }

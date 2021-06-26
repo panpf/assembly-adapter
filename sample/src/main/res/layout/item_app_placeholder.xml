@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/appPlaceholderItemIconImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
+        android:background="@color/placeholder"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/AppIconPlaceholderShape" />
+
+    <View
+        android:id="@+id/appPlaceholderItemNameText"
+        android:layout_width="0dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/placeholder"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/appPlaceholderItemVersionText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/appPlaceholderItemIconImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <View
+        android:id="@+id/appPlaceholderItemVersionText"
+        android:layout_width="180dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/placeholder"
+        app:layout_constraintBottom_toTopOf="@id/appPlaceholderItemSizeText"
+        app:layout_constraintStart_toStartOf="@id/appPlaceholderItemNameText"
+        app:layout_constraintTop_toBottomOf="@id/appPlaceholderItemNameText" />
+
+    <View
+        android:id="@+id/appPlaceholderItemSizeText"
+        android:layout_width="80dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/appPlaceholderItemNameText"
+        app:layout_constraintTop_toBottomOf="@id/appPlaceholderItemVersionText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

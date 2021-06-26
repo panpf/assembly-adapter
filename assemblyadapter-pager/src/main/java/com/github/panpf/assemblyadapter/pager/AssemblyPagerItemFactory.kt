@@ -20,17 +20,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.ItemFactory
 
+// todo 新增 Binding 支持 和 ViewPagerItemFactory
 abstract class AssemblyPagerItemFactory<DATA> : ItemFactory {
 
-    abstract override fun match(data: Any?): Boolean
+    abstract override fun match(data: Any): Boolean
 
     fun dispatchCreateView(
-        context: Context, container: ViewGroup, position: Int, data: DATA?
+        context: Context, container: ViewGroup, position: Int, data: DATA
     ): View {
         return createView(context, container, position, data)
     }
 
     abstract fun createView(
-        context: Context, container: ViewGroup, position: Int, data: DATA?
+        context: Context, container: ViewGroup, position: Int, data: DATA
     ): View
 }

@@ -24,12 +24,12 @@ abstract class BindingAssemblyItemFactory<DATA, VIEW_BINDING : ViewBinding> :
     ) {
     }
 
-    abstract fun bindData(
+    abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: BindingAssemblyItem<DATA, VIEW_BINDING>,
+        item: AssemblyItem<DATA>,
         bindingAdapterPosition: Int,
-        data: DATA?
+        data: DATA
     )
 
     class BindingAssemblyItem<DATA, VIEW_BINDING : ViewBinding>(
@@ -37,8 +37,8 @@ abstract class BindingAssemblyItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         val binding: VIEW_BINDING
     ) : AssemblyItem<DATA>(binding.root) {
 
-        public override fun bindData(bindingAdapterPosition: Int, data: DATA?) {
-            factory.bindData(context, binding, this, bindingAdapterPosition, data)
+        override fun bindData(bindingAdapterPosition: Int, data: DATA) {
+            factory.bindItemData(context, binding, this, bindingAdapterPosition, data)
         }
     }
 }

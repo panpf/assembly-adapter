@@ -3,4 +3,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
+
+    <style name="AppIconPlaceholderShape">
+        <item name="cornerSize">16dp</item>
+    </style>
 </resources>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.updatePadding
+import com.github.panpf.assemblyadapter.AssemblyItem
 import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
@@ -17,7 +18,7 @@ class AppsOverviewItemFactory(
 ) :
     BindingAssemblyItemFactory<AppsOverview, ItemAppsOverviewBinding>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is AppsOverview
     }
 
@@ -50,16 +51,15 @@ class AppsOverviewItemFactory(
         }
     }
 
-    override fun bindData(
-        context: Context, binding: ItemAppsOverviewBinding,
-        item: BindingAssemblyItem<AppsOverview, ItemAppsOverviewBinding>,
-        bindingAdapterPosition: Int, data: AppsOverview?
+    override fun bindItemData(
+        context: Context,
+        binding: ItemAppsOverviewBinding,
+        item: AssemblyItem<AppsOverview>,
+        bindingAdapterPosition: Int,
+        data: AppsOverview
     ) {
         binding.appsOverviewItemContentText.text = context.getString(
-            R.string.apps_overview_item,
-            data?.count ?: 0,
-            data?.userAppCount ?: 0,
-            data?.groupCount ?: 0
+            R.string.apps_overview_item, data.count, data.userAppCount, data.groupCount
         )
     }
 }

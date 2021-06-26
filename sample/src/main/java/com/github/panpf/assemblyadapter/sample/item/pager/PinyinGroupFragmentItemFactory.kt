@@ -6,11 +6,11 @@ import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
 
 class PinyinGroupFragmentItemFactory : AssemblyFragmentItemFactory<PinyinGroup>() {
 
-    override fun match(data: Any?): Boolean {
+    override fun match(data: Any): Boolean {
         return data is PinyinGroup
     }
 
-    override fun createFragment(position: Int, data: PinyinGroup?): Fragment {
-        return PinyinGroupFragment.createInstance(data!!)
+    override fun createFragment(position: Int, data: PinyinGroup): Fragment {
+        return PinyinGroupFragment.createInstance(data)
     }
 }

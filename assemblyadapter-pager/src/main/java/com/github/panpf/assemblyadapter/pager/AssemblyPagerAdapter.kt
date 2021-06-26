@@ -20,15 +20,21 @@ import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DatasAdapter
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
-class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<*>>) :
-    PagerAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
+class AssemblyPagerAdapter<DATA>(
+    itemFactoryList: List<AssemblyPagerItemFactory<*>>,
+    placeholderItemFactory: AssemblyPagerPlaceholderItemFactory? = null,
+    dataList: List<DATA>? = null
+) : PagerAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage<DATA> { notifyDataSetChanged() }
+    private val itemFactoryStorage = ItemFactoryStorage(
+        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
+    )
+    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
     var isDisableItemRefreshWhenDataSetChanged: Boolean
@@ -41,10 +47,13 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
 
     constructor(
         itemFactoryList: List<AssemblyPagerItemFactory<*>>,
+        placeholderItemFactory: AssemblyPagerPlaceholderItemFactory?,
+    ) : this(itemFactoryList, placeholderItemFactory, null)
+
+    constructor(
+        itemFactoryList: List<AssemblyPagerItemFactory<*>>,
         dataList: List<DATA>?
-    ) : this(itemFactoryList) {
-        itemDataStorage.setDataList(dataList)
-    }
+    ) : this(itemFactoryList, null, dataList)
 
     override fun getCount(): Int {
         return itemDataStorage.dataCount
@@ -52,11 +61,16 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val data = itemDataStorage.getData(position)
+        val matchData = data ?: Placeholder
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(data) as AssemblyPagerItemFactory<Any>
-        val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
+            itemFactoryStorage.getItemFactoryByData(matchData) as AssemblyPagerItemFactory<Any>
+        val itemView = if (itemFactory is AssemblyPagerPlaceholderItemFactory) {
+            itemFactory.dispatchCreateView(container.context, container, position, Placeholder)
+        } else {
+            itemFactory.dispatchCreateView(container.context, container, position, data!!)
+        }
         container.addView(itemView)
         return itemView.apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
@@ -90,7 +104,7 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
     override val dataListSnapshot: List<DATA>
         get() = itemDataStorage.dataListSnapshot
 
-    override fun getData(position: Int): DATA? {
+    override fun getData(position: Int): DATA {
         return itemDataStorage.getData(position)
     }
 
@@ -106,11 +120,11 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
         itemDataStorage.addData(index, data)
     }
 
-    override fun addAllData(datas: Collection<DATA>?): Boolean {
+    override fun addAllData(datas: Collection<DATA>): Boolean {
         return itemDataStorage.addAllData(datas)
     }
 
-    override fun addAllData(index: Int, datas: Collection<DATA>?): Boolean {
+    override fun addAllData(index: Int, datas: Collection<DATA>): Boolean {
         return itemDataStorage.addAllData(index, datas)
     }
 
@@ -118,7 +132,7 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
         return itemDataStorage.removeData(data)
     }
 
-    override fun removeData(index: Int): DATA? {
+    override fun removeData(index: Int): DATA {
         return itemDataStorage.removeData(index)
     }
 
@@ -136,6 +150,26 @@ class AssemblyPagerAdapter<DATA>(itemFactoryList: List<AssemblyPagerItemFactory<
 
 
     override fun getItemFactoryByPosition(position: Int): AssemblyPagerItemFactory<*> {
-        return itemFactoryStorage.getItemFactoryByData(itemDataStorage.getData(position))
+        val matchData = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(matchData)
+    }
+
+
+    class Builder<DATA>(private val itemFactoryList: List<AssemblyPagerItemFactory<*>>) {
+
+        private var dataList: List<DATA>? = null
+        private var placeholderItemFactory: AssemblyPagerPlaceholderItemFactory? = null
+
+        fun setDataList(dataList: List<DATA>?) {
+            this.dataList = dataList
+        }
+
+        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyPagerPlaceholderItemFactory?) {
+            this.placeholderItemFactory = placeholderItemFactory
+        }
+
+        fun build(): AssemblyPagerAdapter<DATA> {
+            return AssemblyPagerAdapter(itemFactoryList, placeholderItemFactory, dataList)
+        }
     }
 }
