@@ -21,12 +21,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 
 class AssemblySingleDataFragmentStateAdapter<DATA>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    private val itemFactory: AssemblyFragmentItemFactory<DATA>,
+    private val itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
 ) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter {
 
@@ -38,7 +38,7 @@ class AssemblySingleDataFragmentStateAdapter<DATA>(
 
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        itemFactory: FragmentItemFactory<DATA>,
         initData: DATA? = null
     ) : this(
         fragmentActivity.supportFragmentManager,
@@ -49,7 +49,7 @@ class AssemblySingleDataFragmentStateAdapter<DATA>(
 
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        itemFactory: FragmentItemFactory<DATA>,
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
@@ -59,13 +59,13 @@ class AssemblySingleDataFragmentStateAdapter<DATA>(
 
     constructor(
         fragment: Fragment,
-        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        itemFactory: FragmentItemFactory<DATA>,
         initData: DATA? = null
     ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactory, initData)
 
     constructor(
         fragment: Fragment,
-        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        itemFactory: FragmentItemFactory<DATA>,
     ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactory, null)
 
     override fun getItemCount(): Int = if (data != null) 1 else 0
@@ -75,7 +75,7 @@ class AssemblySingleDataFragmentStateAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         return itemFactory
     }
 }

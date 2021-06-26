@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-// todo 直接命名为 Item
-abstract class AssemblyItem<DATA>(val itemView: View) {
+abstract class Item<DATA>(val itemView: View) {
 
     private var _data: DATA? = null
     private var _bindingAdapterPosition: Int = -1

@@ -5,37 +5,33 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 
-abstract class BindingAssemblyItemFactory<DATA, VIEW_BINDING : ViewBinding> :
-    AssemblyItemFactory<DATA>() {
+abstract class BindingItemFactory<DATA, VIEW_BINDING : ViewBinding> :
+    ItemFactory<DATA>() {
 
-    override fun createItem(parent: ViewGroup): AssemblyItem<DATA> {
+    override fun createItem(parent: ViewGroup): Item<DATA> {
         val binding = createViewBinding(LayoutInflater.from(parent.context), parent)
-        val item = BindingAssemblyItem(this, binding)
+        val item = BindingItem(this, binding)
         initItem(parent.context, binding, item)
         return item
     }
 
     abstract fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
 
-    open fun initItem(
-        context: Context,
-        binding: VIEW_BINDING,
-        item: BindingAssemblyItem<DATA, VIEW_BINDING>
-    ) {
+    open fun initItem(context: Context, binding: VIEW_BINDING, item: Item<DATA>) {
     }
 
     abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: AssemblyItem<DATA>,
+        item: Item<DATA>,
         bindingAdapterPosition: Int,
         data: DATA
     )
 
-    class BindingAssemblyItem<DATA, VIEW_BINDING : ViewBinding>(
-        private val factory: BindingAssemblyItemFactory<DATA, VIEW_BINDING>,
+    private class BindingItem<DATA, VIEW_BINDING : ViewBinding>(
+        private val factory: BindingItemFactory<DATA, VIEW_BINDING>,
         val binding: VIEW_BINDING
-    ) : AssemblyItem<DATA>(binding.root) {
+    ) : Item<DATA>(binding.root) {
 
         override fun bindData(bindingAdapterPosition: Int, data: DATA) {
             factory.bindItemData(context, binding, this, bindingAdapterPosition, data)

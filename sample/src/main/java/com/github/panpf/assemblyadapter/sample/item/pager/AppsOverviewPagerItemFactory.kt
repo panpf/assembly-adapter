@@ -4,12 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.panpf.assemblyadapter.pager.AssemblyPagerItemFactory
+import com.github.panpf.assemblyadapter.pager.PagerItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppsOverviewBinding
 
-class AppsOverviewPagerItemFactory : AssemblyPagerItemFactory<AppsOverview>() {
+class AppsOverviewPagerItemFactory : PagerItemFactory<AppsOverview>() {
 
     override fun match(data: Any): Boolean {
         return data is AppsOverview

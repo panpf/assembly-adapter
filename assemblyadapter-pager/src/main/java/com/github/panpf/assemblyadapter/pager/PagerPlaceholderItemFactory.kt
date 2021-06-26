@@ -15,22 +15,9 @@
  */
 package com.github.panpf.assemblyadapter.pager
 
-import android.content.Context
-import android.view.View
-import android.view.ViewGroup
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Placeholder
 
-abstract class AssemblyPagerItemFactory<DATA> : ItemFactory {
+abstract class PagerPlaceholderItemFactory : PagerItemFactory<Placeholder>() {
 
-    abstract override fun match(data: Any): Boolean
-
-    fun dispatchCreateView(
-        context: Context, container: ViewGroup, position: Int, data: DATA
-    ): View {
-        return createView(context, container, position, data)
-    }
-
-    abstract fun createView(
-        context: Context, container: ViewGroup, position: Int, data: DATA
-    ): View
+    final override fun match(data: Any): Boolean = data is Placeholder
 }

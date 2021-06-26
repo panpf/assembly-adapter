@@ -5,39 +5,35 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 
-abstract class BindingAssemblyPlaceholderItemFactory<VIEW_BINDING : ViewBinding> :
-    AssemblyPlaceholderItemFactory() {
+abstract class BindingPlaceholderItemFactory<VIEW_BINDING : ViewBinding> :
+    PlaceholderItemFactory() {
 
-    override fun createItem(parent: ViewGroup): AssemblyPlaceholderItem {
+    override fun createItem(parent: ViewGroup): PlaceholderItem {
         val binding = createViewBinding(LayoutInflater.from(parent.context), parent)
-        val item = BindingAssemblyPlaceholderItem(this, binding)
+        val item = BindingPlaceholderItem(this, binding)
         initItem(parent.context, binding, item)
         return item
     }
 
     abstract fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
 
-    open fun initItem(
-        context: Context,
-        binding: VIEW_BINDING,
-        item: BindingAssemblyPlaceholderItem<VIEW_BINDING>,
-    ) {
+    open fun initItem(context: Context, binding: VIEW_BINDING, item: PlaceholderItem) {
     }
 
     open fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: AssemblyPlaceholderItem,
+        item: PlaceholderItem,
         bindingAdapterPosition: Int,
         data: Placeholder
     ) {
 
     }
 
-    class BindingAssemblyPlaceholderItem<VIEW_BINDING : ViewBinding>(
-        private val factory: BindingAssemblyPlaceholderItemFactory<VIEW_BINDING>,
+    private class BindingPlaceholderItem<VIEW_BINDING : ViewBinding>(
+        private val factory: BindingPlaceholderItemFactory<VIEW_BINDING>,
         val binding: VIEW_BINDING
-    ) : AssemblyPlaceholderItem(binding.root) {
+    ) : PlaceholderItem(binding.root) {
 
         override fun bindData(bindingAdapterPosition: Int, data: Placeholder) {
             factory.bindItemData(context, binding, this, bindingAdapterPosition, data)

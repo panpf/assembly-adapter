@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.updateLayoutParams
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemPinyinGroupBinding
 
 open class PinyinGroupItemFactory(
     private val activity: Activity,
     private val hideStartMargin: Boolean = false
-) : BindingAssemblyItemFactory<PinyinGroup, ItemPinyinGroupBinding>() {
+) : BindingItemFactory<PinyinGroup, ItemPinyinGroupBinding>() {
 
     override fun match(data: Any): Boolean {
         return data is PinyinGroup
@@ -31,7 +31,7 @@ open class PinyinGroupItemFactory(
     override fun initItem(
         context: Context,
         binding: ItemPinyinGroupBinding,
-        item: BindingAssemblyItem<PinyinGroup, ItemPinyinGroupBinding>
+        item: Item<PinyinGroup>
     ) {
         super.initItem(context, binding, item)
         if (hideStartMargin) {
@@ -73,7 +73,7 @@ open class PinyinGroupItemFactory(
     override fun bindItemData(
         context: Context,
         binding: ItemPinyinGroupBinding,
-        item: AssemblyItem<PinyinGroup>,
+        item: Item<PinyinGroup>,
         bindingAdapterPosition: Int,
         data: PinyinGroup
     ) {

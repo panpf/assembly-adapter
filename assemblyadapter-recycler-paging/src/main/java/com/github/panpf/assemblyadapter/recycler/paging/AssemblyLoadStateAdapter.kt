@@ -5,13 +5,13 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.AssemblyItemFactory
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 
 open class AssemblyLoadStateAdapter(
-    private val itemFactory: AssemblyItemFactory<LoadState>,
+    private val itemFactory: ItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
 ) : LoadStateAdapter<RecyclerView.ViewHolder>(), AssemblyAdapter {
 
@@ -31,7 +31,7 @@ open class AssemblyLoadStateAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, loadState: LoadState) {
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as AssemblyItem<Any>
+            val item = holder.wrappedItem as Item<Any>
             item.dispatchBindData(0, holder.position, loadState)
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
@@ -45,7 +45,7 @@ open class AssemblyLoadStateAdapter(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemFactory
     }
 }

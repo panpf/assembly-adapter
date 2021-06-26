@@ -31,7 +31,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     FragmentStatePagerAdapter, AssemblyAdapter {
 
-    private val itemFactory: AssemblyFragmentItemFactory<DATA>
+    private val itemFactory: FragmentItemFactory<DATA>
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
 
@@ -51,7 +51,7 @@ class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        itemFactory: FragmentItemFactory<DATA>,
     ) : super(fm, behavior) {
         this.itemFactory = itemFactory
     }
@@ -62,7 +62,7 @@ class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     )
     constructor(
         fm: FragmentManager,
-        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        itemFactory: FragmentItemFactory<DATA>,
     ) : super(fm) {
         this.itemFactory = itemFactory
     }
@@ -70,7 +70,7 @@ class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        itemFactory: FragmentItemFactory<DATA>,
         initData: DATA? = null
     ) : super(fm, behavior) {
         this.itemFactory = itemFactory
@@ -83,7 +83,7 @@ class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     )
     constructor(
         fm: FragmentManager,
-        itemFactory: AssemblyFragmentItemFactory<DATA>,
+        itemFactory: FragmentItemFactory<DATA>,
         initData: DATA? = null
     ) : super(fm) {
         this.itemFactory = itemFactory
@@ -94,7 +94,7 @@ class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
 
     override fun getItem(position: Int): Fragment {
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactory as AssemblyFragmentItemFactory<Any>
+        val itemFactory = itemFactory as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(position, this.data!!).apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
@@ -113,7 +113,7 @@ class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         return itemFactory
     }
 

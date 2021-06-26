@@ -5,12 +5,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 
 open class AssemblyFragmentLoadStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    private val itemFactory: AssemblyFragmentItemFactory<LoadState>,
+    private val itemFactory: FragmentItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
 ) : FragmentLoadStateAdapter(
     fragmentManager,
@@ -18,7 +18,7 @@ open class AssemblyFragmentLoadStateAdapter(
 ) {
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactory: AssemblyFragmentItemFactory<LoadState>
+        itemFactory: FragmentItemFactory<LoadState>
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
@@ -27,7 +27,7 @@ open class AssemblyFragmentLoadStateAdapter(
 
     constructor(
         fragment: Fragment,
-        itemFactory: AssemblyFragmentItemFactory<LoadState>
+        itemFactory: FragmentItemFactory<LoadState>
     ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactory)
 
     override fun displayLoadStateAsItem(loadState: LoadState): Boolean {

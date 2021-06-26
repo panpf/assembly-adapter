@@ -25,8 +25,8 @@ import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridL
 import java.util.*
 
 open class AssemblyRecyclerAdapter<DATA>(
-    itemFactoryList: List<AssemblyItemFactory<*>>,
-    placeholderItemFactory: AssemblyPlaceholderItemFactory? = null,
+    itemFactoryList: List<ItemFactory<*>>,
+    placeholderItemFactory: PlaceholderItemFactory? = null,
     dataList: List<DATA>? = null
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter, DatasAdapter<DATA> {
@@ -37,16 +37,16 @@ open class AssemblyRecyclerAdapter<DATA>(
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     constructor(
-        itemFactoryList: List<AssemblyItemFactory<*>>,
-        placeholderItemFactory: AssemblyPlaceholderItemFactory?,
+        itemFactoryList: List<ItemFactory<*>>,
+        placeholderItemFactory: PlaceholderItemFactory?,
     ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
-        itemFactoryList: List<AssemblyItemFactory<*>>,
+        itemFactoryList: List<ItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(itemFactoryList, null, dataList)
 
-    constructor(itemFactoryList: List<AssemblyItemFactory<*>>) : this(itemFactoryList, null, null)
+    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null, null)
 
     override fun getItemCount(): Int {
         return itemDataStorage.dataCount
@@ -76,8 +76,8 @@ open class AssemblyRecyclerAdapter<DATA>(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as AssemblyItem<Any>
-            if (item is AssemblyPlaceholderItem) {
+            val item = holder.wrappedItem as Item<Any>
+            if (item is PlaceholderItem) {
                 item.dispatchBindData(position, holder.position, Placeholder)
             } else {
                 val data = itemDataStorage.getData(position)!!
@@ -140,22 +140,22 @@ open class AssemblyRecyclerAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val matchData = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(matchData)
     }
 
 
-    class Builder<DATA>(private val itemFactoryList: List<AssemblyItemFactory<*>>) {
+    class Builder<DATA>(private val itemFactoryList: List<ItemFactory<*>>) {
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: AssemblyPlaceholderItemFactory? = null
+        private var placeholderItemFactory: PlaceholderItemFactory? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: PlaceholderItemFactory?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

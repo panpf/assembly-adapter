@@ -18,14 +18,14 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.AssemblyItemFactory
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import java.lang.IllegalArgumentException
 
 open class AssemblySingleDataRecyclerAdapter<DATA>(
-    private val itemFactory: AssemblyItemFactory<DATA>,
+    private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter {
 
@@ -57,7 +57,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA>(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as AssemblyItem<Any>
+            val item = holder.wrappedItem as Item<Any>
             item.dispatchBindData(position, holder.position, data!!)
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
@@ -65,7 +65,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         return itemFactory
     }
 }

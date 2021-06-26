@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager
+package com.github.panpf.assemblyadapter.pager.fragment
 
 import com.github.panpf.assemblyadapter.Placeholder
 
-abstract class AssemblyPagerPlaceholderItemFactory : AssemblyPagerItemFactory<Placeholder>() {
+abstract class FragmentPlaceholderItemFactory :
+    FragmentItemFactory<Placeholder>() {
 
     final override fun match(data: Any): Boolean = data is Placeholder
 }

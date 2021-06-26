@@ -4,11 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.panpf.assemblyadapter.pager.AssemblyPagerItemFactory
+import com.github.panpf.assemblyadapter.pager.PagerItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPinyinGroupBinding
 
-class PinyinGroupPagerItemFactory : AssemblyPagerItemFactory<PinyinGroup>() {
+class PinyinGroupPagerItemFactory : PagerItemFactory<PinyinGroup>() {
 
     override fun match(data: Any): Boolean {
         return data is PinyinGroup

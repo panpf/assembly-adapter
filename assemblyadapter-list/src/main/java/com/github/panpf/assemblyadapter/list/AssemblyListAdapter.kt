@@ -24,8 +24,8 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
 class AssemblyListAdapter<DATA>(
-    itemFactoryList: List<AssemblyItemFactory<*>>,
-    placeholderItemFactory: AssemblyPlaceholderItemFactory? = null,
+    itemFactoryList: List<ItemFactory<*>>,
+    placeholderItemFactory: PlaceholderItemFactory? = null,
     dataList: List<DATA>? = null
 ) : BaseAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
@@ -35,16 +35,16 @@ class AssemblyListAdapter<DATA>(
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     constructor(
-        itemFactoryList: List<AssemblyItemFactory<*>>,
-        placeholderItemFactory: AssemblyPlaceholderItemFactory?,
+        itemFactoryList: List<ItemFactory<*>>,
+        placeholderItemFactory: PlaceholderItemFactory?,
     ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
-        itemFactoryList: List<AssemblyItemFactory<*>>,
+        itemFactoryList: List<ItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(itemFactoryList, null, dataList)
 
-    constructor(itemFactoryList: List<AssemblyItemFactory<*>>) : this(itemFactoryList, null, null)
+    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null, null)
 
     override fun getItem(position: Int): DATA {
         return itemDataStorage.getData(position)
@@ -80,8 +80,8 @@ class AssemblyListAdapter<DATA>(
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val item = itemView.getTag(R.id.aa_tag_item) as AssemblyItem<Any>
-        if (item is AssemblyPlaceholderItem) {
+        val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
+        if (item is PlaceholderItem) {
             item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, Placeholder)
         } else {
             item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data!!)
@@ -142,22 +142,22 @@ class AssemblyListAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val matchData = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(matchData)
     }
 
 
-    class Builder<DATA>(private val itemFactoryList: List<AssemblyItemFactory<*>>) {
+    class Builder<DATA>(private val itemFactoryList: List<ItemFactory<*>>) {
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: AssemblyPlaceholderItemFactory? = null
+        private var placeholderItemFactory: PlaceholderItemFactory? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: PlaceholderItemFactory?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

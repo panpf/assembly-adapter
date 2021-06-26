@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.databinding.ItemLoadStateBinding
 
 class LoadStateItemFactory(private val activity: Activity) :
-    BindingAssemblyItemFactory<LoadState, ItemLoadStateBinding>() {
+    BindingItemFactory<LoadState, ItemLoadStateBinding>() {
 
     override fun match(data: Any): Boolean = data is LoadState
 
@@ -21,11 +21,7 @@ class LoadStateItemFactory(private val activity: Activity) :
         parent: ViewGroup
     ): ItemLoadStateBinding = ItemLoadStateBinding.inflate(inflater, parent, false)
 
-    override fun initItem(
-        context: Context,
-        binding: ItemLoadStateBinding,
-        item: BindingAssemblyItem<LoadState, ItemLoadStateBinding>
-    ) {
+    override fun initItem(context: Context, binding: ItemLoadStateBinding, item: Item<LoadState>) {
         super.initItem(context, binding, item)
 
         binding.root.setOnLongClickListener {
@@ -44,7 +40,7 @@ class LoadStateItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemLoadStateBinding,
-        item: AssemblyItem<LoadState>,
+        item: Item<LoadState>,
         bindingAdapterPosition: Int,
         data: LoadState
     ) {

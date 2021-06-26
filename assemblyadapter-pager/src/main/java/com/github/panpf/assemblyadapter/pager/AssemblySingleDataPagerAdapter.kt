@@ -21,7 +21,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 
 class AssemblySingleDataPagerAdapter<DATA>(
-    private val itemFactory: AssemblyPagerItemFactory<DATA>,
+    private val itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
 ) : PagerAdapter(), AssemblyAdapter {
 
@@ -44,7 +44,7 @@ class AssemblySingleDataPagerAdapter<DATA>(
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactory as AssemblyPagerItemFactory<Any>
+        val itemFactory = itemFactory as PagerItemFactory<Any>
         val itemView = itemFactory.dispatchCreateView(
             container.context, container, position, data!!
         )
@@ -73,5 +73,5 @@ class AssemblySingleDataPagerAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyPagerItemFactory<*> = itemFactory
+    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> = itemFactory
 }

@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 
-abstract class BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
-    AssemblyExpandableItemFactory<DATA>() {
+abstract class BindingExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
+    ExpandableItemFactory<DATA>() {
 
-    override fun createItem(parent: ViewGroup): AssemblyExpandableItem<DATA> {
+    override fun createItem(parent: ViewGroup): ExpandableItem<DATA> {
         val binding = createViewBinding(LayoutInflater.from(parent.context), parent)
-        val item = BindingAssemblyExpandableItem(this, binding)
+        val item = BindingExpandableItem(this, binding)
         initItem(parent.context, binding, item)
         return item
     }
@@ -18,25 +18,21 @@ abstract class BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING : ViewBin
     abstract fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
 
     @Suppress("MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
-    open fun initItem(
-        context: Context,
-        binding: VIEW_BINDING,
-        item: BindingAssemblyExpandableItem<DATA, VIEW_BINDING>
-    ) {
+    open fun initItem(context: Context, binding: VIEW_BINDING, item: ExpandableItem<DATA>) {
     }
 
     abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: AssemblyExpandableItem<DATA>,
+        item: ExpandableItem<DATA>,
         bindingAdapterPosition: Int,
         data: DATA
     )
 
-    class BindingAssemblyExpandableItem<DATA, VIEW_BINDING : ViewBinding>(
-        private val factory: BindingAssemblyExpandableItemFactory<DATA, VIEW_BINDING>,
+    private class BindingExpandableItem<DATA, VIEW_BINDING : ViewBinding>(
+        private val factory: BindingExpandableItemFactory<DATA, VIEW_BINDING>,
         val binding: VIEW_BINDING
-    ) : AssemblyExpandableItem<DATA>(binding.root) {
+    ) : ExpandableItem<DATA>(binding.root) {
 
         public override fun bindData(bindingAdapterPosition: Int, data: DATA) {
             factory.bindItemData(context, binding, this, bindingAdapterPosition, data)

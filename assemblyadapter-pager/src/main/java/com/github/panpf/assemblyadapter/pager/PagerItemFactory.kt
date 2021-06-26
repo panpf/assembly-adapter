@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager.fragment
+package com.github.panpf.assemblyadapter.pager
 
-import com.github.panpf.assemblyadapter.Placeholder
+import android.content.Context
+import android.view.View
+import android.view.ViewGroup
+import com.github.panpf.assemblyadapter.MatchItemFactory
 
-abstract class AssemblyFragmentPlaceholderItemFactory :
-    AssemblyFragmentItemFactory<Placeholder>() {
+abstract class PagerItemFactory<DATA> : MatchItemFactory {
 
-    final override fun match(data: Any): Boolean = data is Placeholder
+    abstract override fun match(data: Any): Boolean
+
+    fun dispatchCreateView(
+        context: Context, container: ViewGroup, position: Int, data: DATA
+    ): View {
+        return createView(context, container, position, data)
+    }
+
+    abstract fun createView(
+        context: Context, container: ViewGroup, position: Int, data: DATA
+    ): View
 }

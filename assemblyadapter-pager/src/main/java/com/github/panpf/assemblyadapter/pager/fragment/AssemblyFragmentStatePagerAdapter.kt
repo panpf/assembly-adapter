@@ -36,8 +36,8 @@ import java.util.*
 class AssemblyFragmentStatePagerAdapter<DATA>(
     fm: FragmentManager,
     @Behavior behavior: Int,
-    itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-    placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null,
+    itemFactoryList: List<FragmentItemFactory<*>>,
+    placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
     dataList: List<DATA>? = null
 ) : FragmentStatePagerAdapter(fm, behavior), AssemblyAdapter, DatasAdapter<DATA> {
 
@@ -59,21 +59,21 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory? = null
     ) : this(fm, behavior, itemFactoryList, placeholderItemFactory, null)
 
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
         dataList: List<DATA>? = null
     ) : this(fm, behavior, itemFactoryList, null, dataList)
 
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>
+        itemFactoryList: List<FragmentItemFactory<*>>
     ) : this(fm, behavior, itemFactoryList, null, null)
 
     @Deprecated(
@@ -82,8 +82,8 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     )
     constructor(
         fm: FragmentManager,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory? = null
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, placeholderItemFactory, null)
 
     @Deprecated(
@@ -92,7 +92,7 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     )
     constructor(
         fm: FragmentManager,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
         dataList: List<DATA>? = null
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, null, dataList)
 
@@ -102,7 +102,7 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     )
     constructor(
         fm: FragmentManager,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>
+        itemFactoryList: List<FragmentItemFactory<*>>
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, null, null)
 
     override fun getCount(): Int {
@@ -115,8 +115,8 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(matchData) as AssemblyFragmentItemFactory<Any>
-        return if (itemFactory is AssemblyFragmentPlaceholderItemFactory) {
+            itemFactoryStorage.getItemFactoryByData(matchData) as FragmentItemFactory<Any>
+        return if (itemFactory is FragmentPlaceholderItemFactory) {
             itemFactory.dispatchCreateFragment(position, Placeholder)
         } else {
             itemFactory.dispatchCreateFragment(position, data!!)
@@ -189,7 +189,7 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val matchData = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(matchData)
     }
@@ -203,17 +203,17 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     class Builder<DATA>(
         private val fragmentManager: FragmentManager,
         @Behavior private val behavior: Int,
-        private val itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        private val itemFactoryList: List<FragmentItemFactory<*>>,
     ) {
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null
+        private var placeholderItemFactory: FragmentPlaceholderItemFactory? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentPlaceholderItemFactory?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

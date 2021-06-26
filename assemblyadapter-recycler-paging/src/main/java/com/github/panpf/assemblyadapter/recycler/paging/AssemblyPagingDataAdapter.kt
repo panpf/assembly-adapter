@@ -12,9 +12,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 open class AssemblyPagingDataAdapter<DATA : Any>(
-    itemFactoryList: List<AssemblyItemFactory<*>>,
+    itemFactoryList: List<ItemFactory<*>>,
     diffCallback: DiffUtil.ItemCallback<DATA>,
-    placeholderItemFactory: AssemblyPlaceholderItemFactory? = null,
+    placeholderItemFactory: PlaceholderItemFactory? = null,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
@@ -22,9 +22,9 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 ), AssemblyAdapter {
 
     constructor(
-        itemFactoryList: List<AssemblyItemFactory<*>>,
+        itemFactoryList: List<ItemFactory<*>>,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        placeholderItemFactory: AssemblyPlaceholderItemFactory,
+        placeholderItemFactory: PlaceholderItemFactory,
     ) : this(
         itemFactoryList,
         diffCallback,
@@ -34,7 +34,7 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     )
 
     constructor(
-        itemFactoryList: List<AssemblyItemFactory<*>>,
+        itemFactoryList: List<ItemFactory<*>>,
         diffCallback: DiffUtil.ItemCallback<DATA>,
     ) : this(
         itemFactoryList,
@@ -68,11 +68,11 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as AssemblyItem<Any>
+            val item = holder.wrappedItem as Item<Any>
             // Here you must use the getItem method to trigger append load
             // And must be placed in this position
             val data = getItem(position)
-            if (item is AssemblyPlaceholderItem) {
+            if (item is PlaceholderItem) {
                 item.dispatchBindData(position, holder.position, Placeholder)
             } else {
                 item.dispatchBindData(position, holder.position, data!!)
@@ -83,21 +83,21 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val matchData = peek(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(matchData)
     }
 
 
     class Builder<DATA : Any>(
-        private val itemFactoryList: List<AssemblyItemFactory<*>>,
+        private val itemFactoryList: List<ItemFactory<*>>,
         private val diffCallback: DiffUtil.ItemCallback<DATA>
     ) {
-        private var placeholderItemFactory: AssemblyPlaceholderItemFactory? = null
+        private var placeholderItemFactory: PlaceholderItemFactory? = null
         private var mainDispatcher: CoroutineDispatcher = Dispatchers.Main
         private var workerDispatcher: CoroutineDispatcher = Dispatchers.Default
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: PlaceholderItemFactory?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

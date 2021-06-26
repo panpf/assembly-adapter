@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppBinding
@@ -16,7 +16,7 @@ import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
 class AppItemFactory(private val activity: Activity) :
-    BindingAssemblyItemFactory<AppInfo, ItemAppBinding>() {
+    BindingItemFactory<AppInfo, ItemAppBinding>() {
 
     override fun match(data: Any): Boolean {
         return data is AppInfo
@@ -30,7 +30,7 @@ class AppItemFactory(private val activity: Activity) :
 
     override fun initItem(
         context: Context, binding: ItemAppBinding,
-        item: BindingAssemblyItem<AppInfo, ItemAppBinding>
+        item: Item<AppInfo>
     ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
@@ -68,7 +68,7 @@ class AppItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemAppBinding,
-        item: AssemblyItem<AppInfo>,
+        item: Item<AppInfo>,
         bindingAdapterPosition: Int,
         data: AppInfo
     ) {

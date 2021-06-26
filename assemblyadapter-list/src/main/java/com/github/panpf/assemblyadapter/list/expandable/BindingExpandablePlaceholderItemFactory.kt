@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import com.github.panpf.assemblyadapter.Placeholder
 
-abstract class BindingAssemblyExpandablePlaceholderItemFactory<VIEW_BINDING : ViewBinding> :
-    AssemblyExpandablePlaceholderItemFactory() {
+abstract class BindingExpandablePlaceholderItemFactory<VIEW_BINDING : ViewBinding> :
+    ExpandablePlaceholderItemFactory() {
 
-    override fun createItem(parent: ViewGroup): AssemblyExpandablePlaceholderItem {
+    override fun createItem(parent: ViewGroup): ExpandablePlaceholderItem {
         val binding = createViewBinding(LayoutInflater.from(parent.context), parent)
-        val item = BindingAssemblyExpandablePlaceholderItem(this, binding)
+        val item = BindingExpandablePlaceholderItem(this, binding)
         initItem(parent.context, binding, item)
         return item
     }
@@ -19,27 +19,23 @@ abstract class BindingAssemblyExpandablePlaceholderItemFactory<VIEW_BINDING : Vi
     abstract fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
 
     @Suppress("MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
-    open fun initItem(
-        context: Context,
-        binding: VIEW_BINDING,
-        item: BindingAssemblyExpandablePlaceholderItem<VIEW_BINDING>
-    ) {
+    open fun initItem(context: Context, binding: VIEW_BINDING, item: ExpandablePlaceholderItem) {
     }
 
     open fun bindData(
         context: Context,
         binding: VIEW_BINDING,
-        item: AssemblyExpandablePlaceholderItem,
+        item: ExpandablePlaceholderItem,
         bindingAdapterPosition: Int,
         data: Placeholder
     ) {
 
     }
 
-    class BindingAssemblyExpandablePlaceholderItem<VIEW_BINDING : ViewBinding>(
-        private val factory: BindingAssemblyExpandablePlaceholderItemFactory<VIEW_BINDING>,
+    private class BindingExpandablePlaceholderItem<VIEW_BINDING : ViewBinding>(
+        private val factory: BindingExpandablePlaceholderItemFactory<VIEW_BINDING>,
         val binding: VIEW_BINDING
-    ) : AssemblyExpandablePlaceholderItem(binding.root) {
+    ) : ExpandablePlaceholderItem(binding.root) {
 
         public override fun bindData(bindingAdapterPosition: Int, data: Placeholder) {
             factory.bindData(context, binding, this, bindingAdapterPosition, data)

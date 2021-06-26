@@ -26,8 +26,8 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
 class AssemblyPagerAdapter<DATA>(
-    itemFactoryList: List<AssemblyPagerItemFactory<*>>,
-    placeholderItemFactory: AssemblyPagerPlaceholderItemFactory? = null,
+    itemFactoryList: List<PagerItemFactory<*>>,
+    placeholderItemFactory: PagerPlaceholderItemFactory? = null,
     dataList: List<DATA>? = null
 ) : PagerAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
@@ -46,12 +46,12 @@ class AssemblyPagerAdapter<DATA>(
         }
 
     constructor(
-        itemFactoryList: List<AssemblyPagerItemFactory<*>>,
-        placeholderItemFactory: AssemblyPagerPlaceholderItemFactory?,
+        itemFactoryList: List<PagerItemFactory<*>>,
+        placeholderItemFactory: PagerPlaceholderItemFactory?,
     ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
-        itemFactoryList: List<AssemblyPagerItemFactory<*>>,
+        itemFactoryList: List<PagerItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(itemFactoryList, null, dataList)
 
@@ -65,8 +65,8 @@ class AssemblyPagerAdapter<DATA>(
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(matchData) as AssemblyPagerItemFactory<Any>
-        val itemView = if (itemFactory is AssemblyPagerPlaceholderItemFactory) {
+            itemFactoryStorage.getItemFactoryByData(matchData) as PagerItemFactory<Any>
+        val itemView = if (itemFactory is PagerPlaceholderItemFactory) {
             itemFactory.dispatchCreateView(container.context, container, position, Placeholder)
         } else {
             itemFactory.dispatchCreateView(container.context, container, position, data!!)
@@ -149,22 +149,22 @@ class AssemblyPagerAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyPagerItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> {
         val matchData = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(matchData)
     }
 
 
-    class Builder<DATA>(private val itemFactoryList: List<AssemblyPagerItemFactory<*>>) {
+    class Builder<DATA>(private val itemFactoryList: List<PagerItemFactory<*>>) {
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: AssemblyPagerPlaceholderItemFactory? = null
+        private var placeholderItemFactory: PagerPlaceholderItemFactory? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyPagerPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: PagerPlaceholderItemFactory?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

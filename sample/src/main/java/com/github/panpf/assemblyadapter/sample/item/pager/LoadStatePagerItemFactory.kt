@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.pager.AssemblyPagerItemFactory
+import com.github.panpf.assemblyadapter.pager.PagerItemFactory
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentLoadStateBinding
 
-class LoadStatePagerItemFactory : AssemblyPagerItemFactory<LoadState>() {
+class LoadStatePagerItemFactory : PagerItemFactory<LoadState>() {
 
     override fun match(data: Any): Boolean {
         return data is LoadState

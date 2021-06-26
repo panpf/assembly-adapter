@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.updatePadding
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppsOverviewBinding
@@ -16,7 +16,7 @@ class AppsOverviewItemFactory(
     private val activity: Activity,
     private val hideStartMargin: Boolean = false
 ) :
-    BindingAssemblyItemFactory<AppsOverview, ItemAppsOverviewBinding>() {
+    BindingItemFactory<AppsOverview, ItemAppsOverviewBinding>() {
 
     override fun match(data: Any): Boolean {
         return data is AppsOverview
@@ -31,7 +31,7 @@ class AppsOverviewItemFactory(
     override fun initItem(
         context: Context,
         binding: ItemAppsOverviewBinding,
-        item: BindingAssemblyItem<AppsOverview, ItemAppsOverviewBinding>
+        item: Item<AppsOverview>
     ) {
         super.initItem(context, binding, item)
         if (hideStartMargin) {
@@ -54,7 +54,7 @@ class AppsOverviewItemFactory(
     override fun bindItemData(
         context: Context,
         binding: ItemAppsOverviewBinding,
-        item: AssemblyItem<AppsOverview>,
+        item: Item<AppsOverview>,
         bindingAdapterPosition: Int,
         data: AppsOverview
     ) {

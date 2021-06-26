@@ -1,11 +1,11 @@
 package com.github.panpf.assemblyadapter.internal
 
 import android.util.SparseArray
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.MatchItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import java.util.*
 
-class ItemFactoryStorage<ITEM_FACTORY : ItemFactory>(
+class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
     private val itemFactoryList: List<ITEM_FACTORY>,
 ) {
 

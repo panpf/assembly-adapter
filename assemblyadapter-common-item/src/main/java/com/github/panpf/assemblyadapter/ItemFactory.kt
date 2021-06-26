@@ -5,25 +5,24 @@ import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.internal.ClickListenerManager
 
-// todo 直接命名为 ItemFactory
-abstract class AssemblyItemFactory<DATA> : ItemFactory {
+abstract class ItemFactory<DATA> : MatchItemFactory {
 
     private var clickListenerManager: ClickListenerManager<DATA>? = null
 
     abstract override fun match(data: Any): Boolean
 
-    open fun dispatchCreateItem(parent: ViewGroup): AssemblyItem<DATA> {
+    open fun dispatchCreateItem(parent: ViewGroup): Item<DATA> {
         return createItem(parent).apply {
             registerItemClickListener(this)
         }
     }
 
-    abstract fun createItem(parent: ViewGroup): AssemblyItem<DATA>
+    abstract fun createItem(parent: ViewGroup): Item<DATA>
 
     fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
-    ): AssemblyItemFactory<DATA> {
+    ): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(viewId, onClickListener)
         return this
     }
@@ -31,28 +30,28 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory {
     fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
-    ): AssemblyItemFactory<DATA> {
+    ): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(viewId, onLongClickListener)
         return this
     }
 
-    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): AssemblyItemFactory<DATA> {
+    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
 
-    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): AssemblyItemFactory<DATA> {
+    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }
 
     private fun getClickListenerManagerOrCreate(): ClickListenerManager<DATA> {
         return (clickListenerManager ?: (ClickListenerManager<DATA>().apply {
-            this@AssemblyItemFactory.clickListenerManager = this
+            this@ItemFactory.clickListenerManager = this
         }))
     }
 
-    private fun registerItemClickListener(item: AssemblyItem<DATA>) {
+    private fun registerItemClickListener(item: Item<DATA>) {
         val clickListenerManager = clickListenerManager ?: return
         val itemView = item.itemView
         for (holder in clickListenerManager.holders) {
@@ -69,7 +68,7 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory {
                 targetView.setTag(R.id.aa_tag_item, item)
                 targetView.setOnClickListener { view ->
                     @Suppress("UNCHECKED_CAST")
-                    val bindItem = view.getTag(R.id.aa_tag_item) as AssemblyItem<DATA>
+                    val bindItem = view.getTag(R.id.aa_tag_item) as Item<DATA>
                     clickListenerHolder.listener.onClick(
                         view.context,
                         view,
@@ -92,7 +91,7 @@ abstract class AssemblyItemFactory<DATA> : ItemFactory {
                 targetView.setTag(R.id.aa_tag_item, item)
                 targetView.setOnLongClickListener { view ->
                     @Suppress("UNCHECKED_CAST")
-                    val bindItem = view.getTag(R.id.aa_tag_item) as AssemblyItem<DATA>
+                    val bindItem = view.getTag(R.id.aa_tag_item) as Item<DATA>
                     longClickListenerHolder.listener.onLongClick(
                         view.context,
                         view,

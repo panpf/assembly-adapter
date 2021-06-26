@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 
-abstract class BindingAssemblyPagerItemFactory<DATA, VIEW_BINDING : ViewBinding> :
-    AssemblyPagerItemFactory<DATA>() {
+abstract class BindingPagerItemFactory<DATA, VIEW_BINDING : ViewBinding> :
+    PagerItemFactory<DATA>() {
 
     abstract override fun match(data: Any): Boolean
 

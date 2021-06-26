@@ -2,9 +2,10 @@ package com.github.panpf.assemblyadapter.list.expandable
 
 import android.view.View
 import android.view.ViewGroup
-import com.github.panpf.assemblyadapter.AssemblyItem
+import com.github.panpf.assemblyadapter.PlaceholderItem
+import com.github.panpf.assemblyadapter.Placeholder
 
-abstract class AssemblyExpandableItem<DATA> : AssemblyItem<DATA> {
+abstract class ExpandablePlaceholderItem : PlaceholderItem {
 
     private var _groupBindingAdapterPosition = -1
     private var _groupAbsoluteAdapterPosition = -1
@@ -40,7 +41,7 @@ abstract class AssemblyExpandableItem<DATA> : AssemblyItem<DATA> {
         childPosition: Int,
         isExpanded: Boolean,
         isLastChild: Boolean,
-        data: DATA
+        data: Placeholder
     ) {
         this._groupBindingAdapterPosition = groupBindingAdapterPosition
         this._groupAbsoluteAdapterPosition = groupAbsoluteAdapterPosition

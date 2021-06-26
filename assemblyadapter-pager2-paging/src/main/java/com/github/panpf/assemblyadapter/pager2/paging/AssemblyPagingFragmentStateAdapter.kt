@@ -24,8 +24,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFactory
-import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentPlaceholderItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.FragmentPlaceholderItemFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -33,8 +33,8 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     diffCallback: DiffUtil.ItemCallback<DATA>,
-    itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-    placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null,
+    itemFactoryList: List<FragmentItemFactory<*>>,
+    placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingFragmentStateAdapter<DATA, RecyclerView.ViewHolder>(
@@ -53,8 +53,8 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory?,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory?,
     ) : this(
         fragmentManager,
         lifecycle,
@@ -69,7 +69,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
     ) : this(
         fragmentManager,
         lifecycle,
@@ -83,8 +83,8 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     constructor(
         fragmentActivity: FragmentActivity,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) : this(
@@ -100,8 +100,8 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     constructor(
         fragmentActivity: FragmentActivity,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory?,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory?,
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
@@ -115,7 +115,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     constructor(
         fragmentActivity: FragmentActivity,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
@@ -129,8 +129,8 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     constructor(
         fragment: Fragment,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) : this(
@@ -146,8 +146,8 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     constructor(
         fragment: Fragment,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory?,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory?,
     ) : this(
         fragment.childFragmentManager,
         fragment.lifecycle,
@@ -161,7 +161,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     constructor(
         fragment: Fragment,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
     ) : this(
         fragment.childFragmentManager,
         fragment.lifecycle,
@@ -180,8 +180,8 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(matchData) as AssemblyFragmentItemFactory<Any>
-        return if (itemFactory is AssemblyFragmentPlaceholderItemFactory) {
+            itemFactoryStorage.getItemFactoryByData(matchData) as FragmentItemFactory<Any>
+        return if (itemFactory is FragmentPlaceholderItemFactory) {
             itemFactory.dispatchCreateFragment(position, Placeholder)
         } else {
             itemFactory.dispatchCreateFragment(position, data!!)
@@ -189,7 +189,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val matchData = peek(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(matchData)
     }
@@ -199,14 +199,14 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         private val fragmentManager: FragmentManager,
         private val lifecycle: Lifecycle,
         private val diffCallback: DiffUtil.ItemCallback<DATA>,
-        private val itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        private val itemFactoryList: List<FragmentItemFactory<*>>,
     ) {
 
-        private var placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null
+        private var placeholderItemFactory: FragmentPlaceholderItemFactory? = null
         private var mainDispatcher: CoroutineDispatcher = Dispatchers.Main
         private var workerDispatcher: CoroutineDispatcher = Dispatchers.Default
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentPlaceholderItemFactory?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

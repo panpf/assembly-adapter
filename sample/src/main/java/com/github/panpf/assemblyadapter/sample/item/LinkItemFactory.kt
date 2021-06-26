@@ -5,14 +5,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import com.github.panpf.assemblyadapter.AssemblyItem
-import com.github.panpf.assemblyadapter.BindingAssemblyItemFactory
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.base.FragmentContainerActivity
 import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.ItemLinkBinding
 
 class LinkItemFactory(private val activity: Activity) :
-    BindingAssemblyItemFactory<Link, ItemLinkBinding>() {
+    BindingItemFactory<Link, ItemLinkBinding>() {
 
     override fun match(data: Any): Boolean {
         return data is Link
@@ -24,10 +24,7 @@ class LinkItemFactory(private val activity: Activity) :
         return ItemLinkBinding.inflate(inflater, parent, false)
     }
 
-    override fun initItem(
-        context: Context, binding: ItemLinkBinding,
-        item: BindingAssemblyItem<Link, ItemLinkBinding>
-    ) {
+    override fun initItem(context: Context, binding: ItemLinkBinding, item: Item<Link>) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
             val data = item.dataOrNull ?: return@setOnClickListener
@@ -55,7 +52,7 @@ class LinkItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemLinkBinding,
-        item: AssemblyItem<Link>,
+        item: Item<Link>,
         bindingAdapterPosition: Int,
         data: Link
     ) {

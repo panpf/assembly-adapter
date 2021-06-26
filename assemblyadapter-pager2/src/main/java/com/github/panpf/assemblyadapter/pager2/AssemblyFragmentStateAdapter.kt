@@ -25,14 +25,14 @@ import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentItemFactory
-import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentPlaceholderItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.fragment.FragmentPlaceholderItemFactory
 
 class AssemblyFragmentStateAdapter<DATA>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-    placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null,
+    itemFactoryList: List<FragmentItemFactory<*>>,
+    placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
     dataList: List<DATA>? = null
 ) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter, DatasAdapter<DATA> {
 
@@ -43,8 +43,8 @@ class AssemblyFragmentStateAdapter<DATA>(
 
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
         dataList: List<DATA>? = null
     ) : this(
         fragmentActivity.supportFragmentManager,
@@ -56,8 +56,8 @@ class AssemblyFragmentStateAdapter<DATA>(
 
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory?,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory?,
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
@@ -68,7 +68,7 @@ class AssemblyFragmentStateAdapter<DATA>(
 
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
         dataList: List<DATA>?
     ) : this(
         fragmentActivity.supportFragmentManager,
@@ -80,7 +80,7 @@ class AssemblyFragmentStateAdapter<DATA>(
 
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
@@ -91,8 +91,8 @@ class AssemblyFragmentStateAdapter<DATA>(
 
     constructor(
         fragment: Fragment,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
         dataList: List<DATA>? = null
     ) : this(
         fragment.childFragmentManager,
@@ -104,8 +104,8 @@ class AssemblyFragmentStateAdapter<DATA>(
 
     constructor(
         fragment: Fragment,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
-        placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null,
+        itemFactoryList: List<FragmentItemFactory<*>>,
+        placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
     ) : this(
         fragment.childFragmentManager,
         fragment.lifecycle,
@@ -116,7 +116,7 @@ class AssemblyFragmentStateAdapter<DATA>(
 
     constructor(
         fragment: Fragment,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
         dataList: List<DATA>? = null
     ) : this(
         fragment.childFragmentManager,
@@ -128,7 +128,7 @@ class AssemblyFragmentStateAdapter<DATA>(
 
     constructor(
         fragment: Fragment,
-        itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<*>>,
     ) : this(
         fragment.childFragmentManager,
         fragment.lifecycle,
@@ -147,8 +147,8 @@ class AssemblyFragmentStateAdapter<DATA>(
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(matchData) as AssemblyFragmentItemFactory<Any>
-        return if (itemFactory is AssemblyFragmentPlaceholderItemFactory) {
+            itemFactoryStorage.getItemFactoryByData(matchData) as FragmentItemFactory<Any>
+        return if (itemFactory is FragmentPlaceholderItemFactory) {
             itemFactory.dispatchCreateFragment(position, Placeholder)
         } else {
             itemFactory.dispatchCreateFragment(position, data!!)
@@ -207,7 +207,7 @@ class AssemblyFragmentStateAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): AssemblyFragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val matchData = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(matchData)
     }
@@ -216,11 +216,11 @@ class AssemblyFragmentStateAdapter<DATA>(
     class Builder<DATA>(
         private val fragmentManager: FragmentManager,
         private val lifecycle: Lifecycle,
-        private val itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+        private val itemFactoryList: List<FragmentItemFactory<*>>,
     ) {
         constructor(
             fragmentActivity: FragmentActivity,
-            itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+            itemFactoryList: List<FragmentItemFactory<*>>,
         ) : this(
             fragmentActivity.supportFragmentManager,
             fragmentActivity.lifecycle,
@@ -228,7 +228,7 @@ class AssemblyFragmentStateAdapter<DATA>(
         )
         constructor(
             fragment: Fragment,
-            itemFactoryList: List<AssemblyFragmentItemFactory<*>>,
+            itemFactoryList: List<FragmentItemFactory<*>>,
         ) : this(
             fragment.childFragmentManager,
             fragment.lifecycle,
@@ -236,13 +236,13 @@ class AssemblyFragmentStateAdapter<DATA>(
         )
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory? = null
+        private var placeholderItemFactory: FragmentPlaceholderItemFactory? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: AssemblyFragmentPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentPlaceholderItemFactory?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 
