@@ -25,7 +25,7 @@ import java.util.*
 
 class AssemblyListAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    placeholderItemFactory: PlaceholderItemFactory? = null,
+    placeholderItemFactory: ItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null
 ) : BaseAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
@@ -36,7 +36,7 @@ class AssemblyListAdapter<DATA>(
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
-        placeholderItemFactory: PlaceholderItemFactory?,
+        placeholderItemFactory: ItemFactory<Placeholder>?,
     ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
@@ -45,6 +45,17 @@ class AssemblyListAdapter<DATA>(
     ) : this(itemFactoryList, null, dataList)
 
     constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null, null)
+
+    init {
+        placeholderItemFactory?.apply {
+            if (!match(Placeholder)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
+            }
+            if (match(0)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
+            }
+        }
+    }
 
     override fun getItem(position: Int): DATA {
         return itemDataStorage.getData(position)
@@ -63,14 +74,13 @@ class AssemblyListAdapter<DATA>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val matchData = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(matchData)
+        val data = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val data = itemDataStorage.getData(position)
-        val matchData = data ?: Placeholder
-        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(matchData)
+        val data = itemDataStorage.getData(position) ?: Placeholder
+        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(data)
             .dispatchCreateItem(parent).apply {
                 itemView.setTag(R.id.aa_tag_item, this)
             }.itemView
@@ -81,11 +91,7 @@ class AssemblyListAdapter<DATA>(
 
         @Suppress("UNCHECKED_CAST")
         val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
-        if (item is PlaceholderItem) {
-            item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, Placeholder)
-        } else {
-            item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data!!)
-        }
+        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
 
         return itemView
     }
@@ -143,21 +149,21 @@ class AssemblyListAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val matchData = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(matchData)
+        val data = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(data)
     }
 
 
     class Builder<DATA>(private val itemFactoryList: List<ItemFactory<*>>) {
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: PlaceholderItemFactory? = null
+        private var placeholderItemFactory: ItemFactory<Placeholder>? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: PlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: ItemFactory<Placeholder>?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

@@ -2,7 +2,7 @@ package com.github.panpf.assemblyadapter.sample.base
 
 import androidx.recyclerview.widget.DiffUtil
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.PlaceholderItemFactory
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerAdapter
 import kotlinx.coroutines.CoroutineDispatcher
@@ -13,7 +13,7 @@ class AssemblyStickyPagingDataAdapter<DATA : Any> : AssemblyPagingDataAdapter<DA
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        placeholderItemFactory: PlaceholderItemFactory?,
+        placeholderItemFactory: ItemFactory<Placeholder>?,
         mainDispatcher: CoroutineDispatcher,
         workerDispatcher: CoroutineDispatcher
     ) : super(
@@ -27,7 +27,7 @@ class AssemblyStickyPagingDataAdapter<DATA : Any> : AssemblyPagingDataAdapter<DA
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        placeholderItemFactory: PlaceholderItemFactory
+        placeholderItemFactory: ItemFactory<Placeholder>
     ) : super(itemFactoryList, diffCallback, placeholderItemFactory)
 
     constructor(

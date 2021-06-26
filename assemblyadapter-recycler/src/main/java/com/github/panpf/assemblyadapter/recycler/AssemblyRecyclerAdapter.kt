@@ -26,7 +26,7 @@ import java.util.*
 
 open class AssemblyRecyclerAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    placeholderItemFactory: PlaceholderItemFactory? = null,
+    placeholderItemFactory: ItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter, DatasAdapter<DATA> {
@@ -38,7 +38,7 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
-        placeholderItemFactory: PlaceholderItemFactory?,
+        placeholderItemFactory: ItemFactory<Placeholder>?,
     ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
@@ -47,6 +47,17 @@ open class AssemblyRecyclerAdapter<DATA>(
     ) : this(itemFactoryList, null, dataList)
 
     constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null, null)
+
+    init {
+        placeholderItemFactory?.apply {
+            if (!match(Placeholder)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
+            }
+            if (match(0)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
+            }
+        }
+    }
 
     override fun getItemCount(): Int {
         return itemDataStorage.dataCount
@@ -57,8 +68,8 @@ open class AssemblyRecyclerAdapter<DATA>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val matchData = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(matchData)
+        val data = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -77,12 +88,8 @@ open class AssemblyRecyclerAdapter<DATA>(
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
-            if (item is PlaceholderItem) {
-                item.dispatchBindData(position, holder.position, Placeholder)
-            } else {
-                val data = itemDataStorage.getData(position)!!
-                item.dispatchBindData(position, holder.position, data)
-            }
+            val data = itemDataStorage.getData(position) ?: Placeholder
+            item.dispatchBindData(position, holder.position, data)
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }
@@ -141,21 +148,21 @@ open class AssemblyRecyclerAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val matchData = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(matchData)
+        val data = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(data)
     }
 
 
     class Builder<DATA>(private val itemFactoryList: List<ItemFactory<*>>) {
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: PlaceholderItemFactory? = null
+        private var placeholderItemFactory: ItemFactory<Placeholder>? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: PlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: ItemFactory<Placeholder>?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

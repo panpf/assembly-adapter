@@ -26,7 +26,7 @@ import java.util.*
 
 class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    placeholderItemFactory: PlaceholderItemFactory? = null,
+    placeholderItemFactory: ItemFactory<Placeholder>? = null,
     dataList: List<GROUP_DATA>? = null
 ) : BaseExpandableListAdapter(), AssemblyAdapter, DatasAdapter<GROUP_DATA> {
 
@@ -40,7 +40,7 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
-        placeholderItemFactory: PlaceholderItemFactory?,
+        placeholderItemFactory: ItemFactory<Placeholder>?,
     ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
@@ -49,6 +49,17 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     ) : this(itemFactoryList, null, dataList)
 
     constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null, null)
+
+    init {
+        placeholderItemFactory?.apply {
+            if (!match(Placeholder)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
+            }
+            if (match(0)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
+            }
+        }
+    }
 
 
     override fun getGroupCount(): Int = itemDataStorage.dataCount
@@ -60,17 +71,16 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     override fun getGroupTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getGroupType(groupPosition: Int): Int {
-        val matchData = itemDataStorage.getData(groupPosition) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(matchData)
+        val data = itemDataStorage.getData(groupPosition) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun getGroupView(
         groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
-        val groupData = itemDataStorage.getData(groupPosition)
-        val matchData = groupData ?: Placeholder
+        val groupData = itemDataStorage.getData(groupPosition) ?: Placeholder
         val groupItemView =
-            convertView ?: itemFactoryStorage.getItemFactoryByData(matchData)
+            convertView ?: itemFactoryStorage.getItemFactoryByData(groupData)
                 .dispatchCreateItem(parent).apply {
                     itemView.setTag(R.id.aa_tag_item, this)
                 }.itemView
@@ -83,16 +93,6 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
         @Suppress("UNCHECKED_CAST")
         when (val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<Any>) {
-            is ExpandablePlaceholderItem -> groupItem.dispatchBindData(
-                groupBindingAdapterPosition,
-                groupAbsoluteAdapterPosition,
-                groupBindingAdapterPosition,
-                groupAbsoluteAdapterPosition,
-                -1,
-                isExpanded,
-                false,
-                Placeholder
-            )
             is ExpandableItem<Any> -> groupItem.dispatchBindData(
                 groupBindingAdapterPosition,
                 groupAbsoluteAdapterPosition,
@@ -101,17 +101,12 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
                 -1,
                 isExpanded,
                 false,
-                groupData!!
-            )
-            is PlaceholderItem -> groupItem.dispatchBindData(
-                groupBindingAdapterPosition,
-                groupAbsoluteAdapterPosition,
-                Placeholder
+                groupData
             )
             else -> groupItem.dispatchBindData(
                 groupBindingAdapterPosition,
                 groupAbsoluteAdapterPosition,
-                groupData!!
+                groupData
             )
         }
         return groupItemView
@@ -234,21 +229,21 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val matchData = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(matchData)
+        val data = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(data)
     }
 
 
     class Builder<GROUP_DATA, CHILD_DATA>(private val itemFactoryList: List<ItemFactory<*>>) {
 
         private var dataList: List<GROUP_DATA>? = null
-        private var placeholderItemFactory: PlaceholderItemFactory? = null
+        private var placeholderItemFactory: ItemFactory<Placeholder>? = null
 
         fun setDataList(dataList: List<GROUP_DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: PlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: ItemFactory<Placeholder>?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

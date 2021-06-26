@@ -27,7 +27,7 @@ import java.util.*
 
 class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
-    placeholderItemFactory: PagerPlaceholderItemFactory? = null,
+    placeholderItemFactory: PagerItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null
 ) : PagerAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
@@ -47,7 +47,7 @@ class AssemblyPagerAdapter<DATA>(
 
     constructor(
         itemFactoryList: List<PagerItemFactory<*>>,
-        placeholderItemFactory: PagerPlaceholderItemFactory?,
+        placeholderItemFactory: PagerItemFactory<Placeholder>?,
     ) : this(itemFactoryList, placeholderItemFactory, null)
 
     constructor(
@@ -55,22 +55,28 @@ class AssemblyPagerAdapter<DATA>(
         dataList: List<DATA>?
     ) : this(itemFactoryList, null, dataList)
 
+    init {
+        placeholderItemFactory?.apply {
+            if (!match(Placeholder)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
+            }
+            if (match(0)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
+            }
+        }
+    }
+
     override fun getCount(): Int {
         return itemDataStorage.dataCount
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val data = itemDataStorage.getData(position)
-        val matchData = data ?: Placeholder
+        val data = itemDataStorage.getData(position) ?: Placeholder
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(matchData) as PagerItemFactory<Any>
-        val itemView = if (itemFactory is PagerPlaceholderItemFactory) {
-            itemFactory.dispatchCreateView(container.context, container, position, Placeholder)
-        } else {
-            itemFactory.dispatchCreateView(container.context, container, position, data!!)
-        }
+            itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
+        val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
         container.addView(itemView)
         return itemView.apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
@@ -150,21 +156,21 @@ class AssemblyPagerAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> {
-        val matchData = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(matchData)
+        val data = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(data)
     }
 
 
     class Builder<DATA>(private val itemFactoryList: List<PagerItemFactory<*>>) {
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: PagerPlaceholderItemFactory? = null
+        private var placeholderItemFactory: PagerItemFactory<Placeholder>? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: PagerPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: PagerItemFactory<Placeholder>?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

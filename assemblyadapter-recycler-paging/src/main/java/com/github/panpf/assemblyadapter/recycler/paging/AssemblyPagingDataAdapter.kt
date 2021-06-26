@@ -14,17 +14,21 @@ import kotlinx.coroutines.Dispatchers
 open class AssemblyPagingDataAdapter<DATA : Any>(
     itemFactoryList: List<ItemFactory<*>>,
     diffCallback: DiffUtil.ItemCallback<DATA>,
-    placeholderItemFactory: PlaceholderItemFactory? = null,
+    placeholderItemFactory: ItemFactory<Placeholder>? = null,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
     diffCallback, mainDispatcher, workerDispatcher
 ), AssemblyAdapter {
 
+    private val itemFactoryStorage = ItemFactoryStorage(
+        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
+    )
+
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        placeholderItemFactory: PlaceholderItemFactory,
+        placeholderItemFactory: ItemFactory<Placeholder>,
     ) : this(
         itemFactoryList,
         diffCallback,
@@ -44,13 +48,20 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
         Dispatchers.Default
     )
 
-    private val itemFactoryStorage = ItemFactoryStorage(
-        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
-    )
+    init {
+        placeholderItemFactory?.apply {
+            if (!match(Placeholder)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
+            }
+            if (match(0)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
+            }
+        }
+    }
 
     override fun getItemViewType(position: Int): Int {
-        val matchData = peek(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(matchData)
+        val data = peek(position) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -70,13 +81,8 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
             // Here you must use the getItem method to trigger append load
-            // And must be placed in this position
-            val data = getItem(position)
-            if (item is PlaceholderItem) {
-                item.dispatchBindData(position, holder.position, Placeholder)
-            } else {
-                item.dispatchBindData(position, holder.position, data!!)
-            }
+            val data = getItem(position) ?: Placeholder
+            item.dispatchBindData(position, holder.position, data)
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }
@@ -84,8 +90,8 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val matchData = peek(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(matchData)
+        val data = peek(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(data)
     }
 
 
@@ -93,11 +99,11 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
         private val itemFactoryList: List<ItemFactory<*>>,
         private val diffCallback: DiffUtil.ItemCallback<DATA>
     ) {
-        private var placeholderItemFactory: PlaceholderItemFactory? = null
+        private var placeholderItemFactory: ItemFactory<Placeholder>? = null
         private var mainDispatcher: CoroutineDispatcher = Dispatchers.Main
         private var workerDispatcher: CoroutineDispatcher = Dispatchers.Default
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: PlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: ItemFactory<Placeholder>?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

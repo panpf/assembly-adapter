@@ -37,7 +37,7 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     fm: FragmentManager,
     @Behavior behavior: Int,
     itemFactoryList: List<FragmentItemFactory<*>>,
-    placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
+    placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null
 ) : FragmentStatePagerAdapter(fm, behavior), AssemblyAdapter, DatasAdapter<DATA> {
 
@@ -60,7 +60,7 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
         fm: FragmentManager,
         @Behavior behavior: Int,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentPlaceholderItemFactory? = null
+        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null
     ) : this(fm, behavior, itemFactoryList, placeholderItemFactory, null)
 
     constructor(
@@ -83,7 +83,7 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     constructor(
         fm: FragmentManager,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentPlaceholderItemFactory? = null
+        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, placeholderItemFactory, null)
 
     @Deprecated(
@@ -105,22 +105,28 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
         itemFactoryList: List<FragmentItemFactory<*>>
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, null, null)
 
+    init {
+        placeholderItemFactory?.apply {
+            if (!match(Placeholder)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
+            }
+            if (match(0)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
+            }
+        }
+    }
+
     override fun getCount(): Int {
         return itemDataStorage.dataCount
     }
 
     override fun getItem(position: Int): Fragment {
-        val data = itemDataStorage.getData(position)
-        val matchData = data ?: Placeholder
+        val data = itemDataStorage.getData(position) ?: Placeholder
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(matchData) as FragmentItemFactory<Any>
-        return if (itemFactory is FragmentPlaceholderItemFactory) {
-            itemFactory.dispatchCreateFragment(position, Placeholder)
-        } else {
-            itemFactory.dispatchCreateFragment(position, data!!)
-        }.apply {
+            itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+        return  itemFactory.dispatchCreateFragment(position, data).apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
     }
@@ -190,8 +196,8 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
-        val matchData = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(matchData)
+        val data = itemDataStorage.getData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(data)
     }
 
 
@@ -207,13 +213,13 @@ class AssemblyFragmentStatePagerAdapter<DATA>(
     ) {
 
         private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: FragmentPlaceholderItemFactory? = null
+        private var placeholderItemFactory: FragmentItemFactory<Placeholder>? = null
 
         fun setDataList(dataList: List<DATA>?) {
             this.dataList = dataList
         }
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentItemFactory<Placeholder>?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

@@ -25,7 +25,6 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
-import com.github.panpf.assemblyadapter.pager.fragment.FragmentPlaceholderItemFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -34,7 +33,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     lifecycle: Lifecycle,
     diffCallback: DiffUtil.ItemCallback<DATA>,
     itemFactoryList: List<FragmentItemFactory<*>>,
-    placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
+    placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingFragmentStateAdapter<DATA, RecyclerView.ViewHolder>(
@@ -54,7 +53,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         lifecycle: Lifecycle,
         diffCallback: DiffUtil.ItemCallback<DATA>,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentPlaceholderItemFactory?,
+        placeholderItemFactory: FragmentItemFactory<Placeholder>?,
     ) : this(
         fragmentManager,
         lifecycle,
@@ -84,7 +83,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         fragmentActivity: FragmentActivity,
         diffCallback: DiffUtil.ItemCallback<DATA>,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
+        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) : this(
@@ -101,7 +100,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         fragmentActivity: FragmentActivity,
         diffCallback: DiffUtil.ItemCallback<DATA>,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentPlaceholderItemFactory?,
+        placeholderItemFactory: FragmentItemFactory<Placeholder>?,
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
@@ -130,7 +129,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         fragment: Fragment,
         diffCallback: DiffUtil.ItemCallback<DATA>,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentPlaceholderItemFactory? = null,
+        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) : this(
@@ -147,7 +146,7 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         fragment: Fragment,
         diffCallback: DiffUtil.ItemCallback<DATA>,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentPlaceholderItemFactory?,
+        placeholderItemFactory: FragmentItemFactory<Placeholder>?,
     ) : this(
         fragment.childFragmentManager,
         fragment.lifecycle,
@@ -171,27 +170,32 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         Dispatchers.Main,
         Dispatchers.Default,
     )
+
+    init {
+        placeholderItemFactory?.apply {
+            if (!match(Placeholder)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
+            }
+            if (match(0)) {
+                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
+            }
+        }
+    }
 
     override fun createFragment(position: Int): Fragment {
         // Here you must use the getItem method to trigger append load
-        // And must be placed in this position
-        val data = getItem(position)
-        val matchData = data ?: Placeholder
+        val data = getItem(position) ?: Placeholder
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(matchData) as FragmentItemFactory<Any>
-        return if (itemFactory is FragmentPlaceholderItemFactory) {
-            itemFactory.dispatchCreateFragment(position, Placeholder)
-        } else {
-            itemFactory.dispatchCreateFragment(position, data!!)
-        }
+            itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+        return itemFactory.dispatchCreateFragment(position, data)
     }
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
-        val matchData = peek(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(matchData)
+        val data = peek(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(data)
     }
 
 
@@ -202,11 +206,11 @@ class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         private val itemFactoryList: List<FragmentItemFactory<*>>,
     ) {
 
-        private var placeholderItemFactory: FragmentPlaceholderItemFactory? = null
+        private var placeholderItemFactory: FragmentItemFactory<Placeholder>? = null
         private var mainDispatcher: CoroutineDispatcher = Dispatchers.Main
         private var workerDispatcher: CoroutineDispatcher = Dispatchers.Default
 
-        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentPlaceholderItemFactory?) {
+        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentItemFactory<Placeholder>?) {
             this.placeholderItemFactory = placeholderItemFactory
         }
 

@@ -39,6 +39,6 @@
         android:layout_height="0.5dp"
         android:background="#EAEAEA"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/appGroupPlaceholderItemTitleText"
+        app:layout_constraintEnd_toEndOf="@id/appGroupPlaceholderItemExpandView"
         app:layout_constraintStart_toStartOf="@id/appGroupPlaceholderItemTitleText" />
 </androidx.constraintlayout.widget.ConstraintLayout>
