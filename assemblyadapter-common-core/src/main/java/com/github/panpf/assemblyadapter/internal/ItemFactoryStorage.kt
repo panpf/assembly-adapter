@@ -24,7 +24,7 @@ class ItemFactoryStorage<ITEM_FACTORY : ItemFactory>(itemFactoryListParam: List<
 
     fun getItemFactoryByData(data: Any?): ITEM_FACTORY {
         return itemFactoryList.find { it.match(data) }
-            ?: throw IllegalStateException("Not found item factory by data: $data")
+            ?: throw IllegalStateException("Not found matching item factory by data: $data")
     }
 
     fun getItemFactoryByItemType(itemType: Int): ITEM_FACTORY {
@@ -35,6 +35,6 @@ class ItemFactoryStorage<ITEM_FACTORY : ItemFactory>(itemFactoryListParam: List<
     fun getItemTypeByData(data: Any?): Int {
         val itemFactory = getItemFactoryByData(data)
         return getItemTypeByItemFactoryMap[itemFactory]
-            ?: throw IllegalStateException("Not found item type by item factory: $itemFactory")
+            ?: throw IllegalStateException("Not found matching item type by item factory: $itemFactory")
     }
 }
