@@ -20,7 +20,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.ItemFactory
 
-// todo 新增 Binding 支持 和 ViewPagerItemFactory
 abstract class AssemblyPagerItemFactory<DATA> : ItemFactory {
 
     abstract override fun match(data: Any): Boolean
