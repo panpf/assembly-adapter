@@ -76,7 +76,7 @@ class AssemblyPagerAdapter<DATA>(
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
             itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
-        val itemView = itemFactory.dispatchCreateView(container.context, container, position, data)
+        val itemView = itemFactory.dispatchCreateItemView(container.context, container, position, data)
         container.addView(itemView)
         return itemView.apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)

@@ -15,7 +15,7 @@ class AppsOverviewPagerItemFactory :
         return data is AppsOverview
     }
 
-    override fun createViewBinding(
+    override fun createItemViewBinding(
         context: Context,
         inflater: LayoutInflater,
         parent: ViewGroup,

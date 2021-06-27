@@ -15,7 +15,7 @@ class AppGroupPlaceholderItemFactory :
         return data is Placeholder
     }
 
-    override fun createViewBinding(
+    override fun createItemViewBinding(
         inflater: LayoutInflater,
         parent: ViewGroup
     ): ItemAppGroupPlaceholderBinding {

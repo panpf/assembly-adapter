@@ -22,7 +22,7 @@ open class ListSeparatorItemFactory(
         return data is ListSeparator
     }
 
-    override fun createViewBinding(
+    override fun createItemViewBinding(
         inflater: LayoutInflater, parent: ViewGroup
     ): ItemListSeparatorBinding {
         return ItemListSeparatorBinding.inflate(inflater, parent, false)

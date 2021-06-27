@@ -20,7 +20,7 @@ class AppGroupPagerItemFactory(private val activity: Activity) :
         return data is AppGroup
     }
 
-    override fun createViewBinding(
+    override fun createItemViewBinding(
         context: Context,
         inflater: LayoutInflater,
         parent: ViewGroup,

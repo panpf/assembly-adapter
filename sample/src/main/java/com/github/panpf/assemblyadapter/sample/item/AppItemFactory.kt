@@ -22,7 +22,7 @@ class AppItemFactory(private val activity: Activity) :
         return data is AppInfo
     }
 
-    override fun createViewBinding(
+    override fun createItemViewBinding(
         inflater: LayoutInflater, parent: ViewGroup
     ): ItemAppBinding {
         return ItemAppBinding.inflate(inflater, parent, false)

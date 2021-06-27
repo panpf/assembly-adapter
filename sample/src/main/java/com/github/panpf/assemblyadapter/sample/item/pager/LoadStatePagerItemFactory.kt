@@ -14,7 +14,7 @@ class LoadStatePagerItemFactory : BindingPagerItemFactory<LoadState, FragmentLoa
         return data is LoadState
     }
 
-    override fun createViewBinding(
+    override fun createItemViewBinding(
         context: Context,
         inflater: LayoutInflater,
         parent: ViewGroup,

@@ -9,15 +9,14 @@ abstract class BindingExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
     ExpandableItemFactory<DATA>() {
 
     override fun createItem(parent: ViewGroup): ExpandableItem<DATA> {
-        val binding = createViewBinding(LayoutInflater.from(parent.context), parent)
+        val binding = createItemViewBinding(LayoutInflater.from(parent.context), parent)
         val item = BindingExpandableItem(this, binding)
         initItem(parent.context, binding, item)
         return item
     }
 
-    abstract fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
+    abstract fun createItemViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
 
-    @Suppress("MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
     open fun initItem(context: Context, binding: VIEW_BINDING, item: ExpandableItem<DATA>) {
     }
 

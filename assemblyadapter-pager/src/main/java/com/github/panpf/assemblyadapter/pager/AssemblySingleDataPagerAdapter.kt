@@ -45,7 +45,7 @@ class AssemblySingleDataPagerAdapter<DATA>(
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as PagerItemFactory<Any>
-        val itemView = itemFactory.dispatchCreateView(
+        val itemView = itemFactory.dispatchCreateItemView(
             container.context, container, position, data!!
         )
         container.addView(itemView)
