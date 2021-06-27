@@ -16,7 +16,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBindi
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.item.PinyinGroupItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
@@ -36,7 +36,7 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
                 AppCardGridItemFactory(requireActivity()),
-                PinyinGroupItemFactory(requireActivity(), true)
+                ListSeparatorItemFactory(requireActivity(), true)
             )
         )
         val footerLoadStateAdapter =
@@ -47,7 +47,7 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                 requireContext(), 3,
                 mapOf(
                     AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
-                    PinyinGroupItemFactory::class to ItemSpan.fullSpan(),
+                    ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
                     LoadStateItemFactory::class to ItemSpan.fullSpan()
                 )
             )

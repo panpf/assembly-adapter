@@ -17,12 +17,12 @@ import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerItemDec
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
-import com.github.panpf.assemblyadapter.sample.item.PinyinGroupStickyItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorStickyItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class RecyclerPagingLinearStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerStickyPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<PinyinFlatPagingAppsViewModel>()
 
@@ -38,7 +38,7 @@ class RecyclerPagingLinearStickyFragment : BaseBindingFragment<FragmentRecyclerB
         val pagingDataAdapter = AssemblyStickyPagingDataAdapter(
             listOf(
                 AppItemFactory(requireActivity()),
-                PinyinGroupStickyItemFactory(requireActivity())
+                ListSeparatorStickyItemFactory(requireActivity())
             ),
             KeyDiffItemCallback()
         )

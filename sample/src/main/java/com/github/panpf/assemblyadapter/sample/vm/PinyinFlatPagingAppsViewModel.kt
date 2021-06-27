@@ -10,7 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
-import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
+import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
 import com.github.panpf.assemblyadapter.sample.ds.AppListPagerSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -36,10 +36,10 @@ class PinyinFlatPagingAppsViewModel(application: Application) :
                         before != null && after != null -> {
                             val beforeFirChar = before.namePinyinLowerCase.first().uppercaseChar()
                             val afterFirChar = after.namePinyinLowerCase.first().uppercaseChar()
-                            if (beforeFirChar != afterFirChar) PinyinGroup(afterFirChar.toString()) else null
+                            if (beforeFirChar != afterFirChar) ListSeparator(afterFirChar.toString()) else null
                         }
                         before == null && after != null -> {
-                            PinyinGroup(after.namePinyinLowerCase.first().uppercase())
+                            ListSeparator(after.namePinyinLowerCase.first().uppercase())
                         }
                         else -> null
                     }

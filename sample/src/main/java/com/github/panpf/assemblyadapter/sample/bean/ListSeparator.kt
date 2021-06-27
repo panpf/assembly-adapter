@@ -6,7 +6,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class PinyinGroup(val title: String, val childSize: Int = 0) : DiffKey, Parcelable {
+data class ListSeparator(val title: String) : DiffKey, Parcelable {
 
     @IgnoredOnParcel
     override val diffKey: String = title

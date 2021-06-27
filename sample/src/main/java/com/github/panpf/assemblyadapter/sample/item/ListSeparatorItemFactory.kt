@@ -8,34 +8,34 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.updateLayoutParams
-import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.BindingItemFactory
-import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
-import com.github.panpf.assemblyadapter.sample.databinding.ItemPinyinGroupBinding
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
+import com.github.panpf.assemblyadapter.sample.databinding.ItemListSeparatorBinding
 
-open class PinyinGroupItemFactory(
+open class ListSeparatorItemFactory(
     private val activity: Activity,
     private val hideStartMargin: Boolean = false
-) : BindingItemFactory<PinyinGroup, ItemPinyinGroupBinding>() {
+) : BindingItemFactory<ListSeparator, ItemListSeparatorBinding>() {
 
     override fun match(data: Any): Boolean {
-        return data is PinyinGroup
+        return data is ListSeparator
     }
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup
-    ): ItemPinyinGroupBinding {
-        return ItemPinyinGroupBinding.inflate(inflater, parent, false)
+    ): ItemListSeparatorBinding {
+        return ItemListSeparatorBinding.inflate(inflater, parent, false)
     }
 
     override fun initItem(
         context: Context,
-        binding: ItemPinyinGroupBinding,
-        item: Item<PinyinGroup>
+        binding: ItemListSeparatorBinding,
+        item: Item<ListSeparator>
     ) {
         super.initItem(context, binding, item)
         if (hideStartMargin) {
-            binding.pinyinGroupItemTitleText.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            binding.listSeparatorItemTitleText.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = 0
                 rightMargin = 0
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -72,11 +72,11 @@ open class PinyinGroupItemFactory(
 
     override fun bindItemData(
         context: Context,
-        binding: ItemPinyinGroupBinding,
-        item: Item<PinyinGroup>,
+        binding: ItemListSeparatorBinding,
+        item: Item<ListSeparator>,
         bindingAdapterPosition: Int,
-        data: PinyinGroup
+        data: ListSeparator
     ) {
-        binding.pinyinGroupItemTitleText.text = data.title
+        binding.listSeparatorItemTitleText.text = data.title
     }
 }

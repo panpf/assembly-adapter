@@ -18,7 +18,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBindi
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.item.PinyinGroupItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 import kotlinx.coroutines.flow.collect
@@ -40,7 +40,7 @@ class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecycler
         val pagingDataAdapter = AssemblyPagingDataAdapter(
             listOf(
                 AppCardGridItemFactory(requireActivity()),
-                PinyinGroupItemFactory(requireActivity(), true)
+                ListSeparatorItemFactory(requireActivity(), true)
             ),
             KeyDiffItemCallback()
         )
@@ -53,7 +53,7 @@ class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecycler
                 3,
                 listOf(
                     AppsOverviewItemFactory::class,
-                    PinyinGroupItemFactory::class,
+                    ListSeparatorItemFactory::class,
                     LoadStateItemFactory::class
                 )
             )

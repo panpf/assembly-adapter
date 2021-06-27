@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.bean.Link
+import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
 import com.github.panpf.assemblyadapter.sample.databinding.AcivityMainBinding
 import com.github.panpf.assemblyadapter.sample.item.LinkItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListPlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListFragment
@@ -32,27 +34,32 @@ class MainActivity : AppCompatActivity() {
         binding.mainRecycler.apply {
             layoutManager = LinearLayoutManager(baseContext)
             adapter = AssemblyRecyclerAdapter(
-                listOf(LinkItemFactory(this@MainActivity)),
                 listOf(
+                    LinkItemFactory(this@MainActivity),
+                    ListSeparatorItemFactory(this@MainActivity)
+                ),
+                listOf(
+                    ListSeparator("RecyclerView"),
                     Link("RecyclerView - Linear", RecyclerLinearFragment()),
-                    Link("RecyclerView - Linear - Sticky", RecyclerLinearStickyFragment()),
                     Link("RecyclerView - Grid", RecyclerGridFragment()),
                     Link("RecyclerView - Grid - Staggered", RecyclerGridStaggeredFragment()),
-                    Link("RecyclerView - Placeholder", RecyclerPlaceholderFragment()),
                     Link("RecyclerView - Paging - Linear", RecyclerPagingLinearFragment()),
-                    Link(
-                        "RecyclerView - Paging - Linear - Sticky",
-                        RecyclerPagingLinearStickyFragment()
-                    ),
                     Link("RecyclerView - Paging - Grid", RecyclerPagingGridFragment()),
                     Link(
                         "RecyclerView - Paging - Grid - Staggered",
                         RecyclerPagingGridStaggeredFragment()
                     ),
+                    Link("RecyclerView - Placeholder", RecyclerPlaceholderFragment()),
+                    Link("RecyclerView - Sticky", RecyclerStickyFragment()),
+                    Link("RecyclerView - Sticky - Paging", RecyclerStickyPagingFragment()),
+
+                    ListSeparator("ListView"),
                     Link("ListView", ListFragment()),
                     Link("ListView - Placeholder", ListPlaceholderFragment()),
                     Link("ExpandableListView", ExpandableListFragment()),
                     Link("ExpandableListView - Placeholder", ExpandableListPlaceholderFragment()),
+
+                    ListSeparator("ViewPager"),
                     Link("ViewPager - View", PagerViewFragment()),
                     Link("ViewPager - Fragment", PagerFragmentFragment()),
                     Link("ViewPager - Fragment - State", PagerFragmentStateFragment()),

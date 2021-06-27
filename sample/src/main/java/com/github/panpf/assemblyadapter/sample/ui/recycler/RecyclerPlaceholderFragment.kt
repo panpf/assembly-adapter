@@ -30,7 +30,7 @@ class RecyclerPlaceholderFragment : BaseBindingFragment<FragmentRecyclerBinding>
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter(
-            listOf(AppItemFactory(requireActivity()), PinyinGroupItemFactory(requireActivity())),
+            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity())),
             AppPlaceholderItemFactory(),
             arrayOfNulls<Any?>(100).toList()
         )

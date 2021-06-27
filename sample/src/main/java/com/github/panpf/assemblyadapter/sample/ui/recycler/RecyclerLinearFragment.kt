@@ -14,7 +14,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBindi
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.item.PinyinGroupItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
 class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
@@ -31,7 +31,7 @@ class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
-            listOf(AppItemFactory(requireActivity()), PinyinGroupItemFactory(requireActivity()))
+            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity()))
         )
         val footerLoadStateAdapter =
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))

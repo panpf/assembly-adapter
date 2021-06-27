@@ -13,7 +13,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.item.PinyinGroupItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
 class ListFragment : BaseBindingFragment<FragmentListBinding>() {
@@ -30,7 +30,7 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
         val appsOverviewAdapter =
             AssemblySingleDataListAdapter(AppsOverviewItemFactory(requireActivity()))
         val listAdapter = AssemblyListAdapter<Any>(
-            listOf(AppItemFactory(requireActivity()), PinyinGroupItemFactory(requireActivity()))
+            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity()))
         )
         val footerLoadStateAdapter =
             AssemblySingleDataListAdapter(LoadStateItemFactory(requireActivity()))

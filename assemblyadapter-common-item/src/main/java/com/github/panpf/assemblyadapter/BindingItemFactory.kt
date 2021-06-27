@@ -15,6 +15,7 @@ abstract class BindingItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         return item
     }
 
+    // todo 改名为 createItemViewBinding
     abstract fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
 
     open fun initItem(context: Context, binding: VIEW_BINDING, item: Item<DATA>) {

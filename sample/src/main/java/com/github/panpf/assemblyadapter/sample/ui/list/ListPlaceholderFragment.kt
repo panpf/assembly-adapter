@@ -29,7 +29,7 @@ class ListPlaceholderFragment : BaseBindingFragment<FragmentListBinding>() {
         val appsOverviewAdapter =
             AssemblySingleDataListAdapter(AppsOverviewItemFactory(requireActivity()))
         val listAdapter = AssemblyListAdapter(
-            listOf(AppItemFactory(requireActivity()), PinyinGroupItemFactory(requireActivity())),
+            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity())),
             AppPlaceholderItemFactory(),
             arrayOfNulls<Any?>(100).toList()
         )

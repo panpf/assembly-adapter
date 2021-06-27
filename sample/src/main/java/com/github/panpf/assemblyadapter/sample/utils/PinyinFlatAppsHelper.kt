@@ -3,7 +3,7 @@ package com.github.panpf.assemblyadapter.sample.utils
 import android.content.Context
 import android.content.pm.PackageManager
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
-import com.github.panpf.assemblyadapter.sample.bean.PinyinGroup
+import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
 import java.util.*
 
 class PinyinFlatAppsHelper(private val context: Context) {
@@ -25,7 +25,7 @@ class PinyinFlatAppsHelper(private val context: Context) {
             appPackageList.forEach { app ->
                 val namePinyinFirstChar = app.namePinyin.first().uppercaseChar()
                 if (lastPinyinFirstChar == null || namePinyinFirstChar != lastPinyinFirstChar) {
-                    add(PinyinGroup(namePinyinFirstChar.toString()))
+                    add(ListSeparator(namePinyinFirstChar.toString()))
                     lastPinyinFirstChar = namePinyinFirstChar
                 }
                 add(app)
