@@ -6,9 +6,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
+import com.github.panpf.assemblyadapter.Placeholder
+import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.concat.expandable.ConcatExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpandableListAdapter
+import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
@@ -34,7 +37,7 @@ class ExpandableListPlaceholderFragment : BaseBindingFragment<FragmentExpandable
         )
         val listAdapter = AssemblyExpandableListAdapter<AppGroup?, AppInfo>(
             listOf(AppGroupItemFactory(), AppItemFactory(requireActivity())),
-            AppGroupPlaceholderItemFactory(),
+            ViewItemFactory(Placeholder::class.java, R.layout.item_app_group_placeholder),
             arrayOfNulls<AppGroup?>(100).toList()
         )
         val footerLoadStateAdapter = AssemblySingleDataExpandableListAdapter<LoadState, Any>(

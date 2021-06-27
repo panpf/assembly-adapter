@@ -35,7 +35,7 @@ class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
             FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
             AppsOverviewFragmentItemFactory()
         )
-        val listAdapter = AssemblyFragmentPagerAdapter<Any>(
+        val pagerAdapter = AssemblyFragmentPagerAdapter<Any>(
             childFragmentManager,
             FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
             listOf(AppGroupFragmentItemFactory())
@@ -50,7 +50,7 @@ class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
                 childFragmentManager,
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
                 appsOverviewAdapter,
-                listAdapter,
+                pagerAdapter,
                 footerLoadStateAdapter
             )
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
@@ -72,7 +72,7 @@ class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
         }
 
         viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-            listAdapter.setDataList(it)
+            pagerAdapter.setDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
             updatePageNumber(binding)
         }

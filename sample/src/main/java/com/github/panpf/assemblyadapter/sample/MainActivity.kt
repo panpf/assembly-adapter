@@ -14,11 +14,10 @@ import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListPlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListPlaceholderFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentStateFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager.PagerViewFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager.*
 import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPagingFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.recycler.*
 
 class MainActivity : AppCompatActivity() {
@@ -43,13 +42,13 @@ class MainActivity : AppCompatActivity() {
                     Link("RecyclerView - Linear", RecyclerLinearFragment()),
                     Link("RecyclerView - Grid", RecyclerGridFragment()),
                     Link("RecyclerView - Grid - Staggered", RecyclerGridStaggeredFragment()),
+                    Link("RecyclerView - Placeholder", RecyclerPlaceholderFragment()),
                     Link("RecyclerView - Paging - Linear", RecyclerPagingLinearFragment()),
                     Link("RecyclerView - Paging - Grid", RecyclerPagingGridFragment()),
                     Link(
                         "RecyclerView - Paging - Grid - Staggered",
                         RecyclerPagingGridStaggeredFragment()
                     ),
-                    Link("RecyclerView - Placeholder", RecyclerPlaceholderFragment()),
                     Link("RecyclerView - Sticky", RecyclerStickyFragment()),
                     Link("RecyclerView - Sticky - Paging", RecyclerStickyPagingFragment()),
 
@@ -61,9 +60,13 @@ class MainActivity : AppCompatActivity() {
 
                     ListSeparator("ViewPager"),
                     Link("ViewPager - View", PagerViewFragment()),
+                    Link("ViewPager - View - Placeholder", PagerViewPlaceholderFragment()),
                     Link("ViewPager - Fragment", PagerFragmentFragment()),
+                    Link("ViewPager - Fragment - Placeholder", PagerFragmentPlaceholderFragment()),
                     Link("ViewPager - Fragment - State", PagerFragmentStateFragment()),
+                    Link("ViewPager - Fragment - State - Placeholder", PagerFragmentStatePlaceholderFragment()),
                     Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
+                    Link("ViewPager2 - Fragment - Placeholder", Pager2FragmentPlaceholderFragment()),
                     Link("ViewPager2 - Fragment - Paging", Pager2FragmentPagingFragment()),
                 )
             )
