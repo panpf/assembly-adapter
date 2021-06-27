@@ -16,9 +16,9 @@ abstract class BindingPagerItemFactory<DATA, VIEW_BINDING : ViewBinding> :
     ): VIEW_BINDING
 
     override fun createItemView(
-        context: Context, container: ViewGroup, position: Int, data: DATA
+        context: Context, parent: ViewGroup, position: Int, data: DATA
     ): View {
-        val inflater = LayoutInflater.from(container.context)
-        return createItemViewBinding(context, inflater, container, position, data).root
+        val inflater = LayoutInflater.from(context)
+        return createItemViewBinding(context, inflater, parent, position, data).root
     }
 }

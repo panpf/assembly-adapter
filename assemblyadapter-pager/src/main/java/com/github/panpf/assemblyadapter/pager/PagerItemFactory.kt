@@ -25,12 +25,12 @@ abstract class PagerItemFactory<DATA> : MatchItemFactory {
     abstract override fun match(data: Any): Boolean
 
     fun dispatchCreateItemView(
-        context: Context, container: ViewGroup, position: Int, data: DATA
+        context: Context, parent: ViewGroup, position: Int, data: DATA
     ): View {
-        return createItemView(context, container, position, data)
+        return createItemView(context, parent, position, data)
     }
 
     abstract fun createItemView(
-        context: Context, container: ViewGroup, position: Int, data: DATA
+        context: Context, parent: ViewGroup, position: Int, data: DATA
     ): View
 }
