@@ -1,4 +1,4 @@
-package com.github.panpf.assemblyadapter
+package com.github.panpf.assemblyadapter.list.expandable
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 
-class ViewItemFactory<DATA>(
+class ViewExpandableItemFactory<DATA>(
     private val dataClazz: Class<DATA>,
     private val viewFactory: (inflater: LayoutInflater, parent: ViewGroup) -> View
-) : SimpleItemFactory<DATA>() {
+) : SimpleExpandableItemFactory<DATA>() {
 
     constructor(dataClazz: Class<DATA>, @LayoutRes layoutResId: Int) : this(
         dataClazz,
@@ -27,7 +27,11 @@ class ViewItemFactory<DATA>(
     }
 
     override fun bindItemData(
-        context: Context, itemView: View, item: Item<DATA>, bindingAdapterPosition: Int, data: DATA
+        context: Context,
+        itemView: View,
+        item: ExpandableItem<DATA>,
+        bindingAdapterPosition: Int,
+        data: DATA
     ) {
     }
 }

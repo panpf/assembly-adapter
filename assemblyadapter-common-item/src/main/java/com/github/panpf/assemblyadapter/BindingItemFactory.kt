@@ -30,7 +30,7 @@ abstract class BindingItemFactory<DATA, VIEW_BINDING : ViewBinding> :
 
     private class BindingItem<DATA, VIEW_BINDING : ViewBinding>(
         private val factory: BindingItemFactory<DATA, VIEW_BINDING>,
-        val binding: VIEW_BINDING
+        private val binding: VIEW_BINDING
     ) : Item<DATA>(binding.root) {
 
         override fun bindData(bindingAdapterPosition: Int, data: DATA) {

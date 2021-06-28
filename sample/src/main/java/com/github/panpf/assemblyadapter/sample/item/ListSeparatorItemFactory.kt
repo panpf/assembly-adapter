@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.updateLayoutParams
 import com.github.panpf.assemblyadapter.BindingItemFactory
-import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
 import com.github.panpf.assemblyadapter.sample.databinding.ItemListSeparatorBinding
 

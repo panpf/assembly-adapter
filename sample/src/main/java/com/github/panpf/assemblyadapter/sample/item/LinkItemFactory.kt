@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.base.FragmentContainerActivity
 import com.github.panpf.assemblyadapter.sample.bean.Link

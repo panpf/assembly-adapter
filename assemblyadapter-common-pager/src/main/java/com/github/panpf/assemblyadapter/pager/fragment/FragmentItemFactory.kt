@@ -26,5 +26,5 @@ abstract class FragmentItemFactory<DATA> : MatchItemFactory {
         return createFragment(position, data)
     }
 
-    abstract fun createFragment(position: Int, data: DATA): Fragment
+    protected abstract fun createFragment(position: Int, data: DATA): Fragment
 }

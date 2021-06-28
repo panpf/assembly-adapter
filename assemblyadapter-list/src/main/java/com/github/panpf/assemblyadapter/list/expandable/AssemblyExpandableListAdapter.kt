@@ -92,8 +92,8 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
             (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        when (val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<Any>) {
-            is ExpandableItem<Any> -> groupItem.dispatchBindData(
+        when (val groupItem = groupItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>) {
+            is ExpandableItemFactory.ExpandableItem<Any> -> groupItem.dispatchExpandableBindData(
                 groupBindingAdapterPosition,
                 groupAbsoluteAdapterPosition,
                 groupBindingAdapterPosition,
@@ -151,9 +151,9 @@ class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
             (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val childItem = childItemView.getTag(R.id.aa_tag_item) as Item<Any>
-        if (childItem is ExpandableItem<Any>) {
-            childItem.dispatchBindData(
+        val childItem = childItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
+        if (childItem is ExpandableItemFactory.ExpandableItem<Any>) {
+            childItem.dispatchExpandableBindData(
                 childPosition,
                 childPosition,
                 groupBindingAdapterPosition,

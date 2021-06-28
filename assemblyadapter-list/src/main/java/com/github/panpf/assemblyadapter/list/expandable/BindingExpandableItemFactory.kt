@@ -30,7 +30,7 @@ abstract class BindingExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
 
     private class BindingExpandableItem<DATA, VIEW_BINDING : ViewBinding>(
         private val factory: BindingExpandableItemFactory<DATA, VIEW_BINDING>,
-        val binding: VIEW_BINDING
+        private val binding: VIEW_BINDING
     ) : ExpandableItem<DATA>(binding.root) {
 
         public override fun bindData(bindingAdapterPosition: Int, data: DATA) {

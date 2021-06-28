@@ -90,7 +90,7 @@ class AssemblyListAdapter<DATA>(
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
+        val item = itemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
         item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
 
         return itemView

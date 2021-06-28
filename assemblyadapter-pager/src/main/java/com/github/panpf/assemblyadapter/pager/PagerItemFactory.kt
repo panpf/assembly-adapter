@@ -30,7 +30,7 @@ abstract class PagerItemFactory<DATA> : MatchItemFactory {
         return createItemView(context, parent, position, data)
     }
 
-    abstract fun createItemView(
+    protected abstract fun createItemView(
         context: Context, parent: ViewGroup, position: Int, data: DATA
     ): View
 }

@@ -19,7 +19,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.R
@@ -75,9 +74,9 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
             (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<Any>
-        if (groupItem is ExpandableItem<Any>) {
-            groupItem.dispatchBindData(
+        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
+        if (groupItem is ExpandableItemFactory.ExpandableItem<Any>) {
+            groupItem.dispatchExpandableBindData(
                 groupBindingAdapterPosition,
                 groupAbsoluteAdapterPosition,
                 groupBindingAdapterPosition,
@@ -136,9 +135,9 @@ class AssemblySingleDataExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
             (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val childItem = childItemView.getTag(R.id.aa_tag_item) as Item<Any>
-        if (childItem is ExpandableItem<Any>) {
-            childItem.dispatchBindData(
+        val childItem = childItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
+        if (childItem is ExpandableItemFactory.ExpandableItem<Any>) {
+            childItem.dispatchExpandableBindData(
                 childPosition,
                 childPosition,
                 groupBindingAdapterPosition,

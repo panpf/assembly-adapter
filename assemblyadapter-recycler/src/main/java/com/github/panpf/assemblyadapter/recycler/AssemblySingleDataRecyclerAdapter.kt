@@ -18,7 +18,6 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
@@ -57,7 +56,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA>(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as Item<Any>
+            val item = holder.wrappedItem as ItemFactory.Item<Any>
             item.dispatchBindData(position, holder.position, data!!)
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")

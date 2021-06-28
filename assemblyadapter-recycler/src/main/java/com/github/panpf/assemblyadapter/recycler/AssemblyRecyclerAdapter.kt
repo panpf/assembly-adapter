@@ -87,7 +87,7 @@ open class AssemblyRecyclerAdapter<DATA>(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AssemblyItemViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as Item<Any>
+            val item = holder.wrappedItem as ItemFactory.Item<Any>
             val data = itemDataStorage.getData(position) ?: Placeholder
             item.dispatchBindData(position, holder.position, data)
         } else {
