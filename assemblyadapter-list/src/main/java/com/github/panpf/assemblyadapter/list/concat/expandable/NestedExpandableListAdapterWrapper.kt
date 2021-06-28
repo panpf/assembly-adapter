@@ -21,7 +21,7 @@ import android.widget.BaseExpandableListAdapter
 /**
  * Wrapper for each adapter in [ConcatExpandableListAdapter].
  */
-class NestedExpandableListAdapterWrapper(
+internal class NestedExpandableListAdapterWrapper(
     val adapter: BaseExpandableListAdapter,
     private val mCallback: Callback,
     viewTypeStorage: ExpandableListViewTypeStorage,

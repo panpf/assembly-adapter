@@ -28,7 +28,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
         "com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter"
     )
 )
-class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
+open class AssemblySingleDataFragmentStatePagerAdapter<DATA> :
     FragmentStatePagerAdapter, AssemblyAdapter {
 
     private val itemFactory: FragmentItemFactory<DATA>

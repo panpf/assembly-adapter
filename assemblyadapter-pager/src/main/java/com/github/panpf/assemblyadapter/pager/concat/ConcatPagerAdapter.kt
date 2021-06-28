@@ -22,7 +22,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.PagerAdapterRefreshHelper
 import java.util.*
 
-class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
+open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
 
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
@@ -71,7 +71,7 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(adapter: PagerAdapter): Boolean {
+    open fun addAdapter(adapter: PagerAdapter): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -87,7 +87,7 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(index: Int, adapter: PagerAdapter): Boolean {
+    open fun addAdapter(index: Int, adapter: PagerAdapter): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -98,7 +98,7 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      * @return `true` if the adapter was previously added to this `ConcatPagerAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    fun removeAdapter(adapter: PagerAdapter): Boolean {
+    open fun removeAdapter(adapter: PagerAdapter): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -160,7 +160,7 @@ class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
         return super.getItemPosition(item)
     }
 
-    fun findLocalAdapterAndPosition(position: Int): Pair<PagerAdapter, Int> {
+    open fun findLocalAdapterAndPosition(position: Int): Pair<PagerAdapter, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 }

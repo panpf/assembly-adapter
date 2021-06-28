@@ -21,7 +21,6 @@ import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import java.util.*
 
 open class AssemblyRecyclerAdapter<DATA>(

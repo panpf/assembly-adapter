@@ -29,7 +29,7 @@ import java.util.*
         "androidx.recyclerview.widget.ConcatAdapter"
     )
 )
-class ConcatFragmentPagerAdapter(
+open class ConcatFragmentPagerAdapter(
     fm: FragmentManager,
     @Behavior behavior: Int,
     adapters: List<FragmentPagerAdapter>
@@ -108,7 +108,7 @@ class ConcatFragmentPagerAdapter(
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(adapter: FragmentPagerAdapter): Boolean {
+    open fun addAdapter(adapter: FragmentPagerAdapter): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -124,7 +124,7 @@ class ConcatFragmentPagerAdapter(
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(index: Int, adapter: FragmentPagerAdapter): Boolean {
+    open fun addAdapter(index: Int, adapter: FragmentPagerAdapter): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -135,7 +135,7 @@ class ConcatFragmentPagerAdapter(
      * @return `true` if the adapter was previously added to this `ConcatPagerAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    fun removeAdapter(adapter: FragmentPagerAdapter): Boolean {
+    open fun removeAdapter(adapter: FragmentPagerAdapter): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -173,7 +173,7 @@ class ConcatFragmentPagerAdapter(
         return super.getItemPosition(item)
     }
 
-    fun findLocalAdapterAndPosition(position: Int): Pair<FragmentPagerAdapter, Int> {
+    open fun findLocalAdapterAndPosition(position: Int): Pair<FragmentPagerAdapter, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 

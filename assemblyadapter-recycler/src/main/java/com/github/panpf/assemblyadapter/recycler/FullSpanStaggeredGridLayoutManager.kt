@@ -1,4 +1,4 @@
-package com.github.panpf.assemblyadapter.recycler.internal
+package com.github.panpf.assemblyadapter.recycler
 
 import android.view.View
 import com.github.panpf.assemblyadapter.ItemFactory

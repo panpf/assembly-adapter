@@ -15,12 +15,12 @@ abstract class BindingExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         return item
     }
 
-    abstract fun createItemViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
+    protected abstract fun createItemViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
 
-    open fun initItem(context: Context, binding: VIEW_BINDING, item: ExpandableItem<DATA>) {
+    protected open fun initItem(context: Context, binding: VIEW_BINDING, item: ExpandableItem<DATA>) {
     }
 
-    abstract fun bindItemData(
+    protected abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
         item: ExpandableItem<DATA>,
@@ -33,7 +33,7 @@ abstract class BindingExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         private val binding: VIEW_BINDING
     ) : ExpandableItem<DATA>(binding.root) {
 
-        public override fun bindData(bindingAdapterPosition: Int, data: DATA) {
+        override fun bindData(bindingAdapterPosition: Int, data: DATA) {
             factory.bindItemData(context, binding, this, bindingAdapterPosition, data)
         }
     }

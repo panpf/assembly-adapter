@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.FullSpanStaggeredGridLayoutManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

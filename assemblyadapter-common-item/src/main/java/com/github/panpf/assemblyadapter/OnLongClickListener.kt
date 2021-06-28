@@ -9,6 +9,6 @@ fun interface OnLongClickListener<DATA> {
         view: View,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
-        data: DATA?
+        data: DATA
     ): Boolean
 }

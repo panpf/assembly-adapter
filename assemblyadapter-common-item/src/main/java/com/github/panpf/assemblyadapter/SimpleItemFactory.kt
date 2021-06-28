@@ -14,12 +14,12 @@ abstract class SimpleItemFactory<DATA> : ItemFactory<DATA>() {
         return item
     }
 
-    abstract fun createItemView(inflater: LayoutInflater, parent: ViewGroup): View
+    protected abstract fun createItemView(inflater: LayoutInflater, parent: ViewGroup): View
 
-    open fun initItem(context: Context, itemView: View, item: Item<DATA>) {
+    protected open fun initItem(context: Context, itemView: View, item: Item<DATA>) {
     }
 
-    abstract fun bindItemData(
+    protected abstract fun bindItemData(
         context: Context, itemView: View, item: Item<DATA>, bindingAdapterPosition: Int, data: DATA
     )
 

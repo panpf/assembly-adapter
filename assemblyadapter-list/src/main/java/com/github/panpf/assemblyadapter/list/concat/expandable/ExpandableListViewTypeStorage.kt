@@ -22,7 +22,7 @@ import java.util.*
 /**
  * Used by [ConcatExpandableListAdapter] to isolate view types between nested adapters, if necessary.
  */
-interface ExpandableListViewTypeStorage {
+internal interface ExpandableListViewTypeStorage {
     fun getWrapperForGlobalType(globalViewType: Int): NestedExpandableListAdapterWrapper
     fun createViewTypeWrapper(
         wrapper: NestedExpandableListAdapterWrapper

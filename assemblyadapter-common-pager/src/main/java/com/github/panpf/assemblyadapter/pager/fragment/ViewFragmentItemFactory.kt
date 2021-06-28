@@ -30,11 +30,7 @@ class ViewFragmentItemFactory<DATA>(
         private val layoutResId by lazy { arguments?.getInt("layoutResId")!! }
 
         override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-            return LayoutInflater.from(requireContext()).inflate(layoutResId, container, false)
-        }
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        ): View = inflater.inflate(layoutResId, container, false)
     }
 }

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.FullSpanStaggeredGridLayoutManager
 
 open class AssemblyLoadStateAdapter(
     private val itemFactory: ItemFactory<LoadState>,

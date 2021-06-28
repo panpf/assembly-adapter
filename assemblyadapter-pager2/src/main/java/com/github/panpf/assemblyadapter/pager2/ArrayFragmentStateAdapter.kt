@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ArrayFragmentStateAdapter(
+open class ArrayFragmentStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     fragments: List<Fragment>
@@ -52,11 +52,11 @@ class ArrayFragmentStateAdapter(
     }
 
 
-    fun getFragmentsSnapshot(): List<Fragment> {
+    open fun getFragmentsSnapshot(): List<Fragment> {
         return fragmentList.toList()
     }
 
-    fun setFragments(fragments: List<Fragment>?) {
+    open fun setFragments(fragments: List<Fragment>?) {
         fragmentList = fragments?.toList() ?: emptyList()
         notifyDataSetChanged()
     }

@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.R
 import java.util.*
 
-class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
+open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     placeholderItemFactory: ItemFactory<Placeholder>? = null,
     dataList: List<GROUP_DATA>? = null

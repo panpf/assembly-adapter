@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
-class AssemblyListAdapter<DATA>(
+open class AssemblyListAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     placeholderItemFactory: ItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null

@@ -11,14 +11,14 @@ abstract class BindingPagerItemFactory<DATA, VIEW_BINDING : ViewBinding> :
 
     abstract override fun match(data: Any): Boolean
 
-    abstract fun createItemViewBinding(
-        context: Context, inflater: LayoutInflater, parent: ViewGroup, position: Int, data: DATA
-    ): VIEW_BINDING
-
     override fun createItemView(
         context: Context, parent: ViewGroup, position: Int, data: DATA
     ): View {
         val inflater = LayoutInflater.from(context)
         return createItemViewBinding(context, inflater, parent, position, data).root
     }
+
+    protected abstract fun createItemViewBinding(
+        context: Context, inflater: LayoutInflater, parent: ViewGroup, position: Int, data: DATA
+    ): VIEW_BINDING
 }

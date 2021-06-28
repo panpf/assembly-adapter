@@ -33,7 +33,7 @@ import java.util.*
         "com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter"
     )
 )
-class AssemblyFragmentStatePagerAdapter<DATA>(
+open class AssemblyFragmentStatePagerAdapter<DATA>(
     fm: FragmentManager,
     @Behavior behavior: Int,
     itemFactoryList: List<FragmentItemFactory<*>>,

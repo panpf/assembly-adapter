@@ -20,7 +20,7 @@ import androidx.collection.LongSparseArray
 /**
  * Used by [ConcatExpandableListAdapter] to isolate item ids between nested adapters, if necessary.
  */
-interface ExpandableListStableIdStorage {
+internal interface ExpandableListStableIdStorage {
     fun createStableIdLookup(): StableIdLookup
 
     /**

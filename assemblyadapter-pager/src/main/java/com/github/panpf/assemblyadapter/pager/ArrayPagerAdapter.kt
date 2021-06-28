@@ -19,7 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 
-class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
+open class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
 
     private var viewList: List<View> = views.toList()
     private var pageTitleList: List<CharSequence>? = null
@@ -69,20 +69,20 @@ class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
     }
 
 
-    fun getViewsSnapshot(): List<View> {
+    open fun getViewsSnapshot(): List<View> {
         return viewList.toList()
     }
 
-    fun setViews(views: List<View>?) {
+    open fun setViews(views: List<View>?) {
         viewList = views?.toList() ?: emptyList()
         notifyDataSetChanged()
     }
 
-    fun getPageTitlesSnapshot(): List<CharSequence> {
+    open fun getPageTitlesSnapshot(): List<CharSequence> {
         return pageTitleList?.toList() ?: emptyList()
     }
 
-    fun setPageTitles(pageTitles: List<CharSequence>?) {
+    open fun setPageTitles(pageTitles: List<CharSequence>?) {
         pageTitleList = pageTitles?.toList() ?: emptyList()
     }
 }

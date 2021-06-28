@@ -4,6 +4,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.ItemFactory
 
+/**
+ * It is not recommended to directly inherit [ExpandableItemFactory], you can inherit [BindingExpandableItemFactory] and [SimpleExpandableItemFactory] to implement your own ItemFactory
+ * @see BindingExpandableItemFactory
+ * @see SimpleExpandableItemFactory
+ * @see ViewExpandableItemFactory
+ */
 abstract class ExpandableItemFactory<DATA> : ItemFactory<DATA>() {
 
     abstract override fun createItem(parent: ViewGroup): ExpandableItem<DATA>

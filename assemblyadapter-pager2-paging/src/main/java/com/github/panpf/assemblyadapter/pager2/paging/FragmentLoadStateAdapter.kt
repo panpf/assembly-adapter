@@ -82,5 +82,5 @@ abstract class FragmentLoadStateAdapter(
         return onCreateFragment(position, loadState)
     }
 
-    abstract fun onCreateFragment(position: Int, loadState: LoadState): Fragment
+    protected abstract fun onCreateFragment(position: Int, loadState: LoadState): Fragment
 }

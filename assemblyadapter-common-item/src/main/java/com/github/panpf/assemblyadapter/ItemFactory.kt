@@ -8,6 +8,12 @@ import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.internal.ClickListenerManager
 
+/**
+ * It is not recommended to directly inherit [ItemFactory], you can inherit [BindingItemFactory] and [SimpleItemFactory] to implement your own ItemFactory
+ * @see BindingItemFactory
+ * @see SimpleItemFactory
+ * @see ViewItemFactory
+ */
 abstract class ItemFactory<DATA> : MatchItemFactory {
 
     private var clickListenerManager: ClickListenerManager<DATA>? = null
@@ -22,7 +28,7 @@ abstract class ItemFactory<DATA> : MatchItemFactory {
 
     protected abstract fun createItem(parent: ViewGroup): Item<DATA>
 
-    fun setOnViewClickListener(
+    open fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
     ): ItemFactory<DATA> {
@@ -30,7 +36,7 @@ abstract class ItemFactory<DATA> : MatchItemFactory {
         return this
     }
 
-    fun setOnViewLongClickListener(
+    open fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
     ): ItemFactory<DATA> {
@@ -38,12 +44,12 @@ abstract class ItemFactory<DATA> : MatchItemFactory {
         return this
     }
 
-    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
+    open fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
 
-    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
+    open fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }
@@ -77,7 +83,7 @@ abstract class ItemFactory<DATA> : MatchItemFactory {
                         view,
                         bindItem.bindingAdapterPosition,
                         bindItem.absoluteAdapterPosition,
-                        bindItem.dataOrNull
+                        bindItem.requireData
                     )
                 }
             } else if (holder is ClickListenerManager.LongClickListenerHolder<*>) {
@@ -100,7 +106,7 @@ abstract class ItemFactory<DATA> : MatchItemFactory {
                         view,
                         bindItem.bindingAdapterPosition,
                         bindItem.absoluteAdapterPosition,
-                        bindItem.dataOrNull
+                        bindItem.requireData
                     )
                 }
             }

@@ -29,7 +29,7 @@ import java.util.*
  * @param adapters The list of adapters to add
  * @see Config.Builder
  */
-class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpandableListAdapter>) :
+open class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpandableListAdapter>) :
     BaseExpandableListAdapter() {
 
     companion object {
@@ -100,7 +100,7 @@ class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpandableL
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(adapter: BaseExpandableListAdapter): Boolean {
+    open fun addAdapter(adapter: BaseExpandableListAdapter): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -116,7 +116,7 @@ class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpandableL
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(index: Int, adapter: BaseExpandableListAdapter): Boolean {
+    open fun addAdapter(index: Int, adapter: BaseExpandableListAdapter): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -127,7 +127,7 @@ class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpandableL
      * @return `true` if the adapter was previously added to this `ConcatExpandableListAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    fun removeAdapter(adapter: BaseExpandableListAdapter): Boolean {
+    open fun removeAdapter(adapter: BaseExpandableListAdapter): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -202,7 +202,7 @@ class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpandableL
         mController.onGroupExpanded(groupPosition)
     }
 
-    fun findLocalAdapterAndPosition(position: Int): Pair<BaseExpandableListAdapter, Int> {
+    open fun findLocalAdapterAndPosition(position: Int): Pair<BaseExpandableListAdapter, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 

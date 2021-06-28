@@ -29,7 +29,7 @@ import java.util.*
  * @param adapters The list of adapters to add
  * @see Config.Builder
  */
-class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : BaseAdapter() {
+open class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : BaseAdapter() {
 
     companion object {
         const val NO_ID: Long = -1
@@ -92,7 +92,7 @@ class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : BaseAdapt
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(adapter: BaseAdapter): Boolean {
+    open fun addAdapter(adapter: BaseAdapter): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -108,7 +108,7 @@ class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : BaseAdapt
      * @see .addAdapter
      * @see .removeAdapter
      */
-    fun addAdapter(index: Int, adapter: BaseAdapter): Boolean {
+    open fun addAdapter(index: Int, adapter: BaseAdapter): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -119,7 +119,7 @@ class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : BaseAdapt
      * @return `true` if the adapter was previously added to this `ConcatListAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    fun removeAdapter(adapter: BaseAdapter): Boolean {
+    open fun removeAdapter(adapter: BaseAdapter): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -151,7 +151,7 @@ class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : BaseAdapt
         return mController.hasStableIds()
     }
 
-    fun findLocalAdapterAndPosition(position: Int): Pair<BaseAdapter, Int> {
+    open fun findLocalAdapterAndPosition(position: Int): Pair<BaseAdapter, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 

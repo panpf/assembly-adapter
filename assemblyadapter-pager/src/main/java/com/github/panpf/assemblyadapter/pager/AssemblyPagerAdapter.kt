@@ -25,7 +25,7 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
-class AssemblyPagerAdapter<DATA>(
+open class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
     placeholderItemFactory: PagerItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null

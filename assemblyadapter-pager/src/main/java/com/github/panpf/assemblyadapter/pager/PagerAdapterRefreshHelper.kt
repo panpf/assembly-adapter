@@ -5,7 +5,7 @@ import android.view.View
 /**
  * Realize that PagerAdapter can refresh correctly when calling notifyDataSetChanged
  */
-class PagerAdapterRefreshHelper {
+internal class PagerAdapterRefreshHelper {
 
     private var notifyDataSetChangedNumber = 0
 

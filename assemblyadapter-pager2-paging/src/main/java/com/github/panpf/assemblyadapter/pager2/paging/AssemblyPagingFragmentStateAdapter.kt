@@ -28,7 +28,7 @@ import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-class AssemblyPagingFragmentStateAdapter<DATA : Any>(
+open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     diffCallback: DiffUtil.ItemCallback<DATA>,

@@ -20,6 +20,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.MatchItemFactory
 
+/**
+ * @see BindingPagerItemFactory
+ * @see ViewPagerItemFactory
+ */
 abstract class PagerItemFactory<DATA> : MatchItemFactory {
 
     abstract override fun match(data: Any): Boolean

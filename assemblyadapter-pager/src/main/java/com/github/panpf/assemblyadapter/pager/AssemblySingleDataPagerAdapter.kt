@@ -20,7 +20,7 @@ import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 
-class AssemblySingleDataPagerAdapter<DATA>(
+open class AssemblySingleDataPagerAdapter<DATA>(
     private val itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
 ) : PagerAdapter(), AssemblyAdapter {

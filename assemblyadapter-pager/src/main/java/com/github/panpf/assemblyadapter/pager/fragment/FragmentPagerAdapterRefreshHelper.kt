@@ -9,7 +9,7 @@ import com.github.panpf.assemblyadapter.pager.R
 /**
  * Realize that FragmentPagerAdapter can refresh correctly when calling notifyDataSetChanged
  */
-class FragmentPagerAdapterRefreshHelper {
+internal class FragmentPagerAdapterRefreshHelper {
 
     private var notifyDataSetChangedNumber = 0
 

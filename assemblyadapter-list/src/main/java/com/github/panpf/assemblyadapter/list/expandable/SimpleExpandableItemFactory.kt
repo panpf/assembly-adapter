@@ -15,12 +15,12 @@ abstract class SimpleExpandableItemFactory<DATA> :
         return item
     }
 
-    abstract fun createItemView(inflater: LayoutInflater, parent: ViewGroup): View
+    protected abstract fun createItemView(inflater: LayoutInflater, parent: ViewGroup): View
 
-    open fun initItem(context: Context, itemView: View, item: ExpandableItem<DATA>) {
+    protected open fun initItem(context: Context, itemView: View, item: ExpandableItem<DATA>) {
     }
 
-    abstract fun bindItemData(
+    protected abstract fun bindItemData(
         context: Context,
         itemView: View,
         item: ExpandableItem<DATA>,
@@ -33,7 +33,7 @@ abstract class SimpleExpandableItemFactory<DATA> :
         itemView: View
     ) : ExpandableItem<DATA>(itemView) {
 
-        public override fun bindData(bindingAdapterPosition: Int, data: DATA) {
+        override fun bindData(bindingAdapterPosition: Int, data: DATA) {
             factory.bindItemData(context, itemView, this, bindingAdapterPosition, data)
         }
     }

@@ -27,7 +27,7 @@ import androidx.fragment.app.FragmentPagerAdapter
         "com.github.panpf.assemblyadapter.pager2.ArrayFragmentStateAdapter"
     )
 )
-class ArrayFragmentPagerAdapter : FragmentPagerAdapter {
+open class ArrayFragmentPagerAdapter : FragmentPagerAdapter {
 
     private var fragmentList: List<Fragment>
     private var pageTitleList: List<CharSequence>? = null
@@ -81,20 +81,20 @@ class ArrayFragmentPagerAdapter : FragmentPagerAdapter {
     }
 
 
-    fun getFragmentsSnapshot(): List<Fragment> {
+    open fun getFragmentsSnapshot(): List<Fragment> {
         return fragmentList.toList()
     }
 
-    fun setFragments(fragments: List<Fragment>?) {
+    open fun setFragments(fragments: List<Fragment>?) {
         fragmentList = fragments?.toList() ?: emptyList()
         notifyDataSetChanged()
     }
 
-    fun getPageTitlesSnapshot(): List<CharSequence> {
+    open fun getPageTitlesSnapshot(): List<CharSequence> {
         return pageTitleList?.toList() ?: emptyList()
     }
 
-    fun setPageTitles(pageTitles: List<CharSequence>?) {
+    open fun setPageTitles(pageTitles: List<CharSequence>?) {
         pageTitleList = pageTitles?.toList() ?: emptyList()
     }
 

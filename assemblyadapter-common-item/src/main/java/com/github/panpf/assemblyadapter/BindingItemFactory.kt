@@ -15,12 +15,15 @@ abstract class BindingItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         return item
     }
 
-    abstract fun createItemViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
+    protected abstract fun createItemViewBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup
+    ): VIEW_BINDING
 
-    open fun initItem(context: Context, binding: VIEW_BINDING, item: Item<DATA>) {
+    protected open fun initItem(context: Context, binding: VIEW_BINDING, item: Item<DATA>) {
     }
 
-    abstract fun bindItemData(
+    protected abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
         item: Item<DATA>,
