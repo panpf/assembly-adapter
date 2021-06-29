@@ -9,13 +9,15 @@ abstract class BindingItemFactory<DATA, VIEW_BINDING : ViewBinding> :
     ItemFactory<DATA>() {
 
     override fun createItem(parent: ViewGroup): Item<DATA> {
-        val binding = createItemViewBinding(LayoutInflater.from(parent.context), parent)
-        val item = BindingItem(this, binding)
-        initItem(parent.context, binding, item)
-        return item
+        val context = parent.context
+        val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
+        return BindingItem(this, binding).apply {
+            initItem(parent.context, binding, this)
+        }
     }
 
     protected abstract fun createItemViewBinding(
+        context: Context,
         inflater: LayoutInflater,
         parent: ViewGroup
     ): VIEW_BINDING

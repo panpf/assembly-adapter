@@ -8,22 +8,24 @@ import androidx.annotation.LayoutRes
 
 class ViewItemFactory<DATA>(
     private val dataClazz: Class<DATA>,
-    private val viewFactory: (inflater: LayoutInflater, parent: ViewGroup) -> View
+    private val viewFactory: (context: Context, inflater: LayoutInflater, parent: ViewGroup) -> View
 ) : SimpleItemFactory<DATA>() {
 
     constructor(dataClazz: Class<DATA>, @LayoutRes layoutResId: Int) : this(
         dataClazz,
-        { inflater, parent -> inflater.inflate(layoutResId, parent, false) }
+        { _, inflater, parent -> inflater.inflate(layoutResId, parent, false) }
     )
 
-    constructor(dataClazz: Class<DATA>, view: View) : this(dataClazz, { _, _ -> view })
+    constructor(dataClazz: Class<DATA>, view: View) : this(dataClazz, { _, _, _ -> view })
 
     override fun match(data: Any): Boolean {
         return dataClazz.isInstance(data)
     }
 
-    override fun createItemView(inflater: LayoutInflater, parent: ViewGroup): View {
-        return viewFactory(LayoutInflater.from(parent.context), parent)
+    override fun createItemView(
+        context: Context, inflater: LayoutInflater, parent: ViewGroup
+    ): View {
+        return viewFactory(context, inflater, parent)
     }
 
     override fun bindItemData(

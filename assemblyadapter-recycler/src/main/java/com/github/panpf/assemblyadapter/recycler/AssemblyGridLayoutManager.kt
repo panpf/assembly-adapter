@@ -104,7 +104,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
                 }
             }
             else -> {
-                throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass}")
+                throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
             }
         }
     }

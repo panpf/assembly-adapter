@@ -9,15 +9,20 @@ abstract class BindingExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
     ExpandableItemFactory<DATA>() {
 
     override fun createItem(parent: ViewGroup): ExpandableItem<DATA> {
-        val binding = createItemViewBinding(LayoutInflater.from(parent.context), parent)
-        val item = BindingExpandableItem(this, binding)
-        initItem(parent.context, binding, item)
-        return item
+        val context = parent.context
+        val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
+        return BindingExpandableItem(this, binding).apply {
+            initItem(parent.context, binding, this)
+        }
     }
 
-    protected abstract fun createItemViewBinding(inflater: LayoutInflater, parent: ViewGroup): VIEW_BINDING
+    protected abstract fun createItemViewBinding(
+        context: Context, inflater: LayoutInflater, parent: ViewGroup
+    ): VIEW_BINDING
 
-    protected open fun initItem(context: Context, binding: VIEW_BINDING, item: ExpandableItem<DATA>) {
+    protected open fun initItem(
+        context: Context, binding: VIEW_BINDING, item: ExpandableItem<DATA>
+    ) {
     }
 
     protected abstract fun bindItemData(
