@@ -33,7 +33,7 @@ class ViewPagerItemFactory<DATA>(
 
     constructor(dataClazz: Class<DATA>, view: View) : this(dataClazz, { _, _, _ -> view })
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return dataClazz.isInstance(data)
     }
 

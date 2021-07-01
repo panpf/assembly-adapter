@@ -21,7 +21,7 @@ import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 
 class AppGroupFragmentItemFactory : FragmentItemFactory<AppGroup>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is AppGroup
     }
 

@@ -32,7 +32,7 @@ open class ListSeparatorItemFactory(
     private val hideStartMargin: Boolean = false
 ) : BindingItemFactory<ListSeparator, ItemListSeparatorBinding>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is ListSeparator
     }
 

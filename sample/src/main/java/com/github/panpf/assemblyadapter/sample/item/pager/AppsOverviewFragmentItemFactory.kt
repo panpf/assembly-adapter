@@ -21,7 +21,7 @@ import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 
 class AppsOverviewFragmentItemFactory : FragmentItemFactory<AppsOverview>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is AppsOverview
     }
 

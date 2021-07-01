@@ -107,10 +107,10 @@ open class AssemblyFragmentPagerAdapter<DATA>(
 
     init {
         placeholderItemFactory?.apply {
-            if (!match(Placeholder)) {
+            if (!matchData(Placeholder)) {
                 throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
             }
-            if (match(0)) {
+            if (matchData(0)) {
                 throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
             }
         }

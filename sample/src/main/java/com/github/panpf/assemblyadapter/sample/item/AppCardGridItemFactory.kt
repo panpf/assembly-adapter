@@ -31,7 +31,7 @@ import me.panpf.sketch.uri.AppIconUriModel
 class AppCardGridItemFactory(private val activity: Activity) :
     BindingItemFactory<AppInfo, ItemAppGridCardBinding>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is AppInfo
     }
 

@@ -32,7 +32,7 @@ import me.panpf.sketch.uri.AppIconUriModel
 class AppItemFactory(private val activity: Activity) :
     BindingItemFactory<AppInfo, ItemAppBinding>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is AppInfo
     }
 

@@ -31,7 +31,7 @@ import com.github.panpf.tools4a.dimen.ktx.dp2px
 class AppGroupPagerItemFactory(private val activity: Activity) :
     BindingPagerItemFactory<AppGroup, FragmentAppGroupBinding>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is AppGroup
     }
 

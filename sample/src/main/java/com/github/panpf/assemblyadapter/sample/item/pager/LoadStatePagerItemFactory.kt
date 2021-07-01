@@ -25,7 +25,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentLoadStateBind
 
 class LoadStatePagerItemFactory : BindingPagerItemFactory<LoadState, FragmentLoadStateBinding>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is LoadState
     }
 

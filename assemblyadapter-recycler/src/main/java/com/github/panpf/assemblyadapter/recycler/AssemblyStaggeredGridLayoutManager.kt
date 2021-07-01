@@ -20,32 +20,31 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.MatchItemFactory
 import kotlin.reflect.KClass
 
 class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
     FullSpanStaggeredGridLayoutManager {
 
-    private val fullSpanItemFactoryList: List<KClass<out MatchItemFactory>>
+    private val fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
 
     constructor(
         context: Context, attrs: AttributeSet?,
         defStyleAttr: Int, defStyleRes: Int,
-        fullSpanItemFactoryList: List<KClass<out MatchItemFactory>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList
     }
 
     constructor(
         spanCount: Int, orientation: Int,
-        fullSpanItemFactoryList: List<KClass<out MatchItemFactory>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
     ) : super(spanCount, orientation) {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList
     }
 
     constructor(
         spanCount: Int,
-        fullSpanItemFactoryList: List<KClass<out MatchItemFactory>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
     ) : super(spanCount, VERTICAL) {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList
     }

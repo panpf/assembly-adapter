@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.MatchItemFactory
  */
 abstract class FragmentItemFactory<DATA> : MatchItemFactory {
 
-    abstract override fun match(data: Any): Boolean
+    abstract override fun matchData(data: Any): Boolean
 
     fun dispatchCreateFragment(position: Int, data: DATA): Fragment {
         return createFragment(position, data)

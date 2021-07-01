@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGroupBinding
 open class AppGroupItemFactory :
     BindingExpandableItemFactory<AppGroup, ItemAppGroupBinding>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is AppGroup
     }
 

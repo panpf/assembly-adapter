@@ -33,7 +33,7 @@ abstract class ItemFactory<DATA> : MatchItemFactory {
 
     private var clickListenerManager: ClickListenerManager<DATA>? = null
 
-    abstract override fun match(data: Any): Boolean
+    abstract override fun matchData(data: Any): Boolean
 
     open fun dispatchCreateItem(parent: ViewGroup): Item<DATA> {
         return createItem(parent).apply {

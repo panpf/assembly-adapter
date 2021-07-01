@@ -15,6 +15,12 @@
  */
 package com.github.panpf.assemblyadapter
 
+/**
+ * ItemFactory that supports matching data
+ */
 interface MatchItemFactory {
-    fun match(data: Any): Boolean
+    /**
+     * If it returns true, it means that this ItemFactory can handle the [data]
+     */
+    fun matchData(data: Any): Boolean
 }

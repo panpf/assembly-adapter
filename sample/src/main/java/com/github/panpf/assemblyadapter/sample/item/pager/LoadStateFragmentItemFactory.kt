@@ -21,7 +21,7 @@ import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 
 class LoadStateFragmentItemFactory : FragmentItemFactory<LoadState>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is LoadState
     }
 

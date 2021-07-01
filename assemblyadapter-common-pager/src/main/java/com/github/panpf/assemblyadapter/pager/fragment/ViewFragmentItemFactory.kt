@@ -27,7 +27,7 @@ class ViewFragmentItemFactory<DATA>(
     @LayoutRes private val layoutResId: Int
 ) : FragmentItemFactory<DATA>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return dataClazz.isInstance(data)
     }
 

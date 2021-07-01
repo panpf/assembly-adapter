@@ -28,7 +28,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemLinkBinding
 class LinkItemFactory(private val activity: Activity) :
     BindingItemFactory<Link, ItemLinkBinding>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is Link
     }
 

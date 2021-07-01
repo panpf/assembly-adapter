@@ -32,7 +32,7 @@ class AppsOverviewItemFactory(
 ) :
     BindingItemFactory<AppsOverview, ItemAppsOverviewBinding>() {
 
-    override fun match(data: Any): Boolean {
+    override fun matchData(data: Any): Boolean {
         return data is AppsOverview
     }
 

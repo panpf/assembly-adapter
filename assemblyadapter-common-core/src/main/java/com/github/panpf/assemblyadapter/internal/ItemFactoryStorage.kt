@@ -42,7 +42,7 @@ class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
     }
 
     fun getItemFactoryByData(data: Any): ITEM_FACTORY {
-        val itemFactory = itemFactoryList.find { it.match(data) }
+        val itemFactory = itemFactoryList.find { it.matchData(data) }
         if (itemFactory != null) {
             return itemFactory
         }

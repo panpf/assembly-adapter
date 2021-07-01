@@ -28,7 +28,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemLoadStateBinding
 class LoadStateItemFactory(private val activity: Activity) :
     BindingItemFactory<LoadState, ItemLoadStateBinding>() {
 
-    override fun match(data: Any): Boolean = data is LoadState
+    override fun matchData(data: Any): Boolean = data is LoadState
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup

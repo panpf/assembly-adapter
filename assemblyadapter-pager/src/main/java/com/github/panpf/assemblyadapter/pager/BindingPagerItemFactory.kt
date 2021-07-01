@@ -24,7 +24,7 @@ import androidx.viewbinding.ViewBinding
 abstract class BindingPagerItemFactory<DATA, VIEW_BINDING : ViewBinding> :
     PagerItemFactory<DATA>() {
 
-    abstract override fun match(data: Any): Boolean
+    abstract override fun matchData(data: Any): Boolean
 
     override fun createItemView(
         context: Context, parent: ViewGroup, position: Int, data: DATA

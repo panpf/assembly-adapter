@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.MatchItemFactory
  */
 abstract class PagerItemFactory<DATA> : MatchItemFactory {
 
-    abstract override fun match(data: Any): Boolean
+    abstract override fun matchData(data: Any): Boolean
 
     fun dispatchCreateItemView(
         context: Context, parent: ViewGroup, position: Int, data: DATA
