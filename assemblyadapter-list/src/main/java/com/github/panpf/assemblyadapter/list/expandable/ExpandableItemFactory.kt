@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.list.expandable
 import android.view.View
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.ItemFactory
+import kotlin.reflect.KClass
 
 /**
  * It is not recommended to directly inherit [ExpandableItemFactory], you can inherit [BindingExpandableItemFactory] and [SimpleExpandableItemFactory] to implement your own ItemFactory
@@ -25,7 +26,8 @@ import com.github.panpf.assemblyadapter.ItemFactory
  * @see SimpleExpandableItemFactory
  * @see ViewExpandableItemFactory
  */
-abstract class ExpandableItemFactory<DATA> : ItemFactory<DATA>() {
+abstract class ExpandableItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
+    ItemFactory<DATA>(dataClass) {
 
     abstract override fun createItem(parent: ViewGroup): ExpandableItem<DATA>
 

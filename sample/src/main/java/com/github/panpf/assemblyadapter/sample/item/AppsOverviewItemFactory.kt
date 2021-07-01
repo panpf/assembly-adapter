@@ -30,11 +30,7 @@ class AppsOverviewItemFactory(
     private val activity: Activity,
     private val hideStartMargin: Boolean = false
 ) :
-    BindingItemFactory<AppsOverview, ItemAppsOverviewBinding>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is AppsOverview
-    }
+    BindingItemFactory<AppsOverview, ItemAppsOverviewBinding>(AppsOverview::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup

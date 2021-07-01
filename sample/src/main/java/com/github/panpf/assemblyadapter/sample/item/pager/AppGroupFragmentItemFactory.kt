@@ -19,11 +19,7 @@ import androidx.fragment.app.Fragment
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 
-class AppGroupFragmentItemFactory : FragmentItemFactory<AppGroup>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is AppGroup
-    }
+class AppGroupFragmentItemFactory : FragmentItemFactory<AppGroup>(AppGroup::class) {
 
     override fun createFragment(position: Int, data: AppGroup): Fragment {
         return AppGroupFragment.createInstance(data)

@@ -19,8 +19,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlin.reflect.KClass
 
-abstract class SimpleItemFactory<DATA> : ItemFactory<DATA>() {
+abstract class SimpleItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
+    ItemFactory<DATA>(dataClass) {
 
     override fun createItem(parent: ViewGroup): Item<DATA> {
         val context = parent.context
@@ -41,9 +43,8 @@ abstract class SimpleItemFactory<DATA> : ItemFactory<DATA>() {
         context: Context, itemView: View, item: Item<DATA>, bindingAdapterPosition: Int, data: DATA
     )
 
-    private class SimpleItem<DATA>(
-        private val factory: SimpleItemFactory<DATA>,
-        itemView: View
+    private class SimpleItem<DATA : Any>(
+        private val factory: SimpleItemFactory<DATA>, itemView: View
     ) : Item<DATA>(itemView) {
 
         override fun bindData(bindingAdapterPosition: Int, data: DATA) {

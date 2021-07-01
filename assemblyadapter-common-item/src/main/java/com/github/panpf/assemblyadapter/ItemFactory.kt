@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.internal.ClickListenerManager
+import kotlin.reflect.KClass
 
 /**
  * It is not recommended to directly inherit [ItemFactory], you can inherit [BindingItemFactory] and [SimpleItemFactory] to implement your own ItemFactory
@@ -29,11 +30,16 @@ import com.github.panpf.assemblyadapter.internal.ClickListenerManager
  * @see SimpleItemFactory
  * @see ViewItemFactory
  */
-abstract class ItemFactory<DATA> : MatchItemFactory {
+abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : MatchItemFactory {
 
     private var clickListenerManager: ClickListenerManager<DATA>? = null
 
-    abstract override fun matchData(data: Any): Boolean
+    final override fun matchData(data: Any): Boolean {
+        @Suppress("UNCHECKED_CAST")
+        return dataClass.isInstance(data) && carefullyMatchData(data as DATA)
+    }
+
+    open fun carefullyMatchData(data: DATA): Boolean = true
 
     open fun dispatchCreateItem(parent: ViewGroup): Item<DATA> {
         return createItem(parent).apply {

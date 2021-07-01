@@ -20,22 +20,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import kotlin.reflect.KClass
 
-class ViewItemFactory<DATA>(
-    private val dataClazz: Class<DATA>,
+class ViewItemFactory<DATA : Any>(
+    dataClass: KClass<DATA>,
     private val viewFactory: (context: Context, inflater: LayoutInflater, parent: ViewGroup) -> View
-) : SimpleItemFactory<DATA>() {
+) : SimpleItemFactory<DATA>(dataClass) {
 
-    constructor(dataClazz: Class<DATA>, @LayoutRes layoutResId: Int) : this(
-        dataClazz,
+    constructor(dataClass: KClass<DATA>, @LayoutRes layoutResId: Int) : this(
+        dataClass,
         { _, inflater, parent -> inflater.inflate(layoutResId, parent, false) }
     )
 
-    constructor(dataClazz: Class<DATA>, view: View) : this(dataClazz, { _, _, _ -> view })
-
-    override fun matchData(data: Any): Boolean {
-        return dataClazz.isInstance(data)
-    }
+    constructor(dataClass: KClass<DATA>, view: View) : this(dataClass, { _, _, _ -> view })
 
     override fun createItemView(
         context: Context, inflater: LayoutInflater, parent: ViewGroup

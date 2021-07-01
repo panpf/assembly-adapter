@@ -23,7 +23,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 
-open class AssemblySingleDataFragmentStateAdapter<DATA>(
+open class AssemblySingleDataFragmentStateAdapter<DATA: Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     private val itemFactory: FragmentItemFactory<DATA>,

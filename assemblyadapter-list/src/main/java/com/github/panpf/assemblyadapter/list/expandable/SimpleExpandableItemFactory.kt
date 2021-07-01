@@ -19,8 +19,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlin.reflect.KClass
 
-abstract class SimpleExpandableItemFactory<DATA> : ExpandableItemFactory<DATA>() {
+abstract class SimpleExpandableItemFactory<DATA : Any>(
+    dataClass: KClass<DATA>
+) : ExpandableItemFactory<DATA>(dataClass) {
 
     override fun createItem(parent: ViewGroup): ExpandableItem<DATA> {
         val context = parent.context
@@ -45,9 +48,8 @@ abstract class SimpleExpandableItemFactory<DATA> : ExpandableItemFactory<DATA>()
         data: DATA
     )
 
-    private class SimpleExpandableItem<DATA>(
-        private val factory: SimpleExpandableItemFactory<DATA>,
-        itemView: View
+    private class SimpleExpandableItem<DATA : Any>(
+        private val factory: SimpleExpandableItemFactory<DATA>, itemView: View
     ) : ExpandableItem<DATA>(itemView) {
 
         override fun bindData(bindingAdapterPosition: Int, data: DATA) {

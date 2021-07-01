@@ -22,7 +22,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import java.lang.IllegalArgumentException
 
-open class AssemblySingleDataRecyclerAdapter<DATA>(
+open class AssemblySingleDataRecyclerAdapter<DATA: Any>(
     private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter {

@@ -30,11 +30,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemListSeparatorBind
 open class ListSeparatorItemFactory(
     private val activity: Activity,
     private val hideStartMargin: Boolean = false
-) : BindingItemFactory<ListSeparator, ItemListSeparatorBinding>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is ListSeparator
-    }
+) : BindingItemFactory<ListSeparator, ItemListSeparatorBinding>(ListSeparator::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup

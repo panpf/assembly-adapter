@@ -24,6 +24,7 @@ import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
 import com.github.panpf.assemblyadapter.list.concat.ConcatListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -43,7 +44,7 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
 
     override fun onInitData(binding: FragmentListBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
-            AssemblySingleDataListAdapter(AppsOverviewItemFactory(requireActivity()))
+            AssemblySingleDataListAdapter<AppsOverview>(AppsOverviewItemFactory(requireActivity()))
         val listAdapter = AssemblyListAdapter<Any>(
             listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity()))
         )

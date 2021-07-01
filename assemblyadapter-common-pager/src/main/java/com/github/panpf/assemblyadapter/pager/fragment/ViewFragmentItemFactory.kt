@@ -21,15 +21,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import kotlin.reflect.KClass
 
-class ViewFragmentItemFactory<DATA>(
-    private val dataClazz: Class<DATA>,
+class ViewFragmentItemFactory<DATA : Any>(
+    dataClass: KClass<DATA>,
     @LayoutRes private val layoutResId: Int
-) : FragmentItemFactory<DATA>() {
-
-    override fun matchData(data: Any): Boolean {
-        return dataClazz.isInstance(data)
-    }
+) : FragmentItemFactory<DATA>(dataClass) {
 
     override fun createFragment(position: Int, data: DATA): Fragment {
         return ViewFragment.createInstance(layoutResId)

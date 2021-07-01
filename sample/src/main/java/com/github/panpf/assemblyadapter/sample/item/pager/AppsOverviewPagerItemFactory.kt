@@ -24,11 +24,7 @@ import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppsOverviewBinding
 
 class AppsOverviewPagerItemFactory :
-    BindingPagerItemFactory<AppsOverview, FragmentAppsOverviewBinding>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is AppsOverview
-    }
+    BindingPagerItemFactory<AppsOverview, FragmentAppsOverviewBinding>(AppsOverview::class) {
 
     override fun createItemViewBinding(
         context: Context,

@@ -23,11 +23,8 @@ import androidx.paging.LoadState
 import com.github.panpf.assemblyadapter.pager.BindingPagerItemFactory
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentLoadStateBinding
 
-class LoadStatePagerItemFactory : BindingPagerItemFactory<LoadState, FragmentLoadStateBinding>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is LoadState
-    }
+class LoadStatePagerItemFactory :
+    BindingPagerItemFactory<LoadState, FragmentLoadStateBinding>(LoadState::class) {
 
     override fun createItemViewBinding(
         context: Context,

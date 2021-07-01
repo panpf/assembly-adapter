@@ -19,9 +19,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import kotlin.reflect.KClass
 
-abstract class BindingItemFactory<DATA, VIEW_BINDING : ViewBinding> :
-    ItemFactory<DATA>() {
+abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
+    dataClass: KClass<DATA>
+) : ItemFactory<DATA>(dataClass) {
 
     override fun createItem(parent: ViewGroup): Item<DATA> {
         val context = parent.context
@@ -48,7 +50,7 @@ abstract class BindingItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         data: DATA
     )
 
-    private class BindingItem<DATA, VIEW_BINDING : ViewBinding>(
+    private class BindingItem<DATA : Any, VIEW_BINDING : ViewBinding>(
         private val factory: BindingItemFactory<DATA, VIEW_BINDING>,
         private val binding: VIEW_BINDING
     ) : Item<DATA>(binding.root) {

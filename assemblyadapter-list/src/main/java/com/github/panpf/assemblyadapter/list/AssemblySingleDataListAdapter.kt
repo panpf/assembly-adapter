@@ -21,7 +21,7 @@ import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 
-open class AssemblySingleDataListAdapter<DATA>(
+open class AssemblySingleDataListAdapter<DATA: Any>(
     private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
 ) : BaseAdapter(), AssemblyAdapter {

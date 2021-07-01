@@ -19,14 +19,20 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.MatchItemFactory
+import kotlin.reflect.KClass
 
 /**
  * @see BindingPagerItemFactory
  * @see ViewPagerItemFactory
  */
-abstract class PagerItemFactory<DATA> : MatchItemFactory {
+abstract class PagerItemFactory<DATA: Any>(private val dataClass: KClass<DATA>) : MatchItemFactory {
 
-    abstract override fun matchData(data: Any): Boolean
+    final override fun matchData(data: Any): Boolean {
+        @Suppress("UNCHECKED_CAST")
+        return dataClass.isInstance(data) && carefullyMatchData(data as DATA)
+    }
+
+    open fun carefullyMatchData(data: DATA): Boolean = true
 
     fun dispatchCreateItemView(
         context: Context, parent: ViewGroup, position: Int, data: DATA

@@ -29,11 +29,7 @@ import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class AppGroupPagerItemFactory(private val activity: Activity) :
-    BindingPagerItemFactory<AppGroup, FragmentAppGroupBinding>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is AppGroup
-    }
+    BindingPagerItemFactory<AppGroup, FragmentAppGroupBinding>(AppGroup::class) {
 
     override fun createItemViewBinding(
         context: Context,

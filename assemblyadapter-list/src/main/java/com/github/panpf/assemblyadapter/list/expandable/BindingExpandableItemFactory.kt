@@ -19,9 +19,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import kotlin.reflect.KClass
 
-abstract class BindingExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
-    ExpandableItemFactory<DATA>() {
+abstract class BindingExpandableItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
+    dataClass: KClass<DATA>
+) : ExpandableItemFactory<DATA>(dataClass) {
 
     override fun createItem(parent: ViewGroup): ExpandableItem<DATA> {
         val context = parent.context
@@ -48,7 +50,7 @@ abstract class BindingExpandableItemFactory<DATA, VIEW_BINDING : ViewBinding> :
         data: DATA
     )
 
-    private class BindingExpandableItem<DATA, VIEW_BINDING : ViewBinding>(
+    private class BindingExpandableItem<DATA : Any, VIEW_BINDING : ViewBinding>(
         private val factory: BindingExpandableItemFactory<DATA, VIEW_BINDING>,
         private val binding: VIEW_BINDING
     ) : ExpandableItem<DATA>(binding.root) {

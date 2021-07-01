@@ -29,11 +29,7 @@ import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
 class AppCardGridItemFactory(private val activity: Activity) :
-    BindingItemFactory<AppInfo, ItemAppGridCardBinding>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is AppInfo
-    }
+    BindingItemFactory<AppInfo, ItemAppGridCardBinding>(AppInfo::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup

@@ -24,11 +24,7 @@ import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGroupBinding
 
 open class AppGroupItemFactory :
-    BindingExpandableItemFactory<AppGroup, ItemAppGroupBinding>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is AppGroup
-    }
+    BindingExpandableItemFactory<AppGroup, ItemAppGroupBinding>(AppGroup::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup

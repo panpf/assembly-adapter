@@ -54,7 +54,7 @@ class ExpandableListPlaceholderFragment : BaseBindingFragment<FragmentExpandable
             listOf(
                 AppGroupItemFactory(),
                 AppItemFactory(requireActivity()),
-                ViewItemFactory(Placeholder::class.java, R.layout.item_app_group_placeholder),
+                ViewItemFactory(Placeholder::class, R.layout.item_app_group_placeholder),
             ),
             arrayOfNulls<AppGroup?>(100).toList()
         )

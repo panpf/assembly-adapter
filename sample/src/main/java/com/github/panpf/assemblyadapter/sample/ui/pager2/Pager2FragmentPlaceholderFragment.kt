@@ -58,7 +58,7 @@ class Pager2FragmentPlaceholderFragment : BaseBindingFragment<FragmentPager2Bind
             listOf(
                 AppGroupFragmentItemFactory(),
                 ViewFragmentItemFactory(
-                    Placeholder::class.java,
+                    Placeholder::class,
                     R.layout.fragment_app_group_placeholder
                 ),
             ),

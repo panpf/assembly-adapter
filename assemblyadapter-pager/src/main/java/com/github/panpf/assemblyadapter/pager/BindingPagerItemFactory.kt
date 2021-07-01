@@ -20,11 +20,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import kotlin.reflect.KClass
 
-abstract class BindingPagerItemFactory<DATA, VIEW_BINDING : ViewBinding> :
-    PagerItemFactory<DATA>() {
-
-    abstract override fun matchData(data: Any): Boolean
+abstract class BindingPagerItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
+    dataClass: KClass<DATA>
+) : PagerItemFactory<DATA>(dataClass) {
 
     override fun createItemView(
         context: Context, parent: ViewGroup, position: Int, data: DATA

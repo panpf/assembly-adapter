@@ -26,11 +26,7 @@ import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.ItemLinkBinding
 
 class LinkItemFactory(private val activity: Activity) :
-    BindingItemFactory<Link, ItemLinkBinding>() {
-
-    override fun matchData(data: Any): Boolean {
-        return data is Link
-    }
+    BindingItemFactory<Link, ItemLinkBinding>(Link::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup

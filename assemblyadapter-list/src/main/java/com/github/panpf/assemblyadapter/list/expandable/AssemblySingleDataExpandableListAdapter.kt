@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.R
 
-open class AssemblySingleDataExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
+open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     initData: GROUP_DATA? = null
 ) : BaseExpandableListAdapter(), AssemblyAdapter {

@@ -30,7 +30,10 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
 class RecyclerPlaceholderFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
@@ -51,7 +54,7 @@ class RecyclerPlaceholderFragment : BaseBindingFragment<FragmentRecyclerBinding>
             listOf(
                 AppItemFactory(requireActivity()),
                 ListSeparatorItemFactory(requireActivity()),
-                ViewItemFactory(Placeholder::class.java, R.layout.item_app_placeholder),
+                ViewItemFactory(Placeholder::class, R.layout.item_app_placeholder),
             ),
             arrayOfNulls<Any?>(100).toList()
         )
