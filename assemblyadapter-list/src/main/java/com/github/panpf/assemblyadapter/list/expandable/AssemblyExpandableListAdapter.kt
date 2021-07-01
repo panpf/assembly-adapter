@@ -211,8 +211,8 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return itemDataStorage.removeData(data)
     }
 
-    override fun removeData(index: Int): GROUP_DATA {
-        return itemDataStorage.removeData(index)
+    override fun removeDataAt(index: Int): GROUP_DATA {
+        return itemDataStorage.removeDataAt(index)
     }
 
     override fun removeAllData(datas: Collection<GROUP_DATA>): Boolean {

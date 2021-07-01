@@ -138,8 +138,8 @@ open class AssemblyPagerAdapter<DATA>(
         return itemDataStorage.removeData(data)
     }
 
-    override fun removeData(index: Int): DATA {
-        return itemDataStorage.removeData(index)
+    override fun removeDataAt(index: Int): DATA {
+        return itemDataStorage.removeDataAt(index)
     }
 
     override fun removeAllData(datas: Collection<DATA>): Boolean {

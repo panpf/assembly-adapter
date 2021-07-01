@@ -89,7 +89,7 @@ class ItemDataStorage<DATA>(
         }
     }
 
-    fun removeData(index: Int): DATA {
+    fun removeDataAt(index: Int): DATA {
         return dataList.removeAt(index).apply {
             onDataListChanged()
         }

@@ -37,8 +37,14 @@ interface DatasAdapter<DATA> {
 
     fun removeData(data: DATA): Boolean
 
-    fun removeData(index: Int): DATA
+    fun removeDataAt(index: Int): DATA
 
+
+    /**
+     * Removes all of the elements of the specified collection [datas] from the data set
+     *
+     * @return `true` if the list was changed as the result of the operation.
+     */
     fun removeAllData(datas: Collection<DATA>): Boolean
 
     fun clearData()
