@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter
+package com.github.panpf.assemblyadapter.sample.item
 
-interface MatchItemFactory {
-    fun match(data: Any): Boolean
-}
+import android.app.Activity
+import com.github.panpf.assemblyadapter.sample.base.StickyItemFactory
+
+class StickyListSeparatorItemFactory(activity: Activity, hideStartMargin: Boolean = false) :
+    ListSeparatorItemFactory(activity, hideStartMargin), StickyItemFactory

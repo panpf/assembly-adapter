@@ -159,7 +159,7 @@ recyclerView.adapter = adapter
 Please view the [CHANGELOG.md] file
 
 ## License
-    Copyright (C) 2017 Peng fei Pan <sky@panpf.me>
+    Copyright (C) 2021 panpf <panpfpanpf@outlook.com>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
