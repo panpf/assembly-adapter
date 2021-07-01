@@ -27,13 +27,10 @@ import java.util.*
 
 open class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
-    placeholderItemFactory: PagerItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null
 ) : PagerAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(
-        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
-    )
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
@@ -45,26 +42,7 @@ open class AssemblyPagerAdapter<DATA>(
             }
         }
 
-    constructor(
-        itemFactoryList: List<PagerItemFactory<*>>,
-        placeholderItemFactory: PagerItemFactory<Placeholder>?,
-    ) : this(itemFactoryList, placeholderItemFactory, null)
-
-    constructor(
-        itemFactoryList: List<PagerItemFactory<*>>,
-        dataList: List<DATA>?
-    ) : this(itemFactoryList, null, dataList)
-
-    init {
-        placeholderItemFactory?.apply {
-            if (!matchData(Placeholder)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
-            }
-            if (matchData(0)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
-            }
-        }
-    }
+    constructor(itemFactoryList: List<PagerItemFactory<*>>) : this(itemFactoryList, null)
 
     override fun getCount(): Int {
         return itemDataStorage.dataCount
@@ -76,7 +54,8 @@ open class AssemblyPagerAdapter<DATA>(
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
             itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
-        val itemView = itemFactory.dispatchCreateItemView(container.context, container, position, data)
+        val itemView =
+            itemFactory.dispatchCreateItemView(container.context, container, position, data)
         container.addView(itemView)
         return itemView.apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
@@ -162,24 +141,5 @@ open class AssemblyPagerAdapter<DATA>(
     override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(data)
-    }
-
-
-    class Builder<DATA>(private val itemFactoryList: List<PagerItemFactory<*>>) {
-
-        private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: PagerItemFactory<Placeholder>? = null
-
-        fun setDataList(dataList: List<DATA>?) {
-            this.dataList = dataList
-        }
-
-        fun setPlaceholderItemFactory(placeholderItemFactory: PagerItemFactory<Placeholder>?) {
-            this.placeholderItemFactory = placeholderItemFactory
-        }
-
-        fun build(): AssemblyPagerAdapter<DATA> {
-            return AssemblyPagerAdapter(itemFactoryList, placeholderItemFactory, dataList)
-        }
     }
 }

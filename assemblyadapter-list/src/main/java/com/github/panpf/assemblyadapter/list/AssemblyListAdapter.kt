@@ -25,37 +25,13 @@ import java.util.*
 
 open class AssemblyListAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    placeholderItemFactory: ItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null
 ) : BaseAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(
-        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
-    )
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        placeholderItemFactory: ItemFactory<Placeholder>?,
-    ) : this(itemFactoryList, placeholderItemFactory, null)
-
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        dataList: List<DATA>?
-    ) : this(itemFactoryList, null, dataList)
-
-    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null, null)
-
-    init {
-        placeholderItemFactory?.apply {
-            if (!matchData(Placeholder)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
-            }
-            if (matchData(0)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
-            }
-        }
-    }
+    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
 
     override fun getItem(position: Int): DATA {
         return itemDataStorage.getData(position)
@@ -155,24 +131,5 @@ open class AssemblyListAdapter<DATA>(
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(data)
-    }
-
-
-    class Builder<DATA>(private val itemFactoryList: List<ItemFactory<*>>) {
-
-        private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: ItemFactory<Placeholder>? = null
-
-        fun setDataList(dataList: List<DATA>?) {
-            this.dataList = dataList
-        }
-
-        fun setPlaceholderItemFactory(placeholderItemFactory: ItemFactory<Placeholder>?) {
-            this.placeholderItemFactory = placeholderItemFactory
-        }
-
-        fun build(): AssemblyListAdapter<DATA> {
-            return AssemblyListAdapter(itemFactoryList, placeholderItemFactory, dataList)
-        }
     }
 }

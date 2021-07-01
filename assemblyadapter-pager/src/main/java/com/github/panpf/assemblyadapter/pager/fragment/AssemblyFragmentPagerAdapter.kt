@@ -37,13 +37,10 @@ open class AssemblyFragmentPagerAdapter<DATA>(
     fm: FragmentManager,
     @Behavior behavior: Int,
     itemFactoryList: List<FragmentItemFactory<*>>,
-    placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null
 ) : FragmentPagerAdapter(fm, behavior), AssemblyAdapter, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(
-        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
-    )
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
@@ -59,32 +56,8 @@ open class AssemblyFragmentPagerAdapter<DATA>(
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null
-    ) : this(fm, behavior, itemFactoryList, placeholderItemFactory, null)
-
-    constructor(
-        fm: FragmentManager,
-        @Behavior behavior: Int,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-        dataList: List<DATA>? = null
-    ) : this(fm, behavior, itemFactoryList, null, dataList)
-
-    constructor(
-        fm: FragmentManager,
-        @Behavior behavior: Int,
         itemFactoryList: List<FragmentItemFactory<*>>
-    ) : this(fm, behavior, itemFactoryList, null, null)
-
-    @Deprecated(
-        """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, AssemblyFragmentPlaceholderItemFactory)} with
-      {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
-    )
-    constructor(
-        fm: FragmentManager,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null
-    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, placeholderItemFactory, null)
+    ) : this(fm, behavior, itemFactoryList, null)
 
     @Deprecated(
         """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List<AssemblyFragmentItemFactory<*>>, List<DATA>)} with
@@ -94,7 +67,7 @@ open class AssemblyFragmentPagerAdapter<DATA>(
         fm: FragmentManager,
         itemFactoryList: List<FragmentItemFactory<*>>,
         dataList: List<DATA>? = null
-    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, null, dataList)
+    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, dataList)
 
     @Deprecated(
         """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List<AssemblyFragmentItemFactory<*>>)} with
@@ -103,18 +76,7 @@ open class AssemblyFragmentPagerAdapter<DATA>(
     constructor(
         fm: FragmentManager,
         itemFactoryList: List<FragmentItemFactory<*>>
-    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, null, null)
-
-    init {
-        placeholderItemFactory?.apply {
-            if (!matchData(Placeholder)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
-            }
-            if (matchData(0)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
-            }
-        }
-    }
+    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, null)
 
     override fun getCount(): Int {
         return itemDataStorage.dataCount
@@ -208,33 +170,4 @@ open class AssemblyFragmentPagerAdapter<DATA>(
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     @IntDef(BEHAVIOR_SET_USER_VISIBLE_HINT, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
     private annotation class Behavior
-
-
-    class Builder<DATA>(
-        private val fragmentManager: FragmentManager,
-        @Behavior private val behavior: Int,
-        private val itemFactoryList: List<FragmentItemFactory<*>>,
-    ) {
-
-        private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: FragmentItemFactory<Placeholder>? = null
-
-        fun setDataList(dataList: List<DATA>?) {
-            this.dataList = dataList
-        }
-
-        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentItemFactory<Placeholder>?) {
-            this.placeholderItemFactory = placeholderItemFactory
-        }
-
-        fun build(): AssemblyFragmentPagerAdapter<DATA> {
-            return AssemblyFragmentPagerAdapter(
-                fragmentManager,
-                behavior,
-                itemFactoryList,
-                placeholderItemFactory,
-                dataList
-            )
-        }
-    }
 }

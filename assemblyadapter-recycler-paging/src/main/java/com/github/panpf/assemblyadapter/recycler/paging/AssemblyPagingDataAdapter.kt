@@ -29,28 +29,13 @@ import kotlinx.coroutines.Dispatchers
 open class AssemblyPagingDataAdapter<DATA : Any>(
     itemFactoryList: List<ItemFactory<*>>,
     diffCallback: DiffUtil.ItemCallback<DATA>,
-    placeholderItemFactory: ItemFactory<Placeholder>? = null,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
     diffCallback, mainDispatcher, workerDispatcher
 ), AssemblyAdapter {
 
-    private val itemFactoryStorage = ItemFactoryStorage(
-        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
-    )
-
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
-        placeholderItemFactory: ItemFactory<Placeholder>,
-    ) : this(
-        itemFactoryList,
-        diffCallback,
-        placeholderItemFactory,
-        Dispatchers.Main,
-        Dispatchers.Default
-    )
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
@@ -58,21 +43,9 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     ) : this(
         itemFactoryList,
         diffCallback,
-        null,
         Dispatchers.Main,
         Dispatchers.Default
     )
-
-    init {
-        placeholderItemFactory?.apply {
-            if (!matchData(Placeholder)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
-            }
-            if (matchData(0)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
-            }
-        }
-    }
 
     override fun getItemViewType(position: Int): Int {
         val data = peek(position) ?: Placeholder
@@ -107,37 +80,5 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = peek(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(data)
-    }
-
-
-    class Builder<DATA : Any>(
-        private val itemFactoryList: List<ItemFactory<*>>,
-        private val diffCallback: DiffUtil.ItemCallback<DATA>
-    ) {
-        private var placeholderItemFactory: ItemFactory<Placeholder>? = null
-        private var mainDispatcher: CoroutineDispatcher = Dispatchers.Main
-        private var workerDispatcher: CoroutineDispatcher = Dispatchers.Default
-
-        fun setPlaceholderItemFactory(placeholderItemFactory: ItemFactory<Placeholder>?) {
-            this.placeholderItemFactory = placeholderItemFactory
-        }
-
-        fun setMainDispatcher(mainDispatcher: CoroutineDispatcher) {
-            this.mainDispatcher = mainDispatcher
-        }
-
-        fun setWorkerDispatcher(workerDispatcher: CoroutineDispatcher) {
-            this.workerDispatcher = workerDispatcher
-        }
-
-        fun build(): AssemblyPagingDataAdapter<DATA> {
-            return AssemblyPagingDataAdapter(
-                itemFactoryList,
-                diffCallback,
-                placeholderItemFactory,
-                mainDispatcher,
-                workerDispatcher
-            )
-        }
     }
 }

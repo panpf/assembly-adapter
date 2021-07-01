@@ -48,8 +48,11 @@ class ListPlaceholderFragment : BaseBindingFragment<FragmentListBinding>() {
         val appsOverviewAdapter =
             AssemblySingleDataListAdapter(AppsOverviewItemFactory(requireActivity()))
         val listAdapter = AssemblyListAdapter(
-            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity())),
-            ViewItemFactory(Placeholder::class.java, R.layout.item_app_placeholder),
+            listOf(
+                AppItemFactory(requireActivity()),
+                ListSeparatorItemFactory(requireActivity()),
+                ViewItemFactory(Placeholder::class.java, R.layout.item_app_placeholder)
+            ),
             arrayOfNulls<Any?>(100).toList()
         )
         val footerLoadStateAdapter =

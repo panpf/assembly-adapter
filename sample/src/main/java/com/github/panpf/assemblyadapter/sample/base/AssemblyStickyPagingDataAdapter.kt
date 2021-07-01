@@ -28,22 +28,9 @@ class AssemblyStickyPagingDataAdapter<DATA : Any> : AssemblyPagingDataAdapter<DA
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         diffCallback: DiffUtil.ItemCallback<DATA>,
-        placeholderItemFactory: ItemFactory<Placeholder>?,
         mainDispatcher: CoroutineDispatcher,
         workerDispatcher: CoroutineDispatcher
-    ) : super(
-        itemFactoryList,
-        diffCallback,
-        placeholderItemFactory,
-        mainDispatcher,
-        workerDispatcher
-    )
-
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
-        placeholderItemFactory: ItemFactory<Placeholder>
-    ) : super(itemFactoryList, diffCallback, placeholderItemFactory)
+    ) : super(itemFactoryList, diffCallback, mainDispatcher, workerDispatcher)
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,

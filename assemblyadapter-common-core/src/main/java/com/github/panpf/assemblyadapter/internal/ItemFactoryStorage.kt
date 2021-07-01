@@ -47,7 +47,7 @@ class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
             return itemFactory
         }
         if (data is Placeholder) {
-            throw IllegalArgumentException("Need to set the placeholderItemFactory property of Assembly*Adapter")
+            throw IllegalArgumentException("Need to add an MatchItemFactory that supports PlaceHolder to the AssemblyAdapter")
         } else {
             throw IllegalArgumentException("Not found matching item factory by data: $data")
         }

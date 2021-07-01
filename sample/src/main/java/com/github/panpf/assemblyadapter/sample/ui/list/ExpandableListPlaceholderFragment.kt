@@ -51,8 +51,11 @@ class ExpandableListPlaceholderFragment : BaseBindingFragment<FragmentExpandable
             AppsOverviewItemFactory(requireActivity())
         )
         val listAdapter = AssemblyExpandableListAdapter<AppGroup?, AppInfo>(
-            listOf(AppGroupItemFactory(), AppItemFactory(requireActivity())),
-            ViewItemFactory(Placeholder::class.java, R.layout.item_app_group_placeholder),
+            listOf(
+                AppGroupItemFactory(),
+                AppItemFactory(requireActivity()),
+                ViewItemFactory(Placeholder::class.java, R.layout.item_app_group_placeholder),
+            ),
             arrayOfNulls<AppGroup?>(100).toList()
         )
         val footerLoadStateAdapter = AssemblySingleDataExpandableListAdapter<LoadState, Any>(

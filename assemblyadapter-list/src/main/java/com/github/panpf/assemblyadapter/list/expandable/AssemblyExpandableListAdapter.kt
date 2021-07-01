@@ -26,40 +26,17 @@ import java.util.*
 
 open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    placeholderItemFactory: ItemFactory<Placeholder>? = null,
     dataList: List<GROUP_DATA>? = null
 ) : BaseExpandableListAdapter(), AssemblyAdapter, DatasAdapter<GROUP_DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(
-        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
-    )
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     var hasStableIds = false
     var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
 
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        placeholderItemFactory: ItemFactory<Placeholder>?,
-    ) : this(itemFactoryList, placeholderItemFactory, null)
 
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        dataList: List<GROUP_DATA>?
-    ) : this(itemFactoryList, null, dataList)
-
-    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null, null)
-
-    init {
-        placeholderItemFactory?.apply {
-            if (!matchData(Placeholder)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
-            }
-            if (matchData(0)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
-            }
-        }
-    }
+    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
 
 
     override fun getGroupCount(): Int = itemDataStorage.dataCount
@@ -235,24 +212,5 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(data)
-    }
-
-
-    class Builder<GROUP_DATA, CHILD_DATA>(private val itemFactoryList: List<ItemFactory<*>>) {
-
-        private var dataList: List<GROUP_DATA>? = null
-        private var placeholderItemFactory: ItemFactory<Placeholder>? = null
-
-        fun setDataList(dataList: List<GROUP_DATA>?) {
-            this.dataList = dataList
-        }
-
-        fun setPlaceholderItemFactory(placeholderItemFactory: ItemFactory<Placeholder>?) {
-            this.placeholderItemFactory = placeholderItemFactory
-        }
-
-        fun build(): AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA> {
-            return AssemblyExpandableListAdapter(itemFactoryList, placeholderItemFactory, dataList)
-        }
     }
 }

@@ -48,8 +48,11 @@ class RecyclerPlaceholderFragment : BaseBindingFragment<FragmentRecyclerBinding>
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter(
-            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity())),
-            ViewItemFactory(Placeholder::class.java, R.layout.item_app_placeholder),
+            listOf(
+                AppItemFactory(requireActivity()),
+                ListSeparatorItemFactory(requireActivity()),
+                ViewItemFactory(Placeholder::class.java, R.layout.item_app_placeholder),
+            ),
             arrayOfNulls<Any?>(100).toList()
         )
         val footerLoadStateAdapter =

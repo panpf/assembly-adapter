@@ -31,37 +31,20 @@ open class AssemblyFragmentStateAdapter<DATA>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     itemFactoryList: List<FragmentItemFactory<*>>,
-    placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
     dataList: List<DATA>? = null
 ) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(
-        if (placeholderItemFactory != null) itemFactoryList.plus(placeholderItemFactory) else itemFactoryList
-    )
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     constructor(
-        fragmentActivity: FragmentActivity,
+        fragmentManager: FragmentManager,
+        lifecycle: Lifecycle,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
-        dataList: List<DATA>? = null
     ) : this(
-        fragmentActivity.supportFragmentManager,
-        fragmentActivity.lifecycle,
+        fragmentManager,
+        lifecycle,
         itemFactoryList,
-        placeholderItemFactory,
-        dataList
-    )
-
-    constructor(
-        fragmentActivity: FragmentActivity,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentItemFactory<Placeholder>?,
-    ) : this(
-        fragmentActivity.supportFragmentManager,
-        fragmentActivity.lifecycle,
-        itemFactoryList,
-        placeholderItemFactory,
         null
     )
 
@@ -73,7 +56,6 @@ open class AssemblyFragmentStateAdapter<DATA>(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
         itemFactoryList,
-        null,
         dataList
     )
 
@@ -84,32 +66,6 @@ open class AssemblyFragmentStateAdapter<DATA>(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
         itemFactoryList,
-        null,
-        null
-    )
-
-    constructor(
-        fragment: Fragment,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
-        dataList: List<DATA>? = null
-    ) : this(
-        fragment.childFragmentManager,
-        fragment.lifecycle,
-        itemFactoryList,
-        placeholderItemFactory,
-        dataList
-    )
-
-    constructor(
-        fragment: Fragment,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-        placeholderItemFactory: FragmentItemFactory<Placeholder>? = null,
-    ) : this(
-        fragment.childFragmentManager,
-        fragment.lifecycle,
-        itemFactoryList,
-        placeholderItemFactory,
         null
     )
 
@@ -121,7 +77,6 @@ open class AssemblyFragmentStateAdapter<DATA>(
         fragment.childFragmentManager,
         fragment.lifecycle,
         itemFactoryList,
-        null,
         dataList
     )
 
@@ -132,20 +87,9 @@ open class AssemblyFragmentStateAdapter<DATA>(
         fragment.childFragmentManager,
         fragment.lifecycle,
         itemFactoryList,
-        null,
         null
     )
 
-    init {
-        placeholderItemFactory?.apply {
-            if (!matchData(Placeholder)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return true when passing in Placeholder")
-            }
-            if (matchData(0)) {
-                throw IllegalArgumentException("'${placeholderItemFactory::class.java.name}' 's match(Any) method must return false when passing in non Placeholder")
-            }
-        }
-    }
 
     override fun getItemCount(): Int {
         return itemDataStorage.dataCount
@@ -219,50 +163,5 @@ open class AssemblyFragmentStateAdapter<DATA>(
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(data)
-    }
-
-
-    class Builder<DATA>(
-        private val fragmentManager: FragmentManager,
-        private val lifecycle: Lifecycle,
-        private val itemFactoryList: List<FragmentItemFactory<*>>,
-    ) {
-        constructor(
-            fragmentActivity: FragmentActivity,
-            itemFactoryList: List<FragmentItemFactory<*>>,
-        ) : this(
-            fragmentActivity.supportFragmentManager,
-            fragmentActivity.lifecycle,
-            itemFactoryList,
-        )
-        constructor(
-            fragment: Fragment,
-            itemFactoryList: List<FragmentItemFactory<*>>,
-        ) : this(
-            fragment.childFragmentManager,
-            fragment.lifecycle,
-            itemFactoryList,
-        )
-
-        private var dataList: List<DATA>? = null
-        private var placeholderItemFactory: FragmentItemFactory<Placeholder>? = null
-
-        fun setDataList(dataList: List<DATA>?) {
-            this.dataList = dataList
-        }
-
-        fun setPlaceholderItemFactory(placeholderItemFactory: FragmentItemFactory<Placeholder>?) {
-            this.placeholderItemFactory = placeholderItemFactory
-        }
-
-        fun build(): AssemblyFragmentStateAdapter<DATA> {
-            return AssemblyFragmentStateAdapter(
-                fragmentManager,
-                lifecycle,
-                itemFactoryList,
-                placeholderItemFactory,
-                dataList
-            )
-        }
     }
 }

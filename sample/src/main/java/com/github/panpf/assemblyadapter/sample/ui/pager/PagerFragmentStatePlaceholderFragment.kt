@@ -58,10 +58,12 @@ class PagerFragmentStatePlaceholderFragment : BaseBindingFragment<FragmentPagerB
         val pagerAdapter = AssemblyFragmentStatePagerAdapter(
             childFragmentManager,
             FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-            listOf(AppGroupFragmentItemFactory()),
-            ViewFragmentItemFactory(
-                Placeholder::class.java,
-                R.layout.fragment_app_group_placeholder
+            listOf(
+                AppGroupFragmentItemFactory(),
+                ViewFragmentItemFactory(
+                    Placeholder::class.java,
+                    R.layout.fragment_app_group_placeholder
+                ),
             ),
             arrayOfNulls<Any?>(20).toList()
         )
