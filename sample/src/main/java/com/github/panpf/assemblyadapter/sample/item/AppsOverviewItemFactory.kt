@@ -22,7 +22,7 @@ class AppsOverviewItemFactory(
     }
 
     override fun createItemViewBinding(
-        inflater: LayoutInflater, parent: ViewGroup
+        context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemAppsOverviewBinding {
         return ItemAppsOverviewBinding.inflate(inflater, parent, false)
     }

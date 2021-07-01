@@ -16,7 +16,7 @@ open class AppGroupItemFactory :
     }
 
     override fun createItemViewBinding(
-        inflater: LayoutInflater, parent: ViewGroup
+        context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemAppGroupBinding {
         return ItemAppGroupBinding.inflate(inflater, parent, false)
     }

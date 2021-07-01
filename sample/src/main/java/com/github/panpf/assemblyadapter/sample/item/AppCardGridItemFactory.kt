@@ -21,7 +21,7 @@ class AppCardGridItemFactory(private val activity: Activity) :
     }
 
     override fun createItemViewBinding(
-        inflater: LayoutInflater, parent: ViewGroup
+        context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemAppGridCardBinding {
         return ItemAppGridCardBinding.inflate(inflater, parent, false)
     }

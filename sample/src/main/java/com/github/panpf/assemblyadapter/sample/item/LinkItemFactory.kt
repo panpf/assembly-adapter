@@ -18,7 +18,7 @@ class LinkItemFactory(private val activity: Activity) :
     }
 
     override fun createItemViewBinding(
-        inflater: LayoutInflater, parent: ViewGroup
+        context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemLinkBinding {
         return ItemLinkBinding.inflate(inflater, parent, false)
     }

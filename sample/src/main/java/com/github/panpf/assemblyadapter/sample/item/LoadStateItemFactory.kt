@@ -16,8 +16,7 @@ class LoadStateItemFactory(private val activity: Activity) :
     override fun match(data: Any): Boolean = data is LoadState
 
     override fun createItemViewBinding(
-        inflater: LayoutInflater,
-        parent: ViewGroup
+        context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemLoadStateBinding = ItemLoadStateBinding.inflate(inflater, parent, false)
 
     override fun initItem(context: Context, binding: ItemLoadStateBinding, item: Item<LoadState>) {
