@@ -219,6 +219,10 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return itemDataStorage.removeAllData(datas)
     }
 
+    override fun removeDataIf(filter: (GROUP_DATA) -> Boolean): Boolean {
+        return itemDataStorage.removeDataIf(filter)
+    }
+
     override fun clearData() {
         itemDataStorage.clearData()
     }

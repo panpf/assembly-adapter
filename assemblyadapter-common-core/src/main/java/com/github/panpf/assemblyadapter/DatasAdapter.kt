@@ -47,6 +47,16 @@ interface DatasAdapter<DATA> {
      */
     fun removeAllData(datas: Collection<DATA>): Boolean
 
+    /**
+     * Removes all of the elements of this collection that satisfy the given
+     * predicate.  Errors or runtime exceptions thrown during iteration or by
+     * the predicate are relayed to the caller.
+     *
+     * @param filter a predicate which returns true for elements to be removed
+     * @return `true` if the list was changed as the result of the operation.
+     */
+    fun removeDataIf(filter: (DATA) -> Boolean): Boolean
+
     fun clearData()
 
     fun sortData(comparator: Comparator<DATA>)

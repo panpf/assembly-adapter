@@ -21,13 +21,13 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.MatchItemFactory
+import com.github.panpf.assemblyadapter.ItemFactory
 import kotlin.reflect.KClass
 
 class AssemblyGridLayoutManager : GridLayoutManager {
 
     private var recyclerView: RecyclerView? = null
-    private val gridLayoutItemSpanMap: Map<KClass<out MatchItemFactory>, ItemSpan>
+    private val gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
     private val spanSizeLookup = object : SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             return getSpanSizeImpl(position)
@@ -41,7 +41,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         attrs: AttributeSet?,
         defStyleAttr: Int,
         defStyleRes: Int,
-        gridLayoutItemSpanMap: Map<KClass<out MatchItemFactory>, ItemSpan>
+        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
         super.setSpanSizeLookup(spanSizeLookup)
@@ -52,7 +52,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         spanCount: Int,
         orientation: Int,
         reverseLayout: Boolean,
-        gridLayoutItemSpanMap: Map<KClass<out MatchItemFactory>, ItemSpan>
+        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
     ) : super(context, spanCount, orientation, reverseLayout) {
         this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
         super.setSpanSizeLookup(spanSizeLookup)
@@ -61,7 +61,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     constructor(
         context: Context,
         spanCount: Int,
-        gridLayoutItemSpanMap: Map<KClass<out MatchItemFactory>, ItemSpan>
+        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
     ) : super(context, spanCount) {
         this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
         super.setSpanSizeLookup(spanSizeLookup)
@@ -90,10 +90,10 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         return 1
     }
 
-    private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): MatchItemFactory {
+    private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<*> {
         return when (adapter) {
             is AssemblyAdapter -> {
-                adapter.getItemFactoryByPosition(position)
+                adapter.getItemFactoryByPosition(position) as ItemFactory<*>
             }
             is ConcatAdapter -> {
                 val wrapperAdapters = concatAdapterAdaptersCacheMap.getOrPut(adapter) {

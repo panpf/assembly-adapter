@@ -203,6 +203,10 @@ open class AssemblyFragmentStateAdapter<DATA>(
         return itemDataStorage.removeAllData(datas)
     }
 
+    override fun removeDataIf(filter: (DATA) -> Boolean): Boolean {
+        return itemDataStorage.removeDataIf(filter)
+    }
+
     override fun clearData() {
         itemDataStorage.clearData()
     }

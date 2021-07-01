@@ -15,6 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.internal
 
+import android.os.Build
 import java.util.*
 
 class ItemDataStorage<DATA>(
@@ -22,7 +23,7 @@ class ItemDataStorage<DATA>(
     private val onDataListChanged: () -> Unit
 ) {
 
-    private val dataList = ArrayList<DATA>()
+    private val dataList: MutableList<DATA> = ArrayList<DATA>()
 
     init {
         if (_dataList != null) {
@@ -72,15 +73,6 @@ class ItemDataStorage<DATA>(
         }
     }
 
-    @SafeVarargs
-    fun addAllData(vararg datas: DATA): Boolean {
-        return Collections.addAll(dataList, *datas).apply {
-            if (this) {
-                onDataListChanged()
-            }
-        }
-    }
-
     fun removeData(data: DATA): Boolean {
         return dataList.remove(data).apply {
             if (this) {
@@ -100,6 +92,26 @@ class ItemDataStorage<DATA>(
             if (this) {
                 onDataListChanged()
             }
+        }
+    }
+
+    fun removeDataIf(filter: (DATA) -> Boolean): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            dataList.removeIf(filter).apply {
+                if (this) {
+                    onDataListChanged()
+                }
+            }
+        } else {
+            var removed = false
+            val each: MutableIterator<DATA> = dataList.iterator()
+            while (each.hasNext()) {
+                if (filter(each.next())) {
+                    each.remove()
+                    removed = true
+                }
+            }
+            return removed
         }
     }
 

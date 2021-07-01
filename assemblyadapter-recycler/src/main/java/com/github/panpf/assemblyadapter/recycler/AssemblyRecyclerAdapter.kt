@@ -129,12 +129,16 @@ open class AssemblyRecyclerAdapter<DATA>(
         return itemDataStorage.removeData(data)
     }
 
-    override fun removeData(index: Int): DATA {
-        return itemDataStorage.removeData(index)
+    override fun removeDataAt(index: Int): DATA {
+        return itemDataStorage.removeDataAt(index)
     }
 
     override fun removeAllData(datas: Collection<DATA>): Boolean {
         return itemDataStorage.removeAllData(datas)
+    }
+
+    override fun removeDataIf(filter: (DATA) -> Boolean): Boolean {
+        return itemDataStorage.removeDataIf(filter)
     }
 
     override fun clearData() {
