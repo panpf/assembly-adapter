@@ -15,22 +15,19 @@
  */
 package com.github.panpf.assemblyadapter.internal
 
-import android.util.SparseArray
 import com.github.panpf.assemblyadapter.MatchItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import java.util.*
 
+/**
+ * Responsible for managing itemType and matching ItemFactory according to data and itemType
+ */
 class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
     itemFactoryList: List<ITEM_FACTORY>,
 ) {
 
     private val _itemFactoryList: List<ITEM_FACTORY> = itemFactoryList.toList()
 
-    private val getItemFactoryByItemTypeArray = SparseArray<ITEM_FACTORY>().apply {
-        itemFactoryList.forEachIndexed { index, itemFactory ->
-            append(index, itemFactory)
-        }
-    }
     private val getItemTypeByItemFactoryMap = HashMap<ITEM_FACTORY, Int>().apply {
         itemFactoryList.forEachIndexed { index, itemFactory ->
             this[itemFactory] = index
@@ -43,6 +40,12 @@ class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }
 
+    /**
+     * Get the [MatchItemFactory] that can process the specified [data],
+     * usually the matchData(data) method of [MatchItemFactory] returns true to indicate that it can be processed
+     *
+     * @throws IllegalArgumentException Could not find it
+     */
     fun getItemFactoryByData(data: Any): ITEM_FACTORY {
         val itemFactory = _itemFactoryList.find { it.matchData(data) }
         return when {
@@ -55,14 +58,26 @@ class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
         }
     }
 
+    /**
+     * Get the [MatchItemFactory] corresponding to the specified [itemType]
+     *
+     * @throws IllegalArgumentException Could not find it
+     */
+    fun getItemFactoryByItemType(itemType: Int): ITEM_FACTORY {
+        require(itemType >= 0 && itemType < _itemFactoryList.size) {
+            "Unknown item type: $itemType"
+        }
+        return _itemFactoryList[itemType]
+    }
+
+    /**
+     * Get the itemType corresponding to the specified [data]
+     *
+     * @throws IllegalArgumentException Could not find it
+     */
     fun getItemTypeByData(data: Any): Int {
         val itemFactory = getItemFactoryByData(data)
         return getItemTypeByItemFactoryMap[itemFactory]
             ?: throw IllegalArgumentException("Not found matching item type by item factory: $itemFactory")
-    }
-
-    fun getItemFactoryByItemType(itemType: Int): ITEM_FACTORY {
-        return getItemFactoryByItemTypeArray[itemType]
-            ?: throw IllegalArgumentException("Unknown item type: $itemType")
     }
 }

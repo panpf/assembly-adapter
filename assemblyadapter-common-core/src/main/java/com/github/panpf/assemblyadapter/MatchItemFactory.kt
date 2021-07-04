@@ -20,7 +20,7 @@ package com.github.panpf.assemblyadapter
  */
 interface MatchItemFactory {
     /**
-     * If it returns true, it means that this ItemFactory can handle the [data]
+     * If it returns true, it means that this ItemFactory can process the [data]
      */
     fun matchData(data: Any): Boolean
 }

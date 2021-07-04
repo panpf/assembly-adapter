@@ -15,4 +15,11 @@
  */
 package com.github.panpf.assemblyadapter
 
+/**
+ * If there are null elements in your data set, [Placeholder] will be used instead of null elements
+ * when creating itemView and binding data to itemView, so you need to add a [MatchItemFactory]
+ * that supports [Placeholder] when configuring the itemFactoryList property of AssemblyAdapter
+ *
+ * @see com.github.panpf.assemblyadapter.internal.ItemFactoryStorage.getItemFactoryByData
+ */
 object Placeholder
