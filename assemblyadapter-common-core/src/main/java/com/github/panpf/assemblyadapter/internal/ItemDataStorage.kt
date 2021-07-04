@@ -42,7 +42,7 @@ class ItemDataStorage<DATA>(
 
     init {
         if (initDataList != null) {
-            this.dataList.addAll(dataList)
+            dataList.addAll(initDataList)
         }
     }
 

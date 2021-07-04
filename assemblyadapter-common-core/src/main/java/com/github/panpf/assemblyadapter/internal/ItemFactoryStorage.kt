@@ -23,21 +23,21 @@ import java.util.*
  * Responsible for managing itemType and matching ItemFactory according to data and itemType
  */
 class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
-    itemFactoryList: List<ITEM_FACTORY>,
+    initItemFactoryList: List<ITEM_FACTORY>,
 ) {
 
-    private val _itemFactoryList: List<ITEM_FACTORY> = itemFactoryList.toList()
+    private val itemFactoryList: List<ITEM_FACTORY> = initItemFactoryList.toList()
 
     private val getItemTypeByItemFactoryMap = HashMap<ITEM_FACTORY, Int>().apply {
-        itemFactoryList.forEachIndexed { index, itemFactory ->
+        initItemFactoryList.forEachIndexed { index, itemFactory ->
             this[itemFactory] = index
         }
     }
 
-    val itemTypeCount = itemFactoryList.size
+    val itemTypeCount = initItemFactoryList.size
 
     init {
-        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+        require(initItemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }
 
     /**
@@ -47,7 +47,7 @@ class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
      * @throws IllegalArgumentException Could not find it
      */
     fun getItemFactoryByData(data: Any): ITEM_FACTORY {
-        val itemFactory = _itemFactoryList.find { it.matchData(data) }
+        val itemFactory = itemFactoryList.find { it.matchData(data) }
         return when {
             itemFactory != null -> itemFactory
             data is Placeholder -> throw IllegalArgumentException(
@@ -64,10 +64,10 @@ class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
      * @throws IllegalArgumentException Could not find it
      */
     fun getItemFactoryByItemType(itemType: Int): ITEM_FACTORY {
-        require(itemType >= 0 && itemType < _itemFactoryList.size) {
+        require(itemType >= 0 && itemType < itemFactoryList.size) {
             "Unknown item type: $itemType"
         }
-        return _itemFactoryList[itemType]
+        return itemFactoryList[itemType]
     }
 
     /**
