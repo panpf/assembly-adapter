@@ -104,7 +104,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
                         view,
                         bindItem.bindingAdapterPosition,
                         bindItem.absoluteAdapterPosition,
-                        bindItem.requireData
+                        bindItem.dataOrThrow
                     )
                 }
             } else if (holder is ClickListenerManager.LongClickListenerHolder<*>) {
@@ -127,7 +127,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
                         view,
                         bindItem.bindingAdapterPosition,
                         bindItem.absoluteAdapterPosition,
-                        bindItem.requireData
+                        bindItem.dataOrThrow
                     )
                 }
             }
@@ -144,7 +144,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
 
         val dataOrNull: DATA?
             get() = _data
-        val requireData: DATA
+        val dataOrThrow: DATA
             get() = _data!!
         val bindingAdapterPosition: Int
             get() = _bindingAdapterPosition

@@ -44,7 +44,7 @@ class AppItemFactory(private val activity: Activity) :
     ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
-            val data = item.dataOrNull ?: return@setOnClickListener
+            val data = item.dataOrThrow
             val launchIntent =
                 context.packageManager.getLaunchIntentForPackage(data.packageName)
             if (launchIntent != null) {
@@ -53,7 +53,7 @@ class AppItemFactory(private val activity: Activity) :
         }
 
         binding.root.setOnLongClickListener {
-            val data = item.dataOrNull ?: return@setOnLongClickListener false
+            val data = item.dataOrThrow
             AlertDialog.Builder(activity).apply {
                 setMessage(buildString {
                     append("App（${data.name}）").appendLine()
