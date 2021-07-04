@@ -21,8 +21,10 @@ import com.github.panpf.assemblyadapter.Placeholder
 import java.util.*
 
 class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
-    private val itemFactoryList: List<ITEM_FACTORY>,
+    itemFactoryList: List<ITEM_FACTORY>,
 ) {
+
+    private val _itemFactoryList: List<ITEM_FACTORY> = itemFactoryList.toList()
 
     private val getItemFactoryByItemTypeArray = SparseArray<ITEM_FACTORY>().apply {
         itemFactoryList.forEachIndexed { index, itemFactory ->
@@ -38,18 +40,18 @@ class ItemFactoryStorage<ITEM_FACTORY : MatchItemFactory>(
     val itemTypeCount = itemFactoryList.size
 
     init {
-        require(this.itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }
 
     fun getItemFactoryByData(data: Any): ITEM_FACTORY {
-        val itemFactory = itemFactoryList.find { it.matchData(data) }
-        if (itemFactory != null) {
-            return itemFactory
-        }
-        if (data is Placeholder) {
-            throw IllegalArgumentException("Need to add an MatchItemFactory that supports PlaceHolder to the AssemblyAdapter")
-        } else {
-            throw IllegalArgumentException("Not found matching item factory by data: $data")
+        val itemFactory = _itemFactoryList.find { it.matchData(data) }
+        return when {
+            itemFactory != null -> itemFactory
+            data is Placeholder -> throw IllegalArgumentException(
+                "Because there are null elements in your data set, so need to add an MatchItemFactory " +
+                        "that supports PlaceHolder to the Assembly*Adapter's itemFactoryList property"
+            )
+            else -> throw IllegalArgumentException("Not found matching item factory by data: $data")
         }
     }
 
