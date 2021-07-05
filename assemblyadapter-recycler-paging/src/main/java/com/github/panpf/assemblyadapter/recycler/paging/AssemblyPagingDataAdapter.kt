@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.internal.MatchableStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import kotlinx.coroutines.CoroutineDispatcher
@@ -37,7 +37,7 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     diffCallback, mainDispatcher, workerDispatcher
 ), AssemblyAdapter<ItemFactory<*>> {
 
-    private val matchableStorage = MatchableStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
@@ -55,13 +55,13 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 
     override fun getItemViewType(position: Int): Int {
         val data = peek(position) ?: Placeholder
-        return matchableStorage.getItemTypeByData(
+        return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
         )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemFactory = matchableStorage.getMatchableByItemType(viewType)
+        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         return AssemblyItemViewHolderWrapper(item).apply {
             val layoutManager =
@@ -87,7 +87,7 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = peek(position) ?: Placeholder
-        return matchableStorage.getMatchableByData(
+        return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
         )
     }

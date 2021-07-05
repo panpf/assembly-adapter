@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.internal.MatchableStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.AbsoluteAdapterPositionAdapter
 import java.util.*
 
@@ -42,7 +42,7 @@ open class AssemblyFragmentPagerAdapter<DATA>(
 ) : FragmentPagerAdapter(fm, behavior), AssemblyAdapter<FragmentItemFactory<*>>,
     DatasAdapter<DATA>, AbsoluteAdapterPositionAdapter {
 
-    private val matchableStorage = MatchableStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
@@ -96,7 +96,7 @@ open class AssemblyFragmentPagerAdapter<DATA>(
         val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = matchableStorage.getMatchableByData(
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(
             data, "FragmentItemFactory", "AssemblyFragmentPagerAdapter", "itemFactoryList"
         ) as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
@@ -176,7 +176,7 @@ open class AssemblyFragmentPagerAdapter<DATA>(
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return matchableStorage.getMatchableByData(
+        return itemFactoryStorage.getItemFactoryByData(
             data, "FragmentItemFactory", "AssemblyFragmentPagerAdapter", "itemFactoryList"
         )
     }

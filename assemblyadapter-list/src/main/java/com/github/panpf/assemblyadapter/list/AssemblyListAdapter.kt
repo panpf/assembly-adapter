@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.internal.MatchableStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import java.util.*
 
 open class AssemblyListAdapter<DATA>(
@@ -31,7 +31,7 @@ open class AssemblyListAdapter<DATA>(
     dataList: List<DATA>? = null
 ) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>>, DatasAdapter<DATA> {
 
-    private val matchableStorage = MatchableStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
@@ -53,19 +53,19 @@ open class AssemblyListAdapter<DATA>(
     }
 
     override fun getViewTypeCount(): Int {
-        return matchableStorage.matchableCount
+        return itemFactoryStorage.itemTypeCount
     }
 
     override fun getItemViewType(position: Int): Int {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return matchableStorage.getItemTypeByData(
+        return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         )
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        val itemView = convertView ?: matchableStorage.getMatchableByData(
+        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         ).dispatchCreateItem(parent).apply {
             itemView.setTag(R.id.aa_tag_item, this)
@@ -140,7 +140,7 @@ open class AssemblyListAdapter<DATA>(
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return matchableStorage.getMatchableByData(
+        return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         )
     }

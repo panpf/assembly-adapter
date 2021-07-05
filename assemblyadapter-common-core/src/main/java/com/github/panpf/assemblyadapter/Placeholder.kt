@@ -20,6 +20,6 @@ package com.github.panpf.assemblyadapter
  * when creating itemView and binding data to itemView, so you need to add a ItemFactory
  * that supports [Placeholder] when configuring the itemFactoryList property of AssemblyAdapter
  *
- * @see com.github.panpf.assemblyadapter.internal.MatchableStorage.getMatchableByData
+ * @see com.github.panpf.assemblyadapter.internal.ItemFactoryStorage.getItemFactoryByData
  */
 object Placeholder

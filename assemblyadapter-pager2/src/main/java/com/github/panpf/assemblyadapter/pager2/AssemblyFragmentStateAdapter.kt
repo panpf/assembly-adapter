@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.internal.MatchableStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 
 open class AssemblyFragmentStateAdapter<DATA>(
@@ -37,7 +37,7 @@ open class AssemblyFragmentStateAdapter<DATA>(
 ) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<FragmentItemFactory<*>>,
     DatasAdapter<DATA> {
 
-    private val matchableStorage = MatchableStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
     private var recyclerView: RecyclerView? = null
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
@@ -120,7 +120,7 @@ open class AssemblyFragmentStateAdapter<DATA>(
         }
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = matchableStorage.getMatchableByData(
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(
             data, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
         ) as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
@@ -186,7 +186,7 @@ open class AssemblyFragmentStateAdapter<DATA>(
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return matchableStorage.getMatchableByData(
+        return itemFactoryStorage.getItemFactoryByData(
             data, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
         )
     }

@@ -20,7 +20,7 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.internal.MatchableStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.R
 
 open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>(
@@ -28,7 +28,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
     initData: GROUP_DATA? = null
 ) : BaseExpandableListAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
-    private val matchableStorage = MatchableStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
 
     var data: GROUP_DATA? = initData
         set(value) {
@@ -57,11 +57,11 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
     override fun getGroupId(groupPosition: Int): Long = groupPosition.toLong()
 
-    override fun getGroupTypeCount(): Int = matchableStorage.matchableCount
+    override fun getGroupTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getGroupType(groupPosition: Int): Int {
         val groupData = data!!
-        return matchableStorage.getItemTypeByData(
+        return itemFactoryStorage.getItemTypeByData(
             groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         )
     }
@@ -70,7 +70,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
         val groupData = data!!
-        val groupItemView = convertView ?: matchableStorage.getMatchableByData(
+        val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         ).dispatchCreateItem(parent).apply {
             itemView.setTag(R.id.aa_tag_item, this)
@@ -121,11 +121,11 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long = childPosition.toLong()
 
-    override fun getChildTypeCount(): Int = matchableStorage.matchableCount
+    override fun getChildTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getChildType(groupPosition: Int, childPosition: Int): Int {
         val childData = getChild(groupPosition, childPosition)!!
-        return matchableStorage.getItemTypeByData(
+        return itemFactoryStorage.getItemTypeByData(
             childData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         )
     }
@@ -135,7 +135,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         convertView: View?, parent: ViewGroup
     ): View {
         val childData = getChild(groupPosition, childPosition)!!
-        val childItemView = convertView ?: matchableStorage.getMatchableByData(
+        val childItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             childData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         ).dispatchCreateItem(parent).apply {
             itemView.setTag(R.id.aa_tag_item, this)
@@ -175,7 +175,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val groupData = data!!
-        return matchableStorage.getMatchableByData(
+        return itemFactoryStorage.getItemFactoryByData(
             groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         )
     }

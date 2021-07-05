@@ -22,7 +22,7 @@ import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.internal.MatchableStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import java.util.*
 
@@ -32,7 +32,7 @@ open class AssemblyRecyclerAdapter<DATA>(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     AssemblyAdapter<ItemFactory<*>>, DatasAdapter<DATA> {
 
-    private val matchableStorage = MatchableStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
@@ -51,13 +51,13 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     override fun getItemViewType(position: Int): Int {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return matchableStorage.getItemTypeByData(
+        return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
         )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemFactory = matchableStorage.getMatchableByItemType(viewType)
+        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         return AssemblyItemViewHolderWrapper(item).apply {
             val layoutManager =
@@ -137,7 +137,7 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return matchableStorage.getMatchableByData(
+        return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
         )
     }

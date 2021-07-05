@@ -23,32 +23,26 @@ import java.util.*
 /**
  * Responsible for managing itemType and matching ItemFactory according to data and itemType
  */
-class MatchableStorage<MATCHABLE : Matchable>(
-    initMatchableList: List<MATCHABLE>,
+class ItemFactoryStorage<ITEM_FACTORY : Matchable>(
+    initItemFactoryList: List<ITEM_FACTORY>,
 ) {
 
-    private val matchableList: List<MATCHABLE> = initMatchableList.toList()
+    private val itemFactoryList: List<ITEM_FACTORY> = initItemFactoryList.toList()
 
-    private val getItemTypeByMatchableMap = HashMap<MATCHABLE, Int>().apply {
-        initMatchableList.forEachIndexed { index, itemFactory ->
+    private val getItemTypeByItemFactoryMap = HashMap<ITEM_FACTORY, Int>().apply {
+        initItemFactoryList.forEachIndexed { index, itemFactory ->
             this[itemFactory] = index
         }
     }
 
-    val matchableCount = initMatchableList.size
+    val itemTypeCount = initItemFactoryList.size
 
-    /**
-     * Get the [Matchable] that can process the specified [data],
-     * usually the matchData(data) method of [Matchable] returns true to indicate that it can be processed
-     *
-     * @throws NotFoundMatchedItemFactoryException No [Matchable] that can support [data] is found in the Adapter’s itemFactoryList
-     */
-    fun getMatchableByData(
+    fun getItemFactoryByData(
         data: Any, itemFactoryName: String, adapterName: String, itemFactoryPropertyName: String
-    ): MATCHABLE {
-        val matchable = matchableList.find { it.matchData(data) }
+    ): ITEM_FACTORY {
+        val itemFactory = itemFactoryList.find { it.matchData(data) }
         return when {
-            matchable != null -> matchable
+            itemFactory != null -> itemFactory
             data is Placeholder -> throw NotFoundMatchedItemFactoryException(
                 "Because there are null elements in your data set, so need to add an $itemFactoryName " +
                         "that supports '${data::class.java.name}' to the $adapterName's $itemFactoryPropertyName property"
@@ -59,28 +53,18 @@ class MatchableStorage<MATCHABLE : Matchable>(
         }
     }
 
-    /**
-     * Get the [Matchable] corresponding to the specified [itemType]
-     *
-     * @throws IllegalArgumentException Could not find it
-     */
-    fun getMatchableByItemType(itemType: Int): MATCHABLE {
-        require(itemType >= 0 && itemType < matchableList.size) {
+    fun getItemFactoryByItemType(itemType: Int): ITEM_FACTORY {
+        require(itemType >= 0 && itemType < itemFactoryList.size) {
             "Unknown item type: $itemType"
         }
-        return matchableList[itemType]
+        return itemFactoryList[itemType]
     }
 
-    /**
-     * Get the itemType corresponding to the specified [data]
-     *
-     * @throws IllegalArgumentException Could not find it
-     */
     fun getItemTypeByData(
         data: Any, itemFactoryName: String, adapterName: String, itemFactoryPropertyName: String
     ): Int {
         val itemFactory =
-            getMatchableByData(data, itemFactoryName, adapterName, itemFactoryPropertyName)
-        return getItemTypeByMatchableMap[itemFactory]!!
+            getItemFactoryByData(data, itemFactoryName, adapterName, itemFactoryPropertyName)
+        return getItemTypeByItemFactoryMap[itemFactory]!!
     }
 }
