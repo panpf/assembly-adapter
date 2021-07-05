@@ -19,11 +19,16 @@ import android.content.Context
 import android.view.View
 
 /**
- * View 点击监听器，用于在 ItemFactory 中方便的对 Item 中的 View 设置点击监听
- *
- * @see ItemFactory
+ * View click listener, used to easily set click listener on the View in Item in ItemFactory
  */
 fun interface OnClickListener<DATA> {
+
+    /**
+     * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
+     * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method
+     * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
+     * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method
+     */
     fun onClick(
         context: Context,
         view: View,
