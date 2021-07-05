@@ -76,8 +76,6 @@ class MainActivity : AppCompatActivity() {
                     ListSeparator("ViewPager"),
                     Link("ViewPager - View", PagerViewFragment()),
                     Link("ViewPager - View - Placeholder", PagerViewPlaceholderFragment()),
-                    Link("ViewPager - Fragment", PagerFragmentFragment()),
-                    Link("ViewPager - Fragment - Placeholder", PagerFragmentPlaceholderFragment()),
                     Link("ViewPager - Fragment - State", PagerFragmentStateFragment()),
                     Link("ViewPager - Fragment - State - Placeholder", PagerFragmentStatePlaceholderFragment()),
                     Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
