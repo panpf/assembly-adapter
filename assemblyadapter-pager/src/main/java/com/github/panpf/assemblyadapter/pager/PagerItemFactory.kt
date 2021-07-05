@@ -18,7 +18,11 @@ package com.github.panpf.assemblyadapter.pager
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.MatchItemFactory
+import com.github.panpf.assemblyadapter.OnClickListener
+import com.github.panpf.assemblyadapter.OnLongClickListener
+import com.github.panpf.assemblyadapter.internal.ClickListenerManager
 import kotlin.reflect.KClass
 
 /**
@@ -27,6 +31,8 @@ import kotlin.reflect.KClass
  */
 abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) :
     MatchItemFactory {
+
+    private var clickListenerManager: ClickListenerManager<DATA>? = null
 
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
@@ -44,7 +50,9 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
     ): View {
         return createItemView(
             context, parent, bindingAdapterPosition, absoluteAdapterPosition, data
-        )
+        ).apply {
+            registerItemClickListener(this, bindingAdapterPosition, absoluteAdapterPosition, data)
+        }
     }
 
     protected abstract fun createItemView(
@@ -53,4 +61,76 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
         absoluteAdapterPosition: Int,
         data: DATA
     ): View
+
+    open fun setOnViewClickListener(
+        @IdRes viewId: Int,
+        onClickListener: OnClickListener<DATA>
+    ): PagerItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onClickListener)
+        return this
+    }
+
+    open fun setOnViewLongClickListener(
+        @IdRes viewId: Int,
+        onLongClickListener: OnLongClickListener<DATA>
+    ): PagerItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onLongClickListener)
+        return this
+    }
+
+    open fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): PagerItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(onClickListener)
+        return this
+    }
+
+    open fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): PagerItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(onLongClickListener)
+        return this
+    }
+
+    private fun getClickListenerManagerOrCreate(): ClickListenerManager<DATA> {
+        return (clickListenerManager ?: (ClickListenerManager<DATA>().apply {
+            this@PagerItemFactory.clickListenerManager = this
+        }))
+    }
+
+    private fun registerItemClickListener(
+        itemView: View, bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
+    ) {
+        val clickListenerManager = clickListenerManager ?: return
+        for (holder in clickListenerManager.holders) {
+            if (holder is ClickListenerManager.ClickListenerHolder<*>) {
+                @Suppress("UNCHECKED_CAST")
+                val clickListenerHolder = holder as ClickListenerManager.ClickListenerHolder<DATA>
+                val viewId = clickListenerHolder.viewId
+                val targetView = if (viewId > 0) {
+                    itemView.findViewById(viewId)
+                        ?: throw IllegalArgumentException("Not found click bind target view by id $viewId")
+                } else {
+                    itemView
+                }
+                targetView.setOnClickListener { view ->
+                    clickListenerHolder.listener.onClick(
+                        view.context, view, bindingAdapterPosition, absoluteAdapterPosition, data
+                    )
+                }
+            } else if (holder is ClickListenerManager.LongClickListenerHolder<*>) {
+                @Suppress("UNCHECKED_CAST")
+                val longClickListenerHolder =
+                    holder as ClickListenerManager.LongClickListenerHolder<DATA>
+                val viewId = longClickListenerHolder.viewId
+                val targetView = if (viewId > 0) {
+                    itemView.findViewById(viewId)
+                        ?: throw IllegalArgumentException("Not found long click bind target view by id $viewId")
+                } else {
+                    itemView
+                }
+                targetView.setOnLongClickListener { view ->
+                    longClickListenerHolder.listener.onLongClick(
+                        view.context, view, bindingAdapterPosition, absoluteAdapterPosition, data
+                    )
+                }
+            }
+        }
+    }
 }

@@ -40,7 +40,7 @@ internal class FragmentPagerAdapterRefreshHelper {
             override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                 if (source.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                     item.requireView().setTag(
-                        R.id.aa_tag_pagerItem_notifyDataSetChangedNumber,
+                        R.id.aa_tag_notifyDataSetChangedNumber,
                         notifyDataSetChangedNumber
                     )
                     source.lifecycle.removeObserver(this)
@@ -53,7 +53,7 @@ internal class FragmentPagerAdapterRefreshHelper {
     fun isItemPositionChanged(item: Fragment): Boolean {
         val view = item.view ?: return true
         val currentNumber = notifyDataSetChangedNumber
-        val bindNumber = view.getTag(R.id.aa_tag_pagerItem_notifyDataSetChangedNumber)?.toString()?.toInt()
+        val bindNumber = view.getTag(R.id.aa_tag_notifyDataSetChangedNumber)?.toString()?.toInt()
         return bindNumber != currentNumber
     }
 }

@@ -95,10 +95,10 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
                 } else {
                     itemView
                 }
-                targetView.setTag(R.id.aa_tag_item, item)
+                targetView.setTag(R.id.aa_tag_clickBindItem, item)
                 targetView.setOnClickListener { view ->
                     @Suppress("UNCHECKED_CAST")
-                    val bindItem = view.getTag(R.id.aa_tag_item) as Item<DATA>
+                    val bindItem = view.getTag(R.id.aa_tag_clickBindItem) as Item<DATA>
                     clickListenerHolder.listener.onClick(
                         view.context,
                         view,
@@ -118,10 +118,10 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
                 } else {
                     itemView
                 }
-                targetView.setTag(R.id.aa_tag_item, item)
+                targetView.setTag(R.id.aa_tag_clickBindItem, item)
                 targetView.setOnLongClickListener { view ->
                     @Suppress("UNCHECKED_CAST")
-                    val bindItem = view.getTag(R.id.aa_tag_item) as Item<DATA>
+                    val bindItem = view.getTag(R.id.aa_tag_clickBindItem) as Item<DATA>
                     longClickListenerHolder.listener.onLongClick(
                         view.context,
                         view,
