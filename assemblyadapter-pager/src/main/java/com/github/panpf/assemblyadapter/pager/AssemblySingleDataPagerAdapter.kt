@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 open class AssemblySingleDataPagerAdapter<DATA : Any>(
     private val itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
-) : PagerAdapter(), AssemblyAdapter {
+) : PagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
 
     var data: DATA? = initData
         set(value) {

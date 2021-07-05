@@ -19,10 +19,12 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.*
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Placeholder
+import com.github.panpf.assemblyadapter.internal.MatchableStorage
 import com.github.panpf.assemblyadapter.recycler.FullSpanStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -33,9 +35,9 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
     diffCallback, mainDispatcher, workerDispatcher
-), AssemblyAdapter {
+), AssemblyAdapter<ItemFactory<*>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val matchableStorage = MatchableStorage(itemFactoryList)
 
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
@@ -47,13 +49,19 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
         Dispatchers.Default
     )
 
+    init {
+        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
+
     override fun getItemViewType(position: Int): Int {
         val data = peek(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(data)
+        return matchableStorage.getItemTypeByData(
+            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
+        val itemFactory = matchableStorage.getMatchableByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         return AssemblyItemViewHolderWrapper(item).apply {
             val layoutManager =
@@ -79,6 +87,8 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = peek(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(data)
+        return matchableStorage.getMatchableByData(
+            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
+        )
     }
 }

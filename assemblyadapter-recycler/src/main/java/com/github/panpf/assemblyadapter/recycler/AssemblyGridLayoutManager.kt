@@ -104,7 +104,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
 
     private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<*> {
         return when (adapter) {
-            is AssemblyAdapter -> {
+            is AssemblyAdapter<*> -> {
                 adapter.getItemFactoryByPosition(position) as ItemFactory<*>
             }
             is ConcatAdapter -> {

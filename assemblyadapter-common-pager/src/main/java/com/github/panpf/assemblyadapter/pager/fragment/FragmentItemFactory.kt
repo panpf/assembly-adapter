@@ -16,14 +16,13 @@
 package com.github.panpf.assemblyadapter.pager.fragment
 
 import androidx.fragment.app.Fragment
-import com.github.panpf.assemblyadapter.MatchItemFactory
+import com.github.panpf.assemblyadapter.Matchable
 import kotlin.reflect.KClass
 
 /**
  * @see ViewFragmentItemFactory
  */
-abstract class FragmentItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) :
-    MatchItemFactory {
+abstract class FragmentItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Matchable {
 
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")

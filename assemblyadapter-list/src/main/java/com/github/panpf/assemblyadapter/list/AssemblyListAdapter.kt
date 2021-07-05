@@ -18,20 +18,27 @@ package com.github.panpf.assemblyadapter.list
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.github.panpf.assemblyadapter.*
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.DatasAdapter
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.internal.MatchableStorage
 import java.util.*
 
 open class AssemblyListAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     dataList: List<DATA>? = null
-) : BaseAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
+) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>>, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val matchableStorage = MatchableStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
+
+    init {
+        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
 
     override fun getItem(position: Int): DATA {
         return itemDataStorage.getData(position)
@@ -46,20 +53,23 @@ open class AssemblyListAdapter<DATA>(
     }
 
     override fun getViewTypeCount(): Int {
-        return itemFactoryStorage.itemTypeCount
+        return matchableStorage.matchableCount
     }
 
     override fun getItemViewType(position: Int): Int {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(data)
+        return matchableStorage.getItemTypeByData(
+            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+        )
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(data)
-            .dispatchCreateItem(parent).apply {
-                itemView.setTag(R.id.aa_tag_item, this)
-            }.itemView
+        val itemView = convertView ?: matchableStorage.getMatchableByData(
+            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+        ).dispatchCreateItem(parent).apply {
+            itemView.setTag(R.id.aa_tag_item, this)
+        }.itemView
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
@@ -130,6 +140,8 @@ open class AssemblyListAdapter<DATA>(
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(data)
+        return matchableStorage.getMatchableByData(
+            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+        )
     }
 }

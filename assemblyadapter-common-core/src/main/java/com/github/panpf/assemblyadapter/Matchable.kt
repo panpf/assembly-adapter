@@ -15,17 +15,6 @@
  */
 package com.github.panpf.assemblyadapter
 
-/**
- * The adapter that implements the [AssemblyAdapter] interface can easily support any multi type of adapters by cooperating with the predefined ItemFactory
- */
-interface AssemblyAdapter<ITEM_FACTORY : Matchable> {
-
-    /**
-     * Get the ItemFactory of the specified [position]
-     *
-     * @see Matchable
-     * @throws IndexOutOfBoundsException If the [position] is out of range (position < 0 || index >= count())
-     * @throws NotFoundMatchedItemFactoryException No ItemFactory can match the data corresponding to [position]
-     */
-    fun getItemFactoryByPosition(position: Int): ITEM_FACTORY
+interface Matchable {
+    fun matchData(data: Any): Boolean
 }

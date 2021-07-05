@@ -27,7 +27,7 @@ import com.github.panpf.assemblyadapter.recycler.FullSpanStaggeredGridLayoutMana
 open class AssemblyLoadStateAdapter(
     private val itemFactory: ItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
-) : LoadStateAdapter<RecyclerView.ViewHolder>(), AssemblyAdapter {
+) : LoadStateAdapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
 
     override fun onCreateViewHolder(
         parent: ViewGroup, loadState: LoadState

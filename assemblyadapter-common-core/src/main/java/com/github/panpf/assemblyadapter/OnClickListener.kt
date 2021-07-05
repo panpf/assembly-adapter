@@ -18,6 +18,11 @@ package com.github.panpf.assemblyadapter
 import android.content.Context
 import android.view.View
 
+/**
+ * View 点击监听器，用于在 ItemFactory 中方便的对 Item 中的 View 设置点击监听
+ *
+ * @see ItemFactory
+ */
 fun interface OnClickListener<DATA> {
     fun onClick(
         context: Context,

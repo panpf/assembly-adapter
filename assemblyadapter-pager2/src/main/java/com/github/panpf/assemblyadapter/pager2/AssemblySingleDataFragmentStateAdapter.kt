@@ -30,7 +30,7 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     lifecycle: Lifecycle,
     private val itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
-) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter {
+) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<FragmentItemFactory<*>> {
 
     private var recyclerView: RecyclerView? = null
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null

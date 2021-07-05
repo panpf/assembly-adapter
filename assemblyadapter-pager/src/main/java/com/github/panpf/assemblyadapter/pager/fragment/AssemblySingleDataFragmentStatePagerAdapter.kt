@@ -30,7 +30,7 @@ import com.github.panpf.assemblyadapter.pager.AbsoluteAdapterPositionAdapter
     )
 )
 open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any> :
-    FragmentStatePagerAdapter, AssemblyAdapter, AbsoluteAdapterPositionAdapter {
+    FragmentStatePagerAdapter, AssemblyAdapter<FragmentItemFactory<*>>, AbsoluteAdapterPositionAdapter {
 
     private val itemFactory: FragmentItemFactory<DATA>
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =

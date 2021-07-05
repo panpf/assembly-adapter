@@ -20,7 +20,7 @@ import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import java.util.*
 
-class ClickListenerManager<DATA> {
+class ClickListenerStorage<DATA> {
 
     val holders: MutableList<Any> = LinkedList()
 

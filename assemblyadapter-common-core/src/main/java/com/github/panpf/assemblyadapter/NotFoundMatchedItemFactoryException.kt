@@ -15,12 +15,4 @@
  */
 package com.github.panpf.assemblyadapter
 
-/**
- * ItemFactory that supports matching data
- */
-interface MatchItemFactory {
-    /**
-     * If it returns true, it means that this ItemFactory can process the [data]
-     */
-    fun matchData(data: Any): Boolean
-}
+class NotFoundMatchedItemFactoryException(message: String?) : RuntimeException(message)

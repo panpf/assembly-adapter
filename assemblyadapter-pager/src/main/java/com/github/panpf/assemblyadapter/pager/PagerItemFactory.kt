@@ -19,20 +19,19 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
-import com.github.panpf.assemblyadapter.MatchItemFactory
+import com.github.panpf.assemblyadapter.Matchable
 import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
-import com.github.panpf.assemblyadapter.internal.ClickListenerManager
+import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
 import kotlin.reflect.KClass
 
 /**
  * @see BindingPagerItemFactory
  * @see ViewPagerItemFactory
  */
-abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) :
-    MatchItemFactory {
+abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Matchable {
 
-    private var clickListenerManager: ClickListenerManager<DATA>? = null
+    private var clickListenerStorage: ClickListenerStorage<DATA>? = null
 
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
@@ -88,20 +87,20 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
         return this
     }
 
-    private fun getClickListenerManagerOrCreate(): ClickListenerManager<DATA> {
-        return (clickListenerManager ?: (ClickListenerManager<DATA>().apply {
-            this@PagerItemFactory.clickListenerManager = this
+    private fun getClickListenerManagerOrCreate(): ClickListenerStorage<DATA> {
+        return (clickListenerStorage ?: (ClickListenerStorage<DATA>().apply {
+            this@PagerItemFactory.clickListenerStorage = this
         }))
     }
 
     private fun registerItemClickListener(
         itemView: View, bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
     ) {
-        val clickListenerManager = clickListenerManager ?: return
+        val clickListenerManager = clickListenerStorage ?: return
         for (holder in clickListenerManager.holders) {
-            if (holder is ClickListenerManager.ClickListenerHolder<*>) {
+            if (holder is ClickListenerStorage.ClickListenerHolder<*>) {
                 @Suppress("UNCHECKED_CAST")
-                val clickListenerHolder = holder as ClickListenerManager.ClickListenerHolder<DATA>
+                val clickListenerHolder = holder as ClickListenerStorage.ClickListenerHolder<DATA>
                 val viewId = clickListenerHolder.viewId
                 val targetView = if (viewId > 0) {
                     itemView.findViewById(viewId)
@@ -114,10 +113,10 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
                         view.context, view, bindingAdapterPosition, absoluteAdapterPosition, data
                     )
                 }
-            } else if (holder is ClickListenerManager.LongClickListenerHolder<*>) {
+            } else if (holder is ClickListenerStorage.LongClickListenerHolder<*>) {
                 @Suppress("UNCHECKED_CAST")
                 val longClickListenerHolder =
-                    holder as ClickListenerManager.LongClickListenerHolder<DATA>
+                    holder as ClickListenerStorage.LongClickListenerHolder<DATA>
                 val viewId = longClickListenerHolder.viewId
                 val targetView = if (viewId > 0) {
                     itemView.findViewById(viewId)

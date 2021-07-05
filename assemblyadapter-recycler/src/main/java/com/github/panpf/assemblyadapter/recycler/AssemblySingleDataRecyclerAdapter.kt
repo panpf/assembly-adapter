@@ -25,7 +25,7 @@ import java.lang.IllegalArgumentException
 open class AssemblySingleDataRecyclerAdapter<DATA: Any>(
     private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
 
     var data: DATA? = initData
         set(value) {

@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.AbsoluteAdapterPositionAdapter
+import com.github.panpf.assemblyadapter.pager.PagerItemFactory
 
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter' instead.",
@@ -30,7 +31,7 @@ import com.github.panpf.assemblyadapter.pager.AbsoluteAdapterPositionAdapter
     )
 )
 open class AssemblySingleDataFragmentPagerAdapter<DATA: Any> :
-    FragmentPagerAdapter, AssemblyAdapter, AbsoluteAdapterPositionAdapter {
+    FragmentPagerAdapter, AssemblyAdapter<FragmentItemFactory<*>>, AbsoluteAdapterPositionAdapter {
 
     private val itemFactory: FragmentItemFactory<DATA>
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =

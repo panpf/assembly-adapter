@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 open class AssemblySingleDataListAdapter<DATA: Any>(
     private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
-) : BaseAdapter(), AssemblyAdapter {
+) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     var data: DATA? = initData
         set(value) {

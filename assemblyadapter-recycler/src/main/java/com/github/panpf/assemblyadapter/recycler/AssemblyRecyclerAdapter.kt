@@ -22,20 +22,24 @@ import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.internal.MatchableStorage
 import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
 import java.util.*
 
 open class AssemblyRecyclerAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     dataList: List<DATA>? = null
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter, DatasAdapter<DATA> {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+    AssemblyAdapter<ItemFactory<*>>, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val matchableStorage = MatchableStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
+
+    init {
+        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
 
     override fun getItemCount(): Int {
         return itemDataStorage.dataCount
@@ -47,11 +51,13 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     override fun getItemViewType(position: Int): Int {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(data)
+        return matchableStorage.getItemTypeByData(
+            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
+        val itemFactory = matchableStorage.getMatchableByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         return AssemblyItemViewHolderWrapper(item).apply {
             val layoutManager =
@@ -131,6 +137,8 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(data)
+        return matchableStorage.getMatchableByData(
+            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+        )
     }
 }

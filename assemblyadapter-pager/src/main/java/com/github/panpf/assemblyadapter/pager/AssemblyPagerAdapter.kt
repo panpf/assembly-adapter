@@ -22,15 +22,15 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.internal.MatchableStorage
 import java.util.*
 
 open class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
     dataList: List<DATA>? = null
-) : PagerAdapter(), AssemblyAdapter, DatasAdapter<DATA> {
+) : PagerAdapter(), AssemblyAdapter<PagerItemFactory<*>>, DatasAdapter<DATA> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val matchableStorage = MatchableStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
@@ -44,6 +44,10 @@ open class AssemblyPagerAdapter<DATA>(
 
     constructor(itemFactoryList: List<PagerItemFactory<*>>) : this(itemFactoryList, null)
 
+    init {
+        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
+
     override fun getCount(): Int {
         return itemDataStorage.dataCount
     }
@@ -56,8 +60,9 @@ open class AssemblyPagerAdapter<DATA>(
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
+        val itemFactory = matchableStorage.getMatchableByData(
+            data, "PagerItemFactory", "AssemblyPagerAdapter", "itemFactoryList"
+        ) as PagerItemFactory<Any>
         val itemView = itemFactory.dispatchCreateItemView(
             container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
         )
@@ -145,6 +150,8 @@ open class AssemblyPagerAdapter<DATA>(
 
     override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> {
         val data = itemDataStorage.getData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(data)
+        return matchableStorage.getMatchableByData(
+            data, "PagerItemFactory", "AssemblyPagerAdapter", "itemFactoryList"
+        )
     }
 }

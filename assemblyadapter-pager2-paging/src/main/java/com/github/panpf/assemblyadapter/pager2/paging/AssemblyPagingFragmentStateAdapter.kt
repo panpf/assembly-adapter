@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.internal.MatchableStorage
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.ConcatAdapterAbsoluteHelper
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,9 +43,9 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     diffCallback,
     mainDispatcher,
     workerDispatcher
-), AssemblyAdapter {
+), AssemblyAdapter<FragmentItemFactory<*>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val matchableStorage = MatchableStorage(itemFactoryList)
     private var recyclerView: RecyclerView? = null
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
@@ -119,6 +119,10 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         Dispatchers.Default,
     )
 
+    init {
+        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
+
 
     override fun createFragment(position: Int): Fragment {
         // Here you must use the getItem method to trigger append load
@@ -137,8 +141,9 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         }
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory =
-            itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+        val itemFactory = matchableStorage.getMatchableByData(
+            data, "FragmentItemFactory", "AssemblyPagingFragmentStateAdapter", "itemFactoryList"
+        ) as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
@@ -147,7 +152,9 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val data = peek(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(data)
+        return matchableStorage.getMatchableByData(
+            data, "FragmentItemFactory", "AssemblyPagingFragmentStateAdapter", "itemFactoryList"
+        )
     }
 
 
