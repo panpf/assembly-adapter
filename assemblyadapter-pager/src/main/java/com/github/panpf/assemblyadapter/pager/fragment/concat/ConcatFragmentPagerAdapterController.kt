@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.pager.fragment.concat
 import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
+import com.github.panpf.assemblyadapter.pager.AbsoluteAdapterPositionAdapter
 import java.util.*
 
 /**
@@ -141,8 +142,11 @@ internal class ConcatFragmentPagerAdapterController(private val mConcatAdapter: 
 
     fun getItem(globalPosition: Int): Fragment {
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
-        val adapter = wrapperAndPos.mWrapper!!.adapter
-        val fragment = adapter.getItem(wrapperAndPos.mLocalPosition)
+        val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter
+        if (wrapperAdapter is AbsoluteAdapterPositionAdapter) {
+            wrapperAdapter.setNextItemAbsoluteAdapterPosition(globalPosition)
+        }
+        val fragment = wrapperAdapter.getItem(wrapperAndPos.mLocalPosition)
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return fragment
     }

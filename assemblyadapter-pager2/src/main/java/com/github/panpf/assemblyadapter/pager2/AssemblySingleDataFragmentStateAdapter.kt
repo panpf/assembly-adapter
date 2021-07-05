@@ -19,16 +19,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 
-open class AssemblySingleDataFragmentStateAdapter<DATA: Any>(
+open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     private val itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
 ) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter {
+
+    private var recyclerView: RecyclerView? = null
+    private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
     var data: DATA? = initData
         set(value) {
@@ -71,11 +76,38 @@ open class AssemblySingleDataFragmentStateAdapter<DATA: Any>(
     override fun getItemCount(): Int = if (data != null) 1 else 0
 
     override fun createFragment(position: Int): Fragment {
-        return itemFactory.dispatchCreateFragment(position, data!!)
+        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
+        val parentAdapter = recyclerView?.adapter
+        val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
+            (concatAdapterAbsoluteHelper ?: ConcatAdapterAbsoluteHelper().apply {
+                concatAdapterAbsoluteHelper = this
+            }).findAbsoluteAdapterPosition(
+                parentAdapter, this, position
+            )
+        } else {
+            bindingAdapterPosition
+        }
+
+        return itemFactory.dispatchCreateFragment(
+            bindingAdapterPosition, absoluteAdapterPosition, data!!
+        )
     }
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         return itemFactory
+    }
+
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+        this.concatAdapterAbsoluteHelper = null
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        this.recyclerView = null
+        this.concatAdapterAbsoluteHelper = null
     }
 }

@@ -21,7 +21,9 @@ import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 
 class AppGroupFragmentItemFactory : FragmentItemFactory<AppGroup>(AppGroup::class) {
 
-    override fun createFragment(position: Int, data: AppGroup): Fragment {
+    override fun createFragment(
+        bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: AppGroup
+    ): Fragment {
         return AppGroupFragment.createInstance(data)
     }
 }

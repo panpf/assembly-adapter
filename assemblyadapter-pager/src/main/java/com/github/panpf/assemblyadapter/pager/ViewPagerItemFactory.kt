@@ -37,7 +37,8 @@ class ViewPagerItemFactory<DATA : Any>(
     override fun createItemView(
         context: Context,
         parent: ViewGroup,
-        position: Int,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: DATA
     ): View = viewFactory(context, LayoutInflater.from(context), parent)
 }

@@ -19,12 +19,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager2.ConcatAdapterAbsoluteHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -44,6 +46,8 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
 ), AssemblyAdapter {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private var recyclerView: RecyclerView? = null
+    private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
     constructor(
         fragmentManager: FragmentManager,
@@ -120,15 +124,42 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         // Here you must use the getItem method to trigger append load
         val data = getItem(position) ?: Placeholder
 
+        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
+        val parentAdapter = recyclerView?.adapter
+        val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
+            (concatAdapterAbsoluteHelper ?: ConcatAdapterAbsoluteHelper().apply {
+                concatAdapterAbsoluteHelper = this
+            }).findAbsoluteAdapterPosition(
+                parentAdapter, this, position
+            )
+        } else {
+            bindingAdapterPosition
+        }
+
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
             itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(position, data)
+        return itemFactory.dispatchCreateFragment(
+            bindingAdapterPosition, absoluteAdapterPosition, data
+        )
     }
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val data = peek(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(data)
+    }
+
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+        this.concatAdapterAbsoluteHelper = null
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        this.recyclerView = null
+        this.concatAdapterAbsoluteHelper = null
     }
 }

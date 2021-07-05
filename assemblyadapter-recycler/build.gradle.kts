@@ -30,8 +30,8 @@ android {
 }
 
 dependencies {
-    api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
+    api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
     api(project(":assemblyadapter-common-item"))
 
     testImplementation("junit:junit:${property("JUNIT")}")

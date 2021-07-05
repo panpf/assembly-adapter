@@ -21,7 +21,9 @@ import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 
 class LoadStateFragmentItemFactory : FragmentItemFactory<LoadState>(LoadState::class) {
 
-    override fun createFragment(position: Int, data: LoadState): Fragment {
+    override fun createFragment(
+        bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: LoadState
+    ): Fragment {
         return LoadStateFragment.createInstance(data)
     }
 }

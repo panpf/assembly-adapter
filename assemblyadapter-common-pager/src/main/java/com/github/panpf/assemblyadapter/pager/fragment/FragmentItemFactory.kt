@@ -32,9 +32,17 @@ abstract class FragmentItemFactory<DATA : Any>(private val dataClass: KClass<DAT
 
     open fun carefullyMatchData(data: DATA): Boolean = true
 
-    fun dispatchCreateFragment(position: Int, data: DATA): Fragment {
-        return createFragment(position, data)
+    fun dispatchCreateFragment(
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
+        data: DATA
+    ): Fragment {
+        return createFragment(bindingAdapterPosition, absoluteAdapterPosition, data)
     }
 
-    protected abstract fun createFragment(position: Int, data: DATA): Fragment
+    protected abstract fun createFragment(
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
+        data: DATA
+    ): Fragment
 }

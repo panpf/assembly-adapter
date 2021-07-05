@@ -28,7 +28,9 @@ class ViewFragmentItemFactory<DATA : Any>(
     @LayoutRes private val layoutResId: Int
 ) : FragmentItemFactory<DATA>(dataClass) {
 
-    override fun createFragment(position: Int, data: DATA): Fragment {
+    override fun createFragment(
+        bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
+    ): Fragment {
         return ViewFragment.createInstance(layoutResId)
     }
 

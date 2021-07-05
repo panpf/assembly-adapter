@@ -27,14 +27,13 @@ import kotlin.reflect.KClass
 class AssemblyGridLayoutManager : GridLayoutManager {
 
     private var recyclerView: RecyclerView? = null
+    private var concatAdapterLocalHelper: ConcatAdapterLocalHelper? = null
     private val gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
     private val spanSizeLookup = object : SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             return getSpanSizeImpl(position)
         }
     }
-    private val concatAdapterAdaptersCacheMap =
-        HashMap<ConcatAdapter, ConcatAdapterWrapperAdaptersCache>()
 
     constructor(
         context: Context,
@@ -75,6 +74,19 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     override fun onAttachedToWindow(view: RecyclerView) {
         super.onAttachedToWindow(view)
         recyclerView = view
+        concatAdapterLocalHelper?.reset()
+    }
+
+    override fun onDetachedFromWindow(view: RecyclerView?, recycler: RecyclerView.Recycler?) {
+        super.onDetachedFromWindow(view, recycler)
+        concatAdapterLocalHelper?.reset()
+    }
+
+    override fun onAdapterChanged(
+        oldAdapter: RecyclerView.Adapter<*>?, newAdapter: RecyclerView.Adapter<*>?
+    ) {
+        super.onAdapterChanged(oldAdapter, newAdapter)
+        concatAdapterLocalHelper?.reset()
     }
 
     private fun getSpanSizeImpl(position: Int): Int {
@@ -96,89 +108,15 @@ class AssemblyGridLayoutManager : GridLayoutManager {
                 adapter.getItemFactoryByPosition(position) as ItemFactory<*>
             }
             is ConcatAdapter -> {
-                val wrapperAdapters = concatAdapterAdaptersCacheMap.getOrPut(adapter) {
-                    ConcatAdapterWrapperAdaptersCache(adapter)
-                }.getCachedAdapters()
-                var childAdapterStartPosition = 0
-                val childAdapter = wrapperAdapters.find { childAdapter ->
-                    val childAdapterEndPosition =
-                        childAdapterStartPosition + childAdapter.itemCount - 1
-                    @Suppress("ConvertTwoComparisonsToRangeCheck")
-                    if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
-                        true
-                    } else {
-                        childAdapterStartPosition = childAdapterEndPosition + 1
-                        false
-                    }
-                }
-                if (childAdapter != null) {
-                    val childPosition = position - childAdapterStartPosition
-                    findItemFactory(childAdapter, childPosition)
-                } else {
-                    throw IndexOutOfBoundsException("Index: $position, Size: ${adapter.itemCount}")
-                }
+                val (childAdapter, childPosition) = (concatAdapterLocalHelper
+                    ?: ConcatAdapterLocalHelper().apply {
+                        this@AssemblyGridLayoutManager.concatAdapterLocalHelper = this
+                    }).findLocalAdapterAndPositionImpl(adapter, position)
+                findItemFactory(childAdapter, childPosition)
             }
             else -> {
-                throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
+                throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter::class.java.name}")
             }
-        }
-    }
-
-    private class ConcatAdapterWrapperAdaptersCache(val concatAdapter: ConcatAdapter) {
-
-        private var cachedAdapters: List<RecyclerView.Adapter<*>>? = null
-        private val cachedAdapterDataSetChangedCallback = AnyAdapterDataObserver {
-            cachedAdapters = null
-        }
-
-        init {
-            try {
-                concatAdapter.registerAdapterDataObserver(cachedAdapterDataSetChangedCallback)
-            } catch (e: IllegalStateException) {
-                // already registered
-            }
-        }
-
-        fun getCachedAdapters(): List<RecyclerView.Adapter<*>> {
-            /*
-             * Because concatAdapter.adapters creates a new List every time it is called, consider caching it for list sliding performance
-             */
-            return cachedAdapters ?: concatAdapter.adapters.apply {
-                this@ConcatAdapterWrapperAdaptersCache.cachedAdapters = this
-            }
-        }
-    }
-
-    class AnyAdapterDataObserver(val onAnyChanged: () -> Unit) :
-        RecyclerView.AdapterDataObserver() {
-        override fun onChanged() {
-            super.onChanged()
-            onAnyChanged()
-        }
-
-        override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-            super.onItemRangeChanged(positionStart, itemCount)
-            onAnyChanged()
-        }
-
-        override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
-            super.onItemRangeChanged(positionStart, itemCount, payload)
-            onAnyChanged()
-        }
-
-        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-            super.onItemRangeInserted(positionStart, itemCount)
-            onAnyChanged()
-        }
-
-        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-            super.onItemRangeRemoved(positionStart, itemCount)
-            onAnyChanged()
-        }
-
-        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-            super.onItemRangeMoved(fromPosition, toPosition, itemCount)
-            onAnyChanged()
         }
     }
 }

@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
+import com.github.panpf.assemblyadapter.pager.R
 import java.util.*
 
 /**
@@ -126,9 +127,11 @@ internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPa
         }
 
     fun instantiateItem(container: ViewGroup, globalPosition: Int): Any {
+        container.setTag(R.id.aa_tag_absoluteAdapterPosition, globalPosition)
+
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
-        val adapter = wrapperAndPos.mWrapper!!.adapter
-        val itemView = adapter.instantiateItem(container, wrapperAndPos.mLocalPosition)
+        val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter
+        val itemView = wrapperAdapter.instantiateItem(container, wrapperAndPos.mLocalPosition)
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return itemView
     }

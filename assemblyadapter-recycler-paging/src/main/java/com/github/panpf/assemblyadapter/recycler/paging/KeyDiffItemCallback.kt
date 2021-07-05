@@ -22,12 +22,12 @@ class KeyDiffItemCallback<DATA : Any> : DiffUtil.ItemCallback<DATA>() {
 
     override fun areItemsTheSame(oldItem: DATA, newItem: DATA): Boolean {
         if (oldItem !is DiffKey) {
-            throw IllegalArgumentException("${oldItem.javaClass.name} must implement ${DiffKey::class.java.name} interface")
+            throw IllegalArgumentException("${oldItem::class.java.name} must implement ${DiffKey::class.java.name} interface")
         }
         if (newItem !is DiffKey) {
-            throw IllegalArgumentException("${newItem.javaClass.name} must implement ${DiffKey::class.java.name} interface")
+            throw IllegalArgumentException("${newItem::class.java.name} must implement ${DiffKey::class.java.name} interface")
         }
-        return oldItem.javaClass == newItem.javaClass && oldItem.diffKey == newItem.diffKey
+        return oldItem::class.java == newItem::class.java && oldItem.diffKey == newItem.diffKey
     }
 
     @SuppressLint("DiffUtilEquals")

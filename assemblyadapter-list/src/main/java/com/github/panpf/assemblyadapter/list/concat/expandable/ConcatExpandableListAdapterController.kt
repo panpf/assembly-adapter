@@ -226,11 +226,12 @@ internal class ConcatExpandableListAdapterController(
     fun getGroupView(
         globalGroupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
-        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
-        val adapter = wrapperAndPos.mWrapper!!.adapter
-        val localGroupPosition = wrapperAndPos.mLocalPosition
         parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalGroupPosition)
-        val groupView = adapter.getGroupView(localGroupPosition, isExpanded, convertView, parent)
+
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter
+        val localGroupPosition = wrapperAndPos.mLocalPosition
+        val groupView = wrapperAdapter.getGroupView(localGroupPosition, isExpanded, convertView, parent)
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return groupView
     }
@@ -271,11 +272,12 @@ internal class ConcatExpandableListAdapterController(
         globalGroupPosition: Int, childPosition: Int, isLastChild: Boolean,
         convertView: View?, parent: ViewGroup
     ): View {
-        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
-        val adapter = wrapperAndPos.mWrapper!!.adapter
-        val localGroupPosition = wrapperAndPos.mLocalPosition
         parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalGroupPosition)
-        val childView = adapter.getChildView(
+
+        val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
+        val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter
+        val localGroupPosition = wrapperAndPos.mLocalPosition
+        val childView = wrapperAdapter.getChildView(
             localGroupPosition, childPosition, isLastChild, convertView, parent
         )
         releaseWrapperAndLocalPosition(wrapperAndPos)

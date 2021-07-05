@@ -51,11 +51,16 @@ open class AssemblyPagerAdapter<DATA>(
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val data = itemDataStorage.getData(position) ?: Placeholder
 
+        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
+        val absolutePositionObject = container.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
+
         @Suppress("UNCHECKED_CAST")
         val itemFactory =
             itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
-        val itemView =
-            itemFactory.dispatchCreateItemView(container.context, container, position, data)
+        val itemView = itemFactory.dispatchCreateItemView(
+            container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
+        )
         container.addView(itemView)
         return itemView.apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)

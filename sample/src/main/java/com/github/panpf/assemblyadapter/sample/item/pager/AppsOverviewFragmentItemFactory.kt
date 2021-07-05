@@ -21,7 +21,9 @@ import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 
 class AppsOverviewFragmentItemFactory : FragmentItemFactory<AppsOverview>(AppsOverview::class) {
 
-    override fun createFragment(position: Int, data: AppsOverview): Fragment {
+    override fun createFragment(
+        bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: AppsOverview
+    ): Fragment {
         return AppsOverviewFragment.createInstance(data)
     }
 }

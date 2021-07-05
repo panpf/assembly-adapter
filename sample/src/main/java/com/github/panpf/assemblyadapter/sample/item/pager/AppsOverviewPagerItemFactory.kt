@@ -30,7 +30,8 @@ class AppsOverviewPagerItemFactory :
         context: Context,
         inflater: LayoutInflater,
         parent: ViewGroup,
-        position: Int,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: AppsOverview
     ): FragmentAppsOverviewBinding =
         FragmentAppsOverviewBinding.inflate(inflater, parent, false).apply {

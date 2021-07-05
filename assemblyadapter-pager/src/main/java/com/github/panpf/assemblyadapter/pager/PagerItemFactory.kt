@@ -25,7 +25,8 @@ import kotlin.reflect.KClass
  * @see BindingPagerItemFactory
  * @see ViewPagerItemFactory
  */
-abstract class PagerItemFactory<DATA: Any>(private val dataClass: KClass<DATA>) : MatchItemFactory {
+abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) :
+    MatchItemFactory {
 
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
@@ -35,12 +36,21 @@ abstract class PagerItemFactory<DATA: Any>(private val dataClass: KClass<DATA>) 
     open fun carefullyMatchData(data: DATA): Boolean = true
 
     fun dispatchCreateItemView(
-        context: Context, parent: ViewGroup, position: Int, data: DATA
+        context: Context,
+        parent: ViewGroup,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
+        data: DATA
     ): View {
-        return createItemView(context, parent, position, data)
+        return createItemView(
+            context, parent, bindingAdapterPosition, absoluteAdapterPosition, data
+        )
     }
 
     protected abstract fun createItemView(
-        context: Context, parent: ViewGroup, position: Int, data: DATA
+        context: Context, parent: ViewGroup,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
+        data: DATA
     ): View
 }

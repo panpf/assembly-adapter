@@ -20,7 +20,7 @@ import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 
-open class AssemblySingleDataPagerAdapter<DATA: Any>(
+open class AssemblySingleDataPagerAdapter<DATA : Any>(
     private val itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
 ) : PagerAdapter(), AssemblyAdapter {
@@ -43,10 +43,14 @@ open class AssemblySingleDataPagerAdapter<DATA: Any>(
     override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
+        val absolutePositionObject = container.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
+
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as PagerItemFactory<Any>
         val itemView = itemFactory.dispatchCreateItemView(
-            container.context, container, position, data!!
+            container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data!!
         )
         container.addView(itemView)
         return itemView.apply {

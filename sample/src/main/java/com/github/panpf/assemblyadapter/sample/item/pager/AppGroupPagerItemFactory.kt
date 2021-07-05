@@ -35,7 +35,8 @@ class AppGroupPagerItemFactory(private val activity: Activity) :
         context: Context,
         inflater: LayoutInflater,
         parent: ViewGroup,
-        position: Int,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: AppGroup
     ): FragmentAppGroupBinding =
         FragmentAppGroupBinding.inflate(inflater, parent, false).apply {

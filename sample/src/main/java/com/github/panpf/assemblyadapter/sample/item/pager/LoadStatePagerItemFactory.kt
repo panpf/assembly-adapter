@@ -30,7 +30,8 @@ class LoadStatePagerItemFactory :
         context: Context,
         inflater: LayoutInflater,
         parent: ViewGroup,
-        position: Int,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: LoadState
     ): FragmentLoadStateBinding =
         FragmentLoadStateBinding.inflate(inflater, parent, false).apply {

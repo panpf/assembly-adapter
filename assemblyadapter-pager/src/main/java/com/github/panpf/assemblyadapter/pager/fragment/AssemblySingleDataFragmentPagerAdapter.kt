@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.pager.AbsoluteAdapterPositionAdapter
 
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter' instead.",
@@ -28,11 +29,13 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
         "com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter"
     )
 )
-open class AssemblySingleDataFragmentPagerAdapter<DATA: Any> : FragmentPagerAdapter, AssemblyAdapter {
+open class AssemblySingleDataFragmentPagerAdapter<DATA: Any> :
+    FragmentPagerAdapter, AssemblyAdapter, AbsoluteAdapterPositionAdapter {
 
     private val itemFactory: FragmentItemFactory<DATA>
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
+    private var nextItemAbsoluteAdapterPosition: Int? = null
 
     var data: DATA? = null
         set(value) {
@@ -92,9 +95,14 @@ open class AssemblySingleDataFragmentPagerAdapter<DATA: Any> : FragmentPagerAdap
     override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun getItem(position: Int): Fragment {
+        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
+        val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
+
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as FragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(position, data!!).apply {
+        return itemFactory.dispatchCreateFragment(
+            bindingAdapterPosition, absoluteAdapterPosition, data!!
+        ).apply {
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
     }
@@ -114,6 +122,11 @@ open class AssemblySingleDataFragmentPagerAdapter<DATA: Any> : FragmentPagerAdap
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         return itemFactory
+    }
+
+
+    override fun setNextItemAbsoluteAdapterPosition(absoluteAdapterPosition: Int) {
+        this.nextItemAbsoluteAdapterPosition = absoluteAdapterPosition
     }
 
 
