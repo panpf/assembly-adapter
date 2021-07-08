@@ -16,7 +16,7 @@
 package com.github.panpf.assemblyadapter.pager.fragment
 
 import androidx.fragment.app.Fragment
-import com.github.panpf.assemblyadapter.Matchable
+import com.github.panpf.assemblyadapter.internal.Matchable
 import kotlin.reflect.KClass
 
 /**

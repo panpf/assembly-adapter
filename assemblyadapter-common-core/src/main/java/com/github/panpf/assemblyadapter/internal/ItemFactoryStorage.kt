@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.internal
 
-import com.github.panpf.assemblyadapter.Matchable
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.Placeholder
 import java.util.*

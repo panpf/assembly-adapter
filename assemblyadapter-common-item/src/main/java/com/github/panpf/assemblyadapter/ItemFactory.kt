@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
+import com.github.panpf.assemblyadapter.internal.Matchable
 import kotlin.reflect.KClass
 
 /**

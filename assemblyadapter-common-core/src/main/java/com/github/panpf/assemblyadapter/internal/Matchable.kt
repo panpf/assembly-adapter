@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter
+package com.github.panpf.assemblyadapter.internal
 
-// todo move to internal
 interface Matchable {
     fun matchData(data: Any): Boolean
 }

@@ -19,7 +19,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
-import com.github.panpf.assemblyadapter.Matchable
+import com.github.panpf.assemblyadapter.internal.Matchable
 import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
