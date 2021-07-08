@@ -15,6 +15,7 @@
  */
 package com.github.panpf.assemblyadapter
 
+// todo move to internal
 interface Matchable {
     fun matchData(data: Any): Boolean
 }

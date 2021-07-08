@@ -38,7 +38,7 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
         return dataClass.isInstance(data) && carefullyMatchData(data as DATA)
     }
 
-    open fun carefullyMatchData(data: DATA): Boolean = true
+    protected open fun carefullyMatchData(data: DATA): Boolean = true
 
     fun dispatchCreateItemView(
         context: Context,
@@ -50,7 +50,7 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
         return createItemView(
             context, parent, bindingAdapterPosition, absoluteAdapterPosition, data
         ).apply {
-            registerItemClickListener(this, bindingAdapterPosition, absoluteAdapterPosition, data)
+            registerClickListener(this, bindingAdapterPosition, absoluteAdapterPosition, data)
         }
     }
 
@@ -93,7 +93,7 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
         }))
     }
 
-    private fun registerItemClickListener(
+    private fun registerClickListener(
         itemView: View, bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
     ) {
         val clickListenerManager = clickListenerStorage ?: return

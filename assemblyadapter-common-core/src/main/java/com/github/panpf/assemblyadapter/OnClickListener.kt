@@ -24,10 +24,14 @@ import android.view.View
 fun interface OnClickListener<DATA> {
 
     /**
+     * Clicked View
+     *
      * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
-     * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method
+     * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
      * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
-     * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method
+     * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
      */
     fun onClick(
         context: Context,

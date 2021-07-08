@@ -29,7 +29,7 @@ abstract class FragmentItemFactory<DATA : Any>(private val dataClass: KClass<DAT
         return dataClass.isInstance(data) && carefullyMatchData(data as DATA)
     }
 
-    open fun carefullyMatchData(data: DATA): Boolean = true
+    protected open fun carefullyMatchData(data: DATA): Boolean = true
 
     fun dispatchCreateFragment(
         bindingAdapterPosition: Int,

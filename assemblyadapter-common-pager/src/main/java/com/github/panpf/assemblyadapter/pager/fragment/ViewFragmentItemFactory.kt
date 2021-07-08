@@ -23,7 +23,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import kotlin.reflect.KClass
 
-class ViewFragmentItemFactory<DATA : Any>(
+open class ViewFragmentItemFactory<DATA : Any>(
     dataClass: KClass<DATA>,
     @LayoutRes private val layoutResId: Int
 ) : FragmentItemFactory<DATA>(dataClass) {

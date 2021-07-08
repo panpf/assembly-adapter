@@ -25,8 +25,17 @@ import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
 import kotlin.reflect.KClass
 
 /**
- * It is not recommended to directly inherit [ItemFactory], you can inherit [BindingItemFactory] and [SimpleItemFactory] to implement your own ItemFactory
+ * ItemFactory is responsible for matching data, creating itemView, and binding data.
  *
+ * When the Adapter needs to display a data, it will find a matching ItemFactory from ItemFactoryStorage
+ * through the matchData() method, and then use this ItemFactory to create an itemView and bind the data
+ *
+ * It is not recommended to directly inherit [ItemFactory], you can inherit [BindingItemFactory]
+ * and [SimpleItemFactory] to implement your own ItemFactory
+ *
+ * @param DATA Define the type of matching data
+ * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
+ * it is considered a match. You can also override the [carefullyMatchData] method to achieve exact matching
  * @see BindingItemFactory
  * @see SimpleItemFactory
  * @see ViewItemFactory
@@ -35,21 +44,52 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
 
+    /**
+     * If it returns true, it means that this ItemFactory can handle this [data]
+     */
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
         return dataClass.isInstance(data) && carefullyMatchData(data as DATA)
     }
 
-    open fun carefullyMatchData(data: DATA): Boolean = true
+    /**
+     * Exactly match this [data], such as checking the value of a specific attribute
+     */
+    // todo rename to exactMatchData
+    protected open fun carefullyMatchData(data: DATA): Boolean = true
 
-    open fun dispatchCreateItem(parent: ViewGroup): Item<DATA> {
+    /**
+     * When the Adapter needs a new [Item] to display data, it will execute this method to create an [Item].
+     *
+     * @param parent The new created [Item] will be added to this ViewGroup
+     * @return A new [Item]
+     * @see createItem
+     * @see Item
+     */
+    fun dispatchCreateItem(parent: ViewGroup): Item<DATA> {
         return createItem(parent).apply {
-            registerItemClickListener(this)
+            registerClickListener(this)
         }
     }
 
+    /**
+     * Create a new [Item]. This method can only be called by [dispatchCreateItem]
+     *
+     * @param parent The new created [Item] will be added to this ViewGroup
+     * @return A new [Item]
+     * @see dispatchCreateItem
+     * @see Item
+     */
     protected abstract fun createItem(parent: ViewGroup): Item<DATA>
 
+    /**
+     * Set the click listener of the specified View in the itemView
+     *
+     * @param viewId Specify the id of the View
+     * @param onClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
     open fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
@@ -58,6 +98,15 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
         return this
     }
 
+
+    /**
+     * Set the long click listener of the specified View in the itemView
+     *
+     * @param viewId Specify the id of the View
+     * @param onLongClickListener Implementation of long click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
     open fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
@@ -66,11 +115,25 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
         return this
     }
 
+    /**
+     * Set the click listener of the itemView
+     *
+     * @param onClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
     open fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
 
+    /**
+     * Set the long click listener of the itemView
+     *
+     * @param onLongClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
     open fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
@@ -82,7 +145,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
         }))
     }
 
-    private fun registerItemClickListener(item: Item<DATA>) {
+    private fun registerClickListener(item: Item<DATA>) {
         val clickListenerManager = clickListenerStorage ?: return
         val itemView = item.itemView
         for (holder in clickListenerManager.holders) {
@@ -135,6 +198,9 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
         }
     }
 
+    /**
+     * Item is similar to ViewHolder, responsible for holding itemView and binding data
+     */
     abstract class Item<DATA>(val itemView: View) {
 
         private var _data: DATA? = null
@@ -143,20 +209,56 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
 
         val context: Context = itemView.context
 
+        /**
+         * Get the bound data, or null if there is none
+         */
         val dataOrNull: DATA?
             get() = _data
+
+
+        /**
+         * Get the bound data, if not, throw an exception
+         */
         val dataOrThrow: DATA
             get() = _data!!
+
+        /**
+         * The position of the current item in its directly bound adapter.
+         * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method
+         *
+         * This value will be different when using Concat*Adapter
+         */
         val bindingAdapterPosition: Int
             get() = _bindingAdapterPosition
+
+        /**
+         * The position of the current item in the RecyclerView.adapter adapter.
+         * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method
+         *
+         * This value will be different when using Concat*Adapter
+         */
         val absoluteAdapterPosition: Int
             get() = _absoluteAdapterPosition
 
+        /**
+         * Create Item by layout id and parent ViewGroup
+         */
         constructor(itemLayoutId: Int, parent: ViewGroup) : this(
             LayoutInflater.from(parent.context).inflate(itemLayoutId, parent, false)
         )
 
-        open fun dispatchBindData(
+        /**
+         * Bind data to itemView
+         *
+         * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
+         * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
+         * This value will be different when using Concat*Adapter
+         * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
+         * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
+         * This value will be different when using Concat*Adapter
+         * @param data Data to be bound
+         */
+        fun dispatchBindData(
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
             data: DATA
@@ -167,6 +269,15 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
             bindData(_absoluteAdapterPosition, data)
         }
 
+        /**
+         * Bind data to itemView
+         *
+         * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
+         * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
+         * This value will be different when using Concat*Adapter
+         * @param data Data to be bound
+         */
+        // todo add absoluteAdapterPosition
         protected abstract fun bindData(bindingAdapterPosition: Int, data: DATA)
     }
 }

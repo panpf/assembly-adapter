@@ -21,6 +21,14 @@ import android.view.View
 import android.view.ViewGroup
 import kotlin.reflect.KClass
 
+/**
+ * Simplified version of ItemFactory. Users do not need to define Item,
+ * which can greatly simplify the implementation logic of custom ItemFactory
+ *
+ * @param DATA Define the type of matching data
+ * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
+ * it is considered a match. You can also override the [carefullyMatchData] method to achieve exact matching
+ */
 abstract class SimpleItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
     ItemFactory<DATA>(dataClass) {
 
@@ -36,9 +44,16 @@ abstract class SimpleItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
         context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): View
 
+    /**
+     * Initialize the item, this method is only executed once when the item is created
+     */
     protected open fun initItem(context: Context, itemView: View, item: Item<DATA>) {
     }
 
+
+    /**
+     * Binding item data, this method will be executed frequently
+     */
     protected abstract fun bindItemData(
         context: Context, itemView: View, item: Item<DATA>, bindingAdapterPosition: Int, data: DATA
     )

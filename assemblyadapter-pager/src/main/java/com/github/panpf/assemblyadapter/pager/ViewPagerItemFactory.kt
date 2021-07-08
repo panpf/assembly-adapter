@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
-class ViewPagerItemFactory<DATA : Any>(
+open class ViewPagerItemFactory<DATA : Any>(
     dataClass: KClass<DATA>,
     private val viewFactory: (context: Context, inflater: LayoutInflater, parent: ViewGroup) -> View
 ) : PagerItemFactory<DATA>(dataClass) {
