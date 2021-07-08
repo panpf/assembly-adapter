@@ -47,6 +47,7 @@ abstract class BindingExpandableItemFactory<DATA : Any, VIEW_BINDING : ViewBindi
         binding: VIEW_BINDING,
         item: ExpandableItem<DATA>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: DATA
     )
 
@@ -55,8 +56,12 @@ abstract class BindingExpandableItemFactory<DATA : Any, VIEW_BINDING : ViewBindi
         private val binding: VIEW_BINDING
     ) : ExpandableItem<DATA>(binding.root) {
 
-        override fun bindData(bindingAdapterPosition: Int, data: DATA) {
-            factory.bindItemData(context, binding, this, bindingAdapterPosition, data)
+        override fun bindData(
+            bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
+        ) {
+            factory.bindItemData(
+                context, binding, this, bindingAdapterPosition, absoluteAdapterPosition, data
+            )
         }
     }
 }

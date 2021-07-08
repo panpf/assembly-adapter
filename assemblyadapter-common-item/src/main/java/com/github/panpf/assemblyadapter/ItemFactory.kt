@@ -266,7 +266,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
             this._data = data
             this._bindingAdapterPosition = bindingAdapterPosition
             this._absoluteAdapterPosition = absoluteAdapterPosition
-            bindData(_absoluteAdapterPosition, data)
+            bindData(_absoluteAdapterPosition, absoluteAdapterPosition, data)
         }
 
         /**
@@ -275,9 +275,15 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
          * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
          * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
          * This value will be different when using Concat*Adapter
+         * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
+         * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
+         * This value will be different when using Concat*Adapter
          * @param data Data to be bound
          */
-        // todo add absoluteAdapterPosition
-        protected abstract fun bindData(bindingAdapterPosition: Int, data: DATA)
+        protected abstract fun bindData(
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        )
     }
 }

@@ -45,6 +45,7 @@ class ViewExpandableItemFactory<DATA : Any>(
         itemView: View,
         item: ExpandableItem<DATA>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: DATA
     ) {
     }

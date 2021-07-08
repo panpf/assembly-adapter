@@ -55,7 +55,12 @@ open class ViewItemFactory<DATA : Any>(
     }
 
     override fun bindItemData(
-        context: Context, itemView: View, item: Item<DATA>, bindingAdapterPosition: Int, data: DATA
+        context: Context,
+        itemView: View,
+        item: Item<DATA>,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
+        data: DATA
     ) {
     }
 }

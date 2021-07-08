@@ -65,6 +65,7 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
         binding: VIEW_BINDING,
         item: Item<DATA>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: DATA
     )
 
@@ -73,8 +74,12 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
         private val binding: VIEW_BINDING
     ) : Item<DATA>(binding.root) {
 
-        override fun bindData(bindingAdapterPosition: Int, data: DATA) {
-            factory.bindItemData(context, binding, this, bindingAdapterPosition, data)
+        override fun bindData(
+            bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
+        ) {
+            factory.bindItemData(
+                context, binding, this, bindingAdapterPosition, absoluteAdapterPosition, data
+            )
         }
     }
 }

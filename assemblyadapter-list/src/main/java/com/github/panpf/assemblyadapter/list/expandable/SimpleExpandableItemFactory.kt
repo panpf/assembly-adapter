@@ -45,6 +45,7 @@ abstract class SimpleExpandableItemFactory<DATA : Any>(
         itemView: View,
         item: ExpandableItem<DATA>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: DATA
     )
 
@@ -52,8 +53,12 @@ abstract class SimpleExpandableItemFactory<DATA : Any>(
         private val factory: SimpleExpandableItemFactory<DATA>, itemView: View
     ) : ExpandableItem<DATA>(itemView) {
 
-        override fun bindData(bindingAdapterPosition: Int, data: DATA) {
-            factory.bindItemData(context, itemView, this, bindingAdapterPosition, data)
+        override fun bindData(
+            bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
+        ) {
+            factory.bindItemData(
+                context, itemView, this, bindingAdapterPosition, absoluteAdapterPosition, data
+            )
         }
     }
 }

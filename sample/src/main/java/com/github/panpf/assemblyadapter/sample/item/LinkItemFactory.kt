@@ -64,6 +64,7 @@ class LinkItemFactory(private val activity: Activity) :
         binding: ItemLinkBinding,
         item: Item<Link>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: Link
     ) {
         binding.linkItemTitleText.text = data.title

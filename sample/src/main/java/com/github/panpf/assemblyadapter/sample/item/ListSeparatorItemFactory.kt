@@ -85,6 +85,7 @@ open class ListSeparatorItemFactory(
         binding: ItemListSeparatorBinding,
         item: Item<ListSeparator>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: ListSeparator
     ) {
         binding.listSeparatorItemTitleText.text = data.title

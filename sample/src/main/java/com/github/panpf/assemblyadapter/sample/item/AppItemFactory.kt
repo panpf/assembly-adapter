@@ -80,6 +80,7 @@ class AppItemFactory(private val activity: Activity) :
         binding: ItemAppBinding,
         item: Item<AppInfo>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: AppInfo
     ) {
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)

@@ -37,6 +37,7 @@ open class AppGroupItemFactory :
         binding: ItemAppGroupBinding,
         item: ExpandableItem<AppGroup>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: AppGroup
     ) {
         binding.appGroupItemTitleText.text = data.title

@@ -66,6 +66,7 @@ class AppsOverviewItemFactory(
         binding: ItemAppsOverviewBinding,
         item: Item<AppsOverview>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: AppsOverview
     ) {
         binding.appsOverviewItemContentText.text = context.getString(

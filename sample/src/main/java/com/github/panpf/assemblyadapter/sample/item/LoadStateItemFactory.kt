@@ -53,6 +53,7 @@ class LoadStateItemFactory(private val activity: Activity) :
         binding: ItemLoadStateBinding,
         item: Item<LoadState>,
         bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
         data: LoadState
     ) {
         binding.loadStateItemLoadingLayout.isVisible = data is LoadState.Loading

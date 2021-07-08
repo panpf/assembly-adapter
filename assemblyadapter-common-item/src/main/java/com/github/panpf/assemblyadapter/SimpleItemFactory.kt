@@ -55,15 +55,24 @@ abstract class SimpleItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
      * Binding item data, this method will be executed frequently
      */
     protected abstract fun bindItemData(
-        context: Context, itemView: View, item: Item<DATA>, bindingAdapterPosition: Int, data: DATA
+        context: Context,
+        itemView: View,
+        item: Item<DATA>,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
+        data: DATA
     )
 
     private class SimpleItem<DATA : Any>(
         private val factory: SimpleItemFactory<DATA>, itemView: View
     ) : Item<DATA>(itemView) {
 
-        override fun bindData(bindingAdapterPosition: Int, data: DATA) {
-            factory.bindItemData(context, itemView, this, bindingAdapterPosition, data)
+        override fun bindData(
+            bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
+        ) {
+            factory.bindItemData(
+                context, itemView, this, bindingAdapterPosition, absoluteAdapterPosition, data
+            )
         }
     }
 }
