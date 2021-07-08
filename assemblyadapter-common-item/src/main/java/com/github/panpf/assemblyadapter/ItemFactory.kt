@@ -35,7 +35,7 @@ import kotlin.reflect.KClass
  *
  * @param DATA Define the type of matching data
  * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
- * it is considered a match. You can also override the [carefullyMatchData] method to achieve exact matching
+ * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
  * @see BindingItemFactory
  * @see SimpleItemFactory
  * @see ViewItemFactory
@@ -49,14 +49,13 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
      */
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
-        return dataClass.isInstance(data) && carefullyMatchData(data as DATA)
+        return dataClass.isInstance(data) && exactMatchData(data as DATA)
     }
 
     /**
      * Exactly match this [data], such as checking the value of a specific attribute
      */
-    // todo rename to exactMatchData
-    protected open fun carefullyMatchData(data: DATA): Boolean = true
+    protected open fun exactMatchData(data: DATA): Boolean = true
 
     /**
      * When the Adapter needs a new [Item] to display data, it will execute this method to create an [Item].

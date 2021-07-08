@@ -26,10 +26,10 @@ abstract class FragmentItemFactory<DATA : Any>(private val dataClass: KClass<DAT
 
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
-        return dataClass.isInstance(data) && carefullyMatchData(data as DATA)
+        return dataClass.isInstance(data) && exactMatchData(data as DATA)
     }
 
-    protected open fun carefullyMatchData(data: DATA): Boolean = true
+    protected open fun exactMatchData(data: DATA): Boolean = true
 
     fun dispatchCreateFragment(
         bindingAdapterPosition: Int,

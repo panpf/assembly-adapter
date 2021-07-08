@@ -27,7 +27,7 @@ import kotlin.reflect.KClass
  *
  * @param DATA Define the type of matching data
  * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
- * it is considered a match. You can also override the [carefullyMatchData] method to achieve exact matching
+ * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
  * @param viewFactory Responsible for providing View when creating Item
  */
 open class ViewItemFactory<DATA : Any>(
