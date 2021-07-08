@@ -15,7 +15,7 @@ class ConcatAdapterAbsoluteHelper {
             adapter, localAdapter, localPosition
         ) ?: throw IndexOutOfBoundsException(
             "Not found childAdapterStartPosition by " +
-                    "localPosition: $localPosition, localAdapter: ${localAdapter::class.java.name}"
+                    "localPosition: $localPosition, localAdapter: ${localAdapter.javaClass.name}"
         )
     }
 

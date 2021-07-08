@@ -33,7 +33,7 @@ data class LoadStateParcelable(
             is LoadState.Error -> -1
         },
         loadState.endOfPaginationReached,
-        if (loadState is LoadState.Error) loadState.error::class.java.name else null
+        if (loadState is LoadState.Error) loadState.error.javaClass.name else null
     )
 
     fun toLoadState(): LoadState = when (type) {

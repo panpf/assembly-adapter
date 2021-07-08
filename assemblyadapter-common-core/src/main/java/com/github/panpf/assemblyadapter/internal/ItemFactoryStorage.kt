@@ -45,10 +45,10 @@ class ItemFactoryStorage<ITEM_FACTORY : Matchable>(
             itemFactory != null -> itemFactory
             data is Placeholder -> throw NotFoundMatchedItemFactoryException(
                 "Because there are null elements in your data set, so need to add an $itemFactoryName " +
-                        "that supports '${data::class.java.name}' to the $adapterName's $itemFactoryPropertyName property"
+                        "that supports '${data.javaClass.name}' to the $adapterName's $itemFactoryPropertyName property"
             )
             else -> throw NotFoundMatchedItemFactoryException(
-                "Need to add an $itemFactoryName that supports '${data::class.java.name}' to the $adapterName's $itemFactoryPropertyName property"
+                "Need to add an $itemFactoryName that supports '${data.javaClass.name}' to the $adapterName's $itemFactoryPropertyName property"
             )
         }
     }

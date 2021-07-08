@@ -31,7 +31,7 @@ class FragmentContainerActivity : AppCompatActivity() {
             Intent(context, FragmentContainerActivity::class.java).apply {
                 putExtra("title", title)
                 putExtra("subTitle", subTitle)
-                putExtra("fragmentClassName", fragment::class.java.name)
+                putExtra("fragmentClassName", fragment.javaClass.name)
                 putExtra("fragmentArguments", fragment.arguments)
             }
     }

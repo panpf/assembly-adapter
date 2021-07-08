@@ -115,7 +115,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
                 findItemFactory(childAdapter, childPosition)
             }
             else -> {
-                throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter::class.java.name}")
+                throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
             }
         }
     }

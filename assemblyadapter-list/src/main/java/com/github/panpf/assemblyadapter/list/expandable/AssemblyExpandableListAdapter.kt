@@ -110,7 +110,7 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
             @Suppress("UNCHECKED_CAST")
             return group.getChild(childPosition) as CHILD_DATA
         }
-        throw IllegalArgumentException("group item must implement ExpandableGroup interface. '${group::class.java.name}'")
+        throw IllegalArgumentException("group item must implement ExpandableGroup interface. '${group.javaClass.name}'")
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long = childPosition.toLong()
