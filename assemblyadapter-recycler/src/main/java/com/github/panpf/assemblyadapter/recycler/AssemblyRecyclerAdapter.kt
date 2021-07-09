@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
+import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import java.util.*
 
 open class AssemblyRecyclerAdapter<DATA>(
@@ -59,7 +59,7 @@ open class AssemblyRecyclerAdapter<DATA>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
-        return AssemblyItemViewHolderWrapper(item).apply {
+        return RecyclerViewHolderWrapper(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
             if (layoutManager is FullSpanStaggeredGridLayoutManager) {
@@ -69,7 +69,7 @@ open class AssemblyRecyclerAdapter<DATA>(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is AssemblyItemViewHolderWrapper<*>) {
+        if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as ItemFactory.Item<Any>
             val data = itemDataStorage.getData(position) ?: Placeholder

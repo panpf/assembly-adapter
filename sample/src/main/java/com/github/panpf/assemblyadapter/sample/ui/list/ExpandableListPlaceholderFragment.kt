@@ -53,8 +53,8 @@ class ExpandableListPlaceholderFragment : BaseBindingFragment<FragmentExpandable
         val listAdapter = AssemblyExpandableListAdapter<AppGroup?, AppInfo>(
             listOf(
                 AppGroupItemFactory(),
-                AppItemFactory(requireActivity()),
-                ViewItemFactory(Placeholder::class, R.layout.item_app_group_placeholder),
+                AppChildItemFactory(requireActivity()),
+                AppGroupPlaceholderItemFactory(requireActivity()),
             ),
             arrayOfNulls<AppGroup?>(100).toList()
         )

@@ -26,7 +26,7 @@ abstract class BindingPagerItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     dataClass: KClass<DATA>
 ) : PagerItemFactory<DATA>(dataClass) {
 
-    override fun createItemView(
+    final override fun createItemView(
         context: Context,
         parent: ViewGroup,
         bindingAdapterPosition: Int,

@@ -70,10 +70,11 @@ open class ListSeparatorItemFactory(
             val data = item.dataOrThrow
             AlertDialog.Builder(activity).apply {
                 setMessage(buildString {
-                    append("Group（${data.title}）").appendLine()
+                    append("ListSeparator（${data.title}）").appendLine()
                     appendLine()
                     append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
-                    append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}")
+                    append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
+                    append("data: ${item.dataOrThrow.title}").appendLine()
                 })
             }.show()
             true

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager
+package com.github.panpf.assemblyadapter.list.expandable
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -22,23 +22,35 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
-open class ViewPagerItemFactory<DATA : Any>(
-    dataClass: KClass<DATA>,
+class ViewChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(
+    dataClazz: KClass<CHILD_DATA>,
     private val viewFactory: (context: Context, inflater: LayoutInflater, parent: ViewGroup) -> View
-) : PagerItemFactory<DATA>(dataClass) {
+) : SimpleChildItemFactory<GROUP_DATA, CHILD_DATA>(dataClazz) {
 
-    constructor(dataClass: KClass<DATA>, @LayoutRes layoutResId: Int) : this(
-        dataClass,
+    constructor(dataClazz: KClass<CHILD_DATA>, @LayoutRes layoutResId: Int) : this(
+        dataClazz,
         { _, inflater, parent -> inflater.inflate(layoutResId, parent, false) }
     )
 
-    constructor(dataClass: KClass<DATA>, view: View) : this(dataClass, { _, _, _ -> view })
+    constructor(dataClazz: KClass<CHILD_DATA>, view: View) : this(dataClazz, { _, _, _ -> view })
 
-    final override fun createItemView(
+    override fun createItemView(
+        context: Context, inflater: LayoutInflater, parent: ViewGroup
+    ): View {
+        return viewFactory(context, inflater, parent)
+    }
+
+    override fun bindItemData(
         context: Context,
-        parent: ViewGroup,
+        itemView: View,
+        item: ChildItem<GROUP_DATA, CHILD_DATA>,
+        groupBindingAdapterPosition: Int,
+        groupAbsoluteAdapterPosition: Int,
+        groupData: GROUP_DATA,
+        isLastChild: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
-        data: DATA
-    ): View = viewFactory(context, LayoutInflater.from(context), parent)
+        data: CHILD_DATA,
+    ) {
+    }
 }

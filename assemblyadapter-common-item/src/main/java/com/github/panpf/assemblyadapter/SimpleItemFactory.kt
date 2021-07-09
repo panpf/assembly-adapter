@@ -32,7 +32,7 @@ import kotlin.reflect.KClass
 abstract class SimpleItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
     ItemFactory<DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): Item<DATA> {
+    final override fun createItem(parent: ViewGroup): Item<DATA> {
         val context = parent.context
         val itemView = createItemView(context, LayoutInflater.from(context), parent)
         return SimpleItem(this, itemView).apply {

@@ -48,7 +48,7 @@ open class ViewItemFactory<DATA : Any>(
      */
     constructor(dataClass: KClass<DATA>, view: View) : this(dataClass, { _, _, _ -> view })
 
-    override fun createItemView(
+    final override fun createItemView(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): View {
         return viewFactory(context, inflater, parent)

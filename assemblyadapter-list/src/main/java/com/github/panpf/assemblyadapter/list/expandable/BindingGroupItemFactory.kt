@@ -21,14 +21,14 @@ import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import kotlin.reflect.KClass
 
-abstract class BindingExpandableItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
+abstract class BindingGroupItemFactory<DATA : ExpandableGroup, VIEW_BINDING : ViewBinding>(
     dataClass: KClass<DATA>
-) : ExpandableItemFactory<DATA>(dataClass) {
+) : GroupItemFactory<DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): ExpandableItem<DATA> {
+    override fun createItem(parent: ViewGroup): GroupItem<DATA> {
         val context = parent.context
         val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
-        return BindingExpandableItem(this, binding).apply {
+        return BindingGroupItem(this, binding).apply {
             initItem(parent.context, binding, this)
         }
     }
@@ -38,29 +38,39 @@ abstract class BindingExpandableItemFactory<DATA : Any, VIEW_BINDING : ViewBindi
     ): VIEW_BINDING
 
     protected open fun initItem(
-        context: Context, binding: VIEW_BINDING, item: ExpandableItem<DATA>
+        context: Context, binding: VIEW_BINDING, item: GroupItem<DATA>
     ) {
     }
 
     protected abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: ExpandableItem<DATA>,
+        item: GroupItem<DATA>,
+        isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
-        data: DATA
+        data: DATA,
     )
 
-    private class BindingExpandableItem<DATA : Any, VIEW_BINDING : ViewBinding>(
-        private val factory: BindingExpandableItemFactory<DATA, VIEW_BINDING>,
+    private class BindingGroupItem<DATA : ExpandableGroup, VIEW_BINDING : ViewBinding>(
+        private val factory: BindingGroupItemFactory<DATA, VIEW_BINDING>,
         private val binding: VIEW_BINDING
-    ) : ExpandableItem<DATA>(binding.root) {
+    ) : GroupItem<DATA>(binding.root) {
 
         override fun bindData(
-            bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
+            isExpanded: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA,
         ) {
             factory.bindItemData(
-                context, binding, this, bindingAdapterPosition, absoluteAdapterPosition, data
+                context,
+                binding,
+                this,
+                isExpanded,
+                bindingAdapterPosition,
+                absoluteAdapterPosition,
+                data,
             )
         }
     }

@@ -51,7 +51,7 @@ class ListPlaceholderFragment : BaseBindingFragment<FragmentListBinding>() {
             listOf(
                 AppItemFactory(requireActivity()),
                 ListSeparatorItemFactory(requireActivity()),
-                ViewItemFactory(Placeholder::class, R.layout.item_app_placeholder)
+                AppPlaceholderItemFactory(requireActivity())
             ),
             arrayOfNulls<Any?>(100).toList()
         )

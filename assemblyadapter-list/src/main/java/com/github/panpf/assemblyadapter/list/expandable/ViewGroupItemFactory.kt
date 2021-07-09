@@ -22,10 +22,10 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
-class ViewExpandableItemFactory<DATA : Any>(
+class ViewGroupItemFactory<DATA : ExpandableGroup>(
     dataClazz: KClass<DATA>,
     private val viewFactory: (context: Context, inflater: LayoutInflater, parent: ViewGroup) -> View
-) : SimpleExpandableItemFactory<DATA>(dataClazz) {
+) : SimpleGroupItemFactory<DATA>(dataClazz) {
 
     constructor(dataClazz: KClass<DATA>, @LayoutRes layoutResId: Int) : this(
         dataClazz,
@@ -43,10 +43,11 @@ class ViewExpandableItemFactory<DATA : Any>(
     override fun bindItemData(
         context: Context,
         itemView: View,
-        item: ExpandableItem<DATA>,
+        item: GroupItem<DATA>,
+        isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
-        data: DATA
+        data: DATA,
     ) {
     }
 }

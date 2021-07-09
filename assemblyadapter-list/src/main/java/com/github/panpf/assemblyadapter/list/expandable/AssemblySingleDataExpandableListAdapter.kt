@@ -83,31 +83,36 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
         @Suppress("UNCHECKED_CAST")
         val groupItem = groupItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
-        if (groupItem is ExpandableItemFactory.ExpandableItem<Any>) {
-            groupItem.dispatchExpandableBindData(
-                groupBindingAdapterPosition,
-                groupAbsoluteAdapterPosition,
-                groupBindingAdapterPosition,
-                groupAbsoluteAdapterPosition,
-                -1,
-                isExpanded,
-                false,
-                groupData
-            )
-        } else {
-            groupItem.dispatchBindData(
-                groupBindingAdapterPosition,
-                groupAbsoluteAdapterPosition,
-                groupData
-            )
+        when (groupItem) {
+            is GroupItemFactory.GroupItem<*> -> {
+                @Suppress("UNCHECKED_CAST")
+                (groupItem as GroupItemFactory.GroupItem<ExpandableGroup>)
+                    .dispatchGroupBindData(
+                        isExpanded,
+                        groupBindingAdapterPosition,
+                        groupAbsoluteAdapterPosition,
+                        groupData as ExpandableGroup,
+                    )
+            }
+            is ChildItemFactory.ChildItem<*, *> -> {
+                throw IllegalArgumentException("groupData '${groupData.javaClass.name}' need a matching GroupItemFactory, not ChildItemFactory")
+            }
+            else -> {
+                groupItem.dispatchBindData(
+                    groupBindingAdapterPosition, groupAbsoluteAdapterPosition, groupData
+                )
+            }
         }
         return groupItemView
     }
 
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        val groupData = data!!
-        return if (groupData is ExpandableGroup) groupData.getChildCount() else 0
+        return when (val groupData = data) {
+            null -> 0
+            is ExpandableGroup -> groupData.getChildCount()
+            else -> throw IllegalArgumentException("group item must implement ExpandableGroup interface. '${groupData.javaClass.name}'")
+        }
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): CHILD_DATA {
@@ -115,8 +120,9 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         if (groupData is ExpandableGroup) {
             @Suppress("UNCHECKED_CAST")
             return groupData.getChild(childPosition) as CHILD_DATA
+        } else {
+            throw IllegalArgumentException("group item must implement ExpandableGroup interface. '${groupData.javaClass.name}'")
         }
-        throw IllegalArgumentException("group item must implement ExpandableGroup interface. '${groupData.javaClass.name}'")
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long = childPosition.toLong()
@@ -134,6 +140,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         groupPosition: Int, childPosition: Int, isLastChild: Boolean,
         convertView: View?, parent: ViewGroup
     ): View {
+        val groupData = data!!
         val childData = getChild(groupPosition, childPosition)!!
         val childItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             childData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
@@ -148,19 +155,26 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
         @Suppress("UNCHECKED_CAST")
         val childItem = childItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
-        if (childItem is ExpandableItemFactory.ExpandableItem<Any>) {
-            childItem.dispatchExpandableBindData(
-                childPosition,
-                childPosition,
-                groupBindingAdapterPosition,
-                groupAbsoluteAdapterPosition,
-                childPosition,
-                false,
-                isLastChild,
-                childData
-            )
-        } else {
-            childItem.dispatchBindData(childPosition, childPosition, childData)
+        when (childItem) {
+            is ChildItemFactory.ChildItem<*, *> -> {
+                @Suppress("UNCHECKED_CAST")
+                (childItem as ChildItemFactory.ChildItem<ExpandableGroup, Any>)
+                    .dispatchChildBindData(
+                        groupBindingAdapterPosition,
+                        groupAbsoluteAdapterPosition,
+                        groupData as ExpandableGroup,
+                        isLastChild,
+                        childPosition,
+                        childPosition,
+                        childData
+                    )
+            }
+            is GroupItemFactory.GroupItem<*> -> {
+                throw IllegalArgumentException("childData '${childData.javaClass.name}' need a matching ChildItemFactory, not GroupItemFactory")
+            }
+            else -> {
+                childItem.dispatchBindData(childPosition, childPosition, childData)
+            }
         }
         return childItemView
     }

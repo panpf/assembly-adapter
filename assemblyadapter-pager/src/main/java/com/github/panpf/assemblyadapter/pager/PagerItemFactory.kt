@@ -61,7 +61,7 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
         data: DATA
     ): View
 
-    open fun setOnViewClickListener(
+    fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
     ): PagerItemFactory<DATA> {
@@ -69,7 +69,7 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
         return this
     }
 
-    open fun setOnViewLongClickListener(
+    fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
     ): PagerItemFactory<DATA> {
@@ -77,12 +77,12 @@ abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>)
         return this
     }
 
-    open fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): PagerItemFactory<DATA> {
+    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): PagerItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
 
-    open fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): PagerItemFactory<DATA> {
+    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): PagerItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }

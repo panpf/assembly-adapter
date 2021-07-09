@@ -28,10 +28,7 @@ import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentExpandableListBinding
-import com.github.panpf.assemblyadapter.sample.item.AppGroupItemFactory
-import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
-import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
-import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
+import com.github.panpf.assemblyadapter.sample.item.*
 import com.github.panpf.assemblyadapter.sample.vm.PinyinGroupAppsViewModel
 
 class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding>() {
@@ -49,7 +46,7 @@ class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding
             AppsOverviewItemFactory(requireActivity())
         )
         val listAdapter = AssemblyExpandableListAdapter<AppGroup, AppInfo>(
-            listOf(AppGroupItemFactory(), AppItemFactory(requireActivity()))
+            listOf(AppGroupItemFactory(), AppChildItemFactory(requireActivity()))
         )
         val footerLoadStateAdapter = AssemblySingleDataExpandableListAdapter<LoadState, Any>(
             LoadStateItemFactory(requireActivity())

@@ -22,15 +22,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
-import com.github.panpf.assemblyadapter.BindingItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.BindingChildItemFactory
 import com.github.panpf.assemblyadapter.sample.R
+import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppBinding
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
-class AppItemFactory(private val activity: Activity) :
-    BindingItemFactory<AppInfo, ItemAppBinding>(AppInfo::class) {
+class AppChildItemFactory(private val activity: Activity) :
+    BindingChildItemFactory<AppGroup, AppInfo, ItemAppBinding>(AppInfo::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
@@ -40,7 +41,7 @@ class AppItemFactory(private val activity: Activity) :
 
     override fun initItem(
         context: Context, binding: ItemAppBinding,
-        item: Item<AppInfo>
+        item: ChildItem<AppGroup, AppInfo>
     ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
@@ -58,9 +59,13 @@ class AppItemFactory(private val activity: Activity) :
                 setMessage(buildString {
                     append("App（${data.name}）").appendLine()
                     appendLine()
+                    append("groupBindingAdapterPosition: ${item.groupBindingAdapterPosition}").appendLine()
+                    append("groupAbsoluteAdapterPosition: ${item.groupAbsoluteAdapterPosition}").appendLine()
+                    append("groupData: ${item.groupDataOrThrow.title}").appendLine()
+                    append("isLastChild: ${item.isLastChild}").appendLine()
                     append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
                     append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
-                    append("data: ${item.dataOrThrow.name}").appendLine().appendLine()
+                    append("data: ${item.dataOrThrow.name}").appendLine()
                 })
             }.show()
             true
@@ -79,10 +84,14 @@ class AppItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemAppBinding,
-        item: Item<AppInfo>,
+        item: ChildItem<AppGroup, AppInfo>,
+        groupBindingAdapterPosition: Int,
+        groupAbsoluteAdapterPosition: Int,
+        groupData: AppGroup,
+        isLastChild: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
-        data: AppInfo
+        data: AppInfo,
     ) {
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
         binding.appItemIconImage.displayImage(appIconUri)

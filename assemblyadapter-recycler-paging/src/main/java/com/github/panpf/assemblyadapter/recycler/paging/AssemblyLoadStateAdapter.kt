@@ -21,7 +21,7 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemViewHolderWrapper
+import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.FullSpanStaggeredGridLayoutManager
 
 open class AssemblyLoadStateAdapter(
@@ -33,7 +33,7 @@ open class AssemblyLoadStateAdapter(
         parent: ViewGroup, loadState: LoadState
     ): RecyclerView.ViewHolder {
         val item = itemFactory.dispatchCreateItem(parent)
-        return AssemblyItemViewHolderWrapper(item).apply {
+        return RecyclerViewHolderWrapper(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
             if (layoutManager is FullSpanStaggeredGridLayoutManager) {
@@ -43,7 +43,7 @@ open class AssemblyLoadStateAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, loadState: LoadState) {
-        if (holder is AssemblyItemViewHolderWrapper<*>) {
+        if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as ItemFactory.Item<Any>
             item.dispatchBindData(0, holder.position, loadState)

@@ -90,7 +90,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    open fun setOnViewClickListener(
+    fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
     ): ItemFactory<DATA> {
@@ -107,7 +107,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    open fun setOnViewLongClickListener(
+    fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
     ): ItemFactory<DATA> {
@@ -122,7 +122,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    open fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
+    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
@@ -134,7 +134,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    open fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
+    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }
@@ -201,7 +201,7 @@ abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Ma
     /**
      * Item is similar to ViewHolder, responsible for holding itemView and binding data
      */
-    abstract class Item<DATA>(val itemView: View) {
+    abstract class Item<DATA: Any>(val itemView: View) {
 
         private var _data: DATA? = null
         private var _bindingAdapterPosition: Int = -1

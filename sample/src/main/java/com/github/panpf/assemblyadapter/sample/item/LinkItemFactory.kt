@@ -52,7 +52,8 @@ class LinkItemFactory(private val activity: Activity) :
                     append("Item（${data.title}）").appendLine()
                     appendLine()
                     append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
-                    append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}")
+                    append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
+                    append("data: ${item.dataOrThrow.title}").appendLine()
                 })
             }.show()
             true

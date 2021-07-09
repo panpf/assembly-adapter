@@ -54,7 +54,7 @@ class AppsOverviewItemFactory(
                     append("AppsOverview").appendLine()
                     appendLine()
                     append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
-                    append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}")
+                    append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
                 })
             }.show()
             true
