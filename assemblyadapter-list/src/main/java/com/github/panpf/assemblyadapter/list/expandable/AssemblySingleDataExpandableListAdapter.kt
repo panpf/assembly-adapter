@@ -108,11 +108,8 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        return when (val groupData = data) {
-            null -> 0
-            is ExpandableGroup -> groupData.getChildCount()
-            else -> throw IllegalArgumentException("group item must implement ExpandableGroup interface. '${groupData.javaClass.name}'")
-        }
+        val groupData = data
+        return if (groupData is ExpandableGroup) groupData.getChildCount() else 0
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): CHILD_DATA {
