@@ -22,18 +22,18 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.item.StickyListSeparatorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
-class RecyclerStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+// todo Realize paging load
+class RecyclerNormalLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
@@ -46,18 +46,14 @@ class RecyclerStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
-        val recyclerAdapter = AssemblyStickyRecyclerAdapter<Any>(
-            listOf(
-                AppItemFactory(requireActivity()),
-                StickyListSeparatorItemFactory(requireActivity())
-            )
+        val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
+            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity()))
         )
         val footerLoadStateAdapter =
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
         }
 
         binding.recyclerRefreshLayout.setOnRefreshListener {

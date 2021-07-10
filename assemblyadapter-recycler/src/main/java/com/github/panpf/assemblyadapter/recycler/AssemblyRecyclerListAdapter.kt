@@ -16,31 +16,36 @@
 package com.github.panpf.assemblyadapter.recycler
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.internal.ItemDataStorage
+import com.github.panpf.assemblyadapter.diffkey.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
-import java.util.*
 
-open class AssemblyRecyclerAdapter<DATA>(
-    itemFactoryList: List<ItemFactory<*>>,
-    dataList: List<DATA>? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
-    AssemblyAdapter<ItemFactory<*>>, DatasAdapter<DATA> {
+open class AssemblyRecyclerListAdapter<DATA>
+    : ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<ItemFactory<*>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<*>>
 
-    init {
+    constructor(
+        itemFactoryList: List<ItemFactory<*>>,
+        diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
+    ) : super(diffCallback) {
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }
 
-    override fun getItemCount(): Int {
-        return itemDataStorage.dataCount
+    constructor(
+        itemFactoryList: List<ItemFactory<*>>,
+        config: AsyncDifferConfig<DATA>,
+    ) : super(config) {
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }
 
     override fun getItemId(position: Int): Long {
@@ -48,7 +53,7 @@ open class AssemblyRecyclerAdapter<DATA>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItem(position) ?: Placeholder
         return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
         )
@@ -70,7 +75,7 @@ open class AssemblyRecyclerAdapter<DATA>(
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as ItemFactory.Item<Any>
-            val data = itemDataStorage.getData(position) ?: Placeholder
+            val data = getItem(position) ?: Placeholder
             item.dispatchBindData(position, holder.position, data)
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
@@ -78,63 +83,8 @@ open class AssemblyRecyclerAdapter<DATA>(
     }
 
 
-    override val dataCount: Int
-        get() = itemDataStorage.dataCount
-
-    override val dataListSnapshot: List<DATA>
-        get() = itemDataStorage.dataListSnapshot
-
-    override fun getData(position: Int): DATA {
-        return itemDataStorage.getData(position)
-    }
-
-    override fun setDataList(datas: List<DATA>?) {
-        itemDataStorage.setDataList(datas)
-    }
-
-    override fun addData(data: DATA): Boolean {
-        return itemDataStorage.addData(data)
-    }
-
-    override fun addData(index: Int, data: DATA) {
-        itemDataStorage.addData(index, data)
-    }
-
-    override fun addAllData(datas: Collection<DATA>): Boolean {
-        return itemDataStorage.addAllData(datas)
-    }
-
-    override fun addAllData(index: Int, datas: Collection<DATA>): Boolean {
-        return itemDataStorage.addAllData(index, datas)
-    }
-
-    override fun removeData(data: DATA): Boolean {
-        return itemDataStorage.removeData(data)
-    }
-
-    override fun removeDataAt(index: Int): DATA {
-        return itemDataStorage.removeDataAt(index)
-    }
-
-    override fun removeAllData(datas: Collection<DATA>): Boolean {
-        return itemDataStorage.removeAllData(datas)
-    }
-
-    override fun removeDataIf(filter: (DATA) -> Boolean): Boolean {
-        return itemDataStorage.removeDataIf(filter)
-    }
-
-    override fun clearData() {
-        itemDataStorage.clearData()
-    }
-
-    override fun sortData(comparator: Comparator<DATA>) {
-        itemDataStorage.sortData(comparator)
-    }
-
-
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItem(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
         )

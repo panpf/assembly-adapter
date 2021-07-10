@@ -19,26 +19,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerListAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
-import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
-import com.github.panpf.assemblyadapter.sample.item.StickyListSeparatorItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
-class RecyclerStickyPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerListLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
-    private val viewModel by viewModels<PinyinFlatPagingAppsViewModel>()
+    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -49,40 +45,31 @@ class RecyclerStickyPagingFragment : BaseBindingFragment<FragmentRecyclerBinding
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
-        val pagingDataAdapter = AssemblyStickyPagingDataAdapter<Any>(
-            listOf(
-                AppItemFactory(requireActivity()),
-                StickyListSeparatorItemFactory(requireActivity())
-            )
+        val recyclerAdapter = AssemblyRecyclerListAdapter<Any>(
+            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity()))
         )
+        val footerLoadStateAdapter =
+            AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerRecycler.apply {
-            adapter = ConcatAdapter(
-                appsOverviewAdapter, pagingDataAdapter.withLoadStateFooter(
-                    MyLoadStateAdapter(requireActivity())
-                )
-            )
+            adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
-        }
-        binding.recyclerRefreshLayout.setOnRefreshListener {
-            viewModel.refresh()
-            pagingDataAdapter.refresh()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            pagingDataAdapter.loadStateFlow.collect {
-                binding.recyclerRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
-            }
+        binding.recyclerRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewModel.loadingData.observe(viewLifecycleOwner) {
+            binding.recyclerRefreshLayout.isRefreshing = it == true
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.pinyinFlatAppListDataFlow.collect {
-                pagingDataAdapter.submitData(it)
-            }
+        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+            recyclerAdapter.submitList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
     }
 }

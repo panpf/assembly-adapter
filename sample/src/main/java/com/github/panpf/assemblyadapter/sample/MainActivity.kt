@@ -54,18 +54,26 @@ class MainActivity : AppCompatActivity() {
                 ),
                 listOf(
                     ListSeparator("RecyclerView"),
-                    Link("RecyclerView - Linear", RecyclerLinearFragment()),
-                    Link("RecyclerView - Grid", RecyclerGridFragment()),
-                    Link("RecyclerView - Grid - Staggered", RecyclerGridStaggeredFragment()),
-                    Link("RecyclerView - Placeholder", RecyclerPlaceholderFragment()),
+                    Link("RecyclerView - Normal - Linear", RecyclerNormalLinearFragment()),
+                    Link("RecyclerView - Normal - Grid", RecyclerNormalGridFragment()),
+                    Link(
+                        "RecyclerView - Normal - Grid - Staggered",
+                        RecyclerNormalGridStaggeredFragment()
+                    ),
+                    Link(
+                        "RecyclerView - Normal - Placeholder",
+                        RecyclerNormalPlaceholderFragment()
+                    ),
+                    Link("RecyclerView - Normal - Sticky", RecyclerNormalStickyFragment()),
                     Link("RecyclerView - Paging - Linear", RecyclerPagingLinearFragment()),
                     Link("RecyclerView - Paging - Grid", RecyclerPagingGridFragment()),
                     Link(
                         "RecyclerView - Paging - Grid - Staggered",
                         RecyclerPagingGridStaggeredFragment()
                     ),
-                    Link("RecyclerView - Sticky", RecyclerStickyFragment()),
-                    Link("RecyclerView - Sticky - Paging", RecyclerStickyPagingFragment()),
+                    Link("RecyclerView - Paging - Sticky", RecyclerPagingStickyFragment()),
+                    Link("RecyclerView - List - Linear", RecyclerListLinearFragment()),
+                    Link("RecyclerView - List - Placeholder", RecyclerListPlaceholderFragment()),
 
                     ListSeparator("ListView"),
                     Link("ListView", ListFragment()),
@@ -77,9 +85,15 @@ class MainActivity : AppCompatActivity() {
                     Link("ViewPager - View", PagerViewFragment()),
                     Link("ViewPager - View - Placeholder", PagerViewPlaceholderFragment()),
                     Link("ViewPager - Fragment - State", PagerFragmentStateFragment()),
-                    Link("ViewPager - Fragment - State - Placeholder", PagerFragmentStatePlaceholderFragment()),
+                    Link(
+                        "ViewPager - Fragment - State - Placeholder",
+                        PagerFragmentStatePlaceholderFragment()
+                    ),
                     Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
-                    Link("ViewPager2 - Fragment - Placeholder", Pager2FragmentPlaceholderFragment()),
+                    Link(
+                        "ViewPager2 - Fragment - Placeholder",
+                        Pager2FragmentPlaceholderFragment()
+                    ),
                     Link("ViewPager2 - Fragment - Paging", Pager2FragmentPagingFragment()),
                 )
             )

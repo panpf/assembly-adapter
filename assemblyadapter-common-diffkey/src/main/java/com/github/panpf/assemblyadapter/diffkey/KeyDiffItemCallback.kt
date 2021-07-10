@@ -18,16 +18,18 @@ package com.github.panpf.assemblyadapter.diffkey
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
 
-class KeyDiffItemCallback<DATA : Any> : DiffUtil.ItemCallback<DATA>() {
+class KeyDiffItemCallback<DATA : Any?> : DiffUtil.ItemCallback<DATA>() {
 
     override fun areItemsTheSame(oldItem: DATA, newItem: DATA): Boolean {
-        if (oldItem !is DiffKey) {
+        if (newItem == null || oldItem == null) {
+            return oldItem == null && newItem == null
+        } else if (oldItem !is DiffKey) {
             throw IllegalArgumentException("${oldItem.javaClass.name} must implement ${DiffKey::class.qualifiedName} interface")
-        }
-        if (newItem !is DiffKey) {
+        } else if (newItem !is DiffKey) {
             throw IllegalArgumentException("${newItem.javaClass.name} must implement ${DiffKey::class.qualifiedName} interface")
         }
-        return oldItem::class.java == newItem::class.java && oldItem.diffKey == newItem.diffKey
+        @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+        return oldItem!!::class.java == newItem!!::class.java && oldItem.diffKey == newItem.diffKey
     }
 
     @SuppressLint("DiffUtilEquals")
