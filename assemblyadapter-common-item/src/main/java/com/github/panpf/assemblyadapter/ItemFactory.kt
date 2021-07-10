@@ -41,7 +41,7 @@ import kotlin.reflect.KClass
  * @see SimpleItemFactory
  * @see ViewItemFactory
  */
-abstract class ItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Matchable {
+abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable {
 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
 

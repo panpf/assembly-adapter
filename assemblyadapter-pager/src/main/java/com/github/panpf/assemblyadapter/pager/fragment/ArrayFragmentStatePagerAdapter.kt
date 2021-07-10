@@ -27,9 +27,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter
         "com.github.panpf.assemblyadapter.pager2.ArrayFragmentStateAdapter"
     )
 )
-open class ArrayFragmentStatePagerAdapter : FragmentStatePagerAdapter {
+open class ArrayFragmentStatePagerAdapter(
+    fm: FragmentManager, @Behavior behavior: Int, fragments: List<Fragment>
+) : FragmentStatePagerAdapter(fm, behavior) {
 
-    private var fragmentList: List<Fragment>
+    private var fragmentList: List<Fragment> = fragments.toList()
     private var pageTitleList: List<CharSequence>? = null
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
@@ -42,19 +44,13 @@ open class ArrayFragmentStatePagerAdapter : FragmentStatePagerAdapter {
             }
         }
 
-    constructor(
-        fm: FragmentManager, @Behavior behavior: Int, fragments: List<Fragment>
-    ) : super(fm, behavior) {
-        fragmentList = fragments.toList()
-    }
-
     @Deprecated(
         """use {@link #FragmentArrayStatePagerAdapter(FragmentManager, int, List)} with
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
     )
-    constructor(fm: FragmentManager, fragments: List<Fragment>) : super(fm) {
-        fragmentList = fragments.toList()
-    }
+    constructor(fm: FragmentManager, fragments: List<Fragment>) : this(
+        fm, BEHAVIOR_SET_USER_VISIBLE_HINT, fragments
+    )
 
 
     override fun getCount(): Int {

@@ -62,17 +62,6 @@ open class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpand
     constructor(adapters: List<BaseExpandableListAdapter>) : this(Config.DEFAULT, adapters)
 
     /**
-     * Creates a ConcatExpandableListAdapter with [Config.DEFAULT] and the given adapters in the given
-     * order.
-     *
-     * @param adapters The list of adapters to add
-     */
-    constructor(vararg adapters: BaseExpandableListAdapter) : this(
-        Config.DEFAULT,
-        adapters.toList()
-    )
-
-    /**
      * Creates a ConcatExpandableListAdapter with the given config and the given adapters in the given order.
      *
      * @param config   The configuration for this ConcatExpandableListAdapter
@@ -81,6 +70,17 @@ open class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpand
      */
     constructor(config: Config, vararg adapters: BaseExpandableListAdapter) : this(
         config,
+        adapters.toList()
+    )
+
+    /**
+     * Creates a ConcatExpandableListAdapter with [Config.DEFAULT] and the given adapters in the given
+     * order.
+     *
+     * @param adapters The list of adapters to add
+     */
+    constructor(vararg adapters: BaseExpandableListAdapter) : this(
+        Config.DEFAULT,
         adapters.toList()
     )
 

@@ -43,35 +43,14 @@ open class AssemblyFragmentStateAdapter<DATA>(
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
     constructor(
-        fragmentManager: FragmentManager,
-        lifecycle: Lifecycle,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-    ) : this(
-        fragmentManager,
-        lifecycle,
-        itemFactoryList,
-        null
-    )
-
-    constructor(
         fragmentActivity: FragmentActivity,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        dataList: List<DATA>?
+        dataList: List<DATA>? = null
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
         itemFactoryList,
         dataList
-    )
-
-    constructor(
-        fragmentActivity: FragmentActivity,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-    ) : this(
-        fragmentActivity.supportFragmentManager,
-        fragmentActivity.lifecycle,
-        itemFactoryList,
-        null
     )
 
     constructor(
@@ -83,16 +62,6 @@ open class AssemblyFragmentStateAdapter<DATA>(
         fragment.lifecycle,
         itemFactoryList,
         dataList
-    )
-
-    constructor(
-        fragment: Fragment,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-    ) : this(
-        fragment.childFragmentManager,
-        fragment.lifecycle,
-        itemFactoryList,
-        null
     )
 
     init {

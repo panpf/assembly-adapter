@@ -1,5 +1,6 @@
 include(":assemblyadapter")
 include(":assemblyadapter-common-core")
+include(":assemblyadapter-common-diffkey")
 include(":assemblyadapter-common-item")
 include(":assemblyadapter-common-pager")
 include(":assemblyadapter-list")

@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
  * @see BindingPagerItemFactory
  * @see ViewPagerItemFactory
  */
-abstract class PagerItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Matchable {
+abstract class PagerItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable {
 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
 

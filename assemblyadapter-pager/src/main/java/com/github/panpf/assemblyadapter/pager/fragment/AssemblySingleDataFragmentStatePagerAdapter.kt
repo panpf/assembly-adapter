@@ -29,15 +29,20 @@ import com.github.panpf.assemblyadapter.pager.AbsoluteAdapterPositionAdapter
         "com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter"
     )
 )
-open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any> :
-    FragmentStatePagerAdapter, AssemblyAdapter<FragmentItemFactory<*>>, AbsoluteAdapterPositionAdapter {
+open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
+    fm: FragmentManager,
+    @Behavior behavior: Int,
+    private val itemFactory: FragmentItemFactory<DATA>,
+    data: DATA? = null
+) : FragmentStatePagerAdapter(fm, behavior),
+    AssemblyAdapter<FragmentItemFactory<*>>,
+    AbsoluteAdapterPositionAdapter {
 
-    private val itemFactory: FragmentItemFactory<DATA>
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
     private var nextItemAbsoluteAdapterPosition: Int? = null
 
-    var data: DATA? = null
+    var data: DATA? = data
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -50,35 +55,6 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any> :
             }
         }
 
-    constructor(
-        fm: FragmentManager,
-        @Behavior behavior: Int,
-        itemFactory: FragmentItemFactory<DATA>,
-    ) : super(fm, behavior) {
-        this.itemFactory = itemFactory
-    }
-
-    @Deprecated(
-        """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int)} with
-      {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
-    )
-    constructor(
-        fm: FragmentManager,
-        itemFactory: FragmentItemFactory<DATA>,
-    ) : super(fm) {
-        this.itemFactory = itemFactory
-    }
-
-    constructor(
-        fm: FragmentManager,
-        @Behavior behavior: Int,
-        itemFactory: FragmentItemFactory<DATA>,
-        initData: DATA? = null
-    ) : super(fm, behavior) {
-        this.itemFactory = itemFactory
-        this.data = initData
-    }
-
     @Deprecated(
         """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List)} with
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
@@ -87,10 +63,7 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any> :
         fm: FragmentManager,
         itemFactory: FragmentItemFactory<DATA>,
         initData: DATA? = null
-    ) : super(fm) {
-        this.itemFactory = itemFactory
-        this.data = initData
-    }
+    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactory, initData)
 
     override fun getCount(): Int = if (data != null) 1 else 0
 

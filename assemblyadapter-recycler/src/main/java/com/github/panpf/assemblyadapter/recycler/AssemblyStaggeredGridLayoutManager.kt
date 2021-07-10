@@ -28,15 +28,18 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
     private val fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
 
     constructor(
-        context: Context, attrs: AttributeSet?,
-        defStyleAttr: Int, defStyleRes: Int,
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int,
         fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList
     }
 
     constructor(
-        spanCount: Int, orientation: Int,
+        spanCount: Int,
+        orientation: Int,
         fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
     ) : super(spanCount, orientation) {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList

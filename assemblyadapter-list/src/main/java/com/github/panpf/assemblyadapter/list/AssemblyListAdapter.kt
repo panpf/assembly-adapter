@@ -34,8 +34,6 @@ open class AssemblyListAdapter<DATA>(
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
-    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
-
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }

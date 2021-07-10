@@ -26,6 +26,7 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import java.util.*
 
+// todo Provide assembly implementation of ListAdapter
 open class AssemblyRecyclerAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     dataList: List<DATA>? = null
@@ -34,8 +35,6 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
-
-    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }

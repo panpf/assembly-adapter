@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 /**
  * @see ViewFragmentItemFactory
  */
-abstract class FragmentItemFactory<DATA : Any>(private val dataClass: KClass<DATA>) : Matchable {
+abstract class FragmentItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable {
 
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")

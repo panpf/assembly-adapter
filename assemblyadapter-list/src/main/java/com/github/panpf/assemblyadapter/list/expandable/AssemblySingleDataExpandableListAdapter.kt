@@ -41,10 +41,8 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
     constructor(
         itemFactory: ItemFactory<GROUP_DATA>,
-        initData: GROUP_DATA?
+        initData: GROUP_DATA? = null
     ) : this(listOf(itemFactory), initData)
-
-    constructor(itemFactory: ItemFactory<GROUP_DATA>) : this(listOf(itemFactory), null)
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }

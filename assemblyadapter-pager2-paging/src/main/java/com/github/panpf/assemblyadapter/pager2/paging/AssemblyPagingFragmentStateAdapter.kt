@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
+import com.github.panpf.assemblyadapter.diffkey.DiffKey
+import com.github.panpf.assemblyadapter.diffkey.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.ConcatAdapterAbsoluteHelper
@@ -33,8 +35,8 @@ import kotlinx.coroutines.Dispatchers
 open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    diffCallback: DiffUtil.ItemCallback<DATA>,
     itemFactoryList: List<FragmentItemFactory<*>>,
+    diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingFragmentStateAdapter<DATA, RecyclerView.ViewHolder>(
@@ -50,77 +52,48 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
     constructor(
-        fragmentManager: FragmentManager,
-        lifecycle: Lifecycle,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-    ) : this(
-        fragmentManager,
-        lifecycle,
-        diffCallback,
-        itemFactoryList,
-        Dispatchers.Main,
-        Dispatchers.Default,
-    )
-
-    constructor(
         fragmentActivity: FragmentActivity,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
         itemFactoryList: List<FragmentItemFactory<*>>,
+        diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
-        diffCallback,
         itemFactoryList,
-        mainDispatcher,
-        workerDispatcher,
-    )
-
-    constructor(
-        fragmentActivity: FragmentActivity,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-    ) : this(
-        fragmentActivity.supportFragmentManager,
-        fragmentActivity.lifecycle,
         diffCallback,
-        itemFactoryList,
-        Dispatchers.Main,
-        Dispatchers.Default,
-    )
-
-    constructor(
-        fragment: Fragment,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
-        itemFactoryList: List<FragmentItemFactory<*>>,
-        mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-        workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) : this(
-        fragment.childFragmentManager,
-        fragment.lifecycle,
-        diffCallback,
-        itemFactoryList,
         mainDispatcher,
         workerDispatcher,
     )
 
     constructor(
         fragment: Fragment,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
         itemFactoryList: List<FragmentItemFactory<*>>,
+        diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
+        mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+        workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) : this(
         fragment.childFragmentManager,
         fragment.lifecycle,
-        diffCallback,
         itemFactoryList,
-        Dispatchers.Main,
-        Dispatchers.Default,
+        diffCallback,
+        mainDispatcher,
+        workerDispatcher,
     )
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+        if (diffCallback is KeyDiffItemCallback) {
+            itemFactoryList.forEach { itemFactory ->
+                val dataClass = itemFactory.dataClass
+                if (!DiffKey::class.java.isAssignableFrom(dataClass.java)) {
+                    throw IllegalArgumentException(
+                        "Because you use KeyDiffItemCallback, FragmentItemFactory's dataClass " +
+                                "'${dataClass.qualifiedName}' must implement the DiffKey interface"
+                    )
+                }
+            }
+        }
     }
 
 

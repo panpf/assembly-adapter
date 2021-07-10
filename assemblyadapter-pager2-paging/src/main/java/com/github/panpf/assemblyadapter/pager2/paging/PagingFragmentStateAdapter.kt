@@ -38,6 +38,19 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
+    /**
+     * Track whether developer called [setStateRestorationPolicy] or not to decide whether the
+     * automated state restoration should apply or not.
+     */
+    private var userSetRestorationPolicy = false
+
+    private val differ = AsyncPagingDataDiffer(
+        diffCallback = diffCallback,
+        updateCallback = AdapterListUpdateCallback(this),
+        mainDispatcher = mainDispatcher,
+        workerDispatcher = workerDispatcher
+    )
+
     constructor(
         fragmentActivity: FragmentActivity,
         diffCallback: DiffUtil.ItemCallback<T>,
@@ -52,7 +65,8 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     )
 
     constructor(
-        fragment: Fragment, diffCallback: DiffUtil.ItemCallback<T>,
+        fragment: Fragment,
+        diffCallback: DiffUtil.ItemCallback<T>,
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default
     ) : this(
@@ -63,23 +77,10 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
         workerDispatcher
     )
 
-    /**
-     * Track whether developer called [setStateRestorationPolicy] or not to decide whether the
-     * automated state restoration should apply or not.
-     */
-    private var userSetRestorationPolicy = false
-
     override fun setStateRestorationPolicy(strategy: StateRestorationPolicy) {
         userSetRestorationPolicy = true
         super.setStateRestorationPolicy(strategy)
     }
-
-    private val differ = AsyncPagingDataDiffer(
-        diffCallback = diffCallback,
-        updateCallback = AdapterListUpdateCallback(this),
-        mainDispatcher = mainDispatcher,
-        workerDispatcher = workerDispatcher
-    )
 
     init {
         // Wait on state restoration until the first insert event.

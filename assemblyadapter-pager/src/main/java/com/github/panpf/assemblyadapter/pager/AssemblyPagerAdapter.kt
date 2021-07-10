@@ -42,8 +42,6 @@ open class AssemblyPagerAdapter<DATA>(
             }
         }
 
-    constructor(itemFactoryList: List<PagerItemFactory<*>>) : this(itemFactoryList, null)
-
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }

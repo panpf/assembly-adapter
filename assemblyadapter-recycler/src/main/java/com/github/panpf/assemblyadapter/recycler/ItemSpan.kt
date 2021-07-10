@@ -15,7 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.recycler
 
-data class ItemSpan constructor(val size: Int) {
+data class ItemSpan(val size: Int) {
 
     fun isFullSpan(): Boolean = size < 0
 

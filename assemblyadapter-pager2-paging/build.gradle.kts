@@ -32,9 +32,12 @@ android {
 dependencies {
     api("androidx.paging:paging-runtime:${property("ANDROIDX_PAGING")}")
     api("androidx.paging:paging-common:${property("ANDROIDX_PAGING")}")
+    api(project(":assemblyadapter-common-diffkey"))
     api(project(":assemblyadapter-pager2"))
 
     testImplementation("junit:junit:${property("JUNIT")}")
+    testImplementation("io.github.panpf.tools4j:tools4j-test-ktx:${property("TOOLS4J")}")
+    androidTestImplementation("io.github.panpf.tools4j:tools4j-test-ktx:${property("TOOLS4J")}")
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
     androidTestImplementation("androidx.test:rules:${property("ANDROIDX_TEST_RULES")}")
 }

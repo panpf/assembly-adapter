@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
-import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
@@ -49,9 +48,11 @@ class RecyclerPagingLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
-        val pagingDataAdapter = AssemblyPagingDataAdapter(
-            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity())),
-            KeyDiffItemCallback()
+        val pagingDataAdapter = AssemblyPagingDataAdapter<Any>(
+            listOf(
+                AppItemFactory(requireActivity()),
+                ListSeparatorItemFactory(requireActivity())
+            ),
         )
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(

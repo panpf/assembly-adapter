@@ -26,7 +26,6 @@ import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
-import com.github.panpf.assemblyadapter.recycler.paging.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
@@ -52,12 +51,11 @@ class RecyclerPagingGridStaggeredFragment : BaseBindingFragment<FragmentRecycler
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
-        val pagingDataAdapter = AssemblyPagingDataAdapter(
+        val pagingDataAdapter = AssemblyPagingDataAdapter<Any>(
             listOf(
                 AppCardGridItemFactory(requireActivity()),
                 ListSeparatorItemFactory(requireActivity(), true)
-            ),
-            KeyDiffItemCallback()
+            )
         )
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(

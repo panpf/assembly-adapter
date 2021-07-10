@@ -53,25 +53,10 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     )
 
     constructor(
-        fragmentActivity: FragmentActivity,
-        itemFactory: FragmentItemFactory<DATA>,
-    ) : this(
-        fragmentActivity.supportFragmentManager,
-        fragmentActivity.lifecycle,
-        itemFactory,
-        null
-    )
-
-    constructor(
         fragment: Fragment,
         itemFactory: FragmentItemFactory<DATA>,
         initData: DATA? = null
     ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactory, initData)
-
-    constructor(
-        fragment: Fragment,
-        itemFactory: FragmentItemFactory<DATA>,
-    ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactory, null)
 
     override fun getItemCount(): Int = if (data != null) 1 else 0
 

@@ -56,12 +56,6 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
             }
         }
 
-    constructor(
-        fm: FragmentManager,
-        @Behavior behavior: Int,
-        itemFactoryList: List<FragmentItemFactory<*>>
-    ) : this(fm, behavior, itemFactoryList, null)
-
     @Deprecated(
         """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List<AssemblyFragmentItemFactory<*>>, List<DATA>)} with
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
@@ -71,15 +65,6 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         itemFactoryList: List<FragmentItemFactory<*>>,
         dataList: List<DATA>? = null
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, dataList)
-
-    @Deprecated(
-        """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List<AssemblyFragmentItemFactory<*>>)} with
-      {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
-    )
-    constructor(
-        fm: FragmentManager,
-        itemFactoryList: List<FragmentItemFactory<*>>
-    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, null)
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }

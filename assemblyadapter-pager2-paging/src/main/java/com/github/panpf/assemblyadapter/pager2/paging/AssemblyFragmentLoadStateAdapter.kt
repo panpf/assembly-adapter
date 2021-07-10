@@ -40,17 +40,25 @@ open class AssemblyFragmentLoadStateAdapter(
 
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactory: FragmentItemFactory<LoadState>
+        itemFactory: FragmentItemFactory<LoadState>,
+        alwaysShowWhenEndOfPaginationReached: Boolean = false,
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
-        itemFactory
+        itemFactory,
+        alwaysShowWhenEndOfPaginationReached
     )
 
     constructor(
         fragment: Fragment,
-        itemFactory: FragmentItemFactory<LoadState>
-    ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactory)
+        itemFactory: FragmentItemFactory<LoadState>,
+        alwaysShowWhenEndOfPaginationReached: Boolean = false,
+    ) : this(
+        fragment.childFragmentManager,
+        fragment.lifecycle,
+        itemFactory,
+        alwaysShowWhenEndOfPaginationReached
+    )
 
     override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
         return loadState is LoadState.Loading

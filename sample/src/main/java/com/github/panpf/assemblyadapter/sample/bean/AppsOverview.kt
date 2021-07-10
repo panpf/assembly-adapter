@@ -19,14 +19,14 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Parcelable
-import com.github.panpf.assemblyadapter.recycler.paging.DiffKey
+import com.github.panpf.assemblyadapter.diffkey.DiffKey
 import com.github.promeg.pinyinhelper.Pinyin
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
-data class AppsOverview constructor(val count: Int, val userAppCount: Int, val groupCount: Int) :
+data class AppsOverview(val count: Int, val userAppCount: Int, val groupCount: Int) :
     Parcelable,
     DiffKey {
 

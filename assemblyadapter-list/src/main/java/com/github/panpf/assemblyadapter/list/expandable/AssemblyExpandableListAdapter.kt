@@ -38,9 +38,6 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     var hasStableIds = false
     var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
 
-
-    constructor(itemFactoryList: List<ItemFactory<*>>) : this(itemFactoryList, null)
-
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }

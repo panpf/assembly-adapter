@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
+import com.github.panpf.assemblyadapter.diffkey.DiffKey
+import com.github.panpf.assemblyadapter.diffkey.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
@@ -30,7 +32,7 @@ import kotlinx.coroutines.Dispatchers
 
 open class AssemblyPagingDataAdapter<DATA : Any>(
     itemFactoryList: List<ItemFactory<*>>,
-    diffCallback: DiffUtil.ItemCallback<DATA>,
+    diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
@@ -39,18 +41,19 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
 
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
-    ) : this(
-        itemFactoryList,
-        diffCallback,
-        Dispatchers.Main,
-        Dispatchers.Default
-    )
-
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+        if (diffCallback is KeyDiffItemCallback) {
+            itemFactoryList.forEach { itemFactory ->
+                val dataClass = itemFactory.dataClass
+                if (!DiffKey::class.java.isAssignableFrom(dataClass.java)) {
+                    throw IllegalArgumentException(
+                        "Because you use KeyDiffItemCallback, ItemFactory's dataClass " +
+                                "'${dataClass.qualifiedName}' must implement the DiffKey interface"
+                    )
+                }
+            }
+        }
     }
 
     override fun getItemViewType(position: Int): Int {

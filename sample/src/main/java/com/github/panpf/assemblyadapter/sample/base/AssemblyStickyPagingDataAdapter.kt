@@ -17,25 +17,23 @@ package com.github.panpf.assemblyadapter.sample.base
 
 import androidx.recyclerview.widget.DiffUtil
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.Placeholder
+import com.github.panpf.assemblyadapter.diffkey.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerAdapter
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-class AssemblyStickyPagingDataAdapter<DATA : Any> : AssemblyPagingDataAdapter<DATA>,
-    StickyRecyclerAdapter {
-
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        diffCallback: DiffUtil.ItemCallback<DATA>,
-        mainDispatcher: CoroutineDispatcher,
-        workerDispatcher: CoroutineDispatcher
-    ) : super(itemFactoryList, diffCallback, mainDispatcher, workerDispatcher)
-
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        diffCallback: DiffUtil.ItemCallback<DATA>
-    ) : super(itemFactoryList, diffCallback)
+class AssemblyStickyPagingDataAdapter<DATA : Any>(
+    itemFactoryList: List<ItemFactory<*>>,
+    diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
+    mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    workerDispatcher: CoroutineDispatcher = Dispatchers.Default
+) : AssemblyPagingDataAdapter<DATA>(
+    itemFactoryList,
+    diffCallback,
+    mainDispatcher,
+    workerDispatcher
+), StickyRecyclerAdapter {
 
 
     override fun isStickyItemByPosition(position: Int): Boolean {
