@@ -20,7 +20,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.list.concat.expandable.ConcatExpandableListAdapter
+import com.github.panpf.assemblyadapter.list.expandable.concat.ConcatExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpandableListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment

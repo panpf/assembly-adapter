@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.list.concat.expandable
+package com.github.panpf.assemblyadapter.list.expandable.concat
 
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import com.github.panpf.assemblyadapter.list.concat.expandable.ConcatExpandableListAdapter.Config
-import com.github.panpf.assemblyadapter.list.concat.expandable.ConcatExpandableListAdapter.Config.StableIdMode
+import com.github.panpf.assemblyadapter.list.expandable.concat.ConcatExpandableListAdapter.Config
+import com.github.panpf.assemblyadapter.list.expandable.concat.ConcatExpandableListAdapter.Config.StableIdMode
 import java.util.*
 
 /**

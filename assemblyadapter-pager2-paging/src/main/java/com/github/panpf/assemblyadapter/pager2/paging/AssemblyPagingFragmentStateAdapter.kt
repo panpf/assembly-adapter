@@ -28,7 +28,7 @@ import com.github.panpf.assemblyadapter.diffkey.DiffKey
 import com.github.panpf.assemblyadapter.diffkey.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
-import com.github.panpf.assemblyadapter.pager2.ConcatAdapterAbsoluteHelper
+import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

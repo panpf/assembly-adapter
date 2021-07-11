@@ -28,6 +28,7 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 
 open class AssemblyFragmentStateAdapter<DATA>(
     fragmentManager: FragmentManager,

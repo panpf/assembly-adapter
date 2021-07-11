@@ -1,51 +1,40 @@
-package com.github.panpf.assemblyadapter.pager2
+package com.github.panpf.assemblyadapter.recycler.internal
 
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class ConcatAdapterAbsoluteHelper {
+class ConcatAdapterLocalHelper {
 
     private val concatAdapterAdaptersCacheMap =
         HashMap<ConcatAdapter, ConcatAdapterWrapperAdaptersCache>()
 
-    fun findAbsoluteAdapterPosition(
-        adapter: RecyclerView.Adapter<*>, localAdapter: RecyclerView.Adapter<*>, localPosition: Int
-    ): Int {
-        return findAbsoluteAdapterPositionReal(
-            adapter, localAdapter, localPosition
-        ) ?: throw IndexOutOfBoundsException(
-            "Not found childAdapterStartPosition by " +
-                    "localPosition: $localPosition, localAdapter: ${localAdapter.javaClass.name}"
-        )
+    fun reset() {
+        concatAdapterAdaptersCacheMap.clear()
     }
 
-    private fun findAbsoluteAdapterPositionReal(
-        adapter: RecyclerView.Adapter<*>, localAdapter: RecyclerView.Adapter<*>, localPosition: Int
-    ): Int? {
-        return when {
-            localAdapter === adapter -> {
-                localPosition
+    fun findLocalAdapterAndPositionImpl(
+        adapter: ConcatAdapter, position: Int
+    ): Pair<RecyclerView.Adapter<*>, Int> {
+        val wrapperAdapters = concatAdapterAdaptersCacheMap.getOrPut(adapter) {
+            ConcatAdapterWrapperAdaptersCache(adapter)
+        }.getCachedAdapters()
+        var childAdapterStartPosition = 0
+        val childAdapter = wrapperAdapters.find { childAdapter ->
+            val childAdapterEndPosition =
+                childAdapterStartPosition + childAdapter.itemCount - 1
+            @Suppress("ConvertTwoComparisonsToRangeCheck")
+            if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
+                true
+            } else {
+                childAdapterStartPosition = childAdapterEndPosition + 1
+                false
             }
-            adapter is ConcatAdapter -> {
-                val wrapperAdapters = concatAdapterAdaptersCacheMap.getOrPut(adapter) {
-                    ConcatAdapterWrapperAdaptersCache(adapter)
-                }.getCachedAdapters()
-
-                var childAdapterStartPosition = 0
-                wrapperAdapters.forEach { childAdapter ->
-                    val childPosition = findAbsoluteAdapterPositionReal(
-                        childAdapter, localAdapter, localPosition
-                    )
-                    if (childPosition != null) {
-                        return childAdapterStartPosition + childPosition
-                    }
-                    childAdapterStartPosition = childAdapter.itemCount
-                }
-                null
-            }
-            else -> {
-                null
-            }
+        }
+        if (childAdapter != null) {
+            val childPosition = position - childAdapterStartPosition
+            return childAdapter to childPosition
+        } else {
+            throw IndexOutOfBoundsException("Index: $position, Size: ${adapter.itemCount}")
         }
     }
 

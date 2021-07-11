@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 
 open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,

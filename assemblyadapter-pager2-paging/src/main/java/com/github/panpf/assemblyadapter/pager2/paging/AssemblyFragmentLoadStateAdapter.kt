@@ -23,7 +23,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentItemFactory
-import com.github.panpf.assemblyadapter.pager2.ConcatAdapterAbsoluteHelper
+import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 
 open class AssemblyFragmentLoadStateAdapter(
     fragmentManager: FragmentManager,

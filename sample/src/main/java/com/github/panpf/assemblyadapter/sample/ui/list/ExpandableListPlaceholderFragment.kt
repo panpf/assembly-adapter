@@ -21,12 +21,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.ViewItemFactory
-import com.github.panpf.assemblyadapter.list.concat.expandable.ConcatExpandableListAdapter
+import com.github.panpf.assemblyadapter.list.expandable.concat.ConcatExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpandableListAdapter
-import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
