@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
-class ViewGroupItemFactory<DATA : ExpandableGroup>(
+open class ViewGroupItemFactory<DATA : ExpandableGroup>(
     dataClazz: KClass<DATA>,
     private val viewFactory: (context: Context, inflater: LayoutInflater, parent: ViewGroup) -> View
 ) : SimpleGroupItemFactory<DATA>(dataClazz) {
