@@ -17,5 +17,5 @@ package com.github.panpf.assemblyadapter.list.expandable
 
 interface ExpandableGroup {
     fun getChildCount(): Int
-    fun getChild(childPosition: Int): Any?
+    fun getChild(childPosition: Int): Any
 }

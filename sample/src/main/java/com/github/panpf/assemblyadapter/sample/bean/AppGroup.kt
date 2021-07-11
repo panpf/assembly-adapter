@@ -31,5 +31,5 @@ data class AppGroup(
 
     override fun getChildCount(): Int = appList.size
 
-    override fun getChild(childPosition: Int): Any? = appList[childPosition]
+    override fun getChild(childPosition: Int): Any = appList[childPosition]
 }
