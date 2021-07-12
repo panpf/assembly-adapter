@@ -35,7 +35,7 @@ open class AppGroupItemFactory :
     override fun bindItemData(
         context: Context,
         binding: ItemAppGroupBinding,
-        item: GroupItem<AppGroup>,
+        item: ExpandableGroupItem<AppGroup>,
         isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,

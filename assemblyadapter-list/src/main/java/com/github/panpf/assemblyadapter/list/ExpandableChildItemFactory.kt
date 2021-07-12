@@ -31,9 +31,9 @@ import kotlin.reflect.KClass
 abstract class ExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(dataClass: KClass<CHILD_DATA>) :
     ItemFactory<CHILD_DATA>(dataClass) {
 
-    abstract override fun createItem(parent: ViewGroup): ChildItem<GROUP_DATA, CHILD_DATA>
+    abstract override fun createItem(parent: ViewGroup): ExpandableChildItem<GROUP_DATA, CHILD_DATA>
 
-    abstract class ChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any> :
+    abstract class ExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any> :
         Item<CHILD_DATA> {
 
         private var _groupBindingAdapterPosition = -1

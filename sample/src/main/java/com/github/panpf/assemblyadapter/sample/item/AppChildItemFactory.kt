@@ -41,7 +41,7 @@ class AppChildItemFactory(private val activity: Activity) :
 
     override fun initItem(
         context: Context, binding: ItemAppBinding,
-        item: ChildItem<AppGroup, AppInfo>
+        item: ExpandableChildItem<AppGroup, AppInfo>
     ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
@@ -84,7 +84,7 @@ class AppChildItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemAppBinding,
-        item: ChildItem<AppGroup, AppInfo>,
+        item: ExpandableChildItem<AppGroup, AppInfo>,
         groupBindingAdapterPosition: Int,
         groupAbsoluteAdapterPosition: Int,
         groupData: AppGroup,

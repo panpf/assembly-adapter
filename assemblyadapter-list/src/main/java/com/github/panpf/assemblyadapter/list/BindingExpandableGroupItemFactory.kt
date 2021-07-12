@@ -25,10 +25,10 @@ abstract class BindingExpandableGroupItemFactory<DATA : ExpandableGroup, VIEW_BI
     dataClass: KClass<DATA>
 ) : ExpandableGroupItemFactory<DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): GroupItem<DATA> {
+    override fun createItem(parent: ViewGroup): ExpandableGroupItem<DATA> {
         val context = parent.context
         val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
-        return BindingGroupItem(this, binding).apply {
+        return BindingExpandableGroupItem(this, binding).apply {
             initItem(parent.context, binding, this)
         }
     }
@@ -38,24 +38,24 @@ abstract class BindingExpandableGroupItemFactory<DATA : ExpandableGroup, VIEW_BI
     ): VIEW_BINDING
 
     protected open fun initItem(
-        context: Context, binding: VIEW_BINDING, item: GroupItem<DATA>
+        context: Context, binding: VIEW_BINDING, item: ExpandableGroupItem<DATA>
     ) {
     }
 
     protected abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: GroupItem<DATA>,
+        item: ExpandableGroupItem<DATA>,
         isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: DATA,
     )
 
-    private class BindingGroupItem<DATA : ExpandableGroup, VIEW_BINDING : ViewBinding>(
+    private class BindingExpandableGroupItem<DATA : ExpandableGroup, VIEW_BINDING : ViewBinding>(
         private val factory: BindingExpandableGroupItemFactory<DATA, VIEW_BINDING>,
         private val binding: VIEW_BINDING
-    ) : GroupItem<DATA>(binding.root) {
+    ) : ExpandableGroupItem<DATA>(binding.root) {
 
         override fun bindData(
             isExpanded: Boolean,

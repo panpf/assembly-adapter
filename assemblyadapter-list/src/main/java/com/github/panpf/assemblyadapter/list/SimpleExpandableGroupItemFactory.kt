@@ -25,10 +25,10 @@ abstract class SimpleExpandableGroupItemFactory<DATA : ExpandableGroup>(
     dataClass: KClass<DATA>
 ) : ExpandableGroupItemFactory<DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): GroupItem<DATA> {
+    override fun createItem(parent: ViewGroup): ExpandableGroupItem<DATA> {
         val context = parent.context
         val itemView = createItemView(context, LayoutInflater.from(context), parent)
-        return SimpleGroupItem(this, itemView).apply {
+        return SimpleExpandableGroupItem(this, itemView).apply {
             initItem(parent.context, itemView, this)
         }
     }
@@ -40,23 +40,23 @@ abstract class SimpleExpandableGroupItemFactory<DATA : ExpandableGroup>(
     protected open fun initItem(
         context: Context,
         itemView: View,
-        item: GroupItem<DATA>
+        item: ExpandableGroupItem<DATA>
     ) {
     }
 
     protected abstract fun bindItemData(
         context: Context,
         itemView: View,
-        item: GroupItem<DATA>,
+        item: ExpandableGroupItem<DATA>,
         isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: DATA,
     )
 
-    private class SimpleGroupItem<DATA : ExpandableGroup>(
+    private class SimpleExpandableGroupItem<DATA : ExpandableGroup>(
         private val factory: SimpleExpandableGroupItemFactory<DATA>, itemView: View
-    ) : GroupItem<DATA>(itemView) {
+    ) : ExpandableGroupItem<DATA>(itemView) {
 
         override fun bindData(
             isExpanded: Boolean,

@@ -43,7 +43,7 @@ open class ViewExpandableGroupItemFactory<DATA : ExpandableGroup>(
     override fun bindItemData(
         context: Context,
         itemView: View,
-        item: GroupItem<DATA>,
+        item: ExpandableGroupItem<DATA>,
         isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,

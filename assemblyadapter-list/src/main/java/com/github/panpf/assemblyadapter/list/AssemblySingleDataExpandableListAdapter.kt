@@ -83,9 +83,9 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         @Suppress("UNCHECKED_CAST")
         val groupItem = groupItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
         when (groupItem) {
-            is ExpandableGroupItemFactory.GroupItem<*> -> {
+            is ExpandableGroupItemFactory.ExpandableGroupItem<*> -> {
                 @Suppress("UNCHECKED_CAST")
-                (groupItem as ExpandableGroupItemFactory.GroupItem<ExpandableGroup>)
+                (groupItem as ExpandableGroupItemFactory.ExpandableGroupItem<ExpandableGroup>)
                     .dispatchGroupBindData(
                         isExpanded,
                         groupBindingAdapterPosition,
@@ -93,7 +93,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
                         groupData as ExpandableGroup,
                     )
             }
-            is ExpandableChildItemFactory.ChildItem<*, *> -> {
+            is ExpandableChildItemFactory.ExpandableChildItem<*, *> -> {
                 throw IllegalArgumentException("groupData '${groupData.javaClass.name}' need a matching GroupItemFactory, not ChildItemFactory")
             }
             else -> {
@@ -154,9 +154,9 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         @Suppress("UNCHECKED_CAST")
         val childItem = childItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
         when (childItem) {
-            is ExpandableChildItemFactory.ChildItem<*, *> -> {
+            is ExpandableChildItemFactory.ExpandableChildItem<*, *> -> {
                 @Suppress("UNCHECKED_CAST")
-                (childItem as ExpandableChildItemFactory.ChildItem<ExpandableGroup, Any>)
+                (childItem as ExpandableChildItemFactory.ExpandableChildItem<ExpandableGroup, Any>)
                     .dispatchChildBindData(
                         groupBindingAdapterPosition,
                         groupAbsoluteAdapterPosition,
@@ -167,7 +167,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
                         childData
                     )
             }
-            is ExpandableGroupItemFactory.GroupItem<*> -> {
+            is ExpandableGroupItemFactory.ExpandableGroupItem<*> -> {
                 throw IllegalArgumentException("childData '${childData.javaClass.name}' need a matching ChildItemFactory, not GroupItemFactory")
             }
             else -> {

@@ -25,10 +25,10 @@ abstract class BindingExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, C
     dataClass: KClass<CHILD_DATA>
 ) : ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): ChildItem<GROUP_DATA, CHILD_DATA> {
+    override fun createItem(parent: ViewGroup): ExpandableChildItem<GROUP_DATA, CHILD_DATA> {
         val context = parent.context
         val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
-        return BindingChildItem(this, binding).apply {
+        return BindingExpandableChildItem(this, binding).apply {
             initItem(parent.context, binding, this)
         }
     }
@@ -38,14 +38,14 @@ abstract class BindingExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, C
     ): VIEW_BINDING
 
     protected open fun initItem(
-        context: Context, binding: VIEW_BINDING, item: ChildItem<GROUP_DATA, CHILD_DATA>
+        context: Context, binding: VIEW_BINDING, item: ExpandableChildItem<GROUP_DATA, CHILD_DATA>
     ) {
     }
 
     protected abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: ChildItem<GROUP_DATA, CHILD_DATA>,
+        item: ExpandableChildItem<GROUP_DATA, CHILD_DATA>,
         groupBindingAdapterPosition: Int,
         groupAbsoluteAdapterPosition: Int,
         groupData: GROUP_DATA,
@@ -55,10 +55,10 @@ abstract class BindingExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, C
         data: CHILD_DATA,
     )
 
-    private class BindingChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any, VIEW_BINDING : ViewBinding>(
+    private class BindingExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any, VIEW_BINDING : ViewBinding>(
         private val factory: BindingExpandableChildItemFactory<GROUP_DATA, CHILD_DATA, VIEW_BINDING>,
         private val binding: VIEW_BINDING
-    ) : ChildItem<GROUP_DATA, CHILD_DATA>(binding.root) {
+    ) : ExpandableChildItem<GROUP_DATA, CHILD_DATA>(binding.root) {
 
         override fun bindData(
             groupBindingAdapterPosition: Int,

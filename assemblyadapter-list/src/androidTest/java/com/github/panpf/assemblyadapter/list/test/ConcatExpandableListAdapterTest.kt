@@ -25,11 +25,11 @@ class ConcatExpandableListAdapterTest {
         override fun getChild(childPosition: Int): Any = childDataList[childPosition]
     }
 
-    class DateGroupItemFactory : ViewExpandableGroupItemFactory<DateGroup>(
+    class DateExpandableGroupItemFactory : ViewExpandableGroupItemFactory<DateGroup>(
         DateGroup::class, android.R.layout.activity_list_item
     )
 
-    class DateChildItemFactory : ViewExpandableChildItemFactory<DateGroup, DateChild>(
+    class DateExpandableChildItemFactory : ViewExpandableChildItemFactory<DateGroup, DateChild>(
         DateChild::class, android.R.layout.activity_list_item
     )
 
@@ -41,19 +41,19 @@ class ConcatExpandableListAdapterTest {
     fun testNestedAdapterPosition() {
         val count1Adapter =
             AssemblySingleDataExpandableListAdapter<Any, Any>(
-                listOf(DateGroupItemFactory(), DateChildItemFactory()),
+                listOf(DateExpandableGroupItemFactory(), DateExpandableChildItemFactory()),
                 DateGroup()
             )
         val count3Adapter = AssemblyExpandableListAdapter<Any, Any>(
-            listOf(DateGroupItemFactory(), DateChildItemFactory(), DateItemFactory()),
+            listOf(DateExpandableGroupItemFactory(), DateExpandableChildItemFactory(), DateItemFactory()),
             listOf(DateGroup(), Date(), DateGroup())
         )
         val count5Adapter = AssemblyExpandableListAdapter<Any, Any>(
-            listOf(DateGroupItemFactory(), DateChildItemFactory(), DateItemFactory()),
+            listOf(DateExpandableGroupItemFactory(), DateExpandableChildItemFactory(), DateItemFactory()),
             listOf(DateGroup(), Date(), DateGroup(), Date(), DateGroup())
         )
         val count7Adapter = AssemblyExpandableListAdapter<Any, Any>(
-            listOf(DateGroupItemFactory(), DateChildItemFactory(), DateItemFactory()),
+            listOf(DateExpandableGroupItemFactory(), DateExpandableChildItemFactory(), DateItemFactory()),
             listOf(
                 DateGroup(), Date(), DateGroup(), Date(),
                 DateGroup(), Date(), DateGroup()
@@ -97,7 +97,7 @@ class ConcatExpandableListAdapterTest {
                     val childItemView =
                         adapter.getChildView(groupPosition, 0, false, null, parent)
                     val childItem =
-                        childItemView.getTag(R.id.aa_tag_item) as ExpandableChildItemFactory.ChildItem<*, *>
+                        childItemView.getTag(R.id.aa_tag_item) as ExpandableChildItemFactory.ExpandableChildItem<*, *>
                     Assert.assertEquals(
                         "count${adapter.groupCount}Adapter. groupPosition(${groupPosition}), childPosition(0). item.groupBindingAdapterPosition",
                         expectedBindingAdapterPosition, childItem.groupBindingAdapterPosition
