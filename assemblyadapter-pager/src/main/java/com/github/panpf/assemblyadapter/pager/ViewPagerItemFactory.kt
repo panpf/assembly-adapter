@@ -24,21 +24,35 @@ import kotlin.reflect.KClass
 
 open class ViewPagerItemFactory<DATA : Any>(
     dataClass: KClass<DATA>,
-    private val viewFactory: (context: Context, inflater: LayoutInflater, parent: ViewGroup) -> View
+    private val viewFactory: (
+        context: Context,
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        bindingAdapterPosition: Int,
+        absoluteAdapterPosition: Int,
+        data: DATA
+    ) -> View
 ) : PagerItemFactory<DATA>(dataClass) {
 
     constructor(dataClass: KClass<DATA>, @LayoutRes layoutResId: Int) : this(
         dataClass,
-        { _, inflater, parent -> inflater.inflate(layoutResId, parent, false) }
+        { _, inflater, parent, _, _, _ -> inflater.inflate(layoutResId, parent, false) }
     )
 
-    constructor(dataClass: KClass<DATA>, view: View) : this(dataClass, { _, _, _ -> view })
+    constructor(dataClass: KClass<DATA>, view: View) : this(dataClass, { _, _, _, _, _, _ -> view })
 
-    final override fun createItemView(
+    override fun createItemView(
         context: Context,
         parent: ViewGroup,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: DATA
-    ): View = viewFactory(context, LayoutInflater.from(context), parent)
+    ): View = viewFactory(
+        context,
+        LayoutInflater.from(context),
+        parent,
+        bindingAdapterPosition,
+        absoluteAdapterPosition,
+        data
+    )
 }

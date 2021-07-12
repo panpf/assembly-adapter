@@ -55,6 +55,8 @@ open class AssemblyPagerAdapter<DATA>(
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = container.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        // set tag absoluteAdapterPosition null to support ConcatPagerAdapter nesting
+        container.setTag(R.id.aa_tag_absoluteAdapterPosition, null)
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")

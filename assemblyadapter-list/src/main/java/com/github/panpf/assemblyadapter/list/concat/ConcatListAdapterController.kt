@@ -206,7 +206,10 @@ internal class ConcatListAdapterController(
     }
 
     fun getView(globalPosition: Int, convertView: View?, parent: ViewGroup): View {
-        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalPosition)
+        // tag absoluteAdapterPosition must be null to support ConcatListAdapter nesting
+        if (parent.getTag(R.id.aa_tag_absoluteAdapterPosition) == null) {
+            parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalPosition)
+        }
 
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
         val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter

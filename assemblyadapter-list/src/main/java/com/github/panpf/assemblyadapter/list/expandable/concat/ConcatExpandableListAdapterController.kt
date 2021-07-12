@@ -226,7 +226,10 @@ internal class ConcatExpandableListAdapterController(
     fun getGroupView(
         globalGroupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
-        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalGroupPosition)
+        // tag absoluteAdapterPosition must be null to support ConcatExpandableListAdapter nesting
+        if (parent.getTag(R.id.aa_tag_absoluteAdapterPosition) == null) {
+            parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalGroupPosition)
+        }
 
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
         val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter
@@ -272,7 +275,10 @@ internal class ConcatExpandableListAdapterController(
         globalGroupPosition: Int, childPosition: Int, isLastChild: Boolean,
         convertView: View?, parent: ViewGroup
     ): View {
-        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalGroupPosition)
+        // tag absoluteAdapterPosition must be null to support ConcatExpandableListAdapter nesting
+        if (parent.getTag(R.id.aa_tag_absoluteAdapterPosition) == null) {
+            parent.setTag(R.id.aa_tag_absoluteAdapterPosition, globalGroupPosition)
+        }
 
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
         val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter

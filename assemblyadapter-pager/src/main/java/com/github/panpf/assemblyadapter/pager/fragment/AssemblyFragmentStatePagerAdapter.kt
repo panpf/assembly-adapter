@@ -46,8 +46,8 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
-    private var nextItemAbsoluteAdapterPosition: Int? = null
 
+    override var nextItemAbsoluteAdapterPosition: Int? = null
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {
@@ -80,6 +80,8 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
+        // set nextItemAbsoluteAdapterPosition null to support ConcatFragmentStatePagerAdapter nesting
+        nextItemAbsoluteAdapterPosition = null
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactoryStorage.getItemFactoryByData(
@@ -165,11 +167,6 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         return itemFactoryStorage.getItemFactoryByData(
             data, "FragmentItemFactory", "AssemblyFragmentStatePagerAdapter", "itemFactoryList"
         )
-    }
-
-
-    override fun setNextItemAbsoluteAdapterPosition(absoluteAdapterPosition: Int) {
-        this.nextItemAbsoluteAdapterPosition = absoluteAdapterPosition
     }
 
 

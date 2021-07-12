@@ -19,6 +19,7 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.fragment.FragmentPagerAdapterRefreshHelper
 import java.util.*
 
@@ -33,7 +34,7 @@ open class ConcatFragmentStatePagerAdapter(
     fm: FragmentManager,
     @Behavior behavior: Int,
     adapters: List<FragmentStatePagerAdapter>
-) : FragmentStatePagerAdapter(fm, behavior) {
+) : FragmentStatePagerAdapter(fm, behavior), AbsoluteAdapterPositionAdapter {
 
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
@@ -42,6 +43,9 @@ open class ConcatFragmentStatePagerAdapter(
         ConcatFragmentStatePagerAdapterController(this)
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
+
+    // To support ConcatFragmentStatePagerAdapter nesting
+    override var nextItemAbsoluteAdapterPosition: Int? = null
 
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
@@ -144,7 +148,8 @@ open class ConcatFragmentStatePagerAdapter(
     }
 
     override fun getItem(position: Int): Fragment {
-        return mController.getItem(position).apply {
+        return mController.getItem(position, nextItemAbsoluteAdapterPosition).apply {
+            nextItemAbsoluteAdapterPosition = null
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
     }

@@ -40,8 +40,8 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
 
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
-    private var nextItemAbsoluteAdapterPosition: Int? = null
 
+    override var nextItemAbsoluteAdapterPosition: Int? = null
     var data: DATA? = data
         set(value) {
             field = value
@@ -70,6 +70,8 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     override fun getItem(position: Int): Fragment {
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
+        // set nextItemAbsoluteAdapterPosition null to support ConcatFragmentStatePagerAdapter nesting
+        nextItemAbsoluteAdapterPosition = null
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as FragmentItemFactory<Any>
@@ -95,11 +97,6 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         return itemFactory
-    }
-
-
-    override fun setNextItemAbsoluteAdapterPosition(absoluteAdapterPosition: Int) {
-        this.nextItemAbsoluteAdapterPosition = absoluteAdapterPosition
     }
 
 

@@ -127,7 +127,10 @@ internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPa
         }
 
     fun instantiateItem(container: ViewGroup, globalPosition: Int): Any {
-        container.setTag(R.id.aa_tag_absoluteAdapterPosition, globalPosition)
+        // tag absoluteAdapterPosition must be null to support ConcatPagerAdapter nesting
+        if (container.getTag(R.id.aa_tag_absoluteAdapterPosition) == null) {
+            container.setTag(R.id.aa_tag_absoluteAdapterPosition, globalPosition)
+        }
 
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
         val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter

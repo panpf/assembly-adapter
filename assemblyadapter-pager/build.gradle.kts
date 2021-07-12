@@ -17,6 +17,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+//    sourceSets {
+//        getByName("androidTest") {
+////            java.srcDirs("src/androidTest/java")
+//            res.srcDirs("src/androidTest/res")
+//        }
+//    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -39,6 +46,7 @@ dependencies {
     testImplementation("junit:junit:${property("JUNIT")}")
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
     androidTestImplementation("androidx.test:rules:${property("ANDROIDX_TEST_RULES")}")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${property("KOTLINX_COROUTINES_ANDROID")}")
 }
 
 /**

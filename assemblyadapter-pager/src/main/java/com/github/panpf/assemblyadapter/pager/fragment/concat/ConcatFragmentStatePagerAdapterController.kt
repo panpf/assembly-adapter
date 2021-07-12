@@ -131,11 +131,13 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
         return pageTitle
     }
 
-    fun getItem(globalPosition: Int): Fragment {
+    fun getItem(globalPosition: Int, nextItemAbsoluteAdapterPosition: Int?): Fragment {
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
         val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter
-        if (wrapperAdapter is AbsoluteAdapterPositionAdapter) {
-            wrapperAdapter.setNextItemAbsoluteAdapterPosition(globalPosition)
+        // wrapperAdapter.nextItemAbsoluteAdapterPosition must be null to support ConcatFragmentStatePagerAdapter nesting
+        if (wrapperAdapter is AbsoluteAdapterPositionAdapter && wrapperAdapter.nextItemAbsoluteAdapterPosition == null) {
+            wrapperAdapter.nextItemAbsoluteAdapterPosition =
+                nextItemAbsoluteAdapterPosition ?: globalPosition
         }
         val fragment = wrapperAdapter.getItem(wrapperAndPos.mLocalPosition)
         releaseWrapperAndLocalPosition(wrapperAndPos)

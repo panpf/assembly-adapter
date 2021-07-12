@@ -71,6 +71,8 @@ open class AssemblyListAdapter<DATA>(
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        // set tag absoluteAdapterPosition null to support ConcatListAdapter nesting
+        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, null)
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")

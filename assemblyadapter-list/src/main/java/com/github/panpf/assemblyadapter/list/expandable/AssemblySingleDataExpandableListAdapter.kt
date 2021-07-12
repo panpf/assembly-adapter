@@ -76,6 +76,8 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
         @Suppress("UnnecessaryVariable") val groupBindingAdapterPosition = groupPosition
         val groupAbsolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        // set tag absoluteAdapterPosition null to support ConcatExpandableListAdapter nesting
+        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, null)
         val groupAbsoluteAdapterPosition =
             (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
@@ -145,6 +147,8 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
         @Suppress("UnnecessaryVariable") val groupBindingAdapterPosition = groupPosition
         val groupAbsolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
+        // set tag absoluteAdapterPosition null to support ConcatExpandableListAdapter nesting
+        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, null)
         val groupAbsoluteAdapterPosition =
             (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
