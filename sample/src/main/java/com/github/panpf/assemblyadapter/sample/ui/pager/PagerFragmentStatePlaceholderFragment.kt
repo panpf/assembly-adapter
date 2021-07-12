@@ -26,10 +26,10 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.pager.fragment.AssemblyFragmentStatePagerAdapter
-import com.github.panpf.assemblyadapter.pager.fragment.AssemblySingleDataFragmentStatePagerAdapter
-import com.github.panpf.assemblyadapter.pager.fragment.ViewFragmentItemFactory
-import com.github.panpf.assemblyadapter.pager.fragment.concat.ConcatFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.AssemblyFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.AssemblySingleDataFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding

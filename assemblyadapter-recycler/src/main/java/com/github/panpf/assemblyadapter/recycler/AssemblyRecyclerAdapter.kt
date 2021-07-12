@@ -23,6 +23,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import java.util.*
 

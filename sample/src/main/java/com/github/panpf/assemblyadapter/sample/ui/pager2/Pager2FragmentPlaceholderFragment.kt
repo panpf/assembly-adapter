@@ -26,7 +26,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.pager.fragment.ViewFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter
 import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter
 import com.github.panpf.assemblyadapter.sample.R

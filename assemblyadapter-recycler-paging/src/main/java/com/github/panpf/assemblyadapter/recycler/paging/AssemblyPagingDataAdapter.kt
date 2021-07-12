@@ -25,7 +25,7 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.diffkey.DiffKey
 import com.github.panpf.assemblyadapter.diffkey.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.FullSpanStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

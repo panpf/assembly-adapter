@@ -25,7 +25,7 @@ import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.pager.AssemblyPagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblySingleDataPagerAdapter
-import com.github.panpf.assemblyadapter.pager.concat.ConcatPagerAdapter
+import com.github.panpf.assemblyadapter.pager.ConcatPagerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupPagerItemFactory

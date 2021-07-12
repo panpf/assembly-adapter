@@ -21,15 +21,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
-import com.github.panpf.assemblyadapter.list.concat.ConcatListAdapter
-import com.github.panpf.assemblyadapter.sample.R
+import com.github.panpf.assemblyadapter.list.ConcatListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding
-import com.github.panpf.assemblyadapter.sample.databinding.ItemAppPlaceholderBinding
 import com.github.panpf.assemblyadapter.sample.item.*
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 

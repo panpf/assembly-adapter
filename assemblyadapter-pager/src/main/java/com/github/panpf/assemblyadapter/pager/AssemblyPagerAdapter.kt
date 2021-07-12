@@ -23,6 +23,7 @@ import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 import java.util.*
 
 open class AssemblyPagerAdapter<DATA>(

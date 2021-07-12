@@ -18,13 +18,13 @@ package com.github.panpf.assemblyadapter.sample.item
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.github.panpf.assemblyadapter.list.expandable.BindingGroupItemFactory
+import com.github.panpf.assemblyadapter.list.BindingExpandableGroupItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGroupBinding
 
 open class AppGroupItemFactory :
-    BindingGroupItemFactory<AppGroup, ItemAppGroupBinding>(AppGroup::class) {
+    BindingExpandableGroupItemFactory<AppGroup, ItemAppGroupBinding>(AppGroup::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup

@@ -6,8 +6,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.ViewItemFactory
-import com.github.panpf.assemblyadapter.list.expandable.*
-import com.github.panpf.assemblyadapter.list.expandable.concat.ConcatExpandableListAdapter
+import com.github.panpf.assemblyadapter.list.*
+import com.github.panpf.assemblyadapter.list.ConcatExpandableListAdapter
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,11 +25,11 @@ class ConcatExpandableListAdapterTest {
         override fun getChild(childPosition: Int): Any = childDataList[childPosition]
     }
 
-    class DateGroupItemFactory : ViewGroupItemFactory<DateGroup>(
+    class DateGroupItemFactory : ViewExpandableGroupItemFactory<DateGroup>(
         DateGroup::class, android.R.layout.activity_list_item
     )
 
-    class DateChildItemFactory : ViewChildItemFactory<DateGroup, DateChild>(
+    class DateChildItemFactory : ViewExpandableChildItemFactory<DateGroup, DateChild>(
         DateChild::class, android.R.layout.activity_list_item
     )
 
@@ -97,7 +97,7 @@ class ConcatExpandableListAdapterTest {
                     val childItemView =
                         adapter.getChildView(groupPosition, 0, false, null, parent)
                     val childItem =
-                        childItemView.getTag(R.id.aa_tag_item) as ChildItemFactory.ChildItem<*, *>
+                        childItemView.getTag(R.id.aa_tag_item) as ExpandableChildItemFactory.ChildItem<*, *>
                     Assert.assertEquals(
                         "count${adapter.groupCount}Adapter. groupPosition(${groupPosition}), childPosition(0). item.groupBindingAdapterPosition",
                         expectedBindingAdapterPosition, childItem.groupBindingAdapterPosition

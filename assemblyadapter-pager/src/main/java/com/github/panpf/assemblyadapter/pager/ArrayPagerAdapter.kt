@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.pager
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
+import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 
 open class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
 

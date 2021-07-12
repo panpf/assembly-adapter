@@ -8,7 +8,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
-import com.github.panpf.assemblyadapter.list.concat.ConcatListAdapter
+import com.github.panpf.assemblyadapter.list.ConcatListAdapter
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

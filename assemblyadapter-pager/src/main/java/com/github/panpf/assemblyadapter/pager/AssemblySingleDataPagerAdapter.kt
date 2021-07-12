@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 
 open class AssemblySingleDataPagerAdapter<DATA : Any>(
     private val itemFactory: PagerItemFactory<DATA>,

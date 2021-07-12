@@ -1,9 +1,10 @@
 package com.github.panpf.assemblyadapter.pager2.paging.test
 
+import android.R
 import androidx.fragment.app.FragmentActivity
 import androidx.test.runner.AndroidJUnit4
 import com.github.panpf.assemblyadapter.diffkey.DiffKey
-import com.github.panpf.assemblyadapter.pager.fragment.ViewFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingFragmentStateAdapter
 import com.github.panpf.tools4j.test.ktx.assertNoThrow
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -23,9 +24,9 @@ class AssemblyPagingFragmentStateAdapterTest {
     data class NoKeyData(val time: Long)
 
     private val haveKeyItemFactory =
-        ViewFragmentItemFactory(HaveKeyData::class, android.R.layout.activity_list_item)
+        ViewFragmentItemFactory(HaveKeyData::class, R.layout.activity_list_item)
     private val noKeyItemFactory =
-        ViewFragmentItemFactory(NoKeyData::class, android.R.layout.activity_list_item)
+        ViewFragmentItemFactory(NoKeyData::class, R.layout.activity_list_item)
 
     @Test
     fun testDataClassDiffKey() {

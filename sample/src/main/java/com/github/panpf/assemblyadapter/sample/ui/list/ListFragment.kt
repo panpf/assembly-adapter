@@ -22,7 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
-import com.github.panpf.assemblyadapter.list.concat.ConcatListAdapter
+import com.github.panpf.assemblyadapter.list.ConcatListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding

@@ -20,6 +20,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import kotlin.reflect.KClass
 
 class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,

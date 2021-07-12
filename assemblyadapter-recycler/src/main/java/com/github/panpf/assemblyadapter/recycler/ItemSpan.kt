@@ -22,7 +22,7 @@ data class ItemSpan(val size: Int) {
     companion object {
 
         @JvmStatic
-        val FULL_SPAN = ItemSpan(-1)
+        private val FULL_SPAN = ItemSpan(-1)
 
         @JvmStatic
         fun fullSpan(): ItemSpan {

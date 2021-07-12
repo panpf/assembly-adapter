@@ -22,7 +22,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
-import com.github.panpf.assemblyadapter.list.expandable.BindingChildItemFactory
+import com.github.panpf.assemblyadapter.list.BindingExpandableChildItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
@@ -31,7 +31,7 @@ import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
 class AppChildItemFactory(private val activity: Activity) :
-    BindingChildItemFactory<AppGroup, AppInfo, ItemAppBinding>(AppInfo::class) {
+    BindingExpandableChildItemFactory<AppGroup, AppInfo, ItemAppBinding>(AppInfo::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
