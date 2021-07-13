@@ -47,6 +47,7 @@ open class ArrayPagerAdapter(viewList: List<View>) : PagerAdapter() {
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
                 refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
+                notifyDataSetChanged()
             }
         }
 

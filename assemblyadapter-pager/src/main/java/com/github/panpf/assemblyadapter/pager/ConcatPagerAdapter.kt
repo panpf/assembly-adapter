@@ -36,6 +36,7 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
                 refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
+                notifyDataSetChanged()
             }
         }
 

@@ -53,6 +53,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
                 refreshHelper = if (disable) null else FragmentPagerAdapterRefreshHelper()
+                notifyDataSetChanged()
             }
         }
     /**

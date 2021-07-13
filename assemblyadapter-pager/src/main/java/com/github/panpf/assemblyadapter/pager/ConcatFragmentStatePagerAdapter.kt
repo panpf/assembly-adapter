@@ -53,6 +53,7 @@ open class ConcatFragmentStatePagerAdapter(
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
                 refreshHelper = if (disable) null else FragmentPagerAdapterRefreshHelper()
+                notifyDataSetChanged()
             }
         }
 

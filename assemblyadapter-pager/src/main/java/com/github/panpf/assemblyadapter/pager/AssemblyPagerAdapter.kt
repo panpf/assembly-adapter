@@ -38,6 +38,7 @@ open class AssemblyPagerAdapter<DATA>(
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
                 refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
+                notifyDataSetChanged()
             }
         }
     /**
