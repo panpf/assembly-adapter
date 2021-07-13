@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.paging.*
+import androidx.paging.LoadType.REFRESH
 import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -30,6 +31,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * [Fragment] version of [PagingDataAdapter]
+ *
+ * @see PagingDataAdapter
+ */
 abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
@@ -51,6 +57,9 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
         workerDispatcher = workerDispatcher
     )
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [PagingFragmentStateAdapter]
+     */
     constructor(
         fragmentActivity: FragmentActivity,
         diffCallback: DiffUtil.ItemCallback<T>,
@@ -64,6 +73,9 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
         workerDispatcher
     )
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [PagingFragmentStateAdapter]
+     */
     constructor(
         fragment: Fragment,
         diffCallback: DiffUtil.ItemCallback<T>,
@@ -165,8 +177,6 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
      * up-to-date representation of your backing dataset should typically be done using
      * [collectLatest][kotlinx.coroutines.flow.collectLatest].
      *
-     * @sample androidx.paging.samples.submitDataFlowSample
-     *
      * @see [Pager]
      */
     suspend fun submitData(pagingData: PagingData<T>) {
@@ -180,9 +190,6 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
      * This method is typically used when observing a RxJava or LiveData stream produced by [Pager].
      * For [Flow] support, use the suspending overload of [submitData], which automates cancellation
      * via [CoroutineScope][kotlinx.coroutines.CoroutineScope] instead of relying of [Lifecycle].
-     *
-     * @sample androidx.paging.samples.submitDataLiveDataSample
-     * @sample androidx.paging.samples.submitDataRxSample
      *
      * @see submitData
      * @see [Pager]
@@ -219,8 +226,6 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
      * [PagingSource.invalidate].
      *
      * @see PagingSource.invalidate
-     *
-     * @sample androidx.paging.samples.refreshSample
      */
     fun refresh() {
         differ.refresh()
@@ -271,7 +276,6 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
      * @param listener [LoadStates] listener to receive updates.
      *
      * @see removeLoadStateListener
-     * @sample androidx.paging.samples.addLoadStateListenerSample
      */
     fun addLoadStateListener(listener: (CombinedLoadStates) -> Unit) {
         differ.addLoadStateListener(listener)

@@ -32,6 +32,16 @@ import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
+/**
+ * An implementation of [PagingFragmentStateAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
+ * [AssemblyPagingFragmentStateAdapter] will use the data corresponding to position to find a matching [FragmentItemFactory] (cannot find an exception will be thrown),
+ * and then use [FragmentItemFactory] to create an [Fragment]
+ *
+ * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
+ * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+ * @see FragmentItemFactory
+ */
 open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
@@ -51,6 +61,13 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     private var recyclerView: RecyclerView? = null
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyPagingFragmentStateAdapter]
+     *
+     * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
+     * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
+     * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+     */
     constructor(
         fragmentActivity: FragmentActivity,
         itemFactoryList: List<FragmentItemFactory<*>>,
@@ -66,6 +83,13 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
         workerDispatcher,
     )
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [AssemblyPagingFragmentStateAdapter]
+     *
+     * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
+     * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
+     * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+     */
     constructor(
         fragment: Fragment,
         itemFactoryList: List<FragmentItemFactory<*>>,

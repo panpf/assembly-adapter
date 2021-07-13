@@ -23,16 +23,27 @@ import androidx.lifecycle.Lifecycle
 import androidx.paging.LoadState
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
+/**
+ * [Fragment] version of [androidx.paging.LoadStateAdapter]
+ *
+ * @see androidx.paging.LoadStateAdapter
+ */
 abstract class FragmentLoadStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [FragmentLoadStateAdapter]
+     */
     constructor(fragmentActivity: FragmentActivity) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle
     )
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [FragmentLoadStateAdapter]
+     */
     constructor(fragment: Fragment) : this(fragment.childFragmentManager, fragment.lifecycle)
 
     /**

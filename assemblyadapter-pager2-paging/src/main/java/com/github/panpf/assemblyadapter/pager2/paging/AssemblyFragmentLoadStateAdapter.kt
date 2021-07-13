@@ -20,11 +20,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 
+/**
+ * An implementation of [FragmentLoadStateAdapter], Realize the display of [LoadState] through standardized [FragmentItemFactory].
+ *
+ * @param itemFactory Must be a [FragmentItemFactory] that can match [LoadState]
+ * @param alwaysShowWhenEndOfPaginationReached If true, it will still be displayed at the end of pagination reached
+ */
 open class AssemblyFragmentLoadStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
@@ -38,6 +45,13 @@ open class AssemblyFragmentLoadStateAdapter(
     private var recyclerView: RecyclerView? = null
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
+
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyFragmentLoadStateAdapter]
+     *
+     * @param itemFactory Must be a [FragmentItemFactory] that can match [LoadState]
+     * @param alwaysShowWhenEndOfPaginationReached If true, it will still be displayed at the end of pagination reached
+     */
     constructor(
         fragmentActivity: FragmentActivity,
         itemFactory: FragmentItemFactory<LoadState>,
@@ -49,6 +63,12 @@ open class AssemblyFragmentLoadStateAdapter(
         alwaysShowWhenEndOfPaginationReached
     )
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [AssemblyFragmentLoadStateAdapter]
+     *
+     * @param itemFactory Must be a [FragmentItemFactory] that can match [LoadState]
+     * @param alwaysShowWhenEndOfPaginationReached If true, it will still be displayed at the end of pagination reached
+     */
     constructor(
         fragment: Fragment,
         itemFactory: FragmentItemFactory<LoadState>,
