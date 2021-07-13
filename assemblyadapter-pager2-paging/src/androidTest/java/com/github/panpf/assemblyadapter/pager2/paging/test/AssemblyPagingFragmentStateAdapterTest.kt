@@ -3,7 +3,7 @@ package com.github.panpf.assemblyadapter.pager2.paging.test
 import android.R
 import androidx.fragment.app.FragmentActivity
 import androidx.test.runner.AndroidJUnit4
-import com.github.panpf.assemblyadapter.diffkey.DiffKey
+import com.github.panpf.assemblyadapter.diff.DiffKey
 import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingFragmentStateAdapter
 import com.github.panpf.tools4j.test.ktx.assertNoThrow

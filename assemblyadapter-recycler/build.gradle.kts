@@ -33,7 +33,7 @@ dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
     api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
     api(project(":assemblyadapter-common-item"))
-    api(project(":assemblyadapter-common-diffkey"))
+    api(project(":assemblyadapter-common-diff"))
 
     testImplementation("junit:junit:${property("JUNIT")}")
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")

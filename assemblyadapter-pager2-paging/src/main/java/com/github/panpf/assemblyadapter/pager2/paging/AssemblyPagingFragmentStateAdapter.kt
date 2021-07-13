@@ -24,8 +24,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.diffkey.DiffKey
-import com.github.panpf.assemblyadapter.diffkey.KeyDiffItemCallback
+import com.github.panpf.assemblyadapter.diff.DiffKey
+import com.github.panpf.assemblyadapter.diff.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
