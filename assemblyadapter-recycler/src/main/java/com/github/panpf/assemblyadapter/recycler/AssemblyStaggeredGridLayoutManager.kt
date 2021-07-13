@@ -23,11 +23,20 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import kotlin.reflect.KClass
 
+/**
+ * An implementation of [AssemblyStaggeredGridLayoutManager]. Set the full span of [AssemblyStaggeredGridLayoutManager] according to [ItemFactory] as the identifier
+ */
 class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
     FullSpanStaggeredGridLayoutManager {
 
     private val fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
 
+    /**
+     * Constructor used when layout manager is set in XML by RecyclerView attribute
+     * "layoutManager". Defaults to single column and vertical.
+     *
+     * @param fullSpanItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
+     */
     constructor(
         context: Context,
         attrs: AttributeSet?,
@@ -38,6 +47,13 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
         this.fullSpanItemFactoryList = fullSpanItemFactoryList
     }
 
+    /**
+     * Creates a StaggeredGridLayoutManager with given parameters.
+     *
+     * @param spanCount If [orientation] is vertical, [spanCount] is number of columns. If [orientation] is horizontal, [spanCount] is number of rows.
+     * @param orientation [StaggeredGridLayoutManager.VERTICAL] or [StaggeredGridLayoutManager.HORIZONTAL]
+     * @param fullSpanItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
+     */
     constructor(
         spanCount: Int,
         orientation: Int,
@@ -46,6 +62,12 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
         this.fullSpanItemFactoryList = fullSpanItemFactoryList
     }
 
+    /**
+     * Creates a vertical StaggeredGridLayoutManager with given parameters.
+     *
+     * @param spanCount spanCount is number of columns.
+     * @param fullSpanItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
+     */
     constructor(
         spanCount: Int,
         fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>

@@ -15,7 +15,15 @@
  */
 package com.github.panpf.assemblyadapter.recycler
 
-data class ItemSpan(val size: Int) {
+/**
+ * Used to set spanSize for ItemFactory in AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager
+ */
+data class ItemSpan(
+    /**
+     * Less than 0 means fullSpan, AssemblyGridLayoutManager will use spanCount as spanSize; AssemblyStaggeredGridLayoutManager will set isFullSpan to true
+     */
+    val size: Int
+) {
 
     fun isFullSpan(): Boolean = size < 0
 

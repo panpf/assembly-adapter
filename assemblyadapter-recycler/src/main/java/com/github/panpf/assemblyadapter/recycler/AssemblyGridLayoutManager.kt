@@ -25,6 +25,9 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.ConcatAdapterLocalHelper
 import kotlin.reflect.KClass
 
+/**
+ * An implementation of [GridLayoutManager]. Set the spanSize of [GridLayoutManager] according to [ItemFactory] as the identifier
+ */
 class AssemblyGridLayoutManager : GridLayoutManager {
 
     private var recyclerView: RecyclerView? = null
@@ -36,6 +39,14 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         }
     }
 
+    /**
+     * Constructor used when layout manager is set in XML by RecyclerView attribute
+     * "layoutManager". If spanCount is not specified in the XML, it defaults to a
+     * single column.
+     *
+     * @param gridLayoutItemSpanMap Map of spanSize corresponding to [ItemFactory]
+     * @see androidx.recyclerview.R.attr.spanCount
+     */
     constructor(
         context: Context,
         attrs: AttributeSet?,
@@ -47,6 +58,15 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         super.setSpanSizeLookup(spanSizeLookup)
     }
 
+    /**
+     * Creates a GridLayoutManager
+     *
+     * @param context Current context, will be used to access resources.
+     * @param spanCount The number of columns or rows in the grid
+     * @param orientation Layout orientation. Should be [GridLayoutManager.HORIZONTAL] or [GridLayoutManager.VERTICAL].
+     * @param reverseLayout When set to true, layouts from end to start.
+     * @param gridLayoutItemSpanMap Map of spanSize corresponding to [ItemFactory]
+     */
     constructor(
         context: Context,
         spanCount: Int,
@@ -58,6 +78,14 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         super.setSpanSizeLookup(spanSizeLookup)
     }
 
+
+    /**
+     * Creates a vertical GridLayoutManager
+     *
+     * @param context Current context, will be used to access resources.
+     * @param spanCount The number of columns in the grid
+     * @param gridLayoutItemSpanMap Map of spanSize corresponding to [ItemFactory]
+     */
     constructor(
         context: Context,
         spanCount: Int,

@@ -27,6 +27,16 @@ import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridL
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import java.util.*
 
+/**
+ * An implementation of [RecyclerView.Adapter], which implements multi-type adapters through standardized [ItemFactory].
+ * [AssemblyRecyclerAdapter] will use the data corresponding to position to find a matching [ItemFactory] (cannot find an exception will be thrown),
+ * and then use [ItemFactory] to create an itemView and bind the data
+ *
+ * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
+ * @param dataList Initial data set
+ * @see ItemFactory
+ */
 open class AssemblyRecyclerAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     dataList: List<DATA>? = null

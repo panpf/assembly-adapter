@@ -28,11 +28,27 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
+/**
+ * An implementation of [ListAdapter], which implements multi-type adapters through standardized [ItemFactory].
+ * [AssemblyRecyclerListAdapter] will use the data corresponding to position to find a matching [ItemFactory] (cannot find an exception will be thrown),
+ * and then use [ItemFactory] to create an itemView and bind the data
+ *
+ * @see ItemFactory
+ */
 open class AssemblyRecyclerListAdapter<DATA>
     : ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<*>>
 
+    /**
+     * Create an AssemblyRecyclerListAdapter that provides DiffUtil.ItemCallback externally
+     *
+     * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
+     * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
+     * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+     * @see ItemFactory
+     * @see KeyDiffItemCallback
+     */
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
@@ -41,6 +57,15 @@ open class AssemblyRecyclerListAdapter<DATA>
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }
 
+    /**
+     * Create an AssemblyRecyclerListAdapter that provides AsyncDifferConfig externally
+     *
+     * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
+     * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
+     * @param config AsyncDifferConfig
+     * @see ItemFactory
+     * @see AsyncDifferConfig
+     */
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
         config: AsyncDifferConfig<DATA>,

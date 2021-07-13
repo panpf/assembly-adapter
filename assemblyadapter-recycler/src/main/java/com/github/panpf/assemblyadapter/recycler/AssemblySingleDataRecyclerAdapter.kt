@@ -21,13 +21,22 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
-import java.lang.IllegalArgumentException
 
-open class AssemblySingleDataRecyclerAdapter<DATA: Any>(
+/**
+ * Single data version of AssemblyRecyclerAdapter
+ *
+ * @param itemFactory Can match [data]'s [ItemFactory]
+ * @param initData Initial data
+ * @see ItemFactory
+ */
+open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
 
+    /**
+     * The only data of the current adapter, notifyDataSetChanged will be triggered when the data changes
+     */
     var data: DATA? = initData
         set(value) {
             field = value
