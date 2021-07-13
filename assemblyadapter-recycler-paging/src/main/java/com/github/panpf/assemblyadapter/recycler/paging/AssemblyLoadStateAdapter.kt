@@ -21,9 +21,15 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
+/**
+ * An implementation of [LoadStateAdapter], Realize the display of [LoadState] through standardized [ItemFactory].
+ *
+ * @param itemFactory Must be a [ItemFactory] that can match [LoadState]
+ * @param alwaysShowWhenEndOfPaginationReached If true, it will still be displayed at the end of pagination reached
+ */
 open class AssemblyLoadStateAdapter(
     private val itemFactory: ItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,

@@ -25,11 +25,22 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.diff.DiffKey
 import com.github.panpf.assemblyadapter.diff.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
+/**
+ * An implementation of [PagingDataAdapter], which implements multi-type adapters through standardized [ItemFactory].
+ * [AssemblyPagingDataAdapter] will use the data corresponding to position to find a matching [ItemFactory] (cannot find an exception will be thrown),
+ * and then use [ItemFactory] to create an itemView and bind the data
+ *
+ * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
+ * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+ * @see ItemFactory
+ */
 open class AssemblyPagingDataAdapter<DATA : Any>(
     itemFactoryList: List<ItemFactory<*>>,
     diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
