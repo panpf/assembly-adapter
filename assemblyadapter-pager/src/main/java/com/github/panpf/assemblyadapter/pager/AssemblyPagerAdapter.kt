@@ -24,6 +24,16 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 
+/**
+ * An implementation of [PagerAdapter], which implements multi-type adapters through standardized [PagerItemFactory].
+ * [AssemblyPagerAdapter] will use the data corresponding to position to find a matching [PagerItemFactory] (cannot find an exception will be thrown),
+ * and then use [PagerItemFactory] to create an item view
+ *
+ * @param itemFactoryList The collection of [PagerItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [PagerItemFactory], otherwise an exception will be thrown
+ * @param initDataList Initial data set
+ * @see PagerItemFactory
+ */
 open class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
     initDataList: List<DATA>? = null
@@ -33,6 +43,14 @@ open class AssemblyPagerAdapter<DATA>(
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
+    /**
+     * Disable the function of refreshing item when the data set changes.
+     *
+     * By default, [PagerAdapter] will not refresh the item when the dataset changes.
+     *
+     * [AssemblyPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * method return POSITION_NONE when the dataset changes.
+     */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {
@@ -41,6 +59,7 @@ open class AssemblyPagerAdapter<DATA>(
                 notifyDataSetChanged()
             }
         }
+
     /**
      * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
      * The returned list may not change-changes to the content must be passed through [submitDataList].

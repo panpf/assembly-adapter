@@ -31,7 +31,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
 /**
  * An implementation of [ListAdapter], which implements multi-type adapters through standardized [ItemFactory].
  * [AssemblyRecyclerListAdapter] will use the data corresponding to position to find a matching [ItemFactory] (cannot find an exception will be thrown),
- * and then use [ItemFactory] to create an itemView and bind the data
+ * and then use [ItemFactory] to create an item view and bind the data
  *
  * @see ItemFactory
  */

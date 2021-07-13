@@ -23,7 +23,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 
 /**
- * An implementation of [FragmentStateAdapter], The data is provided by the [Fragment] array passed in from the outside
+ * An implementation of [FragmentStateAdapter], The data is provided by the [Fragment] list passed in from the outside.
+ *
+ * Warning: The [createFragment] method will not directly return the [Fragment] from [fragmentList], but uses it as a template to create a new Fragment
  */
 open class ArrayFragmentStateAdapter(
     fragmentManager: FragmentManager,

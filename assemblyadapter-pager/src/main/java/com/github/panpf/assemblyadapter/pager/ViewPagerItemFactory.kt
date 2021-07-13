@@ -22,6 +22,14 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
+/**
+ * The [View] version of [PagerItemFactory]. Create [ViewPagerItemFactory] directly and provide a [View] or layout id, you can use it
+ *
+ * @param DATA Define the type of matching data
+ * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
+ * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
+ * @param viewFactory Responsible creating item view
+ */
 open class ViewPagerItemFactory<DATA : Any>(
     dataClass: KClass<DATA>,
     private val viewFactory: (
@@ -34,11 +42,17 @@ open class ViewPagerItemFactory<DATA : Any>(
     ) -> View
 ) : PagerItemFactory<DATA>(dataClass) {
 
+    /**
+     * Create the item view by providing the layout id
+     */
     constructor(dataClass: KClass<DATA>, @LayoutRes layoutResId: Int) : this(
         dataClass,
         { _, inflater, parent, _, _, _ -> inflater.inflate(layoutResId, parent, false) }
     )
 
+    /**
+     * Use the provided view directly as the item view
+     */
     constructor(dataClass: KClass<DATA>, view: View) : this(dataClass, { _, _, _, _, _, _ -> view })
 
     override fun createItemView(

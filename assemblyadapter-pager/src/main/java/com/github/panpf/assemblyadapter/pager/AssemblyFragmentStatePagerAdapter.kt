@@ -26,6 +26,16 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefreshHelper
 
+/**
+ * An implementation of [FragmentStatePagerAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
+ * [AssemblyFragmentStatePagerAdapter] will use the data corresponding to position to find a matching [FragmentItemFactory] (cannot find an exception will be thrown),
+ * and then use [FragmentItemFactory] to create an [Fragment]
+ *
+ * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
+ * @param initDataList Initial data set
+ * @see FragmentItemFactory
+ */
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter' instead.",
     replaceWith = ReplaceWith(
@@ -48,6 +58,15 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         FragmentPagerAdapterRefreshHelper()
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
+
+    /**
+     * Disable the function of refreshing item when the data set changes.
+     *
+     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
+     *
+     * [AssemblyFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * method return POSITION_NONE when the dataset changes.
+     */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {

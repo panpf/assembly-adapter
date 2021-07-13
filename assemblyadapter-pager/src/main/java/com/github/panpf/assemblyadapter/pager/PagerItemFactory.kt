@@ -19,13 +19,24 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
-import com.github.panpf.assemblyadapter.internal.Matchable
 import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.internal.Matchable
 import kotlin.reflect.KClass
 
 /**
+ * [PagerItemFactory] is responsible for matching data, creating item view.
+ *
+ * When the Adapter needs to display a data, it will find a matching [PagerItemFactory] from [ItemFactoryStorage]
+ * through the [matchData] method, and then use this [PagerItemFactory] to create an item view
+ *
+ * It is not recommended to directly inherit [PagerItemFactory], you can inherit [BindingPagerItemFactory] to implement your own [ViewPagerItemFactory]
+ *
+ * @param DATA Define the type of matching data
+ * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
+ * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
  * @see BindingPagerItemFactory
  * @see ViewPagerItemFactory
  */
@@ -33,13 +44,33 @@ abstract class PagerItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Match
 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
 
+    /**
+     * If it returns true, it means that this [PagerItemFactory] can handle this [data]
+     */
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
         return dataClass.isInstance(data) && exactMatchData(data as DATA)
     }
 
+    /**
+     * Exactly match this [data], such as checking the value of a specific attribute
+     */
     protected open fun exactMatchData(data: DATA): Boolean = true
 
+    /**
+     * When the Adapter needs a new [View] to display data, it will execute this method to create an [View].
+     *
+     * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
+     * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
+     * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param data Data to be bound
+     * @return A new [View]
+     * @see createItemView
+     * @see View
+     */
     fun dispatchCreateItemView(
         context: Context,
         parent: ViewGroup,
@@ -54,6 +85,19 @@ abstract class PagerItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Match
         }
     }
 
+    /**
+     * Create a new [View]. This method can only be called by [dispatchCreateItemView]
+     *
+     * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
+     * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
+     * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param data Data to be bound
+     * @see dispatchCreateItemView
+     * @see View
+     */
     protected abstract fun createItemView(
         context: Context, parent: ViewGroup,
         bindingAdapterPosition: Int,
@@ -61,6 +105,14 @@ abstract class PagerItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Match
         data: DATA
     ): View
 
+    /**
+     * Set the click listener of the specified View in the item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onClickListener Implementation of click listener
+     * @return [PagerItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
     fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
@@ -69,6 +121,14 @@ abstract class PagerItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Match
         return this
     }
 
+    /**
+     * Set the long click listener of the specified View in the item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onLongClickListener Implementation of long click listener
+     * @return [PagerItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
     fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
@@ -77,11 +137,25 @@ abstract class PagerItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Match
         return this
     }
 
+    /**
+     * Set the click listener of the item view
+     *
+     * @param onClickListener Implementation of click listener
+     * @return [PagerItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
     fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): PagerItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
 
+    /**
+     * Set the long click listener of the item view
+     *
+     * @param onLongClickListener Implementation of click listener
+     * @return [PagerItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
     fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): PagerItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this

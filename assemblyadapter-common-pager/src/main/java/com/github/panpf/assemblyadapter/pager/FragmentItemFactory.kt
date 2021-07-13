@@ -32,13 +32,34 @@ import kotlin.reflect.KClass
  */
 abstract class FragmentItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable {
 
+    /**
+     * If it returns true, it means that this [FragmentItemFactory] can handle this [data]
+     */
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
         return dataClass.isInstance(data) && exactMatchData(data as DATA)
     }
 
+    /**
+     * Exactly match this [data], such as checking the value of a specific attribute
+     */
     protected open fun exactMatchData(data: DATA): Boolean = true
 
+
+    /**
+     * When the Adapter needs a new [Fragment] to display data, it will execute this method to create an [Fragment].
+     *
+     * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
+     * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
+     * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param data Data to be bound
+     * @return A new [Fragment]
+     * @see createFragment
+     * @see Fragment
+     */
     fun dispatchCreateFragment(
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
@@ -47,6 +68,19 @@ abstract class FragmentItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Ma
         return createFragment(bindingAdapterPosition, absoluteAdapterPosition, data)
     }
 
+    /**
+     * Create a new [Fragment]. This method can only be called by [dispatchCreateFragment]
+     *
+     * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
+     * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
+     * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param data Data to be bound
+     * @see dispatchCreateFragment
+     * @see Fragment
+     */
     protected abstract fun createFragment(
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,

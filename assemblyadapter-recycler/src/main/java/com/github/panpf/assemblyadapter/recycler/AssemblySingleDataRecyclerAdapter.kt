@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridL
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
 /**
- * Single data version of AssemblyRecyclerAdapter
+ * Single data version of [AssemblyRecyclerAdapter]
  *
  * @param itemFactory Can match [data]'s [ItemFactory]
  * @param initData Initial data
@@ -35,7 +35,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
 
     /**
-     * The only data of the current adapter, notifyDataSetChanged will be triggered when the data changes
+     * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
      */
     var data: DATA? = initData
         set(value) {

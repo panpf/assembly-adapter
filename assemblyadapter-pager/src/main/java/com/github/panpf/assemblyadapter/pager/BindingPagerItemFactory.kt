@@ -22,11 +22,19 @@ import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import kotlin.reflect.KClass
 
+/**
+ * Implementation of [PagerItemFactory] for [ViewBinding] version.
+ *
+ * @param DATA Define the type of matching data
+ * @param VIEW_BINDING Define the [ViewBinding] type of item view
+ * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
+ * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
+ */
 abstract class BindingPagerItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     dataClass: KClass<DATA>
 ) : PagerItemFactory<DATA>(dataClass) {
 
-    final override fun createItemView(
+    override fun createItemView(
         context: Context,
         parent: ViewGroup,
         bindingAdapterPosition: Int,
@@ -39,6 +47,9 @@ abstract class BindingPagerItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
         ).root
     }
 
+    /**
+     * Create the ViewBinding of the item view
+     */
     protected abstract fun createItemViewBinding(
         context: Context,
         inflater: LayoutInflater,

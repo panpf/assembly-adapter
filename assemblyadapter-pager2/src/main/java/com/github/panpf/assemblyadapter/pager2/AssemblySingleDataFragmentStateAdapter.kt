@@ -27,7 +27,7 @@ import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 
 /**
- * Single data version of AssemblyFragmentStateAdapter
+ * Single data version of [AssemblyFragmentStateAdapter]
  *
  * @param itemFactory Can match [data]'s [FragmentItemFactory]
  * @param initData Initial data
@@ -44,7 +44,7 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
     /**
-     * The only data of the current adapter, notifyDataSetChanged will be triggered when the data changes
+     * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
      */
     var data: DATA? = initData
         set(value) {

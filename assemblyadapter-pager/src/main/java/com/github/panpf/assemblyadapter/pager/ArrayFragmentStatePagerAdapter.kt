@@ -23,6 +23,11 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefreshHelper
 import java.util.*
 
+/**
+ * An implementation of [FragmentStatePagerAdapter], The data is provided by the [Fragment] list passed in from the outside.
+ *
+ * Warning: The [getItem] method will not directly return the [Fragment] from [fragmentList], but uses it as a template to create a new Fragment
+ */
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.ArrayFragmentStateAdapter' instead.",
     replaceWith = ReplaceWith(
@@ -55,6 +60,14 @@ open class ArrayFragmentStatePagerAdapter(
     val pageTitleList: List<CharSequence>
         get() = pageTitleStorage?.readOnlyDataList ?: Collections.emptyList()
 
+    /**
+     * Disable the function of refreshing item when the data set changes.
+     *
+     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
+     *
+     * [ArrayFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * method return POSITION_NONE when the dataset changes.
+     */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {

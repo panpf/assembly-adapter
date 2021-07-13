@@ -21,18 +21,37 @@ import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 
+/**
+ * Single data version of [AssemblyPagerAdapter]
+ *
+ * @param itemFactory Can match [data]'s [PagerItemFactory]
+ * @param initData Initial data
+ * @see PagerItemFactory
+ */
 open class AssemblySingleDataPagerAdapter<DATA : Any>(
     private val itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
 ) : PagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
 
+    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
+
+    /**
+     * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
+     */
     var data: DATA? = initData
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
+    /**
+     * Disable the function of refreshing item when the data set changes.
+     *
+     * By default, [PagerAdapter] will not refresh the item when the dataset changes.
+     *
+     * [AssemblySingleDataPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * method return POSITION_NONE when the dataset changes.
+     */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {

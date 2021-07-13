@@ -23,7 +23,7 @@ import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
 /**
- * The View version of ItemFactory. Create [ViewItemFactory] directly and provide a View or layout id, you can use it
+ * The [View] version of [ItemFactory]. Create [ViewItemFactory] directly and provide a [View] or layout id, you can use it
  *
  * @param DATA Define the type of matching data
  * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
@@ -36,7 +36,7 @@ open class ViewItemFactory<DATA : Any>(
 ) : SimpleItemFactory<DATA>(dataClass) {
 
     /**
-     * Create the itemView by providing the layout id
+     * Create the item view by providing the layout id
      */
     constructor(dataClass: KClass<DATA>, @LayoutRes layoutResId: Int) : this(
         dataClass,
@@ -44,7 +44,7 @@ open class ViewItemFactory<DATA : Any>(
     )
 
     /**
-     * Use the provided view directly as the itemView
+     * Use the provided view directly as the item view
      */
     constructor(dataClass: KClass<DATA>, view: View) : this(dataClass, { _, _, _ -> view })
 

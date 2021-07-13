@@ -23,6 +23,13 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefreshHelper
 
+/**
+ * Single data version of [AssemblyFragmentStatePagerAdapter]
+ *
+ * @param itemFactory Can match [data]'s [FragmentItemFactory]
+ * @param initData Initial data
+ * @see FragmentItemFactory
+ */
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter' instead.",
     replaceWith = ReplaceWith(
@@ -34,7 +41,7 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     fm: FragmentManager,
     @Behavior behavior: Int,
     private val itemFactory: FragmentItemFactory<DATA>,
-    data: DATA? = null
+    initData: DATA? = null
 ) : FragmentStatePagerAdapter(fm, behavior),
     AssemblyAdapter<FragmentItemFactory<*>>,
     AbsoluteAdapterPositionAdapter {
@@ -43,11 +50,24 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         FragmentPagerAdapterRefreshHelper()
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
-    var data: DATA? = data
+
+    /**
+     * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
+     */
+    var data: DATA? = initData
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    /**
+     * Disable the function of refreshing item when the data set changes.
+     *
+     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
+     *
+     * [AssemblySingleDataFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * method return POSITION_NONE when the dataset changes.
+     */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {

@@ -22,17 +22,18 @@ import android.view.ViewGroup
 import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.internal.Matchable
 import kotlin.reflect.KClass
 
 /**
- * ItemFactory is responsible for matching data, creating itemView, and binding data.
+ * [ItemFactory] is responsible for matching data, creating item view, and binding data.
  *
- * When the Adapter needs to display a data, it will find a matching ItemFactory from ItemFactoryStorage
- * through the matchData() method, and then use this ItemFactory to create an itemView and bind the data
+ * When the Adapter needs to display a data, it will find a matching [ItemFactory] from [ItemFactoryStorage]
+ * through the [matchData] method, and then use this [ItemFactory] to create an item view and bind the data
  *
  * It is not recommended to directly inherit [ItemFactory], you can inherit [BindingItemFactory]
- * and [SimpleItemFactory] to implement your own ItemFactory
+ * and [SimpleItemFactory] to implement your own [ItemFactory]
  *
  * @param DATA Define the type of matching data
  * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
@@ -46,7 +47,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
 
     /**
-     * If it returns true, it means that this ItemFactory can handle this [data]
+     * If it returns true, it means that this [ItemFactory] can handle this [data]
      */
     final override fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
@@ -83,7 +84,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
     protected abstract fun createItem(parent: ViewGroup): Item<DATA>
 
     /**
-     * Set the click listener of the specified View in the itemView
+     * Set the click listener of the specified View in the item view
      *
      * @param viewId Specify the id of the View
      * @param onClickListener Implementation of click listener
@@ -98,9 +99,8 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
         return this
     }
 
-
     /**
-     * Set the long click listener of the specified View in the itemView
+     * Set the long click listener of the specified View in the item view
      *
      * @param viewId Specify the id of the View
      * @param onLongClickListener Implementation of long click listener
@@ -116,7 +116,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
     }
 
     /**
-     * Set the click listener of the itemView
+     * Set the click listener of the item view
      *
      * @param onClickListener Implementation of click listener
      * @return [ItemFactory] itself, easy to implement chain call
@@ -128,7 +128,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
     }
 
     /**
-     * Set the long click listener of the itemView
+     * Set the long click listener of the item view
      *
      * @param onLongClickListener Implementation of click listener
      * @return [ItemFactory] itself, easy to implement chain call
@@ -199,9 +199,9 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
     }
 
     /**
-     * Item is similar to ViewHolder, responsible for holding itemView and binding data
+     * Item is similar to ViewHolder, responsible for holding item view and binding data
      */
-    abstract class Item<DATA: Any>(val itemView: View) {
+    abstract class Item<DATA : Any>(val itemView: View) {
 
         private var _data: DATA? = null
         private var _bindingAdapterPosition: Int = -1
@@ -248,7 +248,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
         )
 
         /**
-         * Bind data to itemView
+         * Bind data to item view
          *
          * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
          * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
@@ -270,7 +270,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
         }
 
         /**
-         * Bind data to itemView
+         * Bind data to item view
          *
          * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
          * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.

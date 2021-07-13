@@ -23,6 +23,9 @@ import com.github.panpf.assemblyadapter.pager.internal.ConcatPagerAdapterControl
 import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 import java.util.*
 
+/**
+ * An [PagerAdapter] implementation that presents the contents of multiple adapters in sequence.
+ */
 open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
 
     /**
@@ -31,6 +34,14 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
     private val mController: ConcatPagerAdapterController = ConcatPagerAdapterController(this)
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
+    /**
+     * Disable the function of refreshing item when the data set changes.
+     *
+     * By default, [PagerAdapter] will not refresh the item when the dataset changes.
+     *
+     * [ConcatPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * method return POSITION_NONE when the dataset changes.
+     */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {

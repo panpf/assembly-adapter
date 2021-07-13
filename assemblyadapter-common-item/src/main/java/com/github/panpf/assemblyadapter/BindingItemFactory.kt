@@ -22,11 +22,11 @@ import androidx.viewbinding.ViewBinding
 import kotlin.reflect.KClass
 
 /**
- * Implementation of ItemFactory for ViewBinding version. Users do not need to define Item,
- * which can greatly simplify the implementation logic of custom ItemFactory
+ * Implementation of [ItemFactory] for [ViewBinding] version. Users do not need to define Item,
+ * which can greatly simplify the implementation logic of custom [ItemFactory]
  *
  * @param DATA Define the type of matching data
- * @param VIEW_BINDING Define the ViewBinding type of itemView
+ * @param VIEW_BINDING Define the [ViewBinding] type of item view
  * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
  * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
  */
@@ -43,7 +43,7 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     }
 
     /**
-     * Create the ViewBinding of the itemView
+     * Create the ViewBinding of the item view
      */
     protected abstract fun createItemViewBinding(
         context: Context,

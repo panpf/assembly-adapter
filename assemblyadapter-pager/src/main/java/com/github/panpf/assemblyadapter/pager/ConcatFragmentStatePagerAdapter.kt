@@ -19,11 +19,15 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.internal.ConcatFragmentStatePagerAdapterController
 import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefreshHelper
 import java.util.*
 
+/**
+ * An [FragmentStatePagerAdapter] implementation that presents the contents of multiple adapters in sequence.
+ */
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'androidx.recyclerview.widget.ConcatAdapter' instead.",
     replaceWith = ReplaceWith(
@@ -48,6 +52,14 @@ open class ConcatFragmentStatePagerAdapter(
     // To support ConcatFragmentStatePagerAdapter nesting
     override var nextItemAbsoluteAdapterPosition: Int? = null
 
+    /**
+     * Disable the function of refreshing item when the data set changes.
+     *
+     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
+     *
+     * [ConcatFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * method return POSITION_NONE when the dataset changes.
+     */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {
