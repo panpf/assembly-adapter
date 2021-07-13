@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 
 /**
  * An implementation of [FragmentStateAdapter], The data is provided by the [Fragment] array passed in from the outside
@@ -27,11 +28,17 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 open class ArrayFragmentStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    fragments: List<Fragment>
+    templateFragmentList: List<Fragment>
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    // todo Change to ItemDataStorage
-    private var fragmentList = fragments.toList()
+    private val itemDataStorage = ItemDataStorage(templateFragmentList) { notifyDataSetChanged() }
+
+    /**
+     * Get the current list. If a null list is submitted through [submitFragmentList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitFragmentList].
+     */
+    val fragmentList: List<Fragment>
+        get() = itemDataStorage.readOnlyDataList
 
     /**
      * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [ArrayFragmentStateAdapter]
@@ -48,26 +55,22 @@ open class ArrayFragmentStateAdapter(
     ) : this(fragment.childFragmentManager, fragment.lifecycle, fragments)
 
 
-    override fun getItemCount(): Int {
-        return fragmentList.size
+    /**
+     * Set the new list to be displayed.
+     */
+    open fun submitFragmentList(fragmentList: List<Fragment>?) {
+        itemDataStorage.submitDataList(fragmentList)
     }
+
+
+    override fun getItemCount(): Int = itemDataStorage.dataCount
 
     override fun createFragment(position: Int): Fragment {
         // https://developer.android.com/training/animation/vp2-migration
         // The official document clearly states that it is necessary to ensure that the new instance returned by this method each time is not reusable
-        val templateFragment = fragmentList[position]
+        val templateFragment = itemDataStorage.getData(position)
         return templateFragment::class.java.newInstance().apply {
             arguments = templateFragment.arguments
         }
-    }
-
-
-    open fun getFragmentsSnapshot(): List<Fragment> {
-        return fragmentList.toList()
-    }
-
-    open fun setFragments(fragments: List<Fragment>?) {
-        fragmentList = fragments?.toList() ?: emptyList()
-        notifyDataSetChanged()
     }
 }

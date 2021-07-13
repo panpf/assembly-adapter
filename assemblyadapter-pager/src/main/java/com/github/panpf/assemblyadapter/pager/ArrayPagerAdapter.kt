@@ -18,13 +18,29 @@ package com.github.panpf.assemblyadapter.pager
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
+import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
+import java.util.*
 
-open class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
+open class ArrayPagerAdapter(viewList: List<View>) : PagerAdapter() {
 
-    private var viewList: List<View> = views.toList()
-    private var pageTitleList: List<CharSequence>? = null
+    private val itemDataStorage = ItemDataStorage(viewList) { notifyDataSetChanged() }
+    private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
+
+    /**
+     * Get the current list. If a null list is submitted through [submitViewList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitViewList].
+     */
+    val viewList: List<View>
+        get() = itemDataStorage.readOnlyDataList
+
+    /**
+     * Get the current page title list. If a null list is submitted through [submitPageTitleList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitPageTitleList].
+     */
+    val pageTitleList: List<CharSequence>
+        get() = pageTitleStorage?.readOnlyDataList ?: Collections.emptyList()
 
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
@@ -34,12 +50,31 @@ open class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
             }
         }
 
+    /**
+     * Set the new list to be displayed.
+     */
+    open fun submitViewList(viewList: List<View>?) {
+        itemDataStorage.submitDataList(viewList)
+    }
+
+    /**
+     * Set the new page title list to be displayed.
+     */
+    open fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
+        (pageTitleStorage ?: ItemDataStorage<CharSequence>() {
+            notifyDataSetChanged()
+        }.apply {
+            this@ArrayPagerAdapter.pageTitleStorage = this
+        }).submitDataList(pageTitleList)
+    }
+
+
     override fun getCount(): Int {
-        return viewList.size
+        return itemDataStorage.dataCount
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        return viewList[position].apply {
+        return itemDataStorage.getData(position).apply {
             container.addView(this)
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
@@ -66,24 +101,6 @@ open class ArrayPagerAdapter(views: List<View>) : PagerAdapter() {
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return pageTitleList?.getOrNull(position)
-    }
-
-
-    open fun getViewsSnapshot(): List<View> {
-        return viewList.toList()
-    }
-
-    open fun setViews(views: List<View>?) {
-        viewList = views?.toList() ?: emptyList()
-        notifyDataSetChanged()
-    }
-
-    open fun getPageTitlesSnapshot(): List<CharSequence> {
-        return pageTitleList?.toList() ?: emptyList()
-    }
-
-    open fun setPageTitles(pageTitles: List<CharSequence>?) {
-        pageTitleList = pageTitles?.toList() ?: emptyList()
+        return pageTitleStorage?.getData(position)
     }
 }

@@ -19,7 +19,9 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefreshHelper
+import java.util.*
 
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.ArrayFragmentStateAdapter' instead.",
@@ -29,13 +31,29 @@ import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefre
     )
 )
 open class ArrayFragmentStatePagerAdapter(
-    fm: FragmentManager, @Behavior behavior: Int, fragments: List<Fragment>
-) : FragmentStatePagerAdapter(fm, behavior) {
+    fragmentManager: FragmentManager,
+    @Behavior behavior: Int,
+    templateFragmentList: List<Fragment>
+) : FragmentStatePagerAdapter(fragmentManager, behavior) {
 
-    private var fragmentList: List<Fragment> = fragments.toList()
-    private var pageTitleList: List<CharSequence>? = null
+    private val itemDataStorage = ItemDataStorage(templateFragmentList) { notifyDataSetChanged() }
+    private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
+
+    /**
+     * Get the current list. If a null list is submitted through [submitFragmentList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitFragmentList].
+     */
+    val fragmentList: List<Fragment>
+        get() = itemDataStorage.readOnlyDataList
+
+    /**
+     * Get the current page title list. If a null list is submitted through [submitPageTitleList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitPageTitleList].
+     */
+    val pageTitleList: List<CharSequence>
+        get() = pageTitleStorage?.readOnlyDataList ?: Collections.emptyList()
 
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
@@ -53,13 +71,34 @@ open class ArrayFragmentStatePagerAdapter(
         fm, BEHAVIOR_SET_USER_VISIBLE_HINT, fragments
     )
 
+    /**
+     * Set the new list to be displayed.
+     */
+    open fun submitFragmentList(fragmentList: List<Fragment>?) {
+        itemDataStorage.submitDataList(fragmentList)
+    }
+
+    /**
+     * Set the new page title list to be displayed.
+     */
+    open fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
+        (pageTitleStorage ?: ItemDataStorage<CharSequence>() {
+            notifyDataSetChanged()
+        }.apply {
+            this@ArrayFragmentStatePagerAdapter.pageTitleStorage = this
+        }).submitDataList(pageTitleList)
+    }
+
 
     override fun getCount(): Int {
-        return fragmentList.size
+        return itemDataStorage.dataCount
     }
 
     override fun getItem(position: Int): Fragment {
-        return fragmentList[position].apply {
+        // Keep the characteristics consistent with ArrayFragmentStateAdapter
+        val templateFragment = itemDataStorage.getData(position)
+        return templateFragment::class.java.newInstance().apply {
+            arguments = templateFragment.arguments
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
     }
@@ -77,25 +116,7 @@ open class ArrayFragmentStatePagerAdapter(
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return pageTitleList?.getOrNull(position)
-    }
-
-
-    open fun getFragmentsSnapshot(): List<Fragment> {
-        return fragmentList.toList()
-    }
-
-    open fun setFragments(fragments: List<Fragment>?) {
-        fragmentList = fragments?.toList() ?: emptyList()
-        notifyDataSetChanged()
-    }
-
-    open fun getPageTitlesSnapshot(): List<CharSequence> {
-        return pageTitleList?.toList() ?: emptyList()
-    }
-
-    open fun setPageTitles(pageTitles: List<CharSequence>?) {
-        pageTitleList = pageTitles?.toList() ?: emptyList()
+        return pageTitleStorage?.getData(position)
     }
 
 
