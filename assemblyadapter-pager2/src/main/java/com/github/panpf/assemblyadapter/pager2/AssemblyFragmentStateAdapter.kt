@@ -36,18 +36,18 @@ import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHel
  *
  * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
  * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
- * @param dataList Initial data set
+ * @param initDataList Initial data set
  * @see FragmentItemFactory
  */
 open class AssemblyFragmentStateAdapter<DATA>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     itemFactoryList: List<FragmentItemFactory<*>>,
-    dataList: List<DATA>? = null
+    initDataList: List<DATA>? = null
 ) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<FragmentItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
     private var recyclerView: RecyclerView? = null
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
@@ -63,17 +63,17 @@ open class AssemblyFragmentStateAdapter<DATA>(
      *
      * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
      * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
-     * @param dataList Initial data set
+     * @param initDataList Initial data set
      */
     constructor(
         fragmentActivity: FragmentActivity,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        dataList: List<DATA>? = null
+        initDataList: List<DATA>? = null
     ) : this(
         fragmentActivity.supportFragmentManager,
         fragmentActivity.lifecycle,
         itemFactoryList,
-        dataList
+        initDataList
     )
 
     /**
@@ -81,17 +81,17 @@ open class AssemblyFragmentStateAdapter<DATA>(
      *
      * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
      * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
-     * @param dataList Initial data set
+     * @param initDataList Initial data set
      */
     constructor(
         fragment: Fragment,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        dataList: List<DATA>? = null
+        initDataList: List<DATA>? = null
     ) : this(
         fragment.childFragmentManager,
         fragment.lifecycle,
         itemFactoryList,
-        dataList
+        initDataList
     )
 
     init {

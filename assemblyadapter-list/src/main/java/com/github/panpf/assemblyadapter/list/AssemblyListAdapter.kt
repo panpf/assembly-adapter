@@ -26,11 +26,11 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 
 open class AssemblyListAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    dataList: List<DATA>? = null
+    initDataList: List<DATA>? = null
 ) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
     /**
      * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
      * The returned list may not change-changes to the content must be passed through [submitDataList].

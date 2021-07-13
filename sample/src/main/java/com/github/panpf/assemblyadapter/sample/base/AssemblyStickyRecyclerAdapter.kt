@@ -16,14 +16,13 @@
 package com.github.panpf.assemblyadapter.sample.base
 
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerAdapter
 
 class AssemblyStickyRecyclerAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    dataList: List<DATA>? = null
-) : AssemblyRecyclerAdapter<DATA>(itemFactoryList, dataList), StickyRecyclerAdapter {
+    initDataList: List<DATA>? = null
+) : AssemblyRecyclerAdapter<DATA>(itemFactoryList, initDataList), StickyRecyclerAdapter {
 
     override fun isStickyItemByPosition(position: Int): Boolean {
         return getItemFactoryByPosition(position) is StickyItemFactory

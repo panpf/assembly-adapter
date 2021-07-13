@@ -37,13 +37,13 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     fm: FragmentManager,
     @Behavior behavior: Int,
     itemFactoryList: List<FragmentItemFactory<*>>,
-    dataList: List<DATA>? = null
+    initDataList: List<DATA>? = null
 ) : FragmentStatePagerAdapter(fm, behavior),
     AssemblyAdapter<FragmentItemFactory<*>>,
     AbsoluteAdapterPositionAdapter {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
     private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
         FragmentPagerAdapterRefreshHelper()
 
@@ -69,8 +69,8 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     constructor(
         fm: FragmentManager,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        dataList: List<DATA>? = null
-    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, dataList)
+        initDataList: List<DATA>? = null
+    ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, initDataList)
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }

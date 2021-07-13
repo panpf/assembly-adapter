@@ -32,16 +32,16 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
  *
  * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
  * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
- * @param dataList Initial data set
+ * @param initDataList Initial data set
  * @see ItemFactory
  */
 open class AssemblyRecyclerAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    dataList: List<DATA>? = null
+    initDataList: List<DATA>? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
 
     /**
      * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.

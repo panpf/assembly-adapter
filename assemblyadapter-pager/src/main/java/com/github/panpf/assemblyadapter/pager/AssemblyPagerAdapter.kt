@@ -26,11 +26,11 @@ import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 
 open class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
-    dataList: List<DATA>? = null
+    initDataList: List<DATA>? = null
 ) : PagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
     var isDisableItemRefreshWhenDataSetChanged: Boolean

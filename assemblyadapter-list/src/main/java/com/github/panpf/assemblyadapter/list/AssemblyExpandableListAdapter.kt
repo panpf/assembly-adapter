@@ -26,11 +26,11 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 
 open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    dataList: List<GROUP_DATA>? = null
+    initDataList: List<GROUP_DATA>? = null
 ) : BaseExpandableListAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
 
     var hasStableIds = false
     var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
