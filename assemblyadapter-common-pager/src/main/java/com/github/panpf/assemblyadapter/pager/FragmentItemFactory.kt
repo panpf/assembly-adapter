@@ -20,6 +20,14 @@ import com.github.panpf.assemblyadapter.internal.Matchable
 import kotlin.reflect.KClass
 
 /**
+ * FragmentItemFactory is responsible for matching data, creating Fragment
+ *
+ * When the Adapter needs to display a data, it will find a matching FragmentItemFactory from ItemFactoryStorage
+ * through the matchData() method, and then use this FragmentItemFactory to create an Fragment
+ *
+ * @param DATA Define the type of matching data
+ * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
+ * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
  * @see ViewFragmentItemFactory
  */
 abstract class FragmentItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable {

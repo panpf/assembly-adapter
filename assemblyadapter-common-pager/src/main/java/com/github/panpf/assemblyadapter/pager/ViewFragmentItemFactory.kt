@@ -23,6 +23,14 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import kotlin.reflect.KClass
 
+/**
+ * The View version of FragmentItemFactory. Create [ViewFragmentItemFactory] directly and provide a layout id, you can use it
+ *
+ * @param DATA Define the type of matching data
+ * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
+ * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
+ * @param layoutResId Responsible for providing layout id when creating Fragment
+ */
 open class ViewFragmentItemFactory<DATA : Any>(
     dataClass: KClass<DATA>,
     @LayoutRes private val layoutResId: Int
