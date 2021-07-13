@@ -18,6 +18,11 @@ package com.github.panpf.assemblyadapter.diffkey
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
 
+/**
+ * Use key to compare DiffUtil.ItemCallback of item.
+ * The areItemsTheSame(DATA, DATA) method uses the key to compare whether it is the same item, so the item needs to implement the DiffKey interface and provide the comparison key;
+ * The areContentsTheSame(DATA, DATA) method uses equals to compare whether the contents of the item are the same
+ */
 class KeyDiffItemCallback<DATA : Any?> : DiffUtil.ItemCallback<DATA>() {
 
     override fun areItemsTheSame(oldItem: DATA, newItem: DATA): Boolean {

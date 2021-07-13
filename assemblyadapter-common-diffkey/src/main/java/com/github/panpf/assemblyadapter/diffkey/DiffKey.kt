@@ -15,6 +15,13 @@
  */
 package com.github.panpf.assemblyadapter.diffkey
 
+/**
+ * Provide a comparison key for the DiffUtil.ItemCallback.areItemsTheSame(T, T) method.
+ * If the keys of the two are the same, the areItemsTheSame method will return true
+ */
 interface DiffKey {
+    /**
+     * The key used for comparison in the DiffUtil.ItemCallback.areItemsTheSame(T, T) method
+     */
     val diffKey: String
 }
