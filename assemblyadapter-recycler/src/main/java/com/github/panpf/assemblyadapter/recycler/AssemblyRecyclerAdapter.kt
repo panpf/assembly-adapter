@@ -18,14 +18,12 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
-import java.util.*
 
 /**
  * An implementation of [RecyclerView.Adapter], which implements multi-type adapters through standardized [ItemFactory].
@@ -40,14 +38,27 @@ import java.util.*
 open class AssemblyRecyclerAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     dataList: List<DATA>? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
-    AssemblyAdapter<ItemFactory<*>>, DatasAdapter<DATA> {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
+    /**
+     * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitDataList].
+     */
+    val dataList: List<DATA>
+        get() = itemDataStorage.readOnlyDataList
+
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
+
+    /**
+     * Set the new list to be displayed.
+     */
+    fun submitDataList(dataList: List<DATA>?) {
+        itemDataStorage.submitDataList(dataList)
     }
 
     override fun getItemCount(): Int {
@@ -86,61 +97,6 @@ open class AssemblyRecyclerAdapter<DATA>(
         } else {
             throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
         }
-    }
-
-
-    override val dataCount: Int
-        get() = itemDataStorage.dataCount
-
-    override val dataListSnapshot: List<DATA>
-        get() = itemDataStorage.dataListSnapshot
-
-    override fun getData(position: Int): DATA {
-        return itemDataStorage.getData(position)
-    }
-
-    override fun setDataList(datas: List<DATA>?) {
-        itemDataStorage.setDataList(datas)
-    }
-
-    override fun addData(data: DATA): Boolean {
-        return itemDataStorage.addData(data)
-    }
-
-    override fun addData(index: Int, data: DATA) {
-        itemDataStorage.addData(index, data)
-    }
-
-    override fun addAllData(datas: Collection<DATA>): Boolean {
-        return itemDataStorage.addAllData(datas)
-    }
-
-    override fun addAllData(index: Int, datas: Collection<DATA>): Boolean {
-        return itemDataStorage.addAllData(index, datas)
-    }
-
-    override fun removeData(data: DATA): Boolean {
-        return itemDataStorage.removeData(data)
-    }
-
-    override fun removeDataAt(index: Int): DATA {
-        return itemDataStorage.removeDataAt(index)
-    }
-
-    override fun removeAllData(datas: Collection<DATA>): Boolean {
-        return itemDataStorage.removeAllData(datas)
-    }
-
-    override fun removeDataIf(filter: (DATA) -> Boolean): Boolean {
-        return itemDataStorage.removeDataIf(filter)
-    }
-
-    override fun clearData() {
-        itemDataStorage.clearData()
-    }
-
-    override fun sortData(comparator: Comparator<DATA>) {
-        itemDataStorage.sortData(comparator)
     }
 
 

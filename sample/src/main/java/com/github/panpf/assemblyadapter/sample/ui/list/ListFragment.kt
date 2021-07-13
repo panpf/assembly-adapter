@@ -66,7 +66,7 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
         }
 
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
-            listAdapter.setDataList(it)
+            listAdapter.submitDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
     }

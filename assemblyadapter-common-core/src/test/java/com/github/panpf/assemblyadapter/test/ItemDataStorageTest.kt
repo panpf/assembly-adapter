@@ -25,11 +25,11 @@ class ItemDataStorageTest {
     fun testAddRemove() {
         val itemDataStorage = ItemDataStorage<Int> {}
 
-        Assert.assertEquals("", itemDataStorage.dataListSnapshot.joinToString())
+        Assert.assertEquals("", itemDataStorage.unmodifiableDataListSnapshot.joinToString())
         itemDataStorage.addData(1)
-        Assert.assertEquals("1", itemDataStorage.dataListSnapshot.joinToString())
+        Assert.assertEquals("1", itemDataStorage.unmodifiableDataListSnapshot.joinToString())
         itemDataStorage.addData(3)
-        Assert.assertEquals("1, 3", itemDataStorage.dataListSnapshot.joinToString())
+        Assert.assertEquals("1, 3", itemDataStorage.unmodifiableDataListSnapshot.joinToString())
     }
 
     @Test

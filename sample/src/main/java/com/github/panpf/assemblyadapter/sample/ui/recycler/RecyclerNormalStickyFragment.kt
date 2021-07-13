@@ -73,7 +73,7 @@ class RecyclerNormalStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
         }
 
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
-            recyclerAdapter.setDataList(it)
+            recyclerAdapter.submitDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
     }

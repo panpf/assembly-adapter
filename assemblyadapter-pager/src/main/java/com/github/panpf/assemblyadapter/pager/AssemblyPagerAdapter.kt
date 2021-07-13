@@ -19,17 +19,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
-import java.util.*
 
 open class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
     dataList: List<DATA>? = null
-) : PagerAdapter(), AssemblyAdapter<PagerItemFactory<*>>, DatasAdapter<DATA> {
+) : PagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
@@ -42,9 +40,22 @@ open class AssemblyPagerAdapter<DATA>(
                 refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
             }
         }
+    /**
+     * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitDataList].
+     */
+    val dataList: List<DATA>
+        get() = itemDataStorage.readOnlyDataList
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
+
+    /**
+     * Set the new list to be displayed.
+     */
+    fun submitDataList(dataList: List<DATA>?) {
+        itemDataStorage.submitDataList(dataList)
     }
 
     override fun getCount(): Int {
@@ -91,61 +102,6 @@ open class AssemblyPagerAdapter<DATA>(
             return POSITION_NONE
         }
         return super.getItemPosition(item)
-    }
-
-
-    override val dataCount: Int
-        get() = itemDataStorage.dataCount
-
-    override val dataListSnapshot: List<DATA>
-        get() = itemDataStorage.dataListSnapshot
-
-    override fun getData(position: Int): DATA {
-        return itemDataStorage.getData(position)
-    }
-
-    override fun setDataList(datas: List<DATA>?) {
-        itemDataStorage.setDataList(datas)
-    }
-
-    override fun addData(data: DATA): Boolean {
-        return itemDataStorage.addData(data)
-    }
-
-    override fun addData(index: Int, data: DATA) {
-        itemDataStorage.addData(index, data)
-    }
-
-    override fun addAllData(datas: Collection<DATA>): Boolean {
-        return itemDataStorage.addAllData(datas)
-    }
-
-    override fun addAllData(index: Int, datas: Collection<DATA>): Boolean {
-        return itemDataStorage.addAllData(index, datas)
-    }
-
-    override fun removeData(data: DATA): Boolean {
-        return itemDataStorage.removeData(data)
-    }
-
-    override fun removeDataAt(index: Int): DATA {
-        return itemDataStorage.removeDataAt(index)
-    }
-
-    override fun removeAllData(datas: Collection<DATA>): Boolean {
-        return itemDataStorage.removeAllData(datas)
-    }
-
-    override fun removeDataIf(filter: (DATA) -> Boolean): Boolean {
-        return itemDataStorage.removeDataIf(filter)
-    }
-
-    override fun clearData() {
-        itemDataStorage.clearData()
-    }
-
-    override fun sortData(comparator: Comparator<DATA>) {
-        itemDataStorage.sortData(comparator)
     }
 
 

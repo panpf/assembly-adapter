@@ -19,26 +19,37 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.DatasAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import java.util.*
 
 open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     dataList: List<GROUP_DATA>? = null
-) : BaseExpandableListAdapter(), AssemblyAdapter<ItemFactory<*>>, DatasAdapter<GROUP_DATA> {
+) : BaseExpandableListAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(dataList) { notifyDataSetChanged() }
 
     var hasStableIds = false
     var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
+    /**
+     * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitDataList].
+     */
+    val dataList: List<GROUP_DATA>
+        get() = itemDataStorage.readOnlyDataList
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+    }
+
+    /**
+     * Set the new list to be displayed.
+     */
+    fun submitDataList(dataList: List<GROUP_DATA>?) {
+        itemDataStorage.submitDataList(dataList)
     }
 
 
@@ -177,61 +188,6 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
         return isChildSelectable?.invoke(groupPosition, childPosition) == true
-    }
-
-
-    override val dataCount: Int
-        get() = itemDataStorage.dataCount
-
-    override val dataListSnapshot: List<GROUP_DATA>
-        get() = itemDataStorage.dataListSnapshot
-
-    override fun getData(position: Int): GROUP_DATA {
-        return itemDataStorage.getData(position)
-    }
-
-    override fun setDataList(datas: List<GROUP_DATA>?) {
-        itemDataStorage.setDataList(datas)
-    }
-
-    override fun addData(data: GROUP_DATA): Boolean {
-        return itemDataStorage.addData(data)
-    }
-
-    override fun addData(index: Int, data: GROUP_DATA) {
-        itemDataStorage.addData(index, data)
-    }
-
-    override fun addAllData(datas: Collection<GROUP_DATA>): Boolean {
-        return itemDataStorage.addAllData(datas)
-    }
-
-    override fun addAllData(index: Int, datas: Collection<GROUP_DATA>): Boolean {
-        return itemDataStorage.addAllData(index, datas)
-    }
-
-    override fun removeData(data: GROUP_DATA): Boolean {
-        return itemDataStorage.removeData(data)
-    }
-
-    override fun removeDataAt(index: Int): GROUP_DATA {
-        return itemDataStorage.removeDataAt(index)
-    }
-
-    override fun removeAllData(datas: Collection<GROUP_DATA>): Boolean {
-        return itemDataStorage.removeAllData(datas)
-    }
-
-    override fun removeDataIf(filter: (GROUP_DATA) -> Boolean): Boolean {
-        return itemDataStorage.removeDataIf(filter)
-    }
-
-    override fun clearData() {
-        itemDataStorage.clearData()
-    }
-
-    override fun sortData(comparator: Comparator<GROUP_DATA>) {
-        itemDataStorage.sortData(comparator)
     }
 
 
