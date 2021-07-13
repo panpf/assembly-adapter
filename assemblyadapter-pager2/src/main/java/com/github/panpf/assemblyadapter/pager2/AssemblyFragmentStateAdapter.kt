@@ -29,6 +29,16 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 
+/**
+ * An implementation of [FragmentStateAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
+ * [AssemblyFragmentStateAdapter] will use the data corresponding to position to find a matching [FragmentItemFactory] (cannot find an exception will be thrown),
+ * and then use [FragmentItemFactory] to create an [Fragment]
+ *
+ * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
+ * @param dataList Initial data set
+ * @see FragmentItemFactory
+ */
 open class AssemblyFragmentStateAdapter<DATA>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
@@ -48,6 +58,13 @@ open class AssemblyFragmentStateAdapter<DATA>(
     val dataList: List<DATA>
         get() = itemDataStorage.readOnlyDataList
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyFragmentStateAdapter]
+     *
+     * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
+     * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
+     * @param dataList Initial data set
+     */
     constructor(
         fragmentActivity: FragmentActivity,
         itemFactoryList: List<FragmentItemFactory<*>>,
@@ -59,6 +76,13 @@ open class AssemblyFragmentStateAdapter<DATA>(
         dataList
     )
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [AssemblyFragmentStateAdapter]
+     *
+     * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
+     * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
+     * @param dataList Initial data set
+     */
     constructor(
         fragment: Fragment,
         itemFactoryList: List<FragmentItemFactory<*>>,

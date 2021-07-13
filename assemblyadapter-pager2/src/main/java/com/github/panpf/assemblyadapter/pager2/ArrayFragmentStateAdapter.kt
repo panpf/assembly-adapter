@@ -21,18 +21,28 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
+/**
+ * An implementation of [FragmentStateAdapter], The data is provided by the [Fragment] array passed in from the outside
+ */
 open class ArrayFragmentStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     fragments: List<Fragment>
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
+    // todo Change to ItemDataStorage
     private var fragmentList = fragments.toList()
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [ArrayFragmentStateAdapter]
+     */
     constructor(
         fragmentActivity: FragmentActivity, fragments: List<Fragment>
     ) : this(fragmentActivity.supportFragmentManager, fragmentActivity.lifecycle, fragments)
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [ArrayFragmentStateAdapter]
+     */
     constructor(
         fragment: Fragment, fragments: List<Fragment>
     ) : this(fragment.childFragmentManager, fragment.lifecycle, fragments)

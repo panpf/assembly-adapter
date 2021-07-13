@@ -26,6 +26,13 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 
+/**
+ * Single data version of AssemblyFragmentStateAdapter
+ *
+ * @param itemFactory Can match [data]'s [FragmentItemFactory]
+ * @param initData Initial data
+ * @see FragmentItemFactory
+ */
 open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
@@ -36,12 +43,21 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     private var recyclerView: RecyclerView? = null
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
+    /**
+     * The only data of the current adapter, notifyDataSetChanged will be triggered when the data changes
+     */
     var data: DATA? = initData
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblySingleDataFragmentStateAdapter]
+     *
+     * @param itemFactory Can match [data]'s [FragmentItemFactory]
+     * @param initData Initial data
+     */
     constructor(
         fragmentActivity: FragmentActivity,
         itemFactory: FragmentItemFactory<DATA>,
@@ -53,6 +69,12 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
         initData
     )
 
+    /**
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [AssemblySingleDataFragmentStateAdapter]
+     *
+     * @param itemFactory Can match [data]'s [FragmentItemFactory]
+     * @param initData Initial data
+     */
     constructor(
         fragment: Fragment,
         itemFactory: FragmentItemFactory<DATA>,
