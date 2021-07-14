@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.list.internal.ConcatListAdapterControlle
 import java.util.*
 
 /**
- * Creates a ConcatListAdapter with the given config and the given adapters in the given order.
+ * An [BaseAdapter] implementation that presents the contents of multiple adapters in sequence.
  *
  * @param config   The configuration for this ConcatListAdapter
  * @param adapters The list of adapters to add

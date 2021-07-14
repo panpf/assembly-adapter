@@ -24,6 +24,16 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 
+/**
+ * An implementation of [BaseAdapter], which implements multi-type adapters through standardized [ItemFactory].
+ * [AssemblyListAdapter] will use the data corresponding to position to find a matching [ItemFactory] (cannot find an exception will be thrown),
+ * and then use [ItemFactory] to create an item view and bind the data
+ *
+ * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
+ * @param initDataList Initial data set
+ * @see ItemFactory
+ */
 open class AssemblyListAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     initDataList: List<DATA>? = null

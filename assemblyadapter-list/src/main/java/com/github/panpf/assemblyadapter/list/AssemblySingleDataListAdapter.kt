@@ -21,6 +21,13 @@ import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 
+/**
+ * Single data version of [AssemblyListAdapter]
+ *
+ * @param itemFactory Can match [data]'s [ItemFactory]
+ * @param initData Initial data
+ * @see ItemFactory
+ */
 open class AssemblySingleDataListAdapter<DATA : Any>(
     private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null

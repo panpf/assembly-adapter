@@ -24,6 +24,20 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 
+/**
+ * An implementation of [BaseExpandableListAdapter], which implements multi-type adapters through standardized [ItemFactory] or [ExpandableGroupItemFactory] or [ExpandableChildItemFactory].
+ * [AssemblyExpandableListAdapter] will use the data corresponding to position to find a matching [ItemFactory] (cannot find an exception will be thrown),
+ * and then use [ItemFactory] to create an item view and bind the data.
+ *
+ * If you need [BaseExpandableListAdapter] specific data such as isExpanded, isLastChild, etc., then you have to use [ExpandableGroupItemFactory] and [ExpandableChildItemFactory]
+ *
+ * @param itemFactoryList The collection of [ItemFactory] or [ExpandableGroupItemFactory] or [ExpandableChildItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
+ * @param initDataList Initial data set
+ * @see ItemFactory
+ * @see ExpandableGroupItemFactory
+ * @see ExpandableChildItemFactory
+ */
 open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     initDataList: List<GROUP_DATA>? = null

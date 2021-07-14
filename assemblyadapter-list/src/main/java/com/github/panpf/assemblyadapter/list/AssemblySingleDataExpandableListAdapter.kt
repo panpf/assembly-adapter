@@ -22,6 +22,16 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 
+/**
+ * Single data version of [AssemblyExpandableListAdapter]
+ *
+ * @param itemFactoryList The collection of [ItemFactory] or [ExpandableGroupItemFactory] or [ExpandableChildItemFactory] passed in from outside, cannot be empty.
+ * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
+ * @param initData Initial data
+ * @see ItemFactory
+ * @see ExpandableGroupItemFactory
+ * @see ExpandableChildItemFactory
+ */
 open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     initData: GROUP_DATA? = null

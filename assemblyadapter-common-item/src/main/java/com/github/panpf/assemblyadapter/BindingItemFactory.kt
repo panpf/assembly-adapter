@@ -59,6 +59,14 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
 
     /**
      * Binding item data, this method will be executed frequently
+     *
+     * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
+     * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
+     * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
+     * This value will be different when using Concat*Adapter
+     * @param data Data to be bound
      */
     protected abstract fun bindItemData(
         context: Context,

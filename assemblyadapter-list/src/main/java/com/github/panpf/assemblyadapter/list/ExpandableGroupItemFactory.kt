@@ -17,10 +17,13 @@ package com.github.panpf.assemblyadapter.list
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import kotlin.reflect.KClass
 
 /**
+ * Specially used in the [BaseExpandableListAdapter.getGroupView] method, the isExpanded parameter is added on the basis of the normal [ItemFactory]
+ *
  * It is not recommended to directly inherit [ExpandableGroupItemFactory],
  * you can inherit [BindingExpandableGroupItemFactory] and [SimpleExpandableGroupItemFactory] to implement your own ItemFactory
  *

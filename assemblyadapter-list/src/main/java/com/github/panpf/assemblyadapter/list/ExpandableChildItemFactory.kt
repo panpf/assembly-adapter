@@ -17,10 +17,14 @@ package com.github.panpf.assemblyadapter.list
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import kotlin.reflect.KClass
 
 /**
+ * Specially used in the [BaseExpandableListAdapter.getChildView] method, adding groupBindingAdapterPosition,
+ * groupAbsoluteAdapterPosition, groupData, isLastChild parameters on the basis of the ordinary [ItemFactory]
+ *
  * It is not recommended to directly inherit [ExpandableChildItemFactory],
  * you can inherit [BindingExpandableChildItemFactory] and [SimpleExpandableChildItemFactory] to implement your own ItemFactory
  *

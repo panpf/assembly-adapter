@@ -22,10 +22,19 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
+/**
+ * The [View] version of [ExpandableGroupItemFactory]. Create [ViewExpandableGroupItemFactory] directly and provide a [View] or layout id, you can use it
+ *
+ * @param GROUP_DATA Define the type of group data
+ * @param CHILD_DATA Define the type of matching data
+ * @param dataClass The class of data that can be matched. By default, as long as the given data is an instance of this class,
+ * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
+ * @param viewFactory Responsible for providing View when creating Item
+ */
 open class ViewExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(
-    dataClazz: KClass<CHILD_DATA>,
+    dataClass: KClass<CHILD_DATA>,
     private val viewFactory: (context: Context, inflater: LayoutInflater, parent: ViewGroup) -> View
-) : SimpleExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>(dataClazz) {
+) : SimpleExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>(dataClass) {
 
     constructor(dataClazz: KClass<CHILD_DATA>, @LayoutRes layoutResId: Int) : this(
         dataClazz,

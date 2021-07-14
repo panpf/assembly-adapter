@@ -15,7 +15,18 @@
  */
 package com.github.panpf.assemblyadapter.list
 
+/**
+ * Data expandable needs to implement this interface
+ */
 interface ExpandableGroup {
+
+    /**
+     * Returns the count of child
+     */
     fun getChildCount(): Int
+
+    /**
+     * Return the child at the [childPosition]
+     */
     fun getChild(childPosition: Int): Any
 }

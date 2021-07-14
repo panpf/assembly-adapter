@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.list.internal.ConcatExpandableListAdapte
 import java.util.*
 
 /**
- * Creates a ConcatExpandableListAdapter with the given config and the given adapters in the given order.
+ * An [BaseExpandableListAdapter] implementation that presents the contents of multiple adapters in sequence.
  *
  * @param config   The configuration for this ConcatExpandableListAdapter
  * @param adapters The list of adapters to add
