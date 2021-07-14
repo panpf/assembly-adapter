@@ -25,7 +25,11 @@ abstract class BaseBindingFragment<VIEW_BINDING : ViewBinding> : BaseFragment() 
 
     protected var binding: VIEW_BINDING? = null
 
-    final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    final override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val binding = createViewBinding(inflater, container)
@@ -46,9 +50,12 @@ abstract class BaseBindingFragment<VIEW_BINDING : ViewBinding> : BaseFragment() 
         super.onDestroyView()
     }
 
-    protected abstract fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup?): VIEW_BINDING
+    protected abstract fun createViewBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup?
+    ): VIEW_BINDING
 
-    protected open fun onInitViews(binding: VIEW_BINDING, savedInstanceState: Bundle?){
+    protected open fun onInitViews(binding: VIEW_BINDING, savedInstanceState: Bundle?) {
 
     }
 

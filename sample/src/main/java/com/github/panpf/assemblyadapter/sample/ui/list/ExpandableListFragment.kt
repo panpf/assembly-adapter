@@ -20,15 +20,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
-import com.github.panpf.assemblyadapter.list.ConcatExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblyExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataExpandableListAdapter
+import com.github.panpf.assemblyadapter.list.ConcatExpandableListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentExpandableListBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppChildItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppGroupItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinGroupAppsViewModel
 
 class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding>() {

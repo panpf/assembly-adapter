@@ -235,7 +235,8 @@ internal class ConcatExpandableListAdapterController(
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
         val wrapperAdapter = wrapperAndPos.mWrapper!!.adapter
         val localGroupPosition = wrapperAndPos.mLocalPosition
-        val groupView = wrapperAdapter.getGroupView(localGroupPosition, isExpanded, convertView, parent)
+        val groupView =
+            wrapperAdapter.getGroupView(localGroupPosition, isExpanded, convertView, parent)
         releaseWrapperAndLocalPosition(wrapperAndPos)
         return groupView
     }

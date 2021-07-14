@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.list.internal
 
 import android.util.SparseArray
 import android.util.SparseIntArray
+import com.github.panpf.assemblyadapter.list.ConcatExpandableListAdapter
 import java.util.*
 
 /**

@@ -16,10 +16,11 @@
 package com.github.panpf.assemblyadapter.pager.internal
 
 import android.view.View
+import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.R
 
 /**
- * Realize that PagerAdapter can refresh correctly when calling notifyDataSetChanged
+ * Realize that [PagerAdapter] can refresh correctly when calling notifyDataSetChanged
  */
 internal class PagerAdapterRefreshHelper {
 

@@ -16,15 +16,16 @@
 package com.github.panpf.assemblyadapter.pager.internal
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.github.panpf.assemblyadapter.pager.R
 
 /**
- * Realize that FragmentPagerAdapter can refresh correctly when calling notifyDataSetChanged
+ * Realize that [FragmentStatePagerAdapter] can refresh correctly when calling notifyDataSetChanged
  */
-internal class FragmentPagerAdapterRefreshHelper {
+internal class FragmentStatePagerAdapterRefreshHelper {
 
     private var notifyDataSetChangedNumber = 0
 

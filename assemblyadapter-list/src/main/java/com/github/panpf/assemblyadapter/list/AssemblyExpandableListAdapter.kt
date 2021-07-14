@@ -34,6 +34,7 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     var hasStableIds = false
     var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
+
     /**
      * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
      * The returned list may not change-changes to the content must be passed through [submitDataList].

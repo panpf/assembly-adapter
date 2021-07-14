@@ -9,8 +9,8 @@ import androidx.test.runner.AndroidJUnit4
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblyPagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblySingleDataPagerAdapter
-import com.github.panpf.assemblyadapter.pager.ViewPagerItemFactory
 import com.github.panpf.assemblyadapter.pager.ConcatPagerAdapter
+import com.github.panpf.assemblyadapter.pager.ViewPagerItemFactory
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

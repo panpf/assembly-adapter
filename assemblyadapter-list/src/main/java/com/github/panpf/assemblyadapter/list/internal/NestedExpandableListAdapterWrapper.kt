@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.list.internal
 
 import android.database.DataSetObserver
 import android.widget.BaseExpandableListAdapter
+import com.github.panpf.assemblyadapter.list.ConcatExpandableListAdapter
 
 /**
  * Wrapper for each adapter in [ConcatExpandableListAdapter].

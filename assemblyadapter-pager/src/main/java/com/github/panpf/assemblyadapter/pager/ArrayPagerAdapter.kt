@@ -17,8 +17,6 @@ package com.github.panpf.assemblyadapter.pager
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper

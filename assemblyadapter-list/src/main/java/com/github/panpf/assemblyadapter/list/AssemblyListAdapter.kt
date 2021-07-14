@@ -31,6 +31,7 @@ open class AssemblyListAdapter<DATA>(
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+
     /**
      * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
      * The returned list may not change-changes to the content must be passed through [submitDataList].

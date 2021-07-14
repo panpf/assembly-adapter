@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
-import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.internal.FragmentStatePagerAdapterRefreshHelper
 
 /**
  * Single data version of [AssemblyFragmentStatePagerAdapter]
@@ -46,8 +46,8 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     AssemblyAdapter<FragmentItemFactory<*>>,
     AbsoluteAdapterPositionAdapter {
 
-    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
-        FragmentPagerAdapterRefreshHelper()
+    private var refreshHelper: FragmentStatePagerAdapterRefreshHelper? =
+        FragmentStatePagerAdapterRefreshHelper()
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
 
@@ -72,7 +72,7 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         get() = refreshHelper != null
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else FragmentPagerAdapterRefreshHelper()
+                refreshHelper = if (disable) null else FragmentStatePagerAdapterRefreshHelper()
                 notifyDataSetChanged()
             }
         }

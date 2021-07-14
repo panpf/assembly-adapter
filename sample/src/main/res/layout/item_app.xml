@@ -48,8 +48,8 @@
         android:lines="1"
         android:textSize="12dp"
         app:layout_constraintBottom_toTopOf="@id/appItemSizeText"
-        app:layout_constraintStart_toStartOf="@id/appItemNameText"
         app:layout_constraintEnd_toEndOf="@id/appItemNameText"
+        app:layout_constraintStart_toStartOf="@id/appItemNameText"
         app:layout_constraintTop_toBottomOf="@id/appItemNameText"
         tools:text="1.2.0" />
 
@@ -62,8 +62,8 @@
         android:lines="1"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/appItemNameText"
         app:layout_constraintEnd_toEndOf="@id/appItemNameText"
+        app:layout_constraintStart_toStartOf="@id/appItemNameText"
         app:layout_constraintTop_toBottomOf="@id/appItemVersionText"
         tools:text="100MB " />
 

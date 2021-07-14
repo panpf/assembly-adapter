@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
-import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.internal.FragmentStatePagerAdapterRefreshHelper
 
 /**
  * An implementation of [FragmentStatePagerAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
@@ -54,8 +54,8 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
-    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
-        FragmentPagerAdapterRefreshHelper()
+    private var refreshHelper: FragmentStatePagerAdapterRefreshHelper? =
+        FragmentStatePagerAdapterRefreshHelper()
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
 
@@ -71,10 +71,11 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         get() = refreshHelper != null
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else FragmentPagerAdapterRefreshHelper()
+                refreshHelper = if (disable) null else FragmentStatePagerAdapterRefreshHelper()
                 notifyDataSetChanged()
             }
         }
+
     /**
      * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
      * The returned list may not change-changes to the content must be passed through [submitDataList].

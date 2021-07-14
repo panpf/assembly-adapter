@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.pager.internal
 
 import android.database.DataSetObserver
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
 
 /**
  * Wrapper for each adapter in [ConcatFragmentStatePagerAdapter].

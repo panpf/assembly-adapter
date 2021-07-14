@@ -7,7 +7,6 @@ import androidx.test.runner.AndroidJUnit4
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.*
-import com.github.panpf.assemblyadapter.list.ConcatExpandableListAdapter
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,15 +44,27 @@ class ConcatExpandableListAdapterTest {
                 DateGroup()
             )
         val count3Adapter = AssemblyExpandableListAdapter<Any, Any>(
-            listOf(DateExpandableGroupItemFactory(), DateExpandableChildItemFactory(), DateItemFactory()),
+            listOf(
+                DateExpandableGroupItemFactory(),
+                DateExpandableChildItemFactory(),
+                DateItemFactory()
+            ),
             listOf(DateGroup(), Date(), DateGroup())
         )
         val count5Adapter = AssemblyExpandableListAdapter<Any, Any>(
-            listOf(DateExpandableGroupItemFactory(), DateExpandableChildItemFactory(), DateItemFactory()),
+            listOf(
+                DateExpandableGroupItemFactory(),
+                DateExpandableChildItemFactory(),
+                DateItemFactory()
+            ),
             listOf(DateGroup(), Date(), DateGroup(), Date(), DateGroup())
         )
         val count7Adapter = AssemblyExpandableListAdapter<Any, Any>(
-            listOf(DateExpandableGroupItemFactory(), DateExpandableChildItemFactory(), DateItemFactory()),
+            listOf(
+                DateExpandableGroupItemFactory(),
+                DateExpandableChildItemFactory(),
+                DateItemFactory()
+            ),
             listOf(
                 DateGroup(), Date(), DateGroup(), Date(),
                 DateGroup(), Date(), DateGroup()

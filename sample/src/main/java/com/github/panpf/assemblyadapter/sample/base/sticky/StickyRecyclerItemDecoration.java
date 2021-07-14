@@ -37,14 +37,13 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
 
     @NonNull
     private final ViewGroup stickyItemContainer;
+    @NonNull
+    private final SparseArray<RecyclerView.ViewHolder> viewHolderArray = new SparseArray<>();
     private boolean disabledScrollStickyHeader;
     private boolean invisibleStickyItemInList;
-
     @Nullable
     private RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
     private int stickyItemPosition = -1;
-    @NonNull
-    private final SparseArray<RecyclerView.ViewHolder> viewHolderArray = new SparseArray<>();
     @Nullable
     private View invisibleItemView;
 

@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.list.internal
 
 import android.database.DataSetObserver
 import android.widget.BaseAdapter
+import com.github.panpf.assemblyadapter.list.ConcatListAdapter
 
 /**
  * Wrapper for each adapter in [ConcatListAdapter].

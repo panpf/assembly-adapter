@@ -58,7 +58,8 @@ abstract class SimpleExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CH
     )
 
     private class SimpleExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(
-        private val factory: SimpleExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>, itemView: View
+        private val factory: SimpleExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>,
+        itemView: View
     ) : ExpandableChildItem<GROUP_DATA, CHILD_DATA>(itemView) {
 
         override fun bindData(

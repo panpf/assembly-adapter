@@ -21,7 +21,7 @@ import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 
-open class AssemblySingleDataListAdapter<DATA: Any>(
+open class AssemblySingleDataListAdapter<DATA : Any>(
     private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
 ) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>> {
@@ -54,6 +54,7 @@ open class AssemblySingleDataListAdapter<DATA: Any>(
         // set tag absoluteAdapterPosition null to support ConcatListAdapter nesting
         parent.setTag(R.id.aa_tag_absoluteAdapterPosition, null)
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
+
         @Suppress("UNCHECKED_CAST")
         val item = itemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
         item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data!!)

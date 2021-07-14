@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.pager.internal.FragmentPagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.internal.FragmentStatePagerAdapterRefreshHelper
 import java.util.*
 
 /**
@@ -43,8 +43,8 @@ open class ArrayFragmentStatePagerAdapter(
 
     private val itemDataStorage = ItemDataStorage(templateFragmentList) { notifyDataSetChanged() }
     private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
-    private var refreshHelper: FragmentPagerAdapterRefreshHelper? =
-        FragmentPagerAdapterRefreshHelper()
+    private var refreshHelper: FragmentStatePagerAdapterRefreshHelper? =
+        FragmentStatePagerAdapterRefreshHelper()
 
     /**
      * Get the current list. If a null list is submitted through [submitFragmentList], or no list is submitted, an empty list will be returned.
@@ -72,7 +72,7 @@ open class ArrayFragmentStatePagerAdapter(
         get() = refreshHelper != null
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else FragmentPagerAdapterRefreshHelper()
+                refreshHelper = if (disable) null else FragmentStatePagerAdapterRefreshHelper()
                 notifyDataSetChanged()
             }
         }
