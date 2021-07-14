@@ -40,7 +40,6 @@ dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
     api("androidx.viewpager:viewpager:${property("ANDROIDX_VIEWPAGER")}")
     api("androidx.fragment:fragment:${property("ANDROIDX_FRAGMENT")}")
-    api(project(":assemblyadapter-common-core"))
     api(project(":assemblyadapter-common-pager"))
 
     testImplementation("junit:junit:${property("JUNIT")}")
