@@ -55,7 +55,7 @@ open class AssemblyLoadStateAdapter(
             val item = holder.wrappedItem as Item<Any>
             item.dispatchBindData(0, holder.position, loadState)
         } else {
-            throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
+            throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }
     }
 

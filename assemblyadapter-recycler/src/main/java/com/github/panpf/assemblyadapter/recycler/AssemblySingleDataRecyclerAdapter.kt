@@ -69,7 +69,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
             val item = holder.wrappedItem as Item<Any>
             item.dispatchBindData(position, holder.position, data!!)
         } else {
-            throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
+            throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }
     }
 

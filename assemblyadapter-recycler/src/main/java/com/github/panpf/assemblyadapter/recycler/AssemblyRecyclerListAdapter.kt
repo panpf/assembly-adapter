@@ -105,7 +105,7 @@ open class AssemblyRecyclerListAdapter<DATA>
             val data = getItem(position) ?: Placeholder
             item.dispatchBindData(position, holder.position, data)
         } else {
-            throw IllegalArgumentException("holder must be AssemblyItemViewHolderWrapper")
+            throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }
     }
 
