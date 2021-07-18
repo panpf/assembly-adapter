@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">AssemblyAdapter</string>
-    <string name="apps_overview">共 %d 个可启动 App\n其中 %d 个用户 App\n按拼音首字母可分为 %d 个组</string>
-    <string name="apps_overview_item">Apps: %d 个（用户: %d 个. 分组: %d 个）</string>
+    <string name="apps_overview">A total of %d startable apps\nAmong them, %d user apps\ncan be divided into %d groups by pinyin initials</string>
+    <string name="apps_overview_item">Apps: %d (User: %d. App Group: %d)</string>
+    <string name="loading">Loading…</string>
+    <string name="load_error">Load failed, click to reload</string>
+    <string name="load_end">THE END</string>
 </resources>
