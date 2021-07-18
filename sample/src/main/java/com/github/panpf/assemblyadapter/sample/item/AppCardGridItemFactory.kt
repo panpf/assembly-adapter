@@ -38,8 +38,9 @@ class AppCardGridItemFactory(private val activity: Activity) :
     }
 
     override fun initItem(
-        context: Context, binding: ItemAppGridCardBinding,
-        item: Item<AppInfo>
+        context: Context,
+        binding: ItemAppGridCardBinding,
+        item: BindingItem<AppInfo, ItemAppGridCardBinding>
     ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
@@ -77,7 +78,7 @@ class AppCardGridItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemAppGridCardBinding,
-        item: Item<AppInfo>,
+        item: BindingItem<AppInfo, ItemAppGridCardBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: AppInfo

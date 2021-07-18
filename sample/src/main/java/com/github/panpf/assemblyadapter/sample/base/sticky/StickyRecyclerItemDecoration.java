@@ -38,6 +38,8 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
     @NonNull
     private final ViewGroup stickyItemContainer;
     @NonNull
+    private final Callback callback;
+    @NonNull
     private final SparseArray<RecyclerView.ViewHolder> viewHolderArray = new SparseArray<>();
     private boolean disabledScrollStickyHeader;
     private boolean invisibleStickyItemInList;
@@ -47,8 +49,19 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
     @Nullable
     private View invisibleItemView;
 
-    public StickyRecyclerItemDecoration(@NonNull ViewGroup stickyItemContainer) {
+    public StickyRecyclerItemDecoration(@NonNull ViewGroup stickyItemContainer, @NonNull Callback callback) {
         this.stickyItemContainer = stickyItemContainer;
+        this.callback = callback;
+    }
+
+    public StickyRecyclerItemDecoration(@NonNull ViewGroup stickyItemContainer) {
+        this(stickyItemContainer, (adapter, position) -> {
+            if (adapter instanceof StickyRecyclerAdapter) {
+                return ((StickyRecyclerAdapter) adapter).isStickyItemByPosition(position);
+            } else {
+                return false;
+            }
+        });
     }
 
     /**
@@ -275,12 +288,11 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
      * 根据类型判断是否是悬停 item
      */
     private boolean isStickyItemByType(@NonNull RecyclerView.Adapter<?> adapter, int position) {
-        if (adapter instanceof StickyRecyclerAdapter) {
-            return ((StickyRecyclerAdapter) adapter).isStickyItemByPosition(position);
-        } else if (adapter instanceof ConcatAdapter) {
+        if (adapter instanceof ConcatAdapter) {
             int childAdapterStartPosition = 0;
             RecyclerView.Adapter<?> childAdapter = null;
             ConcatAdapter concatAdapter = (ConcatAdapter) adapter;
+            // todo Cache getAdapters
             for (RecyclerView.Adapter<?> currentAdapter : concatAdapter.getAdapters()) {
                 int childAdapterEndPosition = childAdapterStartPosition + currentAdapter.getItemCount() - 1;
                 if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
@@ -297,7 +309,7 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
                 throw new IndexOutOfBoundsException("Index: " + position + ", Size: " + concatAdapter.getItemCount());
             }
         } else {
-            return false;
+            return callback.isStickyByPosition(adapter, position);
         }
     }
 
@@ -356,5 +368,13 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
             invisibleItemView.setVisibility(View.VISIBLE);
             invisibleItemView = null;
         }
+    }
+
+    public interface StickyRecyclerAdapter {
+        boolean isStickyItemByPosition(int position);
+    }
+
+    public interface Callback {
+        boolean isStickyByPosition(@NonNull RecyclerView.Adapter<?> adapter, int position);
     }
 }

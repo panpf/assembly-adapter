@@ -20,8 +20,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.ViewItemFactory
 import kotlin.reflect.KClass
 
 /**

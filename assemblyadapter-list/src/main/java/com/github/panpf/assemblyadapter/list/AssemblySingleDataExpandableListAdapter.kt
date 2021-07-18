@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 
@@ -91,11 +92,11 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
             (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
+        val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<Any>
         when (groupItem) {
-            is ExpandableGroupItemFactory.ExpandableGroupItem<*> -> {
+            is ExpandableGroupItem<*> -> {
                 @Suppress("UNCHECKED_CAST")
-                (groupItem as ExpandableGroupItemFactory.ExpandableGroupItem<ExpandableGroup>)
+                (groupItem as ExpandableGroupItem<ExpandableGroup>)
                     .dispatchGroupBindData(
                         isExpanded,
                         groupBindingAdapterPosition,
@@ -103,7 +104,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
                         groupData as ExpandableGroup,
                     )
             }
-            is ExpandableChildItemFactory.ExpandableChildItem<*, *> -> {
+            is ExpandableChildItem<*, *> -> {
                 throw IllegalArgumentException("groupData '${groupData.javaClass.name}' need a matching GroupItemFactory, not ChildItemFactory")
             }
             else -> {
@@ -162,11 +163,11 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
             (groupAbsolutePositionObject as Int?) ?: groupBindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val childItem = childItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
+        val childItem = childItemView.getTag(R.id.aa_tag_item) as Item<Any>
         when (childItem) {
-            is ExpandableChildItemFactory.ExpandableChildItem<*, *> -> {
+            is ExpandableChildItem<*, *> -> {
                 @Suppress("UNCHECKED_CAST")
-                (childItem as ExpandableChildItemFactory.ExpandableChildItem<ExpandableGroup, Any>)
+                (childItem as ExpandableChildItem<ExpandableGroup, Any>)
                     .dispatchChildBindData(
                         groupBindingAdapterPosition,
                         groupAbsoluteAdapterPosition,
@@ -177,7 +178,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
                         childData
                     )
             }
-            is ExpandableGroupItemFactory.ExpandableGroupItem<*> -> {
+            is ExpandableGroupItem<*> -> {
                 throw IllegalArgumentException("childData '${childData.javaClass.name}' need a matching ChildItemFactory, not GroupItemFactory")
             }
             else -> {

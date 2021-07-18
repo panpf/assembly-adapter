@@ -18,8 +18,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:text="努力加载中…" />
+            android:text="@string/loading" />
     </LinearLayout>
 
     <TextView
@@ -28,7 +29,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="16dp"
-        android:text="加载失败，点击重新加载" />
+        android:text="@string/load_error" />
 
     <TextView
         android:id="@+id/loadStateItemEndText"
@@ -36,5 +37,5 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="16dp"
-        android:text="已全部加载" />
+        android:text="@string/load_end" />
 </FrameLayout>

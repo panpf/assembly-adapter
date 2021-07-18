@@ -57,7 +57,7 @@ open class ViewItemFactory<DATA : Any>(
     override fun bindItemData(
         context: Context,
         itemView: View,
-        item: Item<DATA>,
+        item: SimpleItem<DATA>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: DATA

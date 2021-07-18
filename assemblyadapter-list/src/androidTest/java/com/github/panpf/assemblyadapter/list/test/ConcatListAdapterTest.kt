@@ -4,7 +4,7 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
@@ -55,7 +55,7 @@ class ConcatListAdapterTest {
         val verifyAdapterPosition: (BaseAdapter, Int, Int, Int) -> Unit =
             { adapter, position, expectedBindingAdapterPosition, expectedAbsoluteAdapterPosition ->
                 val itemView = adapter.getView(position, null, parent)
-                val item = itemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<*>
+                val item = itemView.getTag(R.id.aa_tag_item) as Item<*>
                 Assert.assertEquals(
                     "count${adapter.count}Adapter. position(${position}). item.bindingAdapterPosition",
                     expectedBindingAdapterPosition, item.bindingAdapterPosition

@@ -15,18 +15,18 @@
  */
 package com.github.panpf.assemblyadapter.list
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import kotlin.reflect.KClass
 
 /**
- * Specially used in the [BaseExpandableListAdapter.getGroupView] method, the isExpanded parameter is added on the basis of the normal [ItemFactory]
+ * Specially used in the [BaseExpandableListAdapter.getGroupView] method
  *
  * It is not recommended to directly inherit [ExpandableGroupItemFactory],
  * you can inherit [BindingExpandableGroupItemFactory] and [SimpleExpandableGroupItemFactory] to implement your own ItemFactory
  *
+ * @see ExpandableGroupItem
  * @see BindingExpandableGroupItemFactory
  * @see SimpleExpandableGroupItemFactory
  * @see ViewExpandableGroupItemFactory
@@ -35,46 +35,4 @@ abstract class ExpandableGroupItemFactory<DATA : ExpandableGroup>(dataClass: KCl
     ItemFactory<DATA>(dataClass) {
 
     abstract override fun createItem(parent: ViewGroup): ExpandableGroupItem<DATA>
-
-    abstract class ExpandableGroupItem<DATA : Any> : Item<DATA> {
-
-        private var _isExpanded = false
-
-        val isExpanded: Boolean
-            get() = _isExpanded
-
-        constructor(itemView: View) : super(itemView)
-
-        constructor(itemLayoutId: Int, parent: ViewGroup) : super(itemLayoutId, parent)
-
-        fun dispatchGroupBindData(
-            isExpanded: Boolean,
-            bindingAdapterPosition: Int,
-            absoluteAdapterPosition: Int,
-            data: DATA,
-        ) {
-            this._isExpanded = isExpanded
-            super.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
-        }
-
-        final override fun bindData(
-            bindingAdapterPosition: Int,
-            absoluteAdapterPosition: Int,
-            data: DATA
-        ) {
-            bindData(
-                isExpanded,
-                bindingAdapterPosition,
-                absoluteAdapterPosition,
-                data,
-            )
-        }
-
-        protected abstract fun bindData(
-            isExpanded: Boolean,
-            bindingAdapterPosition: Int,
-            absoluteAdapterPosition: Int,
-            data: DATA,
-        )
-    }
 }

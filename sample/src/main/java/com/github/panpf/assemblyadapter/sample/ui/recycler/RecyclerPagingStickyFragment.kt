@@ -24,14 +24,14 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyPagingDataAdapter
+import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
-import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerItemDecoration
+import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
-import com.github.panpf.assemblyadapter.sample.item.StickyListSeparatorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -49,10 +49,10 @@ class RecyclerPagingStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
-        val pagingDataAdapter = AssemblyStickyPagingDataAdapter<Any>(
+        val pagingDataAdapter = AssemblyPagingDataAdapter<Any>(
             listOf(
                 AppItemFactory(requireActivity()),
-                StickyListSeparatorItemFactory(requireActivity())
+                ListSeparatorItemFactory(requireActivity())
             )
         )
         binding.recyclerRecycler.apply {
@@ -62,7 +62,11 @@ class RecyclerPagingStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
                 )
             )
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
+            addItemDecoration(
+                AssemblyStickyRecyclerItemDecoration(
+                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
+                )
+            )
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
             viewModel.refresh()

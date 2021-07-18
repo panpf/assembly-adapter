@@ -16,7 +16,7 @@
 package com.github.panpf.assemblyadapter.recycler.internal
 
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Item
 
-open class RecyclerViewHolderWrapper<DATA : Any>(val wrappedItem: ItemFactory.Item<DATA>) :
+open class RecyclerViewHolderWrapper<DATA : Any>(val wrappedItem: Item<DATA>) :
     RecyclerView.ViewHolder(wrappedItem.itemView)

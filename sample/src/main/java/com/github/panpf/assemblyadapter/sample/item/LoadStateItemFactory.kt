@@ -32,7 +32,11 @@ class LoadStateItemFactory(private val activity: Activity) :
         context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemLoadStateBinding = ItemLoadStateBinding.inflate(inflater, parent, false)
 
-    override fun initItem(context: Context, binding: ItemLoadStateBinding, item: Item<LoadState>) {
+    override fun initItem(
+        context: Context,
+        binding: ItemLoadStateBinding,
+        item: BindingItem<LoadState, ItemLoadStateBinding>
+    ) {
         super.initItem(context, binding, item)
 
         binding.root.setOnLongClickListener {
@@ -51,7 +55,7 @@ class LoadStateItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemLoadStateBinding,
-        item: Item<LoadState>,
+        item: BindingItem<LoadState, ItemLoadStateBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: LoadState

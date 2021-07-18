@@ -32,7 +32,7 @@ import kotlin.reflect.KClass
 abstract class SimpleItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
     ItemFactory<DATA>(dataClass) {
 
-    final override fun createItem(parent: ViewGroup): Item<DATA> {
+    final override fun createItem(parent: ViewGroup): SimpleItem<DATA> {
         val context = parent.context
         val itemView = createItemView(context, LayoutInflater.from(context), parent)
         return SimpleItem(this, itemView).apply {
@@ -50,7 +50,7 @@ abstract class SimpleItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
     /**
      * Initialize the item, this method is only executed once when the item is created
      */
-    protected open fun initItem(context: Context, itemView: View, item: Item<DATA>) {
+    protected open fun initItem(context: Context, itemView: View, item: SimpleItem<DATA>) {
     }
 
 
@@ -60,13 +60,13 @@ abstract class SimpleItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
     protected abstract fun bindItemData(
         context: Context,
         itemView: View,
-        item: Item<DATA>,
+        item: SimpleItem<DATA>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: DATA
     )
 
-    private class SimpleItem<DATA : Any>(
+    protected class SimpleItem<DATA : Any>(
         private val factory: SimpleItemFactory<DATA>, itemView: View
     ) : Item<DATA>(itemView) {
 

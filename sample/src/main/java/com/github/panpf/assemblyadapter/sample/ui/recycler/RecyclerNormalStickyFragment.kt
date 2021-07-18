@@ -22,15 +22,15 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.sample.base.AssemblyStickyRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.sticky.StickyRecyclerItemDecoration
+import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.item.StickyListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
 class RecyclerNormalStickyFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
@@ -46,10 +46,10 @@ class RecyclerNormalStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
-        val recyclerAdapter = AssemblyStickyRecyclerAdapter<Any>(
+        val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
                 AppItemFactory(requireActivity()),
-                StickyListSeparatorItemFactory(requireActivity())
+                ListSeparatorItemFactory(requireActivity())
             )
         )
         val footerLoadStateAdapter =
@@ -57,7 +57,11 @@ class RecyclerNormalStickyFragment : BaseBindingFragment<FragmentRecyclerBinding
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(StickyRecyclerItemDecoration(binding.recyclerStickyContainer))
+            addItemDecoration(
+                AssemblyStickyRecyclerItemDecoration(
+                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
+                )
+            )
         }
 
         binding.recyclerRefreshLayout.setOnRefreshListener {

@@ -34,7 +34,11 @@ class LinkItemFactory(private val activity: Activity) :
         return ItemLinkBinding.inflate(inflater, parent, false)
     }
 
-    override fun initItem(context: Context, binding: ItemLinkBinding, item: Item<Link>) {
+    override fun initItem(
+        context: Context,
+        binding: ItemLinkBinding,
+        item: BindingItem<Link, ItemLinkBinding>
+    ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
@@ -63,7 +67,7 @@ class LinkItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemLinkBinding,
-        item: Item<Link>,
+        item: BindingItem<Link, ItemLinkBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: Link

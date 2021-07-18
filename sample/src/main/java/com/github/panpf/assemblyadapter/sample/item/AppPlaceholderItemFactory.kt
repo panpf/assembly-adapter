@@ -10,7 +10,7 @@ import com.github.panpf.assemblyadapter.sample.R
 
 class AppPlaceholderItemFactory(private val activity: Activity) :
     ViewItemFactory<Placeholder>(Placeholder::class, R.layout.item_app_placeholder) {
-    override fun initItem(context: Context, itemView: View, item: Item<Placeholder>) {
+    override fun initItem(context: Context, itemView: View, item: SimpleItem<Placeholder>) {
         super.initItem(context, itemView, item)
 
         itemView.setOnLongClickListener {
