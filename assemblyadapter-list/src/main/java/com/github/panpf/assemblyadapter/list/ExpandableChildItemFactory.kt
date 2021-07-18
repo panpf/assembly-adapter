@@ -15,19 +15,18 @@
  */
 package com.github.panpf.assemblyadapter.list
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import kotlin.reflect.KClass
 
 /**
- * Specially used in the [BaseExpandableListAdapter.getChildView] method, adding groupBindingAdapterPosition,
- * groupAbsoluteAdapterPosition, groupData, isLastChild parameters on the basis of the ordinary [ItemFactory]
+ * Specially used in the [BaseExpandableListAdapter.getChildView] method
  *
  * It is not recommended to directly inherit [ExpandableChildItemFactory],
  * you can inherit [BindingExpandableChildItemFactory] and [SimpleExpandableChildItemFactory] to implement your own ItemFactory
  *
+ * @see ExpandableChildItem
  * @see BindingExpandableChildItemFactory
  * @see SimpleExpandableChildItemFactory
  * @see ViewExpandableChildItemFactory
@@ -37,69 +36,4 @@ abstract class ExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DA
 
     abstract override fun createItem(parent: ViewGroup): ExpandableChildItem<GROUP_DATA, CHILD_DATA>
 
-    abstract class ExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any> :
-        Item<CHILD_DATA> {
-
-        private var _groupBindingAdapterPosition = -1
-        private var _groupAbsoluteAdapterPosition = -1
-        private var _groupData: GROUP_DATA? = null
-        private var _isLastChild = false
-
-        val groupBindingAdapterPosition: Int
-            get() = _groupBindingAdapterPosition
-        val groupAbsoluteAdapterPosition: Int
-            get() = _groupAbsoluteAdapterPosition
-        val groupDataOrNull: GROUP_DATA?
-            get() = _groupData
-        val groupDataOrThrow: GROUP_DATA
-            get() = _groupData!!
-        val isLastChild: Boolean
-            get() = _isLastChild
-
-        constructor(itemView: View) : super(itemView)
-
-        constructor(itemLayoutId: Int, parent: ViewGroup) : super(itemLayoutId, parent)
-
-        fun dispatchChildBindData(
-            groupBindingAdapterPosition: Int,
-            groupAbsoluteAdapterPosition: Int,
-            groupData: GROUP_DATA,
-            isLastChild: Boolean,
-            bindingAdapterPosition: Int,
-            absoluteAdapterPosition: Int,
-            data: CHILD_DATA,
-        ) {
-            this._groupBindingAdapterPosition = groupBindingAdapterPosition
-            this._groupAbsoluteAdapterPosition = groupAbsoluteAdapterPosition
-            this._groupData = groupData
-            this._isLastChild = isLastChild
-            super.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
-        }
-
-        final override fun bindData(
-            bindingAdapterPosition: Int,
-            absoluteAdapterPosition: Int,
-            data: CHILD_DATA
-        ) {
-            bindData(
-                groupBindingAdapterPosition,
-                groupAbsoluteAdapterPosition,
-                groupDataOrThrow,
-                isLastChild,
-                bindingAdapterPosition,
-                absoluteAdapterPosition,
-                data,
-            )
-        }
-
-        protected abstract fun bindData(
-            groupBindingAdapterPosition: Int,
-            groupAbsoluteAdapterPosition: Int,
-            groupData: GROUP_DATA,
-            isLastChild: Boolean,
-            bindingAdapterPosition: Int,
-            absoluteAdapterPosition: Int,
-            data: CHILD_DATA,
-        )
-    }
 }

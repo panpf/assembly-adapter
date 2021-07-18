@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
@@ -98,7 +99,7 @@ open class AssemblyListAdapter<DATA>(
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val item = itemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<Any>
+        val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
         item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
 
         return itemView

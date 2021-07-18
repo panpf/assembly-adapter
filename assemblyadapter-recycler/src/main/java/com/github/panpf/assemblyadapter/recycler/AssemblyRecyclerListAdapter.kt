@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.diff.KeyDiffItemCallback
@@ -100,7 +101,7 @@ open class AssemblyRecyclerListAdapter<DATA>
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as ItemFactory.Item<Any>
+            val item = holder.wrappedItem as Item<Any>
             val data = getItem(position) ?: Placeholder
             item.dispatchBindData(position, holder.position, data)
         } else {

@@ -19,7 +19,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
-import com.github.panpf.assemblyadapter.ItemFactory
 import kotlin.reflect.KClass
 
 /**

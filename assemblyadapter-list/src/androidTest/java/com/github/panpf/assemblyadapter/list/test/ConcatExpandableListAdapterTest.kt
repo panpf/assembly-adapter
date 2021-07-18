@@ -4,7 +4,7 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.ListView
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.*
 import org.junit.Assert
@@ -94,7 +94,7 @@ class ConcatExpandableListAdapterTest {
         val verifyAdapterPosition: (BaseExpandableListAdapter, Int, Int, Int) -> Unit =
             { adapter, groupPosition, expectedBindingAdapterPosition, expectedAbsoluteAdapterPosition ->
                 val groupItemView = adapter.getGroupView(groupPosition, false, null, parent)
-                val groupItem = groupItemView.getTag(R.id.aa_tag_item) as ItemFactory.Item<*>
+                val groupItem = groupItemView.getTag(R.id.aa_tag_item) as Item<*>
                 Assert.assertEquals(
                     "count${adapter.groupCount}Adapter. groupPosition(${groupPosition}). item.bindingAdapterPosition",
                     expectedBindingAdapterPosition, groupItem.bindingAdapterPosition
@@ -108,7 +108,7 @@ class ConcatExpandableListAdapterTest {
                     val childItemView =
                         adapter.getChildView(groupPosition, 0, false, null, parent)
                     val childItem =
-                        childItemView.getTag(R.id.aa_tag_item) as ExpandableChildItemFactory.ExpandableChildItem<*, *>
+                        childItemView.getTag(R.id.aa_tag_item) as ExpandableChildItem<*, *>
                     Assert.assertEquals(
                         "count${adapter.groupCount}Adapter. groupPosition(${groupPosition}), childPosition(0). item.groupBindingAdapterPosition",
                         expectedBindingAdapterPosition, childItem.groupBindingAdapterPosition

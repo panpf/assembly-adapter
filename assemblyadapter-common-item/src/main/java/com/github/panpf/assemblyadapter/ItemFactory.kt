@@ -15,9 +15,6 @@
  */
 package com.github.panpf.assemblyadapter
 
-import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
@@ -198,92 +195,4 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
         }
     }
 
-    /**
-     * Item is similar to ViewHolder, responsible for holding item view and binding data
-     */
-    abstract class Item<DATA : Any>(val itemView: View) {
-
-        private var _data: DATA? = null
-        private var _bindingAdapterPosition: Int = -1
-        private var _absoluteAdapterPosition: Int = -1
-
-        val context: Context = itemView.context
-
-        /**
-         * Get the bound data, or null if there is none
-         */
-        val dataOrNull: DATA?
-            get() = _data
-
-
-        /**
-         * Get the bound data, if not, throw an exception
-         */
-        val dataOrThrow: DATA
-            get() = _data!!
-
-        /**
-         * The position of the current item in its directly bound adapter.
-         * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method
-         *
-         * This value will be different when using Concat*Adapter
-         */
-        val bindingAdapterPosition: Int
-            get() = _bindingAdapterPosition
-
-        /**
-         * The position of the current item in the RecyclerView.adapter adapter.
-         * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method
-         *
-         * This value will be different when using Concat*Adapter
-         */
-        val absoluteAdapterPosition: Int
-            get() = _absoluteAdapterPosition
-
-        /**
-         * Create Item by layout id and parent ViewGroup
-         */
-        constructor(itemLayoutId: Int, parent: ViewGroup) : this(
-            LayoutInflater.from(parent.context).inflate(itemLayoutId, parent, false)
-        )
-
-        /**
-         * Bind data to item view
-         *
-         * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
-         * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
-         * This value will be different when using Concat*Adapter
-         * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
-         * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
-         * This value will be different when using Concat*Adapter
-         * @param data Data to be bound
-         */
-        fun dispatchBindData(
-            bindingAdapterPosition: Int,
-            absoluteAdapterPosition: Int,
-            data: DATA
-        ) {
-            this._data = data
-            this._bindingAdapterPosition = bindingAdapterPosition
-            this._absoluteAdapterPosition = absoluteAdapterPosition
-            bindData(_absoluteAdapterPosition, absoluteAdapterPosition, data)
-        }
-
-        /**
-         * Bind data to item view
-         *
-         * @param bindingAdapterPosition The position of the current item in its directly bound adapter.
-         * For its specific meaning, please refer to the RecyclerView.ViewHolder.getBindingAdapterPosition() method.
-         * This value will be different when using Concat*Adapter
-         * @param absoluteAdapterPosition The position of the current item in the RecyclerView.adapter adapter.
-         * For the specific meaning, please refer to the RecyclerView.ViewHolder.getAbsoluteAdapterPosition() method.
-         * This value will be different when using Concat*Adapter
-         * @param data Data to be bound
-         */
-        protected abstract fun bindData(
-            bindingAdapterPosition: Int,
-            absoluteAdapterPosition: Int,
-            data: DATA
-        )
-    }
 }
