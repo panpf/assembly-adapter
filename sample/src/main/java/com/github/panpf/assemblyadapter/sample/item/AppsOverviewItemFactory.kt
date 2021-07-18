@@ -41,7 +41,7 @@ class AppsOverviewItemFactory(
     override fun initItem(
         context: Context,
         binding: ItemAppsOverviewBinding,
-        item: Item<AppsOverview>
+        item: BindingItem<AppsOverview, ItemAppsOverviewBinding>
     ) {
         super.initItem(context, binding, item)
         if (hideStartMargin) {
@@ -64,7 +64,7 @@ class AppsOverviewItemFactory(
     override fun bindItemData(
         context: Context,
         binding: ItemAppsOverviewBinding,
-        item: Item<AppsOverview>,
+        item: BindingItem<AppsOverview, ItemAppsOverviewBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: AppsOverview

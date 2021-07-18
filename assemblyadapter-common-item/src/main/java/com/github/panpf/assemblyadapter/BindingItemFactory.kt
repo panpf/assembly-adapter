@@ -34,7 +34,7 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     dataClass: KClass<DATA>
 ) : ItemFactory<DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): Item<DATA> {
+    override fun createItem(parent: ViewGroup): BindingItem<DATA, VIEW_BINDING> {
         val context = parent.context
         val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
         return BindingItem(this, binding).apply {
@@ -54,7 +54,7 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     /**
      * Initialize the item, this method is only executed once when the item is created
      */
-    protected open fun initItem(context: Context, binding: VIEW_BINDING, item: Item<DATA>) {
+    protected open fun initItem(context: Context, binding: VIEW_BINDING, item: BindingItem<DATA, VIEW_BINDING>) {
     }
 
     /**
@@ -71,13 +71,13 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     protected abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: Item<DATA>,
+        item: BindingItem<DATA, VIEW_BINDING>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: DATA
     )
 
-    private class BindingItem<DATA : Any, VIEW_BINDING : ViewBinding>(
+    protected class BindingItem<DATA : Any, VIEW_BINDING : ViewBinding>(
         private val factory: BindingItemFactory<DATA, VIEW_BINDING>,
         private val binding: VIEW_BINDING
     ) : Item<DATA>(binding.root) {

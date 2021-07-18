@@ -41,7 +41,7 @@ open class ListSeparatorItemFactory(
     override fun initItem(
         context: Context,
         binding: ItemListSeparatorBinding,
-        item: Item<ListSeparator>
+        item: BindingItem<ListSeparator, ItemListSeparatorBinding>
     ) {
         super.initItem(context, binding, item)
         if (hideStartMargin) {
@@ -84,7 +84,7 @@ open class ListSeparatorItemFactory(
     override fun bindItemData(
         context: Context,
         binding: ItemListSeparatorBinding,
-        item: Item<ListSeparator>,
+        item: BindingItem<ListSeparator, ItemListSeparatorBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: ListSeparator
