@@ -47,9 +47,6 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
 
-    var hasStableIds = false
-    var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
-
     /**
      * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
      * The returned list may not change-changes to the content must be passed through [submitDataList].
@@ -200,10 +197,10 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
 
-    override fun hasStableIds(): Boolean = hasStableIds
+    override fun hasStableIds(): Boolean = false
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
-        return isChildSelectable?.invoke(groupPosition, childPosition) == true
+        return false
     }
 
 
