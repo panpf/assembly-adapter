@@ -73,15 +73,15 @@ abstract class SimpleExpandableGroupItemFactory<DATA : ExpandableGroup>(
     protected abstract fun bindItemData(
         context: Context,
         itemView: View,
-        item: ExpandableGroupItem<DATA>,
+        item: SimpleExpandableGroupItem<DATA>,
         isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: DATA,
     )
 
-    private class SimpleExpandableGroupItem<DATA : ExpandableGroup>(
-        private val factory: SimpleExpandableGroupItemFactory<DATA>, itemView: View
+    class SimpleExpandableGroupItem<DATA : ExpandableGroup>(
+        val factory: SimpleExpandableGroupItemFactory<DATA>, itemView: View
     ) : ExpandableGroupItem<DATA>(itemView) {
 
         override fun bindData(

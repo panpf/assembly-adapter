@@ -31,8 +31,9 @@ import kotlin.reflect.KClass
  * @see SimpleExpandableGroupItemFactory
  * @see ViewExpandableGroupItemFactory
  */
-abstract class ExpandableGroupItemFactory<DATA : ExpandableGroup>(dataClass: KClass<DATA>) :
-    ItemFactory<DATA>(dataClass) {
+abstract class ExpandableGroupItemFactory<DATA : ExpandableGroup>(
+    dataClass: KClass<DATA>
+) : ItemFactory<DATA>(dataClass) {
 
     abstract override fun createItem(parent: ViewGroup): ExpandableGroupItem<DATA>
 }

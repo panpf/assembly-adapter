@@ -85,7 +85,7 @@ class AppChildItemFactory(private val activity: Activity) :
     override fun bindItemData(
         context: Context,
         binding: ItemAppBinding,
-        item: ExpandableChildItem<AppGroup, AppInfo>,
+        item: BindingExpandableChildItem<AppGroup, AppInfo, ItemAppBinding>,
         groupBindingAdapterPosition: Int,
         groupAbsoluteAdapterPosition: Int,
         groupData: AppGroup,
