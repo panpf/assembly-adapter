@@ -9,6 +9,7 @@ import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter3.compat.sample.R
 import com.github.panpf.assemblyadapter3.compat.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter3.compat.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter3.compat.sample.item.AppGridItem
@@ -33,7 +34,7 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                 TextItem.Factory().fullSpan().setOnItemClickListener { _, _, _, _, _ ->
                     setHeaderItemEnabled(0, false)
                 },
-                "我是小额头呀！(我会一点就消失术)"
+                requireContext().getString(R.string.list_header)
             ).apply { isEnabled = false }
             addItemFactory(AppGridItem.Factory())
             addItemFactory(ListSeparatorItem.Factory().fullSpan())
@@ -41,7 +42,7 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                 TextItem.Factory().fullSpan().setOnItemClickListener { _, _, _, _, _ ->
                     setFooterItemEnabled(0, false)
                 },
-                "我是小尾巴呀！(我也会一点就消失术)"
+                requireContext().getString(R.string.list_footer)
             ).apply { isEnabled = false }
             setMoreItem(LoadMoreItem.Factory {
                 viewModel.apppend()

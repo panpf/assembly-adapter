@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyListAdapter
+import com.github.panpf.assemblyadapter3.compat.sample.R
 import com.github.panpf.assemblyadapter3.compat.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter3.compat.sample.databinding.FragmentListBinding
 import com.github.panpf.assemblyadapter3.compat.sample.item.AppItem
@@ -29,7 +30,7 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
                 TextItem.Factory().setOnItemClickListener { _, _, _, _, _ ->
                     setHeaderItemEnabled(0, false)
                 },
-                "我是小额头呀！(我会一点就消失术)"
+                requireContext().getString(R.string.list_header)
             ).apply { isEnabled = false }
             addItemFactory(AppItem.Factory())
             addItemFactory(ListSeparatorItem.Factory())
@@ -37,7 +38,7 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
                 TextItem.Factory().setOnItemClickListener { _, _, _, _, _ ->
                     setFooterItemEnabled(0, false)
                 },
-                "我是小尾巴呀！(我也会一点就消失术)"
+                requireContext().getString(R.string.list_footer)
             ).apply { isEnabled = false }
             setMoreItem(LoadMoreItem.Factory {
                 viewModel.apppend()

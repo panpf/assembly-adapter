@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyExpandableAdapter
+import com.github.panpf.assemblyadapter3.compat.sample.R
 import com.github.panpf.assemblyadapter3.compat.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter3.compat.sample.databinding.FragmentExpandableListBinding
 import com.github.panpf.assemblyadapter3.compat.sample.item.AppGroupItem
@@ -29,7 +30,7 @@ class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding
                 TextItem.Factory().setOnItemClickListener { _, _, _, _, _ ->
                     setHeaderItemEnabled(0, false)
                 },
-                "我是小额头呀！(我会一点就消失术)"
+                requireContext().getString(R.string.list_header)
             ).apply { isEnabled = false }
             addGroupItemFactory(AppGroupItem.Factory())
             addChildItemFactory(AppItem.Factory())
@@ -40,7 +41,7 @@ class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding
                 TextItem.Factory().setOnItemClickListener { _, _, _, _, _ ->
                     setFooterItemEnabled(0, false)
                 },
-                "我是小尾巴呀！(我也会一点就消失术)"
+                requireContext().getString(R.string.list_footer)
             ).apply { isEnabled = false }
         }
 

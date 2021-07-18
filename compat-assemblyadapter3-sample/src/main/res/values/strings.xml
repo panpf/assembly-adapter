@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CompatAssemblyAdapter3</string>
+    <string name="loading">Loading…</string>
+    <string name="load_error">Load failed, click to reload</string>
+    <string name="load_end">THE END</string>
+    <string name="list_header">I am header of list！(Hidden when click me)</string>
+    <string name="list_footer">I am footer of list！(Hidden when click me)</string>
 </resources>

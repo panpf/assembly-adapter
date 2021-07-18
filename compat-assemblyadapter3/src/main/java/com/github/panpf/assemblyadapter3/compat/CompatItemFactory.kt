@@ -1,6 +1,7 @@
 package com.github.panpf.assemblyadapter3.compat
 
 import android.view.ViewGroup
+import com.github.panpf.assemblyadapter.Item
 
 class CompatItemFactory(val itemFactory: CompatAssemblyItemFactory<*>) :
     com.github.panpf.assemblyadapter.ItemFactory<Any>(Any::class) {

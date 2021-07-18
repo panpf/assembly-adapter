@@ -372,4 +372,8 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
     public interface Callback {
         boolean isStickyByPosition(@NonNull RecyclerView.Adapter<?> adapter, int position);
     }
+
+    public interface StickyRecyclerAdapter {
+        boolean isStickyItemByPosition(int position);
+    }
 }

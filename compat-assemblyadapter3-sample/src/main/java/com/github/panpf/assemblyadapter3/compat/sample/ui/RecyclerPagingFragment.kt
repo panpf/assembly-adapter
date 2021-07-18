@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter3.compat.CompatDiffableDiffCallback
+import com.github.panpf.assemblyadapter3.compat.sample.R
 import com.github.panpf.assemblyadapter3.compat.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter3.compat.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter3.compat.sample.item.AppItem
@@ -36,7 +37,7 @@ class RecyclerPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                     TextItem.Factory().setOnItemClickListener { _, _, _, _, _ ->
                         setHeaderItemEnabled(0, false)
                     },
-                    "我是小额头呀！(我会一点就消失术)"
+                    requireContext().getString(R.string.list_header)
                 )
                 addItemFactory(AppItem.Factory())
                 addItemFactory(ListSeparatorItem.Factory())
@@ -44,7 +45,7 @@ class RecyclerPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                     TextItem.Factory().setOnItemClickListener { _, _, _, _, _ ->
                         setFooterItemEnabled(0, false)
                     },
-                    "我是小尾巴呀！(我也会一点就消失术)"
+                    requireContext().getString(R.string.list_footer)
                 )
                 setMoreItem(LoadMoreItem.Factory())
             }

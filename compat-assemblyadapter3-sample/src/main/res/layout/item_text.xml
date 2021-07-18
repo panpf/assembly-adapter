@@ -4,4 +4,4 @@
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:gravity="center"
-    tools:text="我是小尾巴" />
+    tools:text="@string/list_header" />

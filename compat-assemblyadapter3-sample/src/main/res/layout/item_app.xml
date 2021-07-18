@@ -37,7 +37,7 @@
         app:layout_constraintStart_toEndOf="@id/appItemIconImage"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="谷歌浏览器 " />
+        tools:text="@string/app_name" />
 
     <TextView
         android:id="@+id/appItemVersionText"

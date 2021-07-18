@@ -2,6 +2,7 @@ package com.github.panpf.assemblyadapter3.compat
 
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.list.ExpandableGroup
+import com.github.panpf.assemblyadapter.list.ExpandableGroupItem
 import com.github.panpf.assemblyadapter.list.ExpandableGroupItemFactory
 
 class CompatExpandableGroupItemFactory(val itemFactory: CompatAssemblyItemFactory<out CompatAssemblyGroup>) :
