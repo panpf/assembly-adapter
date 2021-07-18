@@ -26,7 +26,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter
-import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingFragmentStateAdapter
+import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingDataFragmentStateAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyFragmentLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
@@ -51,7 +51,7 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
             this,
             AppsOverviewFragmentItemFactory()
         )
-        val pagingDataAdapter = AssemblyPagingFragmentStateAdapter<Any>(
+        val pagingDataAdapter = AssemblyPagingDataFragmentStateAdapter<Any>(
             this, listOf(AppGroupFragmentItemFactory())
         )
         binding.pager2Pager.apply {
