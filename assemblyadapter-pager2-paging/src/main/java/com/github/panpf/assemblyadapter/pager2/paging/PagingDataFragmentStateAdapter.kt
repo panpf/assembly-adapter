@@ -292,14 +292,14 @@ abstract class PagingDataFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHol
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [LoadStateFragmentStateAdapter]s displaying the
      * [LoadType.PREPEND] [LoadState] as a list item at the end of the presented list.
      *
-     * @see FragmentLoadStateAdapter
+     * @see LoadStateFragmentStateAdapter
      * @see withLoadStateHeaderAndFooter
      * @see withLoadStateFooter
      */
-    fun withLoadStateHeader(header: FragmentLoadStateAdapter): ConcatAdapter {
+    fun withLoadStateHeader(header: LoadStateFragmentStateAdapter): ConcatAdapter {
         addLoadStateListener { loadStates ->
             header.loadState = loadStates.prepend
         }
@@ -313,14 +313,14 @@ abstract class PagingDataFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHol
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [LoadStateFragmentStateAdapter]s displaying the
      * [LoadType.APPEND] [LoadState] as a list item at the start of the presented list.
      *
-     * @see FragmentLoadStateAdapter
+     * @see LoadStateFragmentStateAdapter
      * @see withLoadStateHeaderAndFooter
      * @see withLoadStateHeader
      */
-    fun withLoadStateFooter(footer: FragmentLoadStateAdapter): ConcatAdapter {
+    fun withLoadStateFooter(footer: LoadStateFragmentStateAdapter): ConcatAdapter {
         addLoadStateListener { loadStates ->
             footer.loadState = loadStates.append
         }
@@ -334,17 +334,17 @@ abstract class PagingDataFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHol
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [LoadStateFragmentStateAdapter]s displaying the
      * [LoadType.PREPEND] and [LoadType.APPEND] [LoadState]s as list items at the start and end
      * respectively.
      *
-     * @see FragmentLoadStateAdapter
+     * @see LoadStateFragmentStateAdapter
      * @see withLoadStateHeader
      * @see withLoadStateFooter
      */
     fun withLoadStateHeaderAndFooter(
-        header: FragmentLoadStateAdapter,
-        footer: FragmentLoadStateAdapter
+        header: LoadStateFragmentStateAdapter,
+        footer: LoadStateFragmentStateAdapter
     ): ConcatAdapter {
         addLoadStateListener { loadStates ->
             header.loadState = loadStates.prepend

@@ -26,17 +26,17 @@ import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
 
 /**
- * An implementation of [FragmentLoadStateAdapter], Realize the display of [LoadState] through standardized [FragmentItemFactory].
+ * An implementation of [LoadStateFragmentStateAdapter], Realize the display of [LoadState] through standardized [FragmentItemFactory].
  *
  * @param itemFactory Must be a [FragmentItemFactory] that can match [LoadState]
  * @param alwaysShowWhenEndOfPaginationReached If true, it will still be displayed at the end of pagination reached
  */
-open class AssemblyFragmentLoadStateAdapter(
+open class AssemblyLoadStateFragmentStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     private val itemFactory: FragmentItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
-) : FragmentLoadStateAdapter(
+) : LoadStateFragmentStateAdapter(
     fragmentManager,
     lifecycle
 ) {
@@ -46,7 +46,7 @@ open class AssemblyFragmentLoadStateAdapter(
 
 
     /**
-     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyFragmentLoadStateAdapter]
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyLoadStateFragmentStateAdapter]
      *
      * @param itemFactory Must be a [FragmentItemFactory] that can match [LoadState]
      * @param alwaysShowWhenEndOfPaginationReached If true, it will still be displayed at the end of pagination reached
@@ -63,7 +63,7 @@ open class AssemblyFragmentLoadStateAdapter(
     )
 
     /**
-     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [AssemblyFragmentLoadStateAdapter]
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [AssemblyLoadStateFragmentStateAdapter]
      *
      * @param itemFactory Must be a [FragmentItemFactory] that can match [LoadState]
      * @param alwaysShowWhenEndOfPaginationReached If true, it will still be displayed at the end of pagination reached
