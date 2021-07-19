@@ -179,12 +179,12 @@ class AppInfoItemFactory : BindingItemFactory<AppInfo, ItemAppInfoBinding>(AppIn
 
 更多自定义 [ItemFactory] 详细内容请参考 [ItemFactory 自定义详解][docs_item_factory]
 
-### 3. 创建多类型适配器
+### 3. 使用 ItemFactory 创建多类型适配器
 
-使用的时候只需在创建 Adapter 时通过构造参数传入即可，如下：
+只需在创建 Adapter 时通过构造参数传入 ItemFactory 即可，如下：
 
 ```kotlin
-// ListSeparatorItemFactory 是一个列表分割符 Item 具体实现就不写了
+// ListSeparatorItemFactory 是一个列表分割符 ItemFactory 具体实现就不写了
 val appAdapter = AssemblyRecyclerAdapter(
     listOf(AppInfoItemFactory(), ListSeparatorItemFactory())
 )
