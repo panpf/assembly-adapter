@@ -24,43 +24,43 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 
 * [assemblyadapter-list]:
     * [BaseAdapter]
-        * [AssemblyListAdapter]: 多类型 Item 实现
+        * [AssemblyListAdapter]: 多类型 Adapter 实现
         * [AssemblySingleDataListAdapter]：单数据实现
         * [ConcatListAdapter]: 连接 Adapter 实现
     * [BaseExpandableListAdapter]
-        * [AssemblyExpandableListAdapter]: 多类型 Item 实现
+        * [AssemblyExpandableListAdapter]: 多类型 Adapter 实现
         * [AssemblySingleDataExpandableListAdapter]：单数据实现
         * [ConcatExpandableListAdapter]: 连接 Adapter 实现
 * [assemblyadapter-pager]:
     * [PagerAdapter]
-        * [AssemblyPagerAdapter]: 多类型 Item 实现
+        * [AssemblyPagerAdapter]: 多类型 Adapter 实现
         * [AssemblySingleDataPagerAdapter]：单数据实现
         * [ConcatPagerAdapter]: 连接 Adapter 实现
         * [ArrayPagerAdapter]: View 数组实现
     * [FragmentStatePagerAdapter]:
-        * [AssemblyFragmentStatePagerAdapter]: 多类型 Item 实现
+        * [AssemblyFragmentStatePagerAdapter]: 多类型 Adapter 实现
         * [AssemblySingleDataFragmentStatePagerAdapter]：单数据实现
         * [ConcatFragmentStatePagerAdapter]: 连接 Adapter 实现
         * [ArrayFragmentStatePagerAdapter]: Fragment 数组实现
 * [assemblyadapter-pager2]:
     * [FragmentStateAdapter]
-        * [AssemblyFragmentStateAdapter]: 多类型 Item 实现
+        * [AssemblyFragmentStateAdapter]: 多类型 Adapter 实现
         * [AssemblySingleDataFragmentStateAdapter]：单数据实现
         * [ArrayFragmentStateAdapter]: Fragment 数组实现
 * [assemblyadapter-pager2-paging]:
     * [PagingDataFragmentStateAdapter]
-        * [AssemblyPagingDataFragmentStateAdapter]: 多类型 Item 实现
+        * [AssemblyPagingDataFragmentStateAdapter]: 多类型 Adapter 实现
     * [LoadStateFragmentStateAdapter]
         * [AssemblyLoadStateFragmentStateAdapter]: Paging 加载状态 Adapter 实现
 * [assemblyadapter-recycler]:
     * [RecyclerView.Adapter]
-        * [AssemblyRecyclerAdapter]: 多类型 Item 实现
+        * [AssemblyRecyclerAdapter]: 多类型 Adapter 实现
         * [AssemblySingleDataRecyclerAdapter]：单数据实现
     * [ListAdapter]
-        * [AssemblyRecyclerListAdapter]: 多类型 Item 实现
+        * [AssemblyRecyclerListAdapter]: 多类型 Adapter 实现
 * [assemblyadapter-recycler-paging]:
     * [PagingDataAdapter]
-        * [AssemblyPagingDataAdapter]: 多类型 Item 实现
+        * [AssemblyPagingDataAdapter]: 多类型 Adapter 实现
     * [LoadStateAdapter]
         * [AssemblyLoadStateAdapter]: Paging 加载状态 Adapter 实现
 
@@ -92,7 +92,7 @@ dependencies {
 
 ### 2. 定义 ItemFactory
 
-[AssemblyAdapter] 负责管理数据和为数据匹配 [ItemFactory]，[ItemFactory] 负责创建 item 的 view 以及绑定数据。因此你只需要在创建 Adapter 时提供多个 [ItemFactory] 即可轻松的支持多类型 Item。
+[AssemblyAdapter] 负责管理数据和为数据匹配 [ItemFactory]，[ItemFactory] 负责创建 item 的 view 以及绑定数据。因此你只需要在创建 Adapter 时提供多个 [ItemFactory] 即可轻松的实现多类型 Adapter。
 
 通常不建议直接继承 [ItemFactory] 来定义自己的 [ItemFactory]，因为实现 [ItemFactory] 需要再额外定义一个 [Item]，这样写起来会稍显繁琐。AssemblyAdapter 提供了几种简化版的不用定义 [Item] 的子类来简化定义的 [ItemFactory] 流程，如下：
 * [SimpleItemFactory]：只需实现 createItemView() 方法创建 item view 以及实现 bindItemData() 方法绑定数据即可
@@ -179,7 +179,7 @@ class AppInfoItemFactory : BindingItemFactory<AppInfo, ItemAppInfoBinding>(AppIn
 
 更多自定义 [ItemFactory] 详细内容请参考 [ItemFactory 自定义详解][docs_item_factory]
 
-### 3. 使用 ItemFactory 创建多类型适配器
+### 3. 使用 ItemFactory 创建多类型 Adapter
 
 只需在创建 Adapter 时通过构造参数传入 ItemFactory 即可，如下：
 
