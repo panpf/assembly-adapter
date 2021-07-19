@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import com.github.panpf.assemblyadapter.list.BindingExpandableChildItemFactory
-import com.github.panpf.assemblyadapter.list.ExpandableChildItem
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
@@ -42,7 +41,7 @@ class AppChildItemFactory(private val activity: Activity) :
 
     override fun initItem(
         context: Context, binding: ItemAppBinding,
-        item: ExpandableChildItem<AppGroup, AppInfo>
+        item: BindingExpandableChildItem<AppGroup, AppInfo, ItemAppBinding>
     ) {
         super.initItem(context, binding, item)
         binding.root.setOnClickListener {

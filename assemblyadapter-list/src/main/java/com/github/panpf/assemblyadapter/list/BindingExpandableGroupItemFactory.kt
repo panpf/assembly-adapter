@@ -34,7 +34,7 @@ abstract class BindingExpandableGroupItemFactory<DATA : ExpandableGroup, VIEW_BI
     dataClass: KClass<DATA>
 ) : ExpandableGroupItemFactory<DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): ExpandableGroupItem<DATA> {
+    override fun createItem(parent: ViewGroup): BindingExpandableGroupItem<DATA, VIEW_BINDING> {
         val context = parent.context
         val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
         return BindingExpandableGroupItem(this, binding).apply {
@@ -53,7 +53,9 @@ abstract class BindingExpandableGroupItemFactory<DATA : ExpandableGroup, VIEW_BI
      * Initialize the item, this method is only executed once when the item is created
      */
     protected open fun initItem(
-        context: Context, binding: VIEW_BINDING, item: ExpandableGroupItem<DATA>
+        context: Context,
+        binding: VIEW_BINDING,
+        item: BindingExpandableGroupItem<DATA, VIEW_BINDING>
     ) {
     }
 
