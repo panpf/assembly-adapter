@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.internal.Matchable
 import kotlin.reflect.KClass
 
 /**
- * [ItemFactory] is responsible for matching data, creating item view, and binding data.
+ * [ItemFactory] is responsible creating item view, and binding data.
  *
  * When the Adapter needs to display a data, it will find a matching [ItemFactory] from [ItemFactoryStorage]
  * through the [matchData] method, and then use this [ItemFactory] to create an item view and bind the data
@@ -64,10 +64,8 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
      * @see createItem
      * @see Item
      */
-    fun dispatchCreateItem(parent: ViewGroup): Item<DATA> {
-        return createItem(parent).apply {
-            registerClickListener(this)
-        }
+    fun dispatchCreateItem(parent: ViewGroup): Item<DATA> = createItem(parent).apply {
+        registerClickListener(this)
     }
 
     /**
@@ -88,7 +86,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    fun setOnViewClickListener(
+    open fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
     ): ItemFactory<DATA> {
@@ -104,7 +102,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    fun setOnViewLongClickListener(
+    open fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
     ): ItemFactory<DATA> {
@@ -119,7 +117,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
+    open fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
@@ -131,7 +129,7 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
+    open fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }
@@ -194,5 +192,4 @@ abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable 
             }
         }
     }
-
 }

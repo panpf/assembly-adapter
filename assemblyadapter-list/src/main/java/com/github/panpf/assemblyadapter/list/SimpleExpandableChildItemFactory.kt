@@ -77,7 +77,7 @@ abstract class SimpleExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CH
     protected abstract fun bindItemData(
         context: Context,
         itemView: View,
-        item: ExpandableChildItem<GROUP_DATA, CHILD_DATA>,
+        item: SimpleExpandableChildItem<GROUP_DATA, CHILD_DATA>,
         groupBindingAdapterPosition: Int,
         groupAbsoluteAdapterPosition: Int,
         groupData: GROUP_DATA,
@@ -87,8 +87,8 @@ abstract class SimpleExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CH
         data: CHILD_DATA,
     )
 
-    private class SimpleExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(
-        private val factory: SimpleExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>,
+    class SimpleExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(
+        val factory: SimpleExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>,
         itemView: View
     ) : ExpandableChildItem<GROUP_DATA, CHILD_DATA>(itemView) {
 

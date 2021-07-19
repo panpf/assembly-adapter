@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.test.runner.AndroidJUnit4
 import com.github.panpf.assemblyadapter.diff.DiffKey
 import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
-import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingFragmentStateAdapter
+import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingDataFragmentStateAdapter
 import com.github.panpf.tools4j.test.ktx.assertNoThrow
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class AssemblyPagingFragmentStateAdapterTest {
+class AssemblyPagingDataFragmentStateAdapterTest {
 
     data class HaveKeyData(val name: String) : DiffKey {
         override val diffKey: String = name
@@ -37,33 +37,33 @@ class AssemblyPagingFragmentStateAdapterTest {
         }
 
         assertNoThrow {
-            AssemblyPagingFragmentStateAdapter<Any>(
+            AssemblyPagingDataFragmentStateAdapter<Any>(
                 activity, listOf(haveKeyItemFactory)
             )
         }
         assertNoThrow {
-            AssemblyPagingFragmentStateAdapter<Any>(
+            AssemblyPagingDataFragmentStateAdapter<Any>(
                 activity, listOf(haveKeyItemFactory, haveKeyItemFactory)
             )
         }
 
         assertThrow(IllegalArgumentException::class) {
-            AssemblyPagingFragmentStateAdapter<Any>(
+            AssemblyPagingDataFragmentStateAdapter<Any>(
                 activity, listOf(haveKeyItemFactory, noKeyItemFactory),
             )
         }
         assertThrow(IllegalArgumentException::class) {
-            AssemblyPagingFragmentStateAdapter<Any>(
+            AssemblyPagingDataFragmentStateAdapter<Any>(
                 activity, listOf(noKeyItemFactory, haveKeyItemFactory),
             )
         }
         assertThrow(IllegalArgumentException::class) {
-            AssemblyPagingFragmentStateAdapter<Any>(
+            AssemblyPagingDataFragmentStateAdapter<Any>(
                 activity, listOf(noKeyItemFactory, noKeyItemFactory),
             )
         }
         assertThrow(IllegalArgumentException::class) {
-            AssemblyPagingFragmentStateAdapter<Any>(
+            AssemblyPagingDataFragmentStateAdapter<Any>(
                 activity, listOf(noKeyItemFactory),
             )
         }

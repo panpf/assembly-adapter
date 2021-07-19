@@ -54,7 +54,11 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     /**
      * Initialize the item, this method is only executed once when the item is created
      */
-    protected open fun initItem(context: Context, binding: VIEW_BINDING, item: BindingItem<DATA, VIEW_BINDING>) {
+    protected open fun initItem(
+        context: Context,
+        binding: VIEW_BINDING,
+        item: BindingItem<DATA, VIEW_BINDING>
+    ) {
     }
 
     /**
@@ -77,9 +81,9 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
         data: DATA
     )
 
-    protected class BindingItem<DATA : Any, VIEW_BINDING : ViewBinding>(
-        private val factory: BindingItemFactory<DATA, VIEW_BINDING>,
-        private val binding: VIEW_BINDING
+    class BindingItem<DATA : Any, VIEW_BINDING : ViewBinding>(
+        val factory: BindingItemFactory<DATA, VIEW_BINDING>,
+        val binding: VIEW_BINDING
     ) : Item<DATA>(binding.root) {
 
         override fun bindData(

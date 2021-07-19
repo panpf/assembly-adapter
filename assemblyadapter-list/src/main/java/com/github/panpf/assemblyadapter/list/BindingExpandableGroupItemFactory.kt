@@ -72,16 +72,16 @@ abstract class BindingExpandableGroupItemFactory<DATA : ExpandableGroup, VIEW_BI
     protected abstract fun bindItemData(
         context: Context,
         binding: VIEW_BINDING,
-        item: ExpandableGroupItem<DATA>,
+        item: BindingExpandableGroupItem<DATA, VIEW_BINDING>,
         isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: DATA,
     )
 
-    private class BindingExpandableGroupItem<DATA : ExpandableGroup, VIEW_BINDING : ViewBinding>(
-        private val factory: BindingExpandableGroupItemFactory<DATA, VIEW_BINDING>,
-        private val binding: VIEW_BINDING
+    class BindingExpandableGroupItem<DATA : ExpandableGroup, VIEW_BINDING : ViewBinding>(
+        val factory: BindingExpandableGroupItemFactory<DATA, VIEW_BINDING>,
+        val binding: VIEW_BINDING
     ) : ExpandableGroupItem<DATA>(binding.root) {
 
         override fun bindData(

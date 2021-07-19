@@ -33,8 +33,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 /**
- * An implementation of [PagingFragmentStateAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
- * [AssemblyPagingFragmentStateAdapter] will use the data corresponding to position to find a matching [FragmentItemFactory] (cannot find an exception will be thrown),
+ * An implementation of [PagingDataFragmentStateAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
+ * [AssemblyPagingDataFragmentStateAdapter] will use the data corresponding to position to find a matching [FragmentItemFactory] (cannot find an exception will be thrown),
  * and then use [FragmentItemFactory] to create an [Fragment]
  *
  * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
@@ -42,14 +42,14 @@ import kotlinx.coroutines.Dispatchers
  * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
  * @see FragmentItemFactory
  */
-open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
+open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     itemFactoryList: List<FragmentItemFactory<*>>,
     diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
-) : PagingFragmentStateAdapter<DATA, RecyclerView.ViewHolder>(
+) : PagingDataFragmentStateAdapter<DATA, RecyclerView.ViewHolder>(
     fragmentManager,
     lifecycle,
     diffCallback,
@@ -62,7 +62,7 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
 
     /**
-     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyPagingFragmentStateAdapter]
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyPagingDataFragmentStateAdapter]
      *
      * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
      * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
@@ -84,7 +84,7 @@ open class AssemblyPagingFragmentStateAdapter<DATA : Any>(
     )
 
     /**
-     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [AssemblyPagingFragmentStateAdapter]
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [AssemblyPagingDataFragmentStateAdapter]
      *
      * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
      * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown

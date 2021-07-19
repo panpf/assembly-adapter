@@ -20,7 +20,7 @@ import com.github.panpf.assemblyadapter.internal.Matchable
 import kotlin.reflect.KClass
 
 /**
- * FragmentItemFactory is responsible for matching data, creating Fragment
+ * FragmentItemFactory is responsible creating Fragment
  *
  * When the Adapter needs to display a data, it will find a matching FragmentItemFactory from ItemFactoryStorage
  * through the matchData() method, and then use this FragmentItemFactory to create an Fragment

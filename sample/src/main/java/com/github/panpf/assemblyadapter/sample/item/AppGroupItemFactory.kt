@@ -19,7 +19,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.list.BindingExpandableGroupItemFactory
-import com.github.panpf.assemblyadapter.list.ExpandableGroupItem
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGroupBinding
@@ -36,7 +35,7 @@ open class AppGroupItemFactory :
     override fun bindItemData(
         context: Context,
         binding: ItemAppGroupBinding,
-        item: ExpandableGroupItem<AppGroup>,
+        item: BindingExpandableGroupItem<AppGroup, ItemAppGroupBinding>,
         isExpanded: Boolean,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,

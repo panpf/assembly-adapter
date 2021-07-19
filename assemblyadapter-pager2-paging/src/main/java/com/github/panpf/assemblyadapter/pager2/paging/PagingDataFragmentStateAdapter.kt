@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @see PagingDataAdapter
  */
-abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>(
+abstract class PagingDataFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     diffCallback: DiffUtil.ItemCallback<T>,
@@ -58,7 +58,7 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     )
 
     /**
-     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [PagingFragmentStateAdapter]
+     * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [PagingDataFragmentStateAdapter]
      */
     constructor(
         fragmentActivity: FragmentActivity,
@@ -74,7 +74,7 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     )
 
     /**
-     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [PagingFragmentStateAdapter]
+     * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [PagingDataFragmentStateAdapter]
      */
     constructor(
         fragment: Fragment,
@@ -100,7 +100,7 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
 
         fun considerAllowingStateRestoration() {
             if (stateRestorationPolicy == StateRestorationPolicy.PREVENT && !userSetRestorationPolicy) {
-                this@PagingFragmentStateAdapter.stateRestorationPolicy =
+                this@PagingDataFragmentStateAdapter.stateRestorationPolicy =
                     StateRestorationPolicy.ALLOW
             }
         }
@@ -137,9 +137,9 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     /**
      * Note: [getItemId] is final, because stable IDs are unnecessary and therefore unsupported.
      *
-     * [PagingFragmentStateAdapter]'s async diffing means that efficient change animations are handled for
+     * [PagingDataFragmentStateAdapter]'s async diffing means that efficient change animations are handled for
      * you, without the performance drawbacks of [RecyclerView.Adapter.notifyDataSetChanged].
-     * Instead, the diffCallback parameter of the [PagingFragmentStateAdapter] serves the same
+     * Instead, the diffCallback parameter of the [PagingDataFragmentStateAdapter] serves the same
      * functionality - informing the adapter and [RecyclerView] how items are changed and moved.
      */
     final override fun getItemId(position: Int): Long {
@@ -200,7 +200,7 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
 
     /**
      * Retry any failed load requests that would result in a [LoadState.Error] update to this
-     * [PagingFragmentStateAdapter].
+     * [PagingDataFragmentStateAdapter].
      *
      * Unlike [refresh], this does not invalidate [PagingSource], it only retries failed loads
      * within the same generation of [PagingData].
@@ -214,7 +214,7 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     }
 
     /**
-     * Refresh the data presented by this [PagingFragmentStateAdapter].
+     * Refresh the data presented by this [PagingDataFragmentStateAdapter].
      *
      * [refresh] triggers the creation of a new [PagingData] with a new instance of [PagingSource]
      * to represent an updated snapshot of the backing dataset. If a [RemoteMediator] is set,
@@ -292,14 +292,14 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [LoadStateFragmentStateAdapter]s displaying the
      * [LoadType.PREPEND] [LoadState] as a list item at the end of the presented list.
      *
-     * @see FragmentLoadStateAdapter
+     * @see LoadStateFragmentStateAdapter
      * @see withLoadStateHeaderAndFooter
      * @see withLoadStateFooter
      */
-    fun withLoadStateHeader(header: FragmentLoadStateAdapter): ConcatAdapter {
+    fun withLoadStateHeader(header: LoadStateFragmentStateAdapter): ConcatAdapter {
         addLoadStateListener { loadStates ->
             header.loadState = loadStates.prepend
         }
@@ -313,14 +313,14 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [LoadStateFragmentStateAdapter]s displaying the
      * [LoadType.APPEND] [LoadState] as a list item at the start of the presented list.
      *
-     * @see FragmentLoadStateAdapter
+     * @see LoadStateFragmentStateAdapter
      * @see withLoadStateHeaderAndFooter
      * @see withLoadStateHeader
      */
-    fun withLoadStateFooter(footer: FragmentLoadStateAdapter): ConcatAdapter {
+    fun withLoadStateFooter(footer: LoadStateFragmentStateAdapter): ConcatAdapter {
         addLoadStateListener { loadStates ->
             footer.loadState = loadStates.append
         }
@@ -334,17 +334,17 @@ abstract class PagingFragmentStateAdapter<T : Any, VH : RecyclerView.ViewHolder>
     }
 
     /**
-     * Create a [ConcatAdapter] with the provided [FragmentLoadStateAdapter]s displaying the
+     * Create a [ConcatAdapter] with the provided [LoadStateFragmentStateAdapter]s displaying the
      * [LoadType.PREPEND] and [LoadType.APPEND] [LoadState]s as list items at the start and end
      * respectively.
      *
-     * @see FragmentLoadStateAdapter
+     * @see LoadStateFragmentStateAdapter
      * @see withLoadStateHeader
      * @see withLoadStateFooter
      */
     fun withLoadStateHeaderAndFooter(
-        header: FragmentLoadStateAdapter,
-        footer: FragmentLoadStateAdapter
+        header: LoadStateFragmentStateAdapter,
+        footer: LoadStateFragmentStateAdapter
     ): ConcatAdapter {
         addLoadStateListener { loadStates ->
             header.loadState = loadStates.prepend

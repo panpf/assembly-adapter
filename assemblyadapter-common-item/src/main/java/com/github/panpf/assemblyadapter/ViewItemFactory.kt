@@ -50,9 +50,7 @@ open class ViewItemFactory<DATA : Any>(
 
     final override fun createItemView(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
-    ): View {
-        return viewFactory(context, inflater, parent)
-    }
+    ): View = viewFactory(context, inflater, parent)
 
     override fun bindItemData(
         context: Context,
