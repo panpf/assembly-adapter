@@ -21,126 +21,48 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 ## 支持的 Adapter
 
 [AssemblyAdapter] 只是一个接口，不可以直接使用，你需要针对不同的 Adapter 使用具体的实现类，如下表格所示：
-<table>
-    <tr>
-        <th align="left">模块</th>
-        <th align="left">Adapter</th>
-        <th align="left">实现 Adapter</th>
-        <th align="left">简介</th>
-    </tr>
-    <tr>
-        <td rowspan="6">list</td>
-        <td rowspan="3">BaseAdapter</td>
-        <td><a href="assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyListAdapter.kt">AssemblyListAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataListAdapter.kt">AssemblySingleDataListAdapter</a></td>
-        <td>单数据实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatListAdapter.kt">ConcatListAdapter</a></td>
-        <td>连接 Adapter 实现</td>
-    </tr>
-    <tr>
-        <td rowspan="3">BaseExpandableListAdapter</td>
-        <td><a href="assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyExpandableListAdapter.kt">AssemblyExpandableListAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataExpandableListAdapter.kt">AssemblySingleDataExpandableListAdapter</a></td>
-        <td>单数据实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatExpandableListAdapter.kt">ConcatExpandableListAdapter</a></td>
-        <td>连接 Adapter 实现</td>
-    </tr>
-    <tr>
-        <td rowspan="8">pager</td>
-        <td rowspan="4">PagerAdapter</td>
-        <td><a href="assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyPagerAdapter.kt">AssemblyPagerAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblySingleDataPagerAdapter.kt">AssemblySingleDataPagerAdapter</a></td>
-        <td>单数据实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatPagerAdapter.kt">ConcatPagerAdapter</a></td>
-        <td>连接 Adapter 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayPagerAdapter.kt">ArrayPagerAdapter</a></td>
-        <td>View 数组实现</td>
-    </tr>
-    <tr>
-        <td rowspan="4">FragmentStatePagerAdapter</td>
-        <td><a href="assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyFragmentStatePagerAdapter.kt">AssemblyFragmentStatePagerAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblySingleDataFragmentStatePagerAdapter.kt">AssemblySingleDataFragmentStatePagerAdapter</a></td>
-        <td>单数据实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatFragmentStatePagerAdapter.kt">ConcatFragmentStatePagerAdapter</a></td>
-        <td>连接 Adapter 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayFragmentStatePagerAdapter.kt">ArrayFragmentStatePagerAdapter</a></td>
-        <td>Fragment 数组实现</td>
-    </tr>
-    <tr>
-        <td rowspan="3">pager2</td>
-        <td rowspan="3">FragmentStateAdapter</td>
-        <td><a href="assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateAdapter.kt">AssemblyFragmentStateAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateAdapter.kt">AssemblySingleDataFragmentStateAdapter</a></td>
-        <td>单数据实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/ArrayFragmentStateAdapter.kt">ArrayFragmentStateAdapter</a></td>
-        <td>Fragment 数组实现</td>
-    </tr>
-    <tr>
-        <td rowspan="2">pager2-paging</td>
-        <td rowspan="1"><a href="assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/PagingDataFragmentStateAdapter.kt">PagingDataFragmentStateAdapter</a></td>
-        <td><a href="assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/AssemblyPagingDataFragmentStateAdapter.kt">AssemblyPagingDataFragmentStateAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td rowspan="1"><a href="assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/LoadStateFragmentStateAdapter.kt">LoadStateFragmentStateAdapter</a></td>
-        <td><a href="assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/AssemblyLoadStateFragmentStateAdapter.kt">AssemblyLoadStateFragmentStateAdapter</a></td>
-        <td>Paging 加载状态 Adapter 实现</td>
-    </tr>
-    <tr>
-        <td rowspan="3">recycler</td>
-        <td rowspan="3">RecyclerView.Adapter</td>
-        <td><a href="assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyRecyclerAdapter.kt">AssemblyRecyclerAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyRecyclerListAdapter.kt">AssemblyRecyclerListAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td><a href="assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblySingleDataRecyclerAdapter.kt">AssemblySingleDataRecyclerAdapter</a></td>
-        <td>单数据实现</td>
-    </tr>
-    <tr>
-        <td rowspan="2">recycler-paging</td>
-        <td rowspan="1">PagingDataAdapter</td>
-        <td><a href="assemblyadapter-recycler-paging/src/main/java/com/github/panpf/assemblyadapter/recycler/paging/AssemblyPagingDataAdapter.kt">AssemblyPagingDataAdapter</a></td>
-        <td>多类型 Item 实现</td>
-    </tr>
-    <tr>
-        <td rowspan="1">LoadStateAdapter</td>
-        <td><a href="assemblyadapter-recycler-paging/src/main/java/com/github/panpf/assemblyadapter/recycler/paging/AssemblyLoadStateAdapter.kt">AssemblyLoadStateAdapter</a></td>
-        <td>Paging 加载状态 Adapter 实现</td>
-    </tr>
-</table>
+
+* [assemblyadapter-list]:
+    * [BaseAdapter]
+        * [AssemblyListAdapter]: 多类型 Item 实现
+        * [AssemblySingleDataListAdapter]：单数据实现
+        * [ConcatListAdapter]: 连接 Adapter 实现
+    * [BaseExpandableListAdapter]
+        * [AssemblyExpandableListAdapter]: 多类型 Item 实现
+        * [AssemblySingleDataExpandableListAdapter]：单数据实现
+        * [ConcatExpandableListAdapter]: 连接 Adapter 实现
+* [assemblyadapter-pager]:
+    * [PagerAdapter]
+        * [AssemblyPagerAdapter]: 多类型 Item 实现
+        * [AssemblySingleDataPagerAdapter]：单数据实现
+        * [ConcatPagerAdapter]: 连接 Adapter 实现
+        * [ArrayPagerAdapter]: View 数组实现
+    * [FragmentStatePagerAdapter]:
+        * [AssemblyFragmentStatePagerAdapter]: 多类型 Item 实现
+        * [AssemblySingleDataFragmentStatePagerAdapter]：单数据实现
+        * [ConcatFragmentStatePagerAdapter]: 连接 Adapter 实现
+        * [ArrayFragmentStatePagerAdapter]: Fragment 数组实现
+* [assemblyadapter-pager2]:
+    * [FragmentStateAdapter]
+        * [AssemblyFragmentStateAdapter]: 多类型 Item 实现
+        * [AssemblySingleDataFragmentStateAdapter]：单数据实现
+        * [ArrayFragmentStateAdapter]: Fragment 数组实现
+* [assemblyadapter-pager2-paging]:
+    * [PagingDataFragmentStateAdapter]
+        * [AssemblyPagingDataFragmentStateAdapter]: 多类型 Item 实现
+    * [LoadStateFragmentStateAdapter]
+        * [AssemblyLoadStateFragmentStateAdapter]: Paging 加载状态 Adapter 实现
+* [assemblyadapter-recycler]:
+    * [RecyclerView.Adapter]
+        * [AssemblyRecyclerAdapter]: 多类型 Item 实现
+        * [AssemblySingleDataRecyclerAdapter]：单数据实现
+    * [ListAdapter]
+        * [AssemblyRecyclerListAdapter]: 多类型 Item 实现
+* [assemblyadapter-recycler-paging]:
+    * [PagingDataAdapter]
+        * [AssemblyPagingDataAdapter]: 多类型 Item 实现
+    * [LoadStateAdapter]
+        * [AssemblyLoadStateAdapter]: Paging 加载状态 Adapter 实现
 
 ## 使用指南
 
@@ -324,6 +246,13 @@ Please view the [CHANGELOG.md] file
 
 [CHANGELOG.md]: CHANGELOG.md
 
+[assemblyadapter-list]: assemblyadapter-list
+[assemblyadapter-pager]: assemblyadapter-pager
+[assemblyadapter-pager2]: assemblyadapter-pager2
+[assemblyadapter-pager2-paging]: assemblyadapter-pager2-paging
+[assemblyadapter-recycler]: assemblyadapter-recycler
+[assemblyadapter-recycler-paging]: assemblyadapter-recycler-paging
+
 [docs_expandable_list_adapter]: docs/wiki/expandable_list_adapter.md
 [docs_grid_span]: docs/wiki/grid_span.md
 [docs_paging]: ../../raw/master/docs/wiki/paging.md
@@ -339,25 +268,46 @@ Please view the [CHANGELOG.md] file
 [BindingItemFactory]: assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/BindingItemFactory.kt
 [ViewItemFactory]: assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/ViewItemFactory.kt
 
-<!--[AssemblyListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyListAdapter.kt-->
-<!--[AssemblyExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyExpandableListAdapter.kt-->
+[AssemblyListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyListAdapter.kt
+[AssemblyExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyExpandableListAdapter.kt
+[AssemblySingleDataListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataListAdapter.kt
+[AssemblySingleDataExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataExpandableListAdapter.kt
 [ConcatListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatListAdapter.kt
 [ConcatExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatExpandableListAdapter.kt
 
-<!--[AssemblyRecyclerAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyRecyclerAdapter.kt-->
+[AssemblyRecyclerAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyRecyclerAdapter.kt
+[AssemblyRecyclerListAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyRecyclerListAdapter.kt
+[AssemblySingleDataRecyclerAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblySingleDataRecyclerAdapter.kt
 [AssemblyGridLayoutManager]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyGridLayoutManager.kt
 [AssemblyStaggeredGridLayoutManager]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyStaggeredGridLayoutManager.kt
-[AssemblyPagingDataAdapter]: assemblyadapter-recycler-paging/src/main/java/com/github/panpf/assemblyadapter/recycler/paging/AssemblyPagingDataAdapter.kt
 
+[AssemblyPagingDataAdapter]: assemblyadapter-recycler-paging/src/main/java/com/github/panpf/assemblyadapter/recycler/paging/AssemblyPagingDataAdapter.kt
+[AssemblyLoadStateAdapter]: assemblyadapter-recycler-paging/src/main/java/com/github/panpf/assemblyadapter/recycler/paging/AssemblyLoadStateAdapter.kt
+
+[ArrayPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayPagerAdapter.kt
+[ArrayFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayFragmentStatePagerAdapter.kt
+[AssemblyPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyPagerAdapter.kt
+[AssemblyFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyFragmentStatePagerAdapter.kt
+[AssemblySingleDataPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblySingleDataPagerAdapter.kt
+[AssemblySingleDataFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblySingleDataFragmentStatePagerAdapter.kt
 [ConcatPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatPagerAdapter.kt
 [ConcatFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatFragmentStatePagerAdapter.kt
+
+[ArrayFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/ArrayFragmentStateAdapter.kt
 [AssemblyFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateAdapter.kt
+[AssemblySingleDataFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateAdapter.kt
+
 [AssemblyPagingDataFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/AssemblyPagingDataFragmentStateAdapter.kt
+[AssemblyLoadStateFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/AssemblyLoadStateFragmentStateAdapter.kt
+[PagingDataFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/PagingDataFragmentStateAdapter.kt
+[LoadStateFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/LoadStateFragmentStateAdapter.kt
 
 [BaseAdapter]: https://developer.android.google.cn/reference/android/widget/BaseAdapter
 [RecyclerView.Adapter]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView.Adapter
+[ListAdapter]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/ListAdapter
 [BaseExpandableListAdapter]: https://developer.android.google.cn/reference/android/widget/BaseExpandableListAdapter
 [PagerAdapter]: https://developer.android.google.cn/reference/androidx/viewpager/widget/PagerAdapter
 [PagingDataAdapter]: https://developer.android.google.cn/reference/androidx/paging/PagingDataAdapter
+[LoadStateAdapter]: https://developer.android.google.cn/reference/androidx/paging/LoadStateAdapter
 [FragmentStatePagerAdapter]: https://developer.android.google.cn/reference/androidx/fragment/app/FragmentStatePagerAdapter
 [FragmentStateAdapter]: https://developer.android.google.cn/reference/androidx/viewpager2/adapter/FragmentStateAdapter
