@@ -51,8 +51,7 @@ abstract class SimpleItemFactory<DATA : Any>(
     /**
      * Initialize the item, this method is only executed once when the item is created
      */
-    protected open fun initItem(context: Context, itemView: View, item: SimpleItem<DATA>) {
-    }
+    protected abstract fun initItem(context: Context, itemView: View, item: SimpleItem<DATA>)
 
 
     /**

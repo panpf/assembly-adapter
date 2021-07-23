@@ -49,6 +49,14 @@ open class ViewExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DA
         return viewFactory(context, inflater, parent)
     }
 
+    override fun initItem(
+        context: Context,
+        itemView: View,
+        item: SimpleExpandableChildItem<GROUP_DATA, CHILD_DATA>
+    ) {
+
+    }
+
     override fun bindItemData(
         context: Context,
         itemView: View,

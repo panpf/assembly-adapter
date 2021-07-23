@@ -43,7 +43,6 @@ class AppsOverviewItemFactory(
         binding: ItemAppsOverviewBinding,
         item: BindingItem<AppsOverview, ItemAppsOverviewBinding>
     ) {
-        super.initItem(context, binding, item)
         if (hideStartMargin) {
             binding.root.updatePadding(left = 0, right = 0)
         }

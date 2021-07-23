@@ -51,10 +51,9 @@ abstract class SimpleExpandableGroupItemFactory<DATA : ExpandableGroup>(
     /**
      * Initialize the item, this method is only executed once when the item is created
      */
-    protected open fun initItem(
+    protected abstract fun initItem(
         context: Context, itemView: View, item: SimpleExpandableGroupItem<DATA>
-    ) {
-    }
+    )
 
     /**
      * Binding item data, this method will be executed frequently

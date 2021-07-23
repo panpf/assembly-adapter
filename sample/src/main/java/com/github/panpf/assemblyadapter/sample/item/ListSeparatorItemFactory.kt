@@ -43,7 +43,6 @@ open class ListSeparatorItemFactory(
         binding: ItemListSeparatorBinding,
         item: BindingItem<ListSeparator, ItemListSeparatorBinding>
     ) {
-        super.initItem(context, binding, item)
         if (hideStartMargin) {
             binding.listSeparatorItemTitleText.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = 0

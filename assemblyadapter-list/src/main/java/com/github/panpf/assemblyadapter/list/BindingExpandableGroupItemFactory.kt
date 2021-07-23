@@ -52,12 +52,11 @@ abstract class BindingExpandableGroupItemFactory<DATA : ExpandableGroup, VIEW_BI
     /**
      * Initialize the item, this method is only executed once when the item is created
      */
-    protected open fun initItem(
+    protected abstract fun initItem(
         context: Context,
         binding: VIEW_BINDING,
         item: BindingExpandableGroupItem<DATA, VIEW_BINDING>
-    ) {
-    }
+    )
 
     /**
      * Binding item data, this method will be executed frequently

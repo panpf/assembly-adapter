@@ -32,6 +32,14 @@ open class AppGroupItemFactory :
         return ItemAppGroupBinding.inflate(inflater, parent, false)
     }
 
+    override fun initItem(
+        context: Context,
+        binding: ItemAppGroupBinding,
+        item: BindingExpandableGroupItem<AppGroup, ItemAppGroupBinding>
+    ) {
+
+    }
+
     override fun bindItemData(
         context: Context,
         binding: ItemAppGroupBinding,

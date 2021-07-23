@@ -37,8 +37,6 @@ class LoadStateItemFactory(private val activity: Activity) :
         binding: ItemLoadStateBinding,
         item: BindingItem<LoadState, ItemLoadStateBinding>
     ) {
-        super.initItem(context, binding, item)
-
         binding.root.setOnLongClickListener {
             AlertDialog.Builder(activity).apply {
                 setMessage(buildString {

@@ -42,7 +42,6 @@ class AppCardGridItemFactory(private val activity: Activity) :
         binding: ItemAppGridCardBinding,
         item: BindingItem<AppInfo, ItemAppGridCardBinding>
     ) {
-        super.initItem(context, binding, item)
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val launchIntent =

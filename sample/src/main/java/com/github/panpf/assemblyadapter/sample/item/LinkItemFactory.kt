@@ -39,7 +39,6 @@ class LinkItemFactory(private val activity: Activity) :
         binding: ItemLinkBinding,
         item: BindingItem<Link, ItemLinkBinding>
     ) {
-        super.initItem(context, binding, item)
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val title = data.title.substringBefore(" - ", data.title)

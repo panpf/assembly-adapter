@@ -43,7 +43,6 @@ class AppChildItemFactory(private val activity: Activity) :
         context: Context, binding: ItemAppBinding,
         item: BindingExpandableChildItem<AppGroup, AppInfo, ItemAppBinding>
     ) {
-        super.initItem(context, binding, item)
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val launchIntent =

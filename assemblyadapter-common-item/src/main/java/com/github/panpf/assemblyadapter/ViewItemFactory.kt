@@ -52,6 +52,9 @@ open class ViewItemFactory<DATA : Any>(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): View = viewFactory(context, inflater, parent)
 
+    override fun initItem(context: Context, itemView: View, item: SimpleItem<DATA>) {
+    }
+
     override fun bindItemData(
         context: Context,
         itemView: View,

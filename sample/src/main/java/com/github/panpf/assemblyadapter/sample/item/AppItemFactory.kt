@@ -41,7 +41,6 @@ class AppItemFactory(private val activity: Activity) :
     override fun initItem(
         context: Context, binding: ItemAppBinding, item: BindingItem<AppInfo, ItemAppBinding>
     ) {
-        super.initItem(context, binding, item)
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val launchIntent =
