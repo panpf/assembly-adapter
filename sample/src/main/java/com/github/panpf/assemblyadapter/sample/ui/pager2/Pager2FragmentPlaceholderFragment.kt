@@ -35,11 +35,11 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.LoadStateFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupOverviewAppsViewModel
 
 class Pager2FragmentPlaceholderFragment : BaseBindingFragment<FragmentPager2Binding>() {
 
-    private val viewModel by viewModels<PagerPinyinGroupAppsViewModel>()
+    private val viewModel by viewModels<PagerPinyinGroupOverviewAppsViewModel>()
     private var registered = false
 
     override fun createViewBinding(

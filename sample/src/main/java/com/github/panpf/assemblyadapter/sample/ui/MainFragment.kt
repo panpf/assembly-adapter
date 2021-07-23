@@ -15,10 +15,8 @@ import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListPlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListPlaceholderFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentStateFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentStatePlaceholderFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager.PagerViewFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager.PagerViewPlaceholderFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager.*
+import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentArrayFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPagingFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPlaceholderFragment
@@ -69,13 +67,16 @@ class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
 
                     ListSeparator("ViewPager"),
                     Link("ViewPager - View", PagerViewFragment()),
+                    Link("ViewPager - View - Array", PagerViewArrayFragment()),
                     Link("ViewPager - View - Placeholder", PagerViewPlaceholderFragment()),
-                    Link("ViewPager - Fragment - State", PagerFragmentStateFragment()),
+                    Link("ViewPager - Fragment", PagerFragmentFragment()),
+                    Link("ViewPager - Fragment - Array", PagerFragmentArrayFragment()),
                     Link(
-                        "ViewPager - Fragment - State - Placeholder",
-                        PagerFragmentStatePlaceholderFragment()
+                        "ViewPager - Fragment - Placeholder",
+                        PagerFragmentPlaceholderFragment()
                     ),
                     Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
+                    Link("ViewPager2 - Fragment - Array", Pager2FragmentArrayFragment()),
                     Link(
                         "ViewPager2 - Fragment - Placeholder",
                         Pager2FragmentPlaceholderFragment()

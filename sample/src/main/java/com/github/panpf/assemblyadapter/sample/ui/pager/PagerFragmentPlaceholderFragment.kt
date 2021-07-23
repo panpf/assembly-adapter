@@ -21,23 +21,24 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.pager.AssemblyPagerAdapter
-import com.github.panpf.assemblyadapter.pager.AssemblySingleDataPagerAdapter
-import com.github.panpf.assemblyadapter.pager.ConcatPagerAdapter
-import com.github.panpf.assemblyadapter.pager.ViewPagerItemFactory
+import com.github.panpf.assemblyadapter.pager.AssemblyFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.AssemblySingleDataFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
-import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupPagerItemFactory
-import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewPagerItemFactory
-import com.github.panpf.assemblyadapter.sample.item.pager.LoadStatePagerItemFactory
+import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.item.pager.LoadStateFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupOverviewAppsViewModel
 
-class PagerViewPlaceholderFragment : BaseBindingFragment<FragmentPagerBinding>() {
+class PagerFragmentPlaceholderFragment : BaseBindingFragment<FragmentPagerBinding>() {
 
     private val viewModel by viewModels<PagerPinyinGroupOverviewAppsViewModel>()
     private var registered = false
@@ -49,20 +50,36 @@ class PagerViewPlaceholderFragment : BaseBindingFragment<FragmentPagerBinding>()
     }
 
     override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataPagerAdapter(AppsOverviewPagerItemFactory())
-        val pagerAdapter = AssemblyPagerAdapter(
+        val appsOverviewAdapter = AssemblySingleDataFragmentStatePagerAdapter(
+            childFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            AppsOverviewFragmentItemFactory()
+        )
+        val pagerAdapter = AssemblyFragmentStatePagerAdapter(
+            childFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
             listOf(
-                AppGroupPagerItemFactory(requireActivity()),
-                ViewPagerItemFactory(
+                AppGroupFragmentItemFactory(),
+                ViewFragmentItemFactory(
                     Placeholder::class,
                     R.layout.fragment_app_group_placeholder
                 ),
             ),
             arrayOfNulls<Any?>(20).toList()
         )
-        val footerLoadStateAdapter = AssemblySingleDataPagerAdapter(LoadStatePagerItemFactory())
+        val footerLoadStateAdapter = AssemblySingleDataFragmentStatePagerAdapter(
+            childFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            LoadStateFragmentItemFactory()
+        )
         binding.pagerPager.apply {
-            adapter = ConcatPagerAdapter(appsOverviewAdapter, pagerAdapter, footerLoadStateAdapter)
+            adapter = ConcatFragmentStatePagerAdapter(
+                childFragmentManager,
+                FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+                appsOverviewAdapter,
+                pagerAdapter,
+                footerLoadStateAdapter
+            )
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)

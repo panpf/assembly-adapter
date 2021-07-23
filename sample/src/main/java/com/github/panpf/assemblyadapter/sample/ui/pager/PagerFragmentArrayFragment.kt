@@ -20,22 +20,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
-import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
-import com.github.panpf.assemblyadapter.pager.AssemblyPagerAdapter
-import com.github.panpf.assemblyadapter.pager.AssemblySingleDataPagerAdapter
-import com.github.panpf.assemblyadapter.pager.ConcatPagerAdapter
+import com.github.panpf.assemblyadapter.pager.ArrayFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
-import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupPagerItemFactory
-import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewPagerItemFactory
-import com.github.panpf.assemblyadapter.sample.item.pager.LoadStatePagerItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupOverviewAppsViewModel
+import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupAppsViewModel
 
-class PagerViewFragment : BaseBindingFragment<FragmentPagerBinding>() {
+class PagerFragmentArrayFragment : BaseBindingFragment<FragmentPagerBinding>() {
 
-    private val viewModel by viewModels<PagerPinyinGroupOverviewAppsViewModel>()
+    private val viewModel by viewModels<PagerPinyinGroupAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -44,13 +40,7 @@ class PagerViewFragment : BaseBindingFragment<FragmentPagerBinding>() {
     }
 
     override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataPagerAdapter(AppsOverviewPagerItemFactory())
-        val pagerAdapter = AssemblyPagerAdapter<Any>(
-            listOf(AppGroupPagerItemFactory(requireActivity()))
-        )
-        val footerLoadStateAdapter = AssemblySingleDataPagerAdapter(LoadStatePagerItemFactory())
         binding.pagerPager.apply {
-            adapter = ConcatPagerAdapter(appsOverviewAdapter, pagerAdapter, footerLoadStateAdapter)
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -64,14 +54,16 @@ class PagerViewFragment : BaseBindingFragment<FragmentPagerBinding>() {
             binding.pagerPageNumberText.isVisible = it != true
         }
 
-        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
-            appsOverviewAdapter.data = it
-            updatePageNumber(binding)
-        }
-
         viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-            pagerAdapter.submitDataList(it)
-            footerLoadStateAdapter.data = LoadState.NotLoading(true)
+            val itemFactory = AppGroupFragmentItemFactory()
+            val fragmentList = 0.until(it.size).map { position ->
+                itemFactory.dispatchCreateFragment(position, position, it[position])
+            }
+            binding.pagerPager.adapter = ArrayFragmentStatePagerAdapter(
+                childFragmentManager,
+                FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+                fragmentList
+            )
             updatePageNumber(binding)
         }
     }

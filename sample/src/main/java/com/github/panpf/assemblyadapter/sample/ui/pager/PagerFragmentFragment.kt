@@ -19,29 +19,24 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
-import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblySingleDataFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
-import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.LoadStateFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupOverviewAppsViewModel
 
-class PagerFragmentStatePlaceholderFragment : BaseBindingFragment<FragmentPagerBinding>() {
+class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
 
-    private val viewModel by viewModels<PagerPinyinGroupAppsViewModel>()
-    private var registered = false
+    private val viewModel by viewModels<PagerPinyinGroupOverviewAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -52,30 +47,23 @@ class PagerFragmentStatePlaceholderFragment : BaseBindingFragment<FragmentPagerB
     override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter = AssemblySingleDataFragmentStatePagerAdapter(
             childFragmentManager,
-            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
             AppsOverviewFragmentItemFactory()
         )
-        val pagerAdapter = AssemblyFragmentStatePagerAdapter(
+        val pagerAdapter = AssemblyFragmentStatePagerAdapter<Any>(
             childFragmentManager,
-            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-            listOf(
-                AppGroupFragmentItemFactory(),
-                ViewFragmentItemFactory(
-                    Placeholder::class,
-                    R.layout.fragment_app_group_placeholder
-                ),
-            ),
-            arrayOfNulls<Any?>(20).toList()
+            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            listOf(AppGroupFragmentItemFactory())
         )
         val footerLoadStateAdapter = AssemblySingleDataFragmentStatePagerAdapter(
             childFragmentManager,
-            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
             LoadStateFragmentItemFactory()
         )
         binding.pagerPager.apply {
             adapter = ConcatFragmentStatePagerAdapter(
                 childFragmentManager,
-                FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
                 appsOverviewAdapter,
                 pagerAdapter,
                 footerLoadStateAdapter
@@ -87,36 +75,22 @@ class PagerFragmentStatePlaceholderFragment : BaseBindingFragment<FragmentPagerB
                 }
             })
         }
-        updatePageNumber(binding)
 
-        registered = false
-        binding.pagerPageNumberText.setOnClickListener {
-            if (!registered) {
-                registered = true
-
-                viewModel.loadingData.observe(viewLifecycleOwner) {
-                    binding.pagerProgressBar.isVisible = it == true
-                    binding.pagerPageNumberText.isVisible = it != true
-                }
-
-                viewModel.appsOverviewData.observe(viewLifecycleOwner) {
-                    appsOverviewAdapter.data = it
-                    updatePageNumber(binding)
-                }
-
-                viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-                    pagerAdapter.submitDataList(it)
-                    footerLoadStateAdapter.data = LoadState.NotLoading(true)
-                    updatePageNumber(binding)
-                }
-            }
+        viewModel.loadingData.observe(viewLifecycleOwner) {
+            binding.pagerProgressBar.isVisible = it == true
+            binding.pagerPageNumberText.isVisible = it != true
         }
 
-        Toast.makeText(
-            requireContext(),
-            "Click page number to load real data",
-            Toast.LENGTH_LONG
-        ).show()
+        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
+            updatePageNumber(binding)
+        }
+
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+            pagerAdapter.submitDataList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
+            updatePageNumber(binding)
+        }
     }
 
     @SuppressLint("SetTextI18n")
