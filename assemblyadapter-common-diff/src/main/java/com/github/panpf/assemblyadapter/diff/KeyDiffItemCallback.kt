@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.diff
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
+import kotlin.reflect.KClass
 
 /**
  * Use key to compare DiffUtil.ItemCallback of item.
@@ -40,5 +41,19 @@ class KeyDiffItemCallback<DATA : Any?> : DiffUtil.ItemCallback<DATA>() {
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(oldItem: DATA, newItem: DATA): Boolean {
         return oldItem == newItem
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun checkDataClass(dataClassList: List<KClass<*>>) {
+            dataClassList.forEach { dataClass ->
+                if (!DiffKey::class.java.isAssignableFrom(dataClass.java)) {
+                    throw IllegalArgumentException(
+                        "Because you use KeyDiffItemCallback, so '${dataClass.qualifiedName}' must implement the DiffKey interface"
+                    )
+                }
+            }
+        }
     }
 }

@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.diff.DiffKey
 import com.github.panpf.assemblyadapter.diff.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
@@ -107,16 +106,9 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+
         if (diffCallback is KeyDiffItemCallback) {
-            itemFactoryList.forEach { itemFactory ->
-                val dataClass = itemFactory.dataClass
-                if (!DiffKey::class.java.isAssignableFrom(dataClass.java)) {
-                    throw IllegalArgumentException(
-                        "Because you use KeyDiffItemCallback, FragmentItemFactory's dataClass " +
-                                "'${dataClass.qualifiedName}' must implement the DiffKey interface"
-                    )
-                }
-            }
+            KeyDiffItemCallback.checkDataClass(itemFactoryList.map { it.dataClass })
         }
     }
 
