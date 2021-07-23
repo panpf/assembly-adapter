@@ -111,7 +111,7 @@ open class ArrayFragmentStatePagerAdapter(
     override fun getItem(position: Int): Fragment {
         // Keep the characteristics consistent with ArrayFragmentStateAdapter
         val templateFragment = itemDataStorage.getData(position)
-        return templateFragment::class.java.newInstance().apply {
+        return templateFragment.javaClass.newInstance().apply {
             arguments = templateFragment.arguments
             refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }

@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
 class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
     FullSpanStaggeredGridLayoutManager {
 
-    private val fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
+    private val fullSpanItemFactoryList: List<Class<out ItemFactory<*>>>
 
     /**
      * Constructor used when layout manager is set in XML by RecyclerView attribute
@@ -44,7 +44,7 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
         defStyleRes: Int,
         fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
-        this.fullSpanItemFactoryList = fullSpanItemFactoryList
+        this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
 
     /**
@@ -59,7 +59,7 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
         orientation: Int,
         fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
     ) : super(spanCount, orientation) {
-        this.fullSpanItemFactoryList = fullSpanItemFactoryList
+        this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
 
     /**
@@ -72,12 +72,12 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
         spanCount: Int,
         fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
     ) : super(spanCount, VERTICAL) {
-        this.fullSpanItemFactoryList = fullSpanItemFactoryList
+        this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
 
     override fun setFullSpan(itemView: View, itemFactory: ItemFactory<*>) {
         val layoutParams = itemView.layoutParams
-        if (layoutParams is LayoutParams && fullSpanItemFactoryList.contains(itemFactory::class)) {
+        if (layoutParams is LayoutParams && fullSpanItemFactoryList.contains(itemFactory.javaClass)) {
             layoutParams.isFullSpan = true
         }
     }

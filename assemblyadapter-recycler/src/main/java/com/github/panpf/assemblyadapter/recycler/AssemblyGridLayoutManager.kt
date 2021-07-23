@@ -32,7 +32,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
 
     private var recyclerView: RecyclerView? = null
     private var concatAdapterLocalHelper: ConcatAdapterLocalHelper? = null
-    private val gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
+    private val gridLayoutItemSpanMap: Map<Class<out ItemFactory<*>>, ItemSpan>
     private val spanSizeLookup = object : SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             return getSpanSizeImpl(position)
@@ -54,7 +54,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         defStyleRes: Int,
         gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
-        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
+        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
     }
 
@@ -74,7 +74,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         reverseLayout: Boolean,
         gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
     ) : super(context, spanCount, orientation, reverseLayout) {
-        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
+        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
     }
 
@@ -91,7 +91,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         spanCount: Int,
         gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
     ) : super(context, spanCount) {
-        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap
+        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
     }
 
@@ -123,7 +123,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         val gridLayoutItemSpanMap = gridLayoutItemSpanMap
         if (adapter != null && position >= 0 && position < adapter.itemCount) {
             val itemFactory = findItemFactory(adapter, position)
-            val itemSpan = gridLayoutItemSpanMap[itemFactory::class]
+            val itemSpan = gridLayoutItemSpanMap[itemFactory.javaClass]
             if (itemSpan != null) {
                 return if (itemSpan.isFullSpan()) spanCount else itemSpan.size.coerceAtLeast(1)
             }

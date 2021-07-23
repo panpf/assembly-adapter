@@ -71,7 +71,7 @@ open class ArrayFragmentStateAdapter(
         // https://developer.android.com/training/animation/vp2-migration
         // The official document clearly states that it is necessary to ensure that the new instance returned by this method each time is not reusable
         val templateFragment = itemDataStorage.getData(position)
-        return templateFragment::class.java.newInstance().apply {
+        return templateFragment.javaClass.newInstance().apply {
             arguments = templateFragment.arguments
         }
     }

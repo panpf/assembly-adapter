@@ -29,12 +29,12 @@ class KeyDiffItemCallback<DATA : Any?> : DiffUtil.ItemCallback<DATA>() {
         if (newItem == null || oldItem == null) {
             return oldItem == null && newItem == null
         } else if (oldItem !is DiffKey) {
-            throw IllegalArgumentException("${oldItem.javaClass.name} must implement ${DiffKey::class.qualifiedName} interface")
+            throw IllegalArgumentException("${oldItem.javaClass.name} must implement ${DiffKey::class.java.name} interface")
         } else if (newItem !is DiffKey) {
-            throw IllegalArgumentException("${newItem.javaClass.name} must implement ${DiffKey::class.qualifiedName} interface")
+            throw IllegalArgumentException("${newItem.javaClass.name} must implement ${DiffKey::class.java.name} interface")
         }
         @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
-        return oldItem!!::class.java == newItem!!::class.java && oldItem.diffKey == newItem.diffKey
+        return (oldItem!!).javaClass == (newItem!!).javaClass && oldItem.diffKey == newItem.diffKey
     }
 
     @SuppressLint("DiffUtilEquals")
