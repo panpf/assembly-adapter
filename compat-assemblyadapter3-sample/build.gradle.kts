@@ -46,4 +46,5 @@ dependencies {
     implementation("io.github.panpf.tools4a:tools4a-dimen-ktx:${property("TOOLS4A")}")
 
     implementation(project(":compat-assemblyadapter3"))
+    implementation(project(":assemblyadapter-common-recycler-utils"))
 }

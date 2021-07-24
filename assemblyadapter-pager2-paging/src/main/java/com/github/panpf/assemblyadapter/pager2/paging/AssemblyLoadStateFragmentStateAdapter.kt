@@ -23,7 +23,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
-import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
+import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 
 /**
  * An implementation of [LoadStateFragmentStateAdapter], Realize the display of [LoadState] through standardized [FragmentItemFactory].

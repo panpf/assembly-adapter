@@ -19,7 +19,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Parcelable
-import com.github.panpf.assemblyadapter.diff.DiffKey
+import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.promeg.pinyinhelper.Pinyin
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize

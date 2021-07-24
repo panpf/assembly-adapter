@@ -32,7 +32,6 @@ android {
 dependencies {
     api("androidx.paging:paging-runtime:${property("ANDROIDX_PAGING")}")
     api("androidx.paging:paging-common:${property("ANDROIDX_PAGING")}")
-    api(project(":assemblyadapter-common-diff"))
     api(project(":assemblyadapter-pager2"))
 
     testImplementation("junit:junit:${property("JUNIT")}")

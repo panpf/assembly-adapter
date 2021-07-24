@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.diff
+package com.github.panpf.assemblyadapter.recycler
 
 /**
  * Provide a comparison key for the DiffUtil.ItemCallback.areItemsTheSame(T, T) method.

@@ -16,7 +16,7 @@
 package com.github.panpf.assemblyadapter.sample.bean
 
 import android.os.Parcelable
-import com.github.panpf.assemblyadapter.diff.DiffKey
+import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.panpf.assemblyadapter.list.ExpandableGroup
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize

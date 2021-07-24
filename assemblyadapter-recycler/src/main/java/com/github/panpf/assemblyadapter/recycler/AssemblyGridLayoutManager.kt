@@ -17,12 +17,10 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.internal.ConcatAdapterLocalHelper
 import kotlin.reflect.KClass
 
 /**
@@ -30,14 +28,15 @@ import kotlin.reflect.KClass
  */
 class AssemblyGridLayoutManager : GridLayoutManager {
 
-    private var recyclerView: RecyclerView? = null
-    private var concatAdapterLocalHelper: ConcatAdapterLocalHelper? = null
+    private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
     private val gridLayoutItemSpanMap: Map<Class<out ItemFactory<*>>, ItemSpan>
     private val spanSizeLookup = object : SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             return getSpanSizeImpl(position)
         }
     }
+
+    private var recyclerView: RecyclerView? = null
 
     /**
      * Constructor used when layout manager is set in XML by RecyclerView attribute
@@ -103,19 +102,19 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     override fun onAttachedToWindow(view: RecyclerView) {
         super.onAttachedToWindow(view)
         recyclerView = view
-        concatAdapterLocalHelper?.reset()
+        concatAdapterLocalHelper.reset()
     }
 
     override fun onDetachedFromWindow(view: RecyclerView?, recycler: RecyclerView.Recycler?) {
         super.onDetachedFromWindow(view, recycler)
-        concatAdapterLocalHelper?.reset()
+        concatAdapterLocalHelper.reset()
     }
 
     override fun onAdapterChanged(
         oldAdapter: RecyclerView.Adapter<*>?, newAdapter: RecyclerView.Adapter<*>?
     ) {
         super.onAdapterChanged(oldAdapter, newAdapter)
-        concatAdapterLocalHelper?.reset()
+        concatAdapterLocalHelper.reset()
     }
 
     private fun getSpanSizeImpl(position: Int): Int {
@@ -132,20 +131,11 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     }
 
     private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<*> {
-        return when (adapter) {
-            is AssemblyAdapter<*> -> {
-                adapter.getItemFactoryByPosition(position) as ItemFactory<*>
-            }
-            is ConcatAdapter -> {
-                val (childAdapter, childPosition) = (concatAdapterLocalHelper
-                    ?: ConcatAdapterLocalHelper().apply {
-                        this@AssemblyGridLayoutManager.concatAdapterLocalHelper = this
-                    }).findLocalAdapterAndPositionImpl(adapter, position)
-                findItemFactory(childAdapter, childPosition)
-            }
-            else -> {
-                throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
-            }
+        val (localAdapter, localPosition) = concatAdapterLocalHelper.findLocalAdapterAndPosition(adapter, position)
+        return if (localAdapter is AssemblyAdapter<*>) {
+            localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>
+        } else {
+            throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
         }
     }
 }

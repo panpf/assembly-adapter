@@ -34,6 +34,7 @@ dependencies {
     api("androidx.viewpager2:viewpager2:${property("ANDROIDX_VIEWPAGER2")}")
     api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
     api(project(":assemblyadapter-common-pager"))
+    api(project(":assemblyadapter-common-recycler-utils"))
 
     testImplementation("junit:junit:${property("JUNIT")}")
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")

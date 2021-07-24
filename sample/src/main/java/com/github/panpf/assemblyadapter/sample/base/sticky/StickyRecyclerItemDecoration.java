@@ -24,11 +24,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper;
+
+import kotlin.Pair;
 
 public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -48,6 +51,8 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
     private int stickyItemPosition = -1;
     @Nullable
     private View invisibleItemView;
+    @NonNull
+    private final ConcatAdapterLocalHelper concatAdapterLocalHelper = new ConcatAdapterLocalHelper();
 
     public StickyRecyclerItemDecoration(@NonNull ViewGroup stickyItemContainer, @NonNull Callback callback) {
         this.stickyItemContainer = stickyItemContainer;
@@ -288,29 +293,8 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
      * 根据类型判断是否是悬停 item
      */
     private boolean isStickyItemByType(@NonNull RecyclerView.Adapter<?> adapter, int position) {
-        if (adapter instanceof ConcatAdapter) {
-            int childAdapterStartPosition = 0;
-            RecyclerView.Adapter<?> childAdapter = null;
-            ConcatAdapter concatAdapter = (ConcatAdapter) adapter;
-            // todo Cache getAdapters
-            for (RecyclerView.Adapter<?> currentAdapter : concatAdapter.getAdapters()) {
-                int childAdapterEndPosition = childAdapterStartPosition + currentAdapter.getItemCount() - 1;
-                if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
-                    childAdapter = currentAdapter;
-                    break;
-                } else {
-                    childAdapterStartPosition = childAdapterEndPosition + 1;
-                }
-            }
-            if (childAdapter != null) {
-                int childPosition = position - childAdapterStartPosition;
-                return isStickyItemByType(childAdapter, childPosition);
-            } else {
-                throw new IndexOutOfBoundsException("Index: " + position + ", Size: " + concatAdapter.getItemCount());
-            }
-        } else {
-            return callback.isStickyByPosition(adapter, position);
-        }
+        Pair<RecyclerView.Adapter<?>, Integer> localPair = concatAdapterLocalHelper.findLocalAdapterAndPosition(adapter, position);
+        return callback.isStickyByPosition(localPair.getFirst(), localPair.getSecond());
     }
 
     private boolean checkAdapter(@NonNull RecyclerView parent) {

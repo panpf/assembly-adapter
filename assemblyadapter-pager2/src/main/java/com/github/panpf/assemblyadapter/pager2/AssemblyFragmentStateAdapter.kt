@@ -27,7 +27,7 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
-import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
+import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 
 /**
  * An implementation of [FragmentStateAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
@@ -116,7 +116,8 @@ open class AssemblyFragmentStateAdapter<DATA>(
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
-            (concatAdapterAbsoluteHelper ?: ConcatAdapterAbsoluteHelper().apply {
+            (concatAdapterAbsoluteHelper ?: ConcatAdapterAbsoluteHelper()
+                .apply {
                 concatAdapterAbsoluteHelper = this
             }).findAbsoluteAdapterPosition(
                 parentAdapter, this, position

@@ -24,10 +24,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.diff.KeyDiffItemCallback
+import com.github.panpf.assemblyadapter.recycler.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
-import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
+import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

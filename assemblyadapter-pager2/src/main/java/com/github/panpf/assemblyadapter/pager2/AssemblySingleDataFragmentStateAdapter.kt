@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
-import com.github.panpf.assemblyadapter.pager2.internal.ConcatAdapterAbsoluteHelper
+import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 
 /**
  * Single data version of [AssemblyFragmentStateAdapter]
@@ -87,7 +87,8 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
-            (concatAdapterAbsoluteHelper ?: ConcatAdapterAbsoluteHelper().apply {
+            (concatAdapterAbsoluteHelper ?: ConcatAdapterAbsoluteHelper()
+                .apply {
                 concatAdapterAbsoluteHelper = this
             }).findAbsoluteAdapterPosition(
                 parentAdapter, this, position

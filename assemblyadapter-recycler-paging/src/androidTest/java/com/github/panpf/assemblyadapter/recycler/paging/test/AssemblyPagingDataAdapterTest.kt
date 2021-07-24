@@ -2,7 +2,7 @@ package com.github.panpf.assemblyadapter.recycler.paging.test
 
 import androidx.test.runner.AndroidJUnit4
 import com.github.panpf.assemblyadapter.ViewItemFactory
-import com.github.panpf.assemblyadapter.diff.DiffKey
+import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.tools4j.test.ktx.assertNoThrow
 import com.github.panpf.tools4j.test.ktx.assertThrow
