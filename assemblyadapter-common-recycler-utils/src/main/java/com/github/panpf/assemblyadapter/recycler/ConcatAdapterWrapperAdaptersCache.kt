@@ -27,7 +27,7 @@ class ConcatAdapterWrapperAdaptersCache {
         reset()
     }
 
-    fun getAdapterCache(adapter: RecyclerView.Adapter<*>): AdaptersCache {
+    fun getAdaptersCache(adapter: RecyclerView.Adapter<*>): AdaptersCache {
         val oldMainAdapter = mainAdapter
         val adapterCache = adapterCache
         return if (adapterCache == null || oldMainAdapter == null || oldMainAdapter !== adapter) {
@@ -86,36 +86,4 @@ class ConcatAdapterWrapperAdaptersCache {
             get() = adapter.itemCount
     }
 
-    private class AnyAdapterDataObserver(val onAnyChanged: () -> Unit) :
-        RecyclerView.AdapterDataObserver() {
-        override fun onChanged() {
-            super.onChanged()
-            onAnyChanged()
-        }
-
-        override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-            super.onItemRangeChanged(positionStart, itemCount)
-            onAnyChanged()
-        }
-
-        override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
-            super.onItemRangeChanged(positionStart, itemCount, payload)
-            onAnyChanged()
-        }
-
-        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-            super.onItemRangeInserted(positionStart, itemCount)
-            onAnyChanged()
-        }
-
-        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-            super.onItemRangeRemoved(positionStart, itemCount)
-            onAnyChanged()
-        }
-
-        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-            super.onItemRangeMoved(fromPosition, toPosition, itemCount)
-            onAnyChanged()
-        }
-    }
 }

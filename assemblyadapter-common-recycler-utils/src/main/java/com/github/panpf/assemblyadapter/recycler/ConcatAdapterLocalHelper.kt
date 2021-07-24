@@ -24,7 +24,7 @@ class ConcatAdapterLocalHelper {
     fun findLocalAdapterAndPosition(
         adapter: RecyclerView.Adapter<*>, position: Int
     ): Pair<RecyclerView.Adapter<*>, Int> {
-        val adaptersCache = concatAdapterWrapperAdaptersCache.getAdapterCache(adapter)
+        val adaptersCache = concatAdapterWrapperAdaptersCache.getAdaptersCache(adapter)
         var nextAdapter = adaptersCache
         var nextPosition = position
         while (nextAdapter is ConcatAdapterWrapperAdaptersCache.ConcatAdapterCache) {

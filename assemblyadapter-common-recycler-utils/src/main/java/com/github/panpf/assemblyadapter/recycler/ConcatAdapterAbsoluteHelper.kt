@@ -26,7 +26,7 @@ class ConcatAdapterAbsoluteHelper {
         localAdapter: RecyclerView.Adapter<*>,
         localPosition: Int
     ): Int {
-        val parentAdapterCache = concatAdapterWrapperAdaptersCache.getAdapterCache(parentAdapter)
+        val parentAdapterCache = concatAdapterWrapperAdaptersCache.getAdaptersCache(parentAdapter)
         return findAbsoluteAdapterPositionReal(
             parentAdapterCache, localAdapter, localPosition
         ) ?: throw IndexOutOfBoundsException(
