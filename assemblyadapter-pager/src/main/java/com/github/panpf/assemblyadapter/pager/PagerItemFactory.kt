@@ -40,22 +40,9 @@ import kotlin.reflect.KClass
  * @see BindingPagerItemFactory
  * @see ViewPagerItemFactory
  */
-abstract class PagerItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable {
+abstract class PagerItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA> {
 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
-
-    /**
-     * If it returns true, it means that this [PagerItemFactory] can handle this [data]
-     */
-    final override fun matchData(data: Any): Boolean {
-        @Suppress("UNCHECKED_CAST")
-        return dataClass.isInstance(data) && exactMatchData(data as DATA)
-    }
-
-    /**
-     * Exactly match this [data], such as checking the value of a specific attribute
-     */
-    protected open fun exactMatchData(data: DATA): Boolean = true
 
     /**
      * When the Adapter needs a new [View] to display data, it will execute this method to create an [View].

@@ -15,6 +15,22 @@
  */
 package com.github.panpf.assemblyadapter.internal
 
-interface Matchable {
-    fun matchData(data: Any): Boolean
+import kotlin.reflect.KClass
+
+interface Matchable<DATA : Any> {
+
+    val dataClass: KClass<DATA>
+
+    /**
+     * If it returns true, it means that this [Matchable] can handle this [data]
+     */
+    fun matchData(data: Any): Boolean {
+        @Suppress("UNCHECKED_CAST")
+        return dataClass.isInstance(data) && exactMatchData(data as DATA)
+    }
+
+    /**
+     * Exactly match this [data], such as checking the value of a specific attribute
+     */
+    fun exactMatchData(data: DATA): Boolean = true
 }

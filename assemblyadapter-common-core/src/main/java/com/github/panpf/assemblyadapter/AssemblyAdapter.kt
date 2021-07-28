@@ -20,7 +20,7 @@ import com.github.panpf.assemblyadapter.internal.Matchable
 /**
  * The adapter that implements the [AssemblyAdapter] interface can easily support any multi type of adapters by cooperating with the predefined ItemFactory
  */
-interface AssemblyAdapter<ITEM_FACTORY : Matchable> {
+interface AssemblyAdapter<ITEM_FACTORY : Matchable<*>> {
 
     /**
      * Get the ItemFactory of the specified [position]

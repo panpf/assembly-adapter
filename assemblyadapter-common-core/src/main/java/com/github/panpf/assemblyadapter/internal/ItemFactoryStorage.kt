@@ -22,7 +22,7 @@ import java.util.*
 /**
  * Responsible for managing itemType and matching ItemFactory according to data and itemType
  */
-class ItemFactoryStorage<ITEM_FACTORY : Matchable>(
+class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>>(
     initItemFactoryList: List<ITEM_FACTORY>,
 ) {
 

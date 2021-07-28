@@ -21,54 +21,5 @@ import org.junit.Test
 
 class ItemDataStorageTest {
 
-    @Test
-    fun testAddRemove() {
-        val itemDataStorage = ItemDataStorage<Int> {}
 
-        Assert.assertEquals("", itemDataStorage.unmodifiableDataListSnapshot.joinToString())
-        itemDataStorage.addData(1)
-        Assert.assertEquals("1", itemDataStorage.unmodifiableDataListSnapshot.joinToString())
-        itemDataStorage.addData(3)
-        Assert.assertEquals("1, 3", itemDataStorage.unmodifiableDataListSnapshot.joinToString())
-    }
-
-    @Test
-    fun testAddRemoveAll() {
-
-    }
-
-    @Test
-    fun testDataCount() {
-
-    }
-
-    @Test
-    fun testClearData() {
-
-    }
-
-    @Test
-    fun testSortData() {
-
-    }
-
-    @Test
-    fun testGetData() {
-
-    }
-
-    @Test
-    fun testDataListSnapshot() {
-
-    }
-
-    @Test
-    fun testSetDataList() {
-
-    }
-
-    @Test
-    fun testNullable() {
-
-    }
 }

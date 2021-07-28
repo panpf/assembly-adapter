@@ -30,21 +30,7 @@ import kotlin.reflect.KClass
  * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
  * @see ViewFragmentItemFactory
  */
-abstract class FragmentItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable {
-
-    /**
-     * If it returns true, it means that this [FragmentItemFactory] can handle this [data]
-     */
-    final override fun matchData(data: Any): Boolean {
-        @Suppress("UNCHECKED_CAST")
-        return dataClass.isInstance(data) && exactMatchData(data as DATA)
-    }
-
-    /**
-     * Exactly match this [data], such as checking the value of a specific attribute
-     */
-    protected open fun exactMatchData(data: DATA): Boolean = true
-
+abstract class FragmentItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA> {
 
     /**
      * When the Adapter needs a new [Fragment] to display data, it will execute this method to create an [Fragment].

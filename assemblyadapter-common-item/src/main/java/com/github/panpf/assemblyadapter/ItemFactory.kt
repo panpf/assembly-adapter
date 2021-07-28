@@ -39,22 +39,9 @@ import kotlin.reflect.KClass
  * @see SimpleItemFactory
  * @see ViewItemFactory
  */
-abstract class ItemFactory<DATA : Any>(val dataClass: KClass<DATA>) : Matchable {
+abstract class ItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA> {
 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
-
-    /**
-     * If it returns true, it means that this [ItemFactory] can handle this [data]
-     */
-    final override fun matchData(data: Any): Boolean {
-        @Suppress("UNCHECKED_CAST")
-        return dataClass.isInstance(data) && exactMatchData(data as DATA)
-    }
-
-    /**
-     * Exactly match this [data], such as checking the value of a specific attribute
-     */
-    protected open fun exactMatchData(data: DATA): Boolean = true
 
     /**
      * When the Adapter needs a new [Item] to display data, it will execute this method to create an [Item].
