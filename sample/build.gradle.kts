@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion(property("COMPILE_SDK_VERSION").toString().toInt())
+    compileSdk = property("COMPILE_SDK_VERSION").toString().toInt()
 
     defaultConfig {
         applicationId = "com.github.panpf.assemblyadapter.sample"
-        minSdkVersion(property("MIN_SDK_VERSION").toString().toInt())
-        targetSdkVersion(property("TARGET_SDK_VERSION").toString().toInt())
+        minSdk = property("MIN_SDK_VERSION").toString().toInt()
+        targetSdk = property("TARGET_SDK_VERSION").toString().toInt()
         versionCode = property("VERSION_CODE").toString().toInt()
         versionName = property("VERSION_NAME").toString()
     }
