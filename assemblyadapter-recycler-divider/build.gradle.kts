@@ -21,20 +21,15 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
-    api(project(":assemblyadapter-list"))
-    api(project(":assemblyadapter-pager"))
-    api(project(":assemblyadapter-pager2"))
-    api(project(":assemblyadapter-pager2-paging"))
-    api(project(":assemblyadapter-recycler"))
-    api(project(":assemblyadapter-recycler-divider"))
-    api(project(":assemblyadapter-recycler-paging"))
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
+    api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
+
+    testImplementation("junit:junit:${property("JUNIT")}")
+    androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
+    androidTestImplementation("androidx.test:rules:${property("ANDROIDX_TEST_RULES")}")
 }
 
 /**

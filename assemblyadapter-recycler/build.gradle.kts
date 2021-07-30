@@ -32,6 +32,7 @@ dependencies {
     api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
     api(project(":assemblyadapter-common-item"))
     api(project(":assemblyadapter-common-recycler"))
+    api(project(":assemblyadapter-recycler-divider"))
 
     testImplementation("junit:junit:${property("JUNIT")}")
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
