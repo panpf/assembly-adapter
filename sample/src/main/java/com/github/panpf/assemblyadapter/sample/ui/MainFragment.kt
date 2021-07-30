@@ -58,6 +58,8 @@ class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
                     Link("RecyclerView - Paging - Sticky", RecyclerPagingStickyFragment()),
                     Link("RecyclerView - List - Linear", RecyclerListLinearFragment()),
                     Link("RecyclerView - List - Placeholder", RecyclerListPlaceholderFragment()),
+                    Link("RecyclerView - Divider - Linear - Vertical", RecyclerDividerLinearVerticalFragment()),
+                    Link("RecyclerView - Divider - Linear - Horizontal", RecyclerDividerLinearHorizontalFragment()),
 
                     ListSeparator("ListView"),
                     Link("ListView", ListFragment()),

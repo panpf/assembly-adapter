@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#6E75A4</color>
     <color name="colorPrimaryDark">#6E75A4</color>
+    <color name="primaryTranslucent">#886E75A4</color>
     <color name="app_icon_stroke">#DDDDDD</color>
     <color name="placeholder">#DADADA</color>
 </resources>
