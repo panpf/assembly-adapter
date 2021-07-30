@@ -42,7 +42,7 @@ open class AssemblyLoadStateFragmentStateAdapter(
 ) {
 
     private var recyclerView: RecyclerView? = null
-    private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
+    private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
 
 
     /**
@@ -89,11 +89,7 @@ open class AssemblyLoadStateFragmentStateAdapter(
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
-            (concatAdapterAbsoluteHelper ?: ConcatAdapterAbsoluteHelper().apply {
-                concatAdapterAbsoluteHelper = this
-            }).findAbsoluteAdapterPosition(
-                parentAdapter, this, position
-            )
+            concatAdapterAbsoluteHelper.findAbsoluteAdapterPosition(parentAdapter, this, position)
         } else {
             bindingAdapterPosition
         }
@@ -107,12 +103,10 @@ open class AssemblyLoadStateFragmentStateAdapter(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
-        this.concatAdapterAbsoluteHelper = null
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         this.recyclerView = null
-        this.concatAdapterAbsoluteHelper = null
     }
 }

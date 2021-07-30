@@ -24,10 +24,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.recycler.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
+import com.github.panpf.assemblyadapter.recycler.KeyDiffItemCallback
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -58,7 +58,7 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private var recyclerView: RecyclerView? = null
-    private var concatAdapterAbsoluteHelper: ConcatAdapterAbsoluteHelper? = null
+    private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
 
     /**
      * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyPagingDataFragmentStateAdapter]
@@ -120,11 +120,7 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
-            (concatAdapterAbsoluteHelper ?: ConcatAdapterAbsoluteHelper().apply {
-                concatAdapterAbsoluteHelper = this
-            }).findAbsoluteAdapterPosition(
-                parentAdapter, this, position
-            )
+            concatAdapterAbsoluteHelper.findAbsoluteAdapterPosition(parentAdapter, this, position)
         } else {
             bindingAdapterPosition
         }
@@ -150,12 +146,10 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
-        this.concatAdapterAbsoluteHelper = null
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         this.recyclerView = null
-        this.concatAdapterAbsoluteHelper = null
     }
 }
