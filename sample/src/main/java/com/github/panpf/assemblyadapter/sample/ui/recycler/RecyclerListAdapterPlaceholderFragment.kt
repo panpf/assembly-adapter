@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
@@ -26,15 +27,13 @@ import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerListAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
-import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
-import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
-import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
+import com.github.panpf.assemblyadapter.sample.item.*
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
-class RecyclerListLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerListAdapterPlaceholderFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private var registered = false
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -45,9 +44,15 @@ class RecyclerListLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>(
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
-        val recyclerAdapter = AssemblyRecyclerListAdapter<Any>(
-            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity()))
-        )
+        val recyclerAdapter = AssemblyRecyclerListAdapter<Any?>(
+            listOf(
+                AppItemFactory(requireActivity()),
+                ListSeparatorItemFactory(requireActivity()),
+                AppPlaceholderItemFactory(requireActivity()),
+            )
+        ).apply {
+            submitList(arrayOfNulls<Any?>(100).toList())
+        }
         val footerLoadStateAdapter =
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerRecycler.apply {
@@ -55,21 +60,31 @@ class RecyclerListLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>(
             layoutManager = LinearLayoutManager(requireContext())
         }
 
+        registered = false
         binding.recyclerRefreshLayout.setOnRefreshListener {
+            if (!registered) {
+                registered = true
+
+                viewModel.loadingData.observe(viewLifecycleOwner) {
+                    binding.recyclerRefreshLayout.isRefreshing = it == true
+                }
+
+                viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+                    appsOverviewAdapter.data = it
+                }
+
+                viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+                    recyclerAdapter.submitList(it)
+                    footerLoadStateAdapter.data = LoadState.NotLoading(true)
+                }
+            }
             viewModel.refresh()
         }
 
-        viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.recyclerRefreshLayout.isRefreshing = it == true
-        }
-
-        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
-            appsOverviewAdapter.data = it
-        }
-
-        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
-            recyclerAdapter.submitList(it)
-            footerLoadStateAdapter.data = LoadState.NotLoading(true)
-        }
+        Toast.makeText(
+            requireContext(),
+            "Pull down to refresh to load real data",
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

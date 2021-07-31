@@ -36,7 +36,7 @@ import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
-class RecyclerDividerLinearVerticalFragment :
+class RecyclerLinearDividerVerFragment :
     BaseBindingFragment<FragmentRecyclerDividerVerticalBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()

@@ -36,7 +36,7 @@ import com.github.panpf.assemblyadapter.sample.item.LoadStateHorizontalItemFacto
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
-class RecyclerDividerLinearHorizontalFragment :
+class RecyclerLinearDividerHorFragment :
     BaseBindingFragment<FragmentRecyclerDividerHorizontalBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()

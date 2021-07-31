@@ -24,6 +24,49 @@ import com.github.panpf.assemblyadapter.sample.ui.recycler.*
 
 class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
 
+    private val links = listOf(
+        ListSeparator("RecyclerView - Linear"),
+        Link("RecyclerView - Linear", RecyclerLinearFragment()),
+        Link("RecyclerView - Linear - Placeholder", RecyclerLinearPlaceholderFragment()),
+        Link("RecyclerView - Linear - Paging", RecyclerLinearPagingFragment()),
+        Link("RecyclerView - Linear - Divider - Vertical", RecyclerLinearDividerVerFragment()),
+        Link("RecyclerView - Linear - Divider - Horizontal", RecyclerLinearDividerHorFragment()),
+
+        ListSeparator("RecyclerView - Grid"),
+        Link("RecyclerView - Grid", RecyclerGridFragment()),
+        Link("RecyclerView - Grid - Paging", RecyclerGridPagingFragment()),
+
+        ListSeparator("RecyclerView - StaggeredGrid"),
+        Link("RecyclerView - StaggeredGrid", RecyclerStaggeredGridFragment()),
+        Link("RecyclerView - StaggeredGrid - Paging", RecyclerStaggeredGridPagingFragment()),
+
+        ListSeparator("RecyclerView - ListAdapter"),
+        Link("RecyclerView - ListAdapter - Linear", RecyclerListAdapterLinearFragment()),
+        Link("RecyclerView - ListAdapter - Placeholder", RecyclerListAdapterPlaceholderFragment()),
+
+        ListSeparator("ListView"),
+        Link("ListView", ListFragment()),
+        Link("ListView - Placeholder", ListPlaceholderFragment()),
+
+        ListSeparator("ExpandableListView"),
+        Link("ExpandableListView", ExpandableListFragment()),
+        Link("ExpandableListView - Placeholder", ExpandableListPlaceholderFragment()),
+
+        ListSeparator("ViewPager"),
+        Link("ViewPager - View", PagerViewFragment()),
+        Link("ViewPager - View - Array", PagerViewArrayFragment()),
+        Link("ViewPager - View - Placeholder", PagerViewPlaceholderFragment()),
+        Link("ViewPager - Fragment", PagerFragmentFragment()),
+        Link("ViewPager - Fragment - Array", PagerFragmentArrayFragment()),
+        Link("ViewPager - Fragment - Placeholder", PagerFragmentPlaceholderFragment()),
+
+        ListSeparator("ViewPager2"),
+        Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
+        Link("ViewPager2 - Fragment - Array", Pager2FragmentArrayFragment()),
+        Link("ViewPager2 - Fragment - Placeholder", Pager2FragmentPlaceholderFragment()),
+        Link("ViewPager2 - Fragment - Paging", Pager2FragmentPagingFragment()),
+    )
+
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
     ) = FragmentMainBinding.inflate(inflater, parent, false)
@@ -36,55 +79,7 @@ class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
                     LinkItemFactory(requireActivity()),
                     ListSeparatorItemFactory(requireActivity())
                 ),
-                listOf(
-                    ListSeparator("RecyclerView"),
-                    Link("RecyclerView - Normal - Linear", RecyclerNormalLinearFragment()),
-                    Link("RecyclerView - Normal - Grid", RecyclerNormalGridFragment()),
-                    Link(
-                        "RecyclerView - Normal - Grid - Staggered",
-                        RecyclerNormalGridStaggeredFragment()
-                    ),
-                    Link(
-                        "RecyclerView - Normal - Placeholder",
-                        RecyclerNormalPlaceholderFragment()
-                    ),
-                    Link("RecyclerView - Normal - Sticky", RecyclerNormalStickyFragment()),
-                    Link("RecyclerView - Paging - Linear", RecyclerPagingLinearFragment()),
-                    Link("RecyclerView - Paging - Grid", RecyclerPagingGridFragment()),
-                    Link(
-                        "RecyclerView - Paging - Grid - Staggered",
-                        RecyclerPagingGridStaggeredFragment()
-                    ),
-                    Link("RecyclerView - Paging - Sticky", RecyclerPagingStickyFragment()),
-                    Link("RecyclerView - List - Linear", RecyclerListLinearFragment()),
-                    Link("RecyclerView - List - Placeholder", RecyclerListPlaceholderFragment()),
-                    Link("RecyclerView - Divider - Linear - Vertical", RecyclerDividerLinearVerticalFragment()),
-                    Link("RecyclerView - Divider - Linear - Horizontal", RecyclerDividerLinearHorizontalFragment()),
-
-                    ListSeparator("ListView"),
-                    Link("ListView", ListFragment()),
-                    Link("ListView - Placeholder", ListPlaceholderFragment()),
-                    Link("ExpandableListView", ExpandableListFragment()),
-                    Link("ExpandableListView - Placeholder", ExpandableListPlaceholderFragment()),
-
-                    ListSeparator("ViewPager"),
-                    Link("ViewPager - View", PagerViewFragment()),
-                    Link("ViewPager - View - Array", PagerViewArrayFragment()),
-                    Link("ViewPager - View - Placeholder", PagerViewPlaceholderFragment()),
-                    Link("ViewPager - Fragment", PagerFragmentFragment()),
-                    Link("ViewPager - Fragment - Array", PagerFragmentArrayFragment()),
-                    Link(
-                        "ViewPager - Fragment - Placeholder",
-                        PagerFragmentPlaceholderFragment()
-                    ),
-                    Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
-                    Link("ViewPager2 - Fragment - Array", Pager2FragmentArrayFragment()),
-                    Link(
-                        "ViewPager2 - Fragment - Placeholder",
-                        Pager2FragmentPlaceholderFragment()
-                    ),
-                    Link("ViewPager2 - Fragment - Paging", Pager2FragmentPagingFragment()),
-                )
+                links
             )
         }
     }

@@ -21,19 +21,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
+import com.github.panpf.tools4a.dimen.ktx.dp2px
 
-// todo Realize paging load
-class RecyclerNormalLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
@@ -45,17 +46,28 @@ class RecyclerNormalLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
-            listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity()))
+            listOf(
+                AppCardGridItemFactory(requireActivity()),
+                ListSeparatorItemFactory(requireActivity(), true)
+            )
         )
         val footerLoadStateAdapter =
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager =
+                AssemblyStaggeredGridLayoutManager(
+                    3,
+                    listOf(
+                        AppsOverviewItemFactory::class,
+                        ListSeparatorItemFactory::class,
+                        LoadStateItemFactory::class
+                    )
+                )
+            addItemDecoration(context.staggeredDividerBuilder().asSpace().size(20.dp2px).build())
         }
-
         binding.recyclerRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }

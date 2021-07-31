@@ -22,24 +22,21 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
-import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
+import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
-import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
-import com.github.panpf.tools4a.dimen.ktx.dp2px
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class RecyclerPagingGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerLinearPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<PinyinFlatPagingAppsViewModel>()
 
@@ -51,30 +48,24 @@ class RecyclerPagingGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val pagingDataAdapter = AssemblyPagingDataAdapter<Any>(
             listOf(
-                AppCardGridItemFactory(requireActivity()),
-                ListSeparatorItemFactory(requireActivity(), true)
+                AppItemFactory(requireActivity()),
+                ListSeparatorItemFactory(requireActivity())
             )
         )
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(
-                appsOverviewAdapter,
-                pagingDataAdapter.withLoadStateFooter(MyLoadStateAdapter(requireActivity()))
-            )
-            layoutManager = AssemblyGridLayoutManager(
-                requireContext(), 3,
-                mapOf(
-                    AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
-                    ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
-                    LoadStateItemFactory::class to ItemSpan.fullSpan()
+                appsOverviewAdapter, pagingDataAdapter.withLoadStateFooter(
+                    MyLoadStateAdapter(requireActivity())
                 )
             )
+            layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
-                context.dividerBuilder().asSpace()
-                    .showSideDividers().showLastDivider()
-                    .size(20.dp2px).build()
+                AssemblyStickyRecyclerItemDecoration(
+                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
+                )
             )
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
