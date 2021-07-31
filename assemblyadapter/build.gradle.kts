@@ -33,7 +33,6 @@ dependencies {
     api(project(":assemblyadapter-pager2"))
     api(project(":assemblyadapter-pager2-paging"))
     api(project(":assemblyadapter-recycler"))
-    api(project(":assemblyadapter-recycler-divider"))
     api(project(":assemblyadapter-recycler-paging"))
 }
 
