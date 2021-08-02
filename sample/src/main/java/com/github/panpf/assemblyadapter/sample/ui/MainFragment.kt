@@ -35,6 +35,8 @@ class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
         ListSeparator("RecyclerView - Grid"),
         Link("RecyclerView - Grid", RecyclerGridFragment()),
         Link("RecyclerView - Grid - Paging", RecyclerGridPagingFragment()),
+        Link("RecyclerView - Grid - Divider - Vertical", RecyclerGridDividerVerFragment()),
+        Link("RecyclerView - Grid - Divider - Horizontal", RecyclerGridDividerHorFragment()),
 
         ListSeparator("RecyclerView - StaggeredGrid"),
         Link("RecyclerView - StaggeredGrid", RecyclerStaggeredGridFragment()),

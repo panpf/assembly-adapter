@@ -1,16 +1,15 @@
-package com.github.panpf.assemblyadapter.recycler.divider
+package com.github.panpf.assemblyadapter.recycler.divider.internal
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 
-open class DefaultItemDecorateProvider(
+open class LinearItemDecorateProviderImpl(
     private val dividerItemDecorate: ItemDecorate,
     private val firstDividerItemDecorate: ItemDecorate?,
     private val lastDividerItemDecorate: ItemDecorate?,
     private val startSideItemDecorate: ItemDecorate?,
     private val endSideItemDecorate: ItemDecorate?,
-) : ItemDecorateProvider {
+) : LinearItemDecorateProvider {
 
     override fun getItemDecorate(
         view: View,

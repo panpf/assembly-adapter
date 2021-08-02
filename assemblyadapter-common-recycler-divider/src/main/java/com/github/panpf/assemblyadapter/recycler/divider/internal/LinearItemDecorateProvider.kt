@@ -1,10 +1,10 @@
-package com.github.panpf.assemblyadapter.recycler.divider
+package com.github.panpf.assemblyadapter.recycler.divider.internal
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 
-interface ItemDecorateProvider {
+interface LinearItemDecorateProvider {
 
     fun getItemDecorate(
         view: View,

@@ -42,11 +42,7 @@ interface Decorate {
             @Px insetEnd: Int = 0,
         ): Decorate = ColorResDecorate(colorResId, size, insetStart, insetEnd)
 
-        fun space(
-            @Px size: Int = -1,
-            @Px insetStart: Int = 0,
-            @Px insetEnd: Int = 0,
-        ): Decorate = SpaceDecorate(size, insetStart, insetEnd)
+        fun space(@Px size: Int = -1): Decorate = SpaceDecorate(size)
     }
 
     fun createItemDecorate(context: Context): ItemDecorate
@@ -102,13 +98,9 @@ internal class ColorResDecorate(
     }
 }
 
-internal class SpaceDecorate(
-    @Px private val size: Int,
-    @Px private val insetStart: Int = 0,
-    @Px private val insetEnd: Int = 0,
-) : Decorate {
+internal class SpaceDecorate(@Px private val size: Int) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(ColorDrawable(Color.TRANSPARENT), size, insetStart, insetEnd)
+        return ItemDecorate(ColorDrawable(Color.TRANSPARENT), size, 0, 0)
     }
 }

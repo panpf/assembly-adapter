@@ -39,6 +39,7 @@ import com.github.panpf.tools4a.dimen.ktx.dp2px
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+// todo crash need handle
 class RecyclerGridPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<PinyinFlatPagingAppsViewModel>()

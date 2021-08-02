@@ -7,10 +7,12 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProviderImpl
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProvider
 
 open class RecyclerLinearDividerItemDecoration(
-    private val itemDecorateProvider: ItemDecorateProvider,
+    private val linearItemDecorateProvider: LinearItemDecorateProvider,
 ) : ItemDecoration() {
 
     override fun getItemOffsets(
@@ -23,19 +25,25 @@ open class RecyclerLinearDividerItemDecoration(
         val itemCount = parent.adapter?.itemCount ?: 0
         val verticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
 
-        val left = itemDecorateProvider.getItemDecorate(
+        val startItemDecorate = linearItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, verticalOrientation, ItemDecorate.Type.START
-        )?.widthSize ?: 0
-        val top = itemDecorateProvider.getItemDecorate(
+        )
+        val topItemDecorate = linearItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, verticalOrientation, ItemDecorate.Type.TOP
-        )?.heightSize ?: 0
-        val right = itemDecorateProvider.getItemDecorate(
+        )
+        val endItemDecorate = linearItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, verticalOrientation, ItemDecorate.Type.END
-        )?.widthSize ?: 0
-        val bottom = itemDecorateProvider.getItemDecorate(
+        )
+        val bottomItemDecorate = linearItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, verticalOrientation, ItemDecorate.Type.BOTTOM
-        )?.heightSize ?: 0
-        outRect.set(left, top, right, bottom)
+        )
+
+        outRect.set(
+            startItemDecorate?.widthSize ?: 0,
+            topItemDecorate?.heightSize ?: 0,
+            endItemDecorate?.widthSize ?: 0,
+            bottomItemDecorate?.heightSize ?: 0
+        )
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -58,10 +66,20 @@ open class RecyclerLinearDividerItemDecoration(
             val childView = parent.getChildAt(index)
             val position = (childView.layoutParams as RecyclerView.LayoutParams).viewPosition
 
-            // start
-            itemDecorateProvider.getItemDecorate(
+            val startItemDecorate = linearItemDecorateProvider.getItemDecorate(
                 childView, parent, itemCount, position, true, ItemDecorate.Type.START
-            )?.apply {
+            )
+            val topItemDecorate = linearItemDecorateProvider.getItemDecorate(
+                childView, parent, itemCount, position, true, ItemDecorate.Type.TOP
+            )
+            val endItemDecorate = linearItemDecorateProvider.getItemDecorate(
+                childView, parent, itemCount, position, true, ItemDecorate.Type.END
+            )
+            val bottomItemDecorate = linearItemDecorateProvider.getItemDecorate(
+                childView, parent, itemCount, position, true, ItemDecorate.Type.BOTTOM
+            )
+
+            startItemDecorate?.apply {
                 drawable.setBounds(
                     parentLeft,
                     childView.top + insetStart,
@@ -70,11 +88,7 @@ open class RecyclerLinearDividerItemDecoration(
                 )
                 drawable.draw(canvas)
             }
-
-            // top
-            itemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, true, ItemDecorate.Type.TOP
-            )?.apply {
+            topItemDecorate?.apply {
                 drawable.setBounds(
                     parentLeft + insetStart,
                     childView.top - heightSize,
@@ -83,11 +97,7 @@ open class RecyclerLinearDividerItemDecoration(
                 )
                 drawable.draw(canvas)
             }
-
-            // end
-            itemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, true, ItemDecorate.Type.END
-            )?.apply {
+            endItemDecorate?.apply {
                 drawable.setBounds(
                     parentRight - widthSize,
                     childView.top + insetStart,
@@ -96,11 +106,7 @@ open class RecyclerLinearDividerItemDecoration(
                 )
                 drawable.draw(canvas)
             }
-
-            // bottom
-            itemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, true, ItemDecorate.Type.BOTTOM
-            )?.apply {
+            bottomItemDecorate?.apply {
                 drawable.setBounds(
                     parentLeft + insetStart,
                     childView.bottom,
@@ -121,10 +127,20 @@ open class RecyclerLinearDividerItemDecoration(
             val childView = parent.getChildAt(index)
             val position = (childView.layoutParams as RecyclerView.LayoutParams).viewPosition
 
-            // start
-            itemDecorateProvider.getItemDecorate(
+            val startItemDecorate = linearItemDecorateProvider.getItemDecorate(
                 childView, parent, itemCount, position, false, ItemDecorate.Type.START
-            )?.apply {
+            )
+            val topItemDecorate = linearItemDecorateProvider.getItemDecorate(
+                childView, parent, itemCount, position, false, ItemDecorate.Type.TOP
+            )
+            val endItemDecorate = linearItemDecorateProvider.getItemDecorate(
+                childView, parent, itemCount, position, false, ItemDecorate.Type.END
+            )
+            val bottomItemDecorate = linearItemDecorateProvider.getItemDecorate(
+                childView, parent, itemCount, position, false, ItemDecorate.Type.BOTTOM
+            )
+
+            startItemDecorate?.apply {
                 drawable.setBounds(
                     childView.left - widthSize,
                     parentTop + insetStart,
@@ -133,11 +149,7 @@ open class RecyclerLinearDividerItemDecoration(
                 )
                 drawable.draw(canvas)
             }
-
-            // top
-            itemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, false, ItemDecorate.Type.TOP
-            )?.apply {
+            topItemDecorate?.apply {
                 drawable.setBounds(
                     childView.left + insetStart,
                     childView.top - heightSize,
@@ -146,11 +158,7 @@ open class RecyclerLinearDividerItemDecoration(
                 )
                 drawable.draw(canvas)
             }
-
-            // end
-            itemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, false, ItemDecorate.Type.END
-            )?.apply {
+            endItemDecorate?.apply {
                 drawable.setBounds(
                     childView.right,
                     parentTop + insetStart,
@@ -159,11 +167,7 @@ open class RecyclerLinearDividerItemDecoration(
                 )
                 drawable.draw(canvas)
             }
-
-            // bottom
-            itemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, false, ItemDecorate.Type.BOTTOM
-            )?.apply {
+            bottomItemDecorate?.apply {
                 drawable.setBounds(
                     childView.left + insetStart,
                     childView.bottom,
@@ -184,10 +188,10 @@ open class RecyclerLinearDividerItemDecoration(
         private var endSideItemDecorate: ItemDecorate? = null
 
         open fun build(): RecyclerLinearDividerItemDecoration {
-            return RecyclerLinearDividerItemDecoration(buildDecorateProvider())
+            return RecyclerLinearDividerItemDecoration(buildItemDecorateProvider())
         }
 
-        protected open fun buildDecorateProvider(): ItemDecorateProvider {
+        protected open fun buildItemDecorateProvider(): LinearItemDecorateProvider {
             val finalDividerItemDecorate = dividerItemDecorate ?: context.obtainStyledAttributes(
                 intArrayOf(android.R.attr.listDivider)
             ).let { array ->
@@ -197,7 +201,7 @@ open class RecyclerLinearDividerItemDecoration(
             }!!.let {
                 ItemDecorate(it, -1, 0, 0)
             }
-            return DefaultItemDecorateProvider(
+            return LinearItemDecorateProviderImpl(
                 finalDividerItemDecorate,
                 firstDividerItemDecorate,
                 lastDividerItemDecorate,
@@ -227,6 +231,7 @@ open class RecyclerLinearDividerItemDecoration(
             this.lastDividerItemDecorate = decorate.createItemDecorate(context)
             return this
         }
+
 
         open fun startSide(decorate: Decorate): Builder {
             this.startSideItemDecorate = decorate.createItemDecorate(context)

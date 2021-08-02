@@ -21,42 +21,43 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
-import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.ItemSpan
+import com.github.panpf.assemblyadapter.recycler.*
+import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
+import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerVerticalBinding
+import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
-class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerGridDividerVerFragment :
+    BaseBindingFragment<FragmentRecyclerDividerVerticalBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
-    ): FragmentRecyclerBinding {
-        return FragmentRecyclerBinding.inflate(inflater, parent, false)
+    ): FragmentRecyclerDividerVerticalBinding {
+        return FragmentRecyclerDividerVerticalBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        binding: FragmentRecyclerDividerVerticalBinding,
+        savedInstanceState: Bundle?
+    ) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
-                AppCardGridItemFactory(requireActivity()),
+                AppGridItemFactory(requireActivity()),
                 ListSeparatorItemFactory(requireActivity(), true)
             )
         )
         val footerLoadStateAdapter =
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
-        binding.recyclerRecycler.apply {
+        binding.recyclerDividerVerticalRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = AssemblyGridLayoutManager(
                 requireContext(), 3,
@@ -66,23 +67,16 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                     LoadStateItemFactory::class to ItemSpan.fullSpan()
                 )
             )
-//            addItemDecoration(
-//                context.dividerBuilder().asSpace()
-//                    .showSideDividers().showLastDivider()
-//                    .size(20.dp2px).build()
-//            )
-            addItemDecoration(context.dividerBuilder()
-                .color(0x88FF0000.toInt())
-                .insets(5.dp2px, 5.dp2px)
-                .size(20.dp2px)
-                .build())
-        }
-        binding.recyclerRefreshLayout.setOnRefreshListener {
-            viewModel.refresh()
-        }
-
-        viewModel.loadingData.observe(viewLifecycleOwner) {
-            binding.recyclerRefreshLayout.isRefreshing = it == true
+            addItemDecoration(
+                AssemblyRecyclerGridDividerItemDecoration.Builder(requireContext()).apply {
+                    val inset = 0.dp2px
+                    val size = 5.dp2px
+                    divider(Decorate.color(0x88FF0000.toInt(), size, inset, inset))
+                    firstAndLastDivider(Decorate.color(0xFFFF0000.toInt(), size, inset, inset))
+                    side(Decorate.color(0x880000FF.toInt(), size, inset, inset))
+                    firstAndLastSide(Decorate.color(0xFF0000FF.toInt(), size, inset, inset))
+                }.build()
+            )
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
