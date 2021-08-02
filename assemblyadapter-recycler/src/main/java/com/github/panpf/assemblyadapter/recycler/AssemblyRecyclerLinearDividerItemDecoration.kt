@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.recycler.divider.RecyclerLinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
@@ -25,7 +24,8 @@ open class AssemblyRecyclerLinearDividerItemDecoration(
         private var disableStartSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
         private var disableEndSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
 
-        private var itemFactoryClassConverter: ((ItemFactory<*>) -> Class<*>)? = null
+        private var findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)? =
+            null
 
         override fun build(): AssemblyRecyclerLinearDividerItemDecoration {
             return AssemblyRecyclerLinearDividerItemDecoration(buildItemDecorateProvider())
@@ -41,7 +41,7 @@ open class AssemblyRecyclerLinearDividerItemDecoration(
                 disableDividerItemDecorateMap = disableDividerItemDecorateMap,
                 disableStartSideItemDecorateMap = disableStartSideItemDecorateMap,
                 disableEndSideItemDecorateMap = disableEndSideItemDecorateMap,
-                itemFactoryClassConverter = itemFactoryClassConverter,
+                findItemFactoryClassByPosition = findItemFactoryClassByPosition,
             )
         }
 
@@ -62,6 +62,21 @@ open class AssemblyRecyclerLinearDividerItemDecoration(
 
         override fun firstAndLastDivider(decorate: Decorate): Builder {
             super.firstAndLastDivider(decorate)
+            return this
+        }
+
+        override fun showFirstDivider(showFirstDivider: Boolean): Builder {
+            super.showFirstDivider(showFirstDivider)
+            return this
+        }
+
+        override fun showLastDivider(showLastDivider: Boolean): Builder {
+            super.showLastDivider(showLastDivider)
+            return this
+        }
+
+        override fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean): Builder {
+            super.showFirstAndLastDivider(showFirstAndLastDivider)
             return this
         }
 
@@ -146,8 +161,8 @@ open class AssemblyRecyclerLinearDividerItemDecoration(
         }
 
 
-        fun itemFactoryClassConverter(itemFactoryClassConverter: ((ItemFactory<*>) -> Class<*>)): Builder {
-            this.itemFactoryClassConverter = itemFactoryClassConverter
+        fun findItemFactoryClassByPosition(findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)): Builder {
+            this.findItemFactoryClassByPosition = findItemFactoryClassByPosition
             return this
         }
     }
@@ -160,10 +175,18 @@ open class AssemblyRecyclerLinearDividerItemDecoration(
         private val disableDividerItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableStartSideItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableEndSideItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val itemFactoryClassConverter: ((ItemFactory<*>) -> Class<*>)?,
+        findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)?,
     ) : LinearItemDecorateProvider {
 
         private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
+        private val finalFindItemFactoryClassByPosition =
+            findItemFactoryClassByPosition ?: { adapter, position ->
+                if (adapter is AssemblyAdapter<*>) {
+                    adapter.getItemFactoryByPosition(position).javaClass
+                } else {
+                    null
+                }
+            }
 
         override fun getItemDecorate(
             view: View,
@@ -175,9 +198,10 @@ open class AssemblyRecyclerLinearDividerItemDecoration(
         ): ItemDecorate? {
             val isLast = position == itemCount - 1
             val adapter = parent.adapter ?: return null
-            val itemFactory = findItemFactory(adapter, position) ?: return null
-            val itemFactoryClass =
-                itemFactoryClassConverter?.invoke(itemFactory) ?: itemFactory.javaClass
+            val itemFactoryClass = findItemFactoryClassByPosition(adapter, position)
+                ?: return defaultLinearItemDecorateProvider.getItemDecorate(
+                    view, parent, itemCount, position, verticalOrientation, decorateType
+                )
             if (isDisabledItemDecorate(
                     verticalOrientation, decorateType, isLast, itemFactoryClass,
                 )
@@ -237,17 +261,12 @@ open class AssemblyRecyclerLinearDividerItemDecoration(
             }?.get(itemFactoryClass)
         }
 
-        private fun findItemFactory(
-            adapter: RecyclerView.Adapter<*>,
-            position: Int
-        ): ItemFactory<*>? {
+        private fun findItemFactoryClassByPosition(
+            adapter: RecyclerView.Adapter<*>, position: Int
+        ): Class<*>? {
             val (localAdapter, localPosition) = concatAdapterLocalHelper
                 .findLocalAdapterAndPosition(adapter, position)
-            return if (localAdapter is AssemblyAdapter<*>) {
-                localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>
-            } else {
-                null
-            }
+            return finalFindItemFactoryClassByPosition(localAdapter, localPosition)
         }
     }
 }

@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
-import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.github.panpf.tools4a.dimen.ktx.dp2px
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter3.compat.CompatAssemblyAdapter
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter3.compat.sample.R
@@ -17,8 +18,9 @@ import com.github.panpf.assemblyadapter3.compat.sample.item.ListSeparatorItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.LoadMoreItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.TextItem
 import com.github.panpf.assemblyadapter3.compat.sample.vm.RecyclerLinearViewModel
+import com.github.panpf.tools4a.dimen.ktx.dp2px
 
-class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class CompatRecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<RecyclerLinearViewModel>()
 
@@ -52,9 +54,21 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
             layoutManager = CompatAssemblyGridLayoutManager(context, 3)
             adapter = appAdapter
             addItemDecoration(
-                context.dividerBuilder().asSpace()
-                    .showSideDividers().showLastDivider()
-                    .size(20.dp2px).build()
+                AssemblyRecyclerGridDividerItemDecoration.Builder(requireContext()).apply {
+                    divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
+                    side(Decorate.space(20.dp2px)).showFirstAndLastSide()
+                    disableFirstAndLastDivider(TextItem.Factory::class)
+                    disableDivider(TextItem.Factory::class)
+                    disableFirstAndLastSide(TextItem.Factory::class)
+                    disableFirstAndLastSide(ListSeparatorItem.Factory::class)
+                    findItemFactoryClassByPosition { adapter, position ->
+                        if (adapter is CompatAssemblyAdapter) {
+                            adapter.getItemFactoryByPosition(position).javaClass
+                        } else {
+                            null
+                        }
+                    }
+                }.build()
             )
         }
 

@@ -20,8 +20,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
-import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppGroupBinding
@@ -46,8 +48,8 @@ class AppGroupFragment : BaseBindingFragment<FragmentAppGroupBinding>() {
 
     override fun onInitData(binding: FragmentAppGroupBinding, savedInstanceState: Bundle?) {
         val data = appGroup
-        binding.appGroupGroupNameText.text = data?.title
-        binding.appGroupAppCountText.text = data?.appList?.size?.toString()
+        binding.appGroupTitleText.text =
+            requireContext().getString(R.string.app_group_title, data?.title, data?.appList?.size)
         binding.appGroupRecycler.apply {
             adapter = AssemblyRecyclerAdapter<Any>(
                 listOf(AppCardGridItemFactory(requireActivity())),
@@ -55,9 +57,10 @@ class AppGroupFragment : BaseBindingFragment<FragmentAppGroupBinding>() {
             )
             layoutManager = GridLayoutManager(context, 3)
             addItemDecoration(
-                context.dividerBuilder().asSpace()
-                    .showSideDividers().showLastDivider()
-                    .size(20.dp2px).build()
+                AssemblyRecyclerGridDividerItemDecoration.Builder(requireContext())
+                    .divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
+                    .side(Decorate.space(20.dp2px)).showFirstAndLastSide()
+                    .build()
             )
         }
     }

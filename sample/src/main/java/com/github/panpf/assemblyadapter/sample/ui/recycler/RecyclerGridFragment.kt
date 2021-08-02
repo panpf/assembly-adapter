@@ -21,12 +21,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
-import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.ItemSpan
+import com.github.panpf.assemblyadapter.recycler.*
+import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyRecyclerItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -47,11 +45,11 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
                 AppCardGridItemFactory(requireActivity()),
-                ListSeparatorItemFactory(requireActivity(), true)
+                ListSeparatorItemFactory(requireActivity())
             )
         )
         val footerLoadStateAdapter =
@@ -66,16 +64,21 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                     LoadStateItemFactory::class to ItemSpan.fullSpan()
                 )
             )
-//            addItemDecoration(
-//                context.dividerBuilder().asSpace()
-//                    .showSideDividers().showLastDivider()
-//                    .size(20.dp2px).build()
-//            )
-            addItemDecoration(context.dividerBuilder()
-                .color(0x88FF0000.toInt())
-                .insets(5.dp2px, 5.dp2px)
-                .size(20.dp2px)
-                .build())
+            addItemDecoration(
+                AssemblyStickyRecyclerItemDecoration(
+                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
+                )
+            )
+            addItemDecoration(
+                AssemblyRecyclerGridDividerItemDecoration.Builder(requireContext()).apply {
+                    divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
+                    side(Decorate.space(20.dp2px)).showFirstAndLastSide()
+                    disableFirstAndLastDivider(AppsOverviewItemFactory::class)
+                    disableDivider(AppsOverviewItemFactory::class)
+                    disableFirstAndLastSide(AppsOverviewItemFactory::class)
+                    disableFirstAndLastSide(ListSeparatorItemFactory::class)
+                }.build()
+            )
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
             viewModel.refresh()

@@ -20,9 +20,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.panpf.assemblyadapter.pager.BindingPagerItemFactory
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppGroupBinding
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
@@ -40,8 +42,8 @@ class AppGroupPagerItemFactory(private val activity: Activity) :
         data: AppGroup
     ): FragmentAppGroupBinding =
         FragmentAppGroupBinding.inflate(inflater, parent, false).apply {
-            appGroupGroupNameText.text = data.title
-            appGroupAppCountText.text = data.appList.size.toString()
+            appGroupTitleText.text =
+                context.getString(R.string.app_group_title, data.title, data.appList.size)
             appGroupRecycler.apply {
                 adapter = AssemblyRecyclerAdapter<Any>(
                     listOf(AppCardGridItemFactory(activity)),
@@ -49,9 +51,10 @@ class AppGroupPagerItemFactory(private val activity: Activity) :
                 )
                 layoutManager = GridLayoutManager(context, 3)
                 addItemDecoration(
-                    context.dividerBuilder().asSpace()
-                        .showSideDividers().showLastDivider()
-                        .size(20.dp2px).build()
+                    AssemblyRecyclerGridDividerItemDecoration.Builder(context)
+                        .divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
+                        .side(Decorate.space(20.dp2px)).showFirstAndLastSide()
+                        .build()
                 )
             }
         }

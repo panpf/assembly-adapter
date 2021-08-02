@@ -20,7 +20,7 @@ import com.github.panpf.assemblyadapter3.compat.sample.item.LoadMoreItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.TextItem
 import com.github.panpf.assemblyadapter3.compat.sample.vm.PagingViewModel
 
-class RecyclerPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class CompatRecyclerPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<PagingViewModel>()
 

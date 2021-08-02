@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.sample.ui.recycler
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -65,19 +64,22 @@ class RecyclerLinearDividerVerFragment :
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
-                AssemblyRecyclerLinearDividerItemDecoration.Builder(requireContext())
-                    .divider(Decorate.color(Color.GRAY, 1.dp2px, 20.dp2px, 20.dp2px))
-                    .disableDivider(AppsOverviewItemFactory::class)
-                    .disableDivider(ListSeparatorItemFactory::class)
-                    .firstAndLastDivider(Decorate.color(Color.BLACK, 5.dp2px, 2.dp2px, 2.dp2px))
-                    .startAndEndSide(Decorate.color(Color.GRAY, 3.dp2px, 2.dp2px, 2.dp2px))
-                    .personaliseStartAndEndSide(
-                        ListSeparatorItemFactory::class, Decorate.space(3.dp2px)
+                AssemblyRecyclerLinearDividerItemDecoration.Builder(requireContext()).apply {
+                    divider(Decorate.color(0x33FF0000, 0.5f.dp2px, 20.dp2px, 20.dp2px))
+                    firstAndLastDivider(Decorate.color(0xFFFF0000.toInt(), 2.dp2px))
+                    personaliseDivider(
+                        ListSeparatorItemFactory::class,
+                        Decorate.color(0x88FF0000.toInt(), 1.dp2px, 20.dp2px, 20.dp2px)
                     )
-                    .personaliseStartAndEndSide(
-                        AppsOverviewItemFactory::class, Decorate.space(3.dp2px)
+                    disableDivider(AppsOverviewItemFactory::class)
+
+                    startAndEndSide(Decorate.color(0xFF0000FF.toInt(), 2.dp2px))
+                    personaliseStartAndEndSide(
+                        ListSeparatorItemFactory::class, Decorate.space(2.dp2px)
                     )
-                    .build()
+                    disableStartAndEndSide(AppsOverviewItemFactory::class)
+                    disableStartAndEndSide(LoadStateItemFactory::class)
+                }.build()
             )
         }
 

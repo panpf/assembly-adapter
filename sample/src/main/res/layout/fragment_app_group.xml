@@ -5,47 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/appGroupTitleLayout"
+    <TextView
+        android:id="@+id/appGroupTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
         android:paddingLeft="20dp"
         android:paddingTop="14dp"
+        android:paddingEnd="20dp"
+        android:paddingRight="20dp"
         android:paddingBottom="14dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/app_group_title" />
 
-        <TextView
-            android:id="@+id/appGroupGroupNameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="A" />
-
-        <TextView
-            android:id="@+id/appGroupGroupNameSuffixText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=": "
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/appGroupAppCountText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="88" />
-
-        <TextView
-            android:id="@+id/appGroupAppCountSuffixText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" 个 App" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="@id/appGroupTitleText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/appGroupRecycler"
@@ -55,5 +42,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appGroupTitleLayout" />
+        app:layout_constraintTop_toBottomOf="@id/appGroupTitleText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

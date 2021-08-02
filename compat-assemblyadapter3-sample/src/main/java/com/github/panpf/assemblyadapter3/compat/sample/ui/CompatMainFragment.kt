@@ -8,7 +8,7 @@ import com.github.panpf.assemblyadapter3.compat.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter3.compat.sample.base.FragmentContainerActivity
 import com.github.panpf.assemblyadapter3.compat.sample.databinding.FragmentMainBinding
 
-class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
+class CompatMainFragment : BaseBindingFragment<FragmentMainBinding>() {
 
     override fun createViewBinding(
         inflater: LayoutInflater,
@@ -21,11 +21,11 @@ class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
             val title = itemTitle.substringBefore(" - ", itemTitle)
             val subTitle = itemTitle.substringAfter(" - ", "")
             val fragment = when (it.itemId) {
-                R.id.menuNavRecyclerLinear -> RecyclerLinearFragment()
-                R.id.menuNavRecyclerGrid -> RecyclerGridFragment()
-                R.id.menuNavRecyclerPaging -> RecyclerPagingFragment()
-                R.id.menuNavList -> ListFragment()
-                R.id.menuNavListExpandable -> ExpandableListFragment()
+                R.id.menuNavRecyclerLinear -> CompatRecyclerLinearFragment()
+                R.id.menuNavRecyclerGrid -> CompatRecyclerGridFragment()
+                R.id.menuNavRecyclerPaging -> CompatRecyclerPagingFragment()
+                R.id.menuNavList -> CompatListFragment()
+                R.id.menuNavListExpandable -> CompatExpandableListFragment()
                 else -> throw IllegalArgumentException()
             }
             startActivity(

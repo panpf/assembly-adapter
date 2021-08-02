@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.recycler.divider.RecyclerGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecorateProvider
@@ -33,7 +32,8 @@ open class AssemblyRecyclerGridDividerItemDecoration(
         private var disableFirstSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
         private var disableLastSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
 
-        private var itemFactoryClassConverter: ((ItemFactory<*>) -> Class<*>)? = null
+        private var findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)? =
+            null
 
         override fun build(): AssemblyRecyclerGridDividerItemDecoration {
             return AssemblyRecyclerGridDividerItemDecoration(buildItemDecorateProvider())
@@ -55,7 +55,7 @@ open class AssemblyRecyclerGridDividerItemDecoration(
                 disableSideItemDecorateMap = disableSideItemDecorateMap,
                 disableFirstSideItemDecorateMap = disableFirstSideItemDecorateMap,
                 disableLastSideItemDecorateMap = disableLastSideItemDecorateMap,
-                itemFactoryClassConverter = itemFactoryClassConverter,
+                findItemFactoryClassByPosition = findItemFactoryClassByPosition,
             )
         }
 
@@ -79,6 +79,21 @@ open class AssemblyRecyclerGridDividerItemDecoration(
             return this
         }
 
+        override fun showFirstDivider(showFirstDivider: Boolean): Builder {
+            super.showFirstDivider(showFirstDivider)
+            return this
+        }
+
+        override fun showLastDivider(showLastDivider: Boolean): Builder {
+            super.showLastDivider(showLastDivider)
+            return this
+        }
+
+        override fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean): Builder {
+            super.showFirstAndLastDivider(showFirstAndLastDivider)
+            return this
+        }
+
 
         override fun side(decorate: Decorate): Builder {
             super.side(decorate)
@@ -97,6 +112,21 @@ open class AssemblyRecyclerGridDividerItemDecoration(
 
         override fun firstAndLastSide(decorate: Decorate): Builder {
             super.firstAndLastSide(decorate)
+            return this
+        }
+
+        override fun showFirstSide(showFirstSide: Boolean): Builder {
+            super.showFirstSide(showFirstSide)
+            return this
+        }
+
+        override fun showLastSide(showLastSide: Boolean): Builder {
+            super.showLastSide(showLastSide)
+            return this
+        }
+
+        override fun showFirstAndLastSide(showFirstAndLastSide: Boolean): Builder {
+            super.showFirstAndLastSide(showFirstAndLastSide)
             return this
         }
 
@@ -232,8 +262,8 @@ open class AssemblyRecyclerGridDividerItemDecoration(
         }
 
 
-        fun itemFactoryClassConverter(itemFactoryClassConverter: ((ItemFactory<*>) -> Class<*>)): Builder {
-            this.itemFactoryClassConverter = itemFactoryClassConverter
+        fun findItemFactoryClassByPosition(getItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)): Builder {
+            this.findItemFactoryClassByPosition = getItemFactoryClassByPosition
             return this
         }
     }
@@ -252,10 +282,18 @@ open class AssemblyRecyclerGridDividerItemDecoration(
         private val disableSideItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableFirstSideItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableLastSideItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val itemFactoryClassConverter: ((ItemFactory<*>) -> Class<*>)?,
+        findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)?,
     ) : GridItemDecorateProvider {
 
         private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
+        private val finalFindItemFactoryClassByPosition =
+            findItemFactoryClassByPosition ?: { adapter, position ->
+                if (adapter is AssemblyAdapter<*>) {
+                    adapter.getItemFactoryByPosition(position).javaClass
+                } else {
+                    null
+                }
+            }
 
         override fun getItemDecorate(
             view: View,
@@ -276,9 +314,11 @@ open class AssemblyRecyclerGridDividerItemDecoration(
             val isFirstSpan = isFullSpan || spanIndex == 0
             val isLastSpan = isFullSpan || spanIndex == spanCount - 1
             val adapter = parent.adapter ?: return null
-            val itemFactory = findItemFactory(adapter, position) ?: return null
-            val itemFactoryClass =
-                itemFactoryClassConverter?.invoke(itemFactory) ?: itemFactory.javaClass
+            val itemFactoryClass = findItemFactoryClassByPosition(adapter, position)
+                ?: return defaultGridItemDecorateProvider.getItemDecorate(
+                    view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+                    spanGroupCount, spanGroupIndex, verticalOrientation, decorateType
+                )
             if (isDisabledItemDecorate(
                     verticalOrientation, decorateType, isFirstGroup, isLastGroup,
                     isFirstSpan, isLastSpan, itemFactoryClass,
@@ -347,17 +387,12 @@ open class AssemblyRecyclerGridDividerItemDecoration(
             }?.get(itemFactoryClass)
         }
 
-        private fun findItemFactory(
-            adapter: RecyclerView.Adapter<*>,
-            position: Int
-        ): ItemFactory<*>? {
+        private fun findItemFactoryClassByPosition(
+            adapter: RecyclerView.Adapter<*>, position: Int
+        ): Class<*>? {
             val (localAdapter, localPosition) = concatAdapterLocalHelper
                 .findLocalAdapterAndPosition(adapter, position)
-            return if (localAdapter is AssemblyAdapter<*>) {
-                localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>
-            } else {
-                null
-            }
+            return finalFindItemFactoryClassByPosition(localAdapter, localPosition)
         }
     }
 }

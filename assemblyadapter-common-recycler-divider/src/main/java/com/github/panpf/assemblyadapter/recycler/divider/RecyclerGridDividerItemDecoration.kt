@@ -68,7 +68,7 @@ open class RecyclerGridDividerItemDecoration(
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
         }
         val childCount = parent.childCount
-        val itemCount = parent.adapter?.itemCount ?: 0
+        val itemCount = (parent.adapter?.itemCount ?: 0).takeIf { it != 0 } ?: return
         val spanCount = layoutManager.spanCount
         val spanGroupCount =
             layoutManager.spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
@@ -276,6 +276,11 @@ open class RecyclerGridDividerItemDecoration(
         private var firstSideItemDecorate: ItemDecorate? = null
         private var lastSideItemDecorate: ItemDecorate? = null
 
+        private var showFirstDivider = false
+        private var showLastDivider = false
+        private var showFirstSide = false
+        private var showLastSide = false
+
         open fun build(): RecyclerGridDividerItemDecoration {
             return RecyclerGridDividerItemDecoration(buildItemDecorateProvider())
         }
@@ -292,11 +297,15 @@ open class RecyclerGridDividerItemDecoration(
             }
             return GridItemDecorateProviderImpl(
                 finalDividerItemDecorate,
-                firstDividerItemDecorate,
-                lastDividerItemDecorate,
+                firstDividerItemDecorate
+                    ?: if (showFirstDivider) finalDividerItemDecorate else null,
+                lastDividerItemDecorate
+                    ?: if (showLastDivider) finalDividerItemDecorate else null,
                 sideItemDecorate,
-                firstSideItemDecorate,
-                lastSideItemDecorate,
+                firstSideItemDecorate
+                    ?: if (showFirstSide) sideItemDecorate else null,
+                lastSideItemDecorate
+                    ?: if (showFirstSide) sideItemDecorate else null,
             )
         }
 
@@ -322,6 +331,23 @@ open class RecyclerGridDividerItemDecoration(
             return this
         }
 
+        open fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
+            this.showFirstDivider = showFirstDivider
+            return this
+        }
+
+        open fun showLastDivider(showLastDivider: Boolean = true): Builder {
+            this.showLastDivider = showLastDivider
+            return this
+        }
+
+        open fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
+            this.showFirstDivider = showFirstAndLastDivider
+            this.showLastDivider = showFirstAndLastDivider
+            return this
+        }
+
+
         open fun side(decorate: Decorate): Builder {
             this.sideItemDecorate = decorate.createItemDecorate(context)
             return this
@@ -340,6 +366,22 @@ open class RecyclerGridDividerItemDecoration(
         open fun firstAndLastSide(decorate: Decorate): Builder {
             this.firstSideItemDecorate = decorate.createItemDecorate(context)
             this.lastSideItemDecorate = decorate.createItemDecorate(context)
+            return this
+        }
+
+        open fun showFirstSide(showFirstSide: Boolean = true): Builder {
+            this.showFirstSide = showFirstSide
+            return this
+        }
+
+        open fun showLastSide(showLastSide: Boolean = true): Builder {
+            this.showLastSide = showLastSide
+            return this
+        }
+
+        open fun showFirstAndLastSide(showFirstAndLastSide: Boolean = true): Builder {
+            this.showFirstSide = showFirstAndLastSide
+            this.showLastSide = showFirstAndLastSide
             return this
         }
     }

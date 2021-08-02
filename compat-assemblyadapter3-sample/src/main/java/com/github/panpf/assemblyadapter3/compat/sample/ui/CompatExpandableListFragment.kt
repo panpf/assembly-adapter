@@ -4,61 +4,50 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.panpf.assemblyadapter3.compat.CompatAssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter3.compat.CompatAssemblyExpandableAdapter
 import com.github.panpf.assemblyadapter3.compat.sample.R
 import com.github.panpf.assemblyadapter3.compat.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter3.compat.sample.base.sticky.CompatAssemblyStickyRecyclerItemDecoration
-import com.github.panpf.assemblyadapter3.compat.sample.databinding.FragmentRecyclerBinding
+import com.github.panpf.assemblyadapter3.compat.sample.databinding.FragmentExpandableListBinding
+import com.github.panpf.assemblyadapter3.compat.sample.item.AppGroupItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.AppItem
-import com.github.panpf.assemblyadapter3.compat.sample.item.ListSeparatorItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.LoadMoreItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.TextItem
-import com.github.panpf.assemblyadapter3.compat.sample.vm.RecyclerLinearViewModel
+import com.github.panpf.assemblyadapter3.compat.sample.vm.ExpandableListViewModel
 
-class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class CompatExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding>() {
 
-    private val viewModel by viewModels<RecyclerLinearViewModel>()
+    private val viewModel by viewModels<ExpandableListViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
-    ): FragmentRecyclerBinding {
-        return FragmentRecyclerBinding.inflate(inflater, parent, false)
+    ): FragmentExpandableListBinding {
+        return FragmentExpandableListBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
-        val appAdapter = CompatAssemblyRecyclerAdapter().apply {
+    override fun onInitData(binding: FragmentExpandableListBinding, savedInstanceState: Bundle?) {
+        val appAdapter = CompatAssemblyExpandableAdapter().apply {
             addHeaderItem(
                 TextItem.Factory().setOnItemClickListener { _, _, _, _, _ ->
                     setHeaderItemEnabled(0, false)
                 },
                 requireContext().getString(R.string.list_header)
             ).apply { isEnabled = false }
-            addItemFactory(AppItem.Factory())
-            addItemFactory(ListSeparatorItem.Factory())
+            addGroupItemFactory(AppGroupItem.Factory())
+            addChildItemFactory(AppItem.Factory())
+            setMoreItem(LoadMoreItem.Factory {
+                viewModel.apppend()
+            })
             addFooterItem(
                 TextItem.Factory().setOnItemClickListener { _, _, _, _, _ ->
                     setFooterItemEnabled(0, false)
                 },
                 requireContext().getString(R.string.list_footer)
             ).apply { isEnabled = false }
-            setMoreItem(LoadMoreItem.Factory {
-                viewModel.apppend()
-            })
         }
 
-        binding.recyclerRecycler.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = appAdapter
-            addItemDecoration(
-                CompatAssemblyStickyRecyclerItemDecoration(
-                    binding.recyclerStickyContainer,
-                    listOf(ListSeparatorItem.Factory::class)
-                )
-            )
-        }
+        binding.expandableListList.setAdapter(appAdapter)
 
-        binding.recyclerRefreshLayout.setOnRefreshListener {
+        binding.expandableListRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }
 
@@ -74,7 +63,7 @@ class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         }
 
         viewModel.refreshingData.observe(viewLifecycleOwner) {
-            binding.recyclerRefreshLayout.isRefreshing = it == true
+            binding.expandableListRefreshLayout.isRefreshing = it == true
         }
     }
 }

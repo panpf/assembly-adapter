@@ -7,9 +7,9 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProviderImpl
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProviderImpl
 
 open class RecyclerLinearDividerItemDecoration(
     private val linearItemDecorateProvider: LinearItemDecorateProvider,
@@ -187,6 +187,9 @@ open class RecyclerLinearDividerItemDecoration(
         private var startSideItemDecorate: ItemDecorate? = null
         private var endSideItemDecorate: ItemDecorate? = null
 
+        private var showFirstDivider = false
+        private var showLastDivider = false
+
         open fun build(): RecyclerLinearDividerItemDecoration {
             return RecyclerLinearDividerItemDecoration(buildItemDecorateProvider())
         }
@@ -203,8 +206,10 @@ open class RecyclerLinearDividerItemDecoration(
             }
             return LinearItemDecorateProviderImpl(
                 finalDividerItemDecorate,
-                firstDividerItemDecorate,
-                lastDividerItemDecorate,
+                firstDividerItemDecorate
+                    ?: if (showFirstDivider) finalDividerItemDecorate else null,
+                lastDividerItemDecorate
+                    ?: if (showLastDivider) finalDividerItemDecorate else null,
                 startSideItemDecorate,
                 endSideItemDecorate,
             )
@@ -229,6 +234,22 @@ open class RecyclerLinearDividerItemDecoration(
         open fun firstAndLastDivider(decorate: Decorate): Builder {
             this.firstDividerItemDecorate = decorate.createItemDecorate(context)
             this.lastDividerItemDecorate = decorate.createItemDecorate(context)
+            return this
+        }
+
+        open fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
+            this.showFirstDivider = showFirstDivider
+            return this
+        }
+
+        open fun showLastDivider(showLastDivider: Boolean = true): Builder {
+            this.showLastDivider = showLastDivider
+            return this
+        }
+
+        open fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
+            this.showFirstDivider = showFirstAndLastDivider
+            this.showLastDivider = showFirstAndLastDivider
             return this
         }
 
