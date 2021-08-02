@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.sample.ui.recycler
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -29,7 +28,10 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorizontalBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppHorizontalItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewHorizontalItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorHorizontalItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateHorizontalItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
@@ -64,19 +66,76 @@ class RecyclerLinearDividerHorFragment :
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(
                 AssemblyRecyclerLinearDividerItemDecoration.Builder(requireContext()).apply {
-                    divider(Decorate.color(0x33FF0000, 0.5f.dp2px, 20.dp2px, 20.dp2px))
-                    firstAndLastDivider(Decorate.color(0xFFFF0000.toInt(), 2.dp2px))
+                    divider(
+                        Decorate.color(
+                            0x33FF0000,
+                            0.5f.dp2px,
+                            insetStart = 20.dp2px,
+                            insetEnd = 20.dp2px
+                        )
+                    )
+                    firstAndLastDivider(
+                        Decorate.color(
+                            0xFFFF0000.toInt(),
+                            2.dp2px,
+                            insetStart = 4.dp2px,
+                            insetTop = 2.dp2px,
+                            insetEnd = 4.dp2px,
+                            insetBottom = 2.dp2px,
+                        )
+                    )
+                    personaliseDivider(
+                        AppsOverviewHorizontalItemFactory::class,
+                        Decorate.color(
+                            0xFFFF0000.toInt(),
+                            2.dp2px,
+                            insetStart = 4.dp2px,
+                            insetTop = 2.dp2px,
+                            insetEnd = 4.dp2px,
+                            insetBottom = 2.dp2px,
+                        )
+                    )
                     personaliseDivider(
                         ListSeparatorHorizontalItemFactory::class,
-                        Decorate.color(0x88FF0000.toInt(), 1.dp2px, 20.dp2px, 20.dp2px)
+                        Decorate.color(
+                            0x88FF0000.toInt(),
+                            1.dp2px,
+                            insetStart = 20.dp2px,
+                            insetEnd = 20.dp2px
+                        )
                     )
-                    disableDivider(AppsOverviewHorizontalItemFactory::class)
 
-                    startAndEndSide(Decorate.color(0xFF0000FF.toInt(), 2.dp2px))
-                    personaliseStartAndEndSide(
-                        ListSeparatorHorizontalItemFactory::class, Decorate.space(2.dp2px)
+                    startAndEndSide(
+                        Decorate.color(
+                            0xFF0000FF.toInt(),
+                            2.dp2px,
+                            insetStart = 2.dp2px,
+                            insetTop = 4.dp2px,
+                            insetEnd = 2.dp2px,
+                            insetBottom = 4.dp2px
+                        )
                     )
-                    disableStartAndEndSide(AppsOverviewHorizontalItemFactory::class)
+                    personaliseStartAndEndSide(
+                        ListSeparatorHorizontalItemFactory::class,
+                        Decorate.space(
+                            2.dp2px,
+                            insetStart = 2.dp2px,
+                            insetTop = 4.dp2px,
+                            insetEnd = 2.dp2px,
+                            insetBottom = 4.dp2px
+                        )
+                    )
+                    personaliseStartAndEndSide(
+                        AppsOverviewHorizontalItemFactory::class,
+                        Decorate.color(
+                            0xFF0000FF.toInt(),
+                            2.dp2px,
+                            insetStart = 2.dp2px,
+                            insetTop = 4.dp2px,
+                            insetEnd = 2.dp2px,
+                            insetBottom = 4.dp2px
+                        )
+                    )
                     disableStartAndEndSide(LoadStateHorizontalItemFactory::class)
                 }.build()
             )

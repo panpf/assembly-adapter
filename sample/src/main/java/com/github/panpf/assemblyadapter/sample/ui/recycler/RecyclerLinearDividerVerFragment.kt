@@ -65,19 +65,76 @@ class RecyclerLinearDividerVerFragment :
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
                 AssemblyRecyclerLinearDividerItemDecoration.Builder(requireContext()).apply {
-                    divider(Decorate.color(0x33FF0000, 0.5f.dp2px, 20.dp2px, 20.dp2px))
-                    firstAndLastDivider(Decorate.color(0xFFFF0000.toInt(), 2.dp2px))
+                    divider(
+                        Decorate.color(
+                            0x33FF0000,
+                            0.5f.dp2px,
+                            insetStart = 20.dp2px,
+                            insetEnd = 20.dp2px
+                        )
+                    )
+                    firstAndLastDivider(
+                        Decorate.color(
+                            0xFFFF0000.toInt(),
+                            2.dp2px,
+                            insetStart = 2.dp2px,
+                            insetTop = 4.dp2px,
+                            insetEnd = 2.dp2px,
+                            insetBottom = 4.dp2px,
+                        )
+                    )
+                    personaliseDivider(
+                        AppsOverviewItemFactory::class,
+                        Decorate.color(
+                            0xFFFF0000.toInt(),
+                            2.dp2px,
+                            insetStart = 2.dp2px,
+                            insetTop = 4.dp2px,
+                            insetEnd = 2.dp2px,
+                            insetBottom = 4.dp2px,
+                        )
+                    )
                     personaliseDivider(
                         ListSeparatorItemFactory::class,
-                        Decorate.color(0x88FF0000.toInt(), 1.dp2px, 20.dp2px, 20.dp2px)
+                        Decorate.color(
+                            0x88FF0000.toInt(),
+                            1.dp2px,
+                            insetStart = 20.dp2px,
+                            insetEnd = 20.dp2px
+                        )
                     )
-                    disableDivider(AppsOverviewItemFactory::class)
 
-                    startAndEndSide(Decorate.color(0xFF0000FF.toInt(), 2.dp2px))
-                    personaliseStartAndEndSide(
-                        ListSeparatorItemFactory::class, Decorate.space(2.dp2px)
+                    startAndEndSide(
+                        Decorate.color(
+                            0xFF0000FF.toInt(),
+                            2.dp2px,
+                            insetStart = 4.dp2px,
+                            insetTop = 2.dp2px,
+                            insetEnd = 4.dp2px,
+                            insetBottom = 2.dp2px
+                        )
                     )
-                    disableStartAndEndSide(AppsOverviewItemFactory::class)
+                    personaliseStartAndEndSide(
+                        ListSeparatorItemFactory::class,
+                        Decorate.space(
+                            2.dp2px,
+                            insetStart = 4.dp2px,
+                            insetTop = 2.dp2px,
+                            insetEnd = 4.dp2px,
+                            insetBottom = 2.dp2px
+                        )
+                    )
+                    personaliseStartAndEndSide(
+                        AppsOverviewItemFactory::class,
+                        Decorate.color(
+                            0xFF0000FF.toInt(),
+                            2.dp2px,
+                            insetStart = 4.dp2px,
+                            insetTop = 2.dp2px,
+                            insetEnd = 4.dp2px,
+                            insetBottom = 2.dp2px
+                        )
+                    )
                     disableStartAndEndSide(LoadStateItemFactory::class)
                 }.build()
             )

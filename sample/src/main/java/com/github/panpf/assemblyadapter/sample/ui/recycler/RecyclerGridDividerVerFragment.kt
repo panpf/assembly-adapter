@@ -69,12 +69,92 @@ class RecyclerGridDividerVerFragment :
             )
             addItemDecoration(
                 AssemblyRecyclerGridDividerItemDecoration.Builder(requireContext()).apply {
-                    val inset = 0.dp2px
+                    val smallInset = 2.dp2px
+                    val bigInset = 4.dp2px
                     val size = 5.dp2px
-                    divider(Decorate.color(0x88FF0000.toInt(), size, inset, inset))
-                    firstAndLastDivider(Decorate.color(0xFFFF0000.toInt(), size, inset, inset))
-                    side(Decorate.color(0x880000FF.toInt(), size, inset, inset))
-                    firstAndLastSide(Decorate.color(0xFF0000FF.toInt(), size, inset, inset))
+                    divider(
+                        Decorate.color(
+                            0x88FF0000.toInt(),
+                            size,
+                            insetStart = smallInset,
+                            insetTop = bigInset,
+                            insetEnd = smallInset,
+                            insetBottom = bigInset,
+                        )
+                    )
+                    firstAndLastDivider(
+                        Decorate.color(
+                            0xFFFF0000.toInt(),
+                            size,
+                            insetStart = smallInset,
+                            insetTop = bigInset,
+                            insetEnd = smallInset,
+                            insetBottom = bigInset,
+                        )
+                    )
+                    side(
+                        Decorate.color(
+                            0x880000FF.toInt(),
+                            size,
+                            insetStart = bigInset,
+                            insetTop = smallInset,
+                            insetEnd = bigInset,
+                            insetBottom = smallInset,
+                        )
+                    )
+                    firstAndLastSide(
+                        Decorate.color(
+                            0xFF0000FF.toInt(),
+                            size,
+                            insetStart = bigInset,
+                            insetTop = smallInset,
+                            insetEnd = bigInset,
+                            insetBottom = smallInset,
+                        )
+                    )
+                    personaliseDivider(
+                        ListSeparatorItemFactory::class,
+                        Decorate.space(
+                            size,
+                            insetStart = smallInset,
+                            insetTop = bigInset,
+                            insetEnd = smallInset,
+                            insetBottom = bigInset,
+                        )
+                    )
+                    personaliseFirstAndLastSide(
+                        ListSeparatorItemFactory::class,
+                        Decorate.space(
+                            size,
+                            insetStart = bigInset,
+                            insetTop = smallInset,
+                            insetEnd = bigInset,
+                            insetBottom = smallInset,
+                        )
+                    )
+                    personaliseDivider(
+                        AppsOverviewItemFactory::class,
+                        Decorate.color(
+                            0x8800FF00.toInt(),
+                            size,
+                            insetStart = smallInset,
+                            insetTop = bigInset,
+                            insetEnd = smallInset,
+                            insetBottom = bigInset,
+                        )
+                    )
+                    personaliseFirstAndLastSide(
+                        AppsOverviewItemFactory::class,
+                        Decorate.color(
+                            0xFF00FF00.toInt(),
+                            size,
+                            insetStart = bigInset,
+                            insetTop = smallInset,
+                            insetEnd = bigInset,
+                            insetBottom = smallInset,
+                        )
+                    )
+                    disableFirstAndLastSide(LoadStateItemFactory::class)
                 }.build()
             )
         }

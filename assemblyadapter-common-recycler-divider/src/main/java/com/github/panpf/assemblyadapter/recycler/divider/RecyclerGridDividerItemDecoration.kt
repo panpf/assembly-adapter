@@ -37,23 +37,29 @@ open class RecyclerGridDividerItemDecoration(
         val spanGroupCount = spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
         val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
 
-        val left = gridItemDecorateProvider.getItemDecorate(
+        val startItemDecorate = gridItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             spanGroupCount, spanGroupIndex, verticalOrientation, ItemDecorate.Type.START
-        )?.widthSize ?: 0
-        val top = gridItemDecorateProvider.getItemDecorate(
+        )
+        val topItemDecorate = gridItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             spanGroupCount, spanGroupIndex, verticalOrientation, ItemDecorate.Type.TOP
-        )?.heightSize ?: 0
-        val right = gridItemDecorateProvider.getItemDecorate(
+        )
+        val endItemDecorate = gridItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             spanGroupCount, spanGroupIndex, verticalOrientation, ItemDecorate.Type.END
-        )?.widthSize ?: 0
-        val bottom = gridItemDecorateProvider.getItemDecorate(
+        )
+        val bottomItemDecorate = gridItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             spanGroupCount, spanGroupIndex, verticalOrientation, ItemDecorate.Type.BOTTOM
-        )?.heightSize ?: 0
-        outRect.set(left, top, right, bottom)
+        )
+
+        outRect.set(
+            startItemDecorate?.run { widthSize + insetWidthSize } ?: 0,
+            topItemDecorate?.run { heightSize + insetHeightSize } ?: 0,
+            endItemDecorate?.run { widthSize + insetWidthSize } ?: 0,
+            bottomItemDecorate?.run { heightSize + insetHeightSize } ?: 0
+        )
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -118,10 +124,10 @@ open class RecyclerGridDividerItemDecoration(
 
             startItemDecorate?.apply {
                 drawable.setBounds(
-                    childView.left - widthSize,
-                    childView.top + insetStart,
-                    childView.left,
-                    childView.bottom - insetEnd
+                    childView.left - insetEnd - widthSize,
+                    childView.top + insetTop,
+                    childView.left - insetEnd,
+                    childView.bottom - insetBottom
                 )
                 drawable.draw(canvas)
             }
@@ -130,26 +136,26 @@ open class RecyclerGridDividerItemDecoration(
                 if (haveInset) {
                     drawable.setBounds(
                         childView.left + insetStart,
-                        childView.top - heightSize,
+                        childView.top - insetBottom - heightSize,
                         childView.right - insetEnd,
-                        childView.top
+                        childView.top - insetBottom
                     )
                 } else {
                     drawable.setBounds(
                         childView.left - (startItemDecorate?.widthSize ?: 0),
-                        childView.top - heightSize,
+                        childView.top - insetBottom - heightSize,
                         childView.right + (endItemDecorate?.widthSize ?: 0),
-                        childView.top
+                        childView.top - insetBottom
                     )
                 }
                 drawable.draw(canvas)
             }
             endItemDecorate?.apply {
                 drawable.setBounds(
-                    childView.right,
-                    childView.top + insetStart,
-                    childView.right + widthSize,
-                    childView.bottom - insetEnd
+                    childView.right + insetStart,
+                    childView.top + insetTop,
+                    childView.right + insetStart + widthSize,
+                    childView.bottom - insetBottom
                 )
                 drawable.draw(canvas)
             }
@@ -158,16 +164,16 @@ open class RecyclerGridDividerItemDecoration(
                 if (haveInset) {
                     drawable.setBounds(
                         childView.left + insetStart,
-                        childView.bottom,
+                        childView.bottom + insetTop,
                         childView.right - insetEnd,
-                        childView.bottom + heightSize
+                        childView.bottom + insetTop + heightSize
                     )
                 } else {
                     drawable.setBounds(
                         childView.left - (startItemDecorate?.widthSize ?: 0),
-                        childView.bottom,
+                        childView.bottom + insetTop,
                         childView.right + (endItemDecorate?.widthSize ?: 0),
-                        childView.bottom + heightSize
+                        childView.bottom + insetTop + heightSize
                     )
                 }
                 drawable.draw(canvas)
@@ -212,17 +218,17 @@ open class RecyclerGridDividerItemDecoration(
                 val haveInset = insetStart > 0 || insetEnd > 0
                 if (haveInset) {
                     drawable.setBounds(
-                        childView.left - widthSize,
-                        childView.top + insetStart,
-                        childView.left,
-                        childView.bottom - insetEnd
+                        childView.left - insetEnd - widthSize,
+                        childView.top + insetTop,
+                        childView.left - insetEnd,
+                        childView.bottom - insetBottom
                     )
                 } else {
                     drawable.setBounds(
-                        childView.left - widthSize,
-                        childView.top + insetStart - (topItemDecorate?.heightSize ?: 0),
-                        childView.left,
-                        childView.bottom - insetEnd + (bottomItemDecorate?.heightSize ?: 0)
+                        childView.left - insetEnd - widthSize,
+                        childView.top + insetTop - (topItemDecorate?.heightSize ?: 0),
+                        childView.left - insetEnd,
+                        childView.bottom - insetBottom + (bottomItemDecorate?.heightSize ?: 0)
                     )
                 }
                 drawable.draw(canvas)
@@ -230,9 +236,9 @@ open class RecyclerGridDividerItemDecoration(
             topItemDecorate?.apply {
                 drawable.setBounds(
                     childView.left + insetStart,
-                    childView.top - heightSize,
+                    childView.top - insetBottom - heightSize,
                     childView.right - insetEnd,
-                    childView.top
+                    childView.top - insetBottom
                 )
                 drawable.draw(canvas)
             }
@@ -240,17 +246,17 @@ open class RecyclerGridDividerItemDecoration(
                 val haveInset = insetStart > 0 || insetEnd > 0
                 if (haveInset) {
                     drawable.setBounds(
-                        childView.right,
-                        childView.top + insetStart,
-                        childView.right + widthSize,
-                        childView.bottom - insetEnd
+                        childView.right + insetStart,
+                        childView.top + insetTop,
+                        childView.right + insetStart + widthSize,
+                        childView.bottom - insetBottom
                     )
                 } else {
                     drawable.setBounds(
-                        childView.right,
-                        childView.top + insetStart - (topItemDecorate?.heightSize ?: 0),
-                        childView.right + widthSize,
-                        childView.bottom - insetEnd + (bottomItemDecorate?.heightSize ?: 0)
+                        childView.right + insetStart,
+                        childView.top + insetTop - (topItemDecorate?.heightSize ?: 0),
+                        childView.right + insetStart + widthSize,
+                        childView.bottom - insetBottom + (bottomItemDecorate?.heightSize ?: 0)
                     )
                 }
                 drawable.draw(canvas)
@@ -258,9 +264,9 @@ open class RecyclerGridDividerItemDecoration(
             bottomItemDecorate?.apply {
                 drawable.setBounds(
                     childView.left + insetStart,
-                    childView.bottom,
+                    childView.bottom + insetTop,
                     childView.right - insetEnd,
-                    childView.bottom + heightSize
+                    childView.bottom + insetTop + heightSize
                 )
                 drawable.draw(canvas)
             }

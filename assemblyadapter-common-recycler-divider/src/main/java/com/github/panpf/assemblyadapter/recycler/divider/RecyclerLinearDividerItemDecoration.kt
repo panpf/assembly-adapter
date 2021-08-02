@@ -39,10 +39,10 @@ open class RecyclerLinearDividerItemDecoration(
         )
 
         outRect.set(
-            startItemDecorate?.widthSize ?: 0,
-            topItemDecorate?.heightSize ?: 0,
-            endItemDecorate?.widthSize ?: 0,
-            bottomItemDecorate?.heightSize ?: 0
+            startItemDecorate?.run { widthSize + insetWidthSize } ?: 0,
+            topItemDecorate?.run { heightSize + insetHeightSize } ?: 0,
+            endItemDecorate?.run { widthSize + insetWidthSize } ?: 0,
+            bottomItemDecorate?.run { heightSize + insetHeightSize } ?: 0
         )
     }
 
@@ -81,37 +81,37 @@ open class RecyclerLinearDividerItemDecoration(
 
             startItemDecorate?.apply {
                 drawable.setBounds(
-                    parentLeft,
-                    childView.top + insetStart,
-                    parentLeft + widthSize,
-                    childView.bottom - insetEnd
+                    parentLeft + insetStart,
+                    childView.top + insetTop,
+                    parentLeft + insetStart + widthSize,
+                    childView.bottom - insetBottom
                 )
                 drawable.draw(canvas)
             }
             topItemDecorate?.apply {
                 drawable.setBounds(
                     parentLeft + insetStart,
-                    childView.top - heightSize,
+                    childView.top - insetBottom - heightSize,
                     parentRight - insetEnd,
-                    childView.top
+                    childView.top - insetBottom
                 )
                 drawable.draw(canvas)
             }
             endItemDecorate?.apply {
                 drawable.setBounds(
-                    parentRight - widthSize,
-                    childView.top + insetStart,
-                    parentRight,
-                    childView.bottom - insetEnd
+                    parentRight - insetEnd - widthSize,
+                    childView.top + insetTop,
+                    parentRight - insetEnd,
+                    childView.bottom - insetBottom
                 )
                 drawable.draw(canvas)
             }
             bottomItemDecorate?.apply {
                 drawable.setBounds(
                     parentLeft + insetStart,
-                    childView.bottom,
+                    childView.bottom + insetTop,
                     parentRight - insetEnd,
-                    childView.bottom + heightSize
+                    childView.bottom + insetTop + heightSize
                 )
                 drawable.draw(canvas)
             }
@@ -142,37 +142,37 @@ open class RecyclerLinearDividerItemDecoration(
 
             startItemDecorate?.apply {
                 drawable.setBounds(
-                    childView.left - widthSize,
-                    parentTop + insetStart,
-                    childView.left,
-                    parentBottom - insetEnd
+                    childView.left - insetEnd - widthSize,
+                    parentTop + insetTop,
+                    childView.left - insetEnd,
+                    parentBottom - insetBottom
                 )
                 drawable.draw(canvas)
             }
             topItemDecorate?.apply {
                 drawable.setBounds(
                     childView.left + insetStart,
-                    childView.top - heightSize,
+                    childView.top - insetBottom - heightSize,
                     childView.right - insetEnd,
-                    childView.top
+                    childView.top - insetBottom
                 )
                 drawable.draw(canvas)
             }
             endItemDecorate?.apply {
                 drawable.setBounds(
-                    childView.right,
-                    parentTop + insetStart,
-                    childView.right + widthSize,
-                    parentBottom - insetEnd
+                    childView.right + insetEnd,
+                    parentTop + insetTop,
+                    childView.right + insetEnd + widthSize,
+                    parentBottom - insetBottom
                 )
                 drawable.draw(canvas)
             }
             bottomItemDecorate?.apply {
                 drawable.setBounds(
                     childView.left + insetStart,
-                    childView.bottom,
+                    childView.bottom + insetTop,
                     childView.right - insetEnd,
-                    childView.bottom + heightSize
+                    childView.bottom + insetTop + heightSize
                 )
                 drawable.draw(canvas)
             }

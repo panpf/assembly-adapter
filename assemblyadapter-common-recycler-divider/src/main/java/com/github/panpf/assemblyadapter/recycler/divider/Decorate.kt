@@ -18,31 +18,47 @@ interface Decorate {
             drawable: Drawable,
             @Px size: Int = -1,
             @Px insetStart: Int = 0,
+            @Px insetTop: Int = 0,
             @Px insetEnd: Int = 0,
-        ): Decorate = DrawableDecorate(drawable, size, insetStart, insetEnd)
+            @Px insetBottom: Int = 0,
+        ): Decorate = DrawableDecorate(drawable, size, insetStart, insetTop, insetEnd, insetBottom)
 
         fun drawableRes(
             @DrawableRes drawableResId: Int,
             @Px size: Int = -1,
             @Px insetStart: Int = 0,
+            @Px insetTop: Int = 0,
             @Px insetEnd: Int = 0,
-        ): Decorate = DrawableResDecorate(drawableResId, size, insetStart, insetEnd)
+            @Px insetBottom: Int = 0,
+        ): Decorate =
+            DrawableResDecorate(drawableResId, size, insetStart, insetTop, insetEnd, insetBottom)
 
         fun color(
             @ColorInt color: Int,
             @Px size: Int = -1,
             @Px insetStart: Int = 0,
+            @Px insetTop: Int = 0,
             @Px insetEnd: Int = 0,
-        ): Decorate = ColorDecorate(color, size, insetStart, insetEnd)
+            @Px insetBottom: Int = 0,
+        ): Decorate = ColorDecorate(color, size, insetStart, insetTop, insetEnd, insetBottom)
 
         fun colorRes(
             @ColorRes colorResId: Int,
             @Px size: Int = -1,
             @Px insetStart: Int = 0,
+            @Px insetTop: Int = 0,
             @Px insetEnd: Int = 0,
-        ): Decorate = ColorResDecorate(colorResId, size, insetStart, insetEnd)
+            @Px insetBottom: Int = 0,
+        ): Decorate =
+            ColorResDecorate(colorResId, size, insetStart, insetTop, insetEnd, insetBottom)
 
-        fun space(@Px size: Int = -1): Decorate = SpaceDecorate(size)
+        fun space(
+            @Px size: Int = -1,
+            @Px insetStart: Int = 0,
+            @Px insetTop: Int = 0,
+            @Px insetEnd: Int = 0,
+            @Px insetBottom: Int = 0,
+        ): Decorate = SpaceDecorate(size, insetStart, insetTop, insetEnd, insetBottom)
     }
 
     fun createItemDecorate(context: Context): ItemDecorate
@@ -52,11 +68,13 @@ internal class DrawableDecorate(
     private val drawable: Drawable,
     @Px private val size: Int = -1,
     @Px private val insetStart: Int = 0,
+    @Px private val insetTop: Int = 0,
     @Px private val insetEnd: Int = 0,
+    @Px private val insetBottom: Int = 0,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(drawable, size, insetStart, insetEnd)
+        return ItemDecorate(drawable, size, insetStart, insetTop, insetEnd, insetBottom)
     }
 }
 
@@ -64,12 +82,14 @@ internal class DrawableResDecorate(
     @DrawableRes private val drawableResId: Int,
     @Px private val size: Int = -1,
     @Px private val insetStart: Int = 0,
+    @Px private val insetTop: Int = 0,
     @Px private val insetEnd: Int = 0,
+    @Px private val insetBottom: Int = 0,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
         val drawable = ResourcesCompat.getDrawable(context.resources, drawableResId, null)!!
-        return ItemDecorate(drawable, size, insetStart, insetEnd)
+        return ItemDecorate(drawable, size, insetStart, insetTop, insetEnd, insetBottom)
     }
 }
 
@@ -77,11 +97,13 @@ internal class ColorDecorate(
     @ColorInt private val color: Int,
     @Px private val size: Int,
     @Px private val insetStart: Int = 0,
+    @Px private val insetTop: Int = 0,
     @Px private val insetEnd: Int = 0,
+    @Px private val insetBottom: Int = 0,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(ColorDrawable(color), size, insetStart, insetEnd)
+        return ItemDecorate(ColorDrawable(color), size, insetStart, insetTop, insetEnd, insetBottom)
     }
 }
 
@@ -89,18 +111,33 @@ internal class ColorResDecorate(
     @ColorRes private val colorResId: Int,
     @Px private val size: Int,
     @Px private val insetStart: Int = 0,
+    @Px private val insetTop: Int = 0,
     @Px private val insetEnd: Int = 0,
+    @Px private val insetBottom: Int = 0,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
         val color = ResourcesCompat.getColor(context.resources, colorResId, null)
-        return ItemDecorate(ColorDrawable(color), size, insetStart, insetEnd)
+        return ItemDecorate(ColorDrawable(color), size, insetStart, insetTop, insetEnd, insetBottom)
     }
 }
 
-internal class SpaceDecorate(@Px private val size: Int) : Decorate {
+internal class SpaceDecorate(
+    @Px private val size: Int,
+    @Px private val insetStart: Int = 0,
+    @Px private val insetTop: Int = 0,
+    @Px private val insetEnd: Int = 0,
+    @Px private val insetBottom: Int = 0,
+) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(ColorDrawable(Color.TRANSPARENT), size, 0, 0)
+        return ItemDecorate(
+            ColorDrawable(Color.TRANSPARENT),
+            size,
+            insetStart,
+            insetTop,
+            insetEnd,
+            insetBottom
+        )
     }
 }
