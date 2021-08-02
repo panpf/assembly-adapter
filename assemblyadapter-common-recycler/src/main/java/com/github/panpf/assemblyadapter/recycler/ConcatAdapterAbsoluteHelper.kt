@@ -26,8 +26,8 @@ class ConcatAdapterAbsoluteHelper {
         localAdapter: RecyclerView.Adapter<*>,
         localPosition: Int
     ): Int {
-        val parentAdapterCache = concatAdapterWrapperAdaptersCache.getAdaptersCache(parentAdapter)
-        return findAbsoluteAdapterPositionReal(
+        val parentAdapterCache = concatAdapterWrapperAdaptersCache.getAdapterCache(parentAdapter)
+        return findAbsoluteAdapterPositionRecursive(
             parentAdapterCache, localAdapter, localPosition
         ) ?: throw IndexOutOfBoundsException(
             "Not found childAdapterStartPosition by " +
@@ -35,8 +35,8 @@ class ConcatAdapterAbsoluteHelper {
         )
     }
 
-    private fun findAbsoluteAdapterPositionReal(
-        parentAdapter: ConcatAdapterWrapperAdaptersCache.AdaptersCache,
+    private fun findAbsoluteAdapterPositionRecursive(
+        parentAdapter: ConcatAdapterWrapperAdaptersCache.AdapterCache,
         localAdapter: RecyclerView.Adapter<*>,
         localPosition: Int
     ): Int? {
@@ -46,8 +46,8 @@ class ConcatAdapterAbsoluteHelper {
             }
             parentAdapter is ConcatAdapterWrapperAdaptersCache.ConcatAdapterCache -> {
                 var childAdapterStartPosition = 0
-                parentAdapter.adapters.forEach { childAdapter ->
-                    val childPosition = findAbsoluteAdapterPositionReal(
+                parentAdapter.childAdapterCaches.forEach { childAdapter ->
+                    val childPosition = findAbsoluteAdapterPositionRecursive(
                         childAdapter, localAdapter, localPosition
                     )
                     if (childPosition != null) {

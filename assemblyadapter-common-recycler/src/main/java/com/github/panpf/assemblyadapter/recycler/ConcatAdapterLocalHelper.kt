@@ -24,17 +24,15 @@ class ConcatAdapterLocalHelper {
     fun findLocalAdapterAndPosition(
         adapter: RecyclerView.Adapter<*>, position: Int
     ): Pair<RecyclerView.Adapter<*>, Int> {
-        val adaptersCache = concatAdapterWrapperAdaptersCache.getAdaptersCache(adapter)
-        var nextAdapter = adaptersCache
+        var nextAdapter = concatAdapterWrapperAdaptersCache.getAdapterCache(adapter)
         var nextPosition = position
         while (nextAdapter is ConcatAdapterWrapperAdaptersCache.ConcatAdapterCache) {
-            val wrapperAdapters = nextAdapter.adapters
             var childAdapterStartPosition = 0
-            val childAdapter = wrapperAdapters.find { childAdapter ->
+            val childAdapter = nextAdapter.childAdapterCaches.find { childAdapter ->
                 val childAdapterEndPosition =
                     childAdapterStartPosition + childAdapter.itemCount - 1
                 @Suppress("ConvertTwoComparisonsToRangeCheck")
-                if (position >= childAdapterStartPosition && position <= childAdapterEndPosition) {
+                if (nextPosition >= childAdapterStartPosition && nextPosition <= childAdapterEndPosition) {
                     true
                 } else {
                     childAdapterStartPosition = childAdapterEndPosition + 1
@@ -45,7 +43,7 @@ class ConcatAdapterLocalHelper {
                 nextAdapter = childAdapter
                 nextPosition -= childAdapterStartPosition
             } else {
-                throw IndexOutOfBoundsException("Index: $nextPosition, Size: ${nextAdapter.itemCount}")
+                throw IndexOutOfBoundsException("nextPosition: $nextPosition, nextAdapterItemCount: ${nextAdapter.itemCount}, position: $position, itemCount: ${adapter.itemCount}")
             }
         }
         return nextAdapter.adapter to nextPosition

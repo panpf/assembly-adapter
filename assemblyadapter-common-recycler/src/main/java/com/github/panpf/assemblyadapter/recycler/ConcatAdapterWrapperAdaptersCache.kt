@@ -21,13 +21,13 @@ import androidx.recyclerview.widget.RecyclerView
 class ConcatAdapterWrapperAdaptersCache {
 
     private var mainAdapter: RecyclerView.Adapter<*>? = null
-    private var adapterCache: AdaptersCache? = null
+    private var adapterCache: AdapterCache? = null
 
     private val anyAdapterDataObserver = AnyAdapterDataObserver {
         reset()
     }
 
-    fun getAdaptersCache(adapter: RecyclerView.Adapter<*>): AdaptersCache {
+    fun getAdapterCache(adapter: RecyclerView.Adapter<*>): AdapterCache {
         val oldMainAdapter = mainAdapter
         val adapterCache = adapterCache
         return if (adapterCache == null || oldMainAdapter == null || oldMainAdapter !== adapter) {
@@ -38,7 +38,7 @@ class ConcatAdapterWrapperAdaptersCache {
                 } catch (e: Exception) {
                 }
             }
-            AdaptersCache.buildCache(adapter).apply {
+            AdapterCache.buildCache(adapter).apply {
                 this@ConcatAdapterWrapperAdaptersCache.adapterCache = this
             }
         } else {
@@ -54,13 +54,13 @@ class ConcatAdapterWrapperAdaptersCache {
         adapterCache = null
     }
 
-    sealed interface AdaptersCache {
+    sealed interface AdapterCache {
 
         val adapter: RecyclerView.Adapter<*>
         val itemCount: Int
 
         companion object {
-            fun buildCache(adapter: RecyclerView.Adapter<*>): AdaptersCache {
+            fun buildCache(adapter: RecyclerView.Adapter<*>): AdapterCache {
                 return if (adapter is ConcatAdapter) {
                     ConcatAdapterCache(adapter, adapter.adapters.map {
                         buildCache(it)
@@ -74,14 +74,14 @@ class ConcatAdapterWrapperAdaptersCache {
 
     class ConcatAdapterCache(
         override val adapter: RecyclerView.Adapter<*>,
-        val adapters: List<AdaptersCache>
-    ) : AdaptersCache {
+        val childAdapterCaches: List<AdapterCache>
+    ) : AdapterCache {
         override val itemCount: Int
             get() = adapter.itemCount
     }
 
     class NormalAdapterCache(override val adapter: RecyclerView.Adapter<*>) :
-        AdaptersCache {
+        AdapterCache {
         override val itemCount: Int
             get() = adapter.itemCount
     }
