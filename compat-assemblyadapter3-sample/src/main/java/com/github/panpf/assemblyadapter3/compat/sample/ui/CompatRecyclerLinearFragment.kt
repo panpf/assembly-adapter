@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter3.compat.sample.R
 import com.github.panpf.assemblyadapter3.compat.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter3.compat.sample.base.sticky.CompatAssemblyStickyRecyclerItemDecoration
+import com.github.panpf.assemblyadapter3.compat.sample.base.sticky.CompatAssemblyStickyItemDecoration
 import com.github.panpf.assemblyadapter3.compat.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter3.compat.sample.item.AppItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.ListSeparatorItem
@@ -51,7 +51,7 @@ class CompatRecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding
             layoutManager = LinearLayoutManager(activity)
             adapter = appAdapter
             addItemDecoration(
-                CompatAssemblyStickyRecyclerItemDecoration(
+                CompatAssemblyStickyItemDecoration(
                     binding.recyclerStickyContainer,
                     listOf(ListSeparatorItem.Factory::class)
                 )

@@ -68,7 +68,7 @@ class RecyclerGridDividerVerFragment :
                 )
             )
             addItemDecoration(
-                AssemblyRecyclerGridDividerItemDecoration.Builder(requireContext()).apply {
+                AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
                     val smallInset = 2.dp2px
                     val bigInset = 4.dp2px
                     val size = 5.dp2px

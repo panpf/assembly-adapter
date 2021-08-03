@@ -20,16 +20,16 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
-import com.github.panpf.assemblyadapter.recycler.divider.RecyclerLinearDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.LinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProvider
 import kotlin.reflect.KClass
 
-open class AssemblyRecyclerLinearDividerItemDecoration(
+open class AssemblyLinearDividerItemDecoration(
     itemDecorateProvider: AssemblyLinearItemDecorateProvider
-) : RecyclerLinearDividerItemDecoration(itemDecorateProvider) {
+) : LinearDividerItemDecoration(itemDecorateProvider) {
 
-    class Builder(context: Context) : RecyclerLinearDividerItemDecoration.Builder(context) {
+    class Builder(context: Context) : LinearDividerItemDecoration.Builder(context) {
 
         private var personaliseDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
         private var personaliseStartSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
@@ -42,8 +42,8 @@ open class AssemblyRecyclerLinearDividerItemDecoration(
         private var findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)? =
             null
 
-        override fun build(): AssemblyRecyclerLinearDividerItemDecoration {
-            return AssemblyRecyclerLinearDividerItemDecoration(buildItemDecorateProvider())
+        override fun build(): AssemblyLinearDividerItemDecoration {
+            return AssemblyLinearDividerItemDecoration(buildItemDecorateProvider())
         }
 
         override fun buildItemDecorateProvider(): AssemblyLinearItemDecorateProvider {

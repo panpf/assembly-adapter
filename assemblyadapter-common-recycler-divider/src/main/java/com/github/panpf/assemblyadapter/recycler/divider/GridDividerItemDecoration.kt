@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecora
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecorateProviderImpl
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 
-open class RecyclerGridDividerItemDecoration(
+open class GridDividerItemDecoration(
     private val gridItemDecorateProvider: GridItemDecorateProvider,
 ) : ItemDecoration() {
 
@@ -302,8 +302,8 @@ open class RecyclerGridDividerItemDecoration(
         private var showFirstSide = false
         private var showLastSide = false
 
-        open fun build(): RecyclerGridDividerItemDecoration {
-            return RecyclerGridDividerItemDecoration(buildItemDecorateProvider())
+        open fun build(): GridDividerItemDecoration {
+            return GridDividerItemDecoration(buildItemDecorateProvider())
         }
 
         protected open fun buildItemDecorateProvider(): GridItemDecorateProvider {

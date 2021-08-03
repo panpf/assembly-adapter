@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyRecyclerItemDecoration
+import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -59,7 +59,7 @@ class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
-                AssemblyStickyRecyclerItemDecoration(
+                AssemblyStickyItemDecoration(
                     binding.recyclerStickyContainer, ListSeparatorItemFactory::class
                 )
             )

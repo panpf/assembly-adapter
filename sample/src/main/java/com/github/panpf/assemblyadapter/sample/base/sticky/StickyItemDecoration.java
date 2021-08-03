@@ -33,15 +33,13 @@ import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper;
 
 import kotlin.Pair;
 
-public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
+public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final String TAG = "StickyItemDecoration";
     public static boolean DEBUG = false;
 
     @NonNull
     private final ViewGroup stickyItemContainer;
-    @NonNull
-    private final Callback callback;
     @NonNull
     private final SparseArray<RecyclerView.ViewHolder> viewHolderArray = new SparseArray<>();
     private boolean disabledScrollStickyHeader;
@@ -54,28 +52,17 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
     @NonNull
     private final ConcatAdapterLocalHelper concatAdapterLocalHelper = new ConcatAdapterLocalHelper();
 
-    public StickyRecyclerItemDecoration(@NonNull ViewGroup stickyItemContainer, @NonNull Callback callback) {
+    public StickyItemDecoration(@NonNull ViewGroup stickyItemContainer) {
         this.stickyItemContainer = stickyItemContainer;
-        this.callback = callback;
-    }
-
-    public StickyRecyclerItemDecoration(@NonNull ViewGroup stickyItemContainer) {
-        this(stickyItemContainer, (adapter, position) -> {
-            if (adapter instanceof StickyRecyclerAdapter) {
-                return ((StickyRecyclerAdapter) adapter).isStickyItemByPosition(position);
-            } else {
-                return false;
-            }
-        });
     }
 
     /**
      * 禁止滑动过程中下一个 sticky header 往上顶当前 sticky header 的效果
      *
      * @param disabledScrollStickyHeader 禁止
-     * @return StickyRecyclerItemDecoration
+     * @return StickyItemDecoration
      */
-    public StickyRecyclerItemDecoration setDisabledScrollStickyHeader(boolean disabledScrollStickyHeader) {
+    public StickyItemDecoration setDisabledScrollStickyHeader(boolean disabledScrollStickyHeader) {
         this.disabledScrollStickyHeader = disabledScrollStickyHeader;
         return this;
     }
@@ -84,9 +71,9 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
      * 开启滑动过程中 sticky header 显示时隐藏列表中的 sticky item
      *
      * @param invisibleStickyItemInList 开启
-     * @return StickyRecyclerItemDecoration
+     * @return StickyItemDecoration
      */
-    public StickyRecyclerItemDecoration setInvisibleStickyItemInList(boolean invisibleStickyItemInList) {
+    public StickyItemDecoration setInvisibleStickyItemInList(boolean invisibleStickyItemInList) {
         this.invisibleStickyItemInList = invisibleStickyItemInList;
         return this;
     }
@@ -206,7 +193,7 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
     private int findStickyItemPositionToBack(int formPosition) {
         if (adapter != null && formPosition >= 0) {
             for (int position = formPosition; position >= 0; position--) {
-                if (isStickyItemByType(adapter, position)) {
+                if (isStickyItemByPosition(adapter, position)) {
                     return position;
                 }
             }
@@ -222,7 +209,7 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
             int lastVisibleItemPosition = findLastVisibleItemPosition(recyclerView);
             if (lastVisibleItemPosition >= 0) {
                 for (int position = formPosition; position <= lastVisibleItemPosition; position++) {
-                    if (isStickyItemByType(adapter, position)) {
+                    if (isStickyItemByPosition(adapter, position)) {
                         return position;
                     }
                 }
@@ -285,16 +272,23 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
      * 根据位置获取其类型
      */
     private int getItemTypeByPosition(int position) {
-//        return adapter instanceof StickyRecyclerAdapter && position >= 0 && position < adapter.getItemCount() ? adapter.getItemViewType(position) : -1;
         return adapter != null ? adapter.getItemViewType(position) : -1;
     }
 
     /**
      * 根据类型判断是否是悬停 item
      */
-    private boolean isStickyItemByType(@NonNull RecyclerView.Adapter<?> adapter, int position) {
+    public final boolean isStickyItemByPosition(@NonNull RecyclerView.Adapter<?> adapter, int position) {
         Pair<RecyclerView.Adapter<?>, Integer> localPair = concatAdapterLocalHelper.findLocalAdapterAndPosition(adapter, position);
-        return callback.isStickyByPosition(localPair.getFirst(), localPair.getSecond());
+        return isStickyItemByPositionReal(localPair.getFirst(), localPair.getSecond());
+    }
+
+    protected boolean isStickyItemByPositionReal(@NonNull RecyclerView.Adapter<?> adapter, int position) {
+        if (adapter instanceof StickyAdapter) {
+            return ((StickyAdapter) adapter).isStickyItemByPosition(position);
+        } else {
+            return false;
+        }
     }
 
     private boolean checkAdapter(@NonNull RecyclerView parent) {
@@ -354,11 +348,7 @@ public class StickyRecyclerItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    public interface StickyRecyclerAdapter {
+    public interface StickyAdapter {
         boolean isStickyItemByPosition(int position);
-    }
-
-    public interface Callback {
-        boolean isStickyByPosition(@NonNull RecyclerView.Adapter<?> adapter, int position);
     }
 }

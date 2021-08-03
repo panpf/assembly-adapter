@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProviderImpl
 
-open class RecyclerLinearDividerItemDecoration(
+open class LinearDividerItemDecoration(
     private val linearItemDecorateProvider: LinearItemDecorateProvider,
 ) : ItemDecoration() {
 
@@ -205,8 +205,8 @@ open class RecyclerLinearDividerItemDecoration(
         private var showFirstDivider = false
         private var showLastDivider = false
 
-        open fun build(): RecyclerLinearDividerItemDecoration {
-            return RecyclerLinearDividerItemDecoration(buildItemDecorateProvider())
+        open fun build(): LinearDividerItemDecoration {
+            return LinearDividerItemDecoration(buildItemDecorateProvider())
         }
 
         protected open fun buildItemDecorateProvider(): LinearItemDecorateProvider {

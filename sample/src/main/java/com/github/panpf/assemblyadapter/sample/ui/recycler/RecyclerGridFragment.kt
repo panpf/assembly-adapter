@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.github.panpf.assemblyadapter.recycler.*
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyRecyclerItemDecoration
+import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -65,12 +65,12 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                 )
             )
             addItemDecoration(
-                AssemblyStickyRecyclerItemDecoration(
+                AssemblyStickyItemDecoration(
                     binding.recyclerStickyContainer, ListSeparatorItemFactory::class
                 )
             )
             addItemDecoration(
-                AssemblyRecyclerGridDividerItemDecoration.Builder(requireContext()).apply {
+                AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
                     divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
                     side(Decorate.space(20.dp2px)).showFirstAndLastSide()
                     disableFirstAndLastDivider(AppsOverviewItemFactory::class)

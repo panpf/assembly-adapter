@@ -20,16 +20,16 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
-import com.github.panpf.assemblyadapter.recycler.divider.RecyclerGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.GridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecorateProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import kotlin.reflect.KClass
 
-open class AssemblyRecyclerGridDividerItemDecoration(
+open class AssemblyGridDividerItemDecoration(
     itemDecorateProvider: AssemblyGridItemDecorateProvider
-) : RecyclerGridDividerItemDecoration(itemDecorateProvider) {
+) : GridDividerItemDecoration(itemDecorateProvider) {
 
-    class Builder(context: Context) : RecyclerGridDividerItemDecoration.Builder(context) {
+    class Builder(context: Context) : GridDividerItemDecoration.Builder(context) {
 
         private var personaliseDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
         private var personaliseFirstDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? =
@@ -50,8 +50,8 @@ open class AssemblyRecyclerGridDividerItemDecoration(
         private var findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)? =
             null
 
-        override fun build(): AssemblyRecyclerGridDividerItemDecoration {
-            return AssemblyRecyclerGridDividerItemDecoration(buildItemDecorateProvider())
+        override fun build(): AssemblyGridDividerItemDecoration {
+            return AssemblyGridDividerItemDecoration(buildItemDecorateProvider())
         }
 
         override fun buildItemDecorateProvider(): AssemblyGridItemDecorateProvider {

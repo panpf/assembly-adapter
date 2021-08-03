@@ -23,7 +23,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerLinearDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.AssemblyLinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
@@ -64,7 +64,7 @@ class RecyclerLinearDividerVerFragment :
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
-                AssemblyRecyclerLinearDividerItemDecoration.Builder(requireContext()).apply {
+                AssemblyLinearDividerItemDecoration.Builder(requireContext()).apply {
                     divider(
                         Decorate.color(
                             0x33FF0000,
