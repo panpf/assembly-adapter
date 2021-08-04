@@ -34,6 +34,7 @@ open class LinearItemDecorateProviderImpl(
         verticalOrientation: Boolean,
         decorateType: ItemDecorate.Type,
     ): ItemDecorate? {
+        if (itemCount == 0) return null
         val isFirst = position == 0
         val isLast = position == itemCount - 1
         return if (verticalOrientation) {

@@ -89,7 +89,8 @@ open class GridDividerItemDecoration(
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
         }
         val childCount = parent.childCount
-        val itemCount = (parent.adapter?.itemCount ?: 0).takeIf { it != 0 } ?: return
+        val itemCount = parent.adapter?.itemCount ?: 0
+        if (childCount == 0 || itemCount == 0) return
         val spanCount = layoutManager.spanCount
         val spanGroupCount =
             layoutManager.spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1

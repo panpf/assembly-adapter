@@ -211,6 +211,7 @@ open class AssemblyLinearDividerItemDecoration(
             verticalOrientation: Boolean,
             decorateType: ItemDecorate.Type
         ): ItemDecorate? {
+            if (itemCount == 0) return null
             val isLast = position == itemCount - 1
             val adapter = parent.adapter ?: return null
             val itemFactoryClass = findItemFactoryClassByPosition(adapter, position)

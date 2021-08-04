@@ -323,6 +323,7 @@ open class AssemblyGridDividerItemDecoration(
             verticalOrientation: Boolean,
             decorateType: ItemDecorate.Type,
         ): ItemDecorate? {
+            if (itemCount == 0) return null
             val isFirstGroup = spanGroupIndex == 0
             val isLastGroup = spanGroupIndex == spanGroupCount - 1
             val isFullSpan = spanSize == spanCount

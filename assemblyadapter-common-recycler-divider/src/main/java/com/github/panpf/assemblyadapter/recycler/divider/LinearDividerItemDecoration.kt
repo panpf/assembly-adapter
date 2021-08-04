@@ -65,18 +65,21 @@ open class LinearDividerItemDecoration(
         val layoutManager =
             (parent.layoutManager?.takeIf { it is LinearLayoutManager } as LinearLayoutManager?)
                 ?: return
+        val childCount: Int = parent.childCount
+        val itemCount = parent.adapter?.itemCount ?: 0
+        if (childCount == 0 || itemCount == 0) return
         if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
-            drawVerticalDivider(canvas, parent)
+            drawVerticalDivider(canvas, parent, childCount, itemCount)
         } else {
-            drawHorizontalDivider(canvas, parent)
+            drawHorizontalDivider(canvas, parent, childCount, itemCount)
         }
     }
 
-    private fun drawVerticalDivider(canvas: Canvas, parent: RecyclerView) {
+    private fun drawVerticalDivider(
+        canvas: Canvas, parent: RecyclerView, childCount: Int, itemCount: Int
+    ) {
         val parentLeft = parent.paddingLeft
         val parentRight = parent.width - parent.paddingRight
-        val childCount = parent.childCount
-        val itemCount = parent.adapter?.itemCount ?: 0
         for (index in 0 until childCount) {
             val childView = parent.getChildAt(index)
             val position = (childView.layoutParams as RecyclerView.LayoutParams).viewPosition
@@ -133,11 +136,11 @@ open class LinearDividerItemDecoration(
         }
     }
 
-    private fun drawHorizontalDivider(canvas: Canvas, parent: RecyclerView) {
+    private fun drawHorizontalDivider(
+        canvas: Canvas, parent: RecyclerView, childCount: Int, itemCount: Int
+    ) {
         val parentTop: Int = parent.paddingTop
         val parentBottom: Int = parent.height - parent.paddingBottom
-        val childCount: Int = parent.childCount
-        val itemCount = parent.adapter?.itemCount ?: 0
         for (index in 0 until childCount) {
             val childView = parent.getChildAt(index)
             val position = (childView.layoutParams as RecyclerView.LayoutParams).viewPosition
