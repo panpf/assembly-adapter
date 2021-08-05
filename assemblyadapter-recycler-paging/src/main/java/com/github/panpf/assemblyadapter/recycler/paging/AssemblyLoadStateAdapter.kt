@@ -53,7 +53,7 @@ open class AssemblyLoadStateAdapter(
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
-            item.dispatchBindData(0, holder.position, loadState)
+            item.dispatchBindData(0, holder.absoluteAdapterPosition, loadState)
         } else {
             throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }

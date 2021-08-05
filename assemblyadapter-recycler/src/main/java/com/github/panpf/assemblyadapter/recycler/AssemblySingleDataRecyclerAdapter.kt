@@ -67,7 +67,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
-            item.dispatchBindData(position, holder.position, data!!)
+            item.dispatchBindData(position, holder.absoluteAdapterPosition, data!!)
         } else {
             throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }

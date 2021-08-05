@@ -102,7 +102,7 @@ open class AssemblyRecyclerListAdapter<DATA>
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
             val data = getItem(position) ?: Placeholder
-            item.dispatchBindData(position, holder.position, data)
+            item.dispatchBindData(position, holder.absoluteAdapterPosition, data)
         } else {
             throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }
