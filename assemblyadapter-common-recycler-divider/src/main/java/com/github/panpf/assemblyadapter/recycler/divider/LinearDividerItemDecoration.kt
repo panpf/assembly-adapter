@@ -35,8 +35,8 @@ open class LinearDividerItemDecoration(
     ) {
         val layoutManager = (parent.layoutManager?.takeIf { it is LinearLayoutManager }
             ?: IllegalArgumentException("layoutManager must be LinearLayoutManager")) as LinearLayoutManager
-        val position =
-            (view.layoutParams as RecyclerView.LayoutParams).viewPosition
+        val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
+        val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
         val itemCount = parent.adapter?.itemCount ?: 0
         val verticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
 
@@ -82,7 +82,8 @@ open class LinearDividerItemDecoration(
         val parentRight = parent.width - parent.paddingRight
         for (index in 0 until childCount) {
             val childView = parent.getChildAt(index)
-            val position = (childView.layoutParams as RecyclerView.LayoutParams).viewPosition
+            val childLayoutParams = childView.layoutParams as RecyclerView.LayoutParams
+            val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
 
             val startItemDecorate = linearItemDecorateProvider.getItemDecorate(
                 childView, parent, itemCount, position, true, ItemDecorate.Type.START
@@ -143,7 +144,8 @@ open class LinearDividerItemDecoration(
         val parentBottom: Int = parent.height - parent.paddingBottom
         for (index in 0 until childCount) {
             val childView = parent.getChildAt(index)
-            val position = (childView.layoutParams as RecyclerView.LayoutParams).viewPosition
+            val childLayoutParams = childView.layoutParams as RecyclerView.LayoutParams
+            val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
 
             val startItemDecorate = linearItemDecorateProvider.getItemDecorate(
                 childView, parent, itemCount, position, false, ItemDecorate.Type.START
