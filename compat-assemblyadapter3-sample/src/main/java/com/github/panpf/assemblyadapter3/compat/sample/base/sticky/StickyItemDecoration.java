@@ -82,7 +82,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     public void onDraw(@NonNull Canvas c, @NonNull final RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDraw(c, parent, state);
 
-        if (!checkAdapter(parent) || adapter == null) {
+        if (!checkAdapter(parent) || adapter == null || adapter.getItemCount() == 0) {
             return;
         }
 
