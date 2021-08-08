@@ -20,7 +20,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
-import com.github.panpf.assemblyadapter.sample.utils.PinyinFlatAppsHelper
+import com.github.panpf.assemblyadapter.sample.util.PinyinFlatAppsHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

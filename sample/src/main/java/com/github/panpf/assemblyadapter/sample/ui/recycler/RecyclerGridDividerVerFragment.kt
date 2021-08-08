@@ -48,7 +48,7 @@ class RecyclerGridDividerVerFragment :
         savedInstanceState: Bundle?
     ) {
         val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
                 AppGridItemFactory(requireActivity()),

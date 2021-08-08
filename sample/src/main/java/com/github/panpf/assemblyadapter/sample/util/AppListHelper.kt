@@ -13,45 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.sample.utils
+package com.github.panpf.assemblyadapter.sample.util
 
 import android.content.Context
 import android.content.pm.PackageManager
-import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import java.util.*
 
-class PinyinGroupAppsHelper(private val context: Context) {
+class AppListHelper(private val context: Context) {
 
-    // Contains the following class types: AppGroup
-    private val pinyinFlatAppList = loadInstalledAppList()
+    // Contains the following class types: PinyinGroup、AppInfo
+    private val appList = loadInstalledAppList()
 
-    private fun loadInstalledAppList(): List<AppGroup> {
+    private fun loadInstalledAppList(): List<AppInfo> {
         val packageInfoList =
             context.packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
-        val appPackageList = packageInfoList.mapNotNull { packageInfo ->
+        return packageInfoList.mapNotNull { packageInfo ->
             context.packageManager.getLaunchIntentForPackage(packageInfo.packageName)
                 ?: return@mapNotNull null
             AppInfo.fromPackageInfo(context, packageInfo)!!
         }.sortedBy { it.namePinyinLowerCase }
-
-        return appPackageList
-            .groupBy { it.namePinyinLowerCase.first().uppercase() }
-            .map { it -> AppGroup(it.key, it.value.sortedBy { it.namePinyinLowerCase }) }
-            .sortedBy { it.title }
     }
 
-    val count = pinyinFlatAppList.size
+    val count = appList.size
 
-    /**
-     * Contains the following class types: AppGroup
-     */
-    fun getRange(fromIndex: Int, toIndexExclusive: Int): List<AppGroup> {
-        return pinyinFlatAppList.subList(fromIndex, toIndexExclusive)
+    fun getRange(fromIndex: Int, toIndexExclusive: Int): List<AppInfo> {
+        return appList.subList(fromIndex, toIndexExclusive)
     }
 
-    /**
-     * Contains the following class types: AppGroup
-     */
-    fun getAll() = pinyinFlatAppList
+    fun getAll(): List<AppInfo> = appList
 }

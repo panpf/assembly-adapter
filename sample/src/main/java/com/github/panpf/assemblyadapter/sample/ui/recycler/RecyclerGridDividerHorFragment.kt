@@ -47,10 +47,7 @@ class RecyclerGridDividerHorFragment :
     ) {
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(
-                AppsOverviewHorizontalItemFactory(
-                    requireActivity(),
-                    true
-                )
+                AppsOverviewHorizontalItemFactory(requireActivity())
             )
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(

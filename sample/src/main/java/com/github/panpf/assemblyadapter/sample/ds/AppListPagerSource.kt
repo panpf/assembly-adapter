@@ -19,7 +19,7 @@ import android.content.Context
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
-import com.github.panpf.assemblyadapter.sample.utils.AppListHelper
+import com.github.panpf.assemblyadapter.sample.util.AppListHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

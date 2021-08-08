@@ -18,7 +18,7 @@ package com.github.panpf.assemblyadapter.sample.ds
 import android.content.Context
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.github.panpf.assemblyadapter.sample.utils.PinyinGroupAppsHelper
+import com.github.panpf.assemblyadapter.sample.util.PinyinGroupAppsHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
