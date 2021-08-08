@@ -15,11 +15,12 @@
  */
 package com.github.panpf.assemblyadapter.recycler.divider.internal
 
+import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.annotation.Px
 
 data class ItemDecorate(
-    val drawable: Drawable,
+    private val drawable: Drawable,
     @Px private val size: Int,
     @Px val insetStart: Int,
     @Px val insetTop: Int,
@@ -43,6 +44,11 @@ data class ItemDecorate(
 
     @Px
     val heightSize: Int = drawableHeightSize + insetHeightSize
+
+    fun draw(canvas: Canvas, left: Int, top: Int, right: Int, bottom: Int) {
+        drawable.setBounds(left, top, right, bottom)
+        drawable.draw(canvas)
+    }
 
     enum class Type {
         START, TOP, END, BOTTOM

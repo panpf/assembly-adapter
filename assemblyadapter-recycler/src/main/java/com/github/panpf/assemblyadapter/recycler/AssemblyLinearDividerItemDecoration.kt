@@ -25,6 +25,10 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProvider
 import kotlin.reflect.KClass
 
+fun RecyclerView.assemblyLinearDividerItemDecorationBuilder(): AssemblyLinearDividerItemDecoration.Builder {
+    return AssemblyLinearDividerItemDecoration.Builder(context)
+}
+
 open class AssemblyLinearDividerItemDecoration(
     itemDecorateProvider: AssemblyLinearItemDecorateProvider
 ) : LinearDividerItemDecoration(itemDecorateProvider) {

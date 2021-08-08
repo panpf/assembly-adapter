@@ -21,7 +21,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblyGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.assemblyGridDividerItemDecorationBuilder
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
@@ -57,7 +57,7 @@ class AppGroupFragment : BaseBindingFragment<FragmentAppGroupBinding>() {
             )
             layoutManager = GridLayoutManager(context, 3)
             addItemDecoration(
-                AssemblyGridDividerItemDecoration.Builder(requireContext())
+                assemblyGridDividerItemDecorationBuilder()
                     .divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
                     .side(Decorate.space(20.dp2px)).showFirstAndLastSide()
                     .build()

@@ -65,19 +65,18 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                 )
             )
             addItemDecoration(
-                AssemblyStickyItemDecoration(
-                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
-                )
-            )
-            addItemDecoration(
-                AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
-                    divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
+                assemblyGridDividerItemDecorationBuilder().apply {
+                    divider(Decorate.space(20.dp2px)).showLastDivider()
                     side(Decorate.space(20.dp2px)).showFirstAndLastSide()
-                    disableFirstAndLastDivider(AppsOverviewItemFactory::class)
                     disableDivider(AppsOverviewItemFactory::class)
                     disableFirstAndLastSide(AppsOverviewItemFactory::class)
                     disableFirstAndLastSide(ListSeparatorItemFactory::class)
                 }.build()
+            )
+            addItemDecoration(
+                AssemblyStickyItemDecoration(
+                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
+                )
             )
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
