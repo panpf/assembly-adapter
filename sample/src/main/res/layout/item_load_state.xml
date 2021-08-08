@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 在 StaggeredLayoutManager 中使用时 root Layout 不能使用绝对尺寸 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/loadStateItemLoadingLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:gravity="center"
         android:padding="16dp">
 
@@ -26,7 +27,7 @@
     <TextView
         android:id="@+id/loadStateItemErrorText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/load_error" />
@@ -34,7 +35,7 @@
     <TextView
         android:id="@+id/loadStateItemEndText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/load_end" />

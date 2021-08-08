@@ -22,12 +22,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
-import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.assemblyStaggeredGridDividerItemDecorationBuilder
+import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
+import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -50,11 +52,11 @@ class RecyclerStaggeredGridPagingFragment : BaseBindingFragment<FragmentRecycler
 
     override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
         val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity(), true))
+            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val pagingDataAdapter = AssemblyPagingDataAdapter<Any>(
             listOf(
                 AppCardGridItemFactory(requireActivity()),
-                ListSeparatorItemFactory(requireActivity(), true)
+                ListSeparatorItemFactory(requireActivity())
             )
         )
         binding.recyclerRecycler.apply {
@@ -70,7 +72,20 @@ class RecyclerStaggeredGridPagingFragment : BaseBindingFragment<FragmentRecycler
                     LoadStateItemFactory::class
                 )
             )
-            addItemDecoration(context.staggeredDividerBuilder().asSpace().size(20.dp2px).build())
+            addItemDecoration(
+                assemblyStaggeredGridDividerItemDecorationBuilder().apply {
+                    divider(Decorate.space(20.dp2px)).showLastDivider()
+                    side(Decorate.space(20.dp2px)).showFirstAndLastSide()
+                    disableDivider(AppsOverviewItemFactory::class)
+                    disableFirstAndLastSide(AppsOverviewItemFactory::class)
+                    disableFirstAndLastSide(ListSeparatorItemFactory::class)
+                }.build()
+            )
+            addItemDecoration(
+                AssemblyStickyItemDecoration(
+                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
+                )
+            )
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
