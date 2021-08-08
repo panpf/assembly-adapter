@@ -29,7 +29,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemAppBinding
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
-class AppItemFactory(private val activity: Activity) :
+class AppItemFactory(private val activity: Activity, private val showBg: Boolean = false) :
     BindingItemFactory<AppInfo, ItemAppBinding>(AppInfo::class) {
 
     override fun createItemViewBinding(
@@ -41,6 +41,10 @@ class AppItemFactory(private val activity: Activity) :
     override fun initItem(
         context: Context, binding: ItemAppBinding, item: BindingItem<AppInfo, ItemAppBinding>
     ) {
+        if (!showBg) {
+            binding.root.setBackgroundDrawable(null)
+        }
+
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val launchIntent =

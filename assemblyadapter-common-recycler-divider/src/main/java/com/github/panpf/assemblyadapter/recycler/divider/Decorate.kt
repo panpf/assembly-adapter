@@ -32,48 +32,33 @@ interface Decorate {
         fun drawable(
             drawable: Drawable,
             @Px size: Int = -1,
-            @Px insetStart: Int = 0,
-            @Px insetTop: Int = 0,
-            @Px insetEnd: Int = 0,
-            @Px insetBottom: Int = 0,
-        ): Decorate = DrawableDecorate(drawable, size, insetStart, insetTop, insetEnd, insetBottom)
+            insets: Insets? = null,
+        ): Decorate = DrawableDecorate(drawable, size, insets)
 
         fun drawableRes(
             @DrawableRes drawableResId: Int,
             @Px size: Int = -1,
-            @Px insetStart: Int = 0,
-            @Px insetTop: Int = 0,
-            @Px insetEnd: Int = 0,
-            @Px insetBottom: Int = 0,
+            insets: Insets? = null,
         ): Decorate =
-            DrawableResDecorate(drawableResId, size, insetStart, insetTop, insetEnd, insetBottom)
+            DrawableResDecorate(drawableResId, size, insets)
 
         fun color(
             @ColorInt color: Int,
-            @Px size: Int = -1,
-            @Px insetStart: Int = 0,
-            @Px insetTop: Int = 0,
-            @Px insetEnd: Int = 0,
-            @Px insetBottom: Int = 0,
-        ): Decorate = ColorDecorate(color, size, insetStart, insetTop, insetEnd, insetBottom)
+            @Px size: Int,
+            insets: Insets? = null,
+        ): Decorate = ColorDecorate(color, size, insets)
 
         fun colorRes(
             @ColorRes colorResId: Int,
-            @Px size: Int = -1,
-            @Px insetStart: Int = 0,
-            @Px insetTop: Int = 0,
-            @Px insetEnd: Int = 0,
-            @Px insetBottom: Int = 0,
+            @Px size: Int,
+            insets: Insets? = null,
         ): Decorate =
-            ColorResDecorate(colorResId, size, insetStart, insetTop, insetEnd, insetBottom)
+            ColorResDecorate(colorResId, size, insets)
 
         fun space(
-            @Px size: Int = -1,
-            @Px insetStart: Int = 0,
-            @Px insetTop: Int = 0,
-            @Px insetEnd: Int = 0,
-            @Px insetBottom: Int = 0,
-        ): Decorate = SpaceDecorate(size, insetStart, insetTop, insetEnd, insetBottom)
+            @Px size: Int,
+            insets: Insets? = null,
+        ): Decorate = SpaceDecorate(size, insets)
     }
 
     fun createItemDecorate(context: Context): ItemDecorate
@@ -81,78 +66,91 @@ interface Decorate {
 
 internal class DrawableDecorate(
     private val drawable: Drawable,
-    @Px private val size: Int = -1,
-    @Px private val insetStart: Int = 0,
-    @Px private val insetTop: Int = 0,
-    @Px private val insetEnd: Int = 0,
-    @Px private val insetBottom: Int = 0,
+    @Px private val size: Int,
+    private val insets: Insets?,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(drawable, size, insetStart, insetTop, insetEnd, insetBottom)
+        return ItemDecorate(
+            drawable,
+            size,
+            insets?.start ?: 0,
+            insets?.top ?: 0,
+            insets?.end ?: 0,
+            insets?.bottom ?: 0
+        )
     }
 }
 
 internal class DrawableResDecorate(
     @DrawableRes private val drawableResId: Int,
-    @Px private val size: Int = -1,
-    @Px private val insetStart: Int = 0,
-    @Px private val insetTop: Int = 0,
-    @Px private val insetEnd: Int = 0,
-    @Px private val insetBottom: Int = 0,
+    @Px private val size: Int,
+    private val insets: Insets?,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
         val drawable = ResourcesCompat.getDrawable(context.resources, drawableResId, null)!!
-        return ItemDecorate(drawable, size, insetStart, insetTop, insetEnd, insetBottom)
+        return ItemDecorate(
+            drawable,
+            size,
+            insets?.start ?: 0,
+            insets?.top ?: 0,
+            insets?.end ?: 0,
+            insets?.bottom ?: 0
+        )
     }
 }
 
 internal class ColorDecorate(
     @ColorInt private val color: Int,
     @Px private val size: Int,
-    @Px private val insetStart: Int = 0,
-    @Px private val insetTop: Int = 0,
-    @Px private val insetEnd: Int = 0,
-    @Px private val insetBottom: Int = 0,
+    private val insets: Insets?,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(ColorDrawable(color), size, insetStart, insetTop, insetEnd, insetBottom)
+        return ItemDecorate(
+            ColorDrawable(color),
+            size,
+            insets?.start ?: 0,
+            insets?.top ?: 0,
+            insets?.end ?: 0,
+            insets?.bottom ?: 0
+        )
     }
 }
 
 internal class ColorResDecorate(
     @ColorRes private val colorResId: Int,
     @Px private val size: Int,
-    @Px private val insetStart: Int = 0,
-    @Px private val insetTop: Int = 0,
-    @Px private val insetEnd: Int = 0,
-    @Px private val insetBottom: Int = 0,
+    private val insets: Insets?,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
         val color = ResourcesCompat.getColor(context.resources, colorResId, null)
-        return ItemDecorate(ColorDrawable(color), size, insetStart, insetTop, insetEnd, insetBottom)
+        return ItemDecorate(
+            ColorDrawable(color),
+            size,
+            insets?.start ?: 0,
+            insets?.top ?: 0,
+            insets?.end ?: 0,
+            insets?.bottom ?: 0
+        )
     }
 }
 
 internal class SpaceDecorate(
     @Px private val size: Int,
-    @Px private val insetStart: Int = 0,
-    @Px private val insetTop: Int = 0,
-    @Px private val insetEnd: Int = 0,
-    @Px private val insetBottom: Int = 0,
+    private val insets: Insets?,
 ) : Decorate {
 
     override fun createItemDecorate(context: Context): ItemDecorate {
         return ItemDecorate(
             ColorDrawable(Color.TRANSPARENT),
             size,
-            insetStart,
-            insetTop,
-            insetEnd,
-            insetBottom
+            insets?.start ?: 0,
+            insets?.top ?: 0,
+            insets?.end ?: 0,
+            insets?.bottom ?: 0
         )
     }
 }

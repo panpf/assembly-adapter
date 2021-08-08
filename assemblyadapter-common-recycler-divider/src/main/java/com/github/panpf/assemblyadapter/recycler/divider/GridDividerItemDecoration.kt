@@ -35,6 +35,7 @@ open class GridDividerItemDecoration(
     ) {
         val layoutManager = (parent.layoutManager?.takeIf { it is GridLayoutManager }
             ?: IllegalArgumentException("layoutManager must be GridLayoutManager")) as GridLayoutManager
+        val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val spanSizeLookup = layoutManager.spanSizeLookup
         if (!spanSizeLookup.isSpanIndexCacheEnabled) {
             spanSizeLookup.isSpanIndexCacheEnabled = true
@@ -45,7 +46,6 @@ open class GridDividerItemDecoration(
         val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
         val itemCount = parent.adapter?.itemCount ?: 0
-        val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val spanCount = layoutManager.spanCount
         val spanSize = spanSizeLookup.getSpanSize(position)
         val spanIndex = spanSizeLookup.getSpanIndex(position, spanCount)
@@ -70,10 +70,10 @@ open class GridDividerItemDecoration(
         )
 
         outRect.set(
-            startItemDecorate?.run { widthSize + insetWidthSize } ?: 0,
-            topItemDecorate?.run { heightSize + insetHeightSize } ?: 0,
-            endItemDecorate?.run { widthSize + insetWidthSize } ?: 0,
-            bottomItemDecorate?.run { heightSize + insetHeightSize } ?: 0
+            startItemDecorate?.widthSize ?: 0,
+            topItemDecorate?.heightSize ?: 0,
+            endItemDecorate?.widthSize ?: 0,
+            bottomItemDecorate?.heightSize ?: 0
         )
     }
 
@@ -81,6 +81,7 @@ open class GridDividerItemDecoration(
         val layoutManager =
             (parent.layoutManager?.takeIf { it is GridLayoutManager } as GridLayoutManager?)
                 ?: return
+        val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val spanSizeLookup = layoutManager.spanSizeLookup
         if (!spanSizeLookup.isSpanIndexCacheEnabled) {
             spanSizeLookup.isSpanIndexCacheEnabled = true
@@ -94,26 +95,7 @@ open class GridDividerItemDecoration(
         val spanCount = layoutManager.spanCount
         val spanGroupCount =
             layoutManager.spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
-        if (layoutManager.orientation == GridLayoutManager.VERTICAL) {
-            drawVerticalDivider(
-                canvas, parent, spanSizeLookup, childCount, itemCount, spanCount, spanGroupCount
-            )
-        } else {
-            drawHorizontalDivider(
-                canvas, parent, spanSizeLookup, childCount, itemCount, spanCount, spanGroupCount
-            )
-        }
-    }
 
-    private fun drawVerticalDivider(
-        canvas: Canvas,
-        parent: RecyclerView,
-        spanSizeLookup: GridLayoutManager.SpanSizeLookup,
-        childCount: Int,
-        itemCount: Int,
-        spanCount: Int,
-        spanGroupCount: Int,
-    ) {
         for (index in 0 until childCount) {
             val childView = parent.getChildAt(index)
             val childLayoutParams = childView.layoutParams as RecyclerView.LayoutParams
@@ -124,169 +106,101 @@ open class GridDividerItemDecoration(
 
             val startItemDecorate = gridItemDecorateProvider.getItemDecorate(
                 childView, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                spanGroupCount, spanGroupIndex, true, ItemDecorate.Type.START
+                spanGroupCount, spanGroupIndex, verticalOrientation, ItemDecorate.Type.START
             )
             val topItemDecorate = gridItemDecorateProvider.getItemDecorate(
                 childView, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                spanGroupCount, spanGroupIndex, true, ItemDecorate.Type.TOP
+                spanGroupCount, spanGroupIndex, verticalOrientation, ItemDecorate.Type.TOP
             )
             val endItemDecorate = gridItemDecorateProvider.getItemDecorate(
                 childView, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                spanGroupCount, spanGroupIndex, true, ItemDecorate.Type.END
+                spanGroupCount, spanGroupIndex, verticalOrientation, ItemDecorate.Type.END
             )
             val bottomItemDecorate = gridItemDecorateProvider.getItemDecorate(
                 childView, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                spanGroupCount, spanGroupIndex, true, ItemDecorate.Type.BOTTOM
+                spanGroupCount, spanGroupIndex, verticalOrientation, ItemDecorate.Type.BOTTOM
             )
 
-            startItemDecorate?.apply {
-                drawable.setBounds(
-                    childView.left - insetEnd - widthSize,
-                    childView.top + insetTop,
-                    childView.left - insetEnd,
-                    childView.bottom - insetBottom
-                )
-                drawable.draw(canvas)
-            }
-            topItemDecorate?.apply {
-                val haveInset = insetStart > 0 || insetEnd > 0
-                if (haveInset) {
+            if (verticalOrientation) {
+                val topItemDecorateSize = topItemDecorate?.heightSize ?: 0
+                val bottomItemDecorateSize = bottomItemDecorate?.heightSize ?: 0
+
+                startItemDecorate?.apply {
+                    drawable.setBounds(
+                        childView.left - insetEnd - drawableWidthSize,
+                        childView.top - topItemDecorateSize + insetTop,
+                        childView.left - insetEnd,
+                        childView.bottom + bottomItemDecorateSize - insetBottom
+                    )
+                    drawable.draw(canvas)
+                }
+                topItemDecorate?.apply {
                     drawable.setBounds(
                         childView.left + insetStart,
-                        childView.top - insetBottom - heightSize,
+                        childView.top - insetBottom - drawableHeightSize,
                         childView.right - insetEnd,
                         childView.top - insetBottom
                     )
-                } else {
-                    drawable.setBounds(
-                        childView.left - (startItemDecorate?.widthSize ?: 0),
-                        childView.top - insetBottom - heightSize,
-                        childView.right + (endItemDecorate?.widthSize ?: 0),
-                        childView.top - insetBottom
-                    )
+                    drawable.draw(canvas)
                 }
-                drawable.draw(canvas)
-            }
-            endItemDecorate?.apply {
-                drawable.setBounds(
-                    childView.right + insetStart,
-                    childView.top + insetTop,
-                    childView.right + insetStart + widthSize,
-                    childView.bottom - insetBottom
-                )
-                drawable.draw(canvas)
-            }
-            bottomItemDecorate?.apply {
-                val haveInset = insetStart > 0 || insetEnd > 0
-                if (haveInset) {
+                endItemDecorate?.apply {
+                    drawable.setBounds(
+                        childView.right + insetStart,
+                        childView.top - topItemDecorateSize + insetTop,
+                        childView.right + insetStart + drawableWidthSize,
+                        childView.bottom + bottomItemDecorateSize - insetBottom
+                    )
+                    drawable.draw(canvas)
+                }
+                bottomItemDecorate?.apply {
                     drawable.setBounds(
                         childView.left + insetStart,
                         childView.bottom + insetTop,
                         childView.right - insetEnd,
-                        childView.bottom + insetTop + heightSize
+                        childView.bottom + insetTop + drawableHeightSize
                     )
-                } else {
+                    drawable.draw(canvas)
+                }
+            } else {
+                val startItemDecorateSize = startItemDecorate?.widthSize ?: 0
+                val endItemDecorateSize = endItemDecorate?.widthSize ?: 0
+
+                startItemDecorate?.apply {
                     drawable.setBounds(
-                        childView.left - (startItemDecorate?.widthSize ?: 0),
+                        childView.left - insetEnd - drawableWidthSize,
+                        childView.top + insetTop,
+                        childView.left - insetEnd,
+                        childView.bottom - insetBottom
+                    )
+                    drawable.draw(canvas)
+                }
+                topItemDecorate?.apply {
+                    drawable.setBounds(
+                        childView.left - startItemDecorateSize + insetStart,
+                        childView.top - insetBottom - drawableHeightSize,
+                        childView.right + endItemDecorateSize - insetEnd,
+                        childView.top - insetBottom
+                    )
+                    drawable.draw(canvas)
+                }
+                endItemDecorate?.apply {
+                    drawable.setBounds(
+                        childView.right + insetStart,
+                        childView.top + insetTop,
+                        childView.right + insetStart + drawableWidthSize,
+                        childView.bottom - insetBottom
+                    )
+                    drawable.draw(canvas)
+                }
+                bottomItemDecorate?.apply {
+                    drawable.setBounds(
+                        childView.left - startItemDecorateSize + insetStart,
                         childView.bottom + insetTop,
-                        childView.right + (endItemDecorate?.widthSize ?: 0),
-                        childView.bottom + insetTop + heightSize
+                        childView.right + endItemDecorateSize - insetEnd,
+                        childView.bottom + insetTop + drawableHeightSize
                     )
+                    drawable.draw(canvas)
                 }
-                drawable.draw(canvas)
-            }
-        }
-    }
-
-    private fun drawHorizontalDivider(
-        canvas: Canvas,
-        parent: RecyclerView,
-        spanSizeLookup: GridLayoutManager.SpanSizeLookup,
-        childCount: Int,
-        itemCount: Int,
-        spanCount: Int,
-        spanGroupCount: Int,
-    ) {
-        for (index in 0 until childCount) {
-            val childView = parent.getChildAt(index)
-            val childLayoutParams = childView.layoutParams as RecyclerView.LayoutParams
-            val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
-            val spanSize = spanSizeLookup.getSpanSize(position)
-            val spanIndex = spanSizeLookup.getSpanIndex(position, spanCount)
-            val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
-
-            val startItemDecorate = gridItemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                spanGroupCount, spanGroupIndex, false, ItemDecorate.Type.START
-            )
-            val topItemDecorate = gridItemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                spanGroupCount, spanGroupIndex, false, ItemDecorate.Type.TOP
-            )
-            val endItemDecorate = gridItemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                spanGroupCount, spanGroupIndex, false, ItemDecorate.Type.END
-            )
-            val bottomItemDecorate = gridItemDecorateProvider.getItemDecorate(
-                childView, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                spanGroupCount, spanGroupIndex, false, ItemDecorate.Type.BOTTOM
-            )
-
-            startItemDecorate?.apply {
-                val haveInset = insetStart > 0 || insetEnd > 0
-                if (haveInset) {
-                    drawable.setBounds(
-                        childView.left - insetEnd - widthSize,
-                        childView.top + insetTop,
-                        childView.left - insetEnd,
-                        childView.bottom - insetBottom
-                    )
-                } else {
-                    drawable.setBounds(
-                        childView.left - insetEnd - widthSize,
-                        childView.top + insetTop - (topItemDecorate?.heightSize ?: 0),
-                        childView.left - insetEnd,
-                        childView.bottom - insetBottom + (bottomItemDecorate?.heightSize ?: 0)
-                    )
-                }
-                drawable.draw(canvas)
-            }
-            topItemDecorate?.apply {
-                drawable.setBounds(
-                    childView.left + insetStart,
-                    childView.top - insetBottom - heightSize,
-                    childView.right - insetEnd,
-                    childView.top - insetBottom
-                )
-                drawable.draw(canvas)
-            }
-            endItemDecorate?.apply {
-                val haveInset = insetStart > 0 || insetEnd > 0
-                if (haveInset) {
-                    drawable.setBounds(
-                        childView.right + insetStart,
-                        childView.top + insetTop,
-                        childView.right + insetStart + widthSize,
-                        childView.bottom - insetBottom
-                    )
-                } else {
-                    drawable.setBounds(
-                        childView.right + insetStart,
-                        childView.top + insetTop - (topItemDecorate?.heightSize ?: 0),
-                        childView.right + insetStart + widthSize,
-                        childView.bottom - insetBottom + (bottomItemDecorate?.heightSize ?: 0)
-                    )
-                }
-                drawable.draw(canvas)
-            }
-            bottomItemDecorate?.apply {
-                drawable.setBounds(
-                    childView.left + insetStart,
-                    childView.bottom + insetTop,
-                    childView.right - insetEnd,
-                    childView.bottom + insetTop + heightSize
-                )
-                drawable.draw(canvas)
             }
         }
     }
@@ -317,7 +231,7 @@ open class GridDividerItemDecoration(
                     array.recycle()
                 }
             }!!.let {
-                ItemDecorate(it, -1, 0, 0)
+                Decorate.drawable(it).createItemDecorate(context)
             }
             return GridItemDecorateProviderImpl(
                 finalDividerItemDecorate,

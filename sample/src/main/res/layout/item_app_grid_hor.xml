@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:background="#336E75A4"
     android:padding="12dp">
 
     <me.panpf.sketch.SketchImageView
