@@ -182,8 +182,8 @@ open class LinearDividerItemDecoration(
         private var dividerItemDecorate: ItemDecorate? = null
         private var firstDividerItemDecorate: ItemDecorate? = null
         private var lastDividerItemDecorate: ItemDecorate? = null
-        private var startSideItemDecorate: ItemDecorate? = null
-        private var endSideItemDecorate: ItemDecorate? = null
+        private var firstSideItemDecorate: ItemDecorate? = null
+        private var lastSideItemDecorate: ItemDecorate? = null
 
         private var showFirstDivider = false
         private var showLastDivider = false
@@ -208,8 +208,8 @@ open class LinearDividerItemDecoration(
                     ?: if (showFirstDivider) finalDividerItemDecorate else null,
                 lastDividerItemDecorate
                     ?: if (showLastDivider) finalDividerItemDecorate else null,
-                startSideItemDecorate,
-                endSideItemDecorate,
+                firstSideItemDecorate,
+                lastSideItemDecorate,
             )
         }
 
@@ -252,19 +252,19 @@ open class LinearDividerItemDecoration(
         }
 
 
-        open fun startSide(decorate: Decorate): Builder {
-            this.startSideItemDecorate = decorate.createItemDecorate(context)
+        open fun firstSide(decorate: Decorate): Builder {
+            this.firstSideItemDecorate = decorate.createItemDecorate(context)
             return this
         }
 
-        open fun endSide(decorate: Decorate): Builder {
-            this.endSideItemDecorate = decorate.createItemDecorate(context)
+        open fun lastSide(decorate: Decorate): Builder {
+            this.lastSideItemDecorate = decorate.createItemDecorate(context)
             return this
         }
 
-        open fun startAndEndSide(decorate: Decorate): Builder {
-            this.startSideItemDecorate = decorate.createItemDecorate(context)
-            this.endSideItemDecorate = decorate.createItemDecorate(context)
+        open fun firstAndLastSide(decorate: Decorate): Builder {
+            this.firstSideItemDecorate = decorate.createItemDecorate(context)
+            this.lastSideItemDecorate = decorate.createItemDecorate(context)
             return this
         }
     }

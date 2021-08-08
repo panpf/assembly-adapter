@@ -118,14 +118,14 @@ class RecyclerLinearDividerVerFragment :
             )
             disableDivider(AppsOverviewItemFactory::class)
 
-            startAndEndSide(
+            firstAndLastSide(
                 Decorate.color(0xFF0000FF.toInt(), size, insets)
             )
-            personaliseStartAndEndSide(
+            personaliseFirstAndLastSide(
                 ListSeparatorItemFactory::class,
                 Decorate.color(0xFF00FF00.toInt(), size, insets)
             )
-            disableStartAndEndSide(AppsOverviewItemFactory::class)
+            disableFirstAndLastSide(AppsOverviewItemFactory::class)
         }.build()
     }
 }

@@ -32,12 +32,12 @@ open class AssemblyLinearDividerItemDecoration(
     class Builder(context: Context) : LinearDividerItemDecoration.Builder(context) {
 
         private var personaliseDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
-        private var personaliseStartSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
-        private var personaliseEndSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
+        private var personaliseFirstSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
+        private var personaliseLastSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
 
         private var disableDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableStartSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableEndSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
+        private var disableFirstSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
+        private var disableLastSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
 
         private var findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)? =
             null
@@ -51,11 +51,11 @@ open class AssemblyLinearDividerItemDecoration(
             return AssemblyLinearItemDecorateProvider(
                 defaultLinearItemDecorateProvider = defaultItemDecorateProvider,
                 personaliseDividerItemDecorateMap = personaliseDividerItemDecorateMap,
-                personaliseStartSideItemDecorateMap = personaliseStartSideItemDecorateMap,
-                personaliseEndSideItemDecorateMap = personaliseEndSideItemDecorateMap,
+                personaliseFirstSideItemDecorateMap = personaliseFirstSideItemDecorateMap,
+                personaliseLastSideItemDecorateMap = personaliseLastSideItemDecorateMap,
                 disableDividerItemDecorateMap = disableDividerItemDecorateMap,
-                disableStartSideItemDecorateMap = disableStartSideItemDecorateMap,
-                disableEndSideItemDecorateMap = disableEndSideItemDecorateMap,
+                disableFirstSideItemDecorateMap = disableFirstSideItemDecorateMap,
+                disableLastSideItemDecorateMap = disableLastSideItemDecorateMap,
                 findItemFactoryClassByPosition = findItemFactoryClassByPosition,
             )
         }
@@ -96,18 +96,18 @@ open class AssemblyLinearDividerItemDecoration(
         }
 
 
-        override fun startSide(decorate: Decorate): Builder {
-            super.startSide(decorate)
+        override fun firstSide(decorate: Decorate): Builder {
+            super.firstSide(decorate)
             return this
         }
 
-        override fun endSide(decorate: Decorate): Builder {
-            super.endSide(decorate)
+        override fun lastSide(decorate: Decorate): Builder {
+            super.lastSide(decorate)
             return this
         }
 
-        override fun startAndEndSide(decorate: Decorate): Builder {
-            super.startAndEndSide(decorate)
+        override fun firstAndLastSide(decorate: Decorate): Builder {
+            super.firstAndLastSide(decorate)
             return this
         }
 
@@ -119,26 +119,26 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
-        fun personaliseStartSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseStartSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseStartSideItemDecorateMap = this
+        fun personaliseFirstSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
+            (personaliseFirstSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+                this@Builder.personaliseFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
 
-        fun personaliseEndSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseEndSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseEndSideItemDecorateMap = this
+        fun personaliseLastSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
+            (personaliseLastSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+                this@Builder.personaliseLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
 
-        fun personaliseStartAndEndSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseStartSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseStartSideItemDecorateMap = this
+        fun personaliseFirstAndLastSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
+            (personaliseFirstSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+                this@Builder.personaliseFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            (personaliseEndSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseEndSideItemDecorateMap = this
+            (personaliseLastSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+                this@Builder.personaliseLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
@@ -151,26 +151,26 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
-        fun disableStartSide(itemFactoryClass: KClass<*>): Builder {
-            (disableStartSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableStartSideItemDecorateMap = this
+        fun disableFirstSide(itemFactoryClass: KClass<*>): Builder {
+            (disableFirstSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+                this@Builder.disableFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
 
-        fun disableEndSide(itemFactoryClass: KClass<*>): Builder {
-            (disableEndSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableEndSideItemDecorateMap = this
+        fun disableLastSide(itemFactoryClass: KClass<*>): Builder {
+            (disableLastSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+                this@Builder.disableLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
 
-        fun disableStartAndEndSide(itemFactoryClass: KClass<*>): Builder {
-            (disableStartSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableStartSideItemDecorateMap = this
+        fun disableFirstAndLastSide(itemFactoryClass: KClass<*>): Builder {
+            (disableFirstSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+                this@Builder.disableFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
-            (disableEndSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableEndSideItemDecorateMap = this
+            (disableLastSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+                this@Builder.disableLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
@@ -185,11 +185,11 @@ open class AssemblyLinearDividerItemDecoration(
     class AssemblyLinearItemDecorateProvider(
         private val defaultLinearItemDecorateProvider: LinearItemDecorateProvider,
         private val personaliseDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseStartSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseEndSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
+        private val personaliseFirstSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
+        private val personaliseLastSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val disableDividerItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableStartSideItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableEndSideItemDecorateMap: Map<Class<*>, Boolean>?,
+        private val disableFirstSideItemDecorateMap: Map<Class<*>, Boolean>?,
+        private val disableLastSideItemDecorateMap: Map<Class<*>, Boolean>?,
         findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)?,
     ) : LinearItemDecorateProvider {
 
@@ -239,17 +239,17 @@ open class AssemblyLinearDividerItemDecoration(
         ): Boolean {
             return if (verticalOrientation) {
                 when (decorateType) {
-                    ItemDecorate.Type.START -> disableStartSideItemDecorateMap
+                    ItemDecorate.Type.START -> disableFirstSideItemDecorateMap
                     ItemDecorate.Type.TOP -> null
-                    ItemDecorate.Type.END -> disableEndSideItemDecorateMap
+                    ItemDecorate.Type.END -> disableLastSideItemDecorateMap
                     ItemDecorate.Type.BOTTOM -> (if (isLast) null else disableDividerItemDecorateMap)
                 }
             } else {
                 when (decorateType) {
                     ItemDecorate.Type.START -> null
-                    ItemDecorate.Type.TOP -> disableStartSideItemDecorateMap
+                    ItemDecorate.Type.TOP -> disableFirstSideItemDecorateMap
                     ItemDecorate.Type.END -> (if (isLast) null else disableDividerItemDecorateMap)
-                    ItemDecorate.Type.BOTTOM -> disableEndSideItemDecorateMap
+                    ItemDecorate.Type.BOTTOM -> disableLastSideItemDecorateMap
                 }
             }?.containsKey(itemFactoryClass) == true
         }
@@ -262,17 +262,17 @@ open class AssemblyLinearDividerItemDecoration(
         ): ItemDecorate? {
             return if (verticalOrientation) {
                 when (decorateType) {
-                    ItemDecorate.Type.START -> personaliseStartSideItemDecorateMap
+                    ItemDecorate.Type.START -> personaliseFirstSideItemDecorateMap
                     ItemDecorate.Type.TOP -> null
-                    ItemDecorate.Type.END -> personaliseEndSideItemDecorateMap
+                    ItemDecorate.Type.END -> personaliseLastSideItemDecorateMap
                     ItemDecorate.Type.BOTTOM -> (if (isLast) null else personaliseDividerItemDecorateMap)
                 }
             } else {
                 when (decorateType) {
                     ItemDecorate.Type.START -> null
-                    ItemDecorate.Type.TOP -> personaliseStartSideItemDecorateMap
+                    ItemDecorate.Type.TOP -> personaliseFirstSideItemDecorateMap
                     ItemDecorate.Type.END -> (if (isLast) null else personaliseDividerItemDecorateMap)
-                    ItemDecorate.Type.BOTTOM -> personaliseEndSideItemDecorateMap
+                    ItemDecorate.Type.BOTTOM -> personaliseLastSideItemDecorateMap
                 }
             }?.get(itemFactoryClass)
         }

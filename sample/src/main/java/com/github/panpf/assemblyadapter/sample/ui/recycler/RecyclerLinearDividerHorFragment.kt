@@ -119,14 +119,14 @@ class RecyclerLinearDividerHorFragment :
             )
             disableDivider(AppsOverviewHorizontalItemFactory::class)
 
-            startAndEndSide(
+            firstAndLastSide(
                 Decorate.color(0xFF0000FF.toInt(), size, insets)
             )
-            personaliseStartAndEndSide(
+            personaliseFirstAndLastSide(
                 ListSeparatorHorizontalItemFactory::class,
                 Decorate.color(0xFF00FF00.toInt(), size, insets)
             )
-            disableStartAndEndSide(AppsOverviewHorizontalItemFactory::class)
+            disableFirstAndLastSide(AppsOverviewHorizontalItemFactory::class)
         }.build()
     }
 }
