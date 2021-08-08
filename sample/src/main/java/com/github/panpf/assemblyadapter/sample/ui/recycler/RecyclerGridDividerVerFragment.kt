@@ -18,17 +18,22 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.*
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter.recycler.divider.Insets
+import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerVerticalBinding
 import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.MenuViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
@@ -36,6 +41,9 @@ class RecyclerGridDividerVerFragment :
     BaseBindingFragment<FragmentRecyclerDividerVerticalBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private val menuViewModel by activityViewModels<MenuViewModel>()
+
+    private var openedInsets = false
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -52,7 +60,7 @@ class RecyclerGridDividerVerFragment :
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
                 AppGridItemFactory(requireActivity()),
-                ListSeparatorItemFactory(requireActivity(), true)
+                ListSeparatorItemFactory(requireActivity(), hideDivider = true)
             )
         )
         val footerLoadStateAdapter =
@@ -67,96 +75,19 @@ class RecyclerGridDividerVerFragment :
                     LoadStateItemFactory::class to ItemSpan.fullSpan()
                 )
             )
-            addItemDecoration(
-                AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
-                    val smallInset = 2.dp2px
-                    val bigInset = 4.dp2px
-                    val size = 5.dp2px
-                    divider(
-                        Decorate.color(
-                            0x88FF0000.toInt(),
-                            size,
-                            insetStart = smallInset,
-                            insetTop = bigInset,
-                            insetEnd = smallInset,
-                            insetBottom = bigInset,
-                        )
-                    )
-                    firstAndLastDivider(
-                        Decorate.color(
-                            0xFFFF0000.toInt(),
-                            size,
-                            insetStart = smallInset,
-                            insetTop = bigInset,
-                            insetEnd = smallInset,
-                            insetBottom = bigInset,
-                        )
-                    )
-                    side(
-                        Decorate.color(
-                            0x880000FF.toInt(),
-                            size,
-                            insetStart = bigInset,
-                            insetTop = smallInset,
-                            insetEnd = bigInset,
-                            insetBottom = smallInset,
-                        )
-                    )
-                    firstAndLastSide(
-                        Decorate.color(
-                            0xFF0000FF.toInt(),
-                            size,
-                            insetStart = bigInset,
-                            insetTop = smallInset,
-                            insetEnd = bigInset,
-                            insetBottom = smallInset,
-                        )
-                    )
-                    personaliseDivider(
-                        ListSeparatorItemFactory::class,
-                        Decorate.space(
-                            size,
-                            insetStart = smallInset,
-                            insetTop = bigInset,
-                            insetEnd = smallInset,
-                            insetBottom = bigInset,
-                        )
-                    )
-                    personaliseFirstAndLastSide(
-                        ListSeparatorItemFactory::class,
-                        Decorate.space(
-                            size,
-                            insetStart = bigInset,
-                            insetTop = smallInset,
-                            insetEnd = bigInset,
-                            insetBottom = smallInset,
-                        )
-                    )
-                    personaliseDivider(
-                        AppsOverviewItemFactory::class,
-                        Decorate.color(
-                            0x8800FF00.toInt(),
-                            size,
-                            insetStart = smallInset,
-                            insetTop = bigInset,
-                            insetEnd = smallInset,
-                            insetBottom = bigInset,
-                        )
-                    )
-                    personaliseFirstAndLastSide(
-                        AppsOverviewItemFactory::class,
-                        Decorate.color(
-                            0xFF00FF00.toInt(),
-                            size,
-                            insetStart = bigInset,
-                            insetTop = smallInset,
-                            insetEnd = bigInset,
-                            insetBottom = smallInset,
-                        )
-                    )
-                    disableFirstAndLastSide(LoadStateItemFactory::class)
-                }.build()
-            )
+
+            addItemDecoration(buildItemDecoration())
+            menuViewModel.menuInfoListData.postValue(listOf(buildMenuInfo()))
+            menuViewModel.menuClickEvent.listen(viewLifecycleOwner) {
+                binding.recyclerDividerVerticalRecycler.apply {
+                    if (it?.id == R.id.insets_switch) {
+                        openedInsets = !openedInsets
+                        menuViewModel.menuInfoListData.postValue(listOf(buildMenuInfo()))
+                        removeItemDecorationAt(0)
+                        addItemDecoration(buildItemDecoration())
+                    }
+                }
+            }
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -167,5 +98,42 @@ class RecyclerGridDividerVerFragment :
             recyclerAdapter.submitDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
+    }
+
+    private fun buildMenuInfo(): MenuViewModel.MenuInfo {
+        return MenuViewModel.MenuInfo(
+            R.id.insets_switch,
+            if (openedInsets) "DISABLE INSETS" else "ENABLE INSETS"
+        )
+    }
+
+    private fun buildItemDecoration(): RecyclerView.ItemDecoration {
+        return AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
+            val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
+            val size = 5.dp2px
+            divider(
+                Decorate.color(0x88FF0000.toInt(), size, insets)
+            )
+            firstAndLastDivider(
+                Decorate.color(0xFFFF0000.toInt(), size, insets)
+            )
+            personaliseDivider(
+                ListSeparatorItemFactory::class,
+                Decorate.color(0x8800FF00.toInt(), size, insets)
+            )
+            disableDivider(AppsOverviewItemFactory::class)
+
+            side(
+                Decorate.color(0x880000FF.toInt(), size, insets)
+            )
+            firstAndLastSide(
+                Decorate.color(0xFF0000FF.toInt(), size, insets)
+            )
+            personaliseFirstAndLastSide(
+                ListSeparatorItemFactory::class,
+                Decorate.color(0xFF00FF00.toInt(), size, insets)
+            )
+            disableFirstAndLastSide(AppsOverviewItemFactory::class)
+        }.build()
     }
 }

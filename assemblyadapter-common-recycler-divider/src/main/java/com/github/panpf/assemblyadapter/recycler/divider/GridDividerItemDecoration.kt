@@ -70,10 +70,10 @@ open class GridDividerItemDecoration(
         )
 
         outRect.set(
-            startItemDecorate?.run { widthSize + insetWidthSize } ?: 0,
-            topItemDecorate?.run { heightSize + insetHeightSize } ?: 0,
-            endItemDecorate?.run { widthSize + insetWidthSize } ?: 0,
-            bottomItemDecorate?.run { heightSize + insetHeightSize } ?: 0
+            startItemDecorate?.widthSize ?: 0,
+            topItemDecorate?.heightSize ?: 0,
+            endItemDecorate?.widthSize ?: 0,
+            bottomItemDecorate?.heightSize ?: 0
         )
     }
 
@@ -139,60 +139,43 @@ open class GridDividerItemDecoration(
                 spanGroupCount, spanGroupIndex, true, ItemDecorate.Type.BOTTOM
             )
 
+            val topItemDecorateSize = topItemDecorate?.heightSize ?: 0
+            val bottomItemDecorateSize = bottomItemDecorate?.heightSize ?: 0
+
             startItemDecorate?.apply {
                 drawable.setBounds(
-                    childView.left - insetEnd - widthSize,
-                    childView.top + insetTop,
+                    childView.left - insetEnd - drawableWidthSize,
+                    childView.top - topItemDecorateSize + insetTop,
                     childView.left - insetEnd,
-                    childView.bottom - insetBottom
+                    childView.bottom + bottomItemDecorateSize - insetBottom
                 )
                 drawable.draw(canvas)
             }
             topItemDecorate?.apply {
-                val haveInset = insetStart > 0 || insetEnd > 0
-                if (haveInset) {
-                    drawable.setBounds(
-                        childView.left + insetStart,
-                        childView.top - insetBottom - heightSize,
-                        childView.right - insetEnd,
-                        childView.top - insetBottom
-                    )
-                } else {
-                    drawable.setBounds(
-                        childView.left - (startItemDecorate?.widthSize ?: 0),
-                        childView.top - insetBottom - heightSize,
-                        childView.right + (endItemDecorate?.widthSize ?: 0),
-                        childView.top - insetBottom
-                    )
-                }
+                drawable.setBounds(
+                    childView.left + insetStart,
+                    childView.top - insetBottom - drawableHeightSize,
+                    childView.right - insetEnd,
+                    childView.top - insetBottom
+                )
                 drawable.draw(canvas)
             }
             endItemDecorate?.apply {
                 drawable.setBounds(
                     childView.right + insetStart,
-                    childView.top + insetTop,
-                    childView.right + insetStart + widthSize,
-                    childView.bottom - insetBottom
+                    childView.top - topItemDecorateSize + insetTop,
+                    childView.right + insetStart + drawableWidthSize,
+                    childView.bottom + bottomItemDecorateSize - insetBottom
                 )
                 drawable.draw(canvas)
             }
             bottomItemDecorate?.apply {
-                val haveInset = insetStart > 0 || insetEnd > 0
-                if (haveInset) {
-                    drawable.setBounds(
-                        childView.left + insetStart,
-                        childView.bottom + insetTop,
-                        childView.right - insetEnd,
-                        childView.bottom + insetTop + heightSize
-                    )
-                } else {
-                    drawable.setBounds(
-                        childView.left - (startItemDecorate?.widthSize ?: 0),
-                        childView.bottom + insetTop,
-                        childView.right + (endItemDecorate?.widthSize ?: 0),
-                        childView.bottom + insetTop + heightSize
-                    )
-                }
+                drawable.setBounds(
+                    childView.left + insetStart,
+                    childView.bottom + insetTop,
+                    childView.right - insetEnd,
+                    childView.bottom + insetTop + drawableHeightSize
+                )
                 drawable.draw(canvas)
             }
         }
@@ -232,59 +215,42 @@ open class GridDividerItemDecoration(
                 spanGroupCount, spanGroupIndex, false, ItemDecorate.Type.BOTTOM
             )
 
+            val startItemDecorateSize = startItemDecorate?.widthSize ?: 0
+            val endItemDecorateSize = endItemDecorate?.widthSize ?: 0
+
             startItemDecorate?.apply {
-                val haveInset = insetStart > 0 || insetEnd > 0
-                if (haveInset) {
-                    drawable.setBounds(
-                        childView.left - insetEnd - widthSize,
-                        childView.top + insetTop,
-                        childView.left - insetEnd,
-                        childView.bottom - insetBottom
-                    )
-                } else {
-                    drawable.setBounds(
-                        childView.left - insetEnd - widthSize,
-                        childView.top + insetTop - (topItemDecorate?.heightSize ?: 0),
-                        childView.left - insetEnd,
-                        childView.bottom - insetBottom + (bottomItemDecorate?.heightSize ?: 0)
-                    )
-                }
+                drawable.setBounds(
+                    childView.left - insetEnd - drawableWidthSize,
+                    childView.top + insetTop,
+                    childView.left - insetEnd,
+                    childView.bottom - insetBottom
+                )
                 drawable.draw(canvas)
             }
             topItemDecorate?.apply {
                 drawable.setBounds(
-                    childView.left + insetStart,
-                    childView.top - insetBottom - heightSize,
-                    childView.right - insetEnd,
+                    childView.left - startItemDecorateSize + insetStart,
+                    childView.top - insetBottom - drawableHeightSize,
+                    childView.right + endItemDecorateSize - insetEnd,
                     childView.top - insetBottom
                 )
                 drawable.draw(canvas)
             }
             endItemDecorate?.apply {
-                val haveInset = insetStart > 0 || insetEnd > 0
-                if (haveInset) {
-                    drawable.setBounds(
-                        childView.right + insetStart,
-                        childView.top + insetTop,
-                        childView.right + insetStart + widthSize,
-                        childView.bottom - insetBottom
-                    )
-                } else {
-                    drawable.setBounds(
-                        childView.right + insetStart,
-                        childView.top + insetTop - (topItemDecorate?.heightSize ?: 0),
-                        childView.right + insetStart + widthSize,
-                        childView.bottom - insetBottom + (bottomItemDecorate?.heightSize ?: 0)
-                    )
-                }
+                drawable.setBounds(
+                    childView.right + insetStart,
+                    childView.top + insetTop,
+                    childView.right + insetStart + drawableWidthSize,
+                    childView.bottom - insetBottom
+                )
                 drawable.draw(canvas)
             }
             bottomItemDecorate?.apply {
                 drawable.setBounds(
-                    childView.left + insetStart,
+                    childView.left - startItemDecorateSize + insetStart,
                     childView.bottom + insetTop,
-                    childView.right - insetEnd,
-                    childView.bottom + insetTop + heightSize
+                    childView.right + endItemDecorateSize - insetEnd,
+                    childView.bottom + insetTop + drawableHeightSize
                 )
                 drawable.draw(canvas)
             }
@@ -317,7 +283,7 @@ open class GridDividerItemDecoration(
                     array.recycle()
                 }
             }!!.let {
-                ItemDecorate(it, -1, 0, 0)
+                Decorate.drawable(it).createItemDecorate(context)
             }
             return GridItemDecorateProviderImpl(
                 finalDividerItemDecorate,

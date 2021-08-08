@@ -18,15 +18,22 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.*
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter.recycler.divider.Insets
+import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorizontalBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppGridHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewHorizontalItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorHorizontalItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateHorizontalItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.MenuViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
@@ -34,6 +41,9 @@ class RecyclerGridDividerHorFragment :
     BaseBindingFragment<FragmentRecyclerDividerHorizontalBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private val menuViewModel by activityViewModels<MenuViewModel>()
+
+    private var openedInsets = false
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -67,96 +77,19 @@ class RecyclerGridDividerHorFragment :
                     LoadStateHorizontalItemFactory::class to ItemSpan.fullSpan()
                 )
             )
-            addItemDecoration(
-                AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
-                    val bigInset = 4.dp2px
-                    val smallInset = 2.dp2px
-                    val size = 5.dp2px
-                    divider(
-                        Decorate.color(
-                            0x88FF0000.toInt(),
-                            size,
-                            insetStart = bigInset,
-                            insetTop = smallInset,
-                            insetEnd = bigInset,
-                            insetBottom = smallInset,
-                        )
-                    )
-                    firstAndLastDivider(
-                        Decorate.color(
-                            0xFFFF0000.toInt(),
-                            size,
-                            insetStart = bigInset,
-                            insetTop = smallInset,
-                            insetEnd = bigInset,
-                            insetBottom = smallInset,
-                        )
-                    )
-                    side(
-                        Decorate.color(
-                            0x880000FF.toInt(),
-                            size,
-                            insetStart = smallInset,
-                            insetTop = bigInset,
-                            insetEnd = smallInset,
-                            insetBottom = bigInset,
-                        )
-                    )
-                    firstAndLastSide(
-                        Decorate.color(
-                            0xFF0000FF.toInt(),
-                            size,
-                            insetStart = smallInset,
-                            insetTop = bigInset,
-                            insetEnd = smallInset,
-                            insetBottom = bigInset,
-                        )
-                    )
-                    personaliseDivider(
-                        ListSeparatorHorizontalItemFactory::class,
-                        Decorate.space(
-                            size,
-                            insetStart = bigInset,
-                            insetTop = smallInset,
-                            insetEnd = bigInset,
-                            insetBottom = smallInset,
-                        )
-                    )
-                    personaliseFirstAndLastSide(
-                        ListSeparatorHorizontalItemFactory::class,
-                        Decorate.space(
-                            size,
-                            insetStart = smallInset,
-                            insetTop = bigInset,
-                            insetEnd = smallInset,
-                            insetBottom = bigInset,
-                        )
-                    )
-                    personaliseDivider(
-                        AppsOverviewHorizontalItemFactory::class,
-                        Decorate.color(
-                            0x8800FF00.toInt(),
-                            size,
-                            insetStart = bigInset,
-                            insetTop = smallInset,
-                            insetEnd = bigInset,
-                            insetBottom = smallInset,
-                        )
-                    )
-                    personaliseFirstAndLastSide(
-                        AppsOverviewHorizontalItemFactory::class,
-                        Decorate.color(
-                            0xFF00FF00.toInt(),
-                            size,
-                            insetStart = smallInset,
-                            insetTop = bigInset,
-                            insetEnd = smallInset,
-                            insetBottom = bigInset,
-                        )
-                    )
-                    disableFirstAndLastSide(LoadStateHorizontalItemFactory::class)
-                }.build()
-            )
+
+            addItemDecoration(buildItemDecoration())
+            menuViewModel.menuInfoListData.postValue(listOf(buildMenuInfo()))
+            menuViewModel.menuClickEvent.listen(viewLifecycleOwner) {
+                binding.recyclerDividerHorizontalRecycler.apply {
+                    if (it?.id == R.id.insets_switch) {
+                        openedInsets = !openedInsets
+                        menuViewModel.menuInfoListData.postValue(listOf(buildMenuInfo()))
+                        removeItemDecorationAt(0)
+                        addItemDecoration(buildItemDecoration())
+                    }
+                }
+            }
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -167,5 +100,42 @@ class RecyclerGridDividerHorFragment :
             recyclerAdapter.submitDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
+    }
+
+    private fun buildMenuInfo(): MenuViewModel.MenuInfo {
+        return MenuViewModel.MenuInfo(
+            R.id.insets_switch,
+            if (openedInsets) "DISABLE INSETS" else "ENABLE INSETS"
+        )
+    }
+
+    private fun buildItemDecoration(): RecyclerView.ItemDecoration {
+        return AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
+            val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
+            val size = 5.dp2px
+            divider(
+                Decorate.color(0x88FF0000.toInt(), size, insets)
+            )
+            firstAndLastDivider(
+                Decorate.color(0xFFFF0000.toInt(), size, insets)
+            )
+            personaliseDivider(
+                ListSeparatorHorizontalItemFactory::class,
+                Decorate.color(0x8800FF00.toInt(), size, insets)
+            )
+            disableDivider(AppsOverviewHorizontalItemFactory::class)
+
+            side(
+                Decorate.color(0x880000FF.toInt(), size, insets)
+            )
+            firstAndLastSide(
+                Decorate.color(0xFF0000FF.toInt(), size, insets)
+            )
+            personaliseFirstAndLastSide(
+                ListSeparatorHorizontalItemFactory::class,
+                Decorate.color(0xFF00FF00.toInt(), size, insets)
+            )
+            disableFirstAndLastSide(AppsOverviewHorizontalItemFactory::class)
+        }.build()
     }
 }

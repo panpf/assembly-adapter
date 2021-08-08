@@ -29,7 +29,10 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemAppHorizontalBind
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
-class AppHorizontalItemFactory(private val activity: Activity) :
+class AppHorizontalItemFactory(
+    private val activity: Activity,
+    private val showBg: Boolean = false
+) :
     BindingItemFactory<AppInfo, ItemAppHorizontalBinding>(AppInfo::class) {
 
     override fun createItemViewBinding(
@@ -43,6 +46,10 @@ class AppHorizontalItemFactory(private val activity: Activity) :
         binding: ItemAppHorizontalBinding,
         item: BindingItem<AppInfo, ItemAppHorizontalBinding>
     ) {
+        if (!showBg) {
+            binding.root.setBackgroundDrawable(null)
+        }
+
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val launchIntent =

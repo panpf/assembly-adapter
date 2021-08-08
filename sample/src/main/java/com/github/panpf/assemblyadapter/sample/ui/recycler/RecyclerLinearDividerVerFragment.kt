@@ -18,20 +18,25 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.AssemblyLinearDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter.recycler.divider.Insets
+import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerVerticalBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.MenuViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
@@ -39,6 +44,9 @@ class RecyclerLinearDividerVerFragment :
     BaseBindingFragment<FragmentRecyclerDividerVerticalBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private val menuViewModel by activityViewModels<MenuViewModel>()
+
+    private var openedInsets = false
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -54,8 +62,8 @@ class RecyclerLinearDividerVerFragment :
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
-                AppItemFactory(requireActivity()),
-                ListSeparatorItemFactory(activity = requireActivity(), hideDivider = true)
+                AppItemFactory(requireActivity(), showBg = true),
+                ListSeparatorItemFactory(requireActivity(), hideDivider = true)
             )
         )
         val footerLoadStateAdapter =
@@ -63,81 +71,19 @@ class RecyclerLinearDividerVerFragment :
         binding.recyclerDividerVerticalRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(
-                AssemblyLinearDividerItemDecoration.Builder(requireContext()).apply {
-                    divider(
-                        Decorate.color(
-                            0x33FF0000,
-                            0.5f.dp2px,
-                            insetStart = 20.dp2px,
-                            insetEnd = 20.dp2px
-                        )
-                    )
-                    firstAndLastDivider(
-                        Decorate.color(
-                            0xFFFF0000.toInt(),
-                            2.dp2px,
-                            insetStart = 2.dp2px,
-                            insetTop = 4.dp2px,
-                            insetEnd = 2.dp2px,
-                            insetBottom = 4.dp2px,
-                        )
-                    )
-                    personaliseDivider(
-                        AppsOverviewItemFactory::class,
-                        Decorate.color(
-                            0xFFFF0000.toInt(),
-                            2.dp2px,
-                            insetStart = 2.dp2px,
-                            insetTop = 4.dp2px,
-                            insetEnd = 2.dp2px,
-                            insetBottom = 4.dp2px,
-                        )
-                    )
-                    personaliseDivider(
-                        ListSeparatorItemFactory::class,
-                        Decorate.color(
-                            0x88FF0000.toInt(),
-                            1.dp2px,
-                            insetStart = 20.dp2px,
-                            insetEnd = 20.dp2px
-                        )
-                    )
 
-                    startAndEndSide(
-                        Decorate.color(
-                            0xFF0000FF.toInt(),
-                            2.dp2px,
-                            insetStart = 4.dp2px,
-                            insetTop = 2.dp2px,
-                            insetEnd = 4.dp2px,
-                            insetBottom = 2.dp2px
-                        )
-                    )
-                    personaliseStartAndEndSide(
-                        ListSeparatorItemFactory::class,
-                        Decorate.space(
-                            2.dp2px,
-                            insetStart = 4.dp2px,
-                            insetTop = 2.dp2px,
-                            insetEnd = 4.dp2px,
-                            insetBottom = 2.dp2px
-                        )
-                    )
-                    personaliseStartAndEndSide(
-                        AppsOverviewItemFactory::class,
-                        Decorate.color(
-                            0xFF0000FF.toInt(),
-                            2.dp2px,
-                            insetStart = 4.dp2px,
-                            insetTop = 2.dp2px,
-                            insetEnd = 4.dp2px,
-                            insetBottom = 2.dp2px
-                        )
-                    )
-                    disableStartAndEndSide(LoadStateItemFactory::class)
-                }.build()
-            )
+            addItemDecoration(buildItemDecoration())
+            menuViewModel.menuInfoListData.postValue(listOf(buildMenuInfo()))
+            menuViewModel.menuClickEvent.listen(viewLifecycleOwner) {
+                binding.recyclerDividerVerticalRecycler.apply {
+                    if (it?.id == R.id.insets_switch) {
+                        openedInsets = !openedInsets
+                        menuViewModel.menuInfoListData.postValue(listOf(buildMenuInfo()))
+                        removeItemDecorationAt(0)
+                        addItemDecoration(buildItemDecoration())
+                    }
+                }
+            }
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -147,5 +93,39 @@ class RecyclerLinearDividerVerFragment :
             recyclerAdapter.submitDataList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
+    }
+
+    private fun buildMenuInfo(): MenuViewModel.MenuInfo {
+        return MenuViewModel.MenuInfo(
+            R.id.insets_switch,
+            if (openedInsets) "DISABLE INSETS" else "ENABLE INSETS"
+        )
+    }
+
+    private fun buildItemDecoration(): RecyclerView.ItemDecoration {
+        return AssemblyLinearDividerItemDecoration.Builder(requireContext()).apply {
+            val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
+            val size = 5.dp2px
+            divider(
+                Decorate.color(0x88FF0000.toInt(), size, insets)
+            )
+            firstAndLastDivider(
+                Decorate.color(0xFFFF0000.toInt(), size, insets)
+            )
+            personaliseDivider(
+                ListSeparatorItemFactory::class,
+                Decorate.color(0x8800FF00.toInt(), size, insets)
+            )
+            disableDivider(AppsOverviewItemFactory::class)
+
+            startAndEndSide(
+                Decorate.color(0xFF0000FF.toInt(), size, insets)
+            )
+            personaliseStartAndEndSide(
+                ListSeparatorItemFactory::class,
+                Decorate.color(0xFF00FF00.toInt(), size, insets)
+            )
+            disableStartAndEndSide(AppsOverviewItemFactory::class)
+        }.build()
     }
 }

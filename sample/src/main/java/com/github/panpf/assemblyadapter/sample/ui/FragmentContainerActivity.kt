@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.sample.base
+package com.github.panpf.assemblyadapter.sample.ui
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.databinding.AcivityFragmentContainerBinding
+import com.github.panpf.assemblyadapter.sample.vm.MenuViewModel
 
 class FragmentContainerActivity : AppCompatActivity() {
 
@@ -35,6 +39,8 @@ class FragmentContainerActivity : AppCompatActivity() {
                 putExtra("fragmentArguments", fragment.arguments)
             }
     }
+
+    val viewModel by viewModels<MenuViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,5 +67,28 @@ class FragmentContainerActivity : AppCompatActivity() {
                     arguments = fragmentArguments
                 })
             .commit()
+
+        viewModel.menuInfoListData.observe(this) {
+            invalidateOptionsMenu()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        viewModel.menuInfoListData.value?.forEach { menuInfo ->
+            menu?.add(menuInfo.group, menuInfo.id, menuInfo.order, menuInfo.title)?.apply {
+                setShowAsAction(menuInfo.showAsAction)
+            }
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val menuInfo = viewModel.menuInfoListData.value?.find {
+            it.id == item.itemId
+        }
+        if (menuInfo != null) {
+            viewModel.menuClickEvent.postValue(menuInfo)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
