@@ -40,14 +40,12 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             null
         private var personaliseLastDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? =
             null
-        private var personaliseSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
         private var personaliseFirstSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
         private var personaliseLastSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
 
         private var disableDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
         private var disableFirstDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
         private var disableLastDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
         private var disableFirstSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
         private var disableLastSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
 
@@ -65,13 +63,11 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                 personaliseDividerItemDecorateMap = personaliseDividerItemDecorateMap,
                 personaliseFirstDividerItemDecorateMap = personaliseFirstDividerItemDecorateMap,
                 personaliseLastDividerItemDecorateMap = personaliseLastDividerItemDecorateMap,
-                personaliseSideItemDecorateMap = personaliseSideItemDecorateMap,
                 personaliseFirstSideItemDecorateMap = personaliseFirstSideItemDecorateMap,
                 personaliseLastSideItemDecorateMap = personaliseLastSideItemDecorateMap,
                 disableDividerItemDecorateMap = disableDividerItemDecorateMap,
                 disableFirstDividerItemDecorateMap = disableFirstDividerItemDecorateMap,
                 disableLastDividerItemDecorateMap = disableLastDividerItemDecorateMap,
-                disableSideItemDecorateMap = disableSideItemDecorateMap,
                 disableFirstSideItemDecorateMap = disableFirstSideItemDecorateMap,
                 disableLastSideItemDecorateMap = disableLastSideItemDecorateMap,
                 findItemFactoryClassByPosition = findItemFactoryClassByPosition,
@@ -185,13 +181,6 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         }
 
 
-        fun personaliseSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseSideItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            return this
-        }
-
         fun personaliseFirstSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
             (personaliseFirstSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseFirstSideItemDecorateMap = this
@@ -249,13 +238,6 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         }
 
 
-        fun disableSide(itemFactoryClass: KClass<*>): Builder {
-            (disableSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableSideItemDecorateMap = this
-            })[itemFactoryClass.java] = true
-            return this
-        }
-
         fun disableFirstSide(itemFactoryClass: KClass<*>): Builder {
             (disableFirstSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
                 this@Builder.disableFirstSideItemDecorateMap = this
@@ -292,13 +274,11 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private val personaliseDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val personaliseFirstDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val personaliseLastDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val personaliseFirstSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val personaliseLastSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val disableDividerItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableFirstDividerItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableLastDividerItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableSideItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableFirstSideItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableLastSideItemDecorateMap: Map<Class<*>, Boolean>?,
         findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)?,
@@ -340,14 +320,14 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                 )
             if (isDisabledItemDecorate(
                     verticalOrientation, decorateType, isFirstGroup, isLastGroup,
-                    isFirstSpan, isLastSpan, itemFactoryClass,
+                    isFullSpan, isFirstSpan, isLastSpan, itemFactoryClass,
                 )
             ) {
                 return null
             }
             return getPersonaliseItemDecorate(
                 verticalOrientation, decorateType, isFirstGroup, isLastGroup,
-                isFirstSpan, isLastSpan, itemFactoryClass
+                isFullSpan, isFirstSpan, isLastSpan, itemFactoryClass
             ) ?: defaultStaggeredGridItemDecorateProvider.getItemDecorate(
                 view, parent, itemCount, position, spanCount, isFullSpan,
                 spanIndex, verticalOrientation, decorateType
@@ -359,23 +339,42 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             decorateType: ItemDecorate.Type,
             isFirstGroup: Boolean,
             isLastGroup: Boolean,
+            isFullSpan: Boolean,
             isFirstSpan: Boolean,
             isLastSpan: Boolean,
             itemFactoryClass: Class<*>,
         ): Boolean {
-            return if (verticalOrientation) {
-                when (decorateType) {
-                    ItemDecorate.Type.START -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
-                    ItemDecorate.Type.TOP -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
-                    ItemDecorate.Type.END -> if (isLastSpan) disableLastSideItemDecorateMap else disableSideItemDecorateMap
-                    ItemDecorate.Type.BOTTOM -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
+            return if (isFullSpan) {
+                if (verticalOrientation) {
+                    when (decorateType) {
+                        ItemDecorate.Type.START -> disableFirstSideItemDecorateMap
+                        ItemDecorate.Type.TOP -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
+                        ItemDecorate.Type.END -> disableLastSideItemDecorateMap
+                        ItemDecorate.Type.BOTTOM -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
+                    }
+                } else {
+                    when (decorateType) {
+                        ItemDecorate.Type.START -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
+                        ItemDecorate.Type.TOP -> disableFirstSideItemDecorateMap
+                        ItemDecorate.Type.END -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
+                        ItemDecorate.Type.BOTTOM -> disableLastSideItemDecorateMap
+                    }
                 }
             } else {
-                when (decorateType) {
-                    ItemDecorate.Type.START -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
-                    ItemDecorate.Type.TOP -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
-                    ItemDecorate.Type.END -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
-                    ItemDecorate.Type.BOTTOM -> if (isLastSpan) disableLastSideItemDecorateMap else disableSideItemDecorateMap
+                if (verticalOrientation) {
+                    when (decorateType) {
+                        ItemDecorate.Type.START -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
+                        ItemDecorate.Type.TOP -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
+                        ItemDecorate.Type.END -> if (isLastSpan) disableLastSideItemDecorateMap else null
+                        ItemDecorate.Type.BOTTOM -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
+                    }
+                } else {
+                    when (decorateType) {
+                        ItemDecorate.Type.START -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
+                        ItemDecorate.Type.TOP -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
+                        ItemDecorate.Type.END -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
+                        ItemDecorate.Type.BOTTOM -> if (isLastSpan) disableLastSideItemDecorateMap else null
+                    }
                 }
             }?.containsKey(itemFactoryClass) == true
         }
@@ -385,23 +384,42 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             decorateType: ItemDecorate.Type,
             isFirstGroup: Boolean,
             isLastGroup: Boolean,
+            isFullSpan: Boolean,
             isFirstSpan: Boolean,
             isLastSpan: Boolean,
             itemFactoryClass: Class<*>,
         ): ItemDecorate? {
-            return if (verticalOrientation) {
-                when (decorateType) {
-                    ItemDecorate.Type.START -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
-                    ItemDecorate.Type.TOP -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
-                    ItemDecorate.Type.END -> if (isLastSpan) personaliseLastSideItemDecorateMap else personaliseSideItemDecorateMap
-                    ItemDecorate.Type.BOTTOM -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
+            return if (isFullSpan) {
+                if (verticalOrientation) {
+                    when (decorateType) {
+                        ItemDecorate.Type.START -> personaliseFirstSideItemDecorateMap
+                        ItemDecorate.Type.TOP -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
+                        ItemDecorate.Type.END -> personaliseLastSideItemDecorateMap
+                        ItemDecorate.Type.BOTTOM -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
+                    }
+                } else {
+                    when (decorateType) {
+                        ItemDecorate.Type.START -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
+                        ItemDecorate.Type.TOP -> personaliseFirstSideItemDecorateMap
+                        ItemDecorate.Type.END -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
+                        ItemDecorate.Type.BOTTOM -> personaliseLastSideItemDecorateMap
+                    }
                 }
             } else {
-                when (decorateType) {
-                    ItemDecorate.Type.START -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
-                    ItemDecorate.Type.TOP -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
-                    ItemDecorate.Type.END -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
-                    ItemDecorate.Type.BOTTOM -> if (isLastSpan) personaliseLastSideItemDecorateMap else personaliseSideItemDecorateMap
+                if (verticalOrientation) {
+                    when (decorateType) {
+                        ItemDecorate.Type.START -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
+                        ItemDecorate.Type.TOP -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
+                        ItemDecorate.Type.END -> if (isLastSpan) personaliseLastSideItemDecorateMap else null
+                        ItemDecorate.Type.BOTTOM -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
+                    }
+                } else {
+                    when (decorateType) {
+                        ItemDecorate.Type.START -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
+                        ItemDecorate.Type.TOP -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
+                        ItemDecorate.Type.END -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
+                        ItemDecorate.Type.BOTTOM -> if (isLastSpan) personaliseLastSideItemDecorateMap else null
+                    }
                 }
             }?.get(itemFactoryClass)
         }
