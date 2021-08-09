@@ -268,14 +268,14 @@ open class StaggeredGridDividerItemDecoration(
     open class Builder(protected val context: Context) {
 
         private var dividerItemDecorate: ItemDecorate? = null
-        private var firstDividerItemDecorate: ItemDecorate? = null
-        private var lastDividerItemDecorate: ItemDecorate? = null
+//        private var firstDividerItemDecorate: ItemDecorate? = null
+//        private var lastDividerItemDecorate: ItemDecorate? = null
         private var sideItemDecorate: ItemDecorate? = null
         private var firstSideItemDecorate: ItemDecorate? = null
         private var lastSideItemDecorate: ItemDecorate? = null
 
-        private var showFirstDivider = false
-        private var showLastDivider = false
+//        private var showFirstDivider = false
+//        private var showLastDivider = false
         private var showFirstSide = false
         private var showLastSide = false
 
@@ -295,10 +295,10 @@ open class StaggeredGridDividerItemDecoration(
             }
             return StaggeredGridItemDecorateProviderImpl(
                 finalDividerItemDecorate,
-                firstDividerItemDecorate
-                    ?: if (showFirstDivider) finalDividerItemDecorate else null,
-                lastDividerItemDecorate
-                    ?: if (showLastDivider) finalDividerItemDecorate else null,
+//                firstDividerItemDecorate
+//                    ?: if (showFirstDivider) finalDividerItemDecorate else null,
+//                lastDividerItemDecorate
+//                    ?: if (showLastDivider) finalDividerItemDecorate else null,
                 sideItemDecorate,
                 firstSideItemDecorate
                     ?: if (showFirstSide) sideItemDecorate else null,
@@ -313,37 +313,37 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
-        open fun firstDivider(decorate: Decorate): Builder {
-            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
-            return this
-        }
-
-        open fun lastDivider(decorate: Decorate): Builder {
-            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
-            return this
-        }
-
-        open fun firstAndLastDivider(decorate: Decorate): Builder {
-            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
-            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
-            return this
-        }
-
-        open fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
-            this.showFirstDivider = showFirstDivider
-            return this
-        }
-
-        open fun showLastDivider(showLastDivider: Boolean = true): Builder {
-            this.showLastDivider = showLastDivider
-            return this
-        }
-
-        open fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
-            this.showFirstDivider = showFirstAndLastDivider
-            this.showLastDivider = showFirstAndLastDivider
-            return this
-        }
+//        open fun firstDivider(decorate: Decorate): Builder {
+//            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
+//            return this
+//        }
+//
+//        open fun lastDivider(decorate: Decorate): Builder {
+//            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
+//            return this
+//        }
+//
+//        open fun firstAndLastDivider(decorate: Decorate): Builder {
+//            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
+//            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
+//            return this
+//        }
+//
+//        open fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
+//            this.showFirstDivider = showFirstDivider
+//            return this
+//        }
+//
+//        open fun showLastDivider(showLastDivider: Boolean = true): Builder {
+//            this.showLastDivider = showLastDivider
+//            return this
+//        }
+//
+//        open fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
+//            this.showFirstDivider = showFirstAndLastDivider
+//            this.showLastDivider = showFirstAndLastDivider
+//            return this
+//        }
 
 
         open fun side(decorate: Decorate): Builder {

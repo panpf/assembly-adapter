@@ -74,7 +74,7 @@ class RecyclerStaggeredGridPagingFragment : BaseBindingFragment<FragmentRecycler
             )
             addItemDecoration(
                 assemblyStaggeredGridDividerItemDecorationBuilder().apply {
-                    divider(Decorate.space(20.dp2px)).showLastDivider()
+                    divider(Decorate.space(20.dp2px))
                     side(Decorate.space(20.dp2px)).showFirstAndLastSide()
                     disableDivider(AppsOverviewItemFactory::class)
                     disableFirstAndLastSide(AppsOverviewItemFactory::class)
