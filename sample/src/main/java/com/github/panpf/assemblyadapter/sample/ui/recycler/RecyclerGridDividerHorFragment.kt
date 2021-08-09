@@ -44,6 +44,7 @@ class RecyclerGridDividerHorFragment :
     private val menuViewModel by activityViewModels<MenuViewModel>()
 
     private var openedInsets = false
+    private var thickDivider = false
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -79,16 +80,16 @@ class RecyclerGridDividerHorFragment :
             )
 
             addItemDecoration(buildItemDecoration())
-            menuViewModel.menuInfoListData.postValue(listOf(buildMenuInfo()))
+            menuViewModel.menuInfoListData.postValue(buildMenuInfoList())
             menuViewModel.menuClickEvent.listen(viewLifecycleOwner) {
-                binding.recyclerDividerHorizontalRecycler.apply {
-                    if (it?.id == R.id.insets_switch) {
-                        openedInsets = !openedInsets
-                        menuViewModel.menuInfoListData.postValue(listOf(buildMenuInfo()))
-                        removeItemDecorationAt(0)
-                        addItemDecoration(buildItemDecoration())
-                    }
+                if (it?.id == R.id.insets_switch) {
+                    openedInsets = !openedInsets
+                } else if (it?.id == R.id.divider_thickness_switch) {
+                    thickDivider = !thickDivider
                 }
+                menuViewModel.menuInfoListData.postValue(buildMenuInfoList())
+                removeItemDecorationAt(0)
+                addItemDecoration(buildItemDecoration())
             }
         }
 
@@ -102,17 +103,23 @@ class RecyclerGridDividerHorFragment :
         }
     }
 
-    private fun buildMenuInfo(): MenuViewModel.MenuInfo {
-        return MenuViewModel.MenuInfo(
-            R.id.insets_switch,
-            if (openedInsets) "DISABLE INSETS" else "ENABLE INSETS"
+    private fun buildMenuInfoList(): List<MenuViewModel.MenuInfo> {
+        return listOf(
+            MenuViewModel.MenuInfo(
+                R.id.insets_switch,
+                if (openedInsets) "Disable Insets" else "Enable Insets",
+            ),
+            MenuViewModel.MenuInfo(
+                R.id.divider_thickness_switch,
+                if (thickDivider) "Thin Divider" else "Thick Divider",
+            )
         )
     }
 
     private fun buildItemDecoration(): RecyclerView.ItemDecoration {
         return AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
             val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
-            val size = 5.dp2px
+            val size = if (thickDivider) 5.dp2px else 1.dp2px
             divider(
                 Decorate.color(0x88FF0000.toInt(), size, insets)
             )

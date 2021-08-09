@@ -16,6 +16,6 @@ class MenuViewModel(application: Application) : AndroidViewModel(application) {
         val title: String,
         val group: Int = 0,
         val order: Int = 0,
-        val showAsAction: Int = MenuItem.SHOW_AS_ACTION_ALWAYS
+        val showAsAction: Int = MenuItem.SHOW_AS_ACTION_NEVER
     )
 }
