@@ -33,7 +33,6 @@ import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
-// todo Realize paging load
 class RecyclerLinearFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
