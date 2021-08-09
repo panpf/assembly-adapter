@@ -73,7 +73,7 @@ class RecyclerStaggeredGridDividerVerFragment :
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager =
                 AssemblyStaggeredGridLayoutManager(
-                    3,
+                    4,
                     listOf(
                         AppsOverviewItemFactory::class,
                         ListSeparatorItemFactory::class,

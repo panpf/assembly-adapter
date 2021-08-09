@@ -74,7 +74,7 @@ class RecyclerStaggeredGridDividerHorFragment :
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager =
                 AssemblyStaggeredGridLayoutManager(
-                    3,
+                    4,
                     StaggeredGridLayoutManager.HORIZONTAL,
                     listOf(
                         AppsOverviewHorizontalItemFactory::class,
