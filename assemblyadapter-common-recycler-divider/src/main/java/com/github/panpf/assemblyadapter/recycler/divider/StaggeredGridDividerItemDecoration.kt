@@ -40,12 +40,14 @@ open class StaggeredGridDividerItemDecoration(
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
     ) {
-        val layoutManager = (parent.layoutManager?.takeIf { it is StaggeredGridLayoutManager }
-            ?: IllegalArgumentException("layoutManager must be StaggeredGridLayoutManager")) as StaggeredGridLayoutManager
-        val verticalOrientation = layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL
+        val layoutManager = parent.layoutManager ?: return
+        if (layoutManager !is StaggeredGridLayoutManager) {
+            throw IllegalArgumentException("layoutManager must be StaggeredGridLayoutManager")
+        }
+        val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
         val childLayoutParams = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
-        val itemCount = parent.adapter?.itemCount ?: 0
+        val verticalOrientation = layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL
         val spanCount = layoutManager.spanCount
         val spanIndex = childLayoutParams.spanIndex
         val isFillSpan = childLayoutParams.isFullSpan
@@ -146,14 +148,14 @@ open class StaggeredGridDividerItemDecoration(
         }
     }
 
-    override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val layoutManager =
-            (parent.layoutManager?.takeIf { it is StaggeredGridLayoutManager } as StaggeredGridLayoutManager?)
-                ?: return
+    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        val layoutManager = parent.layoutManager ?: return
+        if (layoutManager !is StaggeredGridLayoutManager) {
+            throw IllegalArgumentException("layoutManager must be StaggeredGridLayoutManager")
+        }
+        val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
+        val childCount = parent.childCount.takeIf { it != 0 } ?: return
         val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
-        val childCount = parent.childCount
-        val itemCount = parent.adapter?.itemCount ?: 0
-        if (childCount == 0 || itemCount == 0) return
         val spanCount = layoutManager.spanCount
 
         for (index in 0 until childCount) {
