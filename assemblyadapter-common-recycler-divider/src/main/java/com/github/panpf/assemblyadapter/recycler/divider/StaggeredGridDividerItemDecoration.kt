@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDecorateProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDecorateProviderImpl
+import kotlin.math.ceil
+import kotlin.math.floor
 
 fun RecyclerView.staggeredGridDividerItemDecorationBuilder(): StaggeredGridDividerItemDecoration.Builder {
     return StaggeredGridDividerItemDecoration.Builder(context)
@@ -85,13 +87,13 @@ open class StaggeredGridDividerItemDecoration(
                     outRect.set(
                         startItemDecorateSize,
                         topItemDecorateSize,
-                        endItemDecorateSize / 2,
+                        floor(endItemDecorateSize / 2f).toInt(),
                         bottomItemDecorateSize
                     )
                 }
                 isLastSpan -> {
                     outRect.set(
-                        startItemDecorateSize / 2,
+                        ceil(startItemDecorateSize / 2f).toInt(),
                         topItemDecorateSize,
                         endItemDecorateSize,
                         bottomItemDecorateSize
@@ -99,9 +101,9 @@ open class StaggeredGridDividerItemDecoration(
                 }
                 else -> {
                     outRect.set(
-                        startItemDecorateSize / 2,
+                        ceil(startItemDecorateSize / 2f).toInt(),
                         topItemDecorateSize,
-                        endItemDecorateSize / 2,
+                        floor(endItemDecorateSize / 2f).toInt(),
                         bottomItemDecorateSize
                     )
                 }
@@ -121,13 +123,13 @@ open class StaggeredGridDividerItemDecoration(
                         startItemDecorateSize,
                         topItemDecorateSize,
                         endItemDecorateSize,
-                        bottomItemDecorateSize / 2
+                        floor(bottomItemDecorateSize / 2f).toInt()
                     )
                 }
                 isLastSpan -> {
                     outRect.set(
                         startItemDecorateSize,
-                        topItemDecorateSize / 2,
+                        ceil(topItemDecorateSize / 2f).toInt(),
                         endItemDecorateSize,
                         bottomItemDecorateSize
                     )
@@ -135,9 +137,9 @@ open class StaggeredGridDividerItemDecoration(
                 else -> {
                     outRect.set(
                         startItemDecorateSize,
-                        topItemDecorateSize / 2,
+                        ceil(topItemDecorateSize / 2f).toInt(),
                         endItemDecorateSize,
-                        bottomItemDecorateSize / 2
+                        floor(bottomItemDecorateSize / 2f).toInt()
                     )
                 }
             }
