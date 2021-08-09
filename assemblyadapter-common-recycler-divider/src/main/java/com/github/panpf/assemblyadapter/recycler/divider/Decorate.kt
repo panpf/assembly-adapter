@@ -16,17 +16,16 @@
 package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.Px
-import androidx.core.content.res.ResourcesCompat
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
+import com.github.panpf.assemblyadapter.recycler.divider.internal.*
 
 interface Decorate {
+
+    fun createItemDecorate(context: Context): ItemDecorate
 
     companion object {
         fun drawable(
@@ -59,98 +58,5 @@ interface Decorate {
             @Px size: Int,
             insets: Insets? = null,
         ): Decorate = SpaceDecorate(size, insets)
-    }
-
-    fun createItemDecorate(context: Context): ItemDecorate
-}
-
-internal class DrawableDecorate(
-    private val drawable: Drawable,
-    @Px private val size: Int,
-    private val insets: Insets?,
-) : Decorate {
-
-    override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(
-            drawable,
-            size,
-            insets?.start ?: 0,
-            insets?.top ?: 0,
-            insets?.end ?: 0,
-            insets?.bottom ?: 0
-        )
-    }
-}
-
-internal class DrawableResDecorate(
-    @DrawableRes private val drawableResId: Int,
-    @Px private val size: Int,
-    private val insets: Insets?,
-) : Decorate {
-
-    override fun createItemDecorate(context: Context): ItemDecorate {
-        val drawable = ResourcesCompat.getDrawable(context.resources, drawableResId, null)!!
-        return ItemDecorate(
-            drawable,
-            size,
-            insets?.start ?: 0,
-            insets?.top ?: 0,
-            insets?.end ?: 0,
-            insets?.bottom ?: 0
-        )
-    }
-}
-
-internal class ColorDecorate(
-    @ColorInt private val color: Int,
-    @Px private val size: Int,
-    private val insets: Insets?,
-) : Decorate {
-
-    override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(
-            ColorDrawable(color),
-            size,
-            insets?.start ?: 0,
-            insets?.top ?: 0,
-            insets?.end ?: 0,
-            insets?.bottom ?: 0
-        )
-    }
-}
-
-internal class ColorResDecorate(
-    @ColorRes private val colorResId: Int,
-    @Px private val size: Int,
-    private val insets: Insets?,
-) : Decorate {
-
-    override fun createItemDecorate(context: Context): ItemDecorate {
-        val color = ResourcesCompat.getColor(context.resources, colorResId, null)
-        return ItemDecorate(
-            ColorDrawable(color),
-            size,
-            insets?.start ?: 0,
-            insets?.top ?: 0,
-            insets?.end ?: 0,
-            insets?.bottom ?: 0
-        )
-    }
-}
-
-internal class SpaceDecorate(
-    @Px private val size: Int,
-    private val insets: Insets?,
-) : Decorate {
-
-    override fun createItemDecorate(context: Context): ItemDecorate {
-        return ItemDecorate(
-            ColorDrawable(Color.TRANSPARENT),
-            size,
-            insets?.start ?: 0,
-            insets?.top ?: 0,
-            insets?.end ?: 0,
-            insets?.bottom ?: 0
-        )
     }
 }
