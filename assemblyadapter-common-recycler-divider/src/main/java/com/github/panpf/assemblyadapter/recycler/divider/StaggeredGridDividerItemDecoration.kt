@@ -50,24 +50,24 @@ open class StaggeredGridDividerItemDecoration(
         val verticalOrientation = layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL
         val spanCount = layoutManager.spanCount
         val spanIndex = childLayoutParams.spanIndex
-        val isFillSpan = childLayoutParams.isFullSpan
+        val isFullSpan = childLayoutParams.isFullSpan
         val isFirstSpan = spanIndex == 0
         val isLastSpan = spanIndex == spanCount - 1
 
         val startItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, isFillSpan,
+            view, parent, itemCount, position, spanCount, isFullSpan,
             spanIndex, verticalOrientation, ItemDecorate.Type.START
         )
         val topItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, isFillSpan,
+            view, parent, itemCount, position, spanCount, isFullSpan,
             spanIndex, verticalOrientation, ItemDecorate.Type.TOP
         )
         val endItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, isFillSpan,
+            view, parent, itemCount, position, spanCount, isFullSpan,
             spanIndex, verticalOrientation, ItemDecorate.Type.END
         )
         val bottomItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, isFillSpan,
+            view, parent, itemCount, position, spanCount, isFullSpan,
             spanIndex, verticalOrientation, ItemDecorate.Type.BOTTOM
         )
         val startItemDecorateSize = startItemDecorate?.widthSize ?: 0
@@ -77,7 +77,7 @@ open class StaggeredGridDividerItemDecoration(
 
         if (verticalOrientation) {
             when {
-                isFillSpan -> {
+                isFullSpan -> {
                     outRect.set(
                         startItemDecorateSize,
                         topItemDecorateSize,
@@ -112,7 +112,7 @@ open class StaggeredGridDividerItemDecoration(
             }
         } else {
             when {
-                isFillSpan -> {
+                isFullSpan -> {
                     outRect.set(
                         startItemDecorateSize,
                         topItemDecorateSize,
@@ -164,22 +164,22 @@ open class StaggeredGridDividerItemDecoration(
                 view.layoutParams as StaggeredGridLayoutManager.LayoutParams
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
             val spanIndex = childLayoutParams.spanIndex
-            val isFillSpan = childLayoutParams.isFullSpan
+            val isFullSpan = childLayoutParams.isFullSpan
 
             val startItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, isFillSpan,
+                view, parent, itemCount, position, spanCount, isFullSpan,
                 spanIndex, verticalOrientation, ItemDecorate.Type.START
             )
             val topItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, isFillSpan,
+                view, parent, itemCount, position, spanCount, isFullSpan,
                 spanIndex, verticalOrientation, ItemDecorate.Type.TOP
             )
             val endItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, isFillSpan,
+                view, parent, itemCount, position, spanCount, isFullSpan,
                 spanIndex, verticalOrientation, ItemDecorate.Type.END
             )
             val bottomItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, isFillSpan,
+                view, parent, itemCount, position, spanCount, isFullSpan,
                 spanIndex, verticalOrientation, ItemDecorate.Type.BOTTOM
             )
             val startItemDecorateSize = startItemDecorate?.widthSize ?: 0
