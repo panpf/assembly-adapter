@@ -37,12 +37,14 @@ open class LinearDividerItemDecoration(
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
     ) {
-        val layoutManager = (parent.layoutManager?.takeIf { it is LinearLayoutManager }
-            ?: IllegalArgumentException("layoutManager must be LinearLayoutManager")) as LinearLayoutManager
-        val verticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
+        val layoutManager = parent.layoutManager ?: return
+        if (layoutManager !is LinearLayoutManager) {
+            throw IllegalArgumentException("layoutManager must be LinearLayoutManager")
+        }
+        val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
         val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
-        val itemCount = parent.adapter?.itemCount ?: 0
+        val verticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
 
         val startItemDecorate = linearItemDecorateProvider.getItemDecorate(
             view, parent, itemCount, position, verticalOrientation, ItemDecorate.Type.START
@@ -70,13 +72,13 @@ open class LinearDividerItemDecoration(
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val layoutManager =
-            (parent.layoutManager?.takeIf { it is LinearLayoutManager } as LinearLayoutManager?)
-                ?: return
+        val layoutManager = parent.layoutManager ?: return
+        if (layoutManager !is LinearLayoutManager) {
+            throw IllegalArgumentException("layoutManager must be LinearLayoutManager")
+        }
+        val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
+        val childCount = parent.childCount.takeIf { it != 0 } ?: return
         val verticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
-        val childCount: Int = parent.childCount
-        val itemCount = parent.adapter?.itemCount ?: 0
-        if (childCount == 0 || itemCount == 0) return
 
         for (index in 0 until childCount) {
             val view = parent.getChildAt(index)

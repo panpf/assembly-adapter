@@ -37,8 +37,13 @@ open class GridDividerItemDecoration(
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
     ) {
-        val layoutManager = (parent.layoutManager?.takeIf { it is GridLayoutManager }
-            ?: IllegalArgumentException("layoutManager must be GridLayoutManager")) as GridLayoutManager
+        val layoutManager = parent.layoutManager ?: return
+        if (layoutManager !is GridLayoutManager) {
+            throw IllegalArgumentException("layoutManager must be GridLayoutManager")
+        }
+        val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
+        val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
+        val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
         val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val spanSizeLookup = layoutManager.spanSizeLookup
         if (!spanSizeLookup.isSpanIndexCacheEnabled) {
@@ -47,9 +52,6 @@ open class GridDividerItemDecoration(
         if (!spanSizeLookup.isSpanGroupIndexCacheEnabled) {
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
         }
-        val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
-        val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
-        val itemCount = parent.adapter?.itemCount ?: 0
         val spanCount = layoutManager.spanCount
         val spanSize = spanSizeLookup.getSpanSize(position)
         val spanIndex = spanSizeLookup.getSpanIndex(position, spanCount)
@@ -86,9 +88,12 @@ open class GridDividerItemDecoration(
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val layoutManager =
-            (parent.layoutManager?.takeIf { it is GridLayoutManager } as GridLayoutManager?)
-                ?: return
+        val layoutManager = parent.layoutManager ?: return
+        if (layoutManager !is GridLayoutManager) {
+            throw IllegalArgumentException("layoutManager must be GridLayoutManager")
+        }
+        val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
+        val childCount = parent.childCount.takeIf { it != 0 } ?: return
         val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val spanSizeLookup = layoutManager.spanSizeLookup
         if (!spanSizeLookup.isSpanIndexCacheEnabled) {
@@ -97,9 +102,6 @@ open class GridDividerItemDecoration(
         if (!spanSizeLookup.isSpanGroupIndexCacheEnabled) {
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
         }
-        val childCount = parent.childCount
-        val itemCount = parent.adapter?.itemCount ?: 0
-        if (childCount == 0 || itemCount == 0) return
         val spanCount = layoutManager.spanCount
         val spanGroupCount =
             layoutManager.spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1

@@ -36,16 +36,18 @@ open class AssemblyStaggeredGridDividerItemDecoration(
     class Builder(context: Context) : StaggeredGridDividerItemDecoration.Builder(context) {
 
         private var personaliseDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
-        private var personaliseFirstDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? =
-            null
-        private var personaliseLastDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? =
-            null
+
+        //        private var personaliseFirstDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? =
+//            null
+//        private var personaliseLastDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? =
+//            null
         private var personaliseFirstSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
         private var personaliseLastSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
 
         private var disableDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableFirstDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableLastDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
+
+        //        private var disableFirstDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
+//        private var disableLastDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
         private var disableFirstSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
         private var disableLastSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
 
@@ -61,13 +63,13 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             return AssemblyStaggeredGridItemDecorateProvider(
                 defaultStaggeredGridItemDecorateProvider = defaultItemDecorateProvider,
                 personaliseDividerItemDecorateMap = personaliseDividerItemDecorateMap,
-                personaliseFirstDividerItemDecorateMap = personaliseFirstDividerItemDecorateMap,
-                personaliseLastDividerItemDecorateMap = personaliseLastDividerItemDecorateMap,
+//                personaliseFirstDividerItemDecorateMap = personaliseFirstDividerItemDecorateMap,
+//                personaliseLastDividerItemDecorateMap = personaliseLastDividerItemDecorateMap,
                 personaliseFirstSideItemDecorateMap = personaliseFirstSideItemDecorateMap,
                 personaliseLastSideItemDecorateMap = personaliseLastSideItemDecorateMap,
                 disableDividerItemDecorateMap = disableDividerItemDecorateMap,
-                disableFirstDividerItemDecorateMap = disableFirstDividerItemDecorateMap,
-                disableLastDividerItemDecorateMap = disableLastDividerItemDecorateMap,
+//                disableFirstDividerItemDecorateMap = disableFirstDividerItemDecorateMap,
+//                disableLastDividerItemDecorateMap = disableLastDividerItemDecorateMap,
                 disableFirstSideItemDecorateMap = disableFirstSideItemDecorateMap,
                 disableLastSideItemDecorateMap = disableLastSideItemDecorateMap,
                 findItemFactoryClassByPosition = findItemFactoryClassByPosition,
@@ -79,35 +81,35 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             return this
         }
 
-        override fun firstDivider(decorate: Decorate): Builder {
-            super.firstDivider(decorate)
-            return this
-        }
-
-        override fun lastDivider(decorate: Decorate): Builder {
-            super.lastDivider(decorate)
-            return this
-        }
-
-        override fun firstAndLastDivider(decorate: Decorate): Builder {
-            super.firstAndLastDivider(decorate)
-            return this
-        }
-
-        override fun showFirstDivider(showFirstDivider: Boolean): Builder {
-            super.showFirstDivider(showFirstDivider)
-            return this
-        }
-
-        override fun showLastDivider(showLastDivider: Boolean): Builder {
-            super.showLastDivider(showLastDivider)
-            return this
-        }
-
-        override fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean): Builder {
-            super.showFirstAndLastDivider(showFirstAndLastDivider)
-            return this
-        }
+//        override fun firstDivider(decorate: Decorate): Builder {
+//            super.firstDivider(decorate)
+//            return this
+//        }
+//
+//        override fun lastDivider(decorate: Decorate): Builder {
+//            super.lastDivider(decorate)
+//            return this
+//        }
+//
+//        override fun firstAndLastDivider(decorate: Decorate): Builder {
+//            super.firstAndLastDivider(decorate)
+//            return this
+//        }
+//
+//        override fun showFirstDivider(showFirstDivider: Boolean): Builder {
+//            super.showFirstDivider(showFirstDivider)
+//            return this
+//        }
+//
+//        override fun showLastDivider(showLastDivider: Boolean): Builder {
+//            super.showLastDivider(showLastDivider)
+//            return this
+//        }
+//
+//        override fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean): Builder {
+//            super.showFirstAndLastDivider(showFirstAndLastDivider)
+//            return this
+//        }
 
 
         override fun side(decorate: Decorate): Builder {
@@ -153,32 +155,32 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             return this
         }
 
-        fun personaliseFirstDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseFirstDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseFirstDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            return this
-        }
-
-        fun personaliseLastDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseLastDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseLastDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            return this
-        }
-
-        fun personaliseFirstAndLastDivider(
-            itemFactoryClass: KClass<*>,
-            decorate: Decorate
-        ): Builder {
-            (personaliseFirstDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseFirstDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            (personaliseLastDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseLastDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            return this
-        }
+//        fun personaliseFirstDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
+//            (personaliseFirstDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+//                this@Builder.personaliseFirstDividerItemDecorateMap = this
+//            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
+//            return this
+//        }
+//
+//        fun personaliseLastDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
+//            (personaliseLastDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+//                this@Builder.personaliseLastDividerItemDecorateMap = this
+//            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
+//            return this
+//        }
+//
+//        fun personaliseFirstAndLastDivider(
+//            itemFactoryClass: KClass<*>,
+//            decorate: Decorate
+//        ): Builder {
+//            (personaliseFirstDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+//                this@Builder.personaliseFirstDividerItemDecorateMap = this
+//            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
+//            (personaliseLastDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+//                this@Builder.personaliseLastDividerItemDecorateMap = this
+//            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
+//            return this
+//        }
 
 
         fun personaliseFirstSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
@@ -213,29 +215,29 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             return this
         }
 
-        fun disableFirstDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableFirstDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
-            return this
-        }
-
-        fun disableLastDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableLastDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableLastDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
-            return this
-        }
-
-        fun disableFirstAndLastDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableFirstDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
-            (disableLastDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
-                this@Builder.disableLastDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
-            return this
-        }
+//        fun disableFirstDivider(itemFactoryClass: KClass<*>): Builder {
+//            (disableFirstDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+//                this@Builder.disableFirstDividerItemDecorateMap = this
+//            })[itemFactoryClass.java] = true
+//            return this
+//        }
+//
+//        fun disableLastDivider(itemFactoryClass: KClass<*>): Builder {
+//            (disableLastDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+//                this@Builder.disableLastDividerItemDecorateMap = this
+//            })[itemFactoryClass.java] = true
+//            return this
+//        }
+//
+//        fun disableFirstAndLastDivider(itemFactoryClass: KClass<*>): Builder {
+//            (disableFirstDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+//                this@Builder.disableFirstDividerItemDecorateMap = this
+//            })[itemFactoryClass.java] = true
+//            (disableLastDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+//                this@Builder.disableLastDividerItemDecorateMap = this
+//            })[itemFactoryClass.java] = true
+//            return this
+//        }
 
 
         fun disableFirstSide(itemFactoryClass: KClass<*>): Builder {
@@ -272,13 +274,13 @@ open class AssemblyStaggeredGridDividerItemDecoration(
     class AssemblyStaggeredGridItemDecorateProvider(
         private val defaultStaggeredGridItemDecorateProvider: StaggeredGridItemDecorateProvider,
         private val personaliseDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseFirstDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseLastDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
+//        private val personaliseFirstDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
+//        private val personaliseLastDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val personaliseFirstSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val personaliseLastSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
         private val disableDividerItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableFirstDividerItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableLastDividerItemDecorateMap: Map<Class<*>, Boolean>?,
+//        private val disableFirstDividerItemDecorateMap: Map<Class<*>, Boolean>?,
+//        private val disableLastDividerItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableFirstSideItemDecorateMap: Map<Class<*>, Boolean>?,
         private val disableLastSideItemDecorateMap: Map<Class<*>, Boolean>?,
         findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)?,
@@ -308,8 +310,6 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             if (itemCount == 0) return null
 //            val isFirstGroup = spanGroupIndex == 0
 //            val isLastGroup = spanGroupIndex == spanGroupCount - 1
-            val isFirstGroup = false
-            val isLastGroup = false
             val isFirstSpan = isFullSpan || spanIndex == 0
             val isLastSpan = isFullSpan || spanIndex == spanCount - 1
             val adapter = parent.adapter ?: return null
@@ -319,15 +319,13 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                     spanIndex, verticalOrientation, decorateType
                 )
             if (isDisabledItemDecorate(
-                    verticalOrientation, decorateType, isFirstGroup, isLastGroup,
-                    isFullSpan, isFirstSpan, isLastSpan, itemFactoryClass,
+                    verticalOrientation, decorateType, isFirstSpan, isLastSpan, itemFactoryClass,
                 )
             ) {
                 return null
             }
             return getPersonaliseItemDecorate(
-                verticalOrientation, decorateType, isFirstGroup, isLastGroup,
-                isFullSpan, isFirstSpan, isLastSpan, itemFactoryClass
+                verticalOrientation, decorateType, isFirstSpan, isLastSpan, itemFactoryClass
             ) ?: defaultStaggeredGridItemDecorateProvider.getItemDecorate(
                 view, parent, itemCount, position, spanCount, isFullSpan,
                 spanIndex, verticalOrientation, decorateType
@@ -337,44 +335,27 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private fun isDisabledItemDecorate(
             verticalOrientation: Boolean,
             decorateType: ItemDecorate.Type,
-            isFirstGroup: Boolean,
-            isLastGroup: Boolean,
-            isFullSpan: Boolean,
             isFirstSpan: Boolean,
             isLastSpan: Boolean,
             itemFactoryClass: Class<*>,
         ): Boolean {
-            return if (isFullSpan) {
-                if (verticalOrientation) {
-                    when (decorateType) {
-                        ItemDecorate.Type.START -> disableFirstSideItemDecorateMap
-                        ItemDecorate.Type.TOP -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
-                        ItemDecorate.Type.END -> disableLastSideItemDecorateMap
-                        ItemDecorate.Type.BOTTOM -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
-                    }
-                } else {
-                    when (decorateType) {
-                        ItemDecorate.Type.START -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
-                        ItemDecorate.Type.TOP -> disableFirstSideItemDecorateMap
-                        ItemDecorate.Type.END -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
-                        ItemDecorate.Type.BOTTOM -> disableLastSideItemDecorateMap
-                    }
+            return if (verticalOrientation) {
+                when (decorateType) {
+                    ItemDecorate.Type.START -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
+//                    ItemDecorate.Type.TOP -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
+                    ItemDecorate.Type.TOP -> null
+                    ItemDecorate.Type.END -> if (isLastSpan) disableLastSideItemDecorateMap else null
+//                    ItemDecorate.Type.BOTTOM -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
+                    ItemDecorate.Type.BOTTOM -> disableDividerItemDecorateMap
                 }
             } else {
-                if (verticalOrientation) {
-                    when (decorateType) {
-                        ItemDecorate.Type.START -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
-                        ItemDecorate.Type.TOP -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
-                        ItemDecorate.Type.END -> if (isLastSpan) disableLastSideItemDecorateMap else null
-                        ItemDecorate.Type.BOTTOM -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
-                    }
-                } else {
-                    when (decorateType) {
-                        ItemDecorate.Type.START -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
-                        ItemDecorate.Type.TOP -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
-                        ItemDecorate.Type.END -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
-                        ItemDecorate.Type.BOTTOM -> if (isLastSpan) disableLastSideItemDecorateMap else null
-                    }
+                when (decorateType) {
+//                    ItemDecorate.Type.START -> if (isFirstGroup) disableFirstDividerItemDecorateMap else null
+                    ItemDecorate.Type.START -> null
+                    ItemDecorate.Type.TOP -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
+//                    ItemDecorate.Type.END -> if (isLastGroup) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
+                    ItemDecorate.Type.END -> disableDividerItemDecorateMap
+                    ItemDecorate.Type.BOTTOM -> if (isLastSpan) disableLastSideItemDecorateMap else null
                 }
             }?.containsKey(itemFactoryClass) == true
         }
@@ -382,44 +363,27 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private fun getPersonaliseItemDecorate(
             verticalOrientation: Boolean,
             decorateType: ItemDecorate.Type,
-            isFirstGroup: Boolean,
-            isLastGroup: Boolean,
-            isFullSpan: Boolean,
             isFirstSpan: Boolean,
             isLastSpan: Boolean,
             itemFactoryClass: Class<*>,
         ): ItemDecorate? {
-            return if (isFullSpan) {
-                if (verticalOrientation) {
-                    when (decorateType) {
-                        ItemDecorate.Type.START -> personaliseFirstSideItemDecorateMap
-                        ItemDecorate.Type.TOP -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
-                        ItemDecorate.Type.END -> personaliseLastSideItemDecorateMap
-                        ItemDecorate.Type.BOTTOM -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
-                    }
-                } else {
-                    when (decorateType) {
-                        ItemDecorate.Type.START -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
-                        ItemDecorate.Type.TOP -> personaliseFirstSideItemDecorateMap
-                        ItemDecorate.Type.END -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
-                        ItemDecorate.Type.BOTTOM -> personaliseLastSideItemDecorateMap
-                    }
+            return if (verticalOrientation) {
+                when (decorateType) {
+                    ItemDecorate.Type.START -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
+//                    ItemDecorate.Type.TOP -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
+                    ItemDecorate.Type.TOP -> null
+                    ItemDecorate.Type.END -> if (isLastSpan) personaliseLastSideItemDecorateMap else null
+//                    ItemDecorate.Type.BOTTOM -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
+                    ItemDecorate.Type.BOTTOM -> personaliseDividerItemDecorateMap
                 }
             } else {
-                if (verticalOrientation) {
-                    when (decorateType) {
-                        ItemDecorate.Type.START -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
-                        ItemDecorate.Type.TOP -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
-                        ItemDecorate.Type.END -> if (isLastSpan) personaliseLastSideItemDecorateMap else null
-                        ItemDecorate.Type.BOTTOM -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
-                    }
-                } else {
-                    when (decorateType) {
-                        ItemDecorate.Type.START -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
-                        ItemDecorate.Type.TOP -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
-                        ItemDecorate.Type.END -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
-                        ItemDecorate.Type.BOTTOM -> if (isLastSpan) personaliseLastSideItemDecorateMap else null
-                    }
+                when (decorateType) {
+//                    ItemDecorate.Type.START -> if (isFirstGroup) personaliseFirstDividerItemDecorateMap else null
+                    ItemDecorate.Type.START -> null
+                    ItemDecorate.Type.TOP -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
+//                    ItemDecorate.Type.END -> if (isLastGroup) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
+                    ItemDecorate.Type.END -> personaliseDividerItemDecorateMap
+                    ItemDecorate.Type.BOTTOM -> if (isLastSpan) personaliseLastSideItemDecorateMap else null
                 }
             }?.get(itemFactoryClass)
         }
