@@ -37,9 +37,7 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     override fun createItem(parent: ViewGroup): BindingItem<DATA, VIEW_BINDING> {
         val context = parent.context
         val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
-        return BindingItem(this, binding).apply {
-            initItem(parent.context, binding, this)
-        }
+        return BindingItem(this, binding)
     }
 
     /**
@@ -84,6 +82,10 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
         val factory: BindingItemFactory<DATA, VIEW_BINDING>,
         val binding: VIEW_BINDING
     ) : Item<DATA>(binding.root) {
+
+        init {
+            factory.initItem(binding.root.context, binding, this)
+        }
 
         override fun bindData(
             bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA

@@ -36,9 +36,7 @@ abstract class SimpleItemFactory<DATA : Any>(
     final override fun createItem(parent: ViewGroup): SimpleItem<DATA> {
         val context = parent.context
         val itemView = createItemView(context, LayoutInflater.from(context), parent)
-        return SimpleItem(this, itemView).apply {
-            initItem(parent.context, itemView, this)
-        }
+        return SimpleItem(this, itemView)
     }
 
     /**
@@ -69,6 +67,10 @@ abstract class SimpleItemFactory<DATA : Any>(
     class SimpleItem<DATA : Any>(
         val factory: SimpleItemFactory<DATA>, itemView: View
     ) : Item<DATA>(itemView) {
+
+        init {
+            factory.initItem(itemView.context, itemView, this)
+        }
 
         override fun bindData(
             bindingAdapterPosition: Int, absoluteAdapterPosition: Int, data: DATA
