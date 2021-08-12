@@ -50,32 +50,6 @@ abstract class CompatAssemblyMoreItemFactory(private var listener: CompatOnLoadM
         return this
     }
 
-    override fun setOnViewClickListener(
-        viewId: Int,
-        onClickListener: CompatOnClickListener<CompatMoreState>
-    ): CompatAssemblyMoreItemFactory {
-        super.setOnViewClickListener(viewId, onClickListener)
-        return this
-    }
-
-    override fun setOnItemClickListener(onClickListener: CompatOnClickListener<CompatMoreState>): CompatAssemblyMoreItemFactory {
-        super.setOnItemClickListener(onClickListener)
-        return this
-    }
-
-    override fun setOnViewLongClickListener(
-        viewId: Int,
-        onClickListener: CompatOnLongClickListener<CompatMoreState>
-    ): CompatAssemblyMoreItemFactory {
-        super.setOnViewLongClickListener(viewId, onClickListener)
-        return this
-    }
-
-    override fun setOnItemLongClickListener(onClickListener: CompatOnLongClickListener<CompatMoreState>): CompatAssemblyMoreItemFactory {
-        super.setOnItemLongClickListener(onClickListener)
-        return this
-    }
-
     fun interface OnLoadCallback {
         fun onStartLoad()
     }
