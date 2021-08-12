@@ -29,10 +29,13 @@ abstract class ExtraExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA
     /**
      * Save an value to item
      *
-     * @param key The key of the value, later you can use the key to get the value through the [getExtraOrNull] or [getExtraOrThrow] method
+     * @param key The key of the value, later you can use the key to get the value through the getExtra* method
      * @param value Value to save
      * @see getExtraOrNull
      * @see getExtraOrThrow
+     * @see getExtraOrDefault
+     * @see getExtraOrElse
+     * @see getExtraOrPut
      */
     fun putExtra(key: String, value: Any?) {
         (extras ?: ArrayMap<String, Any>().apply {
