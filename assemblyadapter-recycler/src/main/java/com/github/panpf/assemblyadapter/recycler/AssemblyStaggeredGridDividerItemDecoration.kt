@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.content.Context
 import android.view.View
+import androidx.collection.ArrayMap
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
@@ -35,21 +36,21 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
     class Builder(context: Context) : StaggeredGridDividerItemDecoration.Builder(context) {
 
-        private var personaliseDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
+        private var personaliseDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
 
-        //        private var personaliseFirstDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? =
+        //        private var personaliseFirstDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? =
 //            null
-//        private var personaliseLastDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? =
+//        private var personaliseLastDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? =
 //            null
-        private var personaliseFirstSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
-        private var personaliseLastSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
+        private var personaliseFirstSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
+        private var personaliseLastSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
 
-        private var disableDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
+        private var disableDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
 
-        //        private var disableFirstDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-//        private var disableLastDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableFirstSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableLastSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
+        //        private var disableFirstDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
+//        private var disableLastDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
+        private var disableFirstSideItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
+        private var disableLastSideItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
 
         private var findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)? =
             null
@@ -149,21 +150,21 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
 
         fun personaliseDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseDividerItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
 
 //        fun personaliseFirstDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-//            (personaliseFirstDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+//            (personaliseFirstDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
 //                this@Builder.personaliseFirstDividerItemDecorateMap = this
 //            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
 //            return this
 //        }
 //
 //        fun personaliseLastDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-//            (personaliseLastDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+//            (personaliseLastDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
 //                this@Builder.personaliseLastDividerItemDecorateMap = this
 //            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
 //            return this
@@ -173,10 +174,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 //            itemFactoryClass: KClass<*>,
 //            decorate: Decorate
 //        ): Builder {
-//            (personaliseFirstDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+//            (personaliseFirstDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
 //                this@Builder.personaliseFirstDividerItemDecorateMap = this
 //            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-//            (personaliseLastDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+//            (personaliseLastDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
 //                this@Builder.personaliseLastDividerItemDecorateMap = this
 //            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
 //            return this
@@ -184,24 +185,24 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
 
         fun personaliseFirstSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseFirstSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseFirstSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
 
         fun personaliseLastSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseLastSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseLastSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
 
         fun personaliseFirstAndLastSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseFirstSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseFirstSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            (personaliseLastSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseLastSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
@@ -209,31 +210,31 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
 
         fun disableDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableDividerItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
 
 //        fun disableFirstDivider(itemFactoryClass: KClass<*>): Builder {
-//            (disableFirstDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+//            (disableFirstDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
 //                this@Builder.disableFirstDividerItemDecorateMap = this
 //            })[itemFactoryClass.java] = true
 //            return this
 //        }
 //
 //        fun disableLastDivider(itemFactoryClass: KClass<*>): Builder {
-//            (disableLastDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+//            (disableLastDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
 //                this@Builder.disableLastDividerItemDecorateMap = this
 //            })[itemFactoryClass.java] = true
 //            return this
 //        }
 //
 //        fun disableFirstAndLastDivider(itemFactoryClass: KClass<*>): Builder {
-//            (disableFirstDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+//            (disableFirstDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
 //                this@Builder.disableFirstDividerItemDecorateMap = this
 //            })[itemFactoryClass.java] = true
-//            (disableLastDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+//            (disableLastDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
 //                this@Builder.disableLastDividerItemDecorateMap = this
 //            })[itemFactoryClass.java] = true
 //            return this
@@ -241,24 +242,24 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
 
         fun disableFirstSide(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableFirstSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
 
         fun disableLastSide(itemFactoryClass: KClass<*>): Builder {
-            (disableLastSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableLastSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
 
         fun disableFirstAndLastSide(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableFirstSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
-            (disableLastSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableLastSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
@@ -273,16 +274,16 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
     class AssemblyStaggeredGridItemDecorateProvider(
         private val defaultStaggeredGridItemDecorateProvider: StaggeredGridItemDecorateProvider,
-        private val personaliseDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-//        private val personaliseFirstDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-//        private val personaliseLastDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseFirstSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseLastSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val disableDividerItemDecorateMap: Map<Class<*>, Boolean>?,
-//        private val disableFirstDividerItemDecorateMap: Map<Class<*>, Boolean>?,
-//        private val disableLastDividerItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableFirstSideItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableLastSideItemDecorateMap: Map<Class<*>, Boolean>?,
+        private val personaliseDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+//        private val personaliseFirstDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+//        private val personaliseLastDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+        private val personaliseFirstSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+        private val personaliseLastSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+        private val disableDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
+//        private val disableFirstDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
+//        private val disableLastDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
+        private val disableFirstSideItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
+        private val disableLastSideItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
         findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)?,
     ) : StaggeredGridItemDecorateProvider {
 

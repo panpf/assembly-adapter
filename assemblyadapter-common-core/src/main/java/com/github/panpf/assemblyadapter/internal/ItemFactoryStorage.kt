@@ -15,9 +15,9 @@
  */
 package com.github.panpf.assemblyadapter.internal
 
+import androidx.collection.ArrayMap
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.Placeholder
-import java.util.*
 
 /**
  * Responsible for managing itemType and matching ItemFactory according to data and itemType
@@ -27,8 +27,7 @@ class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>>(
 ) {
 
     private val itemFactoryList: List<ITEM_FACTORY> = initItemFactoryList.toList()
-
-    private val getItemTypeByItemFactoryMap = HashMap<ITEM_FACTORY, Int>().apply {
+    private val itemTypeBindMap = ArrayMap<ITEM_FACTORY, Int>().apply {
         initItemFactoryList.forEachIndexed { index, itemFactory ->
             this[itemFactory] = index
         }
@@ -64,6 +63,6 @@ class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>>(
     ): Int {
         val itemFactory =
             getItemFactoryByData(data, itemFactoryName, adapterName, itemFactoryPropertyName)
-        return getItemTypeByItemFactoryMap[itemFactory]!!
+        return itemTypeBindMap[itemFactory]!!
     }
 }

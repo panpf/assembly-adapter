@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.content.Context
 import android.view.View
+import androidx.collection.ArrayMap
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
@@ -35,13 +36,13 @@ open class AssemblyLinearDividerItemDecoration(
 
     class Builder(context: Context) : LinearDividerItemDecoration.Builder(context) {
 
-        private var personaliseDividerItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
-        private var personaliseFirstSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
-        private var personaliseLastSideItemDecorateMap: MutableMap<Class<*>, ItemDecorate>? = null
+        private var personaliseDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
+        private var personaliseFirstSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
+        private var personaliseLastSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
 
-        private var disableDividerItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableFirstSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
-        private var disableLastSideItemDecorateMap: MutableMap<Class<*>, Boolean>? = null
+        private var disableDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
+        private var disableFirstSideItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
+        private var disableLastSideItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
 
         private var findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)? =
             null
@@ -117,31 +118,31 @@ open class AssemblyLinearDividerItemDecoration(
 
 
         fun personaliseDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseDividerItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseDividerItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
 
         fun personaliseFirstSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseFirstSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseFirstSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
 
         fun personaliseLastSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseLastSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseLastSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
         }
 
         fun personaliseFirstAndLastSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseFirstSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseFirstSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            (personaliseLastSideItemDecorateMap ?: HashMap<Class<*>, ItemDecorate>().apply {
+            (personaliseLastSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
                 this@Builder.personaliseLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = decorate.createItemDecorate(context)
             return this
@@ -149,31 +150,31 @@ open class AssemblyLinearDividerItemDecoration(
 
 
         fun disableDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableDividerItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableDividerItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
 
         fun disableFirstSide(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableFirstSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
 
         fun disableLastSide(itemFactoryClass: KClass<*>): Builder {
-            (disableLastSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableLastSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
         }
 
         fun disableFirstAndLastSide(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableFirstSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableFirstSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
-            (disableLastSideItemDecorateMap ?: HashMap<Class<*>, Boolean>().apply {
+            (disableLastSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableLastSideItemDecorateMap = this
             })[itemFactoryClass.java] = true
             return this
@@ -188,12 +189,12 @@ open class AssemblyLinearDividerItemDecoration(
 
     class AssemblyLinearItemDecorateProvider(
         private val defaultLinearItemDecorateProvider: LinearItemDecorateProvider,
-        private val personaliseDividerItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseFirstSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val personaliseLastSideItemDecorateMap: Map<Class<*>, ItemDecorate>?,
-        private val disableDividerItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableFirstSideItemDecorateMap: Map<Class<*>, Boolean>?,
-        private val disableLastSideItemDecorateMap: Map<Class<*>, Boolean>?,
+        private val personaliseDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+        private val personaliseFirstSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+        private val personaliseLastSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+        private val disableDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
+        private val disableFirstSideItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
+        private val disableLastSideItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
         findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)?,
     ) : LinearItemDecorateProvider {
 

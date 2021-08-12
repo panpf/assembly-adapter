@@ -30,7 +30,6 @@ android {
 dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
     api(project(":assemblyadapter-common-core"))
-    api("androidx.collection:collection:${property("ANDROIDX_COLLECTION")}")
 
     testImplementation("junit:junit:${property("JUNIT")}")
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
