@@ -58,4 +58,27 @@ abstract class ExtraItem<DATA : Any>(itemView: View) : Item<DATA>(itemView) {
     fun <T : Any> getExtraOrThrow(key: String): T {
         return extras?.get(key) as T? ?: throw Exception("Not found extra by key: $key")
     }
+
+    /**
+     * Use the given [key] to get value, Return [defaultValue] if it doesn't exist
+     */
+    fun <T : Any> getExtraOrDefault(key: String, defaultValue: T): T {
+        return extras?.get(key) as T? ?: defaultValue
+    }
+
+    /**
+     * Use the given [key] to get value, Return and put [defaultValue] if it doesn't exist
+     */
+    fun <T : Any> getExtraOrPut(key: String, defaultValue: () -> T): T {
+        return extras?.get(key) as T? ?: defaultValue().apply {
+            putExtra(key, this)
+        }
+    }
+
+    /**
+     * Use the given [key] to get value, Return [defaultValue] if it doesn't exist
+     */
+    fun <T : Any> getExtraOrElse(key: String, defaultValue: () -> T): T {
+        return extras?.get(key) as T? ?: defaultValue()
+    }
 }
