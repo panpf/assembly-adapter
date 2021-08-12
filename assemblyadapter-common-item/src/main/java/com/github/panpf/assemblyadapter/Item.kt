@@ -28,6 +28,7 @@ abstract class Item<DATA : Any>(val itemView: View) {
     private var _data: DATA? = null
     private var _bindingAdapterPosition: Int = -1
     private var _absoluteAdapterPosition: Int = -1
+    private var extraVars: MutableMap<String, Any>? = null
 
     val context: Context = itemView.context
 
@@ -107,4 +108,38 @@ abstract class Item<DATA : Any>(val itemView: View) {
         absoluteAdapterPosition: Int,
         data: DATA
     )
+
+    /**
+     * Save an additional variable to item
+     *
+     * @param key The key of the variable, later you can use the key to get the variable through the [getExtraVarOrNull] or [getExtraVarOrThrow] method
+     * @param value Variable to save
+     * @see getExtraVarOrNull
+     * @see getExtraVarOrThrow
+     */
+    fun putExtraVar(key: String, value: Any?) {
+        (extraVars ?: HashMap<String, Any>().apply {
+            this@Item.extraVars = this
+        }).apply {
+            if (value != null) {
+                put(key, value)
+            } else {
+                remove(key)
+            }
+        }
+    }
+
+    /**
+     * Use the given [key] to get additional variables, If it does not exist, return null
+     */
+    fun <T : Any> getExtraVarOrNull(key: String): T? {
+        return extraVars?.get(key) as T?
+    }
+
+    /**
+     * Use the given [key] to get additional variables, Throw an exception if it doesn't exist
+     */
+    fun <T : Any> getExtraVarOrThrow(key: String): T {
+        return extraVars?.get(key) as T? ?: throw Exception("Not found extra var by key: $key")
+    }
 }
