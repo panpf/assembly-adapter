@@ -19,6 +19,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.collection.ArrayMap
 
 /**
  * Item is similar to ViewHolder, responsible for holding item view and binding data
@@ -28,7 +29,7 @@ abstract class Item<DATA : Any>(val itemView: View) {
     private var _data: DATA? = null
     private var _bindingAdapterPosition: Int = -1
     private var _absoluteAdapterPosition: Int = -1
-    private var extraVars: MutableMap<String, Any>? = null
+    private var extras: ArrayMap<String, Any>? = null
 
     val context: Context = itemView.context
 
@@ -110,16 +111,16 @@ abstract class Item<DATA : Any>(val itemView: View) {
     )
 
     /**
-     * Save an additional variable to item
+     * Save an value to item
      *
-     * @param key The key of the variable, later you can use the key to get the variable through the [getExtraVarOrNull] or [getExtraVarOrThrow] method
-     * @param value Variable to save
-     * @see getExtraVarOrNull
-     * @see getExtraVarOrThrow
+     * @param key The key of the value, later you can use the key to get the value through the [getExtraOrNull] or [getExtraOrThrow] method
+     * @param value Value to save
+     * @see getExtraOrNull
+     * @see getExtraOrThrow
      */
-    fun putExtraVar(key: String, value: Any?) {
-        (extraVars ?: HashMap<String, Any>().apply {
-            this@Item.extraVars = this
+    fun putExtra(key: String, value: Any?) {
+        (extras ?: ArrayMap<String, Any>().apply {
+            this@Item.extras = this
         }).apply {
             if (value != null) {
                 put(key, value)
@@ -130,16 +131,16 @@ abstract class Item<DATA : Any>(val itemView: View) {
     }
 
     /**
-     * Use the given [key] to get additional variables, If it does not exist, return null
+     * Use the given [key] to get value, If it does not exist, return null
      */
-    fun <T : Any> getExtraVarOrNull(key: String): T? {
-        return extraVars?.get(key) as T?
+    fun <T : Any> getExtraOrNull(key: String): T? {
+        return extras?.get(key) as T?
     }
 
     /**
-     * Use the given [key] to get additional variables, Throw an exception if it doesn't exist
+     * Use the given [key] to get value, Throw an exception if it doesn't exist
      */
-    fun <T : Any> getExtraVarOrThrow(key: String): T {
-        return extraVars?.get(key) as T? ?: throw Exception("Not found extra var by key: $key")
+    fun <T : Any> getExtraOrThrow(key: String): T {
+        return extras?.get(key) as T? ?: throw Exception("Not found extra by key: $key")
     }
 }
