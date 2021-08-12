@@ -12,10 +12,10 @@ class CompatItemFactory(val itemFactory: CompatAssemblyItemFactory<*>) :
     }
 
     override fun createItem(parent: ViewGroup): Item<Any> {
-        return NewItemCompat(itemFactory.dispatchCreateItem(parent))
+        return CompatItem(itemFactory.dispatchCreateItem(parent))
     }
 
-    class NewItemCompat(val item: CompatAssemblyItem<*>) :
+    class CompatItem(val item: CompatAssemblyItem<*>) :
         Item<Any>(item.itemView) {
         override fun bindData(
             bindingAdapterPosition: Int,

@@ -19,7 +19,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.collection.ArrayMap
 
 /**
  * Item is similar to ViewHolder, responsible for holding item view and binding data
@@ -29,7 +28,6 @@ abstract class Item<DATA : Any>(val itemView: View) {
     private var _data: DATA? = null
     private var _bindingAdapterPosition: Int = -1
     private var _absoluteAdapterPosition: Int = -1
-    private var extras: ArrayMap<String, Any>? = null
 
     val context: Context = itemView.context
 
@@ -109,38 +107,4 @@ abstract class Item<DATA : Any>(val itemView: View) {
         absoluteAdapterPosition: Int,
         data: DATA
     )
-
-    /**
-     * Save an value to item
-     *
-     * @param key The key of the value, later you can use the key to get the value through the [getExtraOrNull] or [getExtraOrThrow] method
-     * @param value Value to save
-     * @see getExtraOrNull
-     * @see getExtraOrThrow
-     */
-    fun putExtra(key: String, value: Any?) {
-        (extras ?: ArrayMap<String, Any>().apply {
-            this@Item.extras = this
-        }).apply {
-            if (value != null) {
-                put(key, value)
-            } else {
-                remove(key)
-            }
-        }
-    }
-
-    /**
-     * Use the given [key] to get value, If it does not exist, return null
-     */
-    fun <T : Any> getExtraOrNull(key: String): T? {
-        return extras?.get(key) as T?
-    }
-
-    /**
-     * Use the given [key] to get value, Throw an exception if it doesn't exist
-     */
-    fun <T : Any> getExtraOrThrow(key: String): T {
-        return extras?.get(key) as T? ?: throw Exception("Not found extra by key: $key")
-    }
 }

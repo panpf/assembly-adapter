@@ -13,10 +13,10 @@ class CompatExpandableChildItemFactory(val itemFactory: CompatAssemblyItemFactor
     }
 
     override fun createItem(parent: ViewGroup): ExpandableChildItem<ExpandableGroup, Any> {
-        return NewExpandableChildItemCompat(itemFactory.dispatchCreateItem(parent))
+        return CompatExpandableChildItem(itemFactory.dispatchCreateItem(parent))
     }
 
-    class NewExpandableChildItemCompat(val item: CompatAssemblyItem<*>) :
+    class CompatExpandableChildItem(val item: CompatAssemblyItem<*>) :
         ExpandableChildItem<ExpandableGroup, Any>(item.itemView) {
 
         override fun bindData(

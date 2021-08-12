@@ -81,7 +81,7 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     class BindingItem<DATA : Any, VIEW_BINDING : ViewBinding>(
         val factory: BindingItemFactory<DATA, VIEW_BINDING>,
         val binding: VIEW_BINDING
-    ) : Item<DATA>(binding.root) {
+    ) : ExtraItem<DATA>(binding.root) {
 
         init {
             factory.initItem(binding.root.context, binding, this)

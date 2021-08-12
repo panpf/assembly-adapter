@@ -88,7 +88,7 @@ abstract class BindingExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, C
     class BindingExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any, VIEW_BINDING : ViewBinding>(
         val factory: BindingExpandableChildItemFactory<GROUP_DATA, CHILD_DATA, VIEW_BINDING>,
         val binding: VIEW_BINDING
-    ) : ExpandableChildItem<GROUP_DATA, CHILD_DATA>(binding.root) {
+    ) : ExtraExpandableChildItem<GROUP_DATA, CHILD_DATA>(binding.root) {
 
         init {
             factory.initItem(binding.root.context, binding, this)

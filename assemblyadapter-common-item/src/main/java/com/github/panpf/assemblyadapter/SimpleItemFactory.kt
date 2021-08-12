@@ -66,7 +66,7 @@ abstract class SimpleItemFactory<DATA : Any>(
 
     class SimpleItem<DATA : Any>(
         val factory: SimpleItemFactory<DATA>, itemView: View
-    ) : Item<DATA>(itemView) {
+    ) : ExtraItem<DATA>(itemView) {
 
         init {
             factory.initItem(itemView.context, itemView, this)

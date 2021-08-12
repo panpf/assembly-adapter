@@ -87,7 +87,7 @@ abstract class SimpleExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CH
     class SimpleExpandableChildItem<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(
         val factory: SimpleExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>,
         itemView: View
-    ) : ExpandableChildItem<GROUP_DATA, CHILD_DATA>(itemView) {
+    ) : ExtraExpandableChildItem<GROUP_DATA, CHILD_DATA>(itemView) {
 
         init {
             factory.initItem(itemView.context, itemView, this)
