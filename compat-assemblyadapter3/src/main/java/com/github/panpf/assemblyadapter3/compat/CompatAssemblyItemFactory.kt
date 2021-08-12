@@ -50,7 +50,7 @@ abstract class CompatAssemblyItemFactory<DATA> {
         return this
     }
 
-    open fun setOnViewClickListener(
+    fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: CompatOnClickListener<DATA>
     ): CompatAssemblyItemFactory<DATA> {
@@ -61,7 +61,7 @@ abstract class CompatAssemblyItemFactory<DATA> {
         return this
     }
 
-    open fun setOnItemClickListener(onClickListener: CompatOnClickListener<DATA>): CompatAssemblyItemFactory<DATA> {
+    fun setOnItemClickListener(onClickListener: CompatOnClickListener<DATA>): CompatAssemblyItemFactory<DATA> {
         if (clickListenerManager == null) {
             clickListenerManager = CompatClickListenerManager()
         }
@@ -69,7 +69,7 @@ abstract class CompatAssemblyItemFactory<DATA> {
         return this
     }
 
-    open fun setOnViewLongClickListener(
+    fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onClickListener: CompatOnLongClickListener<DATA>
     ): CompatAssemblyItemFactory<DATA> {
@@ -80,7 +80,7 @@ abstract class CompatAssemblyItemFactory<DATA> {
         return this
     }
 
-    open fun setOnItemLongClickListener(onClickListener: CompatOnLongClickListener<DATA>): CompatAssemblyItemFactory<DATA> {
+    fun setOnItemLongClickListener(onClickListener: CompatOnLongClickListener<DATA>): CompatAssemblyItemFactory<DATA> {
         if (clickListenerManager == null) {
             clickListenerManager = CompatClickListenerManager()
         }

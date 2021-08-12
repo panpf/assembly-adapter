@@ -39,9 +39,13 @@ import kotlin.reflect.KClass
  * @see SimpleItemFactory
  * @see ViewItemFactory
  */
-abstract class ItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA> {
+abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA>) : Matchable<DATA> {
 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
+
+    final override fun matchData(data: Any): Boolean {
+        return super.matchData(data)
+    }
 
     /**
      * When the Adapter needs a new [Item] to display data, it will execute this method to create an [Item].
@@ -73,7 +77,7 @@ abstract class ItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : M
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    open fun setOnViewClickListener(
+    fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
     ): ItemFactory<DATA> {
@@ -89,7 +93,7 @@ abstract class ItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : M
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    open fun setOnViewLongClickListener(
+    fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
     ): ItemFactory<DATA> {
@@ -104,7 +108,7 @@ abstract class ItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : M
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    open fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
+    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
@@ -116,7 +120,7 @@ abstract class ItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : M
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    open fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
+    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }

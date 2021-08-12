@@ -40,9 +40,13 @@ import kotlin.reflect.KClass
  * @see BindingPagerItemFactory
  * @see ViewPagerItemFactory
  */
-abstract class PagerItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA> {
+abstract class PagerItemFactory<DATA : Any>(final override val dataClass: KClass<DATA>) : Matchable<DATA> {
 
     private var clickListenerStorage: ClickListenerStorage<DATA>? = null
+
+    final override fun matchData(data: Any): Boolean {
+        return super.matchData(data)
+    }
 
     /**
      * When the Adapter needs a new [View] to display data, it will execute this method to create an [View].
@@ -98,7 +102,7 @@ abstract class PagerItemFactory<DATA : Any>(override val dataClass: KClass<DATA>
      * @return [PagerItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    open fun setOnViewClickListener(
+    fun setOnViewClickListener(
         @IdRes viewId: Int,
         onClickListener: OnClickListener<DATA>
     ): PagerItemFactory<DATA> {
@@ -114,7 +118,7 @@ abstract class PagerItemFactory<DATA : Any>(override val dataClass: KClass<DATA>
      * @return [PagerItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    open fun setOnViewLongClickListener(
+    fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
     ): PagerItemFactory<DATA> {
@@ -129,7 +133,7 @@ abstract class PagerItemFactory<DATA : Any>(override val dataClass: KClass<DATA>
      * @return [PagerItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    open fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): PagerItemFactory<DATA> {
+    fun setOnItemClickListener(onClickListener: OnClickListener<DATA>): PagerItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
@@ -141,7 +145,7 @@ abstract class PagerItemFactory<DATA : Any>(override val dataClass: KClass<DATA>
      * @return [PagerItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    open fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): PagerItemFactory<DATA> {
+    fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): PagerItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }
