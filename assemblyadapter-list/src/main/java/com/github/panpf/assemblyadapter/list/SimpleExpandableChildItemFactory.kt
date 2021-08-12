@@ -34,7 +34,7 @@ abstract class SimpleExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CH
     dataClass: KClass<CHILD_DATA>
 ) : ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): SimpleExpandableChildItem<GROUP_DATA, CHILD_DATA> {
+    final override fun createItem(parent: ViewGroup): SimpleExpandableChildItem<GROUP_DATA, CHILD_DATA> {
         val context = parent.context
         val itemView = createItemView(context, LayoutInflater.from(context), parent)
         return SimpleExpandableChildItem(this, itemView)

@@ -34,7 +34,7 @@ abstract class BindingItemFactory<DATA : Any, VIEW_BINDING : ViewBinding>(
     dataClass: KClass<DATA>
 ) : ItemFactory<DATA>(dataClass) {
 
-    override fun createItem(parent: ViewGroup): BindingItem<DATA, VIEW_BINDING> {
+    final override fun createItem(parent: ViewGroup): BindingItem<DATA, VIEW_BINDING> {
         val context = parent.context
         val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
         return BindingItem(this, binding)
