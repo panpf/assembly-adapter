@@ -4,6 +4,26 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 
 
+/************************************** Linear ****************************************************/
+
+
+fun Context.newAssemblyLinearDividerItemDecoration(
+    block: (AssemblyLinearDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyLinearDividerItemDecoration {
+    return AssemblyLinearDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+fun RecyclerView.newAssemblyLinearDividerItemDecoration(
+    block: (AssemblyLinearDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyLinearDividerItemDecoration {
+    return AssemblyLinearDividerItemDecoration.Builder(context).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+
 fun Context.newAssemblyLinearDividerItemDecorationBuilder(): AssemblyLinearDividerItemDecoration.Builder {
     return AssemblyLinearDividerItemDecoration.Builder(this)
 }
@@ -33,6 +53,26 @@ fun RecyclerView.addAssemblyLinearDividerItemDecoration(
 }
 
 
+/**************************************** Grid ****************************************************/
+
+
+fun Context.newAssemblyGridDividerItemDecoration(
+    block: (AssemblyGridDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyGridDividerItemDecoration {
+    return AssemblyGridDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+fun RecyclerView.newAssemblyGridDividerItemDecoration(
+    block: (AssemblyGridDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyGridDividerItemDecoration {
+    return AssemblyGridDividerItemDecoration.Builder(context).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+
 fun Context.newAssemblyGridDividerItemDecorationBuilder(): AssemblyGridDividerItemDecoration.Builder {
     return AssemblyGridDividerItemDecoration.Builder(this)
 }
@@ -59,6 +99,26 @@ fun RecyclerView.addAssemblyGridDividerItemDecoration(
         }.build(),
         index
     )
+}
+
+
+/************************************** StaggeredGrid *********************************************/
+
+
+fun Context.newAssemblyStaggeredGridDividerItemDecoration(
+    block: (AssemblyStaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyStaggeredGridDividerItemDecoration {
+    return AssemblyStaggeredGridDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+fun RecyclerView.newAssemblyStaggeredGridDividerItemDecoration(
+    block: (AssemblyStaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyStaggeredGridDividerItemDecoration {
+    return AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+        block?.invoke(this)
+    }.build()
 }
 
 

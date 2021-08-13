@@ -49,7 +49,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private var isFullSpanByPosition: IsFullSpanByPosition? = null
         private var findItemFactoryClassByPosition: FindItemFactoryClassByPosition? = null
 
-        fun build(): StaggeredGridDividerItemDecoration {
+        fun build(): AssemblyStaggeredGridDividerItemDecoration {
             return AssemblyStaggeredGridDividerItemDecoration(
                 buildItemDecorateProvider(),
                 isFullSpanByPosition ?: AssemblyIsFullSpanByPosition()
@@ -352,7 +352,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
         class AssemblyFindItemFactoryClassByPosition : FindItemFactoryClassByPosition {
 
-            private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
+            private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
 
             override fun find(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
                 val (localAdapter, localPosition) = concatAdapterLocalHelper

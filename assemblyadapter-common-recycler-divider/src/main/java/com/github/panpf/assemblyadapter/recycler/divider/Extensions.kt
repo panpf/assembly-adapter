@@ -19,6 +19,26 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 
 
+/************************************** Linear ****************************************************/
+
+
+fun Context.newLinearDividerItemDecoration(
+    block: (LinearDividerItemDecoration.Builder.() -> Unit)? = null
+): LinearDividerItemDecoration {
+    return LinearDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+fun RecyclerView.newLinearDividerItemDecoration(
+    block: (LinearDividerItemDecoration.Builder.() -> Unit)? = null
+): LinearDividerItemDecoration {
+    return LinearDividerItemDecoration.Builder(context).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+
 fun Context.newLinearDividerItemDecorationBuilder(): LinearDividerItemDecoration.Builder {
     return LinearDividerItemDecoration.Builder(this)
 }
@@ -28,9 +48,11 @@ fun RecyclerView.newLinearDividerItemDecorationBuilder(): LinearDividerItemDecor
 }
 
 fun RecyclerView.addLinearDividerItemDecoration(block: (LinearDividerItemDecoration.Builder.() -> Unit)? = null) {
-    addItemDecoration(LinearDividerItemDecoration.Builder(context).apply {
-        block?.invoke(this)
-    }.build())
+    addItemDecoration(
+        LinearDividerItemDecoration.Builder(context).apply {
+            block?.invoke(this)
+        }.build()
+    )
 }
 
 fun RecyclerView.addLinearDividerItemDecoration(
@@ -46,6 +68,26 @@ fun RecyclerView.addLinearDividerItemDecoration(
 }
 
 
+/**************************************** Grid ****************************************************/
+
+
+fun Context.newGridDividerItemDecoration(
+    block: (GridDividerItemDecoration.Builder.() -> Unit)? = null
+): GridDividerItemDecoration {
+    return GridDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+fun RecyclerView.newGridDividerItemDecoration(
+    block: (GridDividerItemDecoration.Builder.() -> Unit)? = null
+): GridDividerItemDecoration {
+    return GridDividerItemDecoration.Builder(context).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+
 fun Context.newGridDividerItemDecorationBuilder(): GridDividerItemDecoration.Builder {
     return GridDividerItemDecoration.Builder(this)
 }
@@ -55,9 +97,11 @@ fun RecyclerView.newGridDividerItemDecorationBuilder(): GridDividerItemDecoratio
 }
 
 fun RecyclerView.addGridDividerItemDecoration(block: (GridDividerItemDecoration.Builder.() -> Unit)? = null) {
-    addItemDecoration(GridDividerItemDecoration.Builder(context).apply {
-        block?.invoke(this)
-    }.build())
+    addItemDecoration(
+        GridDividerItemDecoration.Builder(context).apply {
+            block?.invoke(this)
+        }.build()
+    )
 }
 
 fun RecyclerView.addGridDividerItemDecoration(
@@ -73,6 +117,26 @@ fun RecyclerView.addGridDividerItemDecoration(
 }
 
 
+/************************************** StaggeredGrid *********************************************/
+
+
+fun Context.newStaggeredGridDividerItemDecoration(
+    block: (StaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null
+): StaggeredGridDividerItemDecoration {
+    return StaggeredGridDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+fun RecyclerView.newStaggeredGridDividerItemDecoration(
+    block: (StaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null
+): StaggeredGridDividerItemDecoration {
+    return StaggeredGridDividerItemDecoration.Builder(context).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+
 fun Context.newStaggeredGridDividerItemDecorationBuilder(): StaggeredGridDividerItemDecoration.Builder {
     return StaggeredGridDividerItemDecoration.Builder(this)
 }
@@ -82,9 +146,11 @@ fun RecyclerView.newStaggeredGridDividerItemDecorationBuilder(): StaggeredGridDi
 }
 
 fun RecyclerView.addStaggeredGridDividerItemDecoration(block: (StaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null) {
-    addItemDecoration(StaggeredGridDividerItemDecoration.Builder(context).apply {
-        block?.invoke(this)
-    }.build())
+    addItemDecoration(
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            block?.invoke(this)
+        }.build()
+    )
 }
 
 fun RecyclerView.addStaggeredGridDividerItemDecoration(
