@@ -26,10 +26,6 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecora
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import kotlin.reflect.KClass
 
-fun RecyclerView.assemblyGridDividerItemDecorationBuilder(): AssemblyGridDividerItemDecoration.Builder {
-    return AssemblyGridDividerItemDecoration.Builder(context)
-}
-
 open class AssemblyGridDividerItemDecoration(
     itemDecorateProvider: AssemblyGridItemDecorateProvider
 ) : GridDividerItemDecoration(itemDecorateProvider) {

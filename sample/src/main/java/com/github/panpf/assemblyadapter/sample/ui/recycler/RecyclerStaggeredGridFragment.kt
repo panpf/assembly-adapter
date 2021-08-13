@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.assemblyStaggeredGridDividerItemDecorationBuilder
+import com.github.panpf.assemblyadapter.recycler.addAssemblyStaggeredGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
@@ -68,15 +68,13 @@ class RecyclerStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBindin
                         LoadStateItemFactory::class
                     )
                 )
-            addItemDecoration(
-                assemblyStaggeredGridDividerItemDecorationBuilder().apply {
-                    divider(Decorate.space(20.dp2px))
-                    side(Decorate.space(20.dp2px)).showFirstAndLastSide()
-                    disableDivider(AppsOverviewItemFactory::class)
-                    disableFirstAndLastSide(AppsOverviewItemFactory::class)
-                    disableFirstAndLastSide(ListSeparatorItemFactory::class)
-                }.build()
-            )
+            addAssemblyStaggeredGridDividerItemDecoration {
+                divider(Decorate.space(20.dp2px))
+                side(Decorate.space(20.dp2px)).showFirstAndLastSide()
+                disableDivider(AppsOverviewItemFactory::class)
+                disableFirstAndLastSide(AppsOverviewItemFactory::class)
+                disableFirstAndLastSide(ListSeparatorItemFactory::class)
+            }
             addItemDecoration(
                 AssemblyStickyItemDecoration(
                     binding.recyclerStickyContainer, ListSeparatorItemFactory::class

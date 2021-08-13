@@ -26,10 +26,6 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecora
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecorateProviderImpl
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 
-fun RecyclerView.gridDividerItemDecorationBuilder(): GridDividerItemDecoration.Builder {
-    return GridDividerItemDecoration.Builder(context)
-}
-
 open class GridDividerItemDecoration(
     private val gridItemDecorateProvider: GridItemDecorateProvider,
 ) : ItemDecoration() {

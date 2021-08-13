@@ -64,15 +64,13 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                     LoadStateItemFactory::class to ItemSpan.fullSpan()
                 )
             )
-            addItemDecoration(
-                assemblyGridDividerItemDecorationBuilder().apply {
-                    divider(Decorate.space(20.dp2px)).showLastDivider()
-                    side(Decorate.space(20.dp2px)).showFirstAndLastSide()
-                    disableDivider(AppsOverviewItemFactory::class)
-                    disableFirstAndLastSide(AppsOverviewItemFactory::class)
-                    disableFirstAndLastSide(ListSeparatorItemFactory::class)
-                }.build()
-            )
+            addAssemblyGridDividerItemDecoration {
+                divider(Decorate.space(20.dp2px)).showLastDivider()
+                side(Decorate.space(20.dp2px)).showFirstAndLastSide()
+                disableDivider(AppsOverviewItemFactory::class)
+                disableFirstAndLastSide(AppsOverviewItemFactory::class)
+                disableFirstAndLastSide(ListSeparatorItemFactory::class)
+            }
             addItemDecoration(
                 AssemblyStickyItemDecoration(
                     binding.recyclerStickyContainer, ListSeparatorItemFactory::class

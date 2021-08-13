@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
-import com.github.panpf.assemblyadapter.recycler.assemblyGridDividerItemDecorationBuilder
+import com.github.panpf.assemblyadapter.recycler.addAssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyAdapter
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyGridLayoutManager
@@ -53,23 +53,21 @@ class CompatRecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
         binding.recyclerRecycler.apply {
             layoutManager = CompatAssemblyGridLayoutManager(context, 3)
             adapter = appAdapter
-            addItemDecoration(
-                assemblyGridDividerItemDecorationBuilder().apply {
-                    divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
-                    side(Decorate.space(20.dp2px)).showFirstAndLastSide()
-                    disableFirstAndLastDivider(TextItem.Factory::class)
-                    disableDivider(TextItem.Factory::class)
-                    disableFirstAndLastSide(TextItem.Factory::class)
-                    disableFirstAndLastSide(ListSeparatorItem.Factory::class)
-                    findItemFactoryClassByPosition { adapter, position ->
-                        if (adapter is CompatAssemblyAdapter) {
-                            adapter.getItemFactoryByPosition(position).javaClass
-                        } else {
-                            null
-                        }
+            addAssemblyGridDividerItemDecoration {
+                divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
+                side(Decorate.space(20.dp2px)).showFirstAndLastSide()
+                disableFirstAndLastDivider(TextItem.Factory::class)
+                disableDivider(TextItem.Factory::class)
+                disableFirstAndLastSide(TextItem.Factory::class)
+                disableFirstAndLastSide(ListSeparatorItem.Factory::class)
+                findItemFactoryClassByPosition { adapter, position ->
+                    if (adapter is CompatAssemblyAdapter) {
+                        adapter.getItemFactoryByPosition(position).javaClass
+                    } else {
+                        null
                     }
-                }.build()
-            )
+                }
+            }
         }
 
         binding.recyclerStickyContainer.updatePadding(left = 20.dp2px, right = 20.dp2px)

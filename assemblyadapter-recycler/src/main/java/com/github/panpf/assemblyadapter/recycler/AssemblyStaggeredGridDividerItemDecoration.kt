@@ -29,10 +29,6 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridI
 import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
 import kotlin.reflect.KClass
 
-fun RecyclerView.assemblyStaggeredGridDividerItemDecorationBuilder(): AssemblyStaggeredGridDividerItemDecoration.Builder {
-    return AssemblyStaggeredGridDividerItemDecoration.Builder(context)
-}
-
 open class AssemblyStaggeredGridDividerItemDecoration(
     itemDecorateProviderStaggered: AssemblyStaggeredGridItemDecorateProvider,
     isFullSpanByPosition: IsFullSpanByPosition

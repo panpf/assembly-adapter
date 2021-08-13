@@ -29,10 +29,6 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridI
 import kotlin.math.ceil
 import kotlin.math.floor
 
-fun RecyclerView.staggeredGridDividerItemDecorationBuilder(): StaggeredGridDividerItemDecoration.Builder {
-    return StaggeredGridDividerItemDecoration.Builder(context)
-}
-
 open class StaggeredGridDividerItemDecoration(
     private val staggeredGridItemDecorateProvider: StaggeredGridItemDecorateProvider,
     private val isFullSpanByPosition: IsFullSpanByPosition?,
@@ -40,7 +36,9 @@ open class StaggeredGridDividerItemDecoration(
 
     init {
         if (staggeredGridItemDecorateProvider.hasFirstOrLastDivider() && isFullSpanByPosition == null) {
-            throw IllegalArgumentException("Must be set the 'isFullSpanByPosition' property, because you configured 'firstDivider' or 'lastDivider'")
+            throw IllegalArgumentException(
+                "Must be set the 'isFullSpanByPosition' property, because you configured 'firstDivider' or 'lastDivider'"
+            )
         }
     }
 
@@ -60,12 +58,12 @@ open class StaggeredGridDividerItemDecoration(
         val isFullSpan = childLayoutParams.isFullSpan
         val isFirstSpan = spanIndex == 0
         val isLastSpan = spanIndex == spanCount - 1
-        val isFullSpanByPosition = isFullSpanByPosition
         val isColumnFirst = if (isFullSpanByPosition != null && position < spanCount) {
             when {
                 isFullSpan -> position == 0
-                // The position before is all not fullSpan
-                0.rangeTo(position).all { !isFullSpanByPosition.isFullSpan(parent, it) } -> true
+                0.rangeTo(position).all { // The position before is all not fullSpan
+                    !isFullSpanByPosition.isFullSpan(parent, it)
+                } -> true
                 else -> false
             }
         } else {
@@ -74,8 +72,9 @@ open class StaggeredGridDividerItemDecoration(
         val isColumnEnd = if (isFullSpanByPosition != null && position >= itemCount - spanCount) {
             when {
                 isFullSpan -> position == itemCount - 1
-                // The position back is all not fullSpan
-                position.until(itemCount).all { !isFullSpanByPosition.isFullSpan(parent, it) } -> true
+                position.until(itemCount).all { // The position back is all not fullSpan
+                    !isFullSpanByPosition.isFullSpan(parent, it)
+                } -> true
                 else -> false
             }
         } else {
@@ -188,17 +187,16 @@ open class StaggeredGridDividerItemDecoration(
 
         for (index in 0 until childCount) {
             val view = parent.getChildAt(index)
-            val childLayoutParams =
-                view.layoutParams as StaggeredGridLayoutManager.LayoutParams
+            val childLayoutParams = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
             val spanIndex = childLayoutParams.spanIndex
             val isFullSpan = childLayoutParams.isFullSpan
-            val isFullSpanByPosition = isFullSpanByPosition
             val isColumnFirst = if (isFullSpanByPosition != null && position < spanCount) {
                 when {
                     isFullSpan -> position == 0
-                    // The position before is all not fullSpan
-                    0.rangeTo(position).all { !isFullSpanByPosition.isFullSpan(parent, it) } -> true
+                    0.rangeTo(position).all { // The position before is all not fullSpan
+                        !isFullSpanByPosition.isFullSpan(parent, it)
+                    } -> true
                     else -> false
                 }
             } else {
@@ -208,9 +206,9 @@ open class StaggeredGridDividerItemDecoration(
                 if (isFullSpanByPosition != null && position >= itemCount - spanCount) {
                     when {
                         isFullSpan -> position == itemCount - 1
-                        // The position back is all not fullSpan
-                        position.until(itemCount)
-                            .all { !isFullSpanByPosition.isFullSpan(parent, it) } -> true
+                        position.until(itemCount).all { // The position back is all not fullSpan
+                            !isFullSpanByPosition.isFullSpan(parent, it)
+                        } -> true
                         else -> false
                     }
                 } else {
@@ -331,10 +329,13 @@ open class StaggeredGridDividerItemDecoration(
         private var showFirstSide = false
         private var showLastSide = false
 
-        private var isFullSpanByPosition: IsFullSpanByPosition? = null
+        protected var isFullSpanByPosition: IsFullSpanByPosition? = null
 
         open fun build(): StaggeredGridDividerItemDecoration {
-            return StaggeredGridDividerItemDecoration(buildItemDecorateProvider(), isFullSpanByPosition)
+            return StaggeredGridDividerItemDecoration(
+                buildItemDecorateProvider(),
+                isFullSpanByPosition
+            )
         }
 
         protected open fun buildItemDecorateProvider(): StaggeredGridItemDecorateProvider {
