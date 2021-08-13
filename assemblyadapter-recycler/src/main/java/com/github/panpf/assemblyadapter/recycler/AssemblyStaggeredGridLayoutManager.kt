@@ -17,17 +17,15 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
 import kotlin.reflect.KClass
 
 /**
  * An implementation of [AssemblyStaggeredGridLayoutManager]. Set the full span of [AssemblyStaggeredGridLayoutManager] according to [ItemFactory] as the identifier
  */
-class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
-    FullSpanStaggeredGridLayoutManager {
+class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, IsFullSpanByItemFactory {
 
     private val fullSpanItemFactoryList: List<Class<out ItemFactory<*>>>
 
@@ -75,10 +73,7 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager,
         this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
 
-    override fun setFullSpan(itemView: View, itemFactory: ItemFactory<*>) {
-        val layoutParams = itemView.layoutParams
-        if (layoutParams is LayoutParams && fullSpanItemFactoryList.contains(itemFactory.javaClass)) {
-            layoutParams.isFullSpan = true
-        }
+    override fun isFullSpan(itemFactory: ItemFactory<*>): Boolean {
+        return fullSpanItemFactoryList.contains(itemFactory.javaClass)
     }
 }

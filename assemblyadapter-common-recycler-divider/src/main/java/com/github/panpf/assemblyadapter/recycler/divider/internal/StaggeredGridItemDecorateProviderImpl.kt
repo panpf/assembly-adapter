@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class StaggeredGridItemDecorateProviderImpl(
     private val dividerItemDecorate: ItemDecorate,
-//    private val firstDividerItemDecorate: ItemDecorate?,
-//    private val lastDividerItemDecorate: ItemDecorate?,
+    private val firstDividerItemDecorate: ItemDecorate?,
+    private val lastDividerItemDecorate: ItemDecorate?,
     private val sideItemDecorate: ItemDecorate?,
     private val firstSideItemDecorate: ItemDecorate?,
     private val lastSideItemDecorate: ItemDecorate?,
@@ -33,34 +33,34 @@ class StaggeredGridItemDecorateProviderImpl(
         itemCount: Int,
         position: Int,
         spanCount: Int,
-        isFullSpan: Boolean,
         spanIndex: Int,
+        isFullSpan: Boolean,
+        isColumnFirst: Boolean,
+        isColumnEnd: Boolean,
         verticalOrientation: Boolean,
         decorateType: ItemDecorate.Type,
     ): ItemDecorate? {
         if (itemCount == 0) return null
-//        val isFirstGroup = spanGroupIndex == 0
-//        val isLastGroup = spanGroupIndex == spanGroupCount - 1
         val isFirstSpan = isFullSpan || spanIndex == 0
         val isLastSpan = isFullSpan || spanIndex == spanCount - 1
         return if (verticalOrientation) {
             when (decorateType) {
                 ItemDecorate.Type.START -> if (isFirstSpan) firstSideItemDecorate else sideItemDecorate
-//                ItemDecorate.Type.TOP -> if (isFirstGroup) firstDividerItemDecorate else null
-                ItemDecorate.Type.TOP -> null
+                ItemDecorate.Type.TOP -> if (isColumnFirst) firstDividerItemDecorate else null
                 ItemDecorate.Type.END -> if (isLastSpan) lastSideItemDecorate else sideItemDecorate
-//                ItemDecorate.Type.BOTTOM -> if (isLastGroup) lastDividerItemDecorate else dividerItemDecorate
-                ItemDecorate.Type.BOTTOM -> dividerItemDecorate
+                ItemDecorate.Type.BOTTOM -> if (isColumnEnd) lastDividerItemDecorate else dividerItemDecorate
             }
         } else {
             when (decorateType) {
-//                ItemDecorate.Type.START -> if (isFirstGroup) firstDividerItemDecorate else null
-                ItemDecorate.Type.START -> null
+                ItemDecorate.Type.START -> if (isColumnFirst) firstDividerItemDecorate else null
                 ItemDecorate.Type.TOP -> if (isFirstSpan) firstSideItemDecorate else sideItemDecorate
-//                ItemDecorate.Type.END -> if (isLastGroup) lastDividerItemDecorate else dividerItemDecorate
-                ItemDecorate.Type.END -> dividerItemDecorate
+                ItemDecorate.Type.END -> if (isColumnEnd) lastDividerItemDecorate else dividerItemDecorate
                 ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorate else sideItemDecorate
             }
         }
+    }
+
+    override fun hasFirstOrLastDivider(): Boolean {
+        return firstDividerItemDecorate != null || lastDividerItemDecorate != null
     }
 }

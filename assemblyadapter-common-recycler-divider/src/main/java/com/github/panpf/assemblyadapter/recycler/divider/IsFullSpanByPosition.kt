@@ -13,26 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler.divider.internal
+package com.github.panpf.assemblyadapter.recycler.divider
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-interface StaggeredGridItemDecorateProvider {
-
-    fun getItemDecorate(
-        view: View,
-        parent: RecyclerView,
-        itemCount: Int,
-        position: Int,
-        spanCount: Int,
-        spanIndex: Int,
-        isFullSpan: Boolean,
-        isColumnFirst: Boolean,
-        isColumnEnd: Boolean,
-        verticalOrientation: Boolean,
-        decorateType: ItemDecorate.Type,
-    ): ItemDecorate?
-
-    fun hasFirstOrLastDivider(): Boolean
+fun interface IsFullSpanByPosition {
+    fun isFullSpan(parent: RecyclerView, position: Int): Boolean
 }

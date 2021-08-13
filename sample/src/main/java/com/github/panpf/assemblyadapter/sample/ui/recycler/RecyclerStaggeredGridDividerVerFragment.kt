@@ -125,9 +125,9 @@ class RecyclerStaggeredGridDividerVerFragment :
             divider(
                 Decorate.color(0x88FF0000.toInt(), size, insets)
             )
-//            firstAndLastDivider(
-//                Decorate.color(0xFFFF0000.toInt(), size, insets)
-//            )
+            firstAndLastDivider(
+                Decorate.color(0xFFFF0000.toInt(), size, insets)
+            )
             personaliseDivider(
                 ListSeparatorItemFactory::class,
                 Decorate.color(0x8800FF00.toInt(), size, insets)

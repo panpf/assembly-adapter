@@ -19,13 +19,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.recycler.KeyDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanStaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -72,8 +73,9 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
         return RecyclerViewHolderWrapper(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
-            if (layoutManager is FullSpanStaggeredGridLayoutManager) {
-                layoutManager.setFullSpan(itemView, itemFactory)
+            if (layoutManager is StaggeredGridLayoutManager && layoutManager is IsFullSpanByItemFactory) {
+                (itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
+                    .isFullSpan = layoutManager.isFullSpan(itemFactory)
             }
         }
     }

@@ -35,7 +35,14 @@ fun RecyclerView.staggeredGridDividerItemDecorationBuilder(): StaggeredGridDivid
 
 open class StaggeredGridDividerItemDecoration(
     private val staggeredGridItemDecorateProvider: StaggeredGridItemDecorateProvider,
+    private val isFullSpanByPosition: IsFullSpanByPosition?,
 ) : ItemDecoration() {
+
+    init {
+        if (staggeredGridItemDecorateProvider.hasFirstOrLastDivider() && isFullSpanByPosition == null) {
+            throw IllegalArgumentException("Must be set the 'isFullSpanByPosition' property, because you configured 'firstDivider' or 'lastDivider'")
+        }
+    }
 
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
@@ -53,22 +60,43 @@ open class StaggeredGridDividerItemDecoration(
         val isFullSpan = childLayoutParams.isFullSpan
         val isFirstSpan = spanIndex == 0
         val isLastSpan = spanIndex == spanCount - 1
+        val isFullSpanByPosition = isFullSpanByPosition
+        val isColumnFirst = if (isFullSpanByPosition != null && position < spanCount) {
+            when {
+                isFullSpan -> position == 0
+                // The position before is all not fullSpan
+                0.rangeTo(position).all { !isFullSpanByPosition.isFullSpan(parent, it) } -> true
+                else -> false
+            }
+        } else {
+            false
+        }
+        val isColumnEnd = if (isFullSpanByPosition != null && position >= itemCount - spanCount) {
+            when {
+                isFullSpan -> position == itemCount - 1
+                // The position back is all not fullSpan
+                position.until(itemCount).all { !isFullSpanByPosition.isFullSpan(parent, it) } -> true
+                else -> false
+            }
+        } else {
+            false
+        }
 
         val startItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, isFullSpan,
-            spanIndex, verticalOrientation, ItemDecorate.Type.START
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
+            isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.START
         )
         val topItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, isFullSpan,
-            spanIndex, verticalOrientation, ItemDecorate.Type.TOP
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
+            isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.TOP
         )
         val endItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, isFullSpan,
-            spanIndex, verticalOrientation, ItemDecorate.Type.END
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
+            isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.END
         )
         val bottomItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, isFullSpan,
-            spanIndex, verticalOrientation, ItemDecorate.Type.BOTTOM
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
+            isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.BOTTOM
         )
         val startItemDecorateSize = startItemDecorate?.widthSize ?: 0
         val topItemDecorateSize = topItemDecorate?.heightSize ?: 0
@@ -165,22 +193,45 @@ open class StaggeredGridDividerItemDecoration(
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
             val spanIndex = childLayoutParams.spanIndex
             val isFullSpan = childLayoutParams.isFullSpan
+            val isFullSpanByPosition = isFullSpanByPosition
+            val isColumnFirst = if (isFullSpanByPosition != null && position < spanCount) {
+                when {
+                    isFullSpan -> position == 0
+                    // The position before is all not fullSpan
+                    0.rangeTo(position).all { !isFullSpanByPosition.isFullSpan(parent, it) } -> true
+                    else -> false
+                }
+            } else {
+                false
+            }
+            val isColumnEnd =
+                if (isFullSpanByPosition != null && position >= itemCount - spanCount) {
+                    when {
+                        isFullSpan -> position == itemCount - 1
+                        // The position back is all not fullSpan
+                        position.until(itemCount)
+                            .all { !isFullSpanByPosition.isFullSpan(parent, it) } -> true
+                        else -> false
+                    }
+                } else {
+                    false
+                }
 
             val startItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, isFullSpan,
-                spanIndex, verticalOrientation, ItemDecorate.Type.START
+                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
+                isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.START
             )
             val topItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, isFullSpan,
-                spanIndex, verticalOrientation, ItemDecorate.Type.TOP
+                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
+                isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.TOP
             )
             val endItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, isFullSpan,
-                spanIndex, verticalOrientation, ItemDecorate.Type.END
+                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
+                isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.END
             )
             val bottomItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, isFullSpan,
-                spanIndex, verticalOrientation, ItemDecorate.Type.BOTTOM
+                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
+                isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.BOTTOM
             )
             val startItemDecorateSize = startItemDecorate?.widthSize ?: 0
             val topItemDecorateSize = topItemDecorate?.heightSize ?: 0
@@ -268,19 +319,22 @@ open class StaggeredGridDividerItemDecoration(
     open class Builder(protected val context: Context) {
 
         private var dividerItemDecorate: ItemDecorate? = null
-//        private var firstDividerItemDecorate: ItemDecorate? = null
-//        private var lastDividerItemDecorate: ItemDecorate? = null
+
+        private var firstDividerItemDecorate: ItemDecorate? = null
+        private var lastDividerItemDecorate: ItemDecorate? = null
         private var sideItemDecorate: ItemDecorate? = null
         private var firstSideItemDecorate: ItemDecorate? = null
         private var lastSideItemDecorate: ItemDecorate? = null
 
-//        private var showFirstDivider = false
-//        private var showLastDivider = false
+        private var showFirstDivider = false
+        private var showLastDivider = false
         private var showFirstSide = false
         private var showLastSide = false
 
+        private var isFullSpanByPosition: IsFullSpanByPosition? = null
+
         open fun build(): StaggeredGridDividerItemDecoration {
-            return StaggeredGridDividerItemDecoration(buildItemDecorateProvider())
+            return StaggeredGridDividerItemDecoration(buildItemDecorateProvider(), isFullSpanByPosition)
         }
 
         protected open fun buildItemDecorateProvider(): StaggeredGridItemDecorateProvider {
@@ -295,10 +349,10 @@ open class StaggeredGridDividerItemDecoration(
             }
             return StaggeredGridItemDecorateProviderImpl(
                 finalDividerItemDecorate,
-//                firstDividerItemDecorate
-//                    ?: if (showFirstDivider) finalDividerItemDecorate else null,
-//                lastDividerItemDecorate
-//                    ?: if (showLastDivider) finalDividerItemDecorate else null,
+                firstDividerItemDecorate
+                    ?: if (showFirstDivider) finalDividerItemDecorate else null,
+                lastDividerItemDecorate
+                    ?: if (showLastDivider) finalDividerItemDecorate else null,
                 sideItemDecorate,
                 firstSideItemDecorate
                     ?: if (showFirstSide) sideItemDecorate else null,
@@ -313,37 +367,37 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
-//        open fun firstDivider(decorate: Decorate): Builder {
-//            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
-//            return this
-//        }
-//
-//        open fun lastDivider(decorate: Decorate): Builder {
-//            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
-//            return this
-//        }
-//
-//        open fun firstAndLastDivider(decorate: Decorate): Builder {
-//            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
-//            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
-//            return this
-//        }
-//
-//        open fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
-//            this.showFirstDivider = showFirstDivider
-//            return this
-//        }
-//
-//        open fun showLastDivider(showLastDivider: Boolean = true): Builder {
-//            this.showLastDivider = showLastDivider
-//            return this
-//        }
-//
-//        open fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
-//            this.showFirstDivider = showFirstAndLastDivider
-//            this.showLastDivider = showFirstAndLastDivider
-//            return this
-//        }
+        open fun firstDivider(decorate: Decorate): Builder {
+            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
+            return this
+        }
+
+        open fun lastDivider(decorate: Decorate): Builder {
+            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
+            return this
+        }
+
+        open fun firstAndLastDivider(decorate: Decorate): Builder {
+            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
+            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
+            return this
+        }
+
+        open fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
+            this.showFirstDivider = showFirstDivider
+            return this
+        }
+
+        open fun showLastDivider(showLastDivider: Boolean = true): Builder {
+            this.showLastDivider = showLastDivider
+            return this
+        }
+
+        open fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
+            this.showFirstDivider = showFirstAndLastDivider
+            this.showLastDivider = showFirstAndLastDivider
+            return this
+        }
 
 
         open fun side(decorate: Decorate): Builder {
@@ -380,6 +434,11 @@ open class StaggeredGridDividerItemDecoration(
         open fun showFirstAndLastSide(showFirstAndLastSide: Boolean = true): Builder {
             this.showFirstSide = showFirstAndLastSide
             this.showLastSide = showFirstAndLastSide
+            return this
+        }
+
+        open fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
+            this.isFullSpanByPosition = isFullSpanByPosition
             return this
         }
     }
