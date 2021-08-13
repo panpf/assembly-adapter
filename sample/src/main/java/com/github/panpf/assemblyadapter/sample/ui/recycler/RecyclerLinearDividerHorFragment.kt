@@ -47,7 +47,7 @@ class RecyclerLinearDividerHorFragment :
     private val menuViewModel by activityViewModels<MenuViewModel>()
 
     private var openedInsets = false
-    private var thickDivider = false
+    private var thickDivider = true
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
