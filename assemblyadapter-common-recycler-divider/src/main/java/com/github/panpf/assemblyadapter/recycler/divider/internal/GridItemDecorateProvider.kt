@@ -19,12 +19,12 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class GridItemDecorateProvider(
-    private val dividerItemDecorateHolder: ItemDecorateHolder,
-    private val firstDividerItemDecorateHolder: ItemDecorateHolder?,
-    private val lastDividerItemDecorateHolder: ItemDecorateHolder?,
-    private val sideItemDecorateHolder: ItemDecorateHolder?,
-    private val firstSideItemDecorateHolder: ItemDecorateHolder?,
-    private val lastSideItemDecorateHolder: ItemDecorateHolder?,
+    private val dividerItemDecorateConfig: ItemDecorateConfig,
+    private val firstDividerItemDecorateConfig: ItemDecorateConfig?,
+    private val lastDividerItemDecorateConfig: ItemDecorateConfig?,
+    private val sideItemDecorateConfig: ItemDecorateConfig?,
+    private val firstSideItemDecorateConfig: ItemDecorateConfig?,
+    private val lastSideItemDecorateConfig: ItemDecorateConfig?,
 ) {
 
     fun getItemDecorate(
@@ -47,17 +47,17 @@ class GridItemDecorateProvider(
     ): ItemDecorate? {
         return if (vertical) {
             when (decorateType) {
-                ItemDecorate.Type.START -> if (isFirstSpan) firstSideItemDecorateHolder else null
-                ItemDecorate.Type.TOP -> if (isFirstGroup) firstDividerItemDecorateHolder else null
-                ItemDecorate.Type.END -> if (isLastSpan) lastSideItemDecorateHolder else sideItemDecorateHolder
-                ItemDecorate.Type.BOTTOM -> if (isLastGroup) lastDividerItemDecorateHolder else dividerItemDecorateHolder
+                ItemDecorate.Type.START -> if (isFirstSpan) firstSideItemDecorateConfig else null
+                ItemDecorate.Type.TOP -> if (isFirstGroup) firstDividerItemDecorateConfig else null
+                ItemDecorate.Type.END -> if (isLastSpan) lastSideItemDecorateConfig else sideItemDecorateConfig
+                ItemDecorate.Type.BOTTOM -> if (isLastGroup) lastDividerItemDecorateConfig else dividerItemDecorateConfig
             }
         } else {
             when (decorateType) {
-                ItemDecorate.Type.START -> if (isFirstGroup) firstDividerItemDecorateHolder else null
-                ItemDecorate.Type.TOP -> if (isFirstSpan) firstSideItemDecorateHolder else null
-                ItemDecorate.Type.END -> if (isLastGroup) lastDividerItemDecorateHolder else dividerItemDecorateHolder
-                ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorateHolder else sideItemDecorateHolder
+                ItemDecorate.Type.START -> if (isFirstGroup) firstDividerItemDecorateConfig else null
+                ItemDecorate.Type.TOP -> if (isFirstSpan) firstSideItemDecorateConfig else null
+                ItemDecorate.Type.END -> if (isLastGroup) lastDividerItemDecorateConfig else dividerItemDecorateConfig
+                ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorateConfig else sideItemDecorateConfig
             }
         }?.get(parent, position, spanIndex)
     }

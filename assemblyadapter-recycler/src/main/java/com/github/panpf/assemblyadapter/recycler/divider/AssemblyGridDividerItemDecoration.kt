@@ -16,9 +16,9 @@
 package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
-import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecorateProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassByPosition
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecorateProvider
 
 open class AssemblyGridDividerItemDecoration(
     itemDecorateProvider: GridItemDecorateProvider

@@ -16,15 +16,26 @@
 package com.github.panpf.assemblyadapter.recycler.divider.internal
 
 import androidx.collection.ArrayMap
+import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassByPosition
 
-class AssemblyItemDecorateHolder(
-    private val defaultItemDecorateHolder: ItemDecorateHolder,
+class AssemblyItemDecorateConfig(
+    itemDecorate: ItemDecorate,
+    disableByPositionArray: SparseArrayCompat<Boolean>?,
+    disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
     private val disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>?,
+    personaliseByPositionArray: SparseArrayCompat<ItemDecorate>?,
+    personaliseBySpanIndexArray: SparseArrayCompat<ItemDecorate>?,
     private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, ItemDecorate>?,
     private val findItemFactoryClassByPosition: FindItemFactoryClassByPosition,
-) : ItemDecorateHolder {
+) : ItemDecorateConfig(
+    itemDecorate,
+    disableByPositionArray,
+    disableBySpanIndexArray,
+    personaliseByPositionArray,
+    personaliseBySpanIndexArray
+) {
 
     override fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDecorate? {
         if (disableByItemFactoryClassMap != null || personaliseByItemFactoryClassMap != null) {
@@ -37,12 +48,13 @@ class AssemblyItemDecorateHolder(
                     return null
                 }
 
-                val personaliseItemDecorate = personaliseByItemFactoryClassMap?.get(itemFactoryClass)
+                val personaliseItemDecorate =
+                    personaliseByItemFactoryClassMap?.get(itemFactoryClass)
                 if (personaliseItemDecorate != null) {
                     return personaliseItemDecorate
                 }
             }
         }
-        return defaultItemDecorateHolder.get(parent, position, spanIndex)
+        return super.get(parent, position, spanIndex)
     }
 }

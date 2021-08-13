@@ -19,12 +19,12 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class StaggeredGridItemDecorateProvider(
-    private val dividerItemDecorate: ItemDecorateHolder,
-    private val firstDividerItemDecorate: ItemDecorateHolder?,
-    private val lastDividerItemDecorate: ItemDecorateHolder?,
-    private val sideItemDecorate: ItemDecorateHolder?,
-    private val firstSideItemDecorate: ItemDecorateHolder?,
-    private val lastSideItemDecorate: ItemDecorateHolder?,
+    private val dividerItemDecorateConfig: ItemDecorateConfig,
+    private val firstDividerItemDecorateConfig: ItemDecorateConfig?,
+    private val lastDividerItemDecorateConfig: ItemDecorateConfig?,
+    private val sideItemDecorateConfig: ItemDecorateConfig?,
+    private val firstSideItemDecorateConfig: ItemDecorateConfig?,
+    private val lastSideItemDecorateConfig: ItemDecorateConfig?,
 ) {
 
     fun getItemDecorate(
@@ -44,22 +44,22 @@ class StaggeredGridItemDecorateProvider(
     ): ItemDecorate? {
         return if (vertical) {
             when (decorateType) {
-                ItemDecorate.Type.START -> if (isFirstSpan) firstSideItemDecorate else sideItemDecorate
-                ItemDecorate.Type.TOP -> if (isColumnFirst) firstDividerItemDecorate else null
-                ItemDecorate.Type.END -> if (isLastSpan) lastSideItemDecorate else sideItemDecorate
-                ItemDecorate.Type.BOTTOM -> if (isColumnEnd) lastDividerItemDecorate else dividerItemDecorate
+                ItemDecorate.Type.START -> if (isFirstSpan) firstSideItemDecorateConfig else sideItemDecorateConfig
+                ItemDecorate.Type.TOP -> if (isColumnFirst) firstDividerItemDecorateConfig else null
+                ItemDecorate.Type.END -> if (isLastSpan) lastSideItemDecorateConfig else sideItemDecorateConfig
+                ItemDecorate.Type.BOTTOM -> if (isColumnEnd) lastDividerItemDecorateConfig else dividerItemDecorateConfig
             }
         } else {
             when (decorateType) {
-                ItemDecorate.Type.START -> if (isColumnFirst) firstDividerItemDecorate else null
-                ItemDecorate.Type.TOP -> if (isFirstSpan) firstSideItemDecorate else sideItemDecorate
-                ItemDecorate.Type.END -> if (isColumnEnd) lastDividerItemDecorate else dividerItemDecorate
-                ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorate else sideItemDecorate
+                ItemDecorate.Type.START -> if (isColumnFirst) firstDividerItemDecorateConfig else null
+                ItemDecorate.Type.TOP -> if (isFirstSpan) firstSideItemDecorateConfig else sideItemDecorateConfig
+                ItemDecorate.Type.END -> if (isColumnEnd) lastDividerItemDecorateConfig else dividerItemDecorateConfig
+                ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorateConfig else sideItemDecorateConfig
             }
         }?.get(parent, position, spanIndex)
     }
 
     fun hasFirstOrLastDivider(): Boolean {
-        return firstDividerItemDecorate != null || lastDividerItemDecorate != null
+        return firstDividerItemDecorateConfig != null || lastDividerItemDecorateConfig != null
     }
 }

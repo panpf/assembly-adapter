@@ -18,15 +18,15 @@ package com.github.panpf.assemblyadapter.recycler.divider.internal
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 
-open class ItemDecorateHolderImpl(
+open class ItemDecorateConfig(
     private val itemDecorate: ItemDecorate,
     private val disableByPositionArray: SparseArrayCompat<Boolean>?,
     private val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
     private val personaliseByPositionArray: SparseArrayCompat<ItemDecorate>?,
     private val personaliseBySpanIndexArray: SparseArrayCompat<ItemDecorate>?,
-) : ItemDecorateHolder {
+) {
 
-    override fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDecorate? {
+    open fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDecorate? {
         if (disableBySpanIndexArray?.get(spanIndex, false) == true) {
             return null
         }

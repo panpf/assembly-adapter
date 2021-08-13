@@ -19,11 +19,11 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class LinearItemDecorateProvider(
-    private val dividerItemDecorateHolder: ItemDecorateHolder,
-    private val firstDividerItemDecorateHolder: ItemDecorateHolder?,
-    private val lastDividerItemDecorateHolder: ItemDecorateHolder?,
-    private val startSideItemDecorateHolder: ItemDecorateHolder?,
-    private val endSideItemDecorateHolder: ItemDecorateHolder?,
+    private val dividerItemDecorateConfig: ItemDecorateConfig,
+    private val firstDividerItemDecorateConfig: ItemDecorateConfig?,
+    private val lastDividerItemDecorateConfig: ItemDecorateConfig?,
+    private val firstSideItemDecorateConfig: ItemDecorateConfig?,
+    private val lastSideItemDecorateConfig: ItemDecorateConfig?,
 ) {
 
     fun getItemDecorate(
@@ -39,17 +39,17 @@ class LinearItemDecorateProvider(
         val isLast = position == itemCount - 1
         return if (verticalOrientation) {
             when (decorateType) {
-                ItemDecorate.Type.START -> startSideItemDecorateHolder
-                ItemDecorate.Type.TOP -> if (isFirst) firstDividerItemDecorateHolder else null
-                ItemDecorate.Type.END -> endSideItemDecorateHolder
-                ItemDecorate.Type.BOTTOM -> if (isLast) lastDividerItemDecorateHolder else dividerItemDecorateHolder
+                ItemDecorate.Type.START -> firstSideItemDecorateConfig
+                ItemDecorate.Type.TOP -> if (isFirst) firstDividerItemDecorateConfig else null
+                ItemDecorate.Type.END -> lastSideItemDecorateConfig
+                ItemDecorate.Type.BOTTOM -> if (isLast) lastDividerItemDecorateConfig else dividerItemDecorateConfig
             }
         } else {
             when (decorateType) {
-                ItemDecorate.Type.START -> if (isFirst) firstDividerItemDecorateHolder else null
-                ItemDecorate.Type.TOP -> startSideItemDecorateHolder
-                ItemDecorate.Type.END -> if (isLast) lastDividerItemDecorateHolder else dividerItemDecorateHolder
-                ItemDecorate.Type.BOTTOM -> endSideItemDecorateHolder
+                ItemDecorate.Type.START -> if (isFirst) firstDividerItemDecorateConfig else null
+                ItemDecorate.Type.TOP -> firstSideItemDecorateConfig
+                ItemDecorate.Type.END -> if (isLast) lastDividerItemDecorateConfig else dividerItemDecorateConfig
+                ItemDecorate.Type.BOTTOM -> lastSideItemDecorateConfig
             }
         }?.get(parent, position, 0)
     }
