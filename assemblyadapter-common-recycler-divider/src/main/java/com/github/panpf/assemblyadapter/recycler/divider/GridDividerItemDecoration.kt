@@ -42,19 +42,16 @@ open class GridDividerItemDecoration(
             throw IllegalArgumentException("layoutManager must be GridLayoutManager")
         }
         val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
-        val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
+        val childLayoutParams = view.layoutParams as GridLayoutManager.LayoutParams
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
         val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val spanSizeLookup = layoutManager.spanSizeLookup
-        if (!spanSizeLookup.isSpanIndexCacheEnabled) {
-            spanSizeLookup.isSpanIndexCacheEnabled = true
-        }
         if (!spanSizeLookup.isSpanGroupIndexCacheEnabled) {
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
         }
         val spanCount = layoutManager.spanCount
-        val spanSize = spanSizeLookup.getSpanSize(position)
-        val spanIndex = spanSizeLookup.getSpanIndex(position, spanCount)
+        val spanSize = childLayoutParams.spanSize
+        val spanIndex = childLayoutParams.spanIndex
         val spanGroupCount = spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
         val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
 
@@ -96,9 +93,6 @@ open class GridDividerItemDecoration(
         val childCount = parent.childCount.takeIf { it != 0 } ?: return
         val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val spanSizeLookup = layoutManager.spanSizeLookup
-        if (!spanSizeLookup.isSpanIndexCacheEnabled) {
-            spanSizeLookup.isSpanIndexCacheEnabled = true
-        }
         if (!spanSizeLookup.isSpanGroupIndexCacheEnabled) {
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
         }
@@ -108,10 +102,10 @@ open class GridDividerItemDecoration(
 
         for (index in 0 until childCount) {
             val view = parent.getChildAt(index)
-            val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
+            val childLayoutParams = view.layoutParams as GridLayoutManager.LayoutParams
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
-            val spanSize = spanSizeLookup.getSpanSize(position)
-            val spanIndex = spanSizeLookup.getSpanIndex(position, spanCount)
+            val spanSize = childLayoutParams.spanSize
+            val spanIndex = childLayoutParams.spanIndex
             val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
 
             val startItemDecorate = gridItemDecorateProvider.getItemDecorate(
