@@ -18,7 +18,14 @@ package com.github.panpf.assemblyadapter.recycler.divider.internal
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-interface GridItemDecorateProvider {
+class GridItemDecorateProvider(
+    private val dividerItemDecorateHolder: ItemDecorateHolder,
+    private val firstDividerItemDecorateHolder: ItemDecorateHolder?,
+    private val lastDividerItemDecorateHolder: ItemDecorateHolder?,
+    private val sideItemDecorateHolder: ItemDecorateHolder?,
+    private val firstSideItemDecorateHolder: ItemDecorateHolder?,
+    private val lastSideItemDecorateHolder: ItemDecorateHolder?,
+) {
 
     fun getItemDecorate(
         view: View,
@@ -28,9 +35,30 @@ interface GridItemDecorateProvider {
         spanCount: Int,
         spanSize: Int,
         spanIndex: Int,
+        isFullSpan: Boolean,
+        isFirstSpan: Boolean,
+        isLastSpan: Boolean,
         spanGroupCount: Int,
         spanGroupIndex: Int,
-        verticalOrientation: Boolean,
+        isFirstGroup: Boolean,
+        isLastGroup: Boolean,
+        vertical: Boolean,
         decorateType: ItemDecorate.Type,
-    ): ItemDecorate?
+    ): ItemDecorate? {
+        return if (vertical) {
+            when (decorateType) {
+                ItemDecorate.Type.START -> if (isFirstSpan) firstSideItemDecorateHolder else null
+                ItemDecorate.Type.TOP -> if (isFirstGroup) firstDividerItemDecorateHolder else null
+                ItemDecorate.Type.END -> if (isLastSpan) lastSideItemDecorateHolder else sideItemDecorateHolder
+                ItemDecorate.Type.BOTTOM -> if (isLastGroup) lastDividerItemDecorateHolder else dividerItemDecorateHolder
+            }
+        } else {
+            when (decorateType) {
+                ItemDecorate.Type.START -> if (isFirstGroup) firstDividerItemDecorateHolder else null
+                ItemDecorate.Type.TOP -> if (isFirstSpan) firstSideItemDecorateHolder else null
+                ItemDecorate.Type.END -> if (isLastGroup) lastDividerItemDecorateHolder else dividerItemDecorateHolder
+                ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorateHolder else sideItemDecorateHolder
+            }
+        }?.get(parent, position)
+    }
 }

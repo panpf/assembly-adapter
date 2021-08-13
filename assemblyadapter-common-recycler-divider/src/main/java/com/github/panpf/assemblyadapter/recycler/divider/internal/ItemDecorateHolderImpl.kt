@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.recycler.divider.internal
 
-import android.view.View
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 
@@ -26,19 +25,8 @@ open class ItemDecorateHolderImpl(
 ) : ItemDecorateHolder {
 
     override fun get(
-        view: View,
         parent: RecyclerView,
-        itemCount: Int,
         position: Int,
-        spanCount: Int,
-        spanIndex: Int,
-        isFullSpan: Boolean,
-        isFirstSpan: Boolean,
-        isLastSpan: Boolean,
-        isColumnFirst: Boolean,
-        isColumnEnd: Boolean,
-        vertical: Boolean,
-        decorateType: ItemDecorate.Type
     ): ItemDecorate? {
         if (disableItemDecorateArray?.get(position, false) == true) {
             return null

@@ -54,12 +54,17 @@ class CompatRecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
             layoutManager = CompatAssemblyGridLayoutManager(context, 3)
             adapter = appAdapter
             addAssemblyGridDividerItemDecoration {
-                divider(Decorate.space(20.dp2px)).showFirstAndLastDivider()
-                side(Decorate.space(20.dp2px)).showFirstAndLastSide()
-                disableFirstAndLastDivider(TextItem.Factory::class)
-                disableDivider(TextItem.Factory::class)
-                disableFirstAndLastSide(TextItem.Factory::class)
-                disableFirstAndLastSide(ListSeparatorItem.Factory::class)
+                divider(Decorate.space(20.dp2px)) {
+                    disable(TextItem.Factory::class)
+                }
+                firstAndLastDivider(Decorate.space(20.dp2px)) {
+                    disable(TextItem.Factory::class)
+                }
+                side(Decorate.space(20.dp2px))
+                firstAndLastSide(Decorate.space(20.dp2px)) {
+                    disable(TextItem.Factory::class)
+                    disable(ListSeparatorItem.Factory::class)
+                }
                 findItemFactoryClassByPosition { adapter, position ->
                     if (adapter is CompatAssemblyAdapter) {
                         adapter.getItemFactoryByPosition(position).javaClass

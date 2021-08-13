@@ -15,22 +15,8 @@
  */
 package com.github.panpf.assemblyadapter.recycler.divider.internal
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 interface ItemDecorateHolder {
-    fun get(view: View,
-            parent: RecyclerView,
-            itemCount: Int,
-            position: Int,
-            spanCount: Int,
-            spanIndex: Int,
-            isFullSpan: Boolean,
-            isFirstSpan: Boolean,
-            isLastSpan: Boolean,
-            isColumnFirst: Boolean,
-            isColumnEnd: Boolean,
-            vertical: Boolean,
-            decorateType: ItemDecorate.Type
-    ): ItemDecorate?
+    fun get(parent: RecyclerView, position: Int): ItemDecorate?
 }

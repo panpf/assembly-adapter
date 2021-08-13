@@ -23,8 +23,11 @@ import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.recycler.divider.IsFullSpanByPosition
 import com.github.panpf.assemblyadapter.recycler.divider.StaggeredGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDecorateProvider
+import com.github.panpf.assemblyadapter.recycler.internal.AssemblyFindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.internal.ConcatFindItemFactoryClassByPosition
 import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
 
+// todo move to divider folder
 open class AssemblyStaggeredGridDividerItemDecoration(
     itemDecorateProviderStaggered: StaggeredGridItemDecorateProvider,
     isFullSpanByPosition: IsFullSpanByPosition
@@ -69,7 +72,9 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                 }
 
             val finalFindItemFactoryClassByPosition =
-                findItemFactoryClassByPosition ?: AssemblyFindItemFactoryClassByPosition()
+                (findItemFactoryClassByPosition ?: AssemblyFindItemFactoryClassByPosition()).run {
+                    ConcatFindItemFactoryClassByPosition(this)
+                }
 
             val finalDividerItemDecorateConfig =
                 finalDividerDecorateConfig.toItemDecorateHolder(
@@ -346,21 +351,6 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                     }
                 } else {
                     false
-                }
-            }
-        }
-
-        class AssemblyFindItemFactoryClassByPosition : FindItemFactoryClassByPosition {
-
-            private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
-
-            override fun find(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
-                val (localAdapter, localPosition) = concatAdapterLocalHelper
-                    .findLocalAdapterAndPosition(adapter, position)
-                return if (localAdapter is AssemblyAdapter<*>) {
-                    localAdapter.getItemFactoryByPosition(localPosition).javaClass
-                } else {
-                    null
                 }
             }
         }

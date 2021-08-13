@@ -74,11 +74,16 @@ class RecyclerGridPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>(
                 )
             )
             addAssemblyGridDividerItemDecoration {
-                divider(Decorate.space(20.dp2px)).showLastDivider()
-                side(Decorate.space(20.dp2px)).showFirstAndLastSide()
-                disableDivider(AppsOverviewItemFactory::class)
-                disableFirstAndLastSide(AppsOverviewItemFactory::class)
-                disableFirstAndLastSide(ListSeparatorItemFactory::class)
+                divider(Decorate.space(20.dp2px)) {
+                    disable(AppsOverviewItemFactory::class)
+                }
+                showLastDivider()
+
+                side(Decorate.space(20.dp2px))
+                firstAndLastSide(Decorate.space(20.dp2px)) {
+                    disable(AppsOverviewItemFactory::class)
+                    disable(ListSeparatorItemFactory::class)
+                }
             }
             addItemDecoration(
                 AssemblyStickyItemDecoration(

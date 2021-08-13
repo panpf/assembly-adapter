@@ -13,10 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler
+package com.github.panpf.assemblyadapter.recycler.internal
 
 import androidx.recyclerview.widget.RecyclerView
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.recycler.FindItemFactoryClassByPosition
 
-fun interface FindItemFactoryClassByPosition {
-    fun find(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>?
+class AssemblyFindItemFactoryClassByPosition : FindItemFactoryClassByPosition {
+
+    override fun find(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
+        return if (adapter is AssemblyAdapter<*>) {
+            adapter.getItemFactoryByPosition(position).javaClass
+        } else {
+            null
+        }
+    }
 }

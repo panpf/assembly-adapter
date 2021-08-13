@@ -77,6 +77,7 @@ class RecyclerStaggeredGridPagingFragment : BaseBindingFragment<FragmentRecycler
                     disable(AppsOverviewItemFactory::class)
                 }
                 side(Decorate.space(20.dp2px))
+
                 firstAndLastSide(Decorate.space(20.dp2px)) {
                     disable(AppsOverviewItemFactory::class)
                     disable(ListSeparatorItemFactory::class)

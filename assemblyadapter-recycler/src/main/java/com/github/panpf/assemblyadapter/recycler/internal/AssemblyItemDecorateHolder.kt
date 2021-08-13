@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.recycler.internal
 
-import android.view.View
 import androidx.collection.ArrayMap
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.FindItemFactoryClassByPosition
@@ -30,19 +29,8 @@ class AssemblyItemDecorateHolder(
 ) : ItemDecorateHolder {
 
     override fun get(
-        view: View,
         parent: RecyclerView,
-        itemCount: Int,
         position: Int,
-        spanCount: Int,
-        spanIndex: Int,
-        isFullSpan: Boolean,
-        isFirstSpan: Boolean,
-        isLastSpan: Boolean,
-        isColumnFirst: Boolean,
-        isColumnEnd: Boolean,
-        vertical: Boolean,
-        decorateType: ItemDecorate.Type
     ): ItemDecorate? {
         if (disableItemDecorateMap != null || personaliseItemDecorateMap != null) {
             val adapter = parent.adapter
@@ -60,9 +48,6 @@ class AssemblyItemDecorateHolder(
                 }
             }
         }
-        return defaultItemDecorateConfig.get(
-            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-            isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd, vertical, decorateType
-        )
+        return defaultItemDecorateConfig.get(parent, position)
     }
 }
