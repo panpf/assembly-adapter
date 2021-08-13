@@ -241,7 +241,7 @@ open class GridDividerItemDecoration(
                 firstSideItemDecorate
                     ?: if (showFirstSide) sideItemDecorate else null,
                 lastSideItemDecorate
-                    ?: if (showFirstSide) sideItemDecorate else null,
+                    ?: if (showLastSide) sideItemDecorate else null,
             )
         }
 

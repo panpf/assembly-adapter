@@ -16,422 +16,353 @@
 package com.github.panpf.assemblyadapter.recycler
 
 import android.content.Context
-import android.view.View
-import androidx.collection.ArrayMap
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.divider.Decorate
 import com.github.panpf.assemblyadapter.recycler.divider.IsFullSpanByPosition
 import com.github.panpf.assemblyadapter.recycler.divider.StaggeredGridDividerItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDecorateProvider
 import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
-import kotlin.reflect.KClass
 
 open class AssemblyStaggeredGridDividerItemDecoration(
-    itemDecorateProviderStaggered: AssemblyStaggeredGridItemDecorateProvider,
+    itemDecorateProviderStaggered: StaggeredGridItemDecorateProvider,
     isFullSpanByPosition: IsFullSpanByPosition
 ) : StaggeredGridDividerItemDecoration(
     itemDecorateProviderStaggered, isFullSpanByPosition
 ) {
 
-    class Builder(context: Context) : StaggeredGridDividerItemDecoration.Builder(context) {
+    class Builder(val context: Context) {
 
-        private var personaliseDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
+        private var dividerDecorateConfig: AssemblyDecorateConfig? = null
+        private var firstDividerDecorateConfig: AssemblyDecorateConfig? = null
+        private var lastDividerDecorateConfig: AssemblyDecorateConfig? = null
+        private var showFirstDivider = false
+        private var showLastDivider = false
 
-        private var personaliseFirstDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? =
-            null
-        private var personaliseLastDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? =
-            null
-        private var personaliseFirstSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
-        private var personaliseLastSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>? = null
+        private var sideDecorateConfig: AssemblyDecorateConfig? = null
+        private var firstSideDecorateConfig: AssemblyDecorateConfig? = null
+        private var lastSideDecorateConfig: AssemblyDecorateConfig? = null
+        private var showFirstSide = false
+        private var showLastSide = false
 
-        private var disableDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
+        private var isFullSpanByPosition: IsFullSpanByPosition? = null
+        private var findItemFactoryClassByPosition: FindItemFactoryClassByPosition? = null
 
-        private var disableFirstDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
-        private var disableLastDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
-        private var disableFirstSideItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
-        private var disableLastSideItemDecorateMap: ArrayMap<Class<*>, Boolean>? = null
-
-        private var findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)? =
-            null
-
-        override fun build(): AssemblyStaggeredGridDividerItemDecoration {
+        fun build(): StaggeredGridDividerItemDecoration {
             return AssemblyStaggeredGridDividerItemDecoration(
                 buildItemDecorateProvider(),
                 isFullSpanByPosition ?: AssemblyIsFullSpanByPosition()
             )
         }
 
-        override fun buildItemDecorateProvider(): AssemblyStaggeredGridItemDecorateProvider {
-            val defaultItemDecorateProvider = super.buildItemDecorateProvider()
-            return AssemblyStaggeredGridItemDecorateProvider(
-                defaultStaggeredGridItemDecorateProvider = defaultItemDecorateProvider,
-                personaliseDividerItemDecorateMap = personaliseDividerItemDecorateMap,
-                personaliseFirstDividerItemDecorateMap = personaliseFirstDividerItemDecorateMap,
-                personaliseLastDividerItemDecorateMap = personaliseLastDividerItemDecorateMap,
-                personaliseFirstSideItemDecorateMap = personaliseFirstSideItemDecorateMap,
-                personaliseLastSideItemDecorateMap = personaliseLastSideItemDecorateMap,
-                disableDividerItemDecorateMap = disableDividerItemDecorateMap,
-                disableFirstDividerItemDecorateMap = disableFirstDividerItemDecorateMap,
-                disableLastDividerItemDecorateMap = disableLastDividerItemDecorateMap,
-                disableFirstSideItemDecorateMap = disableFirstSideItemDecorateMap,
-                disableLastSideItemDecorateMap = disableLastSideItemDecorateMap,
-                findItemFactoryClassByPosition = findItemFactoryClassByPosition,
+        private fun buildItemDecorateProvider(): StaggeredGridItemDecorateProvider {
+            val finalDividerDecorateConfig =
+                dividerDecorateConfig ?: context.obtainStyledAttributes(
+                    intArrayOf(android.R.attr.listDivider)
+                ).let { array ->
+                    array.getDrawable(0).apply {
+                        array.recycle()
+                    }
+                }!!.let {
+                    AssemblyDecorateConfig.Builder(Decorate.drawable(it)).build()
+                }
+
+            val finalFindItemFactoryClassByPosition =
+                findItemFactoryClassByPosition ?: AssemblyFindItemFactoryClassByPosition()
+
+            val finalDividerItemDecorateConfig =
+                finalDividerDecorateConfig.toItemDecorateHolder(
+                    context,
+                    finalFindItemFactoryClassByPosition
+                )
+            val firstDividerItemDecorate = (firstDividerDecorateConfig
+                ?: if (showFirstDivider) finalDividerDecorateConfig else null)
+                ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
+            val lastDividerItemDecorate = (lastDividerDecorateConfig
+                ?: if (showLastDivider) finalDividerDecorateConfig else null)
+                ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
+
+            val sideItemDecorate =
+                sideDecorateConfig?.toItemDecorateHolder(
+                    context,
+                    finalFindItemFactoryClassByPosition
+                )
+            val firstSideItemDecorate = (firstSideDecorateConfig
+                ?: if (showFirstSide) sideDecorateConfig else null)
+                ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
+            val lastSideItemDecorate = (lastSideDecorateConfig
+                ?: if (showLastSide) sideDecorateConfig else null)
+                ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
+
+            return StaggeredGridItemDecorateProvider(
+                finalDividerItemDecorateConfig,
+                firstDividerItemDecorate,
+                lastDividerItemDecorate,
+                sideItemDecorate,
+                firstSideItemDecorate,
+                lastSideItemDecorate,
             )
         }
 
-        override fun divider(decorate: Decorate): Builder {
-            super.divider(decorate)
+
+        fun divider(decorate: Decorate): Builder {
+            this.dividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
             return this
         }
 
-        override fun firstDivider(decorate: Decorate): Builder {
-            super.firstDivider(decorate)
-            return this
-        }
-
-        override fun lastDivider(decorate: Decorate): Builder {
-            super.lastDivider(decorate)
-            return this
-        }
-
-        override fun firstAndLastDivider(decorate: Decorate): Builder {
-            super.firstAndLastDivider(decorate)
-            return this
-        }
-
-        override fun showFirstDivider(showFirstDivider: Boolean): Builder {
-            super.showFirstDivider(showFirstDivider)
-            return this
-        }
-
-        override fun showLastDivider(showLastDivider: Boolean): Builder {
-            super.showLastDivider(showLastDivider)
-            return this
-        }
-
-        override fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean): Builder {
-            super.showFirstAndLastDivider(showFirstAndLastDivider)
-            return this
-        }
-
-
-        override fun side(decorate: Decorate): Builder {
-            super.side(decorate)
-            return this
-        }
-
-        override fun firstSide(decorate: Decorate): Builder {
-            super.firstSide(decorate)
-            return this
-        }
-
-        override fun lastSide(decorate: Decorate): Builder {
-            super.lastSide(decorate)
-            return this
-        }
-
-        override fun firstAndLastSide(decorate: Decorate): Builder {
-            super.firstAndLastSide(decorate)
-            return this
-        }
-
-        override fun showFirstSide(showFirstSide: Boolean): Builder {
-            super.showFirstSide(showFirstSide)
-            return this
-        }
-
-        override fun showLastSide(showLastSide: Boolean): Builder {
-            super.showLastSide(showLastSide)
-            return this
-        }
-
-        override fun showFirstAndLastSide(showFirstAndLastSide: Boolean): Builder {
-            super.showFirstAndLastSide(showFirstAndLastSide)
-            return this
-        }
-
-        override fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
-            super.isFullSpanByPosition(isFullSpanByPosition)
-            return this
-        }
-
-
-        fun personaliseDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            return this
-        }
-
-        fun personaliseFirstDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseFirstDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseFirstDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            return this
-        }
-
-        fun personaliseLastDivider(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseLastDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseLastDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            return this
-        }
-
-        fun personaliseFirstAndLastDivider(
-            itemFactoryClass: KClass<*>,
-            decorate: Decorate
+        fun divider(
+            decorate: Decorate,
+            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
         ): Builder {
-            (personaliseFirstDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseFirstDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            (personaliseLastDividerItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseLastDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
+            this.dividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun divider(decorateConfig: AssemblyDecorateConfig): Builder {
+            this.dividerDecorateConfig = decorateConfig
             return this
         }
 
 
-        fun personaliseFirstSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseFirstSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseFirstSideItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
+        fun firstDivider(decorate: Decorate): Builder {
+            this.firstDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
             return this
         }
 
-        fun personaliseLastSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseLastSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseLastSideItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
+        fun firstDivider(
+            decorate: Decorate,
+            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.firstDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
             return this
         }
 
-        fun personaliseFirstAndLastSide(itemFactoryClass: KClass<*>, decorate: Decorate): Builder {
-            (personaliseFirstSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseFirstSideItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
-            (personaliseLastSideItemDecorateMap ?: ArrayMap<Class<*>, ItemDecorate>().apply {
-                this@Builder.personaliseLastSideItemDecorateMap = this
-            })[itemFactoryClass.java] = decorate.createItemDecorate(context)
+        fun firstDivider(decorateConfig: AssemblyDecorateConfig): Builder {
+            this.firstDividerDecorateConfig = decorateConfig
             return this
         }
 
 
-        fun disableDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
+        fun lastDivider(decorate: Decorate): Builder {
+            this.lastDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
             return this
         }
 
-        fun disableFirstDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableFirstDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
+        fun lastDivider(
+            decorate: Decorate,
+            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.lastDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
             return this
         }
 
-        fun disableLastDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableLastDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableLastDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
-            return this
-        }
-
-        fun disableFirstAndLastDivider(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableFirstDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
-            (disableLastDividerItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableLastDividerItemDecorateMap = this
-            })[itemFactoryClass.java] = true
+        fun lastDivider(decorateConfig: AssemblyDecorateConfig): Builder {
+            this.lastDividerDecorateConfig = decorateConfig
             return this
         }
 
 
-        fun disableFirstSide(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableFirstSideItemDecorateMap = this
-            })[itemFactoryClass.java] = true
+        fun firstAndLastDivider(decorate: Decorate): Builder {
+            this.firstDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
+            this.lastDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
             return this
         }
 
-        fun disableLastSide(itemFactoryClass: KClass<*>): Builder {
-            (disableLastSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableLastSideItemDecorateMap = this
-            })[itemFactoryClass.java] = true
+        fun firstAndLastDivider(
+            decorate: Decorate,
+            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.firstDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            this.lastDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
             return this
         }
 
-        fun disableFirstAndLastSide(itemFactoryClass: KClass<*>): Builder {
-            (disableFirstSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableFirstSideItemDecorateMap = this
-            })[itemFactoryClass.java] = true
-            (disableLastSideItemDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableLastSideItemDecorateMap = this
-            })[itemFactoryClass.java] = true
+        fun firstAndLastDivider(decorateConfig: AssemblyDecorateConfig): Builder {
+            this.firstDividerDecorateConfig = decorateConfig
+            this.lastDividerDecorateConfig = decorateConfig
             return this
         }
 
 
-        fun findItemFactoryClassByPosition(getItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)): Builder {
+        fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
+            this.showFirstDivider = showFirstDivider
+            return this
+        }
+
+        fun showLastDivider(showLastDivider: Boolean = true): Builder {
+            this.showLastDivider = showLastDivider
+            return this
+        }
+
+        fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
+            this.showFirstDivider = showFirstAndLastDivider
+            this.showLastDivider = showFirstAndLastDivider
+            return this
+        }
+
+
+        fun side(decorate: Decorate): Builder {
+            this.sideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
+            return this
+        }
+
+        fun side(
+            decorate: Decorate,
+            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.sideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun side(decorateConfig: AssemblyDecorateConfig): Builder {
+            this.sideDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun firstSide(decorate: Decorate): Builder {
+            this.firstSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
+            return this
+        }
+
+        fun firstSide(
+            decorate: Decorate,
+            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.firstSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun firstSide(decorateConfig: AssemblyDecorateConfig): Builder {
+            this.firstSideDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun lastSide(decorate: Decorate): Builder {
+            this.lastSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
+            return this
+        }
+
+        fun lastSide(
+            decorate: Decorate,
+            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.lastSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun lastSide(decorateConfig: AssemblyDecorateConfig): Builder {
+            this.lastSideDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun firstAndLastSide(decorate: Decorate): Builder {
+            this.firstSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
+            this.lastSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
+            return this
+        }
+
+        fun firstAndLastSide(
+            decorate: Decorate,
+            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.firstSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            this.lastSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun firstAndLastSide(decorateConfig: AssemblyDecorateConfig): Builder {
+            this.firstSideDecorateConfig = decorateConfig
+            this.lastSideDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun showFirstSide(showFirstSide: Boolean = true): Builder {
+            this.showFirstSide = showFirstSide
+            return this
+        }
+
+        fun showLastSide(showLastSide: Boolean = true): Builder {
+            this.showLastSide = showLastSide
+            return this
+        }
+
+        fun showFirstAndLastSide(showFirstAndLastSide: Boolean = true): Builder {
+            this.showFirstSide = showFirstAndLastSide
+            this.showLastSide = showFirstAndLastSide
+            return this
+        }
+
+
+        fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
+            this.isFullSpanByPosition = isFullSpanByPosition
+            return this
+        }
+
+        fun findItemFactoryClassByPosition(getItemFactoryClassByPosition: FindItemFactoryClassByPosition?): Builder {
             this.findItemFactoryClassByPosition = getItemFactoryClassByPosition
             return this
         }
-    }
 
-    class AssemblyIsFullSpanByPosition : IsFullSpanByPosition {
 
-        private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
+        class AssemblyIsFullSpanByPosition : IsFullSpanByPosition {
 
-        override fun isFullSpan(parent: RecyclerView, position: Int): Boolean {
-            val adapter = parent.adapter
-            return if (adapter != null) {
-                val layoutManager = parent.layoutManager
-                val (localAdapter, localPosition) = concatAdapterLocalHelper
-                    .findLocalAdapterAndPosition(adapter, position)
-                if (localAdapter is AssemblyAdapter<*> && layoutManager is IsFullSpanByItemFactory) {
-                    layoutManager.isFullSpan(localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>)
+            private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
+
+            override fun isFullSpan(parent: RecyclerView, position: Int): Boolean {
+                val adapter = parent.adapter
+                return if (adapter != null) {
+                    val layoutManager = parent.layoutManager
+                    val (localAdapter, localPosition) = concatAdapterLocalHelper
+                        .findLocalAdapterAndPosition(adapter, position)
+                    if (localAdapter is AssemblyAdapter<*> && layoutManager is IsFullSpanByItemFactory) {
+                        layoutManager.isFullSpan(localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>)
+                    } else {
+                        false
+                    }
                 } else {
                     false
                 }
-            } else {
-                false
             }
         }
-    }
 
-    class AssemblyStaggeredGridItemDecorateProvider(
-        private val defaultStaggeredGridItemDecorateProvider: StaggeredGridItemDecorateProvider,
-        private val personaliseDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
-        private val personaliseFirstDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
-        private val personaliseLastDividerItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
-        private val personaliseFirstSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
-        private val personaliseLastSideItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
-        private val disableDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
-        private val disableFirstDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
-        private val disableLastDividerItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
-        private val disableFirstSideItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
-        private val disableLastSideItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
-        findItemFactoryClassByPosition: ((adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>?)?,
-    ) : StaggeredGridItemDecorateProvider {
+        class AssemblyFindItemFactoryClassByPosition : FindItemFactoryClassByPosition {
 
-        private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
-        private val finalFindItemFactoryClassByPosition =
-            findItemFactoryClassByPosition ?: { adapter, position ->
-                if (adapter is AssemblyAdapter<*>) {
-                    adapter.getItemFactoryByPosition(position).javaClass
+            private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
+
+            override fun find(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
+                val (localAdapter, localPosition) = concatAdapterLocalHelper
+                    .findLocalAdapterAndPosition(adapter, position)
+                return if (localAdapter is AssemblyAdapter<*>) {
+                    localAdapter.getItemFactoryByPosition(localPosition).javaClass
                 } else {
                     null
                 }
             }
-
-        override fun hasFirstOrLastDivider(): Boolean {
-            return defaultStaggeredGridItemDecorateProvider.hasFirstOrLastDivider()
-                    || personaliseFirstDividerItemDecorateMap?.isNotEmpty() == true
-                    || personaliseLastDividerItemDecorateMap?.isNotEmpty() == true
-                    || disableFirstDividerItemDecorateMap?.isNotEmpty() == true
-                    || disableLastDividerItemDecorateMap?.isNotEmpty() == true
-        }
-
-        override fun getItemDecorate(
-            view: View,
-            parent: RecyclerView,
-            itemCount: Int,
-            position: Int,
-            spanCount: Int,
-            spanIndex: Int,
-            isFullSpan: Boolean,
-            isColumnFirst: Boolean,
-            isColumnEnd: Boolean,
-            verticalOrientation: Boolean,
-            decorateType: ItemDecorate.Type,
-        ): ItemDecorate? {
-            if (itemCount == 0) return null
-            val isFirstSpan = isFullSpan || spanIndex == 0
-            val isLastSpan = isFullSpan || spanIndex == spanCount - 1
-            val adapter = parent.adapter ?: return null
-            val itemFactoryClass = findItemFactoryClassByPosition(adapter, position)
-                ?: return defaultStaggeredGridItemDecorateProvider.getItemDecorate(
-                    view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-                    isColumnFirst, isColumnEnd, verticalOrientation, decorateType
-                )
-            if (isDisabledItemDecorate(
-                    verticalOrientation, decorateType, isFirstSpan, isLastSpan,
-                    isColumnFirst, isColumnEnd, itemFactoryClass,
-                )
-            ) {
-                return null
-            }
-            return getPersonaliseItemDecorate(
-                verticalOrientation, decorateType, isFirstSpan, isLastSpan,
-                isColumnFirst, isColumnEnd, itemFactoryClass
-            ) ?: defaultStaggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-                isColumnFirst, isColumnEnd, verticalOrientation, decorateType
-            )
-        }
-
-        private fun isDisabledItemDecorate(
-            verticalOrientation: Boolean,
-            decorateType: ItemDecorate.Type,
-            isFirstSpan: Boolean,
-            isLastSpan: Boolean,
-            isColumnFirst: Boolean,
-            isColumnEnd: Boolean,
-            itemFactoryClass: Class<*>,
-        ): Boolean {
-            return if (verticalOrientation) {
-                when (decorateType) {
-                    ItemDecorate.Type.START -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
-                    ItemDecorate.Type.TOP -> if (isColumnFirst) disableFirstDividerItemDecorateMap else null
-                    ItemDecorate.Type.END -> if (isLastSpan) disableLastSideItemDecorateMap else null
-                    ItemDecorate.Type.BOTTOM -> if (isColumnEnd) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
-                }
-            } else {
-                when (decorateType) {
-                    ItemDecorate.Type.START -> if (isColumnFirst) disableFirstDividerItemDecorateMap else null
-                    ItemDecorate.Type.TOP -> if (isFirstSpan) disableFirstSideItemDecorateMap else null
-                    ItemDecorate.Type.END -> if (isColumnEnd) disableLastDividerItemDecorateMap else disableDividerItemDecorateMap
-                    ItemDecorate.Type.BOTTOM -> if (isLastSpan) disableLastSideItemDecorateMap else null
-                }
-            }?.containsKey(itemFactoryClass) == true
-        }
-
-        private fun getPersonaliseItemDecorate(
-            verticalOrientation: Boolean,
-            decorateType: ItemDecorate.Type,
-            isFirstSpan: Boolean,
-            isLastSpan: Boolean,
-            isColumnFirst: Boolean,
-            isColumnEnd: Boolean,
-            itemFactoryClass: Class<*>,
-        ): ItemDecorate? {
-            return if (verticalOrientation) {
-                when (decorateType) {
-                    ItemDecorate.Type.START -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
-                    ItemDecorate.Type.TOP -> if (isColumnFirst) personaliseFirstDividerItemDecorateMap else null
-                    ItemDecorate.Type.END -> if (isLastSpan) personaliseLastSideItemDecorateMap else null
-                    ItemDecorate.Type.BOTTOM -> if (isColumnEnd) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
-                }
-            } else {
-                when (decorateType) {
-                    ItemDecorate.Type.START -> if (isColumnFirst) personaliseFirstDividerItemDecorateMap else null
-                    ItemDecorate.Type.TOP -> if (isFirstSpan) personaliseFirstSideItemDecorateMap else null
-                    ItemDecorate.Type.END -> if (isColumnEnd) personaliseLastDividerItemDecorateMap else personaliseDividerItemDecorateMap
-                    ItemDecorate.Type.BOTTOM -> if (isLastSpan) personaliseLastSideItemDecorateMap else null
-                }
-            }?.get(itemFactoryClass)
-        }
-
-        private fun findItemFactoryClassByPosition(
-            adapter: RecyclerView.Adapter<*>, position: Int
-        ): Class<*>? {
-            val (localAdapter, localPosition) = concatAdapterLocalHelper
-                .findLocalAdapterAndPosition(adapter, position)
-            return finalFindItemFactoryClassByPosition(localAdapter, localPosition)
         }
     }
 }

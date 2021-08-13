@@ -25,17 +25,16 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDecorateProvider
-import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDecorateProviderImpl
 import kotlin.math.ceil
 import kotlin.math.floor
 
 open class StaggeredGridDividerItemDecoration(
-    private val staggeredGridItemDecorateProvider: StaggeredGridItemDecorateProvider,
+    private val itemDecorateProvider: StaggeredGridItemDecorateProvider,
     private val isFullSpanByPosition: IsFullSpanByPosition?,
 ) : ItemDecoration() {
 
     init {
-        if (staggeredGridItemDecorateProvider.hasFirstOrLastDivider() && isFullSpanByPosition == null) {
+        if (itemDecorateProvider.hasFirstOrLastDivider() && isFullSpanByPosition == null) {
             throw IllegalArgumentException(
                 "Must be set the 'isFullSpanByPosition' property, because you configured 'firstDivider' or 'lastDivider'"
             )
@@ -52,12 +51,12 @@ open class StaggeredGridDividerItemDecoration(
         val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
         val childLayoutParams = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
-        val verticalOrientation = layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL
+        val vertical = layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL
         val spanCount = layoutManager.spanCount
         val spanIndex = childLayoutParams.spanIndex
         val isFullSpan = childLayoutParams.isFullSpan
-        val isFirstSpan = spanIndex == 0
-        val isLastSpan = spanIndex == spanCount - 1
+        val isFirstSpan = isFullSpan || spanIndex == 0
+        val isLastSpan = isFullSpan || spanIndex == spanCount - 1
         val isColumnFirst = if (isFullSpanByPosition != null && position < spanCount) {
             when {
                 isFullSpan -> position == 0
@@ -81,28 +80,28 @@ open class StaggeredGridDividerItemDecoration(
             false
         }
 
-        val startItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-            isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.START
+        val startItemDecorate = itemDecorateProvider.getItemDecorate(
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+            isLastSpan, isColumnFirst, isColumnEnd, vertical, ItemDecorate.Type.START
         )
-        val topItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-            isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.TOP
+        val topItemDecorate = itemDecorateProvider.getItemDecorate(
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+            isLastSpan, isColumnFirst, isColumnEnd, vertical, ItemDecorate.Type.TOP
         )
-        val endItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-            isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.END
+        val endItemDecorate = itemDecorateProvider.getItemDecorate(
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+            isLastSpan, isColumnFirst, isColumnEnd, vertical, ItemDecorate.Type.END
         )
-        val bottomItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-            isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.BOTTOM
+        val bottomItemDecorate = itemDecorateProvider.getItemDecorate(
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+            isLastSpan, isColumnFirst, isColumnEnd, vertical, ItemDecorate.Type.BOTTOM
         )
         val startItemDecorateSize = startItemDecorate?.widthSize ?: 0
         val topItemDecorateSize = topItemDecorate?.heightSize ?: 0
         val endItemDecorateSize = endItemDecorate?.widthSize ?: 0
         val bottomItemDecorateSize = bottomItemDecorate?.heightSize ?: 0
 
-        if (verticalOrientation) {
+        if (vertical) {
             when {
                 isFullSpan -> {
                     outRect.set(
@@ -182,7 +181,7 @@ open class StaggeredGridDividerItemDecoration(
         }
         val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
         val childCount = parent.childCount.takeIf { it != 0 } ?: return
-        val verticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
+        val vertical = layoutManager.orientation == GridLayoutManager.VERTICAL
         val spanCount = layoutManager.spanCount
 
         for (index in 0 until childCount) {
@@ -191,6 +190,8 @@ open class StaggeredGridDividerItemDecoration(
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
             val spanIndex = childLayoutParams.spanIndex
             val isFullSpan = childLayoutParams.isFullSpan
+            val isFirstSpan = isFullSpan || spanIndex == 0
+            val isLastSpan = isFullSpan || spanIndex == spanCount - 1
             val isColumnFirst = if (isFullSpanByPosition != null && position < spanCount) {
                 when {
                     isFullSpan -> position == 0
@@ -215,28 +216,28 @@ open class StaggeredGridDividerItemDecoration(
                     false
                 }
 
-            val startItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-                isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.START
+            val startItemDecorate = itemDecorateProvider.getItemDecorate(
+                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+                isLastSpan, isColumnFirst, isColumnEnd, vertical, ItemDecorate.Type.START
             )
-            val topItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-                isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.TOP
+            val topItemDecorate = itemDecorateProvider.getItemDecorate(
+                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+                isLastSpan, isColumnFirst, isColumnEnd, vertical, ItemDecorate.Type.TOP
             )
-            val endItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-                isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.END
+            val endItemDecorate = itemDecorateProvider.getItemDecorate(
+                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+                isLastSpan, isColumnFirst, isColumnEnd, vertical, ItemDecorate.Type.END
             )
-            val bottomItemDecorate = staggeredGridItemDecorateProvider.getItemDecorate(
-                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan,
-                isColumnFirst, isColumnEnd, verticalOrientation, ItemDecorate.Type.BOTTOM
+            val bottomItemDecorate = itemDecorateProvider.getItemDecorate(
+                view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+                isLastSpan, isColumnFirst, isColumnEnd, vertical, ItemDecorate.Type.BOTTOM
             )
             val startItemDecorateSize = startItemDecorate?.widthSize ?: 0
             val topItemDecorateSize = topItemDecorate?.heightSize ?: 0
             val endItemDecorateSize = endItemDecorate?.widthSize ?: 0
             val bottomItemDecorateSize = bottomItemDecorate?.heightSize ?: 0
 
-            if (verticalOrientation) {
+            if (vertical) {
                 startItemDecorate?.apply {
                     draw(
                         canvas,
@@ -314,131 +315,282 @@ open class StaggeredGridDividerItemDecoration(
         }
     }
 
-    open class Builder(protected val context: Context) {
+    class Builder(private val context: Context) {
 
-        private var dividerItemDecorate: ItemDecorate? = null
-
-        private var firstDividerItemDecorate: ItemDecorate? = null
-        private var lastDividerItemDecorate: ItemDecorate? = null
-        private var sideItemDecorate: ItemDecorate? = null
-        private var firstSideItemDecorate: ItemDecorate? = null
-        private var lastSideItemDecorate: ItemDecorate? = null
-
+        private var dividerDecorateConfig: DecorateConfig? = null
+        private var firstDividerDecorateConfig: DecorateConfig? = null
+        private var lastDividerDecorateConfig: DecorateConfig? = null
         private var showFirstDivider = false
         private var showLastDivider = false
+
+        private var sideDecorateConfig: DecorateConfig? = null
+        private var firstSideDecorateConfig: DecorateConfig? = null
+        private var lastSideDecorateConfig: DecorateConfig? = null
         private var showFirstSide = false
         private var showLastSide = false
 
-        protected var isFullSpanByPosition: IsFullSpanByPosition? = null
+        private var isFullSpanByPosition: IsFullSpanByPosition? = null
 
-        open fun build(): StaggeredGridDividerItemDecoration {
+        fun build(): StaggeredGridDividerItemDecoration {
             return StaggeredGridDividerItemDecoration(
                 buildItemDecorateProvider(),
                 isFullSpanByPosition
             )
         }
 
-        protected open fun buildItemDecorateProvider(): StaggeredGridItemDecorateProvider {
-            val finalDividerItemDecorate = dividerItemDecorate ?: context.obtainStyledAttributes(
-                intArrayOf(android.R.attr.listDivider)
-            ).let { array ->
-                array.getDrawable(0).apply {
-                    array.recycle()
+        private fun buildItemDecorateProvider(): StaggeredGridItemDecorateProvider {
+            val finalDividerDecorateConfig =
+                dividerDecorateConfig ?: context.obtainStyledAttributes(
+                    intArrayOf(android.R.attr.listDivider)
+                ).let { array ->
+                    array.getDrawable(0).apply {
+                        array.recycle()
+                    }
+                }!!.let {
+                    DecorateConfig.Builder(Decorate.drawable(it)).build()
                 }
-            }!!.let {
-                Decorate.drawable(it).createItemDecorate(context)
-            }
-            return StaggeredGridItemDecorateProviderImpl(
-                finalDividerItemDecorate,
-                firstDividerItemDecorate
-                    ?: if (showFirstDivider) finalDividerItemDecorate else null,
-                lastDividerItemDecorate
-                    ?: if (showLastDivider) finalDividerItemDecorate else null,
+
+            val finalDividerItemDecorateConfig =
+                finalDividerDecorateConfig.toItemDecorateHolder(context)
+            val firstDividerItemDecorate = (firstDividerDecorateConfig
+                ?: if (showFirstDivider) finalDividerDecorateConfig else null)
+                ?.toItemDecorateHolder(context)
+            val lastDividerItemDecorate = (lastDividerDecorateConfig
+                ?: if (showLastDivider) finalDividerDecorateConfig else null)
+                ?.toItemDecorateHolder(context)
+
+            val sideItemDecorate = sideDecorateConfig?.toItemDecorateHolder(context)
+            val firstSideItemDecorate = (firstSideDecorateConfig
+                ?: if (showFirstSide) sideDecorateConfig else null)
+                ?.toItemDecorateHolder(context)
+            val lastSideItemDecorate = (lastSideDecorateConfig
+                ?: if (showLastSide) sideDecorateConfig else null)
+                ?.toItemDecorateHolder(context)
+
+            return StaggeredGridItemDecorateProvider(
+                finalDividerItemDecorateConfig,
+                firstDividerItemDecorate,
+                lastDividerItemDecorate,
                 sideItemDecorate,
-                firstSideItemDecorate
-                    ?: if (showFirstSide) sideItemDecorate else null,
-                lastSideItemDecorate
-                    ?: if (showFirstSide) sideItemDecorate else null,
+                firstSideItemDecorate,
+                lastSideItemDecorate,
             )
         }
 
 
-        open fun divider(decorate: Decorate): Builder {
-            this.dividerItemDecorate = decorate.createItemDecorate(context)
+        fun divider(decorate: Decorate): Builder {
+            this.dividerDecorateConfig = DecorateConfig.Builder(decorate).build()
             return this
         }
 
-        open fun firstDivider(decorate: Decorate): Builder {
-            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
+        fun divider(
+            decorate: Decorate,
+            configBlock: (DecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.dividerDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
             return this
         }
 
-        open fun lastDivider(decorate: Decorate): Builder {
-            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
+        fun divider(decorateConfig: DecorateConfig): Builder {
+            this.dividerDecorateConfig = decorateConfig
             return this
         }
 
-        open fun firstAndLastDivider(decorate: Decorate): Builder {
-            this.firstDividerItemDecorate = decorate.createItemDecorate(context)
-            this.lastDividerItemDecorate = decorate.createItemDecorate(context)
+
+        fun firstDivider(decorate: Decorate): Builder {
+            this.firstDividerDecorateConfig = DecorateConfig.Builder(decorate).build()
             return this
         }
 
-        open fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
+        fun firstDivider(
+            decorate: Decorate,
+            configBlock: (DecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.firstDividerDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun firstDivider(decorateConfig: DecorateConfig): Builder {
+            this.firstDividerDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun lastDivider(decorate: Decorate): Builder {
+            this.lastDividerDecorateConfig = DecorateConfig.Builder(decorate).build()
+            return this
+        }
+
+        fun lastDivider(
+            decorate: Decorate,
+            configBlock: (DecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.lastDividerDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun lastDivider(decorateConfig: DecorateConfig): Builder {
+            this.lastDividerDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun firstAndLastDivider(decorate: Decorate): Builder {
+            this.firstDividerDecorateConfig = DecorateConfig.Builder(decorate).build()
+            this.lastDividerDecorateConfig = DecorateConfig.Builder(decorate).build()
+            return this
+        }
+
+        fun firstAndLastDivider(
+            decorate: Decorate,
+            configBlock: (DecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.firstDividerDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            this.lastDividerDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun firstAndLastDivider(decorateConfig: DecorateConfig): Builder {
+            this.firstDividerDecorateConfig = decorateConfig
+            this.lastDividerDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
             this.showFirstDivider = showFirstDivider
             return this
         }
 
-        open fun showLastDivider(showLastDivider: Boolean = true): Builder {
+        fun showLastDivider(showLastDivider: Boolean = true): Builder {
             this.showLastDivider = showLastDivider
             return this
         }
 
-        open fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
+        fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
             this.showFirstDivider = showFirstAndLastDivider
             this.showLastDivider = showFirstAndLastDivider
             return this
         }
 
 
-        open fun side(decorate: Decorate): Builder {
-            this.sideItemDecorate = decorate.createItemDecorate(context)
+        fun side(decorate: Decorate): Builder {
+            this.sideDecorateConfig = DecorateConfig.Builder(decorate).build()
             return this
         }
 
-        open fun firstSide(decorate: Decorate): Builder {
-            this.firstSideItemDecorate = decorate.createItemDecorate(context)
+        fun side(
+            decorate: Decorate,
+            configBlock: (DecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.sideDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
             return this
         }
 
-        open fun lastSide(decorate: Decorate): Builder {
-            this.lastSideItemDecorate = decorate.createItemDecorate(context)
+        fun side(decorateConfig: DecorateConfig): Builder {
+            this.sideDecorateConfig = decorateConfig
             return this
         }
 
-        open fun firstAndLastSide(decorate: Decorate): Builder {
-            this.firstSideItemDecorate = decorate.createItemDecorate(context)
-            this.lastSideItemDecorate = decorate.createItemDecorate(context)
+
+        fun firstSide(decorate: Decorate): Builder {
+            this.firstSideDecorateConfig = DecorateConfig.Builder(decorate).build()
             return this
         }
 
-        open fun showFirstSide(showFirstSide: Boolean = true): Builder {
+        fun firstSide(
+            decorate: Decorate,
+            configBlock: (DecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.firstSideDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun firstSide(decorateConfig: DecorateConfig): Builder {
+            this.firstSideDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun lastSide(decorate: Decorate): Builder {
+            this.lastSideDecorateConfig = DecorateConfig.Builder(decorate).build()
+            return this
+        }
+
+        fun lastSide(
+            decorate: Decorate,
+            configBlock: (DecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.lastSideDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun lastSide(decorateConfig: DecorateConfig): Builder {
+            this.lastSideDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun firstAndLastSide(decorate: Decorate): Builder {
+            this.firstSideDecorateConfig = DecorateConfig.Builder(decorate).build()
+            this.lastSideDecorateConfig = DecorateConfig.Builder(decorate).build()
+            return this
+        }
+
+        fun firstAndLastSide(
+            decorate: Decorate,
+            configBlock: (DecorateConfig.Builder.() -> Unit)? = null
+        ): Builder {
+            this.firstSideDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            this.lastSideDecorateConfig = DecorateConfig.Builder(decorate).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
+        }
+
+        fun firstAndLastSide(decorateConfig: DecorateConfig): Builder {
+            this.firstSideDecorateConfig = decorateConfig
+            this.lastSideDecorateConfig = decorateConfig
+            return this
+        }
+
+
+        fun showFirstSide(showFirstSide: Boolean = true): Builder {
             this.showFirstSide = showFirstSide
             return this
         }
 
-        open fun showLastSide(showLastSide: Boolean = true): Builder {
+        fun showLastSide(showLastSide: Boolean = true): Builder {
             this.showLastSide = showLastSide
             return this
         }
 
-        open fun showFirstAndLastSide(showFirstAndLastSide: Boolean = true): Builder {
+        fun showFirstAndLastSide(showFirstAndLastSide: Boolean = true): Builder {
             this.showFirstSide = showFirstAndLastSide
             this.showLastSide = showFirstAndLastSide
             return this
         }
 
-        open fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
+
+        fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
             this.isFullSpanByPosition = isFullSpanByPosition
             return this
         }

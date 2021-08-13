@@ -18,7 +18,14 @@ package com.github.panpf.assemblyadapter.recycler.divider.internal
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-interface StaggeredGridItemDecorateProvider {
+class StaggeredGridItemDecorateProvider(
+    private val dividerItemDecorate: ItemDecorateHolder,
+    private val firstDividerItemDecorate: ItemDecorateHolder?,
+    private val lastDividerItemDecorate: ItemDecorateHolder?,
+    private val sideItemDecorate: ItemDecorateHolder?,
+    private val firstSideItemDecorate: ItemDecorateHolder?,
+    private val lastSideItemDecorate: ItemDecorateHolder?,
+) {
 
     fun getItemDecorate(
         view: View,
@@ -28,11 +35,34 @@ interface StaggeredGridItemDecorateProvider {
         spanCount: Int,
         spanIndex: Int,
         isFullSpan: Boolean,
+        isFirstSpan: Boolean,
+        isLastSpan: Boolean,
         isColumnFirst: Boolean,
         isColumnEnd: Boolean,
-        verticalOrientation: Boolean,
+        vertical: Boolean,
         decorateType: ItemDecorate.Type,
-    ): ItemDecorate?
+    ): ItemDecorate? {
+        return if (vertical) {
+            when (decorateType) {
+                ItemDecorate.Type.START -> if (isFirstSpan) firstSideItemDecorate else sideItemDecorate
+                ItemDecorate.Type.TOP -> if (isColumnFirst) firstDividerItemDecorate else null
+                ItemDecorate.Type.END -> if (isLastSpan) lastSideItemDecorate else sideItemDecorate
+                ItemDecorate.Type.BOTTOM -> if (isColumnEnd) lastDividerItemDecorate else dividerItemDecorate
+            }
+        } else {
+            when (decorateType) {
+                ItemDecorate.Type.START -> if (isColumnFirst) firstDividerItemDecorate else null
+                ItemDecorate.Type.TOP -> if (isFirstSpan) firstSideItemDecorate else sideItemDecorate
+                ItemDecorate.Type.END -> if (isColumnEnd) lastDividerItemDecorate else dividerItemDecorate
+                ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorate else sideItemDecorate
+            }
+        }?.get(
+            view, parent, itemCount, position, spanCount, spanIndex, isFullSpan, isFirstSpan,
+            isLastSpan, isColumnFirst, isColumnEnd, vertical, decorateType
+        )
+    }
 
-    fun hasFirstOrLastDivider(): Boolean
+    fun hasFirstOrLastDivider(): Boolean {
+        return firstDividerItemDecorate != null || lastDividerItemDecorate != null
+    }
 }
