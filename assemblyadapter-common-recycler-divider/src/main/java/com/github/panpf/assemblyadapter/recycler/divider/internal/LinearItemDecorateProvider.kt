@@ -17,9 +17,14 @@ package com.github.panpf.assemblyadapter.recycler.divider.internal
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 
-interface LinearItemDecorateProvider {
+class LinearItemDecorateProvider(
+    private val dividerItemDecorateHolder: ItemDecorateHolder,
+    private val firstDividerItemDecorateHolder: ItemDecorateHolder?,
+    private val lastDividerItemDecorateHolder: ItemDecorateHolder?,
+    private val startSideItemDecorateHolder: ItemDecorateHolder?,
+    private val endSideItemDecorateHolder: ItemDecorateHolder?,
+) {
 
     fun getItemDecorate(
         view: View,
@@ -28,5 +33,24 @@ interface LinearItemDecorateProvider {
         position: Int,
         verticalOrientation: Boolean,
         decorateType: ItemDecorate.Type,
-    ): ItemDecorate?
+    ): ItemDecorate? {
+        if (itemCount == 0) return null
+        val isFirst = position == 0
+        val isLast = position == itemCount - 1
+        return if (verticalOrientation) {
+            when (decorateType) {
+                ItemDecorate.Type.START -> startSideItemDecorateHolder
+                ItemDecorate.Type.TOP -> if (isFirst) firstDividerItemDecorateHolder else null
+                ItemDecorate.Type.END -> endSideItemDecorateHolder
+                ItemDecorate.Type.BOTTOM -> if (isLast) lastDividerItemDecorateHolder else dividerItemDecorateHolder
+            }
+        } else {
+            when (decorateType) {
+                ItemDecorate.Type.START -> if (isFirst) firstDividerItemDecorateHolder else null
+                ItemDecorate.Type.TOP -> startSideItemDecorateHolder
+                ItemDecorate.Type.END -> if (isLast) lastDividerItemDecorateHolder else dividerItemDecorateHolder
+                ItemDecorate.Type.BOTTOM -> endSideItemDecorateHolder
+            }
+        }?.get(parent, position)
+    }
 }

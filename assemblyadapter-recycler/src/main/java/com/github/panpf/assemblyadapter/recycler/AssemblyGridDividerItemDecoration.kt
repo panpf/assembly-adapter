@@ -41,7 +41,6 @@ open class AssemblyGridDividerItemDecoration(
         private var showFirstSide = false
         private var showLastSide = false
 
-        private var isFullSpanByPosition: IsFullSpanByPosition? = null
         private var findItemFactoryClassByPosition: FindItemFactoryClassByPosition? = null
 
         fun build(): AssemblyGridDividerItemDecoration {
@@ -311,11 +310,6 @@ open class AssemblyGridDividerItemDecoration(
             return this
         }
 
-
-        fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
-            this.isFullSpanByPosition = isFullSpanByPosition
-            return this
-        }
 
         fun findItemFactoryClassByPosition(getItemFactoryClassByPosition: FindItemFactoryClassByPosition?): Builder {
             this.findItemFactoryClassByPosition = getItemFactoryClassByPosition

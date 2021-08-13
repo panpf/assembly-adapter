@@ -114,26 +114,22 @@ class RecyclerLinearDividerHorFragment :
         return AssemblyLinearDividerItemDecoration.Builder(requireContext()).apply {
             val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
             val size = if (thickDivider) 5.dp2px else 1.dp2px
-            divider(
-                Decorate.color(0x88FF0000.toInt(), size, insets)
-            )
-            firstAndLastDivider(
-                Decorate.color(0xFFFF0000.toInt(), size, insets)
-            )
-            personaliseDivider(
-                ListSeparatorHorizontalItemFactory::class,
-                Decorate.color(0x8800FF00.toInt(), size, insets)
-            )
-            disableDivider(AppsOverviewHorizontalItemFactory::class)
+            divider(Decorate.color(0x88FF0000.toInt(), size, insets)) {
+                personalise(
+                    ListSeparatorHorizontalItemFactory::class,
+                    Decorate.color(0x8800FF00.toInt(), size, insets)
+                )
+                disable(AppsOverviewHorizontalItemFactory::class)
+            }
+            firstAndLastDivider(Decorate.color(0xFFFF0000.toInt(), size, insets))
 
-            firstAndLastSide(
-                Decorate.color(0xFF0000FF.toInt(), size, insets)
-            )
-            personaliseFirstAndLastSide(
-                ListSeparatorHorizontalItemFactory::class,
-                Decorate.color(0xFF00FF00.toInt(), size, insets)
-            )
-            disableFirstAndLastSide(AppsOverviewHorizontalItemFactory::class)
+            firstAndLastSide(Decorate.color(0xFF0000FF.toInt(), size, insets)) {
+                personalise(
+                    ListSeparatorHorizontalItemFactory::class,
+                    Decorate.color(0xFF00FF00.toInt(), size, insets)
+                )
+                disable(AppsOverviewHorizontalItemFactory::class)
+            }
         }.build()
     }
 }

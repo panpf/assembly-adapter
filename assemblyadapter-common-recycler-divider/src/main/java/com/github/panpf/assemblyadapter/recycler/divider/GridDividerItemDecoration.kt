@@ -266,6 +266,7 @@ open class GridDividerItemDecoration(
             val lastSideItemDecorate = (lastSideDecorateConfig
                 ?: if (showLastSide) sideDecorateConfig else null)
                 ?.toItemDecorateHolder(context)
+
             return GridItemDecorateProvider(
                 finalDividerItemDecorateConfig,
                 firstDividerItemDecorate,
