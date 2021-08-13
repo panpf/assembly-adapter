@@ -55,15 +55,15 @@ class CompatRecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
             adapter = appAdapter
             addAssemblyGridDividerItemDecoration {
                 divider(Decorate.space(20.dp2px)) {
-                    disable(TextItem.Factory::class)
+                    disableByItemFactoryClass(TextItem.Factory::class)
                 }
                 firstAndLastDivider(Decorate.space(20.dp2px)) {
-                    disable(TextItem.Factory::class)
+                    disableByItemFactoryClass(TextItem.Factory::class)
                 }
                 side(Decorate.space(20.dp2px))
                 firstAndLastSide(Decorate.space(20.dp2px)) {
-                    disable(TextItem.Factory::class)
-                    disable(ListSeparatorItem.Factory::class)
+                    disableByItemFactoryClass(TextItem.Factory::class)
+                    disableByItemFactoryClass(ListSeparatorItem.Factory::class)
                 }
                 findItemFactoryClassByPosition { adapter, position ->
                     if (adapter is CompatAssemblyAdapter) {

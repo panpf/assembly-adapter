@@ -114,20 +114,20 @@ class RecyclerLinearDividerVerFragment :
             val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
             val size = if (thickDivider) 5.dp2px else 1.dp2px
             divider(Decorate.color(0x88FF0000.toInt(), size, insets)) {
-                personalise(
+                personaliseByItemFactoryClass(
                     ListSeparatorItemFactory::class,
                     Decorate.color(0x8800FF00.toInt(), size, insets)
                 )
-                disable(AppsOverviewItemFactory::class)
+                disableByItemFactoryClass(AppsOverviewItemFactory::class)
             }
             firstAndLastDivider(Decorate.color(0xFFFF0000.toInt(), size, insets))
 
             firstAndLastSide(Decorate.color(0xFF0000FF.toInt(), size, insets)) {
-                personalise(
+                personaliseByItemFactoryClass(
                     ListSeparatorItemFactory::class,
                     Decorate.color(0xFF00FF00.toInt(), size, insets)
                 )
-                disable(AppsOverviewItemFactory::class)
+                disableByItemFactoryClass(AppsOverviewItemFactory::class)
             }
         }.build()
     }

@@ -70,13 +70,13 @@ class RecyclerStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBindin
                 )
             addAssemblyStaggeredGridDividerItemDecoration {
                 divider(Decorate.space(20.dp2px)) {
-                    disable(AppsOverviewItemFactory::class)
+                    disableByItemFactoryClass(AppsOverviewItemFactory::class)
                 }
                 side(Decorate.space(20.dp2px))
 
                 firstAndLastSide(Decorate.space(20.dp2px)) {
-                    disable(AppsOverviewItemFactory::class)
-                    disable(ListSeparatorItemFactory::class)
+                    disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                    disableByItemFactoryClass(ListSeparatorItemFactory::class)
                 }
             }
             addItemDecoration(

@@ -51,6 +51,6 @@ class LinearItemDecorateProvider(
                 ItemDecorate.Type.END -> if (isLast) lastDividerItemDecorateHolder else dividerItemDecorateHolder
                 ItemDecorate.Type.BOTTOM -> endSideItemDecorateHolder
             }
-        }?.get(parent, position)
+        }?.get(parent, position, 0)
     }
 }

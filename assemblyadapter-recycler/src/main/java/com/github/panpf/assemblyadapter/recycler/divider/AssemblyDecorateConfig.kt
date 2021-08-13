@@ -18,16 +18,18 @@ package com.github.panpf.assemblyadapter.recycler.divider
 import android.content.Context
 import androidx.collection.ArrayMap
 import androidx.collection.SparseArrayCompat
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDecorateHolder
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import kotlin.reflect.KClass
 
 class AssemblyDecorateConfig constructor(
     private val decorate: Decorate,
-    private val disableDecorateArray: SparseArrayCompat<Boolean>?,
-    private val personaliseDecorateArray: SparseArrayCompat<Decorate>?,
-    private val disableDecorateMap: ArrayMap<Class<*>, Boolean>?,
-    private val personaliseDecorateMap: ArrayMap<Class<*>, Decorate>?
+    private val disableByPositionArray: SparseArrayCompat<Boolean>?,
+    private val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
+    private val disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>?,
+    private val personaliseByPositionArray: SparseArrayCompat<Decorate>?,
+    private val personaliseBySpanIndexArray: SparseArrayCompat<Decorate>?,
+    private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, Decorate>?
 ) {
 
     fun toItemDecorateHolder(
@@ -35,9 +37,13 @@ class AssemblyDecorateConfig constructor(
         findItemFactoryClassByPosition: FindItemFactoryClassByPosition
     ): AssemblyItemDecorateHolder {
         val defaultItemDecorateConfig = DecorateConfig(
-            decorate, disableDecorateArray, personaliseDecorateArray
+            decorate,
+            disableByPositionArray,
+            disableBySpanIndexArray,
+            personaliseByPositionArray,
+            personaliseBySpanIndexArray
         ).toItemDecorateHolder(context)
-        val personaliseItemDecorateMap = personaliseDecorateMap?.let { oldMap ->
+        val personaliseByItemFactoryClassMap = personaliseByItemFactoryClassMap?.let { oldMap ->
             ArrayMap<Class<*>, ItemDecorate>().apply {
                 oldMap.forEach {
                     put(it.key, it.value.createItemDecorate(context))
@@ -46,51 +52,69 @@ class AssemblyDecorateConfig constructor(
         }
         return AssemblyItemDecorateHolder(
             defaultItemDecorateConfig,
-            disableDecorateMap,
-            personaliseItemDecorateMap,
+            disableByItemFactoryClassMap,
+            personaliseByItemFactoryClassMap,
             findItemFactoryClassByPosition
         )
     }
 
     class Builder(val decorate: Decorate) {
-        private var disableDecorateArray: SparseArrayCompat<Boolean>? = null
-        private var personaliseDecorateArray: SparseArrayCompat<Decorate>? = null
-        private var disableDecorateMap: ArrayMap<Class<*>, Boolean>? = null
-        private var personaliseDecorateMap: ArrayMap<Class<*>, Decorate>? = null
+        private var disableByPositionArray: SparseArrayCompat<Boolean>? = null
+        private var disableBySpanIndexArray: SparseArrayCompat<Boolean>? = null
+        private var disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>? = null
+        private var personaliseByPositionArray: SparseArrayCompat<Decorate>? = null
+        private var personaliseBySpanIndexArray: SparseArrayCompat<Decorate>? = null
+        private var personaliseByItemFactoryClassMap: ArrayMap<Class<*>, Decorate>? = null
 
-        fun disable(position: Int): Builder {
-            (disableDecorateArray ?: SparseArrayCompat<Boolean>().apply {
-                this@Builder.disableDecorateArray = this
+        fun disableByPosition(position: Int): Builder {
+            (disableByPositionArray ?: SparseArrayCompat<Boolean>().apply {
+                this@Builder.disableByPositionArray = this
             }).put(position, true)
             return this
         }
 
-        fun personalise(position: Int, decorate: Decorate): Builder {
-            (personaliseDecorateArray ?: SparseArrayCompat<Decorate>().apply {
-                this@Builder.personaliseDecorateArray = this
+        fun disableBySpanIndex(spanIndex: Int): Builder {
+            (disableBySpanIndexArray ?: SparseArrayCompat<Boolean>().apply {
+                this@Builder.disableBySpanIndexArray = this
+            }).put(spanIndex, true)
+            return this
+        }
+
+        fun disableByItemFactoryClass(itemFactoryClass: KClass<*>) {
+            (disableByItemFactoryClassMap ?: ArrayMap<Class<*>, Boolean>().apply {
+                this@Builder.disableByItemFactoryClassMap = this
+            })[itemFactoryClass.java] = true
+        }
+
+        fun personaliseByPosition(position: Int, decorate: Decorate): Builder {
+            (personaliseByPositionArray ?: SparseArrayCompat<Decorate>().apply {
+                this@Builder.personaliseByPositionArray = this
             }).put(position, decorate)
             return this
         }
 
-        fun disable(itemFactoryClass: KClass<*>) {
-            (disableDecorateMap ?: ArrayMap<Class<*>, Boolean>().apply {
-                this@Builder.disableDecorateMap = this
-            })[itemFactoryClass.java] = true
+        fun personaliseBySpanIndex(spanIndex: Int, decorate: Decorate): Builder {
+            (personaliseBySpanIndexArray ?: SparseArrayCompat<Decorate>().apply {
+                this@Builder.personaliseBySpanIndexArray = this
+            }).put(spanIndex, decorate)
+            return this
         }
 
-        fun personalise(itemFactoryClass: KClass<*>, decorate: Decorate) {
-            (personaliseDecorateMap ?: ArrayMap<Class<*>, Decorate>().apply {
-                this@Builder.personaliseDecorateMap = this
+        fun personaliseByItemFactoryClass(itemFactoryClass: KClass<*>, decorate: Decorate) {
+            (personaliseByItemFactoryClassMap ?: ArrayMap<Class<*>, Decorate>().apply {
+                this@Builder.personaliseByItemFactoryClassMap = this
             })[itemFactoryClass.java] = decorate
         }
 
         fun build(): AssemblyDecorateConfig {
             return AssemblyDecorateConfig(
                 decorate,
-                disableDecorateArray,
-                personaliseDecorateArray,
-                disableDecorateMap,
-                personaliseDecorateMap
+                disableByPositionArray,
+                disableBySpanIndexArray,
+                disableByItemFactoryClassMap,
+                personaliseByPositionArray,
+                personaliseBySpanIndexArray,
+                personaliseByItemFactoryClassMap
             )
         }
     }

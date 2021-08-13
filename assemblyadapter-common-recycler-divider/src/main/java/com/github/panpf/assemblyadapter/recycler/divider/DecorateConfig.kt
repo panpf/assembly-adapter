@@ -17,18 +17,27 @@ package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
 import androidx.collection.SparseArrayCompat
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorateHolderImpl
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorateHolder
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorateHolderImpl
 
 class DecorateConfig(
     private val decorate: Decorate,
-    private val disableDecorateArray: SparseArrayCompat<Boolean>?,
-    private val personaliseDecorateArray: SparseArrayCompat<Decorate>?,
+    private val disableByPositionArray: SparseArrayCompat<Boolean>?,
+    private val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
+    private val personaliseByPositionArray: SparseArrayCompat<Decorate>?,
+    private val personaliseBySpanIndexArray: SparseArrayCompat<Decorate>?,
 ) {
 
     fun toItemDecorateHolder(context: Context): ItemDecorateHolder {
-        val personaliseItemDecorateArray = personaliseDecorateArray?.let { oldArray ->
+        val personaliseByPositionItemDecorateArray = personaliseByPositionArray?.let { oldArray ->
+            SparseArrayCompat<ItemDecorate>().apply {
+                0.until(oldArray.size()).forEach { index ->
+                    put(oldArray.keyAt(index), oldArray.valueAt(index).createItemDecorate(context))
+                }
+            }
+        }
+        val personaliseBySpanIndexItemDecorateArray = personaliseBySpanIndexArray?.let { oldArray ->
             SparseArrayCompat<ItemDecorate>().apply {
                 0.until(oldArray.size()).forEach { index ->
                     put(oldArray.keyAt(index), oldArray.valueAt(index).createItemDecorate(context))
@@ -37,31 +46,55 @@ class DecorateConfig(
         }
         return ItemDecorateHolderImpl(
             decorate.createItemDecorate(context),
-            disableDecorateArray,
-            personaliseItemDecorateArray,
+            disableByPositionArray,
+            disableBySpanIndexArray,
+            personaliseByPositionItemDecorateArray,
+            personaliseBySpanIndexItemDecorateArray,
         )
     }
 
     class Builder(val decorate: Decorate) {
-        private var disableDecorateArray: SparseArrayCompat<Boolean>? = null
-        private var personaliseDecorateArray: SparseArrayCompat<Decorate>? = null
+        private var disableByPositionArray: SparseArrayCompat<Boolean>? = null
+        private var disableBySpanIndexArray: SparseArrayCompat<Boolean>? = null
+        private var personaliseByPositionDecorateArray: SparseArrayCompat<Decorate>? = null
+        private var personaliseBySpanIndexDecorateArray: SparseArrayCompat<Decorate>? = null
 
-        fun disable(position: Int): Builder {
-            (disableDecorateArray ?: SparseArrayCompat<Boolean>().apply {
-                this@Builder.disableDecorateArray = this
+        fun disableByPosition(position: Int): Builder {
+            (disableByPositionArray ?: SparseArrayCompat<Boolean>().apply {
+                this@Builder.disableByPositionArray = this
             }).put(position, true)
             return this
         }
 
-        fun personalise(position: Int, decorate: Decorate): Builder {
-            (personaliseDecorateArray ?: SparseArrayCompat<Decorate>().apply {
-                this@Builder.personaliseDecorateArray = this
+        fun disableBySpanIndex(spanIndex: Int): Builder {
+            (disableBySpanIndexArray ?: SparseArrayCompat<Boolean>().apply {
+                this@Builder.disableBySpanIndexArray = this
+            }).put(spanIndex, true)
+            return this
+        }
+
+        fun personaliseByPosition(position: Int, decorate: Decorate): Builder {
+            (personaliseByPositionDecorateArray ?: SparseArrayCompat<Decorate>().apply {
+                this@Builder.personaliseByPositionDecorateArray = this
             }).put(position, decorate)
             return this
         }
 
+        fun personaliseBySpanIndex(spanIndex: Int, decorate: Decorate): Builder {
+            (personaliseBySpanIndexDecorateArray ?: SparseArrayCompat<Decorate>().apply {
+                this@Builder.personaliseBySpanIndexDecorateArray = this
+            }).put(spanIndex, decorate)
+            return this
+        }
+
         fun build(): DecorateConfig {
-            return DecorateConfig(decorate, disableDecorateArray, personaliseDecorateArray)
+            return DecorateConfig(
+                decorate,
+                disableByPositionArray,
+                disableBySpanIndexArray,
+                personaliseByPositionDecorateArray,
+                personaliseBySpanIndexDecorateArray
+            )
         }
     }
 }

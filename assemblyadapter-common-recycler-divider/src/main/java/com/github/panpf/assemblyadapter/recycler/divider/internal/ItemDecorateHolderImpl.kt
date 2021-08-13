@@ -20,21 +20,28 @@ import androidx.recyclerview.widget.RecyclerView
 
 open class ItemDecorateHolderImpl(
     private val itemDecorate: ItemDecorate,
-    private val disableItemDecorateArray: SparseArrayCompat<Boolean>?,
-    private val personaliseItemDecorateArray: SparseArrayCompat<ItemDecorate>?,
+    private val disableByPositionArray: SparseArrayCompat<Boolean>?,
+    private val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
+    private val personaliseByPositionArray: SparseArrayCompat<ItemDecorate>?,
+    private val personaliseBySpanIndexArray: SparseArrayCompat<ItemDecorate>?,
 ) : ItemDecorateHolder {
 
-    override fun get(
-        parent: RecyclerView,
-        position: Int,
-    ): ItemDecorate? {
-        if (disableItemDecorateArray?.get(position, false) == true) {
+    override fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDecorate? {
+        if (disableBySpanIndexArray?.get(spanIndex, false) == true) {
+            return null
+        }
+        if (disableByPositionArray?.get(position, false) == true) {
             return null
         }
 
-        val personaliseItemDecorate = personaliseItemDecorateArray?.get(position)
-        if (personaliseItemDecorate != null) {
-            return personaliseItemDecorate
+        val personaliseBySpanIndexItemDecorate = personaliseBySpanIndexArray?.get(position)
+        if (personaliseBySpanIndexItemDecorate != null) {
+            return personaliseBySpanIndexItemDecorate
+        }
+
+        val personaliseByPositionItemDecorate = personaliseByPositionArray?.get(position)
+        if (personaliseByPositionItemDecorate != null) {
+            return personaliseByPositionItemDecorate
         }
 
         return itemDecorate

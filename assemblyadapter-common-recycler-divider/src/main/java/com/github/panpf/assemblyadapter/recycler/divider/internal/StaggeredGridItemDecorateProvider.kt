@@ -56,7 +56,7 @@ class StaggeredGridItemDecorateProvider(
                 ItemDecorate.Type.END -> if (isColumnEnd) lastDividerItemDecorate else dividerItemDecorate
                 ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorate else sideItemDecorate
             }
-        }?.get(parent, position)
+        }?.get(parent, position, spanIndex)
     }
 
     fun hasFirstOrLastDivider(): Boolean {

@@ -20,32 +20,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassByPosition
 
 class AssemblyItemDecorateHolder(
-    private val defaultItemDecorateConfig: ItemDecorateHolder,
-    private val disableItemDecorateMap: ArrayMap<Class<*>, Boolean>?,
-    private val personaliseItemDecorateMap: ArrayMap<Class<*>, ItemDecorate>?,
+    private val defaultItemDecorateHolder: ItemDecorateHolder,
+    private val disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>?,
+    private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, ItemDecorate>?,
     private val findItemFactoryClassByPosition: FindItemFactoryClassByPosition,
 ) : ItemDecorateHolder {
 
-    override fun get(
-        parent: RecyclerView,
-        position: Int,
-    ): ItemDecorate? {
-        if (disableItemDecorateMap != null || personaliseItemDecorateMap != null) {
+    override fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDecorate? {
+        if (disableByItemFactoryClassMap != null || personaliseByItemFactoryClassMap != null) {
             val adapter = parent.adapter
             val itemFactoryClass = adapter?.let {
                 findItemFactoryClassByPosition.find(it, position)
             }
             if (itemFactoryClass != null) {
-                if (disableItemDecorateMap?.get(itemFactoryClass) == true) {
+                if (disableByItemFactoryClassMap?.get(itemFactoryClass) == true) {
                     return null
                 }
 
-                val personaliseItemDecorate = personaliseItemDecorateMap?.get(itemFactoryClass)
+                val personaliseItemDecorate = personaliseByItemFactoryClassMap?.get(itemFactoryClass)
                 if (personaliseItemDecorate != null) {
                     return personaliseItemDecorate
                 }
             }
         }
-        return defaultItemDecorateConfig.get(parent, position)
+        return defaultItemDecorateHolder.get(parent, position, spanIndex)
     }
 }

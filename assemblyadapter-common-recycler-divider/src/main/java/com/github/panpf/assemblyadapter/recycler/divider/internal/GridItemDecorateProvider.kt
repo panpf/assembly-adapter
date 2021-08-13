@@ -59,6 +59,6 @@ class GridItemDecorateProvider(
                 ItemDecorate.Type.END -> if (isLastGroup) lastDividerItemDecorateHolder else dividerItemDecorateHolder
                 ItemDecorate.Type.BOTTOM -> if (isLastSpan) lastSideItemDecorateHolder else sideItemDecorateHolder
             }
-        }?.get(parent, position)
+        }?.get(parent, position, spanIndex)
     }
 }

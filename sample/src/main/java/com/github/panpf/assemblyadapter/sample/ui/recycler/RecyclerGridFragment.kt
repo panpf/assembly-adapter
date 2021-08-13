@@ -67,14 +67,14 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
             )
             addAssemblyGridDividerItemDecoration {
                 divider(Decorate.space(20.dp2px)) {
-                    disable(AppsOverviewItemFactory::class)
+                    disableByItemFactoryClass(AppsOverviewItemFactory::class)
                 }
                 showLastDivider()
 
                 side(Decorate.space(20.dp2px))
                 firstAndLastSide(Decorate.space(20.dp2px)) {
-                    disable(AppsOverviewItemFactory::class)
-                    disable(ListSeparatorItemFactory::class)
+                    disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                    disableByItemFactoryClass(ListSeparatorItemFactory::class)
                 }
             }
             addItemDecoration(
