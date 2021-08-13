@@ -1,4 +1,4 @@
-package com.github.panpf.assemblyadapter.recycler
+package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView

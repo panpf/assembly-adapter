@@ -13,27 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler
+package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.divider.Decorate
-import com.github.panpf.assemblyadapter.recycler.divider.IsFullSpanByPosition
-import com.github.panpf.assemblyadapter.recycler.divider.StaggeredGridDividerItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDecorateProvider
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyFindItemFactoryClassByPosition
-import com.github.panpf.assemblyadapter.recycler.internal.ConcatFindItemFactoryClassByPosition
-import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDecorateProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassByPosition
 
-// todo move to divider folder
-open class AssemblyStaggeredGridDividerItemDecoration(
-    itemDecorateProviderStaggered: StaggeredGridItemDecorateProvider,
-    isFullSpanByPosition: IsFullSpanByPosition
-) : StaggeredGridDividerItemDecoration(
-    itemDecorateProviderStaggered, isFullSpanByPosition
-) {
+open class AssemblyGridDividerItemDecoration(
+    itemDecorateProvider: GridItemDecorateProvider
+) : GridDividerItemDecoration(itemDecorateProvider) {
 
     class Builder(val context: Context) {
 
@@ -49,17 +38,13 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private var showFirstSide = false
         private var showLastSide = false
 
-        private var isFullSpanByPosition: IsFullSpanByPosition? = null
         private var findItemFactoryClassByPosition: FindItemFactoryClassByPosition? = null
 
-        fun build(): AssemblyStaggeredGridDividerItemDecoration {
-            return AssemblyStaggeredGridDividerItemDecoration(
-                buildItemDecorateProvider(),
-                isFullSpanByPosition ?: AssemblyIsFullSpanByPosition()
-            )
+        fun build(): AssemblyGridDividerItemDecoration {
+            return AssemblyGridDividerItemDecoration(buildItemDecorateProvider())
         }
 
-        private fun buildItemDecorateProvider(): StaggeredGridItemDecorateProvider {
+        private fun buildItemDecorateProvider(): GridItemDecorateProvider {
             val finalDividerDecorateConfig =
                 dividerDecorateConfig ?: context.obtainStyledAttributes(
                     intArrayOf(android.R.attr.listDivider)
@@ -100,7 +85,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                 ?: if (showLastSide) sideDecorateConfig else null)
                 ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
 
-            return StaggeredGridItemDecorateProvider(
+            return GridItemDecorateProvider(
                 finalDividerItemDecorateConfig,
                 firstDividerItemDecorate,
                 lastDividerItemDecorate,
@@ -323,36 +308,9 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         }
 
 
-        fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
-            this.isFullSpanByPosition = isFullSpanByPosition
-            return this
-        }
-
         fun findItemFactoryClassByPosition(getItemFactoryClassByPosition: FindItemFactoryClassByPosition?): Builder {
             this.findItemFactoryClassByPosition = getItemFactoryClassByPosition
             return this
-        }
-
-
-        class AssemblyIsFullSpanByPosition : IsFullSpanByPosition {
-
-            private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
-
-            override fun isFullSpan(parent: RecyclerView, position: Int): Boolean {
-                val adapter = parent.adapter
-                return if (adapter != null) {
-                    val layoutManager = parent.layoutManager
-                    val (localAdapter, localPosition) = concatAdapterLocalHelper
-                        .findLocalAdapterAndPosition(adapter, position)
-                    if (localAdapter is AssemblyAdapter<*> && layoutManager is IsFullSpanByItemFactory) {
-                        layoutManager.isFullSpan(localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>)
-                    } else {
-                        false
-                    }
-                } else {
-                    false
-                }
-            }
         }
     }
 }

@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler
+package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
-import com.github.panpf.assemblyadapter.recycler.divider.Decorate
-import com.github.panpf.assemblyadapter.recycler.divider.LinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProvider
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyFindItemFactoryClassByPosition
-import com.github.panpf.assemblyadapter.recycler.internal.ConcatFindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassByPosition
 
 open class AssemblyLinearDividerItemDecoration(
     itemDecorateProvider: LinearItemDecorateProvider

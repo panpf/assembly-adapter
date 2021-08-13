@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler
+package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
 import androidx.collection.ArrayMap
 import androidx.collection.SparseArrayCompat
-import com.github.panpf.assemblyadapter.recycler.divider.Decorate
-import com.github.panpf.assemblyadapter.recycler.divider.DecorateConfig
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
-import com.github.panpf.assemblyadapter.recycler.internal.AssemblyItemDecorateHolder
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDecorateHolder
 import kotlin.reflect.KClass
 
 class AssemblyDecorateConfig constructor(

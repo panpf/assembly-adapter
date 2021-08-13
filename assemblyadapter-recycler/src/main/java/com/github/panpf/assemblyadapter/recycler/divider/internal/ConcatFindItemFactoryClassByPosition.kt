@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler.internal
+package com.github.panpf.assemblyadapter.recycler.divider.internal
 
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper
-import com.github.panpf.assemblyadapter.recycler.FindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassByPosition
 
 class ConcatFindItemFactoryClassByPosition(private val findItemFactoryClassByPosition: FindItemFactoryClassByPosition) :
     FindItemFactoryClassByPosition {
