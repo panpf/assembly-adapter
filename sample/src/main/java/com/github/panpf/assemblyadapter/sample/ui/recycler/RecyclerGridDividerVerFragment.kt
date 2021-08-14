@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.*
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyGridDividerItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
@@ -119,20 +119,20 @@ class RecyclerGridDividerVerFragment :
         return AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
             val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
             val size = if (thickDivider) 5.dp2px else 1.dp2px
-            divider(Decorate.color(0x88FF0000.toInt(), size, insets)) {
+            divider(Divider.color(0x88FF0000.toInt(), size, insets)) {
                 personaliseByItemFactoryClass(
                     ListSeparatorItemFactory::class,
-                    Decorate.color(0x8800FF00.toInt(), size, insets)
+                    Divider.color(0x8800FF00.toInt(), size, insets)
                 )
                 disableByItemFactoryClass(AppsOverviewItemFactory::class)
             }
-            firstAndLastDivider(Decorate.color(0xFFFF0000.toInt(), size, insets))
+            firstAndLastDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
 
-            side(Decorate.color(0x880000FF.toInt(), size, insets))
-            firstAndLastSide(Decorate.color(0xFF0000FF.toInt(), size, insets)) {
+            sideDivider(Divider.color(0x880000FF.toInt(), size, insets))
+            firstAndLastSideDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
                 personaliseByItemFactoryClass(
                     ListSeparatorItemFactory::class,
-                    Decorate.color(0xFF00FF00.toInt(), size, insets)
+                    Divider.color(0xFF00FF00.toInt(), size, insets)
                 )
                 disableByItemFactoryClass(AppsOverviewItemFactory::class)
             }

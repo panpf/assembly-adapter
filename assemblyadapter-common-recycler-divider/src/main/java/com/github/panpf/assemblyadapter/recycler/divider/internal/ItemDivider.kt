@@ -19,7 +19,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.annotation.Px
 
-data class ItemDecorate(
+data class ItemDivider(
     private val drawable: Drawable,
     @Px private val size: Int,
     @Px val insetStart: Int,

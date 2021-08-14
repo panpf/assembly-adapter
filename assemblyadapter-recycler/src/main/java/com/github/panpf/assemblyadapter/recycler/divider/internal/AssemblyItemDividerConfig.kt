@@ -20,24 +20,24 @@ import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassByPosition
 
-class AssemblyItemDecorateConfig(
-    itemDecorate: ItemDecorate,
+class AssemblyItemDividerConfig(
+    itemDivider: ItemDivider,
     disableByPositionArray: SparseArrayCompat<Boolean>?,
     disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
     private val disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>?,
-    personaliseByPositionArray: SparseArrayCompat<ItemDecorate>?,
-    personaliseBySpanIndexArray: SparseArrayCompat<ItemDecorate>?,
-    private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, ItemDecorate>?,
+    personaliseByPositionArray: SparseArrayCompat<ItemDivider>?,
+    personaliseBySpanIndexArray: SparseArrayCompat<ItemDivider>?,
+    private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, ItemDivider>?,
     private val findItemFactoryClassByPosition: FindItemFactoryClassByPosition,
-) : ItemDecorateConfig(
-    itemDecorate,
+) : ItemDividerConfig(
+    itemDivider,
     disableByPositionArray,
     disableBySpanIndexArray,
     personaliseByPositionArray,
     personaliseBySpanIndexArray
 ) {
 
-    override fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDecorate? {
+    override fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDivider? {
         if (disableByItemFactoryClassMap != null || personaliseByItemFactoryClassMap != null) {
             val adapter = parent.adapter
             val itemFactoryClass = adapter?.let {
@@ -48,10 +48,10 @@ class AssemblyItemDecorateConfig(
                     return null
                 }
 
-                val personaliseItemDecorate =
+                val personaliseItemDivider =
                     personaliseByItemFactoryClassMap?.get(itemFactoryClass)
-                if (personaliseItemDecorate != null) {
-                    return personaliseItemDecorate
+                if (personaliseItemDivider != null) {
+                    return personaliseItemDivider
                 }
             }
         }

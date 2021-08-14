@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyAdapter
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyRecyclerAdapter
@@ -54,14 +54,14 @@ class CompatRecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
             layoutManager = CompatAssemblyGridLayoutManager(context, 3)
             adapter = appAdapter
             addAssemblyGridDividerItemDecoration {
-                divider(Decorate.space(20.dp2px)) {
+                divider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(TextItem.Factory::class)
                 }
-                firstAndLastDivider(Decorate.space(20.dp2px)) {
+                firstAndLastDivider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(TextItem.Factory::class)
                 }
-                side(Decorate.space(20.dp2px))
-                firstAndLastSide(Decorate.space(20.dp2px)) {
+                sideDivider(Divider.space(20.dp2px))
+                firstAndLastSideDivider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(TextItem.Factory::class)
                     disableByItemFactoryClass(ListSeparatorItem.Factory::class)
                 }

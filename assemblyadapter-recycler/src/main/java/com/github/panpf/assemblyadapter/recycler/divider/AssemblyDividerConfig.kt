@@ -18,76 +18,76 @@ package com.github.panpf.assemblyadapter.recycler.divider
 import android.content.Context
 import androidx.collection.ArrayMap
 import androidx.collection.SparseArrayCompat
-import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDecorateConfig
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorate
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDecorateConfig
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDividerConfig
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 import kotlin.reflect.KClass
 
-class AssemblyDecorateConfig constructor(
-    decorate: Decorate,
+class AssemblyDividerConfig constructor(
+    divider: Divider,
     disableByPositionArray: SparseArrayCompat<Boolean>?,
     disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
     private val disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>?,
-    personaliseByPositionArray: SparseArrayCompat<Decorate>?,
-    personaliseBySpanIndexArray: SparseArrayCompat<Decorate>?,
-    private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, Decorate>?
-) : DecorateConfig(
-    decorate,
+    personaliseByPositionArray: SparseArrayCompat<Divider>?,
+    personaliseBySpanIndexArray: SparseArrayCompat<Divider>?,
+    private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, Divider>?
+) : DividerConfig(
+    divider,
     disableByPositionArray,
     disableBySpanIndexArray,
     personaliseByPositionArray,
     personaliseBySpanIndexArray
 ) {
 
-    @Deprecated(message = "Please use 'toItemDecorateHolder(Context, FindItemFactoryClassByPosition)' method instead")
-    override fun toItemDecorateHolder(context: Context): ItemDecorateConfig {
-        throw UnsupportedOperationException("Please use 'toItemDecorateHolder(Context, FindItemFactoryClassByPosition)' method instead")
+    @Deprecated(message = "Please use 'toItemDividerConfig(Context, FindItemFactoryClassByPosition)' method instead")
+    override fun toItemDividerConfig(context: Context): ItemDividerConfig {
+        throw UnsupportedOperationException("Please use 'toItemDividerConfig(Context, FindItemFactoryClassByPosition)' method instead")
     }
 
-    fun toItemDecorateHolder(
+    fun toItemDividerConfig(
         context: Context,
         findItemFactoryClassByPosition: FindItemFactoryClassByPosition
-    ): AssemblyItemDecorateConfig {
-        val personaliseByPositionItemDecorateArray = personaliseByPositionArray?.let { oldArray ->
-            SparseArrayCompat<ItemDecorate>().apply {
+    ): AssemblyItemDividerConfig {
+        val personaliseByPositionItemDividerArray = personaliseByPositionArray?.let { oldArray ->
+            SparseArrayCompat<ItemDivider>().apply {
                 0.until(oldArray.size()).forEach { index ->
-                    put(oldArray.keyAt(index), oldArray.valueAt(index).createItemDecorate(context))
+                    put(oldArray.keyAt(index), oldArray.valueAt(index).toItemDivider(context))
                 }
             }
         }
-        val personaliseBySpanIndexItemDecorateArray = personaliseBySpanIndexArray?.let { oldArray ->
-            SparseArrayCompat<ItemDecorate>().apply {
+        val personaliseBySpanIndexItemDividerArray = personaliseBySpanIndexArray?.let { oldArray ->
+            SparseArrayCompat<ItemDivider>().apply {
                 0.until(oldArray.size()).forEach { index ->
-                    put(oldArray.keyAt(index), oldArray.valueAt(index).createItemDecorate(context))
+                    put(oldArray.keyAt(index), oldArray.valueAt(index).toItemDivider(context))
                 }
             }
         }
         val personaliseByItemFactoryClassMap = personaliseByItemFactoryClassMap?.let { oldMap ->
-            ArrayMap<Class<*>, ItemDecorate>().apply {
+            ArrayMap<Class<*>, ItemDivider>().apply {
                 oldMap.forEach {
-                    put(it.key, it.value.createItemDecorate(context))
+                    put(it.key, it.value.toItemDivider(context))
                 }
             }
         }
-        return AssemblyItemDecorateConfig(
-            decorate.createItemDecorate(context),
+        return AssemblyItemDividerConfig(
+            divider.toItemDivider(context),
             disableByPositionArray,
             disableBySpanIndexArray,
             disableByItemFactoryClassMap,
-            personaliseByPositionItemDecorateArray,
-            personaliseBySpanIndexItemDecorateArray,
+            personaliseByPositionItemDividerArray,
+            personaliseBySpanIndexItemDividerArray,
             personaliseByItemFactoryClassMap,
             findItemFactoryClassByPosition
         )
     }
 
-    class Builder(decorate: Decorate) : DecorateConfig.Builder(decorate) {
+    class Builder(divider: Divider) : DividerConfig.Builder(divider) {
         private var disableByPositionArray: SparseArrayCompat<Boolean>? = null
         private var disableBySpanIndexArray: SparseArrayCompat<Boolean>? = null
         private var disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>? = null
-        private var personaliseByPositionArray: SparseArrayCompat<Decorate>? = null
-        private var personaliseBySpanIndexArray: SparseArrayCompat<Decorate>? = null
-        private var personaliseByItemFactoryClassMap: ArrayMap<Class<*>, Decorate>? = null
+        private var personaliseByPositionArray: SparseArrayCompat<Divider>? = null
+        private var personaliseBySpanIndexArray: SparseArrayCompat<Divider>? = null
+        private var personaliseByItemFactoryClassMap: ArrayMap<Class<*>, Divider>? = null
 
         override fun disableByPosition(position: Int): Builder {
             super.disableByPosition(position)
@@ -106,29 +106,29 @@ class AssemblyDecorateConfig constructor(
             return this
         }
 
-        override fun personaliseByPosition(position: Int, decorate: Decorate): Builder {
-            super.personaliseByPosition(position, decorate)
+        override fun personaliseByPosition(position: Int, divider: Divider): Builder {
+            super.personaliseByPosition(position, divider)
             return this
         }
 
-        override fun personaliseBySpanIndex(spanIndex: Int, decorate: Decorate): Builder {
-            super.personaliseBySpanIndex(spanIndex, decorate)
+        override fun personaliseBySpanIndex(spanIndex: Int, divider: Divider): Builder {
+            super.personaliseBySpanIndex(spanIndex, divider)
             return this
         }
 
         fun personaliseByItemFactoryClass(
             itemFactoryClass: KClass<*>,
-            decorate: Decorate
+            divider: Divider
         ): Builder {
-            (personaliseByItemFactoryClassMap ?: ArrayMap<Class<*>, Decorate>().apply {
+            (personaliseByItemFactoryClassMap ?: ArrayMap<Class<*>, Divider>().apply {
                 this@Builder.personaliseByItemFactoryClassMap = this
-            })[itemFactoryClass.java] = decorate
+            })[itemFactoryClass.java] = divider
             return this
         }
 
-        override fun build(): AssemblyDecorateConfig {
-            return AssemblyDecorateConfig(
-                decorate,
+        override fun build(): AssemblyDividerConfig {
+            return AssemblyDividerConfig(
+                divider,
                 disableByPositionArray,
                 disableBySpanIndexArray,
                 disableByItemFactoryClassMap,

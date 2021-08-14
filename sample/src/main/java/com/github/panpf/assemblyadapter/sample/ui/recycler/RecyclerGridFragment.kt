@@ -22,7 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import com.github.panpf.assemblyadapter.recycler.*
-import com.github.panpf.assemblyadapter.recycler.divider.Decorate
+import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
@@ -66,13 +66,13 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                 )
             )
             addAssemblyGridDividerItemDecoration {
-                divider(Decorate.space(20.dp2px)) {
+                divider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(AppsOverviewItemFactory::class)
                 }
                 showLastDivider()
 
-                side(Decorate.space(20.dp2px))
-                firstAndLastSide(Decorate.space(20.dp2px)) {
+                sideDivider(Divider.space(20.dp2px))
+                firstAndLastSideDivider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(AppsOverviewItemFactory::class)
                     disableByItemFactoryClass(ListSeparatorItemFactory::class)
                 }

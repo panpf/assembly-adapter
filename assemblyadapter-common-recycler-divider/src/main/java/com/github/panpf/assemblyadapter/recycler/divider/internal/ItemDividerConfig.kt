@@ -18,15 +18,15 @@ package com.github.panpf.assemblyadapter.recycler.divider.internal
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 
-open class ItemDecorateConfig(
-    private val itemDecorate: ItemDecorate,
+open class ItemDividerConfig(
+    private val itemDivider: ItemDivider,
     private val disableByPositionArray: SparseArrayCompat<Boolean>?,
     private val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
-    private val personaliseByPositionArray: SparseArrayCompat<ItemDecorate>?,
-    private val personaliseBySpanIndexArray: SparseArrayCompat<ItemDecorate>?,
+    private val personaliseByPositionArray: SparseArrayCompat<ItemDivider>?,
+    private val personaliseBySpanIndexArray: SparseArrayCompat<ItemDivider>?,
 ) {
 
-    open fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDecorate? {
+    open fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDivider? {
         if (disableBySpanIndexArray?.get(spanIndex, false) == true) {
             return null
         }
@@ -34,16 +34,16 @@ open class ItemDecorateConfig(
             return null
         }
 
-        val personaliseBySpanIndexItemDecorate = personaliseBySpanIndexArray?.get(position)
-        if (personaliseBySpanIndexItemDecorate != null) {
-            return personaliseBySpanIndexItemDecorate
+        val personaliseBySpanIndexItemDivider = personaliseBySpanIndexArray?.get(position)
+        if (personaliseBySpanIndexItemDivider != null) {
+            return personaliseBySpanIndexItemDivider
         }
 
-        val personaliseByPositionItemDecorate = personaliseByPositionArray?.get(position)
-        if (personaliseByPositionItemDecorate != null) {
-            return personaliseByPositionItemDecorate
+        val personaliseByPositionItemDivider = personaliseByPositionArray?.get(position)
+        if (personaliseByPositionItemDivider != null) {
+            return personaliseByPositionItemDivider
         }
 
-        return itemDecorate
+        return itemDivider
     }
 }

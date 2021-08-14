@@ -16,41 +16,41 @@
 package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDecorateProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassByPosition
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassByPosition
 
 open class AssemblyLinearDividerItemDecoration(
-    itemDecorateProvider: LinearItemDecorateProvider
-) : LinearDividerItemDecoration(itemDecorateProvider) {
+    itemDividerProvider: LinearItemDividerProvider
+) : LinearDividerItemDecoration(itemDividerProvider) {
 
     class Builder(val context: Context) {
 
-        private var dividerDecorateConfig: AssemblyDecorateConfig? = null
-        private var firstDividerDecorateConfig: AssemblyDecorateConfig? = null
-        private var lastDividerDecorateConfig: AssemblyDecorateConfig? = null
+        private var dividerConfig: AssemblyDividerConfig? = null
+        private var firstDividerConfig: AssemblyDividerConfig? = null
+        private var lastDividerConfig: AssemblyDividerConfig? = null
         private var showFirstDivider = false
         private var showLastDivider = false
 
-        private var firstSideDecorateConfig: AssemblyDecorateConfig? = null
-        private var lastSideDecorateConfig: AssemblyDecorateConfig? = null
+        private var firstSideDividerConfig: AssemblyDividerConfig? = null
+        private var lastSideDividerConfig: AssemblyDividerConfig? = null
 
         private var findItemFactoryClassByPosition: FindItemFactoryClassByPosition? = null
 
         fun build(): AssemblyLinearDividerItemDecoration {
-            return AssemblyLinearDividerItemDecoration(buildItemDecorateProvider())
+            return AssemblyLinearDividerItemDecoration(buildItemDividerProvider())
         }
 
-        private fun buildItemDecorateProvider(): LinearItemDecorateProvider {
-            val finalDividerDecorateConfig =
-                dividerDecorateConfig ?: context.obtainStyledAttributes(
+        private fun buildItemDividerProvider(): LinearItemDividerProvider {
+            val finalDividerConfig =
+                dividerConfig ?: context.obtainStyledAttributes(
                     intArrayOf(android.R.attr.listDivider)
                 ).let { array ->
                     array.getDrawable(0).apply {
                         array.recycle()
                     }
                 }!!.let {
-                    AssemblyDecorateConfig.Builder(Decorate.drawable(it)).build()
+                    AssemblyDividerConfig.Builder(Divider.drawable(it)).build()
                 }
 
             val finalFindItemFactoryClassByPosition =
@@ -58,208 +58,162 @@ open class AssemblyLinearDividerItemDecoration(
                     ConcatFindItemFactoryClassByPosition(this)
                 }
 
-            val finalDividerItemDecorateConfig =
-                finalDividerDecorateConfig.toItemDecorateHolder(
-                    context,
-                    finalFindItemFactoryClassByPosition
-                )
-            val firstDividerItemDecorate = (firstDividerDecorateConfig
-                ?: if (showFirstDivider) finalDividerDecorateConfig else null)
-                ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
-            val lastDividerItemDecorate = (lastDividerDecorateConfig
-                ?: if (showLastDivider) finalDividerDecorateConfig else null)
-                ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
-
-            val firstSideItemDecorate = firstSideDecorateConfig
-                ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
-            val lastSideItemDecorate = lastSideDecorateConfig
-                ?.toItemDecorateHolder(context, finalFindItemFactoryClassByPosition)
-
-            return LinearItemDecorateProvider(
-                finalDividerItemDecorateConfig,
-                firstDividerItemDecorate,
-                lastDividerItemDecorate,
-                firstSideItemDecorate,
-                lastSideItemDecorate,
+            return LinearItemDividerProvider(
+                dividerConfig = finalDividerConfig
+                    .toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                firstDividerConfig = (firstDividerConfig
+                    ?: if (showFirstDivider) finalDividerConfig else null)
+                    ?.toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                lastDividerConfig = (lastDividerConfig
+                    ?: if (showLastDivider) finalDividerConfig else null)
+                    ?.toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                firstSideDividerConfig = firstSideDividerConfig
+                    ?.toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                lastSideDividerConfig = lastSideDividerConfig
+                    ?.toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
             )
         }
 
 
-        fun divider(decorate: Decorate): Builder {
-            this.dividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            return this
-        }
-
         fun divider(
-            decorate: Decorate,
-            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+            divider: Divider,
+            configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.dividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.dividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
-        fun divider(decorateConfig: AssemblyDecorateConfig): Builder {
-            this.dividerDecorateConfig = decorateConfig
+        fun divider(config: AssemblyDividerConfig): Builder {
+            this.dividerConfig = config
             return this
         }
 
-
-        fun firstDivider(decorate: Decorate): Builder {
-            this.firstDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            return this
-        }
 
         fun firstDivider(
-            decorate: Decorate,
-            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+            divider: Divider,
+            configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.firstDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
-        fun firstDivider(decorateConfig: AssemblyDecorateConfig): Builder {
-            this.firstDividerDecorateConfig = decorateConfig
+        fun firstDivider(config: AssemblyDividerConfig): Builder {
+            this.firstDividerConfig = config
             return this
         }
 
-
-        fun lastDivider(decorate: Decorate): Builder {
-            this.lastDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            return this
-        }
 
         fun lastDivider(
-            decorate: Decorate,
-            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+            divider: Divider,
+            configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.lastDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.lastDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
-        fun lastDivider(decorateConfig: AssemblyDecorateConfig): Builder {
-            this.lastDividerDecorateConfig = decorateConfig
+        fun lastDivider(config: AssemblyDividerConfig): Builder {
+            this.lastDividerConfig = config
             return this
         }
 
-
-        fun firstAndLastDivider(decorate: Decorate): Builder {
-            this.firstDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            this.lastDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            return this
-        }
 
         fun firstAndLastDivider(
-            decorate: Decorate,
-            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+            divider: Divider,
+            configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.firstDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
-            this.lastDividerDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.lastDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
-        fun firstAndLastDivider(decorateConfig: AssemblyDecorateConfig): Builder {
-            this.firstDividerDecorateConfig = decorateConfig
-            this.lastDividerDecorateConfig = decorateConfig
+        fun firstAndLastDivider(config: AssemblyDividerConfig): Builder {
+            this.firstDividerConfig = config
+            this.lastDividerConfig = config
             return this
         }
 
 
-        fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
-            this.showFirstDivider = showFirstDivider
+        fun showFirstDivider(show: Boolean = true): Builder {
+            this.showFirstDivider = show
             return this
         }
 
-        fun showLastDivider(showLastDivider: Boolean = true): Builder {
-            this.showLastDivider = showLastDivider
+        fun showLastDivider(show: Boolean = true): Builder {
+            this.showLastDivider = show
             return this
         }
 
-        fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
-            this.showFirstDivider = showFirstAndLastDivider
-            this.showLastDivider = showFirstAndLastDivider
+        fun showFirstAndLastDivider(show: Boolean = true): Builder {
+            this.showFirstDivider = show
+            this.showLastDivider = show
             return this
         }
 
 
-        fun firstSide(decorate: Decorate): Builder {
-            this.firstSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            return this
-        }
-
-        fun firstSide(
-            decorate: Decorate,
-            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        fun firstSideDivider(
+            divider: Divider,
+            configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.firstSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
-        fun firstSide(decorateConfig: AssemblyDecorateConfig): Builder {
-            this.firstSideDecorateConfig = decorateConfig
+        fun firstSideDivider(config: AssemblyDividerConfig): Builder {
+            this.firstSideDividerConfig = config
             return this
         }
 
 
-        fun lastSide(decorate: Decorate): Builder {
-            this.lastSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            return this
-        }
-
-        fun lastSide(
-            decorate: Decorate,
-            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        fun lastSideDivider(
+            divider: Divider,
+            configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.lastSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.lastSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
-        fun lastSide(decorateConfig: AssemblyDecorateConfig): Builder {
-            this.lastSideDecorateConfig = decorateConfig
+        fun lastSideDivider(config: AssemblyDividerConfig): Builder {
+            this.lastSideDividerConfig = config
             return this
         }
 
 
-        fun firstAndLastSide(decorate: Decorate): Builder {
-            this.firstSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            this.lastSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).build()
-            return this
-        }
-
-        fun firstAndLastSide(
-            decorate: Decorate,
-            configBlock: (AssemblyDecorateConfig.Builder.() -> Unit)? = null
+        fun firstAndLastSideDivider(
+            divider: Divider,
+            configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.firstSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
-            this.lastSideDecorateConfig = AssemblyDecorateConfig.Builder(decorate).apply {
+            this.lastSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
-        fun firstAndLastSide(decorateConfig: AssemblyDecorateConfig): Builder {
-            this.firstSideDecorateConfig = decorateConfig
-            this.lastSideDecorateConfig = decorateConfig
+        fun firstAndLastSideDivider(config: AssemblyDividerConfig): Builder {
+            this.firstSideDividerConfig = config
+            this.lastSideDividerConfig = config
             return this
         }
 
-        fun findItemFactoryClassByPosition(getItemFactoryClassByPosition: FindItemFactoryClassByPosition?): Builder {
-            this.findItemFactoryClassByPosition = getItemFactoryClassByPosition
+
+        fun findItemFactoryClassByPosition(findItemFactoryClassByPosition: FindItemFactoryClassByPosition?): Builder {
+            this.findItemFactoryClassByPosition = findItemFactoryClassByPosition
             return this
         }
     }
