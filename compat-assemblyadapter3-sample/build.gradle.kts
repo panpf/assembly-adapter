@@ -42,7 +42,6 @@ dependencies {
     implementation("io.github.panpf.pagerindicator:pagerindicator:${property("PAGER_INDICATOR")}")
     implementation("io.github.panpf.sketch:sketch:${property("SKETCH_VERSION")}")
     implementation("com.github.promeg:tinypinyin:${property("TINYPINYIN")}")
-    implementation("com.github.fondesa:recycler-view-divider:${property("RECYCLER_VIEW_DIVIDER")}")
     implementation("io.github.panpf.tools4a:tools4a-dimen-ktx:${property("TOOLS4A")}")
 
     implementation(project(":compat-assemblyadapter3"))
