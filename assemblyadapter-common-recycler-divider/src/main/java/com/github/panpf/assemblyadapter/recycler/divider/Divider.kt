@@ -51,7 +51,7 @@ interface Divider {
         ): Divider = DrawableDivider(drawable, size, insets)
 
         /**
-         * 用指定的 Drawable 资源 ID 创建一个 [Divider]
+         * Create a [Divider] with the specified Drawable resource ID
          *
          * @param size Define the size of the divider. The default is -1, which means that
          * the intrinsicWidth or intrinsicHeight of the drawable is used as the divider size

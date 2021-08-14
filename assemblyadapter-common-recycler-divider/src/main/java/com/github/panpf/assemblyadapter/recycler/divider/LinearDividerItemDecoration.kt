@@ -25,8 +25,11 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
 
+/**
+ * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、first or last divider、fist or last side divider
+ */
 open class LinearDividerItemDecoration(
-    private val linearItemDividerProvider: LinearItemDividerProvider,
+    private val itemDividerProvider: LinearItemDividerProvider,
 ) : ItemDecoration() {
 
     override fun getItemOffsets(
@@ -41,16 +44,16 @@ open class LinearDividerItemDecoration(
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
         val verticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
 
-        val startItemDivider = linearItemDividerProvider.getItemDivider(
+        val startItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.START
         )
-        val topItemDivider = linearItemDividerProvider.getItemDivider(
+        val topItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.TOP
         )
-        val endItemDivider = linearItemDividerProvider.getItemDivider(
+        val endItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.END
         )
-        val bottomItemDivider = linearItemDividerProvider.getItemDivider(
+        val bottomItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.BOTTOM
         )
         val startItemDividerSize = startItemDivider?.widthSize ?: 0
@@ -80,16 +83,16 @@ open class LinearDividerItemDecoration(
             val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
 
-            val startItemDivider = linearItemDividerProvider.getItemDivider(
+            val startItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.START
             )
-            val topItemDivider = linearItemDividerProvider.getItemDivider(
+            val topItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.TOP
             )
-            val endItemDivider = linearItemDividerProvider.getItemDivider(
+            val endItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.END
             )
-            val bottomItemDivider = linearItemDividerProvider.getItemDivider(
+            val bottomItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.BOTTOM
             )
             val startItemDividerSize = startItemDivider?.widthSize ?: 0
@@ -175,7 +178,7 @@ open class LinearDividerItemDecoration(
         }
     }
 
-    open class Builder(protected val context: Context) {
+    class Builder(val context: Context) {
 
         private var dividerConfig: DividerConfig? = null
         private var firstDividerConfig: DividerConfig? = null
@@ -186,11 +189,11 @@ open class LinearDividerItemDecoration(
         private var firstSideDividerConfig: DividerConfig? = null
         private var lastSideDividerConfig: DividerConfig? = null
 
-        open fun build(): LinearDividerItemDecoration {
+        fun build(): LinearDividerItemDecoration {
             return LinearDividerItemDecoration(buildItemDividerProvider())
         }
 
-        protected open fun buildItemDividerProvider(): LinearItemDividerProvider {
+        private fun buildItemDividerProvider(): LinearItemDividerProvider {
             val finalDividerConfig = dividerConfig ?: context.obtainStyledAttributes(
                 intArrayOf(android.R.attr.listDivider)
             ).let { array ->
@@ -215,6 +218,10 @@ open class LinearDividerItemDecoration(
         }
 
 
+        /**
+         * Set the divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun divider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -225,12 +232,19 @@ open class LinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the divider of the item
+         */
         fun divider(config: DividerConfig): Builder {
             this.dividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -241,12 +255,19 @@ open class LinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first divider of the item
+         */
         fun firstDivider(config: DividerConfig): Builder {
             this.firstDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the last divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun lastDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -257,12 +278,19 @@ open class LinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the last divider of the item
+         */
         fun lastDivider(config: DividerConfig): Builder {
             this.lastDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first and last divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstAndLastDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -276,6 +304,9 @@ open class LinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first and last divider of the item
+         */
         fun firstAndLastDivider(config: DividerConfig): Builder {
             this.firstDividerConfig = config
             this.lastDividerConfig = config
@@ -283,16 +314,25 @@ open class LinearDividerItemDecoration(
         }
 
 
+        /**
+         * Use divider as the first divider
+         */
         fun showFirstDivider(show: Boolean = true): Builder {
             this.showFirstDivider = show
             return this
         }
 
+        /**
+         * Use divider as the last divider
+         */
         fun showLastDivider(show: Boolean = true): Builder {
             this.showLastDivider = show
             return this
         }
 
+        /**
+         * Use divider as the first and last divider
+         */
         fun showFirstAndLastDivider(show: Boolean = true): Builder {
             this.showFirstDivider = show
             this.showLastDivider = show
@@ -300,6 +340,10 @@ open class LinearDividerItemDecoration(
         }
 
 
+        /**
+         * Set the first divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -310,12 +354,19 @@ open class LinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first divider on the side of the item
+         */
         fun firstSideDivider(config: DividerConfig): Builder {
             this.firstSideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the last divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun lastSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -326,12 +377,19 @@ open class LinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the last divider on the side of the item
+         */
         fun lastSideDivider(config: DividerConfig): Builder {
             this.lastSideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first and last divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstAndLastSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -345,6 +403,9 @@ open class LinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first and last divider on the side of the item
+         */
         fun firstAndLastSideDivider(config: DividerConfig): Builder {
             this.firstSideDividerConfig = config
             this.lastSideDividerConfig = config

@@ -16,10 +16,16 @@
 package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassByPosition
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassByPosition
 
+/**
+ * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、first or last divider、fist or last side divider
+ *
+ * On the basis of [LinearDividerItemDecoration], the divider can be disabled or personalized according to the ItemFactory class
+ */
 open class AssemblyLinearDividerItemDecoration(
     itemDividerProvider: LinearItemDividerProvider
 ) : LinearDividerItemDecoration(itemDividerProvider) {
@@ -60,21 +66,25 @@ open class AssemblyLinearDividerItemDecoration(
 
             return LinearItemDividerProvider(
                 dividerConfig = finalDividerConfig
-                    .toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                    .toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 firstDividerConfig = (firstDividerConfig
                     ?: if (showFirstDivider) finalDividerConfig else null)
-                    ?.toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 lastDividerConfig = (lastDividerConfig
                     ?: if (showLastDivider) finalDividerConfig else null)
-                    ?.toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 firstSideDividerConfig = firstSideDividerConfig
-                    ?.toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 lastSideDividerConfig = lastSideDividerConfig
-                    ?.toItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
             )
         }
 
 
+        /**
+         * Set the divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun divider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -85,12 +95,19 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the divider of the item
+         */
         fun divider(config: AssemblyDividerConfig): Builder {
             this.dividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -101,12 +118,19 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first divider of the item
+         */
         fun firstDivider(config: AssemblyDividerConfig): Builder {
             this.firstDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the last divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun lastDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -117,12 +141,19 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the last divider of the item
+         */
         fun lastDivider(config: AssemblyDividerConfig): Builder {
             this.lastDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first and last divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstAndLastDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -136,6 +167,9 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first and last divider of the item
+         */
         fun firstAndLastDivider(config: AssemblyDividerConfig): Builder {
             this.firstDividerConfig = config
             this.lastDividerConfig = config
@@ -143,16 +177,25 @@ open class AssemblyLinearDividerItemDecoration(
         }
 
 
+        /**
+         * Use divider as the first divider
+         */
         fun showFirstDivider(show: Boolean = true): Builder {
             this.showFirstDivider = show
             return this
         }
 
+        /**
+         * Use divider as the last divider
+         */
         fun showLastDivider(show: Boolean = true): Builder {
             this.showLastDivider = show
             return this
         }
 
+        /**
+         * Use divider as the first and last divider
+         */
         fun showFirstAndLastDivider(show: Boolean = true): Builder {
             this.showFirstDivider = show
             this.showLastDivider = show
@@ -160,6 +203,11 @@ open class AssemblyLinearDividerItemDecoration(
         }
 
 
+
+        /**
+         * Set the first divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstSideDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -170,12 +218,19 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first divider on the side of the item
+         */
         fun firstSideDivider(config: AssemblyDividerConfig): Builder {
             this.firstSideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the last divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun lastSideDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -186,12 +241,19 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the last divider on the side of the item
+         */
         fun lastSideDivider(config: AssemblyDividerConfig): Builder {
             this.lastSideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first and last divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstAndLastSideDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -205,6 +267,9 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first and last divider on the side of the item
+         */
         fun firstAndLastSideDivider(config: AssemblyDividerConfig): Builder {
             this.firstSideDividerConfig = config
             this.lastSideDividerConfig = config
@@ -212,6 +277,9 @@ open class AssemblyLinearDividerItemDecoration(
         }
 
 
+        /**
+         * Set up the interface to find ItemFactory class based on position
+         */
         fun findItemFactoryClassByPosition(findItemFactoryClassByPosition: FindItemFactoryClassByPosition?): Builder {
             this.findItemFactoryClassByPosition = findItemFactoryClassByPosition
             return this

@@ -41,7 +41,7 @@ class AssemblyItemDividerConfig(
         if (disableByItemFactoryClassMap != null || personaliseByItemFactoryClassMap != null) {
             val adapter = parent.adapter
             val itemFactoryClass = adapter?.let {
-                findItemFactoryClassByPosition.find(it, position)
+                findItemFactoryClassByPosition.findItemFactoryClass(it, position)
             }
             if (itemFactoryClass != null) {
                 if (disableByItemFactoryClassMap?.get(itemFactoryClass) == true) {

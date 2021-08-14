@@ -25,8 +25,11 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDividerProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
 
+/**
+ * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、first or last divider、side divider、fist or last side divider
+ */
 open class GridDividerItemDecoration(
-    private val gridItemDividerProvider: GridItemDividerProvider,
+    private val itemDividerProvider: GridItemDividerProvider,
 ) : ItemDecoration() {
 
     override fun getItemOffsets(
@@ -55,22 +58,22 @@ open class GridDividerItemDecoration(
         val isFirstSpan = isFullSpan || spanIndex == 0
         val isLastSpan = isFullSpan || spanIndex == spanCount - 1
 
-        val startItemDivider = gridItemDividerProvider.getItemDivider(
+        val startItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
             isFirstGroup, isLastGroup, vertical, ItemDivider.Type.START
         )
-        val topItemDivider = gridItemDividerProvider.getItemDivider(
+        val topItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
             isFirstGroup, isLastGroup, vertical, ItemDivider.Type.TOP
         )
-        val endItemDivider = gridItemDividerProvider.getItemDivider(
+        val endItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
             isFirstGroup, isLastGroup, vertical, ItemDivider.Type.END
         )
-        val bottomItemDivider = gridItemDividerProvider.getItemDivider(
+        val bottomItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
             isFirstGroup, isLastGroup, vertical, ItemDivider.Type.BOTTOM
@@ -117,22 +120,22 @@ open class GridDividerItemDecoration(
             val isFirstSpan = isFullSpan || spanIndex == 0
             val isLastSpan = isFullSpan || spanIndex == spanCount - 1
 
-            val startItemDivider = gridItemDividerProvider.getItemDivider(
+            val startItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
                 isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
                 isFirstGroup, isLastGroup, vertical, ItemDivider.Type.START
             )
-            val topItemDivider = gridItemDividerProvider.getItemDivider(
+            val topItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
                 isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
                 isFirstGroup, isLastGroup, vertical, ItemDivider.Type.TOP
             )
-            val endItemDivider = gridItemDividerProvider.getItemDivider(
+            val endItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
                 isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
                 isFirstGroup, isLastGroup, vertical, ItemDivider.Type.END
             )
-            val bottomItemDivider = gridItemDividerProvider.getItemDivider(
+            val bottomItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
                 isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
                 isFirstGroup, isLastGroup, vertical, ItemDivider.Type.BOTTOM
@@ -220,7 +223,7 @@ open class GridDividerItemDecoration(
         }
     }
 
-    open class Builder(protected val context: Context) {
+    class Builder(val context: Context) {
 
         private var dividerConfig: DividerConfig? = null
         private var firstDividerConfig: DividerConfig? = null
@@ -234,11 +237,11 @@ open class GridDividerItemDecoration(
         private var showFirstSideDivider = false
         private var showLastSideDivider = false
 
-        open fun build(): GridDividerItemDecoration {
+        fun build(): GridDividerItemDecoration {
             return GridDividerItemDecoration(buildItemDividerProvider())
         }
 
-        protected open fun buildItemDividerProvider(): GridItemDividerProvider {
+        private fun buildItemDividerProvider(): GridItemDividerProvider {
             val finalDividerConfig =
                 dividerConfig ?: context.obtainStyledAttributes(
                     intArrayOf(android.R.attr.listDivider)
@@ -269,6 +272,10 @@ open class GridDividerItemDecoration(
         }
 
 
+        /**
+         * Set the divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun divider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -279,12 +286,19 @@ open class GridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the divider of the item
+         */
         fun divider(config: DividerConfig): Builder {
             this.dividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -295,12 +309,19 @@ open class GridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first divider of the item
+         */
         fun firstDivider(config: DividerConfig): Builder {
             this.firstDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the last divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun lastDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -311,12 +332,19 @@ open class GridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the last divider of the item
+         */
         fun lastDivider(config: DividerConfig): Builder {
             this.lastDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first and last divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstAndLastDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -330,6 +358,9 @@ open class GridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first and last divider of the item
+         */
         fun firstAndLastDivider(config: DividerConfig): Builder {
             this.firstDividerConfig = config
             this.lastDividerConfig = config
@@ -337,16 +368,25 @@ open class GridDividerItemDecoration(
         }
 
 
+        /**
+         * Use divider as the first divider
+         */
         fun showFirstDivider(show: Boolean = true): Builder {
             this.showFirstDivider = show
             return this
         }
 
+        /**
+         * Use divider as the last divider
+         */
         fun showLastDivider(show: Boolean = true): Builder {
             this.showLastDivider = show
             return this
         }
 
+        /**
+         * Use divider as the first and last divider
+         */
         fun showFirstAndLastDivider(show: Boolean = true): Builder {
             this.showFirstDivider = show
             this.showLastDivider = show
@@ -354,6 +394,10 @@ open class GridDividerItemDecoration(
         }
 
 
+        /**
+         * Set the divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun sideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -364,12 +408,19 @@ open class GridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the divider on the side of the item
+         */
         fun sideDivider(config: DividerConfig): Builder {
             this.sideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -380,12 +431,19 @@ open class GridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first divider on the side of the item
+         */
         fun firstSideDivider(config: DividerConfig): Builder {
             this.firstSideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the last divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun lastSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -396,12 +454,19 @@ open class GridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the last divider on the side of the item
+         */
         fun lastSideDivider(config: DividerConfig): Builder {
             this.lastSideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first and last divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstAndLastSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -415,6 +480,9 @@ open class GridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first and last divider on the side of the item
+         */
         fun firstAndLastSideDivider(config: DividerConfig): Builder {
             this.firstSideDividerConfig = config
             this.lastSideDividerConfig = config
@@ -422,16 +490,25 @@ open class GridDividerItemDecoration(
         }
 
 
+        /**
+         * Use side divider as the first side divider
+         */
         fun showFirstSideDivider(show: Boolean = true): Builder {
             this.showFirstSideDivider = show
             return this
         }
 
+        /**
+         * Use side divider as the last side divider
+         */
         fun showLastSideDivider(show: Boolean = true): Builder {
             this.showLastSideDivider = show
             return this
         }
 
+        /**
+         * Use side divider as the first and last side  divider
+         */
         fun showFirstAndLastSideDivider(show: Boolean = true): Builder {
             this.showFirstSideDivider = show
             this.showLastSideDivider = show

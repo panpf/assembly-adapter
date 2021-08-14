@@ -17,6 +17,9 @@ package com.github.panpf.assemblyadapter.recycler.divider
 
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Determining FullSpan based on position.
+ */
 fun interface IsFullSpanByPosition {
     fun isFullSpan(parent: RecyclerView, position: Int): Boolean
 }

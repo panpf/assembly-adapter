@@ -15,21 +15,12 @@
  */
 package com.github.panpf.assemblyadapter.recycler.divider
 
-import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 
 
-/************************************** Linear ****************************************************/
-
-
-fun Context.newLinearDividerItemDecoration(
-    block: (LinearDividerItemDecoration.Builder.() -> Unit)? = null
-): LinearDividerItemDecoration {
-    return LinearDividerItemDecoration.Builder(this).apply {
-        block?.invoke(this)
-    }.build()
-}
-
+/**
+ * Create a [LinearDividerItemDecoration]. You can also configure divider through the [block] function
+ */
 fun RecyclerView.newLinearDividerItemDecoration(
     block: (LinearDividerItemDecoration.Builder.() -> Unit)? = null
 ): LinearDividerItemDecoration {
@@ -38,26 +29,13 @@ fun RecyclerView.newLinearDividerItemDecoration(
     }.build()
 }
 
-
-fun Context.newLinearDividerItemDecorationBuilder(): LinearDividerItemDecoration.Builder {
-    return LinearDividerItemDecoration.Builder(this)
-}
-
-fun RecyclerView.newLinearDividerItemDecorationBuilder(): LinearDividerItemDecoration.Builder {
-    return LinearDividerItemDecoration.Builder(context)
-}
-
-fun RecyclerView.addLinearDividerItemDecoration(block: (LinearDividerItemDecoration.Builder.() -> Unit)? = null) {
-    addItemDecoration(
-        LinearDividerItemDecoration.Builder(context).apply {
-            block?.invoke(this)
-        }.build()
-    )
-}
-
+/**
+ * Add a [LinearDividerItemDecoration] to the current [RecyclerView]. You can also configure divider through the [block] function
+ * @param index Set the order of addition. -1 means add to the end
+ */
 fun RecyclerView.addLinearDividerItemDecoration(
+    index: Int = -1,
     block: (LinearDividerItemDecoration.Builder.() -> Unit)? = null,
-    index: Int
 ) {
     addItemDecoration(
         LinearDividerItemDecoration.Builder(context).apply {
@@ -68,17 +46,9 @@ fun RecyclerView.addLinearDividerItemDecoration(
 }
 
 
-/**************************************** Grid ****************************************************/
-
-
-fun Context.newGridDividerItemDecoration(
-    block: (GridDividerItemDecoration.Builder.() -> Unit)? = null
-): GridDividerItemDecoration {
-    return GridDividerItemDecoration.Builder(this).apply {
-        block?.invoke(this)
-    }.build()
-}
-
+/**
+ * Create a [GridDividerItemDecoration]. You can also configure divider through the [block] function
+ */
 fun RecyclerView.newGridDividerItemDecoration(
     block: (GridDividerItemDecoration.Builder.() -> Unit)? = null
 ): GridDividerItemDecoration {
@@ -87,26 +57,13 @@ fun RecyclerView.newGridDividerItemDecoration(
     }.build()
 }
 
-
-fun Context.newGridDividerItemDecorationBuilder(): GridDividerItemDecoration.Builder {
-    return GridDividerItemDecoration.Builder(this)
-}
-
-fun RecyclerView.newGridDividerItemDecorationBuilder(): GridDividerItemDecoration.Builder {
-    return GridDividerItemDecoration.Builder(context)
-}
-
-fun RecyclerView.addGridDividerItemDecoration(block: (GridDividerItemDecoration.Builder.() -> Unit)? = null) {
-    addItemDecoration(
-        GridDividerItemDecoration.Builder(context).apply {
-            block?.invoke(this)
-        }.build()
-    )
-}
-
+/**
+ * Add a [GridDividerItemDecoration] to the current [RecyclerView]. You can also configure divider through the [block] function
+ * @param index Set the order of addition. -1 means add to the end
+ */
 fun RecyclerView.addGridDividerItemDecoration(
+    index: Int = -1,
     block: (GridDividerItemDecoration.Builder.() -> Unit)? = null,
-    index: Int
 ) {
     addItemDecoration(
         GridDividerItemDecoration.Builder(context).apply {
@@ -117,17 +74,9 @@ fun RecyclerView.addGridDividerItemDecoration(
 }
 
 
-/************************************** StaggeredGrid *********************************************/
-
-
-fun Context.newStaggeredGridDividerItemDecoration(
-    block: (StaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null
-): StaggeredGridDividerItemDecoration {
-    return StaggeredGridDividerItemDecoration.Builder(this).apply {
-        block?.invoke(this)
-    }.build()
-}
-
+/**
+ * Create a [StaggeredGridDividerItemDecoration]. You can also configure divider through the [block] function
+ */
 fun RecyclerView.newStaggeredGridDividerItemDecoration(
     block: (StaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null
 ): StaggeredGridDividerItemDecoration {
@@ -136,26 +85,13 @@ fun RecyclerView.newStaggeredGridDividerItemDecoration(
     }.build()
 }
 
-
-fun Context.newStaggeredGridDividerItemDecorationBuilder(): StaggeredGridDividerItemDecoration.Builder {
-    return StaggeredGridDividerItemDecoration.Builder(this)
-}
-
-fun RecyclerView.newStaggeredGridDividerItemDecorationBuilder(): StaggeredGridDividerItemDecoration.Builder {
-    return StaggeredGridDividerItemDecoration.Builder(context)
-}
-
-fun RecyclerView.addStaggeredGridDividerItemDecoration(block: (StaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null) {
-    addItemDecoration(
-        StaggeredGridDividerItemDecoration.Builder(context).apply {
-            block?.invoke(this)
-        }.build()
-    )
-}
-
+/**
+ * Add a [StaggeredGridDividerItemDecoration] to the current [RecyclerView]. You can also configure divider through the [block] function
+ * @param index Set the order of addition. -1 means add to the end
+ */
 fun RecyclerView.addStaggeredGridDividerItemDecoration(
+    index: Int = -1,
     block: (StaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null,
-    index: Int
 ) {
     addItemDecoration(
         StaggeredGridDividerItemDecoration.Builder(context).apply {

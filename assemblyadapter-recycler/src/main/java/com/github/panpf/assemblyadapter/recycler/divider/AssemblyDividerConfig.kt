@@ -23,6 +23,10 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 import kotlin.reflect.KClass
 
+/**
+ * Used to define the divider configuration of the item.
+ * The divider can be disabled based on information such as position or spanIndex or ItemFactory class or provide a more personalized divider
+ */
 class AssemblyDividerConfig constructor(
     divider: Divider,
     disableByPositionArray: SparseArrayCompat<Boolean>?,
@@ -39,12 +43,12 @@ class AssemblyDividerConfig constructor(
     personaliseBySpanIndexArray
 ) {
 
-    @Deprecated(message = "Please use 'toItemDividerConfig(Context, FindItemFactoryClassByPosition)' method instead")
+    @Deprecated(message = "Please use 'toAssemblyItemDividerConfig(Context, FindItemFactoryClassByPosition)' method instead")
     override fun toItemDividerConfig(context: Context): ItemDividerConfig {
-        throw UnsupportedOperationException("Please use 'toItemDividerConfig(Context, FindItemFactoryClassByPosition)' method instead")
+        throw UnsupportedOperationException("Please use 'toAssemblyItemDividerConfig(Context, FindItemFactoryClassByPosition)' method instead")
     }
 
-    fun toItemDividerConfig(
+    fun toAssemblyItemDividerConfig(
         context: Context,
         findItemFactoryClassByPosition: FindItemFactoryClassByPosition
     ): AssemblyItemDividerConfig {
@@ -99,6 +103,9 @@ class AssemblyDividerConfig constructor(
             return this
         }
 
+        /**
+         * The item with the specified ItemFactory Class disables this divider
+         */
         fun disableByItemFactoryClass(itemFactoryClass: KClass<*>): Builder {
             (disableByItemFactoryClassMap ?: ArrayMap<Class<*>, Boolean>().apply {
                 this@Builder.disableByItemFactoryClassMap = this
@@ -116,6 +123,9 @@ class AssemblyDividerConfig constructor(
             return this
         }
 
+        /**
+         * Provide a personalized divider for the item with the specified ItemFactory Class
+         */
         fun personaliseByItemFactoryClass(
             itemFactoryClass: KClass<*>,
             divider: Divider

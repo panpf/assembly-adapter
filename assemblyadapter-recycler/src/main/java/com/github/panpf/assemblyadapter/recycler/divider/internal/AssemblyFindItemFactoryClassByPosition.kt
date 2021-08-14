@@ -21,7 +21,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassByP
 
 class AssemblyFindItemFactoryClassByPosition : FindItemFactoryClassByPosition {
 
-    override fun find(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
+    override fun findItemFactoryClass(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
         return if (adapter is AssemblyAdapter<*>) {
             adapter.getItemFactoryByPosition(position).javaClass
         } else {

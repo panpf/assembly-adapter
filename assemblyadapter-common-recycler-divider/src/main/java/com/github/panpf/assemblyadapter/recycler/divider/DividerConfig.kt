@@ -21,7 +21,8 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 
 /**
- * 用来定义 item 的 divider 配置。一个 divider 可以根据 position 或 spanIndex 等信息禁用或者提供更个性化的 divider
+ * Used to define the divider configuration of the item.
+ * The divider can be disabled based on information such as position or spanIndex or provide a more personalized divider
  */
 open class DividerConfig(
     protected val divider: Divider,
@@ -58,9 +59,12 @@ open class DividerConfig(
     open class Builder(val divider: Divider) {
         private var disableByPositionArray: SparseArrayCompat<Boolean>? = null
         private var disableBySpanIndexArray: SparseArrayCompat<Boolean>? = null
-        private var personaliseByPositionDividerArray: SparseArrayCompat<Divider>? = null
-        private var personaliseBySpanIndexDividerArray: SparseArrayCompat<Divider>? = null
+        private var personaliseByPositionArray: SparseArrayCompat<Divider>? = null
+        private var personaliseBySpanIndexArray: SparseArrayCompat<Divider>? = null
 
+        /**
+         * The item with the specified position disables this divider
+         */
         open fun disableByPosition(position: Int): Builder {
             (disableByPositionArray ?: SparseArrayCompat<Boolean>().apply {
                 this@Builder.disableByPositionArray = this
@@ -68,6 +72,9 @@ open class DividerConfig(
             return this
         }
 
+        /**
+         * The item with the specified span index disables this divider
+         */
         open fun disableBySpanIndex(spanIndex: Int): Builder {
             (disableBySpanIndexArray ?: SparseArrayCompat<Boolean>().apply {
                 this@Builder.disableBySpanIndexArray = this
@@ -75,16 +82,22 @@ open class DividerConfig(
             return this
         }
 
+        /**
+         * Provide a personalized divider for the item with the specified position
+         */
         open fun personaliseByPosition(position: Int, divider: Divider): Builder {
-            (personaliseByPositionDividerArray ?: SparseArrayCompat<Divider>().apply {
-                this@Builder.personaliseByPositionDividerArray = this
+            (personaliseByPositionArray ?: SparseArrayCompat<Divider>().apply {
+                this@Builder.personaliseByPositionArray = this
             }).put(position, divider)
             return this
         }
 
+        /**
+         * Provide a personalized divider for the item with the specified span index
+         */
         open fun personaliseBySpanIndex(spanIndex: Int, divider: Divider): Builder {
-            (personaliseBySpanIndexDividerArray ?: SparseArrayCompat<Divider>().apply {
-                this@Builder.personaliseBySpanIndexDividerArray = this
+            (personaliseBySpanIndexArray ?: SparseArrayCompat<Divider>().apply {
+                this@Builder.personaliseBySpanIndexArray = this
             }).put(spanIndex, divider)
             return this
         }
@@ -94,8 +107,8 @@ open class DividerConfig(
                 divider,
                 disableByPositionArray,
                 disableBySpanIndexArray,
-                personaliseByPositionDividerArray,
-                personaliseBySpanIndexDividerArray
+                personaliseByPositionArray,
+                personaliseBySpanIndexArray
             )
         }
     }

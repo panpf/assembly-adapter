@@ -28,6 +28,9 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridI
 import kotlin.math.ceil
 import kotlin.math.floor
 
+/**
+ * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、first or last divider、side divider、fist or last side divider
+ */
 open class StaggeredGridDividerItemDecoration(
     private val itemDividerProvider: StaggeredGridItemDividerProvider,
     private val isFullSpanByPosition: IsFullSpanByPosition?,
@@ -315,7 +318,7 @@ open class StaggeredGridDividerItemDecoration(
         }
     }
 
-    class Builder(private val context: Context) {
+    class Builder(val context: Context) {
 
         private var dividerConfig: DividerConfig? = null
         private var firstDividerConfig: DividerConfig? = null
@@ -369,6 +372,10 @@ open class StaggeredGridDividerItemDecoration(
         }
 
 
+        /**
+         * Set the divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun divider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -379,12 +386,22 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the divider of the item
+         */
         fun divider(config: DividerConfig): Builder {
             this.dividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun firstDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -395,12 +412,25 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first divider of the item.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun firstDivider(config: DividerConfig): Builder {
             this.firstDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the last divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun lastDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -411,12 +441,25 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the last divider of the item.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun lastDivider(config: DividerConfig): Builder {
             this.lastDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first and last divider of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun firstAndLastDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -430,6 +473,12 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first and last divider of the item.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun firstAndLastDivider(config: DividerConfig): Builder {
             this.firstDividerConfig = config
             this.lastDividerConfig = config
@@ -437,16 +486,34 @@ open class StaggeredGridDividerItemDecoration(
         }
 
 
+        /**
+         * Use divider as the first divider.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun showFirstDivider(show: Boolean = true): Builder {
             this.showFirstDivider = show
             return this
         }
 
+        /**
+         * Use divider as the last divider.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun showLastDivider(show: Boolean = true): Builder {
             this.showLastDivider = show
             return this
         }
 
+        /**
+         * Use divider as the first and last divider.
+         *
+         * To use this method, you need to set [isFullSpanByPosition], otherwise an exception will be thrown
+         * @see isFullSpanByPosition
+         */
         fun showFirstAndLastDivider(show: Boolean = true): Builder {
             this.showFirstDivider = show
             this.showLastDivider = show
@@ -454,6 +521,10 @@ open class StaggeredGridDividerItemDecoration(
         }
 
 
+        /**
+         * Set the divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun sideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -464,12 +535,19 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the divider on the side of the item
+         */
         fun sideDivider(config: DividerConfig): Builder {
             this.sideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -480,12 +558,19 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first divider on the side of the item
+         */
         fun firstSideDivider(config: DividerConfig): Builder {
             this.firstSideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the last divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun lastSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -496,12 +581,19 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the last divider on the side of the item
+         */
         fun lastSideDivider(config: DividerConfig): Builder {
             this.lastSideDividerConfig = config
             return this
         }
 
 
+        /**
+         * Set the first and last divider on the side of the item. You can configure to disable the divider or
+         * provide a personalized divider in some cases through the [configBlock] function
+         */
         fun firstAndLastSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
@@ -515,6 +607,9 @@ open class StaggeredGridDividerItemDecoration(
             return this
         }
 
+        /**
+         * Set the first and last divider on the side of the item
+         */
         fun firstAndLastSideDivider(config: DividerConfig): Builder {
             this.firstSideDividerConfig = config
             this.lastSideDividerConfig = config
@@ -522,16 +617,25 @@ open class StaggeredGridDividerItemDecoration(
         }
 
 
+        /**
+         * Use side divider as the first side divider
+         */
         fun showFirstSideDivider(show: Boolean = true): Builder {
             this.showFirstSideDivider = show
             return this
         }
 
+        /**
+         * Use side divider as the last side divider
+         */
         fun showLastSideDivider(show: Boolean = true): Builder {
             this.showLastSideDivider = show
             return this
         }
 
+        /**
+         * Use side divider as the first and last side  divider
+         */
         fun showFirstAndLastSideDivider(show: Boolean = true): Builder {
             this.showFirstSideDivider = show
             this.showLastSideDivider = show
@@ -539,6 +643,19 @@ open class StaggeredGridDividerItemDecoration(
         }
 
 
+        /**
+         * Set the interface for determining FullSpan based on position.
+         * If you use [firstDivider], [lastDivider], [firstAndLastDivider], [showFirstDivider],
+         * [showLastDivider], [showFirstAndLastDivider] then you must set this interface,
+         * otherwise an exception will be thrown
+         *
+         * @see firstDivider
+         * @see lastDivider
+         * @see firstAndLastDivider
+         * @see showFirstDivider
+         * @see showLastDivider
+         * @see showFirstAndLastDivider
+         */
         fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
             this.isFullSpanByPosition = isFullSpanByPosition
             return this

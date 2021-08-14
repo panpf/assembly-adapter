@@ -17,6 +17,9 @@ package com.github.panpf.assemblyadapter.recycler.divider
 
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Find ItemFactory class based on position
+ */
 fun interface FindItemFactoryClassByPosition {
-    fun find(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>?
+    fun findItemFactoryClass(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>?
 }
