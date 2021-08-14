@@ -19,10 +19,18 @@ import kotlin.reflect.KClass
 
 interface Matchable<DATA : Any> {
 
+    /**
+     * The class of the data to be matched. The [matchData] method will match the data with the dataClass class
+     * @see matchData
+     */
     val dataClass: KClass<DATA>
 
     /**
-     * If it returns true, it means that this [Matchable] can handle this [data]
+     * If it returns true, it means that this [Matchable] can handle this [data].
+     * By default, this method only checks whether [data] is an instance of [dataClass].
+     * If you need to match data more accurately, you can override the [exactMatchData] method
+     * @see dataClass
+     * @see exactMatchData
      */
     fun matchData(data: Any): Boolean {
         @Suppress("UNCHECKED_CAST")
@@ -31,6 +39,7 @@ interface Matchable<DATA : Any> {
 
     /**
      * Exactly match this [data], such as checking the value of a specific attribute
+     * @see matchData
      */
     fun exactMatchData(data: DATA): Boolean = true
 }

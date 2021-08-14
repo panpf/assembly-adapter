@@ -20,7 +20,7 @@ import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.Placeholder
 
 /**
- * Responsible for managing itemType and matching ItemFactory according to data and itemType
+ * Matching ItemFactory by data or itemType
  */
 class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>>(
     initItemFactoryList: List<ITEM_FACTORY>,
