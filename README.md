@@ -9,14 +9,14 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 
 ## 特性
 
-* `Item 复用`. 只需为你的 item 写一个 [ItemFactory]，然后就可以到处使用了
-* `支持多类型`. 只需给 [AssemblyAdapter] 添加多种 [ItemFactory] 即可轻松实现多类型 Adapter
-* `支持 ViewPager2`. 提供了 [AssemblyFragmentStateAdapter] 来支持 ViewPager2
-* `支持 Paging 3.0`. 提供了 [AssemblyPagingDataAdapter] 和 [AssemblyPagingDataFragmentStateAdapter] 来支持 Paging 3.0
-* `为更多 Adapter 提供 Concat 支持`. 提供了 [ConcatListAdapter]、[ConcatExpandableListAdapter]、[ConcatPagerAdapter]、[ConcatFragmentStatePagerAdapter] 为更多的 Adapter 提供 Concat 支持
-* `支持全部 Adapter`. 支持 [RecyclerView.Adapter]、[PagingDataAdapter]、[BaseAdapter]、[BaseExpandableListAdapter]、[PagerAdapter]、[FragmentStatePagerAdapter]、[FragmentStateAdapter]
-* `支持 spanSize 和 fullSpan`. 提供了 [AssemblyGridLayoutManager] 和 [AssemblyStaggeredGridLayoutManager] 用来轻松实现横跨多列功能
-* `无性能损耗`. 没有使用任何反射相关的技术，无须担心性能问题
+* `Item 复用`. 只需为你的 item 写一个 [ItemFactory]，然后就可以到处使用了. [详情][docs_item_factory]
+* `支持多类型`. 只需给 [AssemblyAdapter] 添加多个 [ItemFactory] 即可轻松实现多类型 Adapter. [详情][docs_multi_type_adapter]
+* `支持全部 Adapter`. 支持 [BaseAdapter]、[BaseExpandableListAdapter]、[RecyclerView.Adapter]、[ListAdapter]、[PagingDataAdapter]、[PagerAdapter]、[FragmentStatePagerAdapter]、[FragmentStateAdapter] 等全部常用 Adapter
+* `为更多 Adapter 提供 Concat 支持`. 提供了 [ConcatListAdapter]、[ConcatExpandableListAdapter]、[ConcatPagerAdapter]、[ConcatFragmentStatePagerAdapter] 为更多的 Adapter 提供 Concat 支持. [详情][docs_concat_adapter]
+* `支持 Paging 3.0`. 提供了 [AssemblyPagingDataAdapter] 和 [AssemblyPagingDataFragmentStateAdapter] 来支持 Paging 3.0. [详情][docs_paging3]
+* `支持 ViewPager2`. 提供了 [AssemblyFragmentStateAdapter] 来支持 ViewPager2. [详情][docs_pager2]
+* `支持 spanSize 和 fullSpan`. 提供了 [AssemblyGridLayoutManager] 和 [AssemblyStaggeredGridLayoutManager] 可以轻松的实现横跨多列功能. [详情][docs_grid_span]
+* `提供 divider 支持`. [assemblyadapter-common-recycler-divider] 模块提供了一套强大的 DividerItemDecoration 可以轻松实现炫酷的 divider. [详情][docs_recycler_divider]
 
 ## 支持的 Adapter
 
@@ -64,7 +64,7 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
     * [LoadStateAdapter]
         * [AssemblyLoadStateAdapter]: Paging 加载状态 Adapter 实现
 
-## 使用指南
+## 导入
 
 ### 1. 从 mavenCentral 导入
 
@@ -90,13 +90,15 @@ dependencies {
 
 `${LAST_VERSION}`：[![Release Version][release_icon]][release_link] (no include 'v')
 
-### 2. 定义 ItemFactory
+## 使用指南
 
-[AssemblyAdapter] 负责管理数据和为数据匹配 [ItemFactory]，[ItemFactory] 负责创建 item 的 view 以及绑定数据。因此你只需要在创建 Adapter 时提供多个 [ItemFactory] 即可轻松的实现多类型 Adapter。
+### 1. 定义 ItemFactory
 
-通常不建议直接继承 [ItemFactory] 来定义自己的 [ItemFactory]，因为实现 [ItemFactory] 需要再额外定义一个 [Item]，这样写起来会稍显繁琐。AssemblyAdapter 提供了几种简化版的不用定义 [Item] 的子类来简化定义的 [ItemFactory] 流程，如下：
-* [SimpleItemFactory]：只需实现 createItemView() 方法创建 item view 以及实现 bindItemData() 方法绑定数据即可
-* [BindingItemFactory]：支持 ViewBinding. 只需实现 createItemViewBinding() 方法创建 ViewBinding 以及实现 bindItemData() 方法绑定数据即可
+Adapter 负责管理数据和为数据匹配 [ItemFactory]，[ItemFactory] 负责创建 item 的 view 以及绑定数据。
+
+通常不建议直接继承 [ItemFactory] 来定义自己的 [ItemFactory]，因为实现 [ItemFactory] 需要再额外定义一个 [Item]，这样写起来会稍显繁琐。库中提供了几种简化版的不用定义 [Item] 的子类来简化定义的 [ItemFactory] 流程，如下：
+* [SimpleItemFactory]：只需实现 createItemView() 方法创建 item view 以及实现 initItem()、bindItemData() 方法来初始化 item 和绑定数据即可
+* [BindingItemFactory]：支持 ViewBinding. 只需实现 createItemViewBinding() 方法创建 ViewBinding 以及实现 initItem()、bindItemData() 方法来初始化 item 和绑定数据即可
 * [ViewItemFactory]：外部提供创建好的 item view 或者布局 id，即可直接使用
 
 下面演示继承 [BindingItemFactory] 来创建我们的 [ItemFactory]
@@ -134,21 +136,21 @@ class AppInfoItemFactory : BindingItemFactory<AppInfo, ItemAppInfoBinding>(AppIn
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemAppInfoBinding {
+        /*
+         * 在此处创建 ViewBinding。这个方法只执行一次
+         */
         return ItemAppInfoBinding.inflate(inflater, parent, false)
     }
 
     override fun initItem(
         context: Context, binding: ItemAppInfoBinding, item: BindingItem<AppInfo, ItemAppBinding>
     ) {
-        super.initItem(context, binding, item)
-
         /*
-         * Optional. You can initialize the item and bind the click event here. This method is only executed once
+         * 您可以在此处初始化 item 并绑定 click 事件。这个方法只执行一次
          */
-
         binding.root.setOnClickListener {
             // 事件发生时从 item 获取 position 和 数据
-            val data = item.dataOrThrow
+            val data: AppInfo = item.dataOrThrow
             val bindingAdapterPosition: Int = item.bindingAdapterPosition
             val absoluteAdapterPosition: Int = item.absoluteAdapterPosition
             val launchIntent =
@@ -168,7 +170,7 @@ class AppInfoItemFactory : BindingItemFactory<AppInfo, ItemAppInfoBinding>(AppIn
         data: AppInfo
     ) {
         /*
-         * Bind data for the item view here. This method will be executed frequently
+         * 在此处绑定项 item view 的数据。这个方法会经常执行
          */
         binding.appItemNameText.text = data.name
         binding.appItemVersionText.text = "v${data.versionName}"
@@ -179,25 +181,21 @@ class AppInfoItemFactory : BindingItemFactory<AppInfo, ItemAppInfoBinding>(AppIn
 
 更多自定义 [ItemFactory] 详细内容请参考 [ItemFactory 自定义详解][docs_item_factory]
 
-### 3. 使用 ItemFactory 创建多类型 Adapter
+### 2. 使用 ItemFactory 创建 Adapter
 
 只需在创建 Adapter 时通过构造参数传入 ItemFactory 即可，如下：
 
 ```kotlin
-// ListSeparatorItemFactory 是一个列表分割符 ItemFactory 具体实现就不写了
 val appAdapter = AssemblyRecyclerAdapter(
-    listOf(AppInfoItemFactory(), ListSeparatorItemFactory())
+    listOf(AppInfoItemFactory())
 )
 
 appAdapter.submitDataList(listOf(
-    ListSeparator("A"),
     AppInfo("AirPortal", "cn.airportal", "4.21", 1258291L),
     AppInfo("Apex Legends Mobile", "com.ea.gp.apex", "1.2", 100258291L),
     AppInfo("APKPure", "com.apkpure.aegon", "3.17.23", 157879798L),
-    ListSeparator("B"),
     AppInfo("Block Earth", "com.craft.earth", "2.42", 57879798L),
     AppInfo("Bluestack", "app.bluestack", "1.0.0", 41534523L),
-    ListSeparator("C"),
     AppInfo("Craft Pixel Art Rain", "com.lucky.fairy", "15", 4247204L),
     AppInfo("Cutting Edge!", "com.cuttingedge", "0.16", 4289472412L),
     AppInfo("Cyber Knights", "com..cyberknightselite", "2.9.4", 6174924L),
@@ -207,15 +205,19 @@ appAdapter.submitDataList(listOf(
 RecyclerView(activity).adapter = appAdapter
 ```
 
-### 4. 更多功能详解
+### 3. 更多功能
 
-* [ItemFactory 自定义详解][docs_item_factory]
-* [AssemblySingleData*Adapter 使用详解][docs_single_data_adapter]
-* [Concat*Adapter 使用详解][docs_single_data_adapter]
+* [自定义 ItemFactory][docs_item_factory]
+* [实现多类型 Adapter][docs_multi_type_adapter]
+* [体验为 BaseAdapter 或 PagerAdapter 提供的 Concat*Adapter][docs_single_data_adapter]
+* [通过 ConcatAdapter 实现 header 和 footer][docs_header_and_footer]
+* [给 RecyclerView 配置 divider][docs_recycler_divider]
+* [使用 GridLayoutManager 或 StaggeredGridLayoutManager 时配置 Item 横跨多列][docs_grid_span]
+* [Paging 3.0 支持][docs_paging3]
+* [Pager2 支持][docs_pager2]
 * [AssemblyExpandableListAdapter 使用详解][docs_expandable_list_adapter]
-* [在 RecyclerView 中配置 Item 横跨多列][docs_grid_span]
-* [Paging 3.0 支持][docs_paging]
-* [如何使用新版 4.* API 兼容旧版 3.* API][docs_old_api_compat]
+* [通过 AssemblySingleData*Adapter 实现只有一条数据的 Adapter][docs_single_data_adapter]
+* [使用新版 4.* API 兼容旧版 3.* API][docs_old_api_compat]
 
 ## 更新日志
 
@@ -246,6 +248,7 @@ Please view the [CHANGELOG.md] file
 
 [CHANGELOG.md]: CHANGELOG.md
 
+[assemblyadapter-common-recycler-divider]: assemblyadapter-common-recycler-divider
 [assemblyadapter-list]: assemblyadapter-list
 [assemblyadapter-pager]: assemblyadapter-pager
 [assemblyadapter-pager2]: assemblyadapter-pager2
@@ -255,10 +258,15 @@ Please view the [CHANGELOG.md] file
 
 [docs_expandable_list_adapter]: docs/wiki/expandable_list_adapter.md
 [docs_grid_span]: docs/wiki/grid_span.md
-[docs_paging]: ../../raw/master/docs/wiki/paging.md
+[docs_paging3]: ../../raw/master/docs/wiki/paging.md
 [docs_item_factory]: docs/wiki/item_factory.md
 [docs_single_data_adapter]: docs/wiki/single_data_adapter.md
 [docs_old_api_compat]: docs/wiki/old_api_compat.md
+[docs_multi_type_adapter]: docs/wiki/multi_type_adapter.md
+[docs_concat_adapter]: docs/wiki/concat_adapter.md
+[docs_pager2]: docs/wiki/pager2.md
+[docs_recycler_divider]: docs/wiki/recycler_divider.md
+[docs_header_and_footer]: docs/wiki/header_and_footer.md
 
 [AssemblyAdapter]: assemblyadapter-common-core/src/main/java/com/github/panpf/assemblyadapter/AssemblyAdapter.kt
 
