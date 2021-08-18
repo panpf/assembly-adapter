@@ -50,7 +50,7 @@ class KeyEqualsDiffItemCallback<DATA : Any?> : DiffUtil.ItemCallback<DATA>() {
             dataClassList.forEach { dataClass ->
                 if (!DiffKey::class.java.isAssignableFrom(dataClass.java)) {
                     throw IllegalArgumentException(
-                        "Because you use KeyDiffItemCallback, so '${dataClass.qualifiedName}' must implement the DiffKey interface"
+                        "Because you use KeyEqualsDiffItemCallback, so '${dataClass.qualifiedName}' must implement the DiffKey interface"
                     )
                 }
             }
