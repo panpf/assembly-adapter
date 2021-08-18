@@ -9,14 +9,14 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 
 ## 特性
 
-* `Item 复用`. 只需为你的 item 写一个 [ItemFactory]，然后就可以到处使用了. [详情][docs_item_factory]
-* `支持多类型`. 只需给 Adapter 添加多个 [ItemFactory] 即可轻松实现多类型 Adapter. [详情][docs_multi_type_adapter]
+* `Item 复用`. 只需为你的 item 写一个 [ItemFactory]，然后就可以到处使用了. [了解更多][docs_item_factory]
+* `支持多类型`. 只需给 Adapter 添加多个 [ItemFactory] 即可轻松实现多类型 Adapter
 * `支持全部 Adapter`. 支持 [BaseAdapter]、[BaseExpandableListAdapter]、[RecyclerView.Adapter]、[ListAdapter]、[PagingDataAdapter]、[PagerAdapter]、[FragmentStatePagerAdapter]、[FragmentStateAdapter] 等全部常用 Adapter
-* `为更多 Adapter 提供 Concat 支持`. 提供了 [ConcatListAdapter]、[ConcatExpandableListAdapter]、[ConcatPagerAdapter]、[ConcatFragmentStatePagerAdapter] 为更多的 Adapter 提供 Concat 支持. [详情][docs_concat_adapter]
-* `支持 Paging 3.0`. 提供了 [AssemblyPagingDataAdapter] 和 [AssemblyPagingDataFragmentStateAdapter] 来支持 Paging 3.0. [详情][docs_paging3]
-* `支持 ViewPager2`. 提供了 [AssemblyFragmentStateAdapter] 来支持 ViewPager2. [详情][docs_pager2]
-* `支持 spanSize 和 fullSpan`. 提供了 [AssemblyGridLayoutManager] 和 [AssemblyStaggeredGridLayoutManager] 可以轻松的实现横跨多列功能. [详情][docs_grid_span]
-* `提供 divider 支持`. [assemblyadapter-common-recycler-divider] 模块提供了一套强大的 DividerItemDecoration 可以轻松实现炫酷的 divider. [详情][docs_recycler_divider]
+* `为更多 Adapter 提供 Concat 支持`. 提供了 [ConcatListAdapter]、[ConcatExpandableListAdapter]、[ConcatPagerAdapter]、[ConcatFragmentStatePagerAdapter] 为更多的 Adapter 提供 Concat 支持. [了解更多][docs_concat_adapter]
+* `支持 Paging 3.0`. 提供了 [AssemblyPagingDataAdapter] 和 [AssemblyPagingDataFragmentStateAdapter] 来支持 Paging 3.0. [了解更多][docs_paging3]
+* `支持 ViewPager2`. 提供了 [AssemblyFragmentStateAdapter] 来支持 ViewPager2. [了解更多][docs_pager2]
+* `支持 spanSize 和 fullSpan`. 提供了 [AssemblyGridLayoutManager] 和 [AssemblyStaggeredGridLayoutManager] 可以轻松的实现横跨多列功能. [了解更多][docs_grid_span]
+* `提供 divider 支持`. [assemblyadapter-common-recycler-divider] 模块提供了一套强大的 DividerItemDecoration 可以轻松实现炫酷的 divider. [了解更多][docs_recycler_divider]
 
 ## 导入
 
@@ -46,16 +46,16 @@ dependencies {
 
 ## 使用指南
 
-在传统的自定义 Adapter 的过程中我们一般需要以下几个步骤（以RecyclerView.Adapter 为例，其它 Adapter 大同小异）：
+在传统的自定义 Adapter 的过程中我们一般需要以下几个步骤（以 RecyclerView.Adapter 为例，其它 Adapter 大同小异）：
 1. 定义 data 列表
 2. 重写 getItemCount、getItemId 方法
-3. 重写 getItemViewType、onCreateViewHolder、onBindViewHolder、方法根据不同的 data 提供不同的结果或实现
+3. 重写 getItemViewType、onCreateViewHolder、onBindViewHolder 方法根据不同的 data 提供不同的结果或实现
 
 AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分别如下：
 1. Adapter：
    2. 定义 data 列表
    3. 重写 getItemCount、getItemId 方法
-   4. 根据不同的 data 匹配 ItemFactory
+   4. 根据不同的 data 匹配不同的 ItemFactory
    5. 使用匹配的 ItemFactory 重写 getItemViewType、onCreateViewHolder、onBindViewHolder 方法
 2. ItemFactory
    3. 定义目标 data 的 class
@@ -191,21 +191,25 @@ class AppInfoItemFactory : BindingItemFactory<AppInfo, ItemAppInfoBinding>(AppIn
 }
 ```
 
-### 使用 ItemFactory 创建 Adapter
+### 使用 ItemFactory 创建多类型 Adapter
 
-只需在创建 Adapter 时通过构造参数传入 ItemFactory 即可，如下：
+只需在创建 Adapter 时通过构造函数传入 ItemFactory 即可，传入多个 ItemFactory 就可以实现多类型 Adapter，如下：
 
 ```kotlin
+// ListSeparatorItemFactory 是一个列表分割符 ItemFactory 具体实现就不写了
 val appAdapter = AssemblyRecyclerAdapter(
-    listOf(AppInfoItemFactory())
+    listOf(AppInfoItemFactory(), ListSeparatorItemFactory())
 )
 
 appAdapter.submitList(listOf(
+    ListSeparator("A"),
     AppInfo("AirPortal", "cn.airportal", "4.21", 1258291L),
     AppInfo("Apex Legends Mobile", "com.ea.gp.apex", "1.2", 100258291L),
     AppInfo("APKPure", "com.apkpure.aegon", "3.17.23", 157879798L),
+    ListSeparator("B"),
     AppInfo("Block Earth", "com.craft.earth", "2.42", 57879798L),
     AppInfo("Bluestack", "app.bluestack", "1.0.0", 41534523L),
+    ListSeparator("C"),
     AppInfo("Craft Pixel Art Rain", "com.lucky.fairy", "15", 4247204L),
     AppInfo("Cutting Edge!", "com.cuttingedge", "0.16", 4289472412L),
     AppInfo("Cyber Knights", "com..cyberknightselite", "2.9.4", 6174924L),
@@ -218,9 +222,8 @@ RecyclerView(activity).adapter = appAdapter
 ### 更多功能
 
 * [自定义 ItemFactory][docs_item_factory]
-* [实现多类型 Adapter][docs_multi_type_adapter]
-* [体验为 BaseAdapter 或 PagerAdapter 提供的 Concat*Adapter][docs_single_data_adapter]
 * [通过 ConcatAdapter 实现 header 和 footer][docs_header_and_footer]
+* [体验为 BaseAdapter 或 PagerAdapter 提供的 Concat*Adapter][docs_concat_adapter]
 * [给 RecyclerView 配置 divider][docs_recycler_divider]
 * [使用 GridLayoutManager 或 StaggeredGridLayoutManager 时配置 Item 横跨多列][docs_grid_span]
 * [Paging 3.0 支持][docs_paging3]
@@ -272,7 +275,6 @@ Please view the [CHANGELOG.md] file
 [docs_item_factory]: docs/wiki/item_factory.md
 [docs_single_data_adapter]: docs/wiki/single_data_adapter.md
 [docs_old_api_compat]: docs/wiki/old_api_compat.md
-[docs_multi_type_adapter]: docs/wiki/multi_type_adapter.md
 [docs_concat_adapter]: docs/wiki/concat_adapter.md
 [docs_pager2]: docs/wiki/pager2.md
 [docs_recycler_divider]: docs/wiki/recycler_divider.md
