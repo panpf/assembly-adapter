@@ -23,5 +23,5 @@ interface DiffKey {
     /**
      * The key used for comparison in the DiffUtil.ItemCallback.areItemsTheSame(T, T) method
      */
-    val diffKey: String
+    val diffKey: Any
 }
