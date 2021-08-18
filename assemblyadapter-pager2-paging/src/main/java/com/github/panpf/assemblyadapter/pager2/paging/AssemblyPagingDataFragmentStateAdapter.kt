@@ -27,7 +27,7 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
-import com.github.panpf.assemblyadapter.recycler.KeyDiffItemCallback
+import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -38,14 +38,14 @@ import kotlinx.coroutines.Dispatchers
  *
  * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
  * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
- * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+ * @param diffCallback DiffUtil comparison data callback, the default is [KeyEqualsDiffItemCallback]
  * @see FragmentItemFactory
  */
 open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     itemFactoryList: List<FragmentItemFactory<*>>,
-    diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
+    diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataFragmentStateAdapter<DATA, RecyclerView.ViewHolder>(
@@ -65,12 +65,12 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
      *
      * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
      * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
-     * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+     * @param diffCallback DiffUtil comparison data callback, the default is [KeyEqualsDiffItemCallback]
      */
     constructor(
         fragmentActivity: FragmentActivity,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
+        diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) : this(
@@ -87,12 +87,12 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
      *
      * @param itemFactoryList The collection of [FragmentItemFactory] passed in from outside, cannot be empty.
      * Each type of data in the data set must have a matching [FragmentItemFactory], otherwise an exception will be thrown
-     * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+     * @param diffCallback DiffUtil comparison data callback, the default is [KeyEqualsDiffItemCallback]
      */
     constructor(
         fragment: Fragment,
         itemFactoryList: List<FragmentItemFactory<*>>,
-        diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
+        diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
         mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
         workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) : this(
@@ -107,8 +107,10 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
 
-        if (diffCallback is KeyDiffItemCallback) {
-            KeyDiffItemCallback.checkDataClass(itemFactoryList.map { it.dataClass })
+        if (diffCallback is KeyEqualsDiffItemCallback) {
+            KeyEqualsDiffItemCallback.checkDataClass(
+                itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
+            )
         }
     }
 

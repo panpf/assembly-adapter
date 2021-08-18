@@ -102,6 +102,7 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
         * [AssemblySingleDataRecyclerAdapter]：单数据实现
     * [ListAdapter]
         * [AssemblyRecyclerListAdapter]: 多类型 Adapter 实现
+        * [AssemblySingleDataRecyclerListAdapter]: 单数据实现
 * [assemblyadapter-recycler-paging]:
     * [PagingDataAdapter]
         * [AssemblyPagingDataAdapter]: 多类型 Adapter 实现

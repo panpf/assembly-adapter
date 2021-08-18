@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.recycler.KeyDiffItemCallback
+import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
@@ -38,12 +38,12 @@ import kotlinx.coroutines.Dispatchers
  *
  * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
  * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
- * @param diffCallback DiffUtil comparison data callback, the default is [KeyDiffItemCallback]
+ * @param diffCallback DiffUtil comparison data callback, the default is [KeyEqualsDiffItemCallback]
  * @see ItemFactory
  */
 open class AssemblyPagingDataAdapter<DATA : Any>(
     itemFactoryList: List<ItemFactory<*>>,
-    diffCallback: DiffUtil.ItemCallback<DATA> = KeyDiffItemCallback(),
+    diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
@@ -55,8 +55,10 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
 
-        if (diffCallback is KeyDiffItemCallback) {
-            KeyDiffItemCallback.checkDataClass(itemFactoryList.map { it.dataClass })
+        if (diffCallback is KeyEqualsDiffItemCallback) {
+            KeyEqualsDiffItemCallback.checkDataClass(
+                itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
+            )
         }
     }
 
