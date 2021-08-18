@@ -52,6 +52,9 @@ open class AssemblyRecyclerListAdapter<DATA>
     ) : super(diffCallback) {
         itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+        if (diffCallback is KeyDiffItemCallback) {
+            KeyDiffItemCallback.checkDataClass(itemFactoryList.map { it.dataClass })
+        }
     }
 
     /**
