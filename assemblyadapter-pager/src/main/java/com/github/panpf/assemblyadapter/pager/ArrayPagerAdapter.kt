@@ -32,18 +32,18 @@ open class ArrayPagerAdapter(viewList: List<View>) : PagerAdapter() {
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
 
     /**
-     * Get the current list. If a null list is submitted through [submitViewList], or no list is submitted, an empty list will be returned.
-     * The returned list may not change-changes to the content must be passed through [submitViewList].
+     * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitList].
      */
-    val viewList: List<View>
-        get() = itemDataStorage.readOnlyDataList
+    val currentList: List<View>
+        get() = itemDataStorage.readOnlyList
 
     /**
      * Get the current page title list. If a null list is submitted through [submitPageTitleList], or no list is submitted, an empty list will be returned.
      * The returned list may not change-changes to the content must be passed through [submitPageTitleList].
      */
-    val pageTitleList: List<CharSequence>
-        get() = pageTitleStorage?.readOnlyDataList ?: Collections.emptyList()
+    val currentPageTitleList: List<CharSequence>
+        get() = pageTitleStorage?.readOnlyList ?: Collections.emptyList()
 
     /**
      * Disable the function of refreshing item when the data set changes.
@@ -65,8 +65,8 @@ open class ArrayPagerAdapter(viewList: List<View>) : PagerAdapter() {
     /**
      * Set the new list to be displayed.
      */
-    open fun submitViewList(viewList: List<View>?) {
-        itemDataStorage.submitDataList(viewList)
+    open fun submitList(list: List<View>?) {
+        itemDataStorage.submitList(list)
     }
 
     /**
@@ -77,7 +77,7 @@ open class ArrayPagerAdapter(viewList: List<View>) : PagerAdapter() {
             notifyDataSetChanged()
         }.apply {
             this@ArrayPagerAdapter.pageTitleStorage = this
-        }).submitDataList(pageTitleList)
+        }).submitList(pageTitleList)
     }
 
 

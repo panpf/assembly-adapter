@@ -25,7 +25,7 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 /**
  * An implementation of [FragmentStateAdapter], The data is provided by the [Fragment] list passed in from the outside.
  *
- * Warning: The [createFragment] method will not directly return the [Fragment] from [fragmentList], but uses it as a template to create a new Fragment
+ * Warning: The [createFragment] method will not directly return the [Fragment] from [currentList], but uses it as a template to create a new Fragment
  */
 open class ArrayFragmentStateAdapter(
     fragmentManager: FragmentManager,
@@ -36,11 +36,11 @@ open class ArrayFragmentStateAdapter(
     private val itemDataStorage = ItemDataStorage(templateFragmentList) { notifyDataSetChanged() }
 
     /**
-     * Get the current list. If a null list is submitted through [submitFragmentList], or no list is submitted, an empty list will be returned.
-     * The returned list may not change-changes to the content must be passed through [submitFragmentList].
+     * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitList].
      */
-    val fragmentList: List<Fragment>
-        get() = itemDataStorage.readOnlyDataList
+    val currentList: List<Fragment>
+        get() = itemDataStorage.readOnlyList
 
     /**
      * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [ArrayFragmentStateAdapter]
@@ -60,8 +60,8 @@ open class ArrayFragmentStateAdapter(
     /**
      * Set the new list to be displayed.
      */
-    open fun submitFragmentList(fragmentList: List<Fragment>?) {
-        itemDataStorage.submitDataList(fragmentList)
+    open fun submitList(fragmentList: List<Fragment>?) {
+        itemDataStorage.submitList(fragmentList)
     }
 
 

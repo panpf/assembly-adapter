@@ -77,11 +77,11 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         }
 
     /**
-     * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
-     * The returned list may not change-changes to the content must be passed through [submitDataList].
+     * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitList].
      */
-    val dataList: List<DATA>
-        get() = itemDataStorage.readOnlyDataList
+    val currentList: List<DATA>
+        get() = itemDataStorage.readOnlyList
 
     @Deprecated(
         """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List<AssemblyFragmentItemFactory<*>>, List<DATA>)} with
@@ -100,8 +100,8 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     /**
      * Set the new list to be displayed.
      */
-    fun submitDataList(dataList: List<DATA>?) {
-        itemDataStorage.submitDataList(dataList)
+    fun submitList(list: List<DATA>?) {
+        itemDataStorage.submitList(list)
     }
 
     override fun getCount(): Int {

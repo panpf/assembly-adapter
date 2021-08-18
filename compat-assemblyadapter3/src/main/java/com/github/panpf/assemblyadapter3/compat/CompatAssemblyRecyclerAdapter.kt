@@ -43,9 +43,9 @@ open class CompatAssemblyRecyclerAdapter : CompatBaseAssemblyRecyclerAdapter<Any
 
     override fun createBodyAdapter(bodyItemFactoryList: List<ItemFactory<*>>): RecyclerView.Adapter<*> {
         return AssemblyRecyclerAdapter<Any?>(bodyItemFactoryList).apply {
-            submitDataList(dataManager.getDataList())
+            submitList(dataManager.getDataList())
             dataManager.addCallback {
-                submitDataList(dataManager.getDataList())
+                submitList(dataManager.getDataList())
             }
         }
     }

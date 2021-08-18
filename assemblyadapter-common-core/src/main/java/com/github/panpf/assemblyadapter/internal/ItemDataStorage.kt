@@ -25,14 +25,14 @@ class ItemDataStorage<DATA>(
     private val onDataListChanged: () -> Unit
 ) {
 
-    var readOnlyDataList: List<DATA> =
+    var readOnlyList: List<DATA> =
         initDataList?.run { Collections.unmodifiableList(this) } ?: Collections.emptyList()
 
     /**
      * Get the size of data list
      */
     val dataCount: Int
-        get() = readOnlyDataList.size
+        get() = readOnlyList.size
 
     /**
      * Get the data item associated with the specified [position] in the data set.
@@ -42,15 +42,15 @@ class ItemDataStorage<DATA>(
      * @throws IndexOutOfBoundsException If the [position] is out of range (position < 0 || index >= dataCount)
      */
     fun getData(position: Int): DATA {
-        return readOnlyDataList[position]
+        return readOnlyList[position]
     }
 
     /**
-     * Set up a new data list. Will copy the data of [datas], pass in null to clear the data set
+     * Set up a new data list. Will copy the data of [list], pass in null to clear the data set
      */
-    fun submitDataList(datas: List<DATA>?) {
-        readOnlyDataList =
-            datas?.run { Collections.unmodifiableList(this) } ?: Collections.emptyList()
+    fun submitList(list: List<DATA>?) {
+        readOnlyList =
+            list?.run { Collections.unmodifiableList(this) } ?: Collections.emptyList()
         onDataListChanged()
     }
 }

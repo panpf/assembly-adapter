@@ -26,7 +26,7 @@ import java.util.*
 /**
  * An implementation of [FragmentStatePagerAdapter], The data is provided by the [Fragment] list passed in from the outside.
  *
- * Warning: The [getItem] method will not directly return the [Fragment] from [fragmentList], but uses it as a template to create a new Fragment
+ * Warning: The [getItem] method will not directly return the [Fragment] from [currentList], but uses it as a template to create a new Fragment
  */
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'com.github.panpf.assemblyadapter.pager2.ArrayFragmentStateAdapter' instead.",
@@ -47,18 +47,18 @@ open class ArrayFragmentStatePagerAdapter(
         FragmentStatePagerAdapterRefreshHelper()
 
     /**
-     * Get the current list. If a null list is submitted through [submitFragmentList], or no list is submitted, an empty list will be returned.
-     * The returned list may not change-changes to the content must be passed through [submitFragmentList].
+     * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitList].
      */
-    val fragmentList: List<Fragment>
-        get() = itemDataStorage.readOnlyDataList
+    val currentList: List<Fragment>
+        get() = itemDataStorage.readOnlyList
 
     /**
      * Get the current page title list. If a null list is submitted through [submitPageTitleList], or no list is submitted, an empty list will be returned.
      * The returned list may not change-changes to the content must be passed through [submitPageTitleList].
      */
-    val pageTitleList: List<CharSequence>
-        get() = pageTitleStorage?.readOnlyDataList ?: Collections.emptyList()
+    val currentPageTitleList: List<CharSequence>
+        get() = pageTitleStorage?.readOnlyList ?: Collections.emptyList()
 
     /**
      * Disable the function of refreshing item when the data set changes.
@@ -88,8 +88,8 @@ open class ArrayFragmentStatePagerAdapter(
     /**
      * Set the new list to be displayed.
      */
-    open fun submitFragmentList(fragmentList: List<Fragment>?) {
-        itemDataStorage.submitDataList(fragmentList)
+    open fun submitList(list: List<Fragment>?) {
+        itemDataStorage.submitList(list)
     }
 
     /**
@@ -100,7 +100,7 @@ open class ArrayFragmentStatePagerAdapter(
             notifyDataSetChanged()
         }.apply {
             this@ArrayFragmentStatePagerAdapter.pageTitleStorage = this
-        }).submitDataList(pageTitleList)
+        }).submitList(pageTitleList)
     }
 
 

@@ -99,7 +99,7 @@ class RecyclerGridDividerHorFragment :
         }
 
         viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
-            recyclerAdapter.submitDataList(it)
+            recyclerAdapter.submitList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
     }

@@ -76,9 +76,9 @@ class CompatAssemblyListAdapter : BaseAdapter, CompatAssemblyAdapter {
             CompatItemFactory(itemFactory)
         }
         val bodyAdapter = AssemblyListAdapter<Any?>(bodyItemFactoryList)
-        bodyAdapter.submitDataList(dataManager.getDataList())
+        bodyAdapter.submitList(dataManager.getDataList())
         dataManager.addCallback {
-            bodyAdapter.submitDataList(dataManager.getDataList())
+            bodyAdapter.submitList(dataManager.getDataList())
         }
 
         val moreFixedItem = itemManager.moreFixedItem

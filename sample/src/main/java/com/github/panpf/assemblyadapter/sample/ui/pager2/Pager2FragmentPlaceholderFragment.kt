@@ -104,7 +104,7 @@ class Pager2FragmentPlaceholderFragment : BaseBindingFragment<FragmentPager2Bind
                 }
 
                 viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-                    fragmentStateAdapter.submitDataList(it)
+                    fragmentStateAdapter.submitList(it)
                     footerLoadStateAdapter.data = LoadState.NotLoading(true)
                     updatePageNumber(binding)
                 }

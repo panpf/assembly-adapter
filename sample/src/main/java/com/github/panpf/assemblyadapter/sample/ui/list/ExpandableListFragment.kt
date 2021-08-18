@@ -75,7 +75,7 @@ class ExpandableListFragment : BaseBindingFragment<FragmentExpandableListBinding
         }
 
         viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-            listAdapter.submitDataList(it)
+            listAdapter.submitList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
     }

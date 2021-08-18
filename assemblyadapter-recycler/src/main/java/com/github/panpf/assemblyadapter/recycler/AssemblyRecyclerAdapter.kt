@@ -46,11 +46,11 @@ open class AssemblyRecyclerAdapter<DATA>(
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
 
     /**
-     * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
-     * The returned list may not change-changes to the content must be passed through [submitDataList].
+     * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitList].
      */
-    val dataList: List<DATA>
-        get() = itemDataStorage.readOnlyDataList
+    val currentList: List<DATA>
+        get() = itemDataStorage.readOnlyList
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
@@ -59,8 +59,8 @@ open class AssemblyRecyclerAdapter<DATA>(
     /**
      * Set the new list to be displayed.
      */
-    fun submitDataList(dataList: List<DATA>?) {
-        itemDataStorage.submitDataList(dataList)
+    fun submitList(dataList: List<DATA>?) {
+        itemDataStorage.submitList(dataList)
     }
 
     override fun getItemCount(): Int {

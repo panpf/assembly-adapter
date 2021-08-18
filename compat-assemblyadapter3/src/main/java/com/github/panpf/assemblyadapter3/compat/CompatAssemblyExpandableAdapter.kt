@@ -80,9 +80,9 @@ class CompatAssemblyExpandableAdapter : BaseExpandableListAdapter, CompatAssembl
             CompatExpandableChildItemFactory(itemFactory)
         })
         val bodyAdapter = AssemblyExpandableListAdapter<Any?, Any>(bodyItemFactoryList)
-        bodyAdapter.submitDataList(dataManager.getDataList())
+        bodyAdapter.submitList(dataManager.getDataList())
         dataManager.addCallback {
-            bodyAdapter.submitDataList(dataManager.getDataList())
+            bodyAdapter.submitList(dataManager.getDataList())
         }
 
         val moreFixedItem = itemManager.moreFixedItem

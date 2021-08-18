@@ -200,7 +200,7 @@ val appAdapter = AssemblyRecyclerAdapter(
     listOf(AppInfoItemFactory())
 )
 
-appAdapter.submitDataList(listOf(
+appAdapter.submitList(listOf(
     AppInfo("AirPortal", "cn.airportal", "4.21", 1258291L),
     AppInfo("Apex Legends Mobile", "com.ea.gp.apex", "1.2", 100258291L),
     AppInfo("APKPure", "com.apkpure.aegon", "3.17.23", 157879798L),

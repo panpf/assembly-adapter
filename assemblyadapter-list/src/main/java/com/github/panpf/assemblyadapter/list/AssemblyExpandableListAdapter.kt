@@ -48,11 +48,11 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
 
     /**
-     * Get the current list. If a null list is submitted through [submitDataList], or no list is submitted, an empty list will be returned.
-     * The returned list may not change-changes to the content must be passed through [submitDataList].
+     * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitList].
      */
-    val dataList: List<GROUP_DATA>
-        get() = itemDataStorage.readOnlyDataList
+    val currentList: List<GROUP_DATA>
+        get() = itemDataStorage.readOnlyList
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
@@ -61,8 +61,8 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     /**
      * Set the new list to be displayed.
      */
-    fun submitDataList(dataList: List<GROUP_DATA>?) {
-        itemDataStorage.submitDataList(dataList)
+    fun submitList(list: List<GROUP_DATA>?) {
+        itemDataStorage.submitList(list)
     }
 
 
