@@ -1,6 +1,6 @@
 # 自定义 ItemFactory
 
-通常不建议直接继承 [ItemFactory] 来定义自己的 [ItemFactory]，因为实现 [ItemFactory] 需要再额外定义一个 [Item]，这样写起来会稍显繁琐。
+通常不建议直接继承 [ItemFactory] 来定义自己的 [ItemFactory]，因为实现 [ItemFactory] 需要再额外定义一个 [Item]，这样写起来会稍显繁琐
 
 AssemblyAdapter 提供了几种简化版的不用定义 [Item] 的子类来简化定义 [ItemFactory] 的流程，如下：
 * [BindingItemFactory]：支持 ViewBinding. 只需实现 createItemViewBinding() 方法创建 ViewBinding 以及实现 initItem()、bindItemData() 方法来初始化 item 和绑定数据即可
@@ -156,11 +156,25 @@ ViewItemFactory{ context, inflater, parent ->
 }
 ```
 
-### 关键点
+### 在 initItem 方法中获取 data 或 position
 
-1. 在 initItem 方法中可以通过 item 来获取 data 和 position，但只能在发生事件以后才能获取到真实有效的值。因为 initItem 方法只会执行一次，并且执行的时候 data 和 position 并没有赋值
-2. bindingAdapterPosition 和 absoluteAdapterPosition 的区别可以参考 [ViewHolder] 中的相关解释
-3. 通过 item 获取 data 时可以使用 dataOrThrow 或 dataOrNull 属性获取
+在 initItem 方法中可以通过 item 来获取 data 和 position，如下：
+* item.dataOrThrow：获取 data，如果 data 为 null 则抛出异常
+* item.dataOrNull：获取 data，如果 data 为 null 则返回 null
+* item.bindingAdapterPosition：获取 item 在其直接绑定的 Adapter 中的位置
+* item.absoluteAdapterPosition：获取 item 在 RecyclerView.adapter 中的位置
+
+#### 获取时机
+
+由于 initItem 方法只会在创建 item 的时候执行一次，所以执行的时候 data 和 position 并没有赋值，因此只能在发生事件的时候才能获取到真实有效的值，例如点击事件
+
+#### bindingAdapterPosition 和 absoluteAdapterPosition 的区别
+
+bindingAdapterPosition 表示 item 在其直接绑定的 Adapter 中的位置
+<br>
+absoluteAdapterPosition 表示 item 在 RecyclerView.adapter 中的位置
+
+这两个值只有在使用 ConcatAdapter 时才会不一样，更多解释可以参考 [ViewHolder] 中的相关解释
 
 
 [Item]: ../../assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/Item.kt

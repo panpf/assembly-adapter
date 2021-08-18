@@ -11,12 +11,12 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 
 * `Item 复用`. 只需为你的 item 写一个 [ItemFactory]，然后就可以到处使用了. [了解更多][docs_item_factory]
 * `支持多类型`. 只需给 Adapter 添加多个 [ItemFactory] 即可轻松实现多类型 Adapter
-* `支持全部 Adapter`. 支持 [BaseAdapter]、[BaseExpandableListAdapter]、[RecyclerView.Adapter]、[ListAdapter]、[PagingDataAdapter]、[PagerAdapter]、[FragmentStatePagerAdapter]、[FragmentStateAdapter] 等全部常用 Adapter
-* `为更多 Adapter 提供 Concat 支持`. 提供了 [ConcatListAdapter]、[ConcatExpandableListAdapter]、[ConcatPagerAdapter]、[ConcatFragmentStatePagerAdapter] 为更多的 Adapter 提供 Concat 支持. [了解更多][docs_concat_adapter]
-* `支持 Paging 3.0`. 提供了 [AssemblyPagingDataAdapter] 和 [AssemblyPagingDataFragmentStateAdapter] 来支持 Paging 3.0. [了解更多][docs_paging3]
-* `支持 ViewPager2`. 提供了 [AssemblyFragmentStateAdapter] 来支持 ViewPager2. [了解更多][docs_pager2]
-* `支持 spanSize 和 fullSpan`. 提供了 [AssemblyGridLayoutManager] 和 [AssemblyStaggeredGridLayoutManager] 可以轻松的实现横跨多列功能. [了解更多][docs_grid_span]
-* `提供 divider 支持`. [assemblyadapter-common-recycler-divider] 模块提供了一套强大的 DividerItemDecoration 可以轻松实现炫酷的 divider. [了解更多][docs_recycler_divider]
+* `支持全部 Adapter`. 支持 [BaseAdapter]、[RecyclerView.Adapter] 等常用 Adapter. [了解更多](#support_adapters)
+* `更多 ConcatAdapter 支持`. 为 BaseAdapter 等更多 Adapter 提供了 Concat 支持. [了解更多][docs_concat_adapter]
+* `支持 Paging 3.0`. 为 Paging 3.0 提供了多类型支持. [了解更多][docs_paging3]
+* `支持 ViewPager2`. 为 ViewPager2 提供了多类型和 Paging 3.0 分页支持. [了解更多][docs_pager2]
+* `支持 spanSize 和 fullSpan`. 提供了专用的 LayoutManager，可以根据 ItemFactory 设置 spanSize 和 fullSpan. [了解更多][docs_grid_span]
+* `RecyclerView divider 支持`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory 个性化或禁用 divider. [了解更多][docs_recycler_divider]
 
 ## 导入
 
@@ -62,7 +62,7 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
    4. 创建 item view
    5. 绑定 data
 
-### 支持的 Adapter
+### <span id="support_adapters"> 支持的 Adapter </span>
 
 [AssemblyAdapter] 只是一个接口，不可以直接使用，你需要针对不同的 Adapter 使用具体的实现类，如下所示：
 
@@ -223,9 +223,9 @@ RecyclerView(activity).adapter = appAdapter
 
 * [自定义 ItemFactory][docs_item_factory]
 * [通过 ConcatAdapter 实现 header 和 footer][docs_header_and_footer]
-* [体验为 BaseAdapter 或 PagerAdapter 提供的 Concat*Adapter][docs_concat_adapter]
+* [为 BaseAdapter 等更多 Adapter 提供 Concat 支持][docs_concat_adapter]
 * [给 RecyclerView 配置 divider][docs_recycler_divider]
-* [使用 GridLayoutManager 或 StaggeredGridLayoutManager 时配置 Item 横跨多列][docs_grid_span]
+* [设置 spanSize 和 fullSpan][docs_grid_span]
 * [Paging 3.0 支持][docs_paging3]
 * [Pager2 支持][docs_pager2]
 * [AssemblyExpandableListAdapter 使用详解][docs_expandable_list_adapter]
