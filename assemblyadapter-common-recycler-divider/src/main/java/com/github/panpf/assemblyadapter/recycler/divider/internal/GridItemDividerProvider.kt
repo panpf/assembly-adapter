@@ -42,10 +42,10 @@ class GridItemDividerProvider(
         spanGroupIndex: Int,
         isFirstGroup: Boolean,
         isLastGroup: Boolean,
-        vertical: Boolean,
+        isVerticalOrientation: Boolean,
         dividerType: ItemDivider.Type,
     ): ItemDivider? {
-        return if (vertical) {
+        return if (isVerticalOrientation) {
             when (dividerType) {
                 ItemDivider.Type.START -> if (isFirstSpan) firstSideDividerConfig else null
                 ItemDivider.Type.TOP -> if (isFirstGroup) firstDividerConfig else null

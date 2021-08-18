@@ -19,6 +19,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
@@ -42,19 +43,22 @@ open class LinearDividerItemDecoration(
         val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
         val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
-        val verticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
+        val isVerticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
+        val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
 
         val startItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.START
+            view, parent, itemCount, position, isVerticalOrientation,
+            if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
         )
         val topItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.TOP
+            view, parent, itemCount, position, isVerticalOrientation, ItemDivider.Type.TOP
         )
         val endItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.END
+            view, parent, itemCount, position, isVerticalOrientation,
+            if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
         )
         val bottomItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.BOTTOM
+            view, parent, itemCount, position, isVerticalOrientation, ItemDivider.Type.BOTTOM
         )
         val startItemDividerSize = startItemDivider?.widthSize ?: 0
         val topItemDividerSize = topItemDivider?.heightSize ?: 0
@@ -76,7 +80,8 @@ open class LinearDividerItemDecoration(
         }
         val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
         val childCount = parent.childCount.takeIf { it != 0 } ?: return
-        val verticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
+        val isVerticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
+        val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
 
         for (index in 0 until childCount) {
             val view = parent.getChildAt(index)
@@ -84,23 +89,25 @@ open class LinearDividerItemDecoration(
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
 
             val startItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.START
+                view, parent, itemCount, position, isVerticalOrientation,
+                if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
             )
             val topItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.TOP
+                view, parent, itemCount, position, isVerticalOrientation, ItemDivider.Type.TOP
             )
             val endItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.END
+                view, parent, itemCount, position, isVerticalOrientation,
+                if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
             )
             val bottomItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, verticalOrientation, ItemDivider.Type.BOTTOM
+                view, parent, itemCount, position, isVerticalOrientation, ItemDivider.Type.BOTTOM
             )
             val startItemDividerSize = startItemDivider?.widthSize ?: 0
             val topItemDividerSize = topItemDivider?.heightSize ?: 0
             val endItemDividerSize = endItemDivider?.widthSize ?: 0
             val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
 
-            if (verticalOrientation) {
+            if (isVerticalOrientation) {
                 startItemDivider?.apply {
                     draw(
                         canvas,

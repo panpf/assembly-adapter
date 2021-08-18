@@ -19,6 +19,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
@@ -42,7 +43,8 @@ open class GridDividerItemDecoration(
         val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
         val childLayoutParams = view.layoutParams as GridLayoutManager.LayoutParams
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
-        val vertical = layoutManager.orientation == GridLayoutManager.VERTICAL
+        val isVerticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
+        val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
         val spanSizeLookup = layoutManager.spanSizeLookup
         if (!spanSizeLookup.isSpanGroupIndexCacheEnabled) {
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
@@ -61,22 +63,24 @@ open class GridDividerItemDecoration(
         val startItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, vertical, ItemDivider.Type.START
+            isFirstGroup, isLastGroup, isVerticalOrientation,
+            if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
         )
         val topItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, vertical, ItemDivider.Type.TOP
+            isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.TOP
         )
         val endItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, vertical, ItemDivider.Type.END
+            isFirstGroup, isLastGroup, isVerticalOrientation,
+            if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
         )
         val bottomItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, vertical, ItemDivider.Type.BOTTOM
+            isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.BOTTOM
         )
         val startItemDividerSize = startItemDivider?.widthSize ?: 0
         val topItemDividerSize = topItemDivider?.heightSize ?: 0
@@ -98,7 +102,8 @@ open class GridDividerItemDecoration(
         }
         val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
         val childCount = parent.childCount.takeIf { it != 0 } ?: return
-        val vertical = layoutManager.orientation == GridLayoutManager.VERTICAL
+        val isVerticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
+        val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
         val spanSizeLookup = layoutManager.spanSizeLookup
         if (!spanSizeLookup.isSpanGroupIndexCacheEnabled) {
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
@@ -123,29 +128,31 @@ open class GridDividerItemDecoration(
             val startItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
                 isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-                isFirstGroup, isLastGroup, vertical, ItemDivider.Type.START
+                isFirstGroup, isLastGroup, isVerticalOrientation,
+                if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
             )
             val topItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
                 isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-                isFirstGroup, isLastGroup, vertical, ItemDivider.Type.TOP
+                isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.TOP
             )
             val endItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
                 isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-                isFirstGroup, isLastGroup, vertical, ItemDivider.Type.END
+                isFirstGroup, isLastGroup, isVerticalOrientation,
+                if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
             )
             val bottomItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
                 isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-                isFirstGroup, isLastGroup, vertical, ItemDivider.Type.BOTTOM
+                isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.BOTTOM
             )
             val startItemDividerSize = startItemDivider?.widthSize ?: 0
             val topItemDividerSize = topItemDivider?.heightSize ?: 0
             val endItemDividerSize = endItemDivider?.widthSize ?: 0
             val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
 
-            if (vertical) {
+            if (isVerticalOrientation) {
                 startItemDivider?.apply {
                     draw(
                         canvas,

@@ -31,13 +31,13 @@ class LinearItemDividerProvider(
         parent: RecyclerView,
         itemCount: Int,
         position: Int,
-        verticalOrientation: Boolean,
+        isVerticalOrientation: Boolean,
         dividerType: ItemDivider.Type,
     ): ItemDivider? {
         if (itemCount == 0) return null
         val isFirst = position == 0
         val isLast = position == itemCount - 1
-        return if (verticalOrientation) {
+        return if (isVerticalOrientation) {
             when (dividerType) {
                 ItemDivider.Type.START -> firstSideDividerConfig
                 ItemDivider.Type.TOP -> if (isFirst) firstDividerConfig else null
