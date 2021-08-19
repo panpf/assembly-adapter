@@ -15,14 +15,17 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 * `更多 ConcatAdapter 支持`. 为 BaseAdapter 等更多 Adapter 提供了 Concat 支持. [了解更多][docs_concat_adapter]
 * `支持 Paging 3.0`. 为 Paging 3.0 提供了多类型支持. [了解更多][docs_paging3]
 * `支持 ViewPager2`. 为 ViewPager2 提供了多类型和 Paging 3.0 分页支持. [了解更多][docs_pager2]
-* `支持 spanSize 和 fullSpan`. 提供了专用的 LayoutManager，可以根据 ItemFactory 设置 spanSize 和 fullSpan. [了解更多][docs_grid_span]
-* `RecyclerView divider 支持`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory 个性化或禁用 divider. [了解更多][docs_recycler_divider]
+* `支持 spanSize 和 fullSpan`. 提供了专用的 LayoutManager，可以根据 ItemFactory 设置 spanSize 和
+  fullSpan. [了解更多][docs_grid_span]
+* `RecyclerView divider 支持`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory
+  个性化或禁用 divider. [了解更多][docs_recycler_divider]
 
 ## 导入
 
 `该库已发布到 mavenCentral`
 
 你可以直接导入所有模块，如下：
+
 ```kotlin
 dependencies {
     implementation("io.github.panpf.assemblyadapter4:assemblyadapter:${LAST_VERSION}")
@@ -30,6 +33,7 @@ dependencies {
 ```
 
 你还可以按需导入所需模块，如下：
+
 ```kotlin
 dependencies {
     implementation("io.github.panpf.assemblyadapter4:assemblyadapter-list:${LAST_VERSION}")
@@ -40,6 +44,7 @@ dependencies {
     implementation("io.github.panpf.assemblyadapter4:assemblyadapter-recycler-paging:${LAST_VERSION}")
 }
 ```
+
 *每个模块包含哪些 Adapter，可以参考后面 '支持的 Adapter' 部分*
 
 `${LAST_VERSION}`：[![Release Version][release_icon]][release_link] (no include 'v')
@@ -47,20 +52,22 @@ dependencies {
 ## 使用指南
 
 在传统的自定义 Adapter 的过程中我们一般需要以下几个步骤（以 RecyclerView.Adapter 为例，其它 Adapter 大同小异）：
+
 1. 定义 data 列表
 2. 重写 getItemCount、getItemId 方法
 3. 重写 getItemViewType、onCreateViewHolder、onBindViewHolder 方法根据不同的 data 提供不同的结果或实现
 
 AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分别如下：
+
 1. Adapter：
-   2. 定义 data 列表
-   3. 重写 getItemCount、getItemId 方法
-   4. 根据不同的 data 匹配不同的 ItemFactory
-   5. 使用匹配的 ItemFactory 重写 getItemViewType、onCreateViewHolder、onBindViewHolder 方法
+    2. 定义 data 列表
+    3. 重写 getItemCount、getItemId 方法
+    4. 根据不同的 data 匹配不同的 ItemFactory
+    5. 使用匹配的 ItemFactory 重写 getItemViewType、onCreateViewHolder、onBindViewHolder 方法
 2. ItemFactory
-   3. 定义目标 data 的 class
-   4. 创建 item view
-   5. 绑定 data
+    3. 定义目标 data 的 class
+    4. 创建 item view
+    5. 绑定 data
 
 ### <span id="support_adapters"> 支持的 Adapter </span>
 
@@ -102,7 +109,9 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
         * [AssemblySingleDataRecyclerAdapter]：单数据实现
     * [ListAdapter]
         * [AssemblyRecyclerListAdapter]: 多类型 Adapter 实现
-        * [AssemblySingleDataRecyclerListAdapter]: 单数据实现
+        *
+
+        [AssemblySingleDataRecyclerListAdapter]: 单数据实现
 * [assemblyadapter-recycler-paging]:
     * [PagingDataAdapter]
         * [AssemblyPagingDataAdapter]: 多类型 Adapter 实现
@@ -116,23 +125,20 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
 *更多自定义 [ItemFactory] 详细内容请参考 [ItemFactory 自定义详解][docs_item_factory]*
 
 item 布局定义如下 (item_app_info.xml)：
+
 ```xml
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/appItemNameText"
-        />
-    <TextView
-        android:id="@+id/appItemVersionText"
-        />
-    <TextView
-        android:id="@+id/appItemSizeText"
-        />
+    <TextView android:id="@+id/appItemNameText" />
+    <TextView android:id="@+id/appItemVersionText" />
+    <TextView android:id="@+id/appItemSizeText" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
 数据类定义如下：
+
 ```kotlin
 data class AppInfo(
     val name: String,
@@ -201,20 +207,22 @@ val appAdapter = AssemblyRecyclerAdapter(
     listOf(AppInfoItemFactory(), ListSeparatorItemFactory())
 )
 
-appAdapter.submitList(listOf(
-    ListSeparator("A"),
-    AppInfo("AirPortal", "cn.airportal", "4.21", 1258291L),
-    AppInfo("Apex Legends Mobile", "com.ea.gp.apex", "1.2", 100258291L),
-    AppInfo("APKPure", "com.apkpure.aegon", "3.17.23", 157879798L),
-    ListSeparator("B"),
-    AppInfo("Block Earth", "com.craft.earth", "2.42", 57879798L),
-    AppInfo("Bluestack", "app.bluestack", "1.0.0", 41534523L),
-    ListSeparator("C"),
-    AppInfo("Craft Pixel Art Rain", "com.lucky.fairy", "15", 4247204L),
-    AppInfo("Cutting Edge!", "com.cuttingedge", "0.16", 4289472412L),
-    AppInfo("Cyber Knights", "com..cyberknightselite", "2.9.4", 6174924L),
-    AppInfo("Guardians", "com.emagroups.cs", "1.2.3", 7782423L),
-))
+appAdapter.submitList(
+    listOf(
+        ListSeparator("A"),
+        AppInfo("AirPortal", "cn.airportal", "4.21", 1258291L),
+        AppInfo("Apex Legends Mobile", "com.ea.gp.apex", "1.2", 100258291L),
+        AppInfo("APKPure", "com.apkpure.aegon", "3.17.23", 157879798L),
+        ListSeparator("B"),
+        AppInfo("Block Earth", "com.craft.earth", "2.42", 57879798L),
+        AppInfo("Bluestack", "app.bluestack", "1.0.0", 41534523L),
+        ListSeparator("C"),
+        AppInfo("Craft Pixel Art Rain", "com.lucky.fairy", "15", 4247204L),
+        AppInfo("Cutting Edge!", "com.cuttingedge", "0.16", 4289472412L),
+        AppInfo("Cyber Knights", "com..cyberknightselite", "2.9.4", 6174924L),
+        AppInfo("Guardians", "com.emagroups.cs", "1.2.3", 7782423L),
+    )
+)
 
 RecyclerView(activity).adapter = appAdapter
 ```
@@ -237,6 +245,7 @@ RecyclerView(activity).adapter = appAdapter
 Please view the [CHANGELOG.md] file
 
 ## License
+
     Copyright (C) 2021 panpf <panpfpanpf@outlook.com>
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -252,82 +261,137 @@ Please view the [CHANGELOG.md] file
     limitations under the License.
 
 [platform_image]: https://img.shields.io/badge/Platform-Android-brightgreen.svg
+
 [api_image]: https://img.shields.io/badge/API-16%2B-orange.svg
+
 [api_link]: https://android-arsenal.com/api?level=16
+
 [release_icon]: https://img.shields.io/maven-central/v/io.github.panpf.assemblyadapter4/assemblyadapter
+
 [release_link]: https://repo1.maven.org/maven2/io/github/panpf/assemblyadapter4/
+
 [license_image]: https://img.shields.io/badge/License-Apache%202-blue.svg
+
 [license_link]: https://www.apache.org/licenses/LICENSE-2.0
 
 [CHANGELOG.md]: CHANGELOG.md
 
-[assemblyadapter-common-recycler-divider]: assemblyadapter-common-recycler-divider
 [assemblyadapter-list]: assemblyadapter-list
+
 [assemblyadapter-pager]: assemblyadapter-pager
+
 [assemblyadapter-pager2]: assemblyadapter-pager2
+
 [assemblyadapter-pager2-paging]: assemblyadapter-pager2-paging
+
 [assemblyadapter-recycler]: assemblyadapter-recycler
+
 [assemblyadapter-recycler-paging]: assemblyadapter-recycler-paging
 
 [docs_expandable_list_adapter]: docs/wiki/expandable_list_adapter.md
+
 [docs_grid_span]: docs/wiki/grid_span.md
-[docs_paging3]: ../../raw/master/docs/wiki/paging.md
+
+[docs_paging3]: docs/wiki/paging.md
+
 [docs_item_factory]: docs/wiki/item_factory.md
+
 [docs_single_data_adapter]: docs/wiki/single_data_adapter.md
+
 [docs_old_api_compat]: docs/wiki/old_api_compat.md
+
 [docs_concat_adapter]: docs/wiki/concat_adapter.md
+
 [docs_pager2]: docs/wiki/pager2.md
+
 [docs_recycler_divider]: docs/wiki/recycler_divider.md
+
 [docs_header_and_footer]: docs/wiki/header_and_footer.md
 
 [AssemblyAdapter]: assemblyadapter-common-core/src/main/java/com/github/panpf/assemblyadapter/AssemblyAdapter.kt
 
 [ItemFactory]: assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/ItemFactory.kt
+
 [Item]: assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/Item.kt
+
 [SimpleItemFactory]: assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/SimpleItemFactory.kt
+
 [BindingItemFactory]: assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/BindingItemFactory.kt
+
 [ViewItemFactory]: assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/ViewItemFactory.kt
 
 [AssemblyListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyListAdapter.kt
+
 [AssemblyExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyExpandableListAdapter.kt
+
 [AssemblySingleDataListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataListAdapter.kt
+
 [AssemblySingleDataExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataExpandableListAdapter.kt
+
 [ConcatListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatListAdapter.kt
+
 [ConcatExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatExpandableListAdapter.kt
 
 [AssemblyRecyclerAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyRecyclerAdapter.kt
+
 [AssemblyRecyclerListAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyRecyclerListAdapter.kt
+
+[AssemblySingleDataRecyclerListAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblySingleDataRecyclerListAdapter.kt
+
 [AssemblySingleDataRecyclerAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblySingleDataRecyclerAdapter.kt
+
 [AssemblyGridLayoutManager]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyGridLayoutManager.kt
+
 [AssemblyStaggeredGridLayoutManager]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyStaggeredGridLayoutManager.kt
 
 [AssemblyPagingDataAdapter]: assemblyadapter-recycler-paging/src/main/java/com/github/panpf/assemblyadapter/recycler/paging/AssemblyPagingDataAdapter.kt
+
 [AssemblyLoadStateAdapter]: assemblyadapter-recycler-paging/src/main/java/com/github/panpf/assemblyadapter/recycler/paging/AssemblyLoadStateAdapter.kt
 
 [ArrayPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayPagerAdapter.kt
+
 [ArrayFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayFragmentStatePagerAdapter.kt
+
 [AssemblyPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyPagerAdapter.kt
+
 [AssemblyFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyFragmentStatePagerAdapter.kt
+
 [AssemblySingleDataPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblySingleDataPagerAdapter.kt
+
 [AssemblySingleDataFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblySingleDataFragmentStatePagerAdapter.kt
+
 [ConcatPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatPagerAdapter.kt
+
 [ConcatFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatFragmentStatePagerAdapter.kt
 
 [ArrayFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/ArrayFragmentStateAdapter.kt
+
 [AssemblyFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateAdapter.kt
+
 [AssemblySingleDataFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateAdapter.kt
 
 [AssemblyPagingDataFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/AssemblyPagingDataFragmentStateAdapter.kt
+
 [AssemblyLoadStateFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/AssemblyLoadStateFragmentStateAdapter.kt
+
 [PagingDataFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/PagingDataFragmentStateAdapter.kt
+
 [LoadStateFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/LoadStateFragmentStateAdapter.kt
 
 [BaseAdapter]: https://developer.android.google.cn/reference/android/widget/BaseAdapter
+
 [RecyclerView.Adapter]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView.Adapter
+
 [ListAdapter]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/ListAdapter
+
 [BaseExpandableListAdapter]: https://developer.android.google.cn/reference/android/widget/BaseExpandableListAdapter
+
 [PagerAdapter]: https://developer.android.google.cn/reference/androidx/viewpager/widget/PagerAdapter
+
 [PagingDataAdapter]: https://developer.android.google.cn/reference/androidx/paging/PagingDataAdapter
+
 [LoadStateAdapter]: https://developer.android.google.cn/reference/androidx/paging/LoadStateAdapter
+
 [FragmentStatePagerAdapter]: https://developer.android.google.cn/reference/androidx/fragment/app/FragmentStatePagerAdapter
+
 [FragmentStateAdapter]: https://developer.android.google.cn/reference/androidx/viewpager2/adapter/FragmentStateAdapter
