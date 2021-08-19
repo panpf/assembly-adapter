@@ -38,10 +38,10 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 
 支持设置六种 divider，分别如下（以垂直滑动方向为例，横向滑动时换位即可）：
 
-* divider：显示在滑动方向上每个 item 的 bottom 边（最后一个 item 除外）
+* divider：显示在滑动方向上每个 item（最后一个 item 除外）的 bottom 边
 * firstDivider：显示在滑动方向上第一个 item 的 top 边
 * lastDivider：显示在滑动方向上最后一个 item 的 bottom 边
-* sideDivider：显示在非滑动方向上每个 item 的 right 边（最后一个 item 除外）。`LinearDividerItemDecoration 不支持`
+* sideDivider：显示在非滑动方向上每个 item（最后一个 item 除外）的 right 边。`LinearDividerItemDecoration 不支持`
 * firstSideDivider：显示在非滑动方向上第一个 item 的 left 边
 * lastSideDivider：显示在非滑动方向上最后一个 item 的 right 边
 
@@ -64,7 +64,7 @@ val linearDividerItemDecoration = AssemblyLinearDividerItemDecoration.Builder(co
     // divider 为红色 5 个像素
     divider(Divider.color(Color.RED, 5)) {
         personaliseByItemFactoryClass(
-          ListSeparatorItemFactory::class, 
+          ListSeparatorItemFactory::class,
           Divider.color(Color.BLUE, 5)
         )
     }
@@ -116,5 +116,11 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 [AssemblyDividerExtensions.kt]: ../../assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/divider/AssemblyDividerExtensions.kt
 
 [RecyclerView]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView
+
+[LinearLayoutManager]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/LinearLayoutManager
+
+[GridLayoutManager]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/LinearLayoutManager
+
+[StaggeredGridLayoutManager]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/StaggeredGridLayoutManager
 
 [ItemDecoration]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration
