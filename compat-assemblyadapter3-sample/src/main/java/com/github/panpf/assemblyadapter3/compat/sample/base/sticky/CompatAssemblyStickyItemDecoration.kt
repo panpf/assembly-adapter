@@ -6,8 +6,7 @@ import com.github.panpf.assemblyadapter3.compat.CompatAssemblyAdapter
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyItemFactory
 import kotlin.reflect.KClass
 
-class CompatAssemblyStickyItemDecoration :
-    StickyItemDecoration {
+class CompatAssemblyStickyItemDecoration : StickyItemDecoration {
 
     private val stickyItemFactoryList: List<Class<out CompatAssemblyItemFactory<*>>>
     private var findItemFactoryClassByPosition: (adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>? =

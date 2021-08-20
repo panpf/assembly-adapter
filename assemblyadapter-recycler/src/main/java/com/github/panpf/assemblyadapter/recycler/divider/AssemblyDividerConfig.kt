@@ -50,7 +50,7 @@ class AssemblyDividerConfig constructor(
 
     fun toAssemblyItemDividerConfig(
         context: Context,
-        findItemFactoryClassByPosition: FindItemFactoryClassByPosition
+        findItemFactoryClassSupport: FindItemFactoryClassSupport
     ): AssemblyItemDividerConfig {
         val personaliseByPositionItemDividerArray = personaliseByPositionArray?.let { oldArray ->
             SparseArrayCompat<ItemDivider>().apply {
@@ -81,7 +81,7 @@ class AssemblyDividerConfig constructor(
             personaliseByPositionItemDividerArray,
             personaliseBySpanIndexItemDividerArray,
             personaliseByItemFactoryClassMap,
-            findItemFactoryClassByPosition
+            findItemFactoryClassSupport
         )
     }
 

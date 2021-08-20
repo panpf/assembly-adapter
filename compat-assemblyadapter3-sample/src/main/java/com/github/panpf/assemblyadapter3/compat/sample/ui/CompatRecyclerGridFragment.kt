@@ -65,7 +65,7 @@ class CompatRecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
                     disableByItemFactoryClass(TextItem.Factory::class)
                     disableByItemFactoryClass(ListSeparatorItem.Factory::class)
                 }
-                findItemFactoryClassByPosition { adapter, position ->
+                findItemFactoryClassSupport { adapter, position ->
                     if (adapter is CompatAssemblyAdapter) {
                         adapter.getItemFactoryByPosition(position).javaClass
                     } else {

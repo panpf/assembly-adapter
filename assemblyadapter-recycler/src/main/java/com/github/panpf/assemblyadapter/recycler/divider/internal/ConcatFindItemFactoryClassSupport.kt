@@ -17,16 +17,16 @@ package com.github.panpf.assemblyadapter.recycler.divider.internal
 
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper
-import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassSupport
 
-class ConcatFindItemFactoryClassByPosition(private val findItemFactoryClassByPosition: FindItemFactoryClassByPosition) :
-    FindItemFactoryClassByPosition {
+class ConcatFindItemFactoryClassSupport(private val findItemFactoryClassSupport: FindItemFactoryClassSupport) :
+    FindItemFactoryClassSupport {
 
     private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
 
-    override fun findItemFactoryClass(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
+    override fun findItemFactoryClassByPosition(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
         val (localAdapter, localPosition) = concatAdapterLocalHelper
             .findLocalAdapterAndPosition(adapter, position)
-        return findItemFactoryClassByPosition.findItemFactoryClass(localAdapter, localPosition)
+        return findItemFactoryClassSupport.findItemFactoryClassByPosition(localAdapter, localPosition)
     }
 }

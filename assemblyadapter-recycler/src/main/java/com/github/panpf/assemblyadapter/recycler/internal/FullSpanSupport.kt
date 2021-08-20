@@ -13,19 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler.divider.internal
+package com.github.panpf.assemblyadapter.recycler.internal
 
-import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.ItemFactory
 
-class AssemblyFindItemFactoryClassByPosition : FindItemFactoryClassByPosition {
-
-    override fun findItemFactoryClass(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
-        return if (adapter is AssemblyAdapter<*>) {
-            adapter.getItemFactoryByPosition(position).javaClass
-        } else {
-            null
-        }
-    }
+interface FullSpanSupport {
+    fun isFullSpanByItemFactory(itemFactory: ItemFactory<*>): Boolean
 }

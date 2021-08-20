@@ -21,10 +21,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper
-import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassByPosition
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDividerProvider
-import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 
 /**
  * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、first or last divider、side divider、fist or last side divider
@@ -53,7 +53,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private var showLastSideDivider = false
 
         private var isFullSpanByPosition: IsFullSpanByPosition? = null
-        private var findItemFactoryClassByPosition: FindItemFactoryClassByPosition? = null
+        private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
         fun build(): AssemblyStaggeredGridDividerItemDecoration {
             return AssemblyStaggeredGridDividerItemDecoration(
@@ -75,8 +75,8 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                 }
 
             val finalFindItemFactoryClassByPosition =
-                (findItemFactoryClassByPosition ?: AssemblyFindItemFactoryClassByPosition()).run {
-                    ConcatFindItemFactoryClassByPosition(this)
+                (findItemFactoryClassSupport ?: AssemblyFindItemFactoryClassSupport()).run {
+                    ConcatFindItemFactoryClassSupport(this)
                 }
 
             return StaggeredGridItemDividerProvider(
@@ -350,10 +350,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         }
 
         /**
-         * Set up the interface to find ItemFactory class based on position
+         * Set up the interface to find ItemFactory class
          */
-        fun findItemFactoryClassByPosition(findItemFactoryClassByPosition: FindItemFactoryClassByPosition?): Builder {
-            this.findItemFactoryClassByPosition = findItemFactoryClassByPosition
+        fun findItemFactoryClassSupport(findItemFactoryClassSupport: FindItemFactoryClassSupport?): Builder {
+            this.findItemFactoryClassSupport = findItemFactoryClassSupport
             return this
         }
 
@@ -368,8 +368,8 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                     val layoutManager = parent.layoutManager
                     val (localAdapter, localPosition) = concatAdapterLocalHelper
                         .findLocalAdapterAndPosition(adapter, position)
-                    if (localAdapter is AssemblyAdapter<*> && layoutManager is IsFullSpanByItemFactory) {
-                        layoutManager.isFullSpan(localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>)
+                    if (localAdapter is AssemblyAdapter<*> && layoutManager is FullSpanSupport) {
+                        layoutManager.isFullSpanByItemFactory(localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>)
                     } else {
                         false
                     }

@@ -17,8 +17,8 @@ package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
 import androidx.recyclerview.widget.GridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassByPosition
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassByPosition
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDividerProvider
 
 /**
@@ -44,7 +44,7 @@ open class AssemblyGridDividerItemDecoration(
         private var showFirstSideDivider = false
         private var showLastSideDivider = false
 
-        private var findItemFactoryClassByPosition: FindItemFactoryClassByPosition? = null
+        private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
         fun build(): AssemblyGridDividerItemDecoration {
             return AssemblyGridDividerItemDecoration(buildItemDividerProvider())
@@ -63,8 +63,8 @@ open class AssemblyGridDividerItemDecoration(
                 }
 
             val finalFindItemFactoryClassByPosition =
-                (findItemFactoryClassByPosition ?: AssemblyFindItemFactoryClassByPosition()).run {
-                    ConcatFindItemFactoryClassByPosition(this)
+                (findItemFactoryClassSupport ?: AssemblyFindItemFactoryClassSupport()).run {
+                    ConcatFindItemFactoryClassSupport(this)
                 }
 
             return GridItemDividerProvider(
@@ -333,10 +333,10 @@ open class AssemblyGridDividerItemDecoration(
 
 
         /**
-         * Set up the interface to find ItemFactory class based on position
+         * Set up the interface to find ItemFactory class
          */
-        fun findItemFactoryClassByPosition(findItemFactoryClassByPosition: FindItemFactoryClassByPosition?): Builder {
-            this.findItemFactoryClassByPosition = findItemFactoryClassByPosition
+        fun findItemFactoryClassSupport(findItemFactoryClassSupport: FindItemFactoryClassSupport?): Builder {
+            this.findItemFactoryClassSupport = findItemFactoryClassSupport
             return this
         }
     }

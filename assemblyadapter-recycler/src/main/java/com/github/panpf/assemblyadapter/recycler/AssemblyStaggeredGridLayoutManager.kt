@@ -19,13 +19,13 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import kotlin.reflect.KClass
 
 /**
  * An implementation of [AssemblyStaggeredGridLayoutManager]. Set the full span of [AssemblyStaggeredGridLayoutManager] according to [ItemFactory] as the identifier
  */
-class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, IsFullSpanByItemFactory {
+class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanSupport {
 
     private val fullSpanItemFactoryList: List<Class<out ItemFactory<*>>>
 
@@ -73,7 +73,7 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, IsFullSpa
         this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
 
-    override fun isFullSpan(itemFactory: ItemFactory<*>): Boolean {
+    override fun isFullSpanByItemFactory(itemFactory: ItemFactory<*>): Boolean {
         return fullSpanItemFactoryList.contains(itemFactory.javaClass)
     }
 }

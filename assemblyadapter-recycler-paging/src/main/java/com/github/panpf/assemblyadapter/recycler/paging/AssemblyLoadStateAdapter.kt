@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.internal.IsFullSpanByItemFactory
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
 /**
@@ -44,9 +44,9 @@ open class AssemblyLoadStateAdapter(
         return RecyclerViewHolderWrapper(item).apply {
             val layoutManager =
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
-            if (layoutManager is StaggeredGridLayoutManager && layoutManager is IsFullSpanByItemFactory) {
+            if (layoutManager is StaggeredGridLayoutManager && layoutManager is FullSpanSupport) {
                 (itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
-                    .isFullSpan = layoutManager.isFullSpan(itemFactory)
+                    .isFullSpan = layoutManager.isFullSpanByItemFactory(itemFactory)
             }
         }
     }
