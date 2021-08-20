@@ -13,8 +13,8 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 * `支持多类型`. 只需给 Adapter 添加多个 [ItemFactory] 即可轻松实现多类型 Adapter
 * `支持全部 Adapter`. 支持 [BaseAdapter]、[RecyclerView.Adapter] 等常用 Adapter. [了解更多](#support_adapters)
 * `更多 ConcatAdapter 支持`. 为 BaseAdapter 等更多 Adapter 提供了 Concat 支持. [了解更多][docs_concat_adapter]
-* `支持 Paging 3.0`. 为 Paging 3.0 提供了多类型支持. [了解更多][docs_paging3]
-* `支持 ViewPager2`. 为 ViewPager2 提供了多类型和 Paging 3.0 分页支持. [了解更多][docs_pager2]
+* `支持 Paging`. 为 Paging 提供了多类型支持. [了解更多][docs_paging]
+* `支持 ViewPager 和 ViewPager2`. 为 ViewPager 和 ViewPager2 提供了多类型及 Paging 分页支持. [了解更多][docs_pager]
 * `支持 spanSize 和 fullSpan`. 提供了专用的 LayoutManager，可以根据 ItemFactory 设置 spanSize 和
   fullSpan. [了解更多][docs_grid_span]
 * `RecyclerView divider 支持`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory
@@ -73,50 +73,49 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
 
 [AssemblyAdapter] 只是一个接口，不可以直接使用，你需要针对不同的 Adapter 使用具体的实现类，如下所示：
 
-* [assemblyadapter-list]:
+* [assemblyadapter-list]
     * [BaseAdapter]
-        * [AssemblyListAdapter]: 多类型 Adapter 实现
+        * [AssemblyListAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataListAdapter]：单数据实现
-        * [ConcatListAdapter]: 连接 Adapter 实现
+        * [ConcatListAdapter]：连接 Adapter 实现
     * [BaseExpandableListAdapter]
-        * [AssemblyExpandableListAdapter]: 多类型 Adapter 实现
+        * [AssemblyExpandableListAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataExpandableListAdapter]：单数据实现
-        * [ConcatExpandableListAdapter]: 连接 Adapter 实现
-* [assemblyadapter-pager]:
+        * [ConcatExpandableListAdapter]：连接 Adapter 实现
+* [assemblyadapter-pager]
     * [PagerAdapter]
-        * [AssemblyPagerAdapter]: 多类型 Adapter 实现
+        * [AssemblyPagerAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataPagerAdapter]：单数据实现
-        * [ConcatPagerAdapter]: 连接 Adapter 实现
-        * [ArrayPagerAdapter]: View 数组实现
-    * [FragmentStatePagerAdapter]:
-        * [AssemblyFragmentStatePagerAdapter]: 多类型 Adapter 实现
+        * [ConcatPagerAdapter]：连接 Adapter 实现
+        * [ArrayPagerAdapter]：View 数组实现
+    * [FragmentStatePagerAdapter]
+        * [AssemblyFragmentStatePagerAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataFragmentStatePagerAdapter]：单数据实现
-        * [ConcatFragmentStatePagerAdapter]: 连接 Adapter 实现
-        * [ArrayFragmentStatePagerAdapter]: Fragment 数组实现
-* [assemblyadapter-pager2]:
+        * [ConcatFragmentStatePagerAdapter]：连接 Adapter 实现
+        * [ArrayFragmentStatePagerAdapter]：Fragment 数组实现
+* [assemblyadapter-pager2]
     * [FragmentStateAdapter]
-        * [AssemblyFragmentStateAdapter]: 多类型 Adapter 实现
+        * [AssemblyFragmentStateAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataFragmentStateAdapter]：单数据实现
-        * [ArrayFragmentStateAdapter]: Fragment 数组实现
-* [assemblyadapter-pager2-paging]:
-    * [PagingDataFragmentStateAdapter]
-        * [AssemblyPagingDataFragmentStateAdapter]: 多类型 Adapter 实现
-    * [LoadStateFragmentStateAdapter]
-        * [AssemblyLoadStateFragmentStateAdapter]: Paging 加载状态 Adapter 实现
-* [assemblyadapter-recycler]:
+        * [ArrayFragmentStateAdapter]：Fragment 数组实现
+* [assemblyadapter-pager2-paging]
+    * [FragmentStateAdapter]
+        * [PagingDataFragmentStateAdapter]：Paging 实现
+        * [LoadStateFragmentStateAdapter]：LoadState 实现
+        * [AssemblyPagingDataFragmentStateAdapter]：多类型 + Paging Adapter 实现
+        * [AssemblyLoadStateFragmentStateAdapter]：多类型 + Paging 加载状态 Adapter 实现
+* [assemblyadapter-recycler]
     * [RecyclerView.Adapter]
-        * [AssemblyRecyclerAdapter]: 多类型 Adapter 实现
+        * [AssemblyRecyclerAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataRecyclerAdapter]：单数据实现
     * [ListAdapter]
-        * [AssemblyRecyclerListAdapter]: 多类型 Adapter 实现
-        *
-
-        [AssemblySingleDataRecyclerListAdapter]: 单数据实现
-* [assemblyadapter-recycler-paging]:
+        * [AssemblyRecyclerListAdapter]：多类型 Adapter 实现
+        * [AssemblySingleDataRecyclerListAdapter]：单数据实现
+* [assemblyadapter-recycler-paging]
     * [PagingDataAdapter]
-        * [AssemblyPagingDataAdapter]: 多类型 Adapter 实现
+        * [AssemblyPagingDataAdapter]：多类型 Adapter 实现
     * [LoadStateAdapter]
-        * [AssemblyLoadStateAdapter]: Paging 加载状态 Adapter 实现
+        * [AssemblyLoadStateAdapter]：Paging 加载状态 Adapter 实现
 
 ### 定义 ItemFactory
 
@@ -127,7 +126,6 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
 item 布局定义如下 (item_app_info.xml)：
 
 ```xml
-
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -234,8 +232,8 @@ RecyclerView(activity).adapter = appAdapter
 * [为 BaseAdapter 等更多 Adapter 提供 Concat 支持][docs_concat_adapter]
 * [给 RecyclerView 配置 divider][docs_recycler_divider]
 * [设置 spanSize 和 fullSpan][docs_grid_span]
-* [Paging 3.0 支持][docs_paging3]
-* [Pager2 支持][docs_pager2]
+* [支持 Paging][docs_paging]
+* [支持 ViewPager 和 ViewPager2][docs_pager]
 * [AssemblyExpandableListAdapter 使用详解][docs_expandable_list_adapter]
 * [通过 AssemblySingleData*Adapter 实现只有一条数据的 Adapter][docs_single_data_adapter]
 * [使用新版 4.* API 兼容旧版 3.* API][docs_old_api_compat]
@@ -292,7 +290,7 @@ Please view the [CHANGELOG.md] file
 
 [docs_grid_span]: docs/wiki/grid_span.md
 
-[docs_paging3]: docs/wiki/paging.md
+[docs_paging]: docs/wiki/paging.md
 
 [docs_item_factory]: docs/wiki/item_factory.md
 
@@ -302,7 +300,7 @@ Please view the [CHANGELOG.md] file
 
 [docs_concat_adapter]: docs/wiki/concat_adapter.md
 
-[docs_pager2]: docs/wiki/pager2.md
+[docs_pager]: docs/wiki/pager.md
 
 [docs_recycler_divider]: docs/wiki/recycler_divider.md
 
