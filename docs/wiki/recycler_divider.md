@@ -64,8 +64,8 @@ val linearDividerItemDecoration = AssemblyLinearDividerItemDecoration.Builder(co
     // divider 为红色 5 个像素
     divider(Divider.color(Color.RED, 5)) {
         personaliseByItemFactoryClass(
-          ListSeparatorItemFactory::class,
-          Divider.color(Color.BLUE, 5)
+            ListSeparatorItemFactory::class,
+            Divider.color(Color.BLUE, 5)
         )
     }
 }.build()
@@ -92,6 +92,21 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 * RecyclerView.addAssemblyLinearDividerItemDecoration()
 * RecyclerView.addAssemblyGridDividerItemDecoration()
 * RecyclerView.addAssemblyStaggeredGridDividerItemDecoration()
+
+### 更多示例
+
+* [RecyclerLinearDividerHorFragment]
+* [RecyclerLinearDividerVerFragment]
+* [RecyclerStaggeredGridDividerHorFragment]
+* [RecyclerStaggeredGridDividerVerFragment]
+
+[RecyclerLinearDividerHorFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerLinearDividerHorFragment.kt
+
+[RecyclerLinearDividerVerFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerLinearDividerVerFragment.kt
+
+[RecyclerStaggeredGridDividerHorFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerStaggeredGridDividerHorFragment.kt
+
+[RecyclerStaggeredGridDividerVerFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerStaggeredGridDividerVerFragment.kt
 
 [ItemFactory]: ../../assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/ItemFactory.kt
 

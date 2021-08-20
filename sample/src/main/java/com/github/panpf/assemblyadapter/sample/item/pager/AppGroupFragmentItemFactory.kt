@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.sample.item.pager
 import androidx.fragment.app.Fragment
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
+import com.github.panpf.assemblyadapter.sample.ui.pager.AppGroupFragment
 
 class AppGroupFragmentItemFactory : FragmentItemFactory<AppGroup>(AppGroup::class) {
 

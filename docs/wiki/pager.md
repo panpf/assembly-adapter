@@ -57,6 +57,49 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 、[AssemblyPagingDataFragmentStateAdapter]、[AssemblyLoadStateFragmentStateAdapter]
 来为 [FragmentStateAdapter] 提供 Paging 支持，用法同 [PagingDataAdapter] 和  [AssemblyPagingDataAdapter] 一样
 
+### 更多示例
+
+* item
+    * [AppGroupPagerItemFactory]
+    * [AppGroupFragmentItemFactory]
+* PagerAdapter
+    * [PagerViewArrayFragment]
+    * [PagerViewFragment]
+    * [PagerViewPlaceholderFragment]
+* PagerFragmentStatePagerAdapter
+    * [PagerFragmentArrayFragment]
+    * [PagerFragmentFragment]
+    * [PagerFragmentPlaceholderFragment]
+* PagerFragmentStateAdapter
+    * [Pager2FragmentArrayFragment]
+    * [Pager2FragmentFragment]
+    * [Pager2FragmentPagingFragment]
+    * [Pager2FragmentPlaceholderFragment]
+
+[AppGroupPagerItemFactory]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/item/pager/AppGroupPagerItemFactory.kt
+
+[AppGroupFragmentItemFactory]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/item/pager/AppGroupFragmentItemFactory.kt
+
+[PagerViewArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewArrayFragment.kt
+
+[PagerViewFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewFragment.kt
+
+[PagerViewPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewPlaceholderFragment.kt
+
+[PagerFragmentArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentArrayFragment.kt
+
+[PagerFragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentFragment.kt
+
+[PagerFragmentPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentPlaceholderFragment.kt
+
+[Pager2FragmentArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentArrayFragment.kt
+
+[Pager2FragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentFragment.kt
+
+[Pager2FragmentPagingFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentPagingFragment.kt
+
+[Pager2FragmentPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentPlaceholderFragment.kt
+
 [README]: ../../README.md
 
 [AssemblyPagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyPagerAdapter.kt

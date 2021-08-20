@@ -9,6 +9,20 @@ AssemblyAdapter 为常用的几种 Adapter 提供了 Concat 支持，如下：
 
 用法和 [ConcatAdapter] 一样，也能实现 header 和 footer [了解更多](header_and_footer.md)
 
+### 更多示例
+
+* [ListFragment]
+* [ExpandableListFragment]
+* [PagerViewFragment]
+* [Pager2FragmentFragment]
+
+[ListFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/list/ListFragment.kt
+
+[ExpandableListFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/list/ExpandableListFragment.kt
+
+[PagerViewFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewFragment.kt
+
+[Pager2FragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentFragment.kt
 
 [ConcatListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatListAdapter.kt
 

@@ -1,9 +1,9 @@
 # 设置 spanSize 和 fullSpan
 
-[RecyclerView] 的 [GridLayoutManager] 和 [StaggeredGridLayoutManager] 支持让一个 item 横跨多列显示，但 API
-使用起来较为复杂
+[RecyclerView] 的 [GridLayoutManager] 和 [StaggeredGridLayoutManager] 支持让一个 item 横跨多列显示，但 API 使用起来较为复杂
 
-AssemblyAdapter 将相应 API 进行了封装提供了 [AssemblyGridLayoutManager] 和 [AssemblyStaggeredGridLayoutManager]，可以通过 ItemFactory 来设置 spanSize 或 fullSpan，使用起来更方便
+AssemblyAdapter 将相应 API 进行了封装提供了 [AssemblyGridLayoutManager] 和 [AssemblyStaggeredGridLayoutManager]
+，可以通过 ItemFactory 来设置 spanSize 或 fullSpan，使用起来更方便
 
 ### 示例
 
@@ -31,8 +31,8 @@ RecyclerView(context).apply {
 }
 
 /**
-  * AssemblyStaggeredGridLayoutManager
-  */
+ * AssemblyStaggeredGridLayoutManager
+ */
 RecyclerView(context).apply {
     adapter = AssemblyRecyclerAdapter<Any>(
         listOf(
@@ -52,6 +52,15 @@ RecyclerView(context).apply {
     )
 }
 ```
+
+### 更多示例
+
+* [RecyclerGridFragment]
+* [RecyclerStaggeredGridFragment]
+
+[RecyclerGridFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerGridFragment.kt
+
+[RecyclerStaggeredGridFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerStaggeredGridFragment.kt
 
 [AssemblyGridLayoutManager]: ../../assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyGridLayoutManager.kt
 

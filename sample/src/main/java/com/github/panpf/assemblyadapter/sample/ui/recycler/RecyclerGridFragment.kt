@@ -58,9 +58,9 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = AssemblyGridLayoutManager(
-                requireContext(),
-                3,
-                mapOf(
+                context = requireContext(),
+                spanCount = 3,
+                gridLayoutItemSpanMap = mapOf(
                     AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
                     ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
                     LoadStateItemFactory::class to ItemSpan.fullSpan()

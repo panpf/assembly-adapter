@@ -17,8 +17,9 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 * `支持 ViewPager 和 ViewPager2`. 为 ViewPager 和 ViewPager2 提供了多类型及 Paging 分页支持. [了解更多][docs_pager]
 * `支持 spanSize 和 fullSpan`. 提供了专用的 LayoutManager，可以根据 ItemFactory 设置 spanSize 和
   fullSpan. [了解更多][docs_grid_span]
-* `RecyclerView divider 支持`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory
+* `支持 divider`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory
   个性化或禁用 divider. [了解更多][docs_recycler_divider]
+* `支持占位符`. 通过固定的占位符数据类型支持占位符. [了解更多][docs_placeholder]
 
 ## 导入
 
@@ -126,6 +127,7 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
 item 布局定义如下 (item_app_info.xml)：
 
 ```xml
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -234,8 +236,9 @@ RecyclerView(activity).adapter = appAdapter
 * [设置 spanSize 和 fullSpan][docs_grid_span]
 * [支持 Paging][docs_paging]
 * [支持 ViewPager 和 ViewPager2][docs_pager]
-* [AssemblyExpandableListAdapter 使用详解][docs_expandable_list_adapter]
+* [BaseExpandableListAdapter 支持][docs_expandable_list_adapter]
 * [通过 AssemblySingleData*Adapter 实现只有一条数据的 Adapter][docs_single_data_adapter]
+* [使用占位符][docs_placeholder]
 * [使用新版 4.* API 兼容旧版 3.* API][docs_old_api_compat]
 
 ## 更新日志
@@ -305,6 +308,8 @@ Please view the [CHANGELOG.md] file
 [docs_recycler_divider]: docs/wiki/recycler_divider.md
 
 [docs_header_and_footer]: docs/wiki/header_and_footer.md
+
+[docs_placeholder]: docs/wiki/placeholder.md
 
 [AssemblyAdapter]: assemblyadapter-common-core/src/main/java/com/github/panpf/assemblyadapter/AssemblyAdapter.kt
 

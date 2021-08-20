@@ -18,3 +18,18 @@ headerAdapter.submitList(headerDataList)
 
 AssemblyAdapter 也为 BaseAdapter、BaseExpandableListAdapter、PagerAdapter、FragmentStatePagerAdapter
 提供了专用的 ConcatAdapter 实现（[了解更多](concat_adapter.md)），因此这些 Adapter 也可以轻的实现 header 和 footer
+
+### 更多示例
+
+* [ListFragment]
+* [ExpandableListFragment]
+* [PagerViewFragment]
+* [Pager2FragmentFragment]
+
+[ListFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/list/ListFragment.kt
+
+[ExpandableListFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/list/ExpandableListFragment.kt
+
+[PagerViewFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewFragment.kt
+
+[Pager2FragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentFragment.kt

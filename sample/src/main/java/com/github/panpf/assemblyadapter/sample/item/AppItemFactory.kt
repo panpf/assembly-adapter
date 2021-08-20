@@ -15,6 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.sample.item
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.text.format.Formatter
@@ -22,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
@@ -42,7 +44,7 @@ class AppItemFactory(private val activity: Activity, private val showBg: Boolean
         context: Context, binding: ItemAppBinding, item: BindingItem<AppInfo, ItemAppBinding>
     ) {
         if (!showBg) {
-            binding.root.setBackgroundDrawable(null)
+            ViewCompat.setBackground(binding.root, null)
         }
 
         binding.root.setOnClickListener {
@@ -78,6 +80,7 @@ class AppItemFactory(private val activity: Activity, private val showBg: Boolean
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindItemData(
         context: Context,
         binding: ItemAppBinding,

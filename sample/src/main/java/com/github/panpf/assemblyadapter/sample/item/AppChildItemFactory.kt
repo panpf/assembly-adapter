@@ -15,6 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.sample.item
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.text.format.Formatter
@@ -22,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
 import com.github.panpf.assemblyadapter.list.BindingExpandableChildItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
@@ -30,7 +32,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemAppBinding
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
-class AppChildItemFactory(private val activity: Activity) :
+class AppChildItemFactory(private val activity: Activity, private val showBg: Boolean = false) :
     BindingExpandableChildItemFactory<AppGroup, AppInfo, ItemAppBinding>(AppInfo::class) {
 
     override fun createItemViewBinding(
@@ -43,6 +45,10 @@ class AppChildItemFactory(private val activity: Activity) :
         context: Context, binding: ItemAppBinding,
         item: BindingExpandableChildItem<AppGroup, AppInfo, ItemAppBinding>
     ) {
+        if (!showBg) {
+            ViewCompat.setBackground(binding.root, null)
+        }
+
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val launchIntent =
@@ -80,6 +86,7 @@ class AppChildItemFactory(private val activity: Activity) :
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindItemData(
         context: Context,
         binding: ItemAppBinding,

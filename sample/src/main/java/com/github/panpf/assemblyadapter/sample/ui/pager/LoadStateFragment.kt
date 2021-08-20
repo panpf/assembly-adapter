@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.sample.item.pager
+package com.github.panpf.assemblyadapter.sample.ui.pager
 
 import android.os.Bundle
 import android.view.LayoutInflater

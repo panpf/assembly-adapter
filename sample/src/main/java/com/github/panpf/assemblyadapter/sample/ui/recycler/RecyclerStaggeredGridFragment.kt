@@ -61,8 +61,8 @@ class RecyclerStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBindin
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager =
                 AssemblyStaggeredGridLayoutManager(
-                    3,
-                    listOf(
+                    spanCount = 3,
+                    fullSpanItemFactoryList = listOf(
                         AppsOverviewItemFactory::class,
                         ListSeparatorItemFactory::class,
                         LoadStateItemFactory::class

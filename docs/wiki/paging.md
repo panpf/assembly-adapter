@@ -23,6 +23,17 @@ areContentsTheSame 方法
 
 [AssemblyLoadStateAdapter] 用来代替 [LoadStateAdapter]
 
+### 更多示例
+
+* [RecyclerGridPagingFragment]
+* [RecyclerLinearPagingFragment]
+* [RecyclerStaggeredGridPagingFragment]
+
+[RecyclerGridPagingFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerGridPagingFragment.kt
+
+[RecyclerLinearPagingFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerLinearPagingFragment.kt
+
+[RecyclerStaggeredGridPagingFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerStaggeredGridPagingFragment.kt
 
 [README]: ../../README.md
 
