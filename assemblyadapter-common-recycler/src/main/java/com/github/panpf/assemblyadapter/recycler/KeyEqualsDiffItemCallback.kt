@@ -47,12 +47,15 @@ class KeyEqualsDiffItemCallback<DATA : Any?> : DiffUtil.ItemCallback<DATA>() {
 
         @JvmStatic
         fun checkDataClass(dataClassList: List<KClass<*>>) {
-            dataClassList.forEach { dataClass ->
-                if (!DiffKey::class.java.isAssignableFrom(dataClass.java)) {
-                    throw IllegalArgumentException(
-                        "Because you use KeyEqualsDiffItemCallback, so '${dataClass.qualifiedName}' must implement the DiffKey interface"
-                    )
-                }
+            val diffKeyClass = DiffKey::class.java
+            val errorDataClassList =
+                dataClassList.filter { !diffKeyClass.isAssignableFrom(it.java) }
+            if (errorDataClassList.isNotEmpty()) {
+                val errorDataClassNames =
+                    errorDataClassList.joinToString { it.qualifiedName.orEmpty() }
+                throw IllegalArgumentException(
+                    "Because you use KeyEqualsDiffItemCallback, so '$errorDataClassNames' must implement the DiffKey interface"
+                )
             }
         }
     }
