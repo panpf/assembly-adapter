@@ -19,7 +19,7 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
   fullSpan. [了解更多][docs_grid_span]
 * `支持 divider`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory
   个性化或禁用 divider. [了解更多][docs_recycler_divider]
-* `支持占位符`. 通过固定的占位符数据类型支持占位符. [了解更多][docs_placeholder]
+* `支持占位符 Placeholder`. 通过固定的占位符数据类型支持占位符. [了解更多][docs_placeholder]
 
 ## 导入
 
@@ -238,7 +238,7 @@ RecyclerView(activity).adapter = appAdapter
 * [支持 ViewPager 和 ViewPager2][docs_pager]
 * [BaseExpandableListAdapter 支持][docs_expandable_list_adapter]
 * [通过 AssemblySingleData*Adapter 实现只有一条数据的 Adapter][docs_single_data_adapter]
-* [使用占位符][docs_placeholder]
+* [使用占位符 Placeholder][docs_placeholder]
 * [使用新版 4.* API 兼容旧版 3.* API][docs_old_api_compat]
 
 ## 更新日志

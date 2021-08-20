@@ -24,7 +24,11 @@ AssemblyAdapter 也为 BaseAdapter、BaseExpandableListAdapter、PagerAdapter、
 * [ListFragment]
 * [ExpandableListFragment]
 * [PagerViewFragment]
+* [PagerFragmentFragment]
 * [Pager2FragmentFragment]
+* [RecyclerLinearFragment]
+* [RecyclerGridFragment]
+* [RecyclerStaggeredGridFragment]
 
 [ListFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/list/ListFragment.kt
 
@@ -32,4 +36,12 @@ AssemblyAdapter 也为 BaseAdapter、BaseExpandableListAdapter、PagerAdapter、
 
 [PagerViewFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewFragment.kt
 
+[PagerFragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentFragment.kt
+
 [Pager2FragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentFragment.kt
+
+[RecyclerLinearFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerLinearFragment.kt
+
+[RecyclerGridFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerGridFragment.kt
+
+[RecyclerStaggeredGridFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerStaggeredGridFragment.kt
