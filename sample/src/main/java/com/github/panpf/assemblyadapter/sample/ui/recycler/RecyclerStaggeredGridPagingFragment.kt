@@ -78,7 +78,7 @@ class RecyclerStaggeredGridPagingFragment : BaseBindingFragment<FragmentRecycler
                 }
                 sideDivider(Divider.space(20.dp2px))
 
-                firstAndLastSideDivider(Divider.space(20.dp2px)) {
+                headerAndFooterSideDivider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(AppsOverviewItemFactory::class)
                     disableByItemFactoryClass(ListSeparatorItemFactory::class)
                 }

@@ -20,10 +20,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 class LinearItemDividerProvider(
     private val dividerConfig: ItemDividerConfig,
-    private val firstDividerConfig: ItemDividerConfig?,
-    private val lastDividerConfig: ItemDividerConfig?,
-    private val firstSideDividerConfig: ItemDividerConfig?,
-    private val lastSideDividerConfig: ItemDividerConfig?,
+    private val headerDividerConfig: ItemDividerConfig?,
+    private val footerDividerConfig: ItemDividerConfig?,
+    private val headerSideDividerConfig: ItemDividerConfig?,
+    private val footerSideDividerConfig: ItemDividerConfig?,
 ) {
 
     fun getItemDivider(
@@ -31,25 +31,24 @@ class LinearItemDividerProvider(
         parent: RecyclerView,
         itemCount: Int,
         position: Int,
+        isFirst: Boolean,
+        isLast: Boolean,
         isVerticalOrientation: Boolean,
         dividerType: ItemDivider.Type,
     ): ItemDivider? {
-        if (itemCount == 0) return null
-        val isFirst = position == 0
-        val isLast = position == itemCount - 1
         return if (isVerticalOrientation) {
             when (dividerType) {
-                ItemDivider.Type.START -> firstSideDividerConfig
-                ItemDivider.Type.TOP -> if (isFirst) firstDividerConfig else null
-                ItemDivider.Type.END -> lastSideDividerConfig
-                ItemDivider.Type.BOTTOM -> if (isLast) lastDividerConfig else dividerConfig
+                ItemDivider.Type.START -> headerSideDividerConfig
+                ItemDivider.Type.TOP -> if (isFirst) headerDividerConfig else null
+                ItemDivider.Type.END -> footerSideDividerConfig
+                ItemDivider.Type.BOTTOM -> if (isLast) footerDividerConfig else dividerConfig
             }
         } else {
             when (dividerType) {
-                ItemDivider.Type.START -> if (isFirst) firstDividerConfig else null
-                ItemDivider.Type.TOP -> firstSideDividerConfig
-                ItemDivider.Type.END -> if (isLast) lastDividerConfig else dividerConfig
-                ItemDivider.Type.BOTTOM -> lastSideDividerConfig
+                ItemDivider.Type.START -> if (isFirst) headerDividerConfig else null
+                ItemDivider.Type.TOP -> headerSideDividerConfig
+                ItemDivider.Type.END -> if (isLast) footerDividerConfig else dividerConfig
+                ItemDivider.Type.BOTTOM -> footerSideDividerConfig
             }
         }?.get(parent, position, 0)
     }

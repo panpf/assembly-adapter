@@ -27,11 +27,11 @@ val linearDividerItemDecoration = LinearDividerItemDecoration.Builder(context).a
         disableByPosition(5)
     }
 
-    // 第一个和最后一个 divider 为空白 20 个像素（默认不显示第一个和最后一个 divider）
-    firstAndLastDivider(Divider.space(20))
+    // 头部和尾巴 divider 为空白 20 个像素（默认不显示头部和尾巴 divider）
+    headerAndFooterDivider(Divider.space(20))
 
-    // 第一个和最后一个 side divider 为绿色 5 个像素
-    firstAndLastSideDivider(Divider.color(Color.GREEN, 5))
+    // 头部和尾巴 side divider 为绿色 5 个像素
+    headerAndFooterSideDivider(Divider.color(Color.GREEN, 5))
 }.build()
 recyclerView.addItemDecoration(linearDividerItemDecoration)
 ```
@@ -39,11 +39,11 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 支持设置六种 divider，分别如下（以垂直滑动方向为例，横向滑动时换位即可）：
 
 * divider：显示在滑动方向上每个 item（最后一个 item 除外）的 bottom 边
-* firstDivider：显示在滑动方向上第一个 item 的 top 边
-* lastDivider：显示在滑动方向上最后一个 item 的 bottom 边
+* headerDivider：显示在滑动方向上第一个 item 的 top 边
+* footerDivider：显示在滑动方向上最后一个 item 的 bottom 边
 * sideDivider：显示在非滑动方向上每个 item（最后一个 item 除外）的 right 边。`LinearDividerItemDecoration 不支持`
-* firstSideDivider：显示在非滑动方向上第一个 item 的 left 边
-* lastSideDivider：显示在非滑动方向上最后一个 item 的 right 边
+* headerSideDivider：显示在非滑动方向上第一个 item 的 left 边
+* footerSideDivider：显示在非滑动方向上最后一个 item 的 right 边
 
 ### ItemFactory 支持
 

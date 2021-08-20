@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 class GridItemDividerProvider(
     private val dividerConfig: ItemDividerConfig,
-    private val firstDividerConfig: ItemDividerConfig?,
-    private val lastDividerConfig: ItemDividerConfig?,
+    private val headerDividerConfig: ItemDividerConfig?,
+    private val footerDividerConfig: ItemDividerConfig?,
     private val sideDividerConfig: ItemDividerConfig?,
-    private val firstSideDividerConfig: ItemDividerConfig?,
-    private val lastSideDividerConfig: ItemDividerConfig?,
+    private val headerSideDividerConfig: ItemDividerConfig?,
+    private val footerSideDividerConfig: ItemDividerConfig?,
 ) {
 
     fun getItemDivider(
@@ -47,17 +47,17 @@ class GridItemDividerProvider(
     ): ItemDivider? {
         return if (isVerticalOrientation) {
             when (dividerType) {
-                ItemDivider.Type.START -> if (isFirstSpan) firstSideDividerConfig else null
-                ItemDivider.Type.TOP -> if (isFirstGroup) firstDividerConfig else null
-                ItemDivider.Type.END -> if (isLastSpan) lastSideDividerConfig else sideDividerConfig
-                ItemDivider.Type.BOTTOM -> if (isLastGroup) lastDividerConfig else dividerConfig
+                ItemDivider.Type.START -> if (isFirstSpan) headerSideDividerConfig else null
+                ItemDivider.Type.TOP -> if (isFirstGroup) headerDividerConfig else null
+                ItemDivider.Type.END -> if (isLastSpan) footerSideDividerConfig else sideDividerConfig
+                ItemDivider.Type.BOTTOM -> if (isLastGroup) footerDividerConfig else dividerConfig
             }
         } else {
             when (dividerType) {
-                ItemDivider.Type.START -> if (isFirstGroup) firstDividerConfig else null
-                ItemDivider.Type.TOP -> if (isFirstSpan) firstSideDividerConfig else null
-                ItemDivider.Type.END -> if (isLastGroup) lastDividerConfig else dividerConfig
-                ItemDivider.Type.BOTTOM -> if (isLastSpan) lastSideDividerConfig else sideDividerConfig
+                ItemDivider.Type.START -> if (isFirstGroup) headerDividerConfig else null
+                ItemDivider.Type.TOP -> if (isFirstSpan) headerSideDividerConfig else null
+                ItemDivider.Type.END -> if (isLastGroup) footerDividerConfig else dividerConfig
+                ItemDivider.Type.BOTTOM -> if (isLastSpan) footerSideDividerConfig else sideDividerConfig
             }
         }?.get(parent, position, spanIndex)
     }

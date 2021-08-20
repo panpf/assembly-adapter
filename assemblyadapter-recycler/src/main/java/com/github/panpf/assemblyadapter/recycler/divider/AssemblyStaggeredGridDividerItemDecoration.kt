@@ -27,7 +27,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridI
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 
 /**
- * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、first or last divider、side divider、fist or last side divider
+ * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  *
  * On the basis of [StaggeredGridDividerItemDecoration], the divider can be disabled or personalized according to the ItemFactory class
  */
@@ -41,16 +41,16 @@ open class AssemblyStaggeredGridDividerItemDecoration(
     class Builder(val context: Context) {
 
         private var dividerConfig: AssemblyDividerConfig? = null
-        private var firstDividerConfig: AssemblyDividerConfig? = null
-        private var lastDividerConfig: AssemblyDividerConfig? = null
-        private var showFirstDivider = false
-        private var showLastDivider = false
+        private var headerDividerConfig: AssemblyDividerConfig? = null
+        private var footerDividerConfig: AssemblyDividerConfig? = null
+        private var useDividerAsHeaderDivider = false
+        private var useDividerAsFooterDivider = false
 
         private var sideDividerConfig: AssemblyDividerConfig? = null
-        private var firstSideDividerConfig: AssemblyDividerConfig? = null
-        private var lastSideDividerConfig: AssemblyDividerConfig? = null
-        private var showFirstSideDivider = false
-        private var showLastSideDivider = false
+        private var headerSideDividerConfig: AssemblyDividerConfig? = null
+        private var footerSideDividerConfig: AssemblyDividerConfig? = null
+        private var useSideDividerAsHeaderSideDivider = false
+        private var useSideDividerAsFooterSideDivider = false
 
         private var isFullSpanByPosition: IsFullSpanByPosition? = null
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
@@ -82,19 +82,19 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             return StaggeredGridItemDividerProvider(
                 dividerConfig = finalDividerConfig
                     .toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                firstDividerConfig = (firstDividerConfig
-                    ?: if (showFirstDivider) finalDividerConfig else null)
+                headerDividerConfig = (headerDividerConfig
+                    ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                lastDividerConfig = (lastDividerConfig
-                    ?: if (showLastDivider) finalDividerConfig else null)
+                footerDividerConfig = (footerDividerConfig
+                    ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 sideDividerConfig = sideDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                firstSideDividerConfig = (firstSideDividerConfig
-                    ?: if (showFirstSideDivider) sideDividerConfig else null)
+                headerSideDividerConfig = (headerSideDividerConfig
+                    ?: if (useSideDividerAsHeaderSideDivider) sideDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                lastSideDividerConfig = (lastSideDividerConfig
-                    ?: if (showLastSideDivider) sideDividerConfig else null)
+                footerSideDividerConfig = (footerSideDividerConfig
+                    ?: if (useSideDividerAsFooterSideDivider) sideDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
             )
         }
@@ -124,100 +124,100 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
 
         /**
-         * Set the first divider of the item. You can configure to disable the divider or
+         * Set the header divider of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function.
          */
-        fun firstDivider(
+        fun headerDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.headerDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the first divider of the item.
+         * Set the header divider of the item.
          */
-        fun firstDivider(config: AssemblyDividerConfig): Builder {
-            this.firstDividerConfig = config
+        fun headerDivider(config: AssemblyDividerConfig): Builder {
+            this.headerDividerConfig = config
             return this
         }
 
 
         /**
-         * Set the last divider of the item. You can configure to disable the divider or
+         * Set the footer divider of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function.
          */
-        fun lastDivider(
+        fun footerDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.lastDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.footerDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the last divider of the item.
+         * Set the footer divider of the item.
          */
-        fun lastDivider(config: AssemblyDividerConfig): Builder {
-            this.lastDividerConfig = config
+        fun footerDivider(config: AssemblyDividerConfig): Builder {
+            this.footerDividerConfig = config
             return this
         }
 
 
         /**
-         * Set the first and last divider of the item. You can configure to disable the divider or
+         * Set the header and footer divider of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function.
          */
-        fun firstAndLastDivider(
+        fun headerAndFooterDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.headerDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
-            this.lastDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.footerDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the first and last divider of the item.
+         * Set the header and footer divider of the item.
          */
-        fun firstAndLastDivider(config: AssemblyDividerConfig): Builder {
-            this.firstDividerConfig = config
-            this.lastDividerConfig = config
+        fun headerAndFooterDivider(config: AssemblyDividerConfig): Builder {
+            this.headerDividerConfig = config
+            this.footerDividerConfig = config
             return this
         }
 
 
         /**
-         * Use divider as the first divider.
+         * Use divider as the header divider.
          */
-        fun showFirstDivider(showFirstDivider: Boolean = true): Builder {
-            this.showFirstDivider = showFirstDivider
+        fun useDividerAsHeaderDivider(use: Boolean = true): Builder {
+            this.useDividerAsHeaderDivider = use
             return this
         }
 
         /**
-         * Use divider as the last divider.
+         * Use divider as the footer divider.
          */
-        fun showLastDivider(showLastDivider: Boolean = true): Builder {
-            this.showLastDivider = showLastDivider
+        fun useDividerAsFooterDivider(use: Boolean = true): Builder {
+            this.useDividerAsFooterDivider = use
             return this
         }
 
         /**
-         * Use divider as the first and last divider.
+         * Use divider as the header and footer divider.
          */
-        fun showFirstAndLastDivider(showFirstAndLastDivider: Boolean = true): Builder {
-            this.showFirstDivider = showFirstAndLastDivider
-            this.showLastDivider = showFirstAndLastDivider
+        fun useDividerAsHeaderAndFooterDivider(use: Boolean = true): Builder {
+            this.useDividerAsHeaderDivider = use
+            this.useDividerAsFooterDivider = use
             return this
         }
 
@@ -246,97 +246,97 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
 
         /**
-         * Set the first divider on the side of the item. You can configure to disable the divider or
+         * Set the header divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun firstSideDivider(
+        fun headerSideDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.headerSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the first divider on the side of the item
+         * Set the header divider on the side of the item
          */
-        fun firstSideDivider(config: AssemblyDividerConfig): Builder {
-            this.firstSideDividerConfig = config
+        fun headerSideDivider(config: AssemblyDividerConfig): Builder {
+            this.headerSideDividerConfig = config
             return this
         }
 
 
         /**
-         * Set the last divider on the side of the item. You can configure to disable the divider or
+         * Set the footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun lastSideDivider(
+        fun footerSideDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.lastSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.footerSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
-        fun lastSideDivider(config: AssemblyDividerConfig): Builder {
-            this.lastSideDividerConfig = config
+        fun footerSideDivider(config: AssemblyDividerConfig): Builder {
+            this.footerSideDividerConfig = config
             return this
         }
 
 
         /**
-         * Set the first and last divider on the side of the item. You can configure to disable the divider or
+         * Set the header and footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun firstAndLastSideDivider(
+        fun headerAndFooterSideDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.headerSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
-            this.lastSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.footerSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the first and last divider on the side of the item
+         * Set the header and footer divider on the side of the item
          */
-        fun firstAndLastSideDivider(config: AssemblyDividerConfig): Builder {
-            this.firstSideDividerConfig = config
-            this.lastSideDividerConfig = config
+        fun headerAndFooterSideDivider(config: AssemblyDividerConfig): Builder {
+            this.headerSideDividerConfig = config
+            this.footerSideDividerConfig = config
             return this
         }
 
 
         /**
-         * Use side divider as the first side divider
+         * Use side divider as the header side divider
          */
-        fun showFirstSideDivider(show: Boolean = true): Builder {
-            this.showFirstSideDivider = show
+        fun useSideDividerAsHeaderSideDivider(use: Boolean = true): Builder {
+            this.useSideDividerAsHeaderSideDivider = use
             return this
         }
 
         /**
-         * Use side divider as the last side divider
+         * Use side divider as the footer side divider
          */
-        fun showLastSideDivider(show: Boolean = true): Builder {
-            this.showLastSideDivider = show
+        fun useSideDividerAsFooterSideDivider(use: Boolean = true): Builder {
+            this.useSideDividerAsFooterSideDivider = use
             return this
         }
 
         /**
-         * Use side divider as the first and last side  divider
+         * Use side divider as the header and footer side divider
          */
-        fun showFirstAndLastSideDivider(show: Boolean = true): Builder {
-            this.showFirstSideDivider = show
-            this.showLastSideDivider = show
+        fun useSideDividerAsHeaderAndFooterSideDivider(use: Boolean = true): Builder {
+            this.useSideDividerAsHeaderSideDivider = use
+            this.useSideDividerAsFooterSideDivider = use
             return this
         }
 

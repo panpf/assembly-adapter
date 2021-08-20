@@ -57,8 +57,8 @@ class AppGroupFragment : BaseBindingFragment<FragmentAppGroupBinding>() {
             )
             layoutManager = GridLayoutManager(context, 3)
             addAssemblyGridDividerItemDecoration {
-                divider(Divider.space(20.dp2px)).showFirstAndLastDivider()
-                sideDivider(Divider.space(20.dp2px)).showFirstAndLastSideDivider()
+                divider(Divider.space(20.dp2px)).useDividerAsHeaderAndFooterDivider()
+                sideDivider(Divider.space(20.dp2px)).useSideDividerAsHeaderAndFooterSideDivider()
             }
         }
     }

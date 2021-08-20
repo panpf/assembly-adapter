@@ -27,7 +27,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDivide
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
 
 /**
- * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、first or last divider、side divider、fist or last side divider
+ * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  */
 open class GridDividerItemDecoration(
     private val itemDividerProvider: GridItemDividerProvider,
@@ -233,22 +233,26 @@ open class GridDividerItemDecoration(
     class Builder(val context: Context) {
 
         private var dividerConfig: DividerConfig? = null
-        private var firstDividerConfig: DividerConfig? = null
-        private var lastDividerConfig: DividerConfig? = null
-        private var showFirstDivider = false
-        private var showLastDivider = false
+        private var headerDividerConfig: DividerConfig? = null
+        private var footerDividerConfig: DividerConfig? = null
+        private var useDividerAsHeaderDivider = false
+        private var useDividerAsFooterDivider = false
 
         private var sideDividerConfig: DividerConfig? = null
-        private var firstSideDividerConfig: DividerConfig? = null
-        private var lastSideDividerConfig: DividerConfig? = null
-        private var showFirstSideDivider = false
-        private var showLastSideDivider = false
+        private var headerSideDividerConfig: DividerConfig? = null
+        private var footerSideDividerConfig: DividerConfig? = null
+        private var useSideDividerAsHeaderSideDivider = false
+        private var useSideDividerAsFooterSideDivider = false
 
         fun build(): GridDividerItemDecoration {
             return GridDividerItemDecoration(buildItemDividerProvider())
         }
 
         private fun buildItemDividerProvider(): GridItemDividerProvider {
+            if ((useSideDividerAsHeaderSideDivider || useSideDividerAsFooterSideDivider) && sideDividerConfig == null) {
+                throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
+            }
+
             val finalDividerConfig =
                 dividerConfig ?: context.obtainStyledAttributes(
                     intArrayOf(android.R.attr.listDivider)
@@ -262,18 +266,18 @@ open class GridDividerItemDecoration(
 
             return GridItemDividerProvider(
                 dividerConfig = finalDividerConfig.toItemDividerConfig(context),
-                firstDividerConfig = (firstDividerConfig
-                    ?: if (showFirstDivider) finalDividerConfig else null)
+                headerDividerConfig = (headerDividerConfig
+                    ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
                     ?.toItemDividerConfig(context),
-                lastDividerConfig = (lastDividerConfig
-                    ?: if (showLastDivider) finalDividerConfig else null)
+                footerDividerConfig = (footerDividerConfig
+                    ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
                     ?.toItemDividerConfig(context),
                 sideDividerConfig = sideDividerConfig?.toItemDividerConfig(context),
-                firstSideDividerConfig = (firstSideDividerConfig
-                    ?: if (showFirstSideDivider) sideDividerConfig else null)
+                headerSideDividerConfig = (headerSideDividerConfig
+                    ?: if (useSideDividerAsHeaderSideDivider) sideDividerConfig else null)
                     ?.toItemDividerConfig(context),
-                lastSideDividerConfig = (lastSideDividerConfig
-                    ?: if (showLastSideDivider) sideDividerConfig else null)
+                footerSideDividerConfig = (footerSideDividerConfig
+                    ?: if (useSideDividerAsFooterSideDivider) sideDividerConfig else null)
                     ?.toItemDividerConfig(context),
             )
         }
@@ -303,100 +307,100 @@ open class GridDividerItemDecoration(
 
 
         /**
-         * Set the first divider of the item. You can configure to disable the divider or
+         * Set the header divider of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun firstDivider(
+        fun headerDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstDividerConfig = DividerConfig.Builder(divider).apply {
+            this.headerDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the first divider of the item
+         * Set the header divider of the item
          */
-        fun firstDivider(config: DividerConfig): Builder {
-            this.firstDividerConfig = config
+        fun headerDivider(config: DividerConfig): Builder {
+            this.headerDividerConfig = config
             return this
         }
 
 
         /**
-         * Set the last divider of the item. You can configure to disable the divider or
+         * Set the footer divider of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun lastDivider(
+        fun footerDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.lastDividerConfig = DividerConfig.Builder(divider).apply {
+            this.footerDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the last divider of the item
+         * Set the footer divider of the item
          */
-        fun lastDivider(config: DividerConfig): Builder {
-            this.lastDividerConfig = config
+        fun footerDivider(config: DividerConfig): Builder {
+            this.footerDividerConfig = config
             return this
         }
 
 
         /**
-         * Set the first and last divider of the item. You can configure to disable the divider or
+         * Set the header and footer divider of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun firstAndLastDivider(
+        fun headerAndFooterDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstDividerConfig = DividerConfig.Builder(divider).apply {
+            this.headerDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
-            this.lastDividerConfig = DividerConfig.Builder(divider).apply {
+            this.footerDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the first and last divider of the item
+         * Set the header and footer divider of the item
          */
-        fun firstAndLastDivider(config: DividerConfig): Builder {
-            this.firstDividerConfig = config
-            this.lastDividerConfig = config
+        fun headerAndFooterDivider(config: DividerConfig): Builder {
+            this.headerDividerConfig = config
+            this.footerDividerConfig = config
             return this
         }
 
 
         /**
-         * Use divider as the first divider
+         * Use divider as the header divider
          */
-        fun showFirstDivider(show: Boolean = true): Builder {
-            this.showFirstDivider = show
+        fun useDividerAsHeaderDivider(use: Boolean = true): Builder {
+            this.useDividerAsHeaderDivider = use
             return this
         }
 
         /**
-         * Use divider as the last divider
+         * Use divider as the footer divider
          */
-        fun showLastDivider(show: Boolean = true): Builder {
-            this.showLastDivider = show
+        fun useDividerAsFooterDivider(use: Boolean = true): Builder {
+            this.useDividerAsFooterDivider = use
             return this
         }
 
         /**
-         * Use divider as the first and last divider
+         * Use divider as the header and footer divider
          */
-        fun showFirstAndLastDivider(show: Boolean = true): Builder {
-            this.showFirstDivider = show
-            this.showLastDivider = show
+        fun useDividerAsHeaderAndFooterDivider(use: Boolean = true): Builder {
+            this.useDividerAsHeaderDivider = use
+            this.useDividerAsFooterDivider = use
             return this
         }
 
@@ -425,100 +429,100 @@ open class GridDividerItemDecoration(
 
 
         /**
-         * Set the first divider on the side of the item. You can configure to disable the divider or
+         * Set the header divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun firstSideDivider(
+        fun headerSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstSideDividerConfig = DividerConfig.Builder(divider).apply {
+            this.headerSideDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the first divider on the side of the item
+         * Set the header divider on the side of the item
          */
-        fun firstSideDivider(config: DividerConfig): Builder {
-            this.firstSideDividerConfig = config
+        fun headerSideDivider(config: DividerConfig): Builder {
+            this.headerSideDividerConfig = config
             return this
         }
 
 
         /**
-         * Set the last divider on the side of the item. You can configure to disable the divider or
+         * Set the footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun lastSideDivider(
+        fun footerSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.lastSideDividerConfig = DividerConfig.Builder(divider).apply {
+            this.footerSideDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the last divider on the side of the item
+         * Set the footer divider on the side of the item
          */
-        fun lastSideDivider(config: DividerConfig): Builder {
-            this.lastSideDividerConfig = config
+        fun footerSideDivider(config: DividerConfig): Builder {
+            this.footerSideDividerConfig = config
             return this
         }
 
 
         /**
-         * Set the first and last divider on the side of the item. You can configure to disable the divider or
+         * Set the header and footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun firstAndLastSideDivider(
+        fun headerAndFooterSideDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.firstSideDividerConfig = DividerConfig.Builder(divider).apply {
+            this.headerSideDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
-            this.lastSideDividerConfig = DividerConfig.Builder(divider).apply {
+            this.footerSideDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
         }
 
         /**
-         * Set the first and last divider on the side of the item
+         * Set the header and footer divider on the side of the item
          */
-        fun firstAndLastSideDivider(config: DividerConfig): Builder {
-            this.firstSideDividerConfig = config
-            this.lastSideDividerConfig = config
+        fun headerAndFooterSideDivider(config: DividerConfig): Builder {
+            this.headerSideDividerConfig = config
+            this.footerSideDividerConfig = config
             return this
         }
 
 
         /**
-         * Use side divider as the first side divider
+         * Use side divider as the header side divider
          */
-        fun showFirstSideDivider(show: Boolean = true): Builder {
-            this.showFirstSideDivider = show
+        fun useSideDividerAsHeaderSideDivider(use: Boolean = true): Builder {
+            this.useSideDividerAsHeaderSideDivider = use
             return this
         }
 
         /**
-         * Use side divider as the last side divider
+         * Use side divider as the footer side divider
          */
-        fun showLastSideDivider(show: Boolean = true): Builder {
-            this.showLastSideDivider = show
+        fun useSideDividerAsFooterSideDivider(use: Boolean = true): Builder {
+            this.useSideDividerAsFooterSideDivider = use
             return this
         }
 
         /**
-         * Use side divider as the first and last side  divider
+         * Use side divider as the header and footer side divider
          */
-        fun showFirstAndLastSideDivider(show: Boolean = true): Builder {
-            this.showFirstSideDivider = show
-            this.showLastSideDivider = show
+        fun useSideDividerAsHeaderAndFooterSideDivider(use: Boolean = true): Builder {
+            this.useSideDividerAsHeaderSideDivider = use
+            this.useSideDividerAsFooterSideDivider = use
             return this
         }
     }

@@ -58,7 +58,8 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = AssemblyGridLayoutManager(
-                requireContext(), 3,
+                requireContext(),
+                3,
                 mapOf(
                     AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
                     ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
@@ -69,10 +70,10 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
                 divider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(AppsOverviewItemFactory::class)
                 }
-                showLastDivider()
+                useDividerAsFooterDivider()
 
                 sideDivider(Divider.space(20.dp2px))
-                firstAndLastSideDivider(Divider.space(20.dp2px)) {
+                headerAndFooterSideDivider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(AppsOverviewItemFactory::class)
                     disableByItemFactoryClass(ListSeparatorItemFactory::class)
                 }

@@ -121,9 +121,9 @@ class RecyclerLinearDividerHorFragment :
                 )
                 disableByItemFactoryClass(AppsOverviewHorizontalItemFactory::class)
             }
-            firstAndLastDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
+            headerAndFooterDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
 
-            firstAndLastSideDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
+            headerAndFooterSideDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
                 personaliseByItemFactoryClass(
                     ListSeparatorHorizontalItemFactory::class,
                     Divider.color(0xFF00FF00.toInt(), size, insets)

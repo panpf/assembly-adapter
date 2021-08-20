@@ -70,7 +70,8 @@ class RecyclerGridDividerVerFragment :
         binding.recyclerDividerVerticalRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = AssemblyGridLayoutManager(
-                requireContext(), 3,
+                requireContext(),
+                4,
                 mapOf(
                     AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
                     ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
@@ -126,10 +127,10 @@ class RecyclerGridDividerVerFragment :
                 )
                 disableByItemFactoryClass(AppsOverviewItemFactory::class)
             }
-            firstAndLastDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
+            headerAndFooterDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
 
             sideDivider(Divider.color(0x880000FF.toInt(), size, insets))
-            firstAndLastSideDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
+            headerAndFooterSideDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
                 personaliseByItemFactoryClass(
                     ListSeparatorItemFactory::class,
                     Divider.color(0xFF00FF00.toInt(), size, insets)

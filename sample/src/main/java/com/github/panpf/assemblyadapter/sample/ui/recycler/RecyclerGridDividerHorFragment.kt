@@ -72,7 +72,7 @@ class RecyclerGridDividerHorFragment :
         binding.recyclerDividerHorizontalRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = AssemblyGridLayoutManager(
-                requireContext(), 3, RecyclerView.HORIZONTAL, false,
+                requireContext(), 6, RecyclerView.HORIZONTAL, false,
                 mapOf(
                     AppsOverviewHorizontalItemFactory::class to ItemSpan.fullSpan(),
                     ListSeparatorHorizontalItemFactory::class to ItemSpan.fullSpan(),
@@ -128,10 +128,10 @@ class RecyclerGridDividerHorFragment :
                 )
                 disableByItemFactoryClass(AppsOverviewHorizontalItemFactory::class)
             }
-            firstAndLastDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
+            headerAndFooterDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
 
             sideDivider(Divider.color(0x880000FF.toInt(), size, insets))
-            firstAndLastSideDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
+            headerAndFooterSideDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
                 personaliseByItemFactoryClass(
                     ListSeparatorHorizontalItemFactory::class,
                     Divider.color(0xFF00FF00.toInt(), size, insets)
