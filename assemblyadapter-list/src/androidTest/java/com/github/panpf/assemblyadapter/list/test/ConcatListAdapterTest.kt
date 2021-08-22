@@ -2,8 +2,8 @@ package com.github.panpf.assemblyadapter.list.test
 
 import android.widget.BaseAdapter
 import android.widget.ListView
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.runner.AndroidJUnit4
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter

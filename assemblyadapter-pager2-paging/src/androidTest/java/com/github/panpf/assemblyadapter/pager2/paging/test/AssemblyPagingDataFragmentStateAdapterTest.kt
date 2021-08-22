@@ -2,10 +2,10 @@ package com.github.panpf.assemblyadapter.pager2.paging.test
 
 import android.R
 import androidx.fragment.app.FragmentActivity
-import androidx.test.runner.AndroidJUnit4
-import com.github.panpf.assemblyadapter.recycler.DiffKey
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingDataFragmentStateAdapter
+import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.panpf.tools4j.test.ktx.assertNoThrow
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import kotlinx.coroutines.Dispatchers

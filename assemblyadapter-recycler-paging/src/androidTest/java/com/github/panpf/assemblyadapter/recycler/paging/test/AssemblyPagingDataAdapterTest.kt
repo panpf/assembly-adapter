@@ -1,6 +1,6 @@
 package com.github.panpf.assemblyadapter.recycler.paging.test
 
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
