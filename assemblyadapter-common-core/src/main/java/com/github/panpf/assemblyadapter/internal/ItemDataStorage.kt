@@ -42,6 +42,9 @@ class ItemDataStorage<DATA>(
      * @throws IndexOutOfBoundsException If the [position] is out of range (position < 0 || index >= dataCount)
      */
     fun getData(position: Int): DATA {
+        if (position < 0 || position >= readOnlyList.size) {
+            throw IndexOutOfBoundsException("Index: " + position + ", Size: " + readOnlyList.size)
+        }
         return readOnlyList[position]
     }
 

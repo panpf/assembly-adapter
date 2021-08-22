@@ -139,7 +139,7 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
                 @Suppress("UNCHECKED_CAST")
                 val clickListenerHolder = holder as ClickListenerStorage.ClickListenerHolder<DATA>
                 val viewId = clickListenerHolder.viewId
-                val targetView = if (viewId > 0) {
+                val targetView = if (viewId != -1) {
                     itemView.findViewById(viewId)
                         ?: throw IllegalArgumentException("Not found click bind target view by id $viewId")
                 } else {
@@ -162,7 +162,7 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
                 val longClickListenerHolder =
                     holder as ClickListenerStorage.LongClickListenerHolder<DATA>
                 val viewId = longClickListenerHolder.viewId
-                val targetView = if (viewId > 0) {
+                val targetView = if (viewId != -1) {
                     itemView.findViewById(viewId)
                         ?: throw IllegalArgumentException("Not found long click bind target view by id $viewId")
                 } else {
