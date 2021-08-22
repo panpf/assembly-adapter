@@ -17,8 +17,8 @@ AssemblyAdapter 是 Android 上的一个为各种 Adapter 提供开箱即用实�
 * `支持 ViewPager 和 ViewPager2`. 为 ViewPager 和 ViewPager2 提供了多类型及 Paging 分页支持. [了解更多][docs_pager]
 * `支持 spanSize 和 fullSpan`. 提供了专用的 LayoutManager，可以根据 ItemFactory 设置 spanSize 和
   fullSpan. [了解更多][docs_grid_span]
-* `支持 divider`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory
-  个性化或禁用 divider. [了解更多][docs_recycler_divider]
+* `支持 divider`. 为 RecyclerView 提供了强大的 divider 支持，还可以根据 position/spanIndex/ItemFactory 个性化或禁用
+  divider. [了解更多][docs_recycler_divider]
 * `支持占位符 Placeholder`. 通过固定的占位符数据类型支持占位符. [了解更多][docs_placeholder]
 
 ## 导入

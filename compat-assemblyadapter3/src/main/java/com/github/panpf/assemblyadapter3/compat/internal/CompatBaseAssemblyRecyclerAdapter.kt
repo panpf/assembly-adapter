@@ -21,9 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter3.compat.*
-import com.github.panpf.assemblyadapter3.compat.*
 import com.github.panpf.assemblyadapter3.compat.internal.*
-import com.github.panpf.assemblyadapter3.compat.CompatMoreFixedItem
 import java.util.*
 
 abstract class CompatBaseAssemblyRecyclerAdapter<T> :

@@ -17,9 +17,9 @@ package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
 
 /**
  * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、header and footer side divider
@@ -201,7 +201,6 @@ open class AssemblyLinearDividerItemDecoration(
             this.useDividerAsFooterDivider = use
             return this
         }
-
 
 
         /**

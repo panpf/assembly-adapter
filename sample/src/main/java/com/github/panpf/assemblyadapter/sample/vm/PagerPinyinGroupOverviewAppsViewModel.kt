@@ -25,7 +25,8 @@ import com.github.panpf.assemblyadapter.sample.util.PinyinGroupAppsHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PagerPinyinGroupOverviewAppsViewModel(application: Application) : AndroidViewModel(application) {
+class PagerPinyinGroupOverviewAppsViewModel(application: Application) :
+    AndroidViewModel(application) {
 
     val loadingData = MutableLiveData<Boolean>()
     val pinyinGroupAppListData = MutableLiveData<List<AppGroup>>()

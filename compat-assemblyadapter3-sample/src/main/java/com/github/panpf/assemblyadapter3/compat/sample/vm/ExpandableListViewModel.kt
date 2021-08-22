@@ -4,12 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import com.github.panpf.assemblyadapter3.compat.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter3.compat.sample.util.PinyinGroupAppsHelper
 import com.github.panpf.assemblyadapter3.compat.sample.util.minExecuteTime
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ExpandableListViewModel(application: Application) : AndroidViewModel(application) {
 

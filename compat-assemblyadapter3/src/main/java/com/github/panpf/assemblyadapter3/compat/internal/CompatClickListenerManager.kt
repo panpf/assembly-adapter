@@ -2,10 +2,6 @@ package com.github.panpf.assemblyadapter3.compat.internal
 
 import android.view.View
 import androidx.annotation.IdRes
-import com.github.panpf.assemblyadapter3.compat.CompatAssemblyItem
-import com.github.panpf.assemblyadapter3.compat.CompatAssemblyItemFactory
-import com.github.panpf.assemblyadapter3.compat.CompatOnClickListener
-import com.github.panpf.assemblyadapter3.compat.CompatOnLongClickListener
 import com.github.panpf.assemblyadapter3.compat.*
 import java.util.*
 

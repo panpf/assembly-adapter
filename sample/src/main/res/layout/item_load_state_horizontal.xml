@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 在 StaggeredLayoutManager 中使用时 root Layout 不能使用绝对尺寸 -->
+<?xml version="1.0" encoding="utf-8"?><!-- 在 StaggeredLayoutManager 中使用时 root Layout 不能使用绝对尺寸 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"

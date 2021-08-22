@@ -131,7 +131,10 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     }
 
     private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<*> {
-        val (localAdapter, localPosition) = concatAdapterLocalHelper.findLocalAdapterAndPosition(adapter, position)
+        val (localAdapter, localPosition) = concatAdapterLocalHelper.findLocalAdapterAndPosition(
+            adapter,
+            position
+        )
         return if (localAdapter is AssemblyAdapter<*>) {
             localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>
         } else {

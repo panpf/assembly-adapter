@@ -13,7 +13,10 @@ abstract class CompatAssemblyMoreItem : CompatAssemblyItem<CompatMoreState> {
         this.itemFactory = itemFactory
     }
 
-    constructor(itemFactory: CompatAssemblyMoreItemFactory, convertView: View) : super(convertView) {
+    constructor(
+        itemFactory: CompatAssemblyMoreItemFactory,
+        convertView: View
+    ) : super(convertView) {
         this.itemFactory = itemFactory
     }
 

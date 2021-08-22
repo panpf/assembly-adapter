@@ -15,7 +15,12 @@ class AppItem(val binding: ItemAppBinding) : CompatAssemblyItem<AppInfo>(binding
     override fun onSetData(position: Int, data: AppInfo?) {
         data ?: return
 
-        binding.appItemIconImage.displayImage(AppIconUriModel.makeUri(data.packageName, data.versionCode))
+        binding.appItemIconImage.displayImage(
+            AppIconUriModel.makeUri(
+                data.packageName,
+                data.versionCode
+            )
+        )
         binding.appItemNameText.text = data.name
         binding.appItemSizeText.text = Formatter.formatFileSize(context, data.apkSize)
         binding.appItemVersionText.text = data.versionName
@@ -24,8 +29,9 @@ class AppItem(val binding: ItemAppBinding) : CompatAssemblyItem<AppInfo>(binding
     class Factory : CompatAssemblyItemFactory<AppInfo>() {
 
         init {
-            setOnItemClickListener {context, _, _, _, data ->
-                val launchIntent = context.packageManager.getLaunchIntentForPackage(requireNotNull(data).packageName.orEmpty())
+            setOnItemClickListener { context, _, _, _, data ->
+                val launchIntent =
+                    context.packageManager.getLaunchIntentForPackage(requireNotNull(data).packageName.orEmpty())
                 if (launchIntent != null) {
                     context.startActivity(launchIntent)
                 } else {
@@ -39,7 +45,13 @@ class AppItem(val binding: ItemAppBinding) : CompatAssemblyItem<AppInfo>(binding
         }
 
         override fun createAssemblyItem(parent: ViewGroup): AppItem {
-            return AppItem(ItemAppBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            return AppItem(
+                ItemAppBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
         }
     }
 }

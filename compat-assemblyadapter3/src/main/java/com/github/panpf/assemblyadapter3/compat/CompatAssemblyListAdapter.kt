@@ -85,19 +85,23 @@ class CompatAssemblyListAdapter : BaseAdapter, CompatAssemblyAdapter {
         val moreAdapter = if (moreFixedItem != null) {
             val moreItemFactoryCompat = CompatItemFactory(moreFixedItem.itemFactory)
             AssemblySingleDataListAdapter(moreItemFactoryCompat).apply {
-                data = if (moreFixedItem.isEnabled && bodyAdapter.count > 0) moreFixedItem.data else null
+                data =
+                    if (moreFixedItem.isEnabled && bodyAdapter.count > 0) moreFixedItem.data else null
                 moreFixedItem.callback = CompatMoreFixedItem.Callback {
-                    data = if (moreFixedItem.isEnabled && bodyAdapter.count > 0) moreFixedItem.data else null
+                    data =
+                        if (moreFixedItem.isEnabled && bodyAdapter.count > 0) moreFixedItem.data else null
                 }
-                bodyAdapter.registerDataSetObserver(object: DataSetObserver() {
+                bodyAdapter.registerDataSetObserver(object : DataSetObserver() {
                     override fun onChanged() {
                         super.onChanged()
-                        data = if (moreFixedItem.isEnabled && bodyAdapter.count > 0) moreFixedItem.data else null
+                        data =
+                            if (moreFixedItem.isEnabled && bodyAdapter.count > 0) moreFixedItem.data else null
                     }
 
                     override fun onInvalidated() {
                         super.onInvalidated()
-                        data = if (moreFixedItem.isEnabled && bodyAdapter.count > 0) moreFixedItem.data else null
+                        data =
+                            if (moreFixedItem.isEnabled && bodyAdapter.count > 0) moreFixedItem.data else null
                     }
                 })
             }

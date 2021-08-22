@@ -30,7 +30,8 @@ class LoadStateHorizontalItemFactory(private val activity: Activity) :
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
-    ): ItemLoadStateHorizontalBinding = ItemLoadStateHorizontalBinding.inflate(inflater, parent, false)
+    ): ItemLoadStateHorizontalBinding =
+        ItemLoadStateHorizontalBinding.inflate(inflater, parent, false)
 
     override fun initItem(
         context: Context,

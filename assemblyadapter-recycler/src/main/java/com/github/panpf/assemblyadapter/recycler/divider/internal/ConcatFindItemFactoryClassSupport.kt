@@ -24,9 +24,15 @@ class ConcatFindItemFactoryClassSupport(private val findItemFactoryClassSupport:
 
     private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
 
-    override fun findItemFactoryClassByPosition(adapter: RecyclerView.Adapter<*>, position: Int): Class<*>? {
+    override fun findItemFactoryClassByPosition(
+        adapter: RecyclerView.Adapter<*>,
+        position: Int
+    ): Class<*>? {
         val (localAdapter, localPosition) = concatAdapterLocalHelper
             .findLocalAdapterAndPosition(adapter, position)
-        return findItemFactoryClassSupport.findItemFactoryClassByPosition(localAdapter, localPosition)
+        return findItemFactoryClassSupport.findItemFactoryClassByPosition(
+            localAdapter,
+            localPosition
+        )
     }
 }

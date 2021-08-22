@@ -1,10 +1,6 @@
 package com.github.panpf.assemblyadapter3.compat.internal
 
-import com.github.panpf.assemblyadapter3.compat.CompatAssemblyAdapter
-import com.github.panpf.assemblyadapter3.compat.CompatAssemblyItemFactory
-import com.github.panpf.assemblyadapter3.compat.CompatFixedItem
-import com.github.panpf.assemblyadapter3.compat.CompatAssemblyMoreItemFactory
-import com.github.panpf.assemblyadapter3.compat.CompatMoreFixedItem
+import com.github.panpf.assemblyadapter3.compat.*
 import java.util.*
 
 open class CompatItemManager(private val callback: Callback) {
@@ -77,7 +73,7 @@ open class CompatItemManager(private val callback: Callback) {
         return fixedItem
     }
 
-    fun  setMoreItem(
+    fun setMoreItem(
         itemFactory: CompatAssemblyMoreItemFactory,
         adapter: CompatAssemblyAdapter
     ): CompatMoreFixedItem {

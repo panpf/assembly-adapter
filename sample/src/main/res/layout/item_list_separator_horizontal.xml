@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 在 StaggeredLayoutManager 中使用时 root Layout 不能使用绝对尺寸 -->
+<?xml version="1.0" encoding="utf-8"?><!-- 在 StaggeredLayoutManager 中使用时 root Layout 不能使用绝对尺寸 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

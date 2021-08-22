@@ -2,10 +2,10 @@ package com.github.panpf.assemblyadapter3.compat.sample.item
 
 import android.view.View
 import android.view.ViewGroup
-import com.github.panpf.assemblyadapter3.compat.ktx.bindView
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyMoreItem
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyMoreItemFactory
 import com.github.panpf.assemblyadapter3.compat.CompatOnLoadMoreListener
+import com.github.panpf.assemblyadapter3.compat.ktx.bindView
 import com.github.panpf.assemblyadapter3.compat.sample.R
 
 class LoadMoreItem(itemFactory: Factory, itemLayoutId: Int, parent: ViewGroup) :
@@ -37,7 +37,8 @@ class LoadMoreItem(itemFactory: Factory, itemLayoutId: Int, parent: ViewGroup) :
         endView.visibility = View.VISIBLE
     }
 
-    class Factory(listener: CompatOnLoadMoreListener? = null) : CompatAssemblyMoreItemFactory(listener) {
+    class Factory(listener: CompatOnLoadMoreListener? = null) :
+        CompatAssemblyMoreItemFactory(listener) {
 
         override fun createAssemblyItem(parent: ViewGroup): CompatAssemblyMoreItem {
             return LoadMoreItem(this, R.layout.item_more, parent)

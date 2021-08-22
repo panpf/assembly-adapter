@@ -10,7 +10,10 @@ import com.github.panpf.assemblyadapter3.compat.CompatAssemblyItemFactory
 import com.github.panpf.assemblyadapter3.compat.sample.bean.ListSeparator
 import com.github.panpf.assemblyadapter3.compat.sample.databinding.ItemListSeparatorBinding
 
-class ListSeparatorItem(val binding: ItemListSeparatorBinding, private val hideStartMargin: Boolean = false) :
+class ListSeparatorItem(
+    val binding: ItemListSeparatorBinding,
+    private val hideStartMargin: Boolean = false
+) :
     CompatAssemblyItem<ListSeparator>(binding.root) {
 
     override fun onConfigViews(context: Context) {

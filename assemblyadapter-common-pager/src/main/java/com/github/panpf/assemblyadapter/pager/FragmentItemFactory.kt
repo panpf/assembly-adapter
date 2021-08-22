@@ -30,7 +30,8 @@ import kotlin.reflect.KClass
  * it is considered a match. You can also override the [exactMatchData] method to achieve exact matching
  * @see ViewFragmentItemFactory
  */
-abstract class FragmentItemFactory<DATA : Any>(final override val dataClass: KClass<DATA>) : Matchable<DATA> {
+abstract class FragmentItemFactory<DATA : Any>(final override val dataClass: KClass<DATA>) :
+    Matchable<DATA> {
 
     final override fun matchData(data: Any): Boolean {
         return super.matchData(data)

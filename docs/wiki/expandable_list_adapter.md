@@ -7,8 +7,10 @@ AssemblyAdapter 也为 [BaseExpandableListAdapter] 提供了支持，如下：
 * [ConcatExpandableListAdapter]：连接 Adapter 实现
 
 ### 注意
+
 1. group 数据必须要实现 [ExpandableGroup] 接口才能正确的获取 child count 和 child
-2. 如果想要获取 [BaseExpandableListAdapter] 独有的 isExpanded、groupPosition、childPosition、isLastChild 数据请使用 [ExpandableGroupItemFactory] 和 [ExpandableChildItemFactory]
+2. 如果想要获取 [BaseExpandableListAdapter] 独有的 isExpanded、groupPosition、childPosition、isLastChild
+   数据请使用 [ExpandableGroupItemFactory] 和 [ExpandableChildItemFactory]
 3. [ExpandableGroupItemFactory] 和 [ExpandableChildItemFactory] 也有 Binding、Simple、View 版本
 
 ### 更多示例

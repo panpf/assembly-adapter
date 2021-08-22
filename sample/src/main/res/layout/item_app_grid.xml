@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#336E75A4"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="#336E75A4"
     android:padding="12dp">
 
     <me.panpf.sketch.SketchImageView

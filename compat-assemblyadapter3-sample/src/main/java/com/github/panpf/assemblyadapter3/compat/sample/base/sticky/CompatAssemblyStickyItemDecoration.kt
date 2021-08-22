@@ -32,7 +32,10 @@ class CompatAssemblyStickyItemDecoration : StickyItemDecoration {
         this.stickyItemFactoryList = itemFactoryClass.map { it.java }
     }
 
-    override fun isStickyItemByPositionReal(adapter: RecyclerView.Adapter<*>, position: Int): Boolean {
+    override fun isStickyItemByPositionReal(
+        adapter: RecyclerView.Adapter<*>,
+        position: Int
+    ): Boolean {
         val itemFactoryClass = findItemFactoryClassByPosition(adapter, position)
         return if (itemFactoryClass != null) {
             stickyItemFactoryList.contains(itemFactoryClass)

@@ -3,8 +3,8 @@ package com.github.panpf.assemblyadapter3.compat.sample.bean
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
-import com.github.promeg.pinyinhelper.Pinyin
 import com.github.panpf.assemblyadapter3.compat.CompatDiffable
+import com.github.promeg.pinyinhelper.Pinyin
 import java.io.File
 import java.util.*
 

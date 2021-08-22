@@ -19,7 +19,7 @@ class CompatDataManager : CompatItemManager.Callback {
         }
     }
 
-    constructor(dataArray: Array<Any?>?): this(dataArray?.toList())
+    constructor(dataArray: Array<Any?>?) : this(dataArray?.toList())
 
     fun addCallback(callback: Callback) {
         callbackList.add(callback)

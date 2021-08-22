@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
-import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
+import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyAdapter
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyRecyclerAdapter

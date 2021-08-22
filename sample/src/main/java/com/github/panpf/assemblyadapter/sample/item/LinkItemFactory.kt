@@ -21,9 +21,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.github.panpf.assemblyadapter.BindingItemFactory
-import com.github.panpf.assemblyadapter.sample.ui.FragmentContainerActivity
 import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.ItemLinkBinding
+import com.github.panpf.assemblyadapter.sample.ui.FragmentContainerActivity
 
 class LinkItemFactory(private val activity: Activity) :
     BindingItemFactory<Link, ItemLinkBinding>(Link::class) {

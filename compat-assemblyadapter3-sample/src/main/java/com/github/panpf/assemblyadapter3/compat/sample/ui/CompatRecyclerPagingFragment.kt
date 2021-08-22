@@ -7,8 +7,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import com.github.panpf.assemblyadapter3.compat.CompatAssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter3.compat.CompatDiffableDiffCallback
 import com.github.panpf.assemblyadapter3.compat.sample.R
@@ -19,6 +17,8 @@ import com.github.panpf.assemblyadapter3.compat.sample.item.ListSeparatorItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.LoadMoreItem
 import com.github.panpf.assemblyadapter3.compat.sample.item.TextItem
 import com.github.panpf.assemblyadapter3.compat.sample.vm.PagingViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class CompatRecyclerPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
 

@@ -14,7 +14,10 @@ class CompatExpandableItemManager(callback: Callback) : CompatItemManager(callba
     /**
      * 添加一个用来处理并显示 dataList 中的 group 数据的 [CompatAssemblyItemFactory]
      */
-    fun <DATA: CompatAssemblyGroup> addGroupItemFactory(childItemFactory: CompatAssemblyItemFactory<DATA>, adapter: CompatAssemblyAdapter) {
+    fun <DATA : CompatAssemblyGroup> addGroupItemFactory(
+        childItemFactory: CompatAssemblyItemFactory<DATA>,
+        adapter: CompatAssemblyAdapter
+    ) {
         groupItemFactoryList.add(childItemFactory)
         childItemFactory.attachToAdapter(adapter)
     }
@@ -22,7 +25,10 @@ class CompatExpandableItemManager(callback: Callback) : CompatItemManager(callba
     /**
      * 添加一个用来处理并显示 dataList 中的 child 数据的 [CompatAssemblyItemFactory]
      */
-    fun addChildItemFactory(childItemFactory: CompatAssemblyItemFactory<*>, adapter: CompatAssemblyAdapter) {
+    fun addChildItemFactory(
+        childItemFactory: CompatAssemblyItemFactory<*>,
+        adapter: CompatAssemblyAdapter
+    ) {
         childItemFactoryList.add(childItemFactory)
         childItemFactory.attachToAdapter(adapter)
     }

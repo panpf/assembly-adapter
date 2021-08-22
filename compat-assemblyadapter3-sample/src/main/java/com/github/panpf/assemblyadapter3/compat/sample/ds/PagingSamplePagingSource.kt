@@ -3,10 +3,10 @@ package com.github.panpf.assemblyadapter3.compat.sample.ds
 import android.app.Application
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import com.github.panpf.assemblyadapter3.compat.sample.util.PinyinFlatAppsHelper
 import com.github.panpf.assemblyadapter3.compat.sample.util.minExecuteTime
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class PagingSamplePagingSource(application: Application) : PagingSource<Int, Any>() {
 

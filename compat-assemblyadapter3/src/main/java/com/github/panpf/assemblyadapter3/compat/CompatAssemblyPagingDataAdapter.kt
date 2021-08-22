@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
+import com.github.panpf.assemblyadapter3.compat.internal.CompatBaseAssemblyRecyclerAdapter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import com.github.panpf.assemblyadapter3.compat.internal.CompatBaseAssemblyRecyclerAdapter
 import java.util.*
 
 /**

@@ -42,6 +42,8 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     private final ViewGroup stickyItemContainer;
     @NonNull
     private final SparseArray<RecyclerView.ViewHolder> viewHolderArray = new SparseArray<>();
+    @NonNull
+    private final ConcatAdapterLocalHelper concatAdapterLocalHelper = new ConcatAdapterLocalHelper();
     private boolean disabledScrollStickyHeader;
     private boolean invisibleStickyItemInList;
     @Nullable
@@ -49,8 +51,6 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     private int stickyItemPosition = -1;
     @Nullable
     private View invisibleItemView;
-    @NonNull
-    private final ConcatAdapterLocalHelper concatAdapterLocalHelper = new ConcatAdapterLocalHelper();
 
     public StickyItemDecoration(@NonNull ViewGroup stickyItemContainer) {
         this.stickyItemContainer = stickyItemContainer;
