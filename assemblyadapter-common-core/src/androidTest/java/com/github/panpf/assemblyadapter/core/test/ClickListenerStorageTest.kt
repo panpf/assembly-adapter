@@ -1,4 +1,4 @@
-package com.github.panpf.assemblyadapter.test
+package com.github.panpf.assemblyadapter.core.test
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.panpf.assemblyadapter.OnClickListener

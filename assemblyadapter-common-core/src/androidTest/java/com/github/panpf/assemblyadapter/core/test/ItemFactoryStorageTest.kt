@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.test
+package com.github.panpf.assemblyadapter.core.test
 
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.Placeholder
@@ -190,12 +190,12 @@ class ItemFactoryStorageTest {
             )
         }
     }
+
+    open class TestItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA>
+
+    class StringItemFactory : TestItemFactory<String>(String::class)
+
+    class IntItemFactory : TestItemFactory<Int>(Int::class)
+
+    class BooleanItemFactory : TestItemFactory<Boolean>(Boolean::class)
 }
-
-open class TestItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA>
-
-class StringItemFactory : TestItemFactory<String>(String::class)
-
-class IntItemFactory : TestItemFactory<Int>(Int::class)
-
-class BooleanItemFactory : TestItemFactory<Boolean>(Boolean::class)

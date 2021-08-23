@@ -21,7 +21,7 @@ import androidx.collection.ArrayMap
 /**
  * [ExpandableGroupItem] that provide extra support
  */
-abstract class ExtraExpandableGroupItem<DATA : Any>(itemView: View) :
+abstract class ExtraExpandableGroupItem<DATA : ExpandableGroup>(itemView: View) :
     ExpandableGroupItem<DATA>(itemView) {
 
     private var extras: ArrayMap<String, Any>? = null
