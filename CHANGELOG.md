@@ -1,3 +1,9 @@
+# new
+* fix: Fix the bug of AbsoluteAdapterPosition error returned by ConcatAdapterAbsoluteHelper 
+* fix: ConcatAdapterLocalHelper now throws IndexOutOfBoundsException when position is out of range
+* change: AnyAdapterDataObserver change to SimpleAdapterDataObserver
+
+
 # v4.0.0-beta01
 
 全新版本，全新出发，4.0 版本 和 3.\* 版本完全不兼容，但两者可以共存
