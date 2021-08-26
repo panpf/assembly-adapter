@@ -20,7 +20,7 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.Px
 
 data class ItemDivider(
-    private val drawable: Drawable,
+    val drawable: Drawable,
     @Px private val size: Int,
     @Px val insetStart: Int,
     @Px val insetTop: Int,

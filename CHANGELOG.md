@@ -2,6 +2,7 @@
 * fix: Fix the bug of AbsoluteAdapterPosition error returned by ConcatAdapterAbsoluteHelper 
 * fix: ConcatAdapterLocalHelper now throws IndexOutOfBoundsException when position is out of range
 * change: AnyAdapterDataObserver change to SimpleAdapterDataObserver
+* fix: Fix the bug that the Insets.topAndBottomOf() method reverses start and top
 
 
 # v4.0.0-beta01

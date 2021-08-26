@@ -40,7 +40,7 @@ class Insets(
 
         fun topAndBottomOf(
             @Px topAndBottomInset: Int,
-        ): Insets = Insets(topAndBottomInset, 0, topAndBottomInset, 0)
+        ): Insets = Insets(0, topAndBottomInset, 0, topAndBottomInset)
 
         fun allOf(
             @Px allInset: Int,
