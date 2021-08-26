@@ -27,21 +27,22 @@ open class ItemDividerConfig(
 ) {
 
     open fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDivider? {
-        if (disableBySpanIndexArray?.get(spanIndex, false) == true) {
-            return null
-        }
         if (disableByPositionArray?.get(position, false) == true) {
             return null
         }
 
-        val personaliseBySpanIndexItemDivider = personaliseBySpanIndexArray?.get(position)
-        if (personaliseBySpanIndexItemDivider != null) {
-            return personaliseBySpanIndexItemDivider
+        if (disableBySpanIndexArray?.get(spanIndex, false) == true) {
+            return null
         }
 
         val personaliseByPositionItemDivider = personaliseByPositionArray?.get(position)
         if (personaliseByPositionItemDivider != null) {
             return personaliseByPositionItemDivider
+        }
+
+        val personaliseBySpanIndexItemDivider = personaliseBySpanIndexArray?.get(spanIndex)
+        if (personaliseBySpanIndexItemDivider != null) {
+            return personaliseBySpanIndexItemDivider
         }
 
         return itemDivider
