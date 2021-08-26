@@ -26,40 +26,41 @@ class ConcatAdapterAbsoluteHelper {
         localAdapter: RecyclerView.Adapter<*>,
         localPosition: Int
     ): Int {
+        val localAdapterItemCount = localAdapter.itemCount
+        if (localPosition < 0 || localPosition >= localAdapterItemCount) {
+            throw IndexOutOfBoundsException("Index: $localPosition, Size: $localAdapterItemCount")
+        }
+
         val parentAdapterCache = concatAdapterWrapperAdaptersCache.getAdapterCache(parentAdapter)
         return findAbsoluteAdapterPositionRecursive(
             parentAdapterCache, localAdapter, localPosition
-        ) ?: throw IndexOutOfBoundsException(
-            "Not found childAdapterStartPosition by " +
-                    "localPosition: $localPosition, localAdapter: ${localAdapter.javaClass.name}"
-        )
+        ) ?: throw IllegalArgumentException("localAdapter not found in parentAdapter")
     }
 
     private fun findAbsoluteAdapterPositionRecursive(
-        parentAdapter: ConcatAdapterWrapperAdaptersCache.AdapterCache,
+        parentAdapterCache: ConcatAdapterWrapperAdaptersCache.AdapterCache,
         localAdapter: RecyclerView.Adapter<*>,
         localPosition: Int
-    ): Int? {
-        return when {
-            localAdapter === parentAdapter.adapter -> {
-                localPosition
-            }
-            parentAdapter is ConcatAdapterWrapperAdaptersCache.ConcatAdapterCache -> {
-                var childAdapterStartPosition = 0
-                parentAdapter.childAdapterCaches.forEach { childAdapter ->
-                    val childPosition = findAbsoluteAdapterPositionRecursive(
-                        childAdapter, localAdapter, localPosition
-                    )
-                    if (childPosition != null) {
-                        return childAdapterStartPosition + childPosition
-                    }
-                    childAdapterStartPosition = childAdapter.itemCount
+    ): Int? = when {
+        localAdapter === parentAdapterCache.adapter -> {
+            localPosition
+        }
+        parentAdapterCache is ConcatAdapterWrapperAdaptersCache.ConcatAdapterCache -> {
+            var childAdapterStartPosition = 0
+            parentAdapterCache.childAdapterCaches.forEach { childAdapterCache ->
+                val childPosition = findAbsoluteAdapterPositionRecursive(
+                    childAdapterCache, localAdapter, localPosition
+                )
+                if (childPosition != null) {
+                    return childAdapterStartPosition + childPosition
+                } else {
+                    childAdapterStartPosition += childAdapterCache.itemCount
                 }
-                null
             }
-            else -> {
-                null
-            }
+            null
+        }
+        else -> {
+            null
         }
     }
 
