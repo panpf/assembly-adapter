@@ -58,7 +58,7 @@ open class GridDividerItemDecoration(
         val isLastGroup = spanGroupIndex == spanGroupCount - 1
         val isFullSpan = spanSize == spanCount
         val isFirstSpan = isFullSpan || spanIndex == 0
-        val isLastSpan = isFullSpan || spanIndex == spanCount - 1
+        val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
 
         val startItemDivider = itemDividerProvider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
@@ -123,7 +123,7 @@ open class GridDividerItemDecoration(
             val isLastGroup = spanGroupIndex == spanGroupCount - 1
             val isFullSpan = spanSize == spanCount
             val isFirstSpan = isFullSpan || spanIndex == 0
-            val isLastSpan = isFullSpan || spanIndex == spanCount - 1
+            val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
 
             val startItemDivider = itemDividerProvider.getItemDivider(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,

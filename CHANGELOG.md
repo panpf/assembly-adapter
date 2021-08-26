@@ -3,6 +3,8 @@
 * fix: ConcatAdapterLocalHelper now throws IndexOutOfBoundsException when position is out of range
 * change: AnyAdapterDataObserver change to SimpleAdapterDataObserver
 * fix: Fix the bug that the Insets.topAndBottomOf() method reverses start and top
+* change: The position priority of DividerConfig is now higher than spanIndex
+* fix: Fix the bug that GridDividerItemDecoration encounters an item with a spanSize greater than 1 and less than spanCount that its isLastSpan is calculated incorrectly
 
 
 # v4.0.0-beta01
