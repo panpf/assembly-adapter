@@ -84,5 +84,4 @@ class ConcatAdapterWrapperAdaptersCache {
         override val itemCount: Int
             get() = adapter.itemCount
     }
-
 }
