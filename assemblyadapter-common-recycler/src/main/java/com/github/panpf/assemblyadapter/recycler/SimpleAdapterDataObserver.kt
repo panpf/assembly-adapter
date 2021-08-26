@@ -17,36 +17,44 @@ package com.github.panpf.assemblyadapter.recycler
 
 import androidx.recyclerview.widget.RecyclerView
 
-class AnyAdapterDataObserver(val onAnyChanged: () -> Unit) :
+class SimpleAdapterDataObserver(private val onDataChanged: ((type: Type) -> Unit)? = null) :
     RecyclerView.AdapterDataObserver() {
 
     override fun onChanged() {
         super.onChanged()
-        onAnyChanged()
+        onDataChanged?.invoke(Changed)
     }
 
     override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
         super.onItemRangeChanged(positionStart, itemCount)
-        onAnyChanged()
+        onDataChanged?.invoke(RangeChanged(positionStart, itemCount, null))
     }
 
     override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
         super.onItemRangeChanged(positionStart, itemCount, payload)
-        onAnyChanged()
+        onDataChanged?.invoke(RangeChanged(positionStart, itemCount, payload))
     }
 
     override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
         super.onItemRangeInserted(positionStart, itemCount)
-        onAnyChanged()
+        onDataChanged?.invoke(RangeInserted(positionStart, itemCount))
     }
 
     override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
         super.onItemRangeRemoved(positionStart, itemCount)
-        onAnyChanged()
+        onDataChanged?.invoke(RangeRemoved(positionStart, itemCount))
     }
 
     override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
         super.onItemRangeMoved(fromPosition, toPosition, itemCount)
-        onAnyChanged()
+        onDataChanged?.invoke(RangeMoved(fromPosition, toPosition, itemCount))
     }
+
+    sealed interface Type
+
+    object Changed : Type
+    data class RangeChanged(val positionStart: Int, val itemCount: Int, val payload: Any?) : Type
+    data class RangeInserted(val positionStart: Int, val itemCount: Int) : Type
+    data class RangeRemoved(val positionStart: Int, val itemCount: Int) : Type
+    data class RangeMoved(val fromPosition: Int, val toPosition: Int, val itemCount: Int) : Type
 }

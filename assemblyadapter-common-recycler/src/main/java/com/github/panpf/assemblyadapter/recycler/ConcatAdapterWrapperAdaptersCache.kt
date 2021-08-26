@@ -23,32 +23,31 @@ class ConcatAdapterWrapperAdaptersCache {
     private var mainAdapter: RecyclerView.Adapter<*>? = null
     private var adapterCache: AdapterCache? = null
 
-    private val anyAdapterDataObserver = AnyAdapterDataObserver {
+    private val simpleAdapterDataObserver = SimpleAdapterDataObserver {
         reset()
     }
 
     fun getAdapterCache(adapter: RecyclerView.Adapter<*>): AdapterCache {
         val oldMainAdapter = mainAdapter
-        val adapterCache = adapterCache
-        return if (adapterCache == null || oldMainAdapter == null || oldMainAdapter !== adapter) {
+        val oldAdapterCache = adapterCache
+        return if (oldAdapterCache == null || oldMainAdapter == null || oldMainAdapter !== adapter) {
             reset()
-            mainAdapter = adapter.apply {
-                try {
-                    registerAdapterDataObserver(anyAdapterDataObserver)
-                } catch (e: Exception) {
-                }
+            try {
+                adapter.registerAdapterDataObserver(simpleAdapterDataObserver)
+            } catch (e: Exception) {
             }
+            mainAdapter = adapter
             AdapterCache.buildCache(adapter).apply {
                 this@ConcatAdapterWrapperAdaptersCache.adapterCache = this
             }
         } else {
-            adapterCache
+            oldAdapterCache
         }
     }
 
     fun reset() {
         try {
-            mainAdapter?.unregisterAdapterDataObserver(anyAdapterDataObserver)
+            mainAdapter?.unregisterAdapterDataObserver(simpleAdapterDataObserver)
         } catch (e: Exception) {
         }
         adapterCache = null
