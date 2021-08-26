@@ -154,4 +154,196 @@ class DividerAndItemDividerTest {
             Assert.assertEquals(32, heightSize)
         }
     }
+
+    @Test
+    fun testDrawable() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val drawable = ResourcesCompat.getDrawable(context.resources, R.drawable.dvider, null)!!
+
+        /**
+         * drawable
+         */
+        Divider.drawable(drawable).toItemDivider(context).apply {
+            Assert.assertEquals(100, this.drawable.intrinsicWidth)
+            Assert.assertEquals(5, this.drawable.intrinsicHeight)
+        }
+
+        /**
+         * size
+         */
+        Divider.drawable(drawable, 10).toItemDivider(context).apply {
+            Assert.assertEquals(100, this.drawable.intrinsicWidth)
+            Assert.assertEquals(5, this.drawable.intrinsicHeight)
+            Assert.assertEquals(10, drawableWidthSize)
+            Assert.assertEquals(10, drawableHeightSize)
+            Assert.assertEquals(10, widthSize)
+            Assert.assertEquals(10, heightSize)
+        }
+        Divider.drawable(drawable, 20).toItemDivider(context).apply {
+            Assert.assertEquals(100, this.drawable.intrinsicWidth)
+            Assert.assertEquals(5, this.drawable.intrinsicHeight)
+            Assert.assertEquals(20, drawableWidthSize)
+            Assert.assertEquals(20, drawableHeightSize)
+            Assert.assertEquals(20, widthSize)
+            Assert.assertEquals(20, heightSize)
+        }
+
+        /**
+         * inset size
+         */
+        Divider.drawable(drawable, 20, Insets.of(1, 2, 3, 4)).toItemDivider(context).apply {
+            Assert.assertEquals(100, this.drawable.intrinsicWidth)
+            Assert.assertEquals(5, this.drawable.intrinsicHeight)
+            Assert.assertEquals(1, insetStart)
+            Assert.assertEquals(2, insetTop)
+            Assert.assertEquals(3, insetEnd)
+            Assert.assertEquals(4, insetBottom)
+            Assert.assertEquals(4, insetWidthSize)
+            Assert.assertEquals(6, insetHeightSize)
+            Assert.assertEquals(20, drawableWidthSize)
+            Assert.assertEquals(20, drawableHeightSize)
+            Assert.assertEquals(24, widthSize)
+            Assert.assertEquals(26, heightSize)
+        }
+        Divider.drawable(drawable, 20, Insets.of(4, 5, 6, 7)).toItemDivider(context).apply {
+            Assert.assertEquals(100, this.drawable.intrinsicWidth)
+            Assert.assertEquals(5, this.drawable.intrinsicHeight)
+            Assert.assertEquals(4, insetStart)
+            Assert.assertEquals(5, insetTop)
+            Assert.assertEquals(6, insetEnd)
+            Assert.assertEquals(7, insetBottom)
+            Assert.assertEquals(10, insetWidthSize)
+            Assert.assertEquals(12, insetHeightSize)
+            Assert.assertEquals(20, drawableWidthSize)
+            Assert.assertEquals(20, drawableHeightSize)
+            Assert.assertEquals(30, widthSize)
+            Assert.assertEquals(32, heightSize)
+        }
+    }
+
+    @Test
+    fun testDrawableRes() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+
+        /**
+         * drawable
+         */
+        Divider.drawableRes(R.drawable.dvider).toItemDivider(context).apply {
+            Assert.assertEquals(100, this.drawable.intrinsicWidth)
+            Assert.assertEquals(5, this.drawable.intrinsicHeight)
+        }
+
+        /**
+         * size
+         */
+        Divider.drawableRes(R.drawable.dvider, 10).toItemDivider(context).apply {
+            Assert.assertEquals(100, this.drawable.intrinsicWidth)
+            Assert.assertEquals(5, this.drawable.intrinsicHeight)
+            Assert.assertEquals(10, drawableWidthSize)
+            Assert.assertEquals(10, drawableHeightSize)
+            Assert.assertEquals(10, widthSize)
+            Assert.assertEquals(10, heightSize)
+        }
+        Divider.drawableRes(R.drawable.dvider, 20).toItemDivider(context).apply {
+            Assert.assertEquals(100, this.drawable.intrinsicWidth)
+            Assert.assertEquals(5, this.drawable.intrinsicHeight)
+            Assert.assertEquals(20, drawableWidthSize)
+            Assert.assertEquals(20, drawableHeightSize)
+            Assert.assertEquals(20, widthSize)
+            Assert.assertEquals(20, heightSize)
+        }
+
+        /**
+         * inset size
+         */
+        Divider.drawableRes(R.drawable.dvider, 20, Insets.of(1, 2, 3, 4))
+            .toItemDivider(context)
+            .apply {
+                Assert.assertEquals(100, this.drawable.intrinsicWidth)
+                Assert.assertEquals(5, this.drawable.intrinsicHeight)
+                Assert.assertEquals(1, insetStart)
+                Assert.assertEquals(2, insetTop)
+                Assert.assertEquals(3, insetEnd)
+                Assert.assertEquals(4, insetBottom)
+                Assert.assertEquals(4, insetWidthSize)
+                Assert.assertEquals(6, insetHeightSize)
+                Assert.assertEquals(20, drawableWidthSize)
+                Assert.assertEquals(20, drawableHeightSize)
+                Assert.assertEquals(24, widthSize)
+                Assert.assertEquals(26, heightSize)
+            }
+        Divider.drawableRes(R.drawable.dvider, 20, Insets.of(4, 5, 6, 7))
+            .toItemDivider(context)
+            .apply {
+                Assert.assertEquals(100, this.drawable.intrinsicWidth)
+                Assert.assertEquals(5, this.drawable.intrinsicHeight)
+                Assert.assertEquals(4, insetStart)
+                Assert.assertEquals(5, insetTop)
+                Assert.assertEquals(6, insetEnd)
+                Assert.assertEquals(7, insetBottom)
+                Assert.assertEquals(10, insetWidthSize)
+                Assert.assertEquals(12, insetHeightSize)
+                Assert.assertEquals(20, drawableWidthSize)
+                Assert.assertEquals(20, drawableHeightSize)
+                Assert.assertEquals(30, widthSize)
+                Assert.assertEquals(32, heightSize)
+            }
+    }
+
+    @Test
+    fun testSpace() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+
+        /**
+         * space
+         */
+        Divider.space(5).toItemDivider(context).apply {
+            val colorDrawable = this.drawable as ColorDrawable
+            Assert.assertEquals(Color.TRANSPARENT, colorDrawable.color)
+        }
+
+        /**
+         * size
+         */
+        Divider.space(10).toItemDivider(context).apply {
+            Assert.assertEquals(10, drawableWidthSize)
+            Assert.assertEquals(10, drawableHeightSize)
+            Assert.assertEquals(10, widthSize)
+            Assert.assertEquals(10, heightSize)
+        }
+        Divider.space(20).toItemDivider(context).apply {
+            Assert.assertEquals(20, drawableWidthSize)
+            Assert.assertEquals(20, drawableHeightSize)
+            Assert.assertEquals(20, widthSize)
+            Assert.assertEquals(20, heightSize)
+        }
+
+        /**
+         * inset size
+         */
+        Divider.space(20, Insets.of(1, 2, 3, 4)).toItemDivider(context).apply {
+            Assert.assertEquals(1, insetStart)
+            Assert.assertEquals(2, insetTop)
+            Assert.assertEquals(3, insetEnd)
+            Assert.assertEquals(4, insetBottom)
+            Assert.assertEquals(4, insetWidthSize)
+            Assert.assertEquals(6, insetHeightSize)
+            Assert.assertEquals(20, drawableWidthSize)
+            Assert.assertEquals(20, drawableHeightSize)
+            Assert.assertEquals(24, widthSize)
+            Assert.assertEquals(26, heightSize)
+        }
+        Divider.space(20, Insets.of(4, 5, 6, 7)).toItemDivider(context).apply {
+            Assert.assertEquals(4, insetStart)
+            Assert.assertEquals(5, insetTop)
+            Assert.assertEquals(6, insetEnd)
+            Assert.assertEquals(7, insetBottom)
+            Assert.assertEquals(10, insetWidthSize)
+            Assert.assertEquals(12, insetHeightSize)
+            Assert.assertEquals(20, drawableWidthSize)
+            Assert.assertEquals(20, drawableHeightSize)
+            Assert.assertEquals(30, widthSize)
+            Assert.assertEquals(32, heightSize)
+        }
+    }
 }
