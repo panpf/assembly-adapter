@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinerDividerItemDecorationHelper
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearDividerItemDecorationHelper
 
 /**
  * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、header and footer side divider
@@ -34,7 +34,7 @@ open class LinearDividerItemDecoration(
 ) : ItemDecoration() {
 
     private val itemDecorationHelper =
-        LinerDividerItemDecorationHelper(itemDividerProvider)
+        LinearDividerItemDecorationHelper(itemDividerProvider)
 
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State

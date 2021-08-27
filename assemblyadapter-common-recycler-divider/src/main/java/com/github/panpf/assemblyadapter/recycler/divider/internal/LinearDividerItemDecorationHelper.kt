@@ -20,7 +20,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class LinerDividerItemDecorationHelper(val itemDividerProvider: LinearItemDividerProvider) {
+class LinearDividerItemDecorationHelper(val itemDividerProvider: LinearItemDividerProvider) {
 
     fun getItemOffsets(
         outRect: Rect,
