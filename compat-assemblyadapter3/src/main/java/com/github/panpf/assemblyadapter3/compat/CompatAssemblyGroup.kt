@@ -15,6 +15,6 @@
  */
 package com.github.panpf.assemblyadapter3.compat
 
-import com.github.panpf.assemblyadapter.list.ExpandableGroup
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 
 interface CompatAssemblyGroup : ExpandableGroup

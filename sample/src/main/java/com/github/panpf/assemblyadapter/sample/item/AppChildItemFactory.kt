@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
-import com.github.panpf.assemblyadapter.list.BindingExpandableChildItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.BindingExpandableChildItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo

@@ -1,9 +1,9 @@
 package com.github.panpf.assemblyadapter3.compat
 
 import android.view.ViewGroup
-import com.github.panpf.assemblyadapter.list.ExpandableChildItem
-import com.github.panpf.assemblyadapter.list.ExpandableChildItemFactory
-import com.github.panpf.assemblyadapter.list.ExpandableGroup
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItem
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 
 class CompatExpandableChildItemFactory(val itemFactory: CompatAssemblyItemFactory<*>) :
     ExpandableChildItemFactory<ExpandableGroup, Any>(Any::class) {

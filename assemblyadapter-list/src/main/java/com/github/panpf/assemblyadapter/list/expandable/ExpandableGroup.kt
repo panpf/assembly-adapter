@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.sample.bean
+package com.github.panpf.assemblyadapter.list.expandable
 
-import android.os.Parcelable
-import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
-import com.github.panpf.assemblyadapter.recycler.DiffKey
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
+/**
+ * Data expandable needs to implement this interface
+ */
+interface ExpandableGroup {
 
-@Parcelize
-data class AppGroup(
-    val title: String, val appList: List<AppInfo>
-) : ExpandableGroup, DiffKey, Parcelable {
+    /**
+     * Returns the count of child
+     */
+    fun getChildCount(): Int
 
-    @IgnoredOnParcel
-    override val diffKey: String = title
-
-    override fun getChildCount(): Int = appList.size
-
-    override fun getChild(childPosition: Int): Any = appList[childPosition]
+    /**
+     * Return the child at the [childPosition]
+     */
+    fun getChild(childPosition: Int): Any
 }
