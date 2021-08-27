@@ -23,8 +23,8 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinerDividerItemDecorationHelper
 
 /**
  * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、header and footer side divider
@@ -32,6 +32,9 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDivi
 open class LinearDividerItemDecoration(
     val itemDividerProvider: LinearItemDividerProvider,
 ) : ItemDecoration() {
+
+    private val itemDecorationHelper =
+        LinerDividerItemDecorationHelper(itemDividerProvider)
 
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
@@ -45,35 +48,15 @@ open class LinearDividerItemDecoration(
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
         val isVerticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
         val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
-        val isFirst = position == 0
-        val isLast = position == itemCount - 1
 
-        val startItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, isFirst, isLast, isVerticalOrientation,
-            if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-        )
-        val topItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, isFirst, isLast, isVerticalOrientation,
-            ItemDivider.Type.TOP
-        )
-        val endItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, isFirst, isLast, isVerticalOrientation,
-            if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
-        )
-        val bottomItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, isFirst, isLast, isVerticalOrientation,
-            ItemDivider.Type.BOTTOM
-        )
-        val startItemDividerSize = startItemDivider?.widthSize ?: 0
-        val topItemDividerSize = topItemDivider?.heightSize ?: 0
-        val endItemDividerSize = endItemDivider?.widthSize ?: 0
-        val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
-
-        outRect.set(
-            startItemDividerSize,
-            topItemDividerSize,
-            endItemDividerSize,
-            bottomItemDividerSize
+        itemDecorationHelper.getItemOffsets(
+            outRect,
+            view,
+            parent,
+            itemCount,
+            position,
+            isVerticalOrientation,
+            isLTRDirection
         )
     }
 
@@ -83,113 +66,23 @@ open class LinearDividerItemDecoration(
             throw IllegalArgumentException("layoutManager must be LinearLayoutManager")
         }
         val itemCount = layoutManager.itemCount.takeIf { it != 0 } ?: return
-        val childCount = parent.childCount.takeIf { it != 0 } ?: return
         val isVerticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
         val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
 
+        val childCount = parent.childCount.takeIf { it != 0 } ?: return
         for (index in 0 until childCount) {
             val view = parent.getChildAt(index)
             val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
-            val isFirst = position == 0
-            val isLast = position == itemCount - 1
-
-            val startItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, isFirst, isLast, isVerticalOrientation,
-                if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
+            itemDecorationHelper.drawItem(
+                canvas,
+                view,
+                parent,
+                itemCount,
+                position,
+                isVerticalOrientation,
+                isLTRDirection
             )
-            val topItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, isFirst, isLast, isVerticalOrientation,
-                ItemDivider.Type.TOP
-            )
-            val endItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, isFirst, isLast, isVerticalOrientation,
-                if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
-            )
-            val bottomItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, isFirst, isLast, isVerticalOrientation,
-                ItemDivider.Type.BOTTOM
-            )
-            val startItemDividerSize = startItemDivider?.widthSize ?: 0
-            val topItemDividerSize = topItemDivider?.heightSize ?: 0
-            val endItemDividerSize = endItemDivider?.widthSize ?: 0
-            val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
-
-            if (isVerticalOrientation) {
-                startItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left - insetEnd - drawableWidthSize,
-                        view.top - topItemDividerSize + insetTop,
-                        view.left - insetEnd,
-                        view.bottom + bottomItemDividerSize - insetBottom
-                    )
-                }
-                endItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.right + insetStart,
-                        view.top - topItemDividerSize + insetTop,
-                        view.right + insetStart + drawableWidthSize,
-                        view.bottom + bottomItemDividerSize - insetBottom
-                    )
-                }
-                topItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left + insetStart,
-                        view.top - insetBottom - drawableHeightSize,
-                        view.right - insetEnd,
-                        view.top - insetBottom
-                    )
-                }
-                bottomItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left + insetStart,
-                        view.bottom + insetTop,
-                        view.right - insetEnd,
-                        view.bottom + insetTop + drawableHeightSize
-                    )
-                }
-            } else {
-                startItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left - insetEnd - drawableWidthSize,
-                        view.top + insetTop,
-                        view.left - insetEnd,
-                        view.bottom - insetBottom
-                    )
-                }
-                endItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.right + insetStart,
-                        view.top + insetTop,
-                        view.right + insetStart + drawableWidthSize,
-                        view.bottom - insetBottom
-                    )
-                }
-                topItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left - startItemDividerSize + insetStart,
-                        view.top - insetBottom - drawableHeightSize,
-                        view.right + endItemDividerSize - insetEnd,
-                        view.top - insetBottom
-                    )
-                }
-                bottomItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left - startItemDividerSize + insetStart,
-                        view.bottom + insetTop,
-                        view.right + endItemDividerSize - insetEnd,
-                        view.bottom + insetTop + drawableHeightSize
-                    )
-                }
-            }
         }
     }
 

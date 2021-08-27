@@ -23,8 +23,8 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerItemDecorationHelper
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDividerProvider
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
 
 /**
  * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
@@ -32,6 +32,8 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
 open class GridDividerItemDecoration(
     val itemDividerProvider: GridItemDividerProvider,
 ) : ItemDecoration() {
+
+    private val itemDecorationHelper = GridDividerItemDecorationHelper(itemDividerProvider)
 
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
@@ -54,44 +56,19 @@ open class GridDividerItemDecoration(
         val spanIndex = childLayoutParams.spanIndex
         val spanGroupCount = spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
         val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
-        val isFirstGroup = spanGroupIndex == 0
-        val isLastGroup = spanGroupIndex == spanGroupCount - 1
-        val isFullSpan = spanSize == spanCount
-        val isFirstSpan = isFullSpan || spanIndex == 0
-        val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
-
-        val startItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-            isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, isVerticalOrientation,
-            if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-        )
-        val topItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-            isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.TOP
-        )
-        val endItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-            isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, isVerticalOrientation,
-            if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
-        )
-        val bottomItemDivider = itemDividerProvider.getItemDivider(
-            view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-            isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.BOTTOM
-        )
-        val startItemDividerSize = startItemDivider?.widthSize ?: 0
-        val topItemDividerSize = topItemDivider?.heightSize ?: 0
-        val endItemDividerSize = endItemDivider?.widthSize ?: 0
-        val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
-
-        outRect.set(
-            startItemDividerSize,
-            topItemDividerSize,
-            endItemDividerSize,
-            bottomItemDividerSize
+        itemDecorationHelper.getItemOffsets(
+            outRect,
+            view,
+            parent,
+            itemCount,
+            position,
+            spanCount,
+            spanSize,
+            spanIndex,
+            spanGroupCount,
+            spanGroupIndex,
+            isVerticalOrientation,
+            isLTRDirection
         )
     }
 
@@ -119,114 +96,20 @@ open class GridDividerItemDecoration(
             val spanSize = childLayoutParams.spanSize
             val spanIndex = childLayoutParams.spanIndex
             val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
-            val isFirstGroup = spanGroupIndex == 0
-            val isLastGroup = spanGroupIndex == spanGroupCount - 1
-            val isFullSpan = spanSize == spanCount
-            val isFirstSpan = isFullSpan || spanIndex == 0
-            val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
-
-            val startItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-                isFirstGroup, isLastGroup, isVerticalOrientation,
-                if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
+            itemDecorationHelper.drawItem(
+                canvas,
+                view,
+                parent,
+                itemCount,
+                position,
+                spanCount,
+                spanSize,
+                spanIndex,
+                spanGroupCount,
+                spanGroupIndex,
+                isVerticalOrientation,
+                isLTRDirection
             )
-            val topItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-                isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.TOP
-            )
-            val endItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-                isFirstGroup, isLastGroup, isVerticalOrientation,
-                if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
-            )
-            val bottomItemDivider = itemDividerProvider.getItemDivider(
-                view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-                isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.BOTTOM
-            )
-            val startItemDividerSize = startItemDivider?.widthSize ?: 0
-            val topItemDividerSize = topItemDivider?.heightSize ?: 0
-            val endItemDividerSize = endItemDivider?.widthSize ?: 0
-            val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
-
-            if (isVerticalOrientation) {
-                startItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left - insetEnd - drawableWidthSize,
-                        view.top - topItemDividerSize + insetTop,
-                        view.left - insetEnd,
-                        view.bottom + bottomItemDividerSize - insetBottom
-                    )
-                }
-                endItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.right + insetStart,
-                        view.top - topItemDividerSize + insetTop,
-                        view.right + insetStart + drawableWidthSize,
-                        view.bottom + bottomItemDividerSize - insetBottom
-                    )
-                }
-                topItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left + insetStart,
-                        view.top - insetBottom - drawableHeightSize,
-                        view.right - insetEnd,
-                        view.top - insetBottom
-                    )
-                }
-                bottomItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left + insetStart,
-                        view.bottom + insetTop,
-                        view.right - insetEnd,
-                        view.bottom + insetTop + drawableHeightSize
-                    )
-                }
-            } else {
-                startItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left - insetEnd - drawableWidthSize,
-                        view.top + insetTop,
-                        view.left - insetEnd,
-                        view.bottom - insetBottom
-                    )
-                }
-                endItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.right + insetStart,
-                        view.top + insetTop,
-                        view.right + insetStart + drawableWidthSize,
-                        view.bottom - insetBottom
-                    )
-                }
-                topItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left - startItemDividerSize + insetStart,
-                        view.top - insetBottom - drawableHeightSize,
-                        view.right + endItemDividerSize - insetEnd,
-                        view.top - insetBottom
-                    )
-                }
-                bottomItemDivider?.apply {
-                    draw(
-                        canvas,
-                        view.left - startItemDividerSize + insetStart,
-                        view.bottom + insetTop,
-                        view.right + endItemDividerSize - insetEnd,
-                        view.bottom + insetTop + drawableHeightSize
-                    )
-                }
-            }
         }
     }
 
