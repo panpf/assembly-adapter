@@ -30,7 +30,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
  * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  */
 open class GridDividerItemDecoration(
-    private val itemDividerProvider: GridItemDividerProvider,
+    val itemDividerProvider: GridItemDividerProvider,
 ) : ItemDecoration() {
 
     override fun getItemOffsets(

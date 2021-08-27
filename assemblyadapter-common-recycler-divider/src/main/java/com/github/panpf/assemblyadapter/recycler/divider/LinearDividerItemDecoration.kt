@@ -30,7 +30,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDivi
  * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、header and footer side divider
  */
 open class LinearDividerItemDecoration(
-    private val itemDividerProvider: LinearItemDividerProvider,
+    val itemDividerProvider: LinearItemDividerProvider,
 ) : ItemDecoration() {
 
     override fun getItemOffsets(

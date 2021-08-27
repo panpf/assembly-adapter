@@ -19,12 +19,12 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class StaggeredGridItemDividerProvider(
-    private val dividerConfig: ItemDividerConfig,
-    private val headerDividerConfig: ItemDividerConfig?,
-    private val footerDividerConfig: ItemDividerConfig?,
-    private val sideDividerConfig: ItemDividerConfig?,
-    private val headerSideDividerConfig: ItemDividerConfig?,
-    private val footerSideDividerConfig: ItemDividerConfig?,
+    val dividerConfig: ItemDividerConfig,
+    val headerDividerConfig: ItemDividerConfig?,
+    val footerDividerConfig: ItemDividerConfig?,
+    val sideDividerConfig: ItemDividerConfig?,
+    val headerSideDividerConfig: ItemDividerConfig?,
+    val footerSideDividerConfig: ItemDividerConfig?,
 ) {
 
     fun getItemDivider(

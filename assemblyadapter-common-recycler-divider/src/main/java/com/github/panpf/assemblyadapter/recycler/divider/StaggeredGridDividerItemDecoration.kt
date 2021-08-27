@@ -33,8 +33,8 @@ import kotlin.math.floor
  * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  */
 open class StaggeredGridDividerItemDecoration(
-    private val itemDividerProvider: StaggeredGridItemDividerProvider,
-    private val isFullSpanByPosition: IsFullSpanByPosition?,
+    val itemDividerProvider: StaggeredGridItemDividerProvider,
+    val isFullSpanByPosition: IsFullSpanByPosition?,
 ) : ItemDecoration() {
 
     init {
