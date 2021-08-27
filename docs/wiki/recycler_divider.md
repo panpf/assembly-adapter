@@ -30,8 +30,8 @@ val linearDividerItemDecoration = LinearDividerItemDecoration.Builder(context).a
     // 头部和尾巴 divider 为空白 20 个像素（默认不显示头部和尾巴 divider）
     headerAndFooterDivider(Divider.space(20))
 
-    // 头部和尾巴 side divider 为绿色 5 个像素
-    headerAndFooterSideDivider(Divider.color(Color.GREEN, 5))
+    // side 头部和尾巴 divider 为绿色 5 个像素
+    sideHeaderAndFooterDivider(Divider.color(Color.GREEN, 5))
 }.build()
 recyclerView.addItemDecoration(linearDividerItemDecoration)
 ```
@@ -42,8 +42,8 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 * headerDivider：显示在滑动方向上第一个 item 的 top 边
 * footerDivider：显示在滑动方向上最后一个 item 的 bottom 边
 * sideDivider：显示在非滑动方向上每个 item（最后一个 item 除外）的 right 边。`LinearDividerItemDecoration 不支持`
-* headerSideDivider：显示在非滑动方向上第一个 item 的 left 边
-* footerSideDivider：显示在非滑动方向上最后一个 item 的 right 边
+* sideHeaderDivider：显示在非滑动方向上第一个 item 的 left 边
+* sideFooterDivider：显示在非滑动方向上最后一个 item 的 right 边
 
 ### ItemFactory 支持
 

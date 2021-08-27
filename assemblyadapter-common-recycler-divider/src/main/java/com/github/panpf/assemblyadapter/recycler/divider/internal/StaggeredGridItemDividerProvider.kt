@@ -23,8 +23,8 @@ class StaggeredGridItemDividerProvider(
     val headerDividerConfig: ItemDividerConfig?,
     val footerDividerConfig: ItemDividerConfig?,
     val sideDividerConfig: ItemDividerConfig?,
-    val headerSideDividerConfig: ItemDividerConfig?,
-    val footerSideDividerConfig: ItemDividerConfig?,
+    val sideHeaderDividerConfig: ItemDividerConfig?,
+    val sideFooterDividerConfig: ItemDividerConfig?,
 ) {
 
     fun getItemDivider(
@@ -44,17 +44,17 @@ class StaggeredGridItemDividerProvider(
     ): ItemDivider? {
         return if (isVerticalOrientation) {
             when (dividerType) {
-                ItemDivider.Type.START -> if (isFirstSpan) headerSideDividerConfig else sideDividerConfig
+                ItemDivider.Type.START -> if (isFirstSpan) sideHeaderDividerConfig else sideDividerConfig
                 ItemDivider.Type.TOP -> if (isColumnFirst) headerDividerConfig else null
-                ItemDivider.Type.END -> if (isLastSpan) footerSideDividerConfig else sideDividerConfig
+                ItemDivider.Type.END -> if (isLastSpan) sideFooterDividerConfig else sideDividerConfig
                 ItemDivider.Type.BOTTOM -> if (isColumnEnd) footerDividerConfig else dividerConfig
             }
         } else {
             when (dividerType) {
                 ItemDivider.Type.START -> if (isColumnFirst) headerDividerConfig else null
-                ItemDivider.Type.TOP -> if (isFirstSpan) headerSideDividerConfig else sideDividerConfig
+                ItemDivider.Type.TOP -> if (isFirstSpan) sideHeaderDividerConfig else sideDividerConfig
                 ItemDivider.Type.END -> if (isColumnEnd) footerDividerConfig else dividerConfig
-                ItemDivider.Type.BOTTOM -> if (isLastSpan) footerSideDividerConfig else sideDividerConfig
+                ItemDivider.Type.BOTTOM -> if (isLastSpan) sideFooterDividerConfig else sideDividerConfig
             }
         }?.get(parent, position, spanIndex)
     }

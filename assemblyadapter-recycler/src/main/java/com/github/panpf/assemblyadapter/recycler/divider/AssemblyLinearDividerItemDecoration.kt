@@ -38,8 +38,8 @@ open class AssemblyLinearDividerItemDecoration(
         private var useDividerAsHeaderDivider = false
         private var useDividerAsFooterDivider = false
 
-        private var headerSideDividerConfig: AssemblyDividerConfig? = null
-        private var footerSideDividerConfig: AssemblyDividerConfig? = null
+        private var sideHeaderDividerConfig: AssemblyDividerConfig? = null
+        private var sideFooterDividerConfig: AssemblyDividerConfig? = null
 
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
@@ -73,9 +73,9 @@ open class AssemblyLinearDividerItemDecoration(
                 footerDividerConfig = (footerDividerConfig
                     ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                headerSideDividerConfig = headerSideDividerConfig
+                sideHeaderDividerConfig = sideHeaderDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                footerSideDividerConfig = footerSideDividerConfig
+                sideFooterDividerConfig = sideFooterDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
             )
         }
@@ -207,11 +207,11 @@ open class AssemblyLinearDividerItemDecoration(
          * Set the header divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun headerSideDivider(
+        fun sideHeaderDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.headerSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.sideHeaderDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -220,8 +220,8 @@ open class AssemblyLinearDividerItemDecoration(
         /**
          * Set the header divider on the side of the item
          */
-        fun headerSideDivider(config: AssemblyDividerConfig): Builder {
-            this.headerSideDividerConfig = config
+        fun sideHeaderDivider(config: AssemblyDividerConfig): Builder {
+            this.sideHeaderDividerConfig = config
             return this
         }
 
@@ -230,11 +230,11 @@ open class AssemblyLinearDividerItemDecoration(
          * Set the footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun footerSideDivider(
+        fun sideFooterDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.footerSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.sideFooterDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -243,8 +243,8 @@ open class AssemblyLinearDividerItemDecoration(
         /**
          * Set the footer divider on the side of the item
          */
-        fun footerSideDivider(config: AssemblyDividerConfig): Builder {
-            this.footerSideDividerConfig = config
+        fun sideFooterDivider(config: AssemblyDividerConfig): Builder {
+            this.sideFooterDividerConfig = config
             return this
         }
 
@@ -253,14 +253,14 @@ open class AssemblyLinearDividerItemDecoration(
          * Set the header and footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun headerAndFooterSideDivider(
+        fun sideHeaderAndFooterDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.headerSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.sideHeaderDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
-            this.footerSideDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.sideFooterDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -269,9 +269,9 @@ open class AssemblyLinearDividerItemDecoration(
         /**
          * Set the header and footer divider on the side of the item
          */
-        fun headerAndFooterSideDivider(config: AssemblyDividerConfig): Builder {
-            this.headerSideDividerConfig = config
-            this.footerSideDividerConfig = config
+        fun sideHeaderAndFooterDivider(config: AssemblyDividerConfig): Builder {
+            this.sideHeaderDividerConfig = config
+            this.sideFooterDividerConfig = config
             return this
         }
 

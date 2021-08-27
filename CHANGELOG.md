@@ -5,6 +5,7 @@
 * fix: Fix the bug that the Insets.topAndBottomOf() method reverses start and top
 * change: The position priority of DividerConfig is now higher than spanIndex
 * fix: Fix the bug that GridDividerItemDecoration encounters an item with a spanSize greater than 1 and less than spanCount that its isLastSpan is calculated incorrectly
+* change: headerSide rename to sideHeader, footerSide rename to sideFooter
 
 
 # v4.0.0-beta01

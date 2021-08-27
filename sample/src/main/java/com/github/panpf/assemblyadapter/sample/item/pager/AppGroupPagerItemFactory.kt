@@ -52,7 +52,7 @@ class AppGroupPagerItemFactory(private val activity: Activity) :
                 layoutManager = GridLayoutManager(context, 3)
                 addAssemblyGridDividerItemDecoration {
                     divider(Divider.space(20.dp2px)).useDividerAsHeaderAndFooterDivider()
-                    sideDivider(Divider.space(20.dp2px)).useSideDividerAsHeaderAndFooterSideDivider()
+                    sideDivider(Divider.space(20.dp2px)).useSideDividerAsSideHeaderAndFooterDivider()
                 }
             }
         }

@@ -89,8 +89,8 @@ class StaggeredGridDividerItemDecorationTest {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -106,8 +106,8 @@ class StaggeredGridDividerItemDecorationTest {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -125,8 +125,8 @@ class StaggeredGridDividerItemDecorationTest {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -142,8 +142,8 @@ class StaggeredGridDividerItemDecorationTest {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -162,8 +162,8 @@ class StaggeredGridDividerItemDecorationTest {
             }
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -181,8 +181,8 @@ class StaggeredGridDividerItemDecorationTest {
             }
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -198,8 +198,8 @@ class StaggeredGridDividerItemDecorationTest {
             }
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -218,8 +218,8 @@ class StaggeredGridDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -237,8 +237,8 @@ class StaggeredGridDividerItemDecorationTest {
                 Assert.assertNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -254,8 +254,8 @@ class StaggeredGridDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -280,8 +280,8 @@ class StaggeredGridDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -305,8 +305,8 @@ class StaggeredGridDividerItemDecorationTest {
                 Assert.assertNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -328,8 +328,8 @@ class StaggeredGridDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -349,8 +349,8 @@ class StaggeredGridDividerItemDecorationTest {
             }
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -370,8 +370,8 @@ class StaggeredGridDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -397,8 +397,8 @@ class StaggeredGridDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
 
@@ -417,8 +417,8 @@ class StaggeredGridDividerItemDecorationTest {
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -435,8 +435,8 @@ class StaggeredGridDividerItemDecorationTest {
                 )
                 Assert.assertNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
@@ -451,74 +451,74 @@ class StaggeredGridDividerItemDecorationTest {
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
          * side header divider
          */
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            headerSideDivider(Divider.space(10))
+            sideHeaderDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            headerSideDivider(Divider.space(10)) {
+            sideHeaderDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            headerSideDivider(DividerConfig.Builder(Divider.space(10)).build())
+            sideHeaderDivider(DividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
          * side footer divider
          */
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            footerSideDivider(Divider.space(10))
+            sideFooterDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -528,15 +528,15 @@ class StaggeredGridDividerItemDecorationTest {
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            footerSideDivider(Divider.space(10)) {
+            sideFooterDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -546,13 +546,13 @@ class StaggeredGridDividerItemDecorationTest {
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            footerSideDivider(DividerConfig.Builder(Divider.space(10)).build())
+            sideFooterDivider(DividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -562,22 +562,22 @@ class StaggeredGridDividerItemDecorationTest {
         }
 
         /**
-         * headerAndFooterDivider
+         * sideHeaderAndFooterDivider
          */
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            headerAndFooterSideDivider(Divider.space(10))
+            sideHeaderAndFooterDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -587,21 +587,21 @@ class StaggeredGridDividerItemDecorationTest {
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            headerAndFooterSideDivider(Divider.space(10)) {
+            sideHeaderAndFooterDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNull(get(parent, 1, 0))
             }
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -611,59 +611,19 @@ class StaggeredGridDividerItemDecorationTest {
         }
 
         StaggeredGridDividerItemDecoration.Builder(context).apply {
-            headerAndFooterSideDivider(DividerConfig.Builder(Divider.space(10)).build())
+            sideHeaderAndFooterDivider(DividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.sideDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            itemDividerProvider.footerSideDividerConfig!!.apply {
-                Assert.assertEquals(
-                    Color.TRANSPARENT,
-                    (get(parent, 0, 0)!!.drawable as ColorDrawable).color
-                )
-                Assert.assertNotNull(get(parent, 1, 0))
-            }
-        }
-
-        /**
-         * useSideDividerAsHeaderSideDivider
-         */
-        StaggeredGridDividerItemDecoration.Builder(context).apply {
-            sideDivider(Divider.space(10))
-            useSideDividerAsHeaderSideDivider()
-        }.build().apply {
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
-                Assert.assertEquals(
-                    Color.TRANSPARENT,
-                    (get(parent, 0, 0)!!.drawable as ColorDrawable).color
-                )
-                Assert.assertNotNull(get(parent, 1, 0))
-            }
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
-        }
-
-        /**
-         * useSideDividerAsFooterSideDivider
-         */
-        StaggeredGridDividerItemDecoration.Builder(context).apply {
-            sideDivider(Divider.space(10))
-            useSideDividerAsFooterSideDivider()
-        }.build().apply {
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -673,23 +633,63 @@ class StaggeredGridDividerItemDecorationTest {
         }
 
         /**
-         * useSideDividerAsHeaderAndFooterSideDivider
+         * useSideDividerAsSideHeaderDivider
          */
         StaggeredGridDividerItemDecoration.Builder(context).apply {
             sideDivider(Divider.space(10))
-            useSideDividerAsHeaderAndFooterSideDivider()
+            useSideDividerAsSideHeaderDivider()
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNotNull(itemDividerProvider.sideDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+        }
+
+        /**
+         * useSideDividerAsSideFooterDivider
+         */
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
+            useSideDividerAsSideFooterDivider()
+        }.build().apply {
+            Assert.assertNull(itemDividerProvider.headerDividerConfig)
+            Assert.assertNull(itemDividerProvider.footerDividerConfig)
+            Assert.assertNotNull(itemDividerProvider.sideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
+                Assert.assertEquals(
+                    Color.TRANSPARENT,
+                    (get(parent, 0, 0)!!.drawable as ColorDrawable).color
+                )
+                Assert.assertNotNull(get(parent, 1, 0))
+            }
+        }
+
+        /**
+         * useSideDividerAsSideHeaderAndFooterDivider
+         */
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
+            useSideDividerAsSideHeaderAndFooterDivider()
+        }.build().apply {
+            Assert.assertNull(itemDividerProvider.headerDividerConfig)
+            Assert.assertNull(itemDividerProvider.footerDividerConfig)
+            Assert.assertNotNull(itemDividerProvider.sideDividerConfig)
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
+                Assert.assertEquals(
+                    Color.TRANSPARENT,
+                    (get(parent, 0, 0)!!.drawable as ColorDrawable).color
+                )
+                Assert.assertNotNull(get(parent, 1, 0))
+            }
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color

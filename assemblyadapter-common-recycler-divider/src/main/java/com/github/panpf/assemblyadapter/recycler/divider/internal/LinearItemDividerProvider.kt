@@ -22,8 +22,8 @@ class LinearItemDividerProvider(
     val dividerConfig: ItemDividerConfig,
     val headerDividerConfig: ItemDividerConfig?,
     val footerDividerConfig: ItemDividerConfig?,
-    val headerSideDividerConfig: ItemDividerConfig?,
-    val footerSideDividerConfig: ItemDividerConfig?,
+    val sideHeaderDividerConfig: ItemDividerConfig?,
+    val sideFooterDividerConfig: ItemDividerConfig?,
 ) {
 
     fun getItemDivider(
@@ -38,17 +38,17 @@ class LinearItemDividerProvider(
     ): ItemDivider? {
         return if (isVerticalOrientation) {
             when (dividerType) {
-                ItemDivider.Type.START -> headerSideDividerConfig
+                ItemDivider.Type.START -> sideHeaderDividerConfig
                 ItemDivider.Type.TOP -> if (isFirst) headerDividerConfig else null
-                ItemDivider.Type.END -> footerSideDividerConfig
+                ItemDivider.Type.END -> sideFooterDividerConfig
                 ItemDivider.Type.BOTTOM -> if (isLast) footerDividerConfig else dividerConfig
             }
         } else {
             when (dividerType) {
                 ItemDivider.Type.START -> if (isFirst) headerDividerConfig else null
-                ItemDivider.Type.TOP -> headerSideDividerConfig
+                ItemDivider.Type.TOP -> sideHeaderDividerConfig
                 ItemDivider.Type.END -> if (isLast) footerDividerConfig else dividerConfig
-                ItemDivider.Type.BOTTOM -> footerSideDividerConfig
+                ItemDivider.Type.BOTTOM -> sideFooterDividerConfig
             }
         }?.get(parent, position, 0)
     }

@@ -43,8 +43,8 @@ class LinearDividerItemDecorationTest {
             }
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -59,8 +59,8 @@ class LinearDividerItemDecorationTest {
             }
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -77,8 +77,8 @@ class LinearDividerItemDecorationTest {
             }
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -93,8 +93,8 @@ class LinearDividerItemDecorationTest {
             }
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -111,8 +111,8 @@ class LinearDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -128,8 +128,8 @@ class LinearDividerItemDecorationTest {
                 Assert.assertNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -143,8 +143,8 @@ class LinearDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -161,8 +161,8 @@ class LinearDividerItemDecorationTest {
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -178,8 +178,8 @@ class LinearDividerItemDecorationTest {
                 )
                 Assert.assertNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -193,8 +193,8 @@ class LinearDividerItemDecorationTest {
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -217,8 +217,8 @@ class LinearDividerItemDecorationTest {
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -240,8 +240,8 @@ class LinearDividerItemDecorationTest {
                 )
                 Assert.assertNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
@@ -261,8 +261,8 @@ class LinearDividerItemDecorationTest {
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -280,8 +280,8 @@ class LinearDividerItemDecorationTest {
                 Assert.assertNotNull(get(parent, 1, 0))
             }
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -299,8 +299,8 @@ class LinearDividerItemDecorationTest {
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
@@ -324,8 +324,8 @@ class LinearDividerItemDecorationTest {
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
 
@@ -333,62 +333,62 @@ class LinearDividerItemDecorationTest {
          * side header divider
          */
         LinearDividerItemDecoration.Builder(context).apply {
-            headerSideDivider(Divider.space(10))
+            sideHeaderDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
-            headerSideDivider(Divider.space(10)) {
+            sideHeaderDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
-            headerSideDivider(DividerConfig.Builder(Divider.space(10)).build())
+            sideHeaderDivider(DividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            Assert.assertNull(itemDividerProvider.footerSideDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
         }
 
         /**
          * side footer divider
          */
         LinearDividerItemDecoration.Builder(context).apply {
-            footerSideDivider(Divider.space(10))
+            sideFooterDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -398,14 +398,14 @@ class LinearDividerItemDecorationTest {
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
-            footerSideDivider(Divider.space(10)) {
+            sideFooterDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -415,12 +415,12 @@ class LinearDividerItemDecorationTest {
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
-            footerSideDivider(DividerConfig.Builder(Divider.space(10)).build())
+            sideFooterDivider(DividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.headerSideDividerConfig)
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -430,21 +430,21 @@ class LinearDividerItemDecorationTest {
         }
 
         /**
-         * headerAndFooterDivider
+         * sideHeaderAndFooterDivider
          */
         LinearDividerItemDecoration.Builder(context).apply {
-            headerAndFooterSideDivider(Divider.space(10))
+            sideHeaderAndFooterDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -454,20 +454,20 @@ class LinearDividerItemDecorationTest {
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
-            headerAndFooterSideDivider(Divider.space(10)) {
+            sideHeaderAndFooterDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNull(get(parent, 1, 0))
             }
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
@@ -477,18 +477,18 @@ class LinearDividerItemDecorationTest {
         }
 
         LinearDividerItemDecoration.Builder(context).apply {
-            headerAndFooterSideDivider(DividerConfig.Builder(Divider.space(10)).build())
+            sideHeaderAndFooterDivider(DividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            itemDividerProvider.headerSideDividerConfig!!.apply {
+            itemDividerProvider.sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color
                 )
                 Assert.assertNotNull(get(parent, 1, 0))
             }
-            itemDividerProvider.footerSideDividerConfig!!.apply {
+            itemDividerProvider.sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
                     (get(parent, 0, 0)!!.drawable as ColorDrawable).color

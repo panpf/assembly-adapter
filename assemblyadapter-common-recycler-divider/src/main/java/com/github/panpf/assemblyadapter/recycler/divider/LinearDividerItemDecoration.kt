@@ -201,8 +201,8 @@ open class LinearDividerItemDecoration(
         private var useDividerAsHeaderDivider = false
         private var useDividerAsFooterDivider = false
 
-        private var headerSideDividerConfig: DividerConfig? = null
-        private var footerSideDividerConfig: DividerConfig? = null
+        private var sideHeaderDividerConfig: DividerConfig? = null
+        private var sideFooterDividerConfig: DividerConfig? = null
 
         fun build(): LinearDividerItemDecoration {
             return LinearDividerItemDecoration(buildItemDividerProvider())
@@ -227,8 +227,8 @@ open class LinearDividerItemDecoration(
                 footerDividerConfig = (footerDividerConfig
                     ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
                     ?.toItemDividerConfig(context),
-                headerSideDividerConfig = headerSideDividerConfig?.toItemDividerConfig(context),
-                footerSideDividerConfig = footerSideDividerConfig?.toItemDividerConfig(context),
+                sideHeaderDividerConfig = sideHeaderDividerConfig?.toItemDividerConfig(context),
+                sideFooterDividerConfig = sideFooterDividerConfig?.toItemDividerConfig(context),
             )
         }
 
@@ -359,11 +359,11 @@ open class LinearDividerItemDecoration(
          * Set the header divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun headerSideDivider(
+        fun sideHeaderDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.headerSideDividerConfig = DividerConfig.Builder(divider).apply {
+            this.sideHeaderDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -372,8 +372,8 @@ open class LinearDividerItemDecoration(
         /**
          * Set the header divider on the side of the item
          */
-        fun headerSideDivider(config: DividerConfig): Builder {
-            this.headerSideDividerConfig = config
+        fun sideHeaderDivider(config: DividerConfig): Builder {
+            this.sideHeaderDividerConfig = config
             return this
         }
 
@@ -382,11 +382,11 @@ open class LinearDividerItemDecoration(
          * Set the footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun footerSideDivider(
+        fun sideFooterDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.footerSideDividerConfig = DividerConfig.Builder(divider).apply {
+            this.sideFooterDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -395,8 +395,8 @@ open class LinearDividerItemDecoration(
         /**
          * Set the footer divider on the side of the item
          */
-        fun footerSideDivider(config: DividerConfig): Builder {
-            this.footerSideDividerConfig = config
+        fun sideFooterDivider(config: DividerConfig): Builder {
+            this.sideFooterDividerConfig = config
             return this
         }
 
@@ -405,14 +405,14 @@ open class LinearDividerItemDecoration(
          * Set the header and footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        fun headerAndFooterSideDivider(
+        fun sideHeaderAndFooterDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.headerSideDividerConfig = DividerConfig.Builder(divider).apply {
+            this.sideHeaderDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
-            this.footerSideDividerConfig = DividerConfig.Builder(divider).apply {
+            this.sideFooterDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -421,9 +421,9 @@ open class LinearDividerItemDecoration(
         /**
          * Set the header and footer divider on the side of the item
          */
-        fun headerAndFooterSideDivider(config: DividerConfig): Builder {
-            this.headerSideDividerConfig = config
-            this.footerSideDividerConfig = config
+        fun sideHeaderAndFooterDivider(config: DividerConfig): Builder {
+            this.sideHeaderDividerConfig = config
+            this.sideFooterDividerConfig = config
             return this
         }
     }

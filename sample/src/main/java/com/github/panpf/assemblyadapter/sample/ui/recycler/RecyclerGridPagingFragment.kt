@@ -81,7 +81,7 @@ class RecyclerGridPagingFragment : BaseBindingFragment<FragmentRecyclerBinding>(
                 useDividerAsFooterDivider()
 
                 sideDivider(Divider.space(20.dp2px))
-                headerAndFooterSideDivider(Divider.space(20.dp2px)) {
+                sideHeaderAndFooterDivider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(AppsOverviewItemFactory::class)
                     disableByItemFactoryClass(ListSeparatorItemFactory::class)
                 }

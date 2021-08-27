@@ -61,7 +61,7 @@ class CompatRecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>(
                     disableByItemFactoryClass(TextItem.Factory::class)
                 }
                 sideDivider(Divider.space(20.dp2px))
-                headerAndFooterSideDivider(Divider.space(20.dp2px)) {
+                sideHeaderAndFooterDivider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(TextItem.Factory::class)
                     disableByItemFactoryClass(ListSeparatorItem.Factory::class)
                 }

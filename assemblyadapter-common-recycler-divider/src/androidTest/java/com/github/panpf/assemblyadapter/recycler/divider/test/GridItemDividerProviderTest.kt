@@ -42,9 +42,9 @@ class GridItemDividerProviderTest {
                 .toItemDividerConfig(context),
             sideDividerConfig = DividerConfig.Builder(Divider.space(20)).build()
                 .toItemDividerConfig(context),
-            headerSideDividerConfig = DividerConfig.Builder(Divider.space(25)).build()
+            sideHeaderDividerConfig = DividerConfig.Builder(Divider.space(25)).build()
                 .toItemDividerConfig(context),
-            footerSideDividerConfig = DividerConfig.Builder(Divider.space(30)).build()
+            sideFooterDividerConfig = DividerConfig.Builder(Divider.space(30)).build()
                 .toItemDividerConfig(context),
         )
 
