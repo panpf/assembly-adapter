@@ -29,21 +29,21 @@ class ItemTest {
     @Suppress("RemoveExplicitTypeArguments")
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testExtraItem = TestItem<String>(TextView(context))
+        val testItem = TestItem<String>(TextView(context))
 
-        Assert.assertNotNull(testExtraItem.context)
-        Assert.assertNull(testExtraItem.dataOrNull)
+        Assert.assertNotNull(testItem.context)
+        Assert.assertNull(testItem.dataOrNull)
         assertThrow(NullPointerException::class) {
-            testExtraItem.dataOrThrow
+            testItem.dataOrThrow
         }
-        Assert.assertEquals(-1, testExtraItem.bindingAdapterPosition)
-        Assert.assertEquals(-1, testExtraItem.absoluteAdapterPosition)
+        Assert.assertEquals(-1, testItem.bindingAdapterPosition)
+        Assert.assertEquals(-1, testItem.absoluteAdapterPosition)
 
-        testExtraItem.dispatchBindData(4, 5, "testData")
-        Assert.assertEquals("testData", testExtraItem.dataOrNull)
-        Assert.assertEquals("testData", testExtraItem.dataOrThrow)
-        Assert.assertEquals(4, testExtraItem.bindingAdapterPosition)
-        Assert.assertEquals(5, testExtraItem.absoluteAdapterPosition)
+        testItem.dispatchBindData(4, 5, "testData")
+        Assert.assertEquals("testData", testItem.dataOrNull)
+        Assert.assertEquals("testData", testItem.dataOrThrow)
+        Assert.assertEquals(4, testItem.bindingAdapterPosition)
+        Assert.assertEquals(5, testItem.absoluteAdapterPosition)
     }
 
     private class TestItem<DATA : Any>(itemView: View) : Item<DATA>(itemView) {

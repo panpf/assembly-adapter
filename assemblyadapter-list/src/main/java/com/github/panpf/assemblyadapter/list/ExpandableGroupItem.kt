@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.Item
  *
  * @see ExpandableGroupItemFactory
  */
-abstract class ExpandableGroupItem<DATA : Any> : Item<DATA> {
+abstract class ExpandableGroupItem<DATA : ExpandableGroup> : Item<DATA> {
 
     private var _isExpanded = false
 

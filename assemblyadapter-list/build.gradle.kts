@@ -37,6 +37,7 @@ dependencies {
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
     androidTestImplementation("androidx.test.ext:junit-ktx:${property("ANDROIDX_TEST_EXT")}")
     androidTestImplementation("io.github.panpf.tools4j:tools4j-test-ktx:${property("TOOLS4J")}")
+    androidTestImplementation("io.github.panpf.tools4j:tools4j-reflect-ktx:${property("TOOLS4J")}")
 }
 
 /**
