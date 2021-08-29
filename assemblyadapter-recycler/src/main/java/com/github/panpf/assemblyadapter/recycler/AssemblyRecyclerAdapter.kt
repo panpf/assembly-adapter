@@ -67,11 +67,6 @@ open class AssemblyRecyclerAdapter<DATA>(
         return itemDataStorage.dataCount
     }
 
-    override fun getItemId(position: Int): Long {
-        // todo 不重写 getItemId
-        return position.toLong()
-    }
-
     override fun getItemViewType(position: Int): Int {
         val data = itemDataStorage.getData(position) ?: Placeholder
         return itemFactoryStorage.getItemTypeByData(

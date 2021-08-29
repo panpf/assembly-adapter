@@ -47,11 +47,6 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
 
     override fun getItemCount(): Int = if (data != null) 1 else 0
 
-    override fun getItemId(position: Int): Long {
-        // todo 不重写 getItemId
-        return position.toLong()
-    }
-
     override fun getItemViewType(position: Int): Int {
         val count = itemCount
         if (position < 0 || position >= count) {
