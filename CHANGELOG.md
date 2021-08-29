@@ -8,6 +8,7 @@
 * change: headerSide rename to sideHeader, footerSide rename to sideFooter
 * change: The expandable related classes in the list module are moved to the expandable directory
 * change: When the position parameter of AssemblySingleData\Adapter related methods exceeds the range of 0 to count, an IndexOutOfBoundsException will be thrown.
+* new: Assembly\*ExpandableListAdapter added getItemFactoryByChildPosition method
 
 
 # v4.0.0-beta01

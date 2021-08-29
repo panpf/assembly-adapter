@@ -363,4 +363,38 @@ class AssemblySingleDataExpandableListAdapterTest {
             Assert.assertSame(groupItemFactory, getItemFactoryByPosition(0))
         }
     }
+
+    @Test
+    fun testMethodGetItemFactoryByChildPosition() {
+        val groupItemFactory = StringsGroupItemFactory()
+        val childItemFactory = StringsChildItemFactory()
+        AssemblySingleDataExpandableListAdapter<Strings, String>(
+            listOf(
+                groupItemFactory,
+                childItemFactory
+            )
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(-1, 0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(0, 0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(1, 0)
+            }
+
+            data = Strings("test")
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(0, -1)
+            }
+            Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 0))
+            Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 1))
+            Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 2))
+            Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 3))
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(0, 4)
+            }
+        }
+    }
 }

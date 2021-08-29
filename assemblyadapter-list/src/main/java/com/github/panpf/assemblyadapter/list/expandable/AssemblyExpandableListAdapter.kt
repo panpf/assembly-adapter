@@ -18,10 +18,7 @@ package com.github.panpf.assemblyadapter.list.expandable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
-import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.Placeholder
+import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.R
@@ -212,5 +209,16 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         )
     }
 
-    // todo add fun getItemFactoryByPosition(groupPosition: Int, childPosition: Int): ItemFactory<*>
+    /**
+     * Get the ItemFactory of the specified [childPosition]
+     *
+     * @throws IndexOutOfBoundsException If the [groupPosition] or [childPosition] is out of range
+     * @throws NotFoundMatchedItemFactoryException No ItemFactory can match the data corresponding to [childPosition]
+     */
+    fun getItemFactoryByChildPosition(groupPosition: Int, childPosition: Int): ItemFactory<*> {
+        val data = getChild(groupPosition, childPosition) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(
+            data, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
+        )
+    }
 }
