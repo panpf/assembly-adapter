@@ -88,7 +88,9 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
             val item = holder.wrappedItem as Item<Any>
             // Here you must use the getItem method to trigger append load
             val data = getItem(position) ?: Placeholder
-            item.dispatchBindData(position, holder.absoluteAdapterPosition, data)
+            val absoluteAdapterPosition =
+                holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
+            item.dispatchBindData(position, absoluteAdapterPosition, data)
         } else {
             throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }
