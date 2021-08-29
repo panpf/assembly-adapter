@@ -64,6 +64,10 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
     override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = container.getTag(R.id.aa_tag_absoluteAdapterPosition)
         // set tag absoluteAdapterPosition null to support ConcatPagerAdapter nesting
@@ -82,6 +86,10 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         container.removeView(item as View)
     }
 
@@ -100,5 +108,11 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> = itemFactory
+    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+        return itemFactory
+    }
 }

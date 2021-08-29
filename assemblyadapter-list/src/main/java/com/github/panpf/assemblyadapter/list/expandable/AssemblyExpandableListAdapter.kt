@@ -211,4 +211,6 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
             data, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
         )
     }
+
+    // todo add fun getItemFactoryByPosition(groupPosition: Int, childPosition: Int): ItemFactory<*>
 }

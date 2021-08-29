@@ -90,6 +90,10 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun getItem(position: Int): Fragment {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
         // set nextItemAbsoluteAdapterPosition null to support ConcatFragmentStatePagerAdapter nesting
@@ -118,6 +122,10 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         return itemFactory
     }
 

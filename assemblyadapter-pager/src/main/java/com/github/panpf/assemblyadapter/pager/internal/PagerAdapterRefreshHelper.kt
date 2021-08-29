@@ -38,6 +38,7 @@ internal class PagerAdapterRefreshHelper {
     }
 
     fun isItemPositionChanged(view: View): Boolean {
+        // todo 貌似每次 notifyDataSetChanged 这里都会返回 true，这样不对，计划改成 从 view 中取出 data，和 position，然后对比旧的 data 和新的 data
         val currentNumber = notifyDataSetChangedNumber
         val bindNumber = view.getTag(R.id.aa_tag_notifyDataSetChangedNumber)?.toString()?.toInt()
         return bindNumber != currentNumber

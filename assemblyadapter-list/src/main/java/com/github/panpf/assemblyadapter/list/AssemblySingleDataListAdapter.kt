@@ -42,15 +42,31 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
 
     override fun getCount(): Int = if (data != null) 1 else 0
 
-    override fun getItem(position: Int): Any? = data
+    override fun getItem(position: Int): Any {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+        return data!!
+    }
 
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getViewTypeCount(): Int = 1
 
-    override fun getItemViewType(position: Int): Int = 0
+    override fun getItemViewType(position: Int): Int {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+        return 0
+    }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         val itemView = convertView ?: itemFactory
             .dispatchCreateItem(parent).apply {
                 itemView.setTag(R.id.aa_tag_item, this)
@@ -70,5 +86,11 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> = itemFactory
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+        return itemFactory
+    }
 }

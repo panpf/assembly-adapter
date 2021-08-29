@@ -43,7 +43,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
                 super.submitList(null)
             }
         }
-        get() = if (itemCount >= 0) getItem(0) else null
+        get() = if (itemCount > 0) getItem(0) else null
 
     /**
      * Create an AssemblySingleDataRecyclerListAdapter that provides DiffUtil.ItemCallback externally
@@ -138,10 +138,17 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
     override fun getItemId(position: Int): Long {
+        // todo 不重写 getItemId
         return position.toLong()
     }
 
-    override fun getItemViewType(position: Int): Int = 0
+    override fun getItemViewType(position: Int): Int {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+        return 0
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val item = itemFactory.dispatchCreateItem(parent)
@@ -156,6 +163,10 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
@@ -167,6 +178,10 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         return itemFactory
     }
 }

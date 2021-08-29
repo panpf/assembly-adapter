@@ -68,6 +68,7 @@ open class AssemblyRecyclerAdapter<DATA>(
     }
 
     override fun getItemId(position: Int): Long {
+        // todo 不重写 getItemId
         return position.toLong()
     }
 

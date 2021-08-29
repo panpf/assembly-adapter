@@ -48,10 +48,17 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     override fun getItemCount(): Int = if (data != null) 1 else 0
 
     override fun getItemId(position: Int): Long {
+        // todo 不重写 getItemId
         return position.toLong()
     }
 
-    override fun getItemViewType(position: Int): Int = 0
+    override fun getItemViewType(position: Int): Int {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+        return 0
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val item = itemFactory.dispatchCreateItem(parent)
@@ -66,6 +73,10 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
@@ -77,6 +88,10 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
         return itemFactory
     }
 }

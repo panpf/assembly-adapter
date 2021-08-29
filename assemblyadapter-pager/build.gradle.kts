@@ -46,6 +46,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit-ktx:${property("ANDROIDX_TEST_EXT")}")
     androidTestImplementation("io.github.panpf.tools4j:tools4j-test-ktx:${property("TOOLS4J")}")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${property("KOTLINX_COROUTINES_ANDROID")}")
+    androidTestImplementation("io.github.panpf.tools4a:tools4a-test-ktx:${property("TOOLS4A")}")
 }
 
 /**

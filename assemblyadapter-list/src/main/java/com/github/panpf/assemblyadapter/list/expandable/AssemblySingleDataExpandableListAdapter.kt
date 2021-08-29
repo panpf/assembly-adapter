@@ -62,22 +62,36 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
     override fun getGroupCount(): Int = if (data != null) 1 else 0
 
-    override fun getGroup(groupPosition: Int): GROUP_DATA? = data
+    override fun getGroup(groupPosition: Int): GROUP_DATA {
+        val groupCount = groupCount
+        if (groupPosition < 0 || groupPosition >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
+        }
+        return data!!
+    }
 
     override fun getGroupId(groupPosition: Int): Long = groupPosition.toLong()
 
     override fun getGroupTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getGroupType(groupPosition: Int): Int {
-        val groupData = data!!
+        val groupCount = groupCount
+        if (groupPosition < 0 || groupPosition >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
+        }
         return itemFactoryStorage.getItemTypeByData(
-            groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
+            data!!, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         )
     }
 
     override fun getGroupView(
         groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
+        val groupCount = groupCount
+        if (groupPosition < 0 || groupPosition >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
+        }
+
         val groupData = data!!
         val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
@@ -119,11 +133,20 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        val groupData = data
+        val groupCount = groupCount
+        if (groupPosition < 0 || groupPosition >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
+        }
+        val groupData = data!!
         return if (groupData is ExpandableGroup) groupData.getChildCount() else 0
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): CHILD_DATA {
+        val groupCount = groupCount
+        if (groupPosition < 0 || groupPosition >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
+        }
+
         val groupData = data!!
         if (groupData is ExpandableGroup) {
             @Suppress("UNCHECKED_CAST")
@@ -148,6 +171,10 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         groupPosition: Int, childPosition: Int, isLastChild: Boolean,
         convertView: View?, parent: ViewGroup
     ): View {
+        val groupCount = groupCount
+        if (groupPosition < 0 || groupPosition >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
+        }
         val groupData = data!!
         val childData = getChild(groupPosition, childPosition)!!
         val childItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
@@ -193,14 +220,23 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
     override fun hasStableIds(): Boolean = hasStableIds
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+        val groupCount = groupCount
+        if (groupPosition < 0 || groupPosition >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
+        }
         return isChildSelectable?.invoke(groupPosition, childPosition) == true
     }
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val groupData = data!!
+        val groupCount = groupCount
+        if (position < 0 || position >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $groupCount")
+        }
         return itemFactoryStorage.getItemFactoryByData(
-            groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
+            data!!, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         )
     }
+
+    // todo add fun getItemFactoryByPosition(groupPosition: Int, childPosition: Int): ItemFactory<*>
 }
