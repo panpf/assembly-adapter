@@ -23,17 +23,14 @@ AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager：
 
 ### ViewPager 数据刷新支持
 
-众所周知 ViewPager 有一个一直以来都存在的 bug，就是 Adapter 数据改变时即使调用了 `notifyDataSetChanged` 方法 ViewPager 也不会刷新其内容
+ViewPager 有一个一直以来都存在的 bug，就是在 PagerAdapter 数据改变时即使调用了 `notifyDataSetChanged` 方法 ViewPager 也不会刷新其内容
 
-究其原因是 ViewPager 在收到数据改变回调时会通过 PagerAdapter 的 getItemPosition 方法依次获取当前显示的 item 的 position，只有 position
+原因是 ViewPager 在收到数据改变回调时会通过 PagerAdapter 的 getItemPosition 方法依次获取当前显示的 item 的 position，只有 position
 是 PagerAdapter.POSITION_NONE 时才会更新
 
-而 PagerAdapter 的 getItemPosition 方法默认返回值是 PagerAdapter.POSITION_UNCHANGED，所以解决办法就是我们需要在数据改变时 让
-getItemPosition 方法返回 PagerAdapter.POSITION_NONE 即可
+而 PagerAdapter 的 getItemPosition 方法默认返回值是 PagerAdapter.POSITION_UNCHANGED，所以我们需要重写 getItemPosition 方法，在 item 对应的数据改变时返回 PagerAdapter.POSITION_NONE 即可
 
-AssemblyAdapter 提供的 [AssemblyPagerAdapter]、[AssemblySingleDataPagerAdapter]、[ConcatPagerAdapter]
-、[ArrayPagerAdapter] 都对 getItemPosition 方法进行了改造确保在调用了 `notifyDataSetChanged` 方法后能够返回
-PagerAdapter.POSITION_NONE
+AssemblyAdapter 提供的所有 Pager 相关 Adapter 都重写了 getItemPosition 方法对数刷新提供了支持可放心使用
 
 ## ViewPager2
 
