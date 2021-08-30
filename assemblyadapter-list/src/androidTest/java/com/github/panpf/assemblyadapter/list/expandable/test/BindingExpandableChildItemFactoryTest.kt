@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.viewbinding.ViewBinding
 import com.github.panpf.assemblyadapter.list.expandable.BindingExpandableChildItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.assemblyadapter.list.test.R
 import org.junit.Assert
 import org.junit.Test
@@ -25,17 +26,17 @@ class BindingExpandableChildItemFactoryTest {
         val itemFactory = TestBindingExpandableChildItemFactory()
         val item =
             itemFactory.dispatchCreateItem(parent)
-                    as BindingExpandableChildItemFactory.BindingExpandableChildItem<TestExpandableGroup, String, ItemBindingTestBinding>
+                    as BindingExpandableChildItemFactory.BindingExpandableChildItem<Strings, String, ItemBindingTestBinding>
 
-        Assert.assertEquals("", item.binding.bindingTestItemTitleText.text)
-        Assert.assertEquals(30f, item.binding.bindingTestItemTitleText.textSize)
+        Assert.assertEquals("", item.binding.testItemTitleText.text)
+        Assert.assertEquals(30f, item.binding.testItemTitleText.textSize)
 
-        item.dispatchChildBindData(0, 0, TestExpandableGroup("test_data"), true, 1, 1, "test_value")
-        Assert.assertEquals("test_value", item.binding.bindingTestItemTitleText.text)
+        item.dispatchChildBindData(0, 0, Strings("test_data"), true, 1, 1, "test_value")
+        Assert.assertEquals("test_value", item.binding.testItemTitleText.text)
     }
 
     private class TestBindingExpandableChildItemFactory :
-        BindingExpandableChildItemFactory<TestExpandableGroup, String, ItemBindingTestBinding>(
+        BindingExpandableChildItemFactory<Strings, String, ItemBindingTestBinding>(
             String::class
         ) {
 
@@ -48,30 +49,30 @@ class BindingExpandableChildItemFactoryTest {
         override fun initItem(
             context: Context,
             binding: ItemBindingTestBinding,
-            item: BindingExpandableChildItem<TestExpandableGroup, String, ItemBindingTestBinding>
+            item: BindingExpandableChildItem<Strings, String, ItemBindingTestBinding>
         ) {
-            binding.bindingTestItemTitleText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 30f)
+            binding.testItemTitleText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 30f)
         }
 
         override fun bindItemData(
             context: Context,
             binding: ItemBindingTestBinding,
-            item: BindingExpandableChildItem<TestExpandableGroup, String, ItemBindingTestBinding>,
+            item: BindingExpandableChildItem<Strings, String, ItemBindingTestBinding>,
             groupBindingAdapterPosition: Int,
             groupAbsoluteAdapterPosition: Int,
-            groupData: TestExpandableGroup,
+            groupData: Strings,
             isLastChild: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
             data: String
         ) {
-            binding.bindingTestItemTitleText.text = data
+            binding.testItemTitleText.text = data
         }
     }
 
     private class ItemBindingTestBinding(
         private val root: LinearLayout,
-        val bindingTestItemTitleText: TextView
+        val testItemTitleText: TextView
     ) : ViewBinding {
 
         override fun getRoot(): View = root

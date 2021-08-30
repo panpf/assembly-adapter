@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItem
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
+import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -31,7 +32,7 @@ class ExpandableChildItemTest {
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val testExpandableChildItem =
-            TestExpandableChildItem<TestExpandableGroup, Any>(TextView(context))
+            TestExpandableChildItem<Strings, Any>(TextView(context))
 
         Assert.assertNotNull(testExpandableChildItem.context)
         Assert.assertNull(testExpandableChildItem.groupDataOrNull)
@@ -49,7 +50,7 @@ class ExpandableChildItemTest {
         }
 
         testExpandableChildItem.dispatchChildBindData(
-            2, 3, TestExpandableGroup("testData"), true, 4, 5, "hello"
+            2, 3, Strings("testData"), true, 4, 5, "hello"
         )
         Assert.assertEquals("testData", testExpandableChildItem.groupDataOrNull?.name)
         Assert.assertEquals("testData", testExpandableChildItem.groupDataOrThrow.name)

@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.list.expandable.ExtraExpandableGroupItem
+import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -15,7 +16,7 @@ class ExtraExpandableGroupItemTest {
     @Suppress("RemoveExplicitTypeArguments")
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testExtraItem = TestExtraItem<TestExpandableGroup>(TextView(context))
+        val testExtraItem = TestExtraItem<Strings>(TextView(context))
 
         Assert.assertNull(testExtraItem.getExtraOrNull<String>("testKey"))
         Assert.assertEquals(

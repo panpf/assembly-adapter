@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroupItem
+import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -30,7 +31,7 @@ class ExpandableGroupItemTest {
     @Suppress("RemoveExplicitTypeArguments")
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testExpandableGroupItem = TestExpandableGroupItem<TestExpandableGroup>(TextView(context))
+        val testExpandableGroupItem = TestExpandableGroupItem<Strings>(TextView(context))
 
         Assert.assertNotNull(testExpandableGroupItem.context)
         Assert.assertNull(testExpandableGroupItem.dataOrNull)
@@ -41,7 +42,7 @@ class ExpandableGroupItemTest {
         Assert.assertEquals(-1, testExpandableGroupItem.absoluteAdapterPosition)
         Assert.assertFalse(testExpandableGroupItem.isExpanded)
 
-        testExpandableGroupItem.dispatchGroupBindData(true, 4, 5, TestExpandableGroup("testData"))
+        testExpandableGroupItem.dispatchGroupBindData(true, 4, 5, Strings("testData"))
         Assert.assertTrue(testExpandableGroupItem.isExpanded)
         Assert.assertEquals("testData", testExpandableGroupItem.dataOrNull?.name)
         Assert.assertEquals("testData", testExpandableGroupItem.dataOrThrow.name)

@@ -24,6 +24,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.list.expandable.SimpleExpandableGroupItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.assemblyadapter.list.test.R
 import org.junit.Assert
 import org.junit.Test
@@ -37,7 +38,7 @@ class SimpleExpandableGroupItemFactoryTest {
 
         val itemFactory = TestSimpleExpandableGroupItemFactory()
         val item =
-            itemFactory.dispatchCreateItem(parent) as SimpleExpandableGroupItemFactory.SimpleExpandableGroupItem<TestExpandableGroup>
+            itemFactory.dispatchCreateItem(parent) as SimpleExpandableGroupItemFactory.SimpleExpandableGroupItem<Strings>
 
         Assert.assertEquals(
             "",
@@ -48,7 +49,7 @@ class SimpleExpandableGroupItemFactoryTest {
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item.dispatchGroupBindData(true, 0, 0, TestExpandableGroup("test_data"))
+        item.dispatchGroupBindData(true, 0, 0, Strings("test_data"))
         Assert.assertEquals(
             "test_data",
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).text
@@ -56,7 +57,7 @@ class SimpleExpandableGroupItemFactoryTest {
     }
 
     private class TestSimpleExpandableGroupItemFactory :
-        SimpleExpandableGroupItemFactory<TestExpandableGroup>(TestExpandableGroup::class) {
+        SimpleExpandableGroupItemFactory<Strings>(Strings::class) {
 
         override fun createItemView(
             context: Context,
@@ -67,7 +68,7 @@ class SimpleExpandableGroupItemFactoryTest {
         override fun initItem(
             context: Context,
             itemView: View,
-            item: SimpleExpandableGroupItem<TestExpandableGroup>
+            item: SimpleExpandableGroupItem<Strings>
         ) {
             itemView.findViewById<TextView>(R.id.testItemTitleText)
                 .setTextSize(TypedValue.COMPLEX_UNIT_PX, 30f)
@@ -76,11 +77,11 @@ class SimpleExpandableGroupItemFactoryTest {
         override fun bindItemData(
             context: Context,
             itemView: View,
-            item: SimpleExpandableGroupItem<TestExpandableGroup>,
+            item: SimpleExpandableGroupItem<Strings>,
             isExpanded: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: TestExpandableGroup
+            data: Strings
         ) {
             itemView.findViewById<TextView>(R.id.testItemTitleText).text = data.name
         }

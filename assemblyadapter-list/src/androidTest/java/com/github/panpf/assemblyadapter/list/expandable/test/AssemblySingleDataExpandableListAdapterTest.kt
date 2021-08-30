@@ -1,12 +1,18 @@
 package com.github.panpf.assemblyadapter.list.expandable.test
 
+import android.content.Context
 import android.database.DataSetObserver
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpandableListAdapter
+import com.github.panpf.assemblyadapter.list.expandable.SimpleExpandableChildItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.SimpleExpandableGroupItemFactory
 import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
-import com.github.panpf.assemblyadapter.list.expandable.test.internal.StringsChildItemFactory
-import com.github.panpf.assemblyadapter.list.expandable.test.internal.StringsGroupItemFactory
+import com.github.panpf.assemblyadapter.list.test.R
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -395,6 +401,66 @@ class AssemblySingleDataExpandableListAdapterTest {
             assertThrow(StringIndexOutOfBoundsException::class) {
                 getItemFactoryByChildPosition(0, 4)
             }
+        }
+    }
+
+    private class StringsGroupItemFactory : SimpleExpandableGroupItemFactory<Strings>(Strings::class) {
+
+        override fun createItemView(
+            context: Context,
+            inflater: LayoutInflater,
+            parent: ViewGroup
+        ): View = inflater.inflate(R.layout.item_test, parent, false)
+
+        override fun initItem(
+            context: Context,
+            itemView: View,
+            item: SimpleExpandableGroupItem<Strings>
+        ) {
+
+        }
+
+        override fun bindItemData(
+            context: Context,
+            itemView: View,
+            item: SimpleExpandableGroupItem<Strings>,
+            isExpanded: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: Strings
+        ) {
+            itemView.findViewById<TextView>(R.id.testItemTitleText).text = data.name
+        }
+    }
+
+    private class StringsChildItemFactory : SimpleExpandableChildItemFactory<Strings, String>(String::class) {
+
+        override fun createItemView(
+            context: Context,
+            inflater: LayoutInflater,
+            parent: ViewGroup
+        ): View = inflater.inflate(R.layout.item_test, parent, false)
+
+        override fun initItem(
+            context: Context,
+            itemView: View,
+            item: SimpleExpandableChildItem<Strings, String>
+        ) {
+        }
+
+        override fun bindItemData(
+            context: Context,
+            itemView: View,
+            item: SimpleExpandableChildItem<Strings, String>,
+            groupBindingAdapterPosition: Int,
+            groupAbsoluteAdapterPosition: Int,
+            groupData: Strings,
+            isLastChild: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: String
+        ) {
+            itemView.findViewById<TextView>(R.id.testItemTitleText).text = data
         }
     }
 }

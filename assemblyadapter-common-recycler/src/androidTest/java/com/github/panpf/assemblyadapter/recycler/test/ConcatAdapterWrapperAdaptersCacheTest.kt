@@ -16,6 +16,7 @@
 package com.github.panpf.assemblyadapter.recycler.test
 
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -94,11 +95,10 @@ class ConcatAdapterWrapperAdaptersCacheTest {
             parent: ViewGroup,
             viewType: Int
         ): RecyclerView.ViewHolder {
-            TODO("Not yet implemented")
+            return object: RecyclerView.ViewHolder(TextView(parent.context)){}
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            TODO("Not yet implemented")
         }
     }
 }

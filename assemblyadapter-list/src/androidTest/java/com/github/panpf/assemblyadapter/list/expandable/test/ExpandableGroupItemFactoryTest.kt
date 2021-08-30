@@ -27,6 +27,7 @@ import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroupItem
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroupItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.tools4j.reflect.ktx.callMethod
 import com.github.panpf.tools4j.reflect.ktx.getFieldValue
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -38,17 +39,17 @@ class ExpandableGroupItemFactoryTest {
 
     @Test
     fun testMethodMatchData() {
-        val testItemFactory = TestExpandableGroupItemFactory(TestExpandableGroup::class)
+        val testItemFactory = TestExpandableGroupItemFactory(Strings::class)
 
         Assert.assertFalse(testItemFactory.matchData(1))
         Assert.assertFalse(testItemFactory.matchData(false))
-        Assert.assertTrue(testItemFactory.matchData(TestExpandableGroup("string")))
+        Assert.assertTrue(testItemFactory.matchData(Strings("string")))
     }
 
     @Test
     fun testMethodDispatchCreateItem() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testItemFactory = TestExpandableGroupItemFactory(TestExpandableGroup::class)
+        val testItemFactory = TestExpandableGroupItemFactory(Strings::class)
 
         val item = testItemFactory.dispatchCreateItem(FrameLayout(context))
         Assert.assertTrue(item is TestExpandableGroupItem)
@@ -57,7 +58,7 @@ class ExpandableGroupItemFactoryTest {
     @Test
     fun testMethodSetOnViewClickListener() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        TestExpandableGroupItemFactory(TestExpandableGroup::class).apply {
+        TestExpandableGroupItemFactory(Strings::class).apply {
             val item = dispatchCreateItem(FrameLayout(context))
             val rootView = item.itemView
             val childView = item.itemView.findViewById<TextView>(R.id.aa_tag_clickBindItem)

@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.list.expandable.SimpleExpandableChildItemFactory
 import com.github.panpf.assemblyadapter.list.expandable.ViewExpandableChildItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.assemblyadapter.list.test.R
 import org.junit.Assert
 import org.junit.Test
@@ -34,12 +35,12 @@ class ViewExpandableChildItemFactoryTest {
         val parent = FrameLayout(context)
 
         val itemFactory =
-            ViewExpandableChildItemFactory<TestExpandableGroup, String>(
+            ViewExpandableChildItemFactory<Strings, String>(
                 String::class,
                 R.layout.item_test
             )
         val item =
-            itemFactory.dispatchCreateItem(parent) as SimpleExpandableChildItemFactory.SimpleExpandableChildItem<TestExpandableGroup, String>
+            itemFactory.dispatchCreateItem(parent) as SimpleExpandableChildItemFactory.SimpleExpandableChildItem<Strings, String>
 
         Assert.assertEquals(
             "",
@@ -50,19 +51,19 @@ class ViewExpandableChildItemFactoryTest {
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item.dispatchChildBindData(0, 0, TestExpandableGroup("test_data"), true, 3, 4, "test_value")
+        item.dispatchChildBindData(0, 0, Strings("test_data"), true, 3, 4, "test_value")
         Assert.assertEquals(
             "",
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).text
         )
 
 
-        val itemFactory2 = ViewExpandableChildItemFactory<TestExpandableGroup, String>(
+        val itemFactory2 = ViewExpandableChildItemFactory<Strings, String>(
             String::class,
             LayoutInflater.from(context).inflate(R.layout.item_test, parent, false)
         )
         val item2 =
-            itemFactory2.dispatchCreateItem(parent) as SimpleExpandableChildItemFactory.SimpleExpandableChildItem<TestExpandableGroup, String>
+            itemFactory2.dispatchCreateItem(parent) as SimpleExpandableChildItemFactory.SimpleExpandableChildItem<Strings, String>
 
         Assert.assertEquals(
             "",
@@ -74,7 +75,7 @@ class ViewExpandableChildItemFactoryTest {
         )
 
         item2.dispatchChildBindData(
-            0, 0, TestExpandableGroup("test_data"), true, 3, 4, "test_value"
+            0, 0, Strings("test_data"), true, 3, 4, "test_value"
         )
         Assert.assertEquals(
             "",
@@ -83,11 +84,11 @@ class ViewExpandableChildItemFactoryTest {
 
 
         val itemFactory3 =
-            ViewExpandableChildItemFactory<TestExpandableGroup, String>(String::class) { _, inflater, parent: ViewGroup ->
+            ViewExpandableChildItemFactory<Strings, String>(String::class) { _, inflater, parent: ViewGroup ->
                 inflater.inflate(R.layout.item_test, parent, false)
             }
         val item3 =
-            itemFactory3.dispatchCreateItem(parent) as SimpleExpandableChildItemFactory.SimpleExpandableChildItem<TestExpandableGroup, String>
+            itemFactory3.dispatchCreateItem(parent) as SimpleExpandableChildItemFactory.SimpleExpandableChildItem<Strings, String>
 
         Assert.assertEquals(
             "",
@@ -99,7 +100,7 @@ class ViewExpandableChildItemFactoryTest {
         )
 
         item3.dispatchChildBindData(
-            0, 0, TestExpandableGroup("test_data"), true, 3, 4, "test_value"
+            0, 0, Strings("test_data"), true, 3, 4, "test_value"
         )
         Assert.assertEquals(
             "",

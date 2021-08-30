@@ -27,6 +27,7 @@ import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItem
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItemFactory
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
+import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.tools4j.reflect.ktx.callMethod
 import com.github.panpf.tools4j.reflect.ktx.getFieldValue
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -39,7 +40,7 @@ class ExpandableChildItemFactoryTest {
     @Test
     fun testMethodMatchData() {
         val testItemFactory =
-            TestExpandableChildItemFactory<TestExpandableGroup, String>(String::class)
+            TestExpandableChildItemFactory<Strings, String>(String::class)
 
         Assert.assertFalse(testItemFactory.matchData(1))
         Assert.assertFalse(testItemFactory.matchData(false))
@@ -50,7 +51,7 @@ class ExpandableChildItemFactoryTest {
     fun testMethodDispatchCreateItem() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val testItemFactory =
-            TestExpandableChildItemFactory<TestExpandableGroup, String>(String::class)
+            TestExpandableChildItemFactory<Strings, String>(String::class)
 
         val item = testItemFactory.dispatchCreateItem(FrameLayout(context))
         Assert.assertTrue(item is TestExpandableChildItem<*, *>)
@@ -59,7 +60,7 @@ class ExpandableChildItemFactoryTest {
     @Test
     fun testMethodSetOnViewClickListener() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        TestExpandableChildItemFactory<TestExpandableGroup, String>(String::class).apply {
+        TestExpandableChildItemFactory<Strings, String>(String::class).apply {
             val item = dispatchCreateItem(FrameLayout(context))
             val rootView = item.itemView
             val childView = item.itemView.findViewById<TextView>(R.id.aa_tag_clickBindItem)
@@ -77,7 +78,7 @@ class ExpandableChildItemFactoryTest {
             Assert.assertNull(viewOnLongClickListener)
         }
 
-        TestExpandableChildItemFactory<TestExpandableGroup, String>(String::class).apply {
+        TestExpandableChildItemFactory<Strings, String>(String::class).apply {
             setOnItemClickListener(TestOnClickListener())
             setOnItemLongClickListener(TestOnLongClickListener())
             setOnViewClickListener(R.id.aa_tag_clickBindItem, TestOnClickListener())
@@ -100,13 +101,13 @@ class ExpandableChildItemFactoryTest {
         }
 
         assertThrow(IllegalArgumentException::class) {
-            TestExpandableChildItemFactory<TestExpandableGroup, String>(String::class).apply {
+            TestExpandableChildItemFactory<Strings, String>(String::class).apply {
                 setOnViewClickListener(R.id.aa_tag_absoluteAdapterPosition, TestOnClickListener())
             }.dispatchCreateItem(FrameLayout(context))
         }
 
         assertThrow(IllegalArgumentException::class) {
-            TestExpandableChildItemFactory<TestExpandableGroup, String>(String::class).apply {
+            TestExpandableChildItemFactory<Strings, String>(String::class).apply {
                 setOnViewLongClickListener(
                     R.id.aa_tag_absoluteAdapterPosition,
                     TestOnLongClickListener()
