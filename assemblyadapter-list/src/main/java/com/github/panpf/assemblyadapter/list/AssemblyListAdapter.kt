@@ -61,12 +61,12 @@ open class AssemblyListAdapter<DATA>(
         itemDataStorage.submitList(list)
     }
 
-    override fun getItem(position: Int): DATA {
-        return itemDataStorage.getData(position)
-    }
-
     override fun getCount(): Int {
         return itemDataStorage.dataCount
+    }
+
+    override fun getItem(position: Int): DATA {
+        return itemDataStorage.getData(position)
     }
 
     override fun getItemId(position: Int): Long {
