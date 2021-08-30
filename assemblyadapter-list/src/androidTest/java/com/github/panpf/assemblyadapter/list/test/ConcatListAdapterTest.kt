@@ -24,6 +24,7 @@ import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
 import com.github.panpf.assemblyadapter.list.ConcatListAdapter
+import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,6 +34,172 @@ import java.util.*
 class ConcatListAdapterTest {
 
     class DateItemFactory : ViewItemFactory<Date>(Date::class, android.R.layout.activity_list_item)
+
+    @Test
+    fun testConstructor() {
+        ConcatListAdapter(AssemblySingleDataListAdapter(DateItemFactory())).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatListAdapter(
+            AssemblySingleDataListAdapter(DateItemFactory()),
+            AssemblySingleDataListAdapter(DateItemFactory())
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatListAdapter(
+            ConcatListAdapter.Config.DEFAULT,
+            AssemblySingleDataListAdapter(DateItemFactory())
+        ).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatListAdapter(
+            ConcatListAdapter.Config.DEFAULT,
+            AssemblySingleDataListAdapter(DateItemFactory()),
+            AssemblySingleDataListAdapter(DateItemFactory())
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatListAdapter(listOf(AssemblySingleDataListAdapter(DateItemFactory()))).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatListAdapter(
+            listOf(
+                AssemblySingleDataListAdapter(DateItemFactory()),
+                AssemblySingleDataListAdapter(DateItemFactory())
+            )
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatListAdapter(
+            ConcatListAdapter.Config.DEFAULT,
+            listOf(AssemblySingleDataListAdapter(DateItemFactory()))
+        ).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatListAdapter(
+            ConcatListAdapter.Config.DEFAULT,
+            listOf(
+                AssemblySingleDataListAdapter(DateItemFactory()),
+                AssemblySingleDataListAdapter(DateItemFactory())
+            )
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+    }
+
+    @Test
+    fun testMethodAddAndRemoveAdapter() {
+        ConcatListAdapter().apply {
+            Assert.assertEquals(0, adapters.size)
+            Assert.assertEquals(0, count)
+            Assert.assertEquals("", adapters.joinToString { it.count.toString() })
+
+            val adapter1 = AssemblySingleDataListAdapter(DateItemFactory(), Date())
+            val adapter2 = AssemblyListAdapter(listOf(DateItemFactory()), listOf(Date(), Date()))
+            val adapter3 =
+                AssemblyListAdapter(listOf(DateItemFactory()), listOf(Date(), Date(), Date()))
+
+            addAdapter(adapter1)
+            Assert.assertEquals(1, adapters.size)
+            Assert.assertEquals(1, count)
+            Assert.assertEquals("1", adapters.joinToString { it.count.toString() })
+
+            addAdapter(adapter3)
+            Assert.assertEquals(2, adapters.size)
+            Assert.assertEquals(4, count)
+            Assert.assertEquals("1, 3", adapters.joinToString { it.count.toString() })
+
+            addAdapter(1, adapter2)
+            Assert.assertEquals(3, adapters.size)
+            Assert.assertEquals(6, count)
+            Assert.assertEquals("1, 2, 3", adapters.joinToString { it.count.toString() })
+
+            removeAdapter(adapter1)
+            Assert.assertEquals(2, adapters.size)
+            Assert.assertEquals(5, count)
+            Assert.assertEquals("2, 3", adapters.joinToString { it.count.toString() })
+
+            removeAdapter(adapter3)
+            Assert.assertEquals(1, adapters.size)
+            Assert.assertEquals(2, count)
+            Assert.assertEquals("2", adapters.joinToString { it.count.toString() })
+        }
+    }
+
+    @Test
+    fun testMethodGetViewTypeCount() {
+        ConcatListAdapter().apply {
+            Assert.assertEquals(0, viewTypeCount)
+
+            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+            Assert.assertEquals(1, viewTypeCount)
+
+            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+            Assert.assertEquals(2, viewTypeCount)
+
+            addAdapter(AssemblyListAdapter<Any>(listOf(DateItemFactory(), DateItemFactory())))
+            Assert.assertEquals(4, viewTypeCount)
+        }
+    }
+
+    @Test
+    fun testMethodGetItemId() {
+        // NO_STABLE_IDS
+        ConcatListAdapter().apply {
+            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+            addAdapter(AssemblyListAdapter<Any>(listOf(DateItemFactory()), listOf(Date(), Date())))
+
+            Assert.assertEquals(-1L, getItemId(-1))
+            Assert.assertEquals(-1L, getItemId(0))
+            Assert.assertEquals(-1L, getItemId(1))
+            Assert.assertEquals(-1L, getItemId(2))
+            Assert.assertEquals(-1L, getItemId(3))
+            assertThrow(IllegalArgumentException::class) {
+                Assert.assertEquals(-1L, getItemId(4))
+            }
+        }
+
+        // todo complete test
+//        // ISOLATED_STABLE_IDS
+//        ConcatListAdapter(
+//            ConcatListAdapter.Config.Builder()
+//                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS).build()
+//        ).apply {
+//            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+//            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+//            addAdapter(AssemblyListAdapter<Any>(listOf(DateItemFactory()), listOf(Date(), Date())))
+//
+//            Assert.assertEquals(-1L, getItemId(-1))
+//            Assert.assertEquals(0L, getItemId(0))
+//            Assert.assertEquals(0L, getItemId(1))
+//            Assert.assertEquals(0L, getItemId(2))
+//            Assert.assertEquals(1L, getItemId(3))
+//            assertThrow(IllegalArgumentException::class) {
+//                Assert.assertEquals(4L, getItemId(4))
+//            }
+//        }
+//
+//        // SHARED_STABLE_IDS
+//        ConcatListAdapter(
+//            ConcatListAdapter.Config.Builder()
+//                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS).build()
+//        ).apply {
+//            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+//            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+//            addAdapter(AssemblyListAdapter<Any>(listOf(DateItemFactory()), listOf(Date(), Date())))
+//
+//            Assert.assertEquals(-1L, getItemId(-1))
+//            Assert.assertEquals(0L, getItemId(0))
+//            Assert.assertEquals(0L, getItemId(1))
+//            Assert.assertEquals(0L, getItemId(2))
+//            Assert.assertEquals(1L, getItemId(3))
+//            Assert.assertEquals(4L, getItemId(4))
+//        }
+    }
 
     @Test
     fun testNestedAdapterPosition() {
@@ -154,5 +321,52 @@ class ConcatListAdapterTest {
         verifyAdapterPosition(concatNestingCount16Adapter, 13, 4, 13)
         verifyAdapterPosition(concatNestingCount16Adapter, 14, 5, 14)
         verifyAdapterPosition(concatNestingCount16Adapter, 15, 6, 15)
+    }
+
+    @Test
+    fun testConfig() {
+        ConcatListAdapter.Config.DEFAULT.apply {
+            Assert.assertEquals(true, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatListAdapter.Config.Builder().build().apply {
+            Assert.assertEquals(true, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatListAdapter.Config.Builder().setIsolateViewTypes(false).build().apply {
+            Assert.assertEquals(false, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatListAdapter.Config.Builder()
+            .setStableIdMode(ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS).build()
+            .apply {
+                Assert.assertEquals(true, this.isolateViewTypes)
+                Assert.assertEquals(
+                    ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS,
+                    this.stableIdMode
+                )
+            }
+
+        ConcatListAdapter.Config.Builder()
+            .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS).build()
+            .apply {
+                Assert.assertEquals(true, this.isolateViewTypes)
+                Assert.assertEquals(
+                    ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS,
+                    this.stableIdMode
+                )
+            }
     }
 }
