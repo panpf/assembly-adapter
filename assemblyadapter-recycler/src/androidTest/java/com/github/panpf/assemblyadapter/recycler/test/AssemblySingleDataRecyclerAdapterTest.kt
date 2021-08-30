@@ -62,17 +62,6 @@ class AssemblySingleDataRecyclerAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemId() {
-        AssemblySingleDataRecyclerAdapter(TestItemFactory()).apply {
-            Assert.assertEquals(-1L, getItemId(-1))
-            Assert.assertEquals(0L, getItemId(0))
-            Assert.assertEquals(1L, getItemId(1))
-            Assert.assertEquals(Int.MAX_VALUE.toLong(), getItemId(Int.MAX_VALUE))
-            Assert.assertEquals(Int.MIN_VALUE.toLong(), getItemId(Int.MIN_VALUE))
-        }
-    }
-
-    @Test
     fun testMethodGetItemViewType() {
         AssemblySingleDataRecyclerAdapter(TestItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
