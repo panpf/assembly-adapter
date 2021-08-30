@@ -107,7 +107,7 @@ class AssemblyExpandableListAdapterTest {
         AssemblyExpandableListAdapter<Strings, String>(listOf(StringsItemFactory())).apply {
             Assert.assertEquals(0, groupCount)
             assertThrow(IndexOutOfBoundsException::class) {
-                Assert.assertEquals(0, getChildrenCount(0))
+                getChildrenCount(0)
             }
 
             submitList(listOf(Strings("hello")))
@@ -123,7 +123,7 @@ class AssemblyExpandableListAdapterTest {
             submitList(null)
             Assert.assertEquals(0, groupCount)
             assertThrow(IndexOutOfBoundsException::class) {
-                Assert.assertEquals(0, getChildrenCount(0))
+                getChildrenCount(0)
             }
         }
     }
@@ -173,16 +173,81 @@ class AssemblyExpandableListAdapterTest {
     fun testMethodGetGroupAndChildId() {
         AssemblyExpandableListAdapter<Strings, String>(listOf(StringsItemFactory())).apply {
             Assert.assertEquals(-1L, getGroupId(-1))
-            Assert.assertEquals(0L, getGroupId(0))
-            Assert.assertEquals(1L, getGroupId(1))
-            Assert.assertEquals(Int.MAX_VALUE.toLong(), getGroupId(Int.MAX_VALUE))
-            Assert.assertEquals(Int.MIN_VALUE.toLong(), getGroupId(Int.MIN_VALUE))
+            Assert.assertEquals(-1L, getGroupId(0))
+            Assert.assertEquals(-1L, getGroupId(1))
+            Assert.assertEquals(-1L, getChildId(-1, -1))
+            Assert.assertEquals(-1L, getChildId(0, 0))
+            Assert.assertEquals(-1L, getChildId(1, 1))
+        }
 
-            Assert.assertEquals(-1L, getChildId(0, -1))
-            Assert.assertEquals(0L, getChildId(0, 0))
-            Assert.assertEquals(1L, getChildId(0, 1))
-            Assert.assertEquals(Int.MAX_VALUE.toLong(), getChildId(0, Int.MAX_VALUE))
-            Assert.assertEquals(Int.MIN_VALUE.toLong(), getChildId(0, Int.MIN_VALUE))
+        AssemblyExpandableListAdapter<Strings, String>(
+            listOf(StringsItemFactory()),
+            hasStableIds = true
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getGroupId(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getGroupId(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getGroupId(1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildId(-1, -1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildId(0, 0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildId(1, 1)
+            }
+        }
+
+        AssemblyExpandableListAdapter<Strings, String>(
+            listOf(StringsItemFactory()),
+            initDataList = listOf(Strings("hello"), Strings("world")),
+            hasStableIds = true
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getGroupId(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildId(-1, -1)
+            }
+
+            Assert.assertEquals("hello".hashCode().toLong(), getGroupId(0))
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getChildId(0, -1)
+            }
+            Assert.assertEquals(getChild(0, 0).hashCode().toLong(), getChildId(0, 0))
+            Assert.assertEquals(getChild(0, 1).hashCode().toLong(), getChildId(0, 1))
+            Assert.assertEquals(getChild(0, 2).hashCode().toLong(), getChildId(0, 2))
+            Assert.assertEquals(getChild(0, 3).hashCode().toLong(), getChildId(0, 3))
+            Assert.assertEquals(getChild(0, 4).hashCode().toLong(), getChildId(0, 4))
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getChildId(0, 5)
+            }
+
+            Assert.assertEquals("world".hashCode().toLong(), getGroupId(1))
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getChildId(1, -1)
+            }
+            Assert.assertEquals(getChild(1, 0).hashCode().toLong(), getChildId(1, 0))
+            Assert.assertEquals(getChild(1, 1).hashCode().toLong(), getChildId(1, 1))
+            Assert.assertEquals(getChild(1, 2).hashCode().toLong(), getChildId(1, 2))
+            Assert.assertEquals(getChild(1, 3).hashCode().toLong(), getChildId(1, 3))
+            Assert.assertEquals(getChild(1, 4).hashCode().toLong(), getChildId(1, 4))
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getChildId(1, 5)
+            }
+
+            assertThrow(IndexOutOfBoundsException::class) {
+                getGroupId(2)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildId(2, 2)
+            }
         }
     }
 
@@ -223,6 +288,15 @@ class AssemblyExpandableListAdapterTest {
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupType(1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildType(-1, -1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildType(0, 0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildType(1, 1)
+            }
 
             submitList(
                 listOf(
@@ -252,6 +326,15 @@ class AssemblyExpandableListAdapterTest {
             }
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupView(1, false, null, parent)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildView(-1, -1, false, null, parent)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildView(0, 0, false, null, parent)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildView(1, 1, false, null, parent)
             }
 
             submitList(listOf(Strings("hello")))

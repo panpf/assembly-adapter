@@ -121,10 +121,35 @@ class AssemblyListAdapterTest {
     fun testMethodGetItemId() {
         AssemblyListAdapter<String>(listOf(StringItemFactory())).apply {
             Assert.assertEquals(-1L, getItemId(-1))
-            Assert.assertEquals(0L, getItemId(0))
-            Assert.assertEquals(1L, getItemId(1))
-            Assert.assertEquals(Int.MAX_VALUE.toLong(), getItemId(Int.MAX_VALUE))
-            Assert.assertEquals(Int.MIN_VALUE.toLong(), getItemId(Int.MIN_VALUE))
+            Assert.assertEquals(-1L, getItemId(0))
+            Assert.assertEquals(-1L, getItemId(1))
+        }
+
+        AssemblyListAdapter<String>(listOf(StringItemFactory()), hasStableIds = true).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(1)
+            }
+        }
+
+        AssemblyListAdapter(
+            listOf(StringItemFactory()),
+            initDataList = listOf("hello", "world"),
+            hasStableIds = true
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            Assert.assertEquals(getItem(0).hashCode().toLong(), getItemId(0))
+            Assert.assertEquals(getItem(1).hashCode().toLong(), getItemId(1))
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(2)
+            }
         }
     }
 

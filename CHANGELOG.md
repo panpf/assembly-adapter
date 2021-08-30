@@ -11,6 +11,7 @@
 * new: Assembly\*ExpandableListAdapter added getItemFactoryByChildPosition method
 * change: Assembly\*RecyclerAdapter no longer rewrite the getItemId method
 * fix: Fix the bug that \PagerAdapter trigger refresh even if the data is the same
+* new: AssemblyListAdapter, AssemblySingleDataListAdapter, AssemblyExpandableListAdapter, AssemblySingleDataExpandableListAdapter now support hasStableIds
 
 
 # v4.0.0-beta01

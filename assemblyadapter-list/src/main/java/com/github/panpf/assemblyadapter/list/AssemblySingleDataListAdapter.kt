@@ -31,7 +31,8 @@ import com.github.panpf.assemblyadapter.ItemFactory
  */
 open class AssemblySingleDataListAdapter<DATA : Any>(
     private val itemFactory: ItemFactory<DATA>,
-    initData: DATA? = null
+    initData: DATA? = null,
+    private val hasStableIds: Boolean = false,
 ) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     var data: DATA? = initData
@@ -50,7 +51,18 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
         return data!!
     }
 
-    override fun getItemId(position: Int): Long = position.toLong()
+    override fun hasStableIds(): Boolean {
+        return hasStableIds
+    }
+
+    override fun getItemId(position: Int): Long {
+        return if (hasStableIds) {
+            val data = getItem(position)
+            if (data is ItemId) data.itemId else data.hashCode().toLong()
+        } else {
+            -1
+        }
+    }
 
     override fun getViewTypeCount(): Int = 1
 

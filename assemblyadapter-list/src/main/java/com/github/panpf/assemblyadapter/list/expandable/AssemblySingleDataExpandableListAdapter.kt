@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
+import com.github.panpf.assemblyadapter.list.ItemId
 import com.github.panpf.assemblyadapter.list.R
 
 /**
@@ -34,7 +35,8 @@ import com.github.panpf.assemblyadapter.list.R
  */
 open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    initData: GROUP_DATA? = null
+    initData: GROUP_DATA? = null,
+    private val hasStableIds: Boolean = false,
 ) : BaseExpandableListAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
@@ -45,17 +47,19 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
             notifyDataSetChanged()
         }
 
-    var hasStableIds = false
     var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
 
     constructor(
         itemFactory: ItemFactory<GROUP_DATA>,
-        initData: GROUP_DATA? = null
-    ) : this(listOf(itemFactory), initData)
+        initData: GROUP_DATA? = null,
+        hasStableIds: Boolean = false,
+    ) : this(listOf(itemFactory), initData, hasStableIds)
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
     }
+
+    override fun hasStableIds(): Boolean = hasStableIds
 
 
     override fun getGroupCount(): Int = if (data != null) 1 else 0
@@ -68,7 +72,14 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         return data!!
     }
 
-    override fun getGroupId(groupPosition: Int): Long = groupPosition.toLong()
+    override fun getGroupId(groupPosition: Int): Long {
+        return if (hasStableIds) {
+            val data = getGroup(groupPosition)
+            if (data is ItemId) data.itemId else data.hashCode().toLong()
+        } else {
+            -1
+        }
+    }
 
     override fun getGroupTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
@@ -154,7 +165,14 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         }
     }
 
-    override fun getChildId(groupPosition: Int, childPosition: Int): Long = childPosition.toLong()
+    override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+        return if (hasStableIds) {
+            val data = getChild(groupPosition, childPosition)!!
+            if (data is ItemId) data.itemId else data.hashCode().toLong()
+        } else {
+            -1
+        }
+    }
 
     override fun getChildTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
@@ -214,8 +232,6 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         return childItemView
     }
 
-
-    override fun hasStableIds(): Boolean = hasStableIds
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
         val groupCount = groupCount

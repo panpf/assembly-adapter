@@ -37,7 +37,8 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
  */
 open class AssemblyListAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    initDataList: List<DATA>? = null
+    initDataList: List<DATA>? = null,
+    private val hasStableIds: Boolean = false,
 ) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
@@ -69,8 +70,17 @@ open class AssemblyListAdapter<DATA>(
         return itemDataStorage.getData(position)
     }
 
+    override fun hasStableIds(): Boolean {
+        return hasStableIds
+    }
+
     override fun getItemId(position: Int): Long {
-        return position.toLong()
+        return if (hasStableIds) {
+            val data = getItem(position) ?: Placeholder
+            if (data is ItemId) data.itemId else data.hashCode().toLong()
+        } else {
+            -1
+        }
     }
 
     override fun getViewTypeCount(): Int {
@@ -78,14 +88,14 @@ open class AssemblyListAdapter<DATA>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItem(position) ?: Placeholder
         return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         )
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItem(position) ?: Placeholder
         val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         ).dispatchCreateItem(parent).apply {
