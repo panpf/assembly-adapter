@@ -30,7 +30,8 @@ import java.util.*
  */
 internal class ConcatListAdapterController(
     private val mConcatAdapter: ConcatListAdapter,
-    config: ConcatListAdapter.Config
+    config: ConcatListAdapter.Config,
+    adapters: List<BaseAdapter>
 ) : NestedListAdapterWrapper.Callback {
 
     /**
@@ -89,6 +90,12 @@ internal class ConcatListAdapterController(
             }
             return adapters
         }
+
+    init {
+        for (adapter in adapters) {
+            addAdapter(adapter)
+        }
+    }
 
     private fun findWrapperFor(adapter: BaseAdapter): NestedListAdapterWrapper? {
         val index = indexOfWrapper(adapter)

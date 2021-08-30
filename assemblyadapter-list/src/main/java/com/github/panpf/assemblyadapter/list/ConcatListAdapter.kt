@@ -40,7 +40,7 @@ open class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : Base
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
-    private val mController = ConcatListAdapterController(this, config)
+    private val mController = ConcatListAdapterController(this, config, adapters)
 
     /**
      * Returns an unmodifiable copy of the list of adapters in this [ConcatListAdapter].
@@ -76,12 +76,6 @@ open class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : Base
      * @param adapters The list of adapters to add
      */
     constructor(vararg adapters: BaseAdapter) : this(Config.DEFAULT, adapters.toList())
-
-    init {
-        for (adapter in adapters) {
-            addAdapter(adapter)
-        }
-    }
 
     /**
      * Appends the given adapter to the existing list of adapters and notifies the observers of

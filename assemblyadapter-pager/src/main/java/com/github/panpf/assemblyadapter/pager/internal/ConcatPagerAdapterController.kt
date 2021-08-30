@@ -28,8 +28,10 @@ import java.util.*
  * All logic for the [ConcatPagerAdapter] is here so that we can clearly see a separation
  * between an adapter implementation and merging logic.
  */
-internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPagerAdapter) :
-    NestedPagerAdapterWrapper.Callback {
+internal class ConcatPagerAdapterController(
+    private val mConcatAdapter: ConcatPagerAdapter,
+    adapters: List<GetItemDataPagerAdapter>
+) : NestedPagerAdapterWrapper.Callback {
 
     private val mWrappers = ArrayList<NestedPagerAdapterWrapper>()
 
@@ -47,6 +49,12 @@ internal class ConcatPagerAdapterController(private val mConcatAdapter: ConcatPa
             }
             return adapters
         }
+
+    init {
+        for (adapter in adapters) {
+            addAdapter(adapter)
+        }
+    }
 
     fun getData(globalPosition: Int): Any {
         val count = totalCount

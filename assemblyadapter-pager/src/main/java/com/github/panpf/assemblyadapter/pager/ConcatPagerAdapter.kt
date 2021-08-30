@@ -31,7 +31,7 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
-    private val mController: ConcatPagerAdapterController = ConcatPagerAdapterController(this)
+    private val mController = ConcatPagerAdapterController(this, adapters)
 
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper(this)
 
@@ -68,12 +68,6 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
      * @param adapters The list of adapters to add
      */
     constructor(vararg adapters: GetItemDataPagerAdapter) : this(adapters.toList())
-
-    init {
-        for (adapter in adapters) {
-            addAdapter(adapter)
-        }
-    }
 
     /**
      * Appends the given adapter to the existing list of adapters and notifies the observers of

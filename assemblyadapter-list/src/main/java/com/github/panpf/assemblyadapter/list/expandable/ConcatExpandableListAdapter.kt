@@ -30,8 +30,9 @@ import java.util.*
  * @param adapters The list of adapters to add
  * @see Config.Builder
  */
-open class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpandableListAdapter>) :
-    BaseExpandableListAdapter() {
+open class ConcatExpandableListAdapter(
+    config: Config, adapters: List<BaseExpandableListAdapter>
+) : BaseExpandableListAdapter() {
 
     companion object {
         const val NO_ID: Long = -1
@@ -42,7 +43,7 @@ open class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpand
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
     private val mController: ConcatExpandableListAdapterController =
-        ConcatExpandableListAdapterController(this, config)
+        ConcatExpandableListAdapterController(this, config, adapters)
 
     /**
      * Returns an unmodifiable copy of the list of adapters in this [ConcatExpandableListAdapter].
@@ -84,12 +85,6 @@ open class ConcatExpandableListAdapter(config: Config, adapters: List<BaseExpand
         Config.DEFAULT,
         adapters.toList()
     )
-
-    init {
-        for (adapter in adapters) {
-            addAdapter(adapter)
-        }
-    }
 
     /**
      * Appends the given adapter to the existing list of adapters and notifies the observers of

@@ -44,8 +44,7 @@ open class ConcatFragmentStatePagerAdapter(
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
-    private val mController: ConcatFragmentStatePagerAdapterController =
-        ConcatFragmentStatePagerAdapterController(this)
+    private val mController = ConcatFragmentStatePagerAdapterController(this, adapters)
 
     private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper(this)
 
@@ -109,12 +108,6 @@ open class ConcatFragmentStatePagerAdapter(
         fm: FragmentManager,
         vararg adapters: GetItemDataFragmentStatePagerAdapter
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, adapters.toList())
-
-    init {
-        for (adapter in adapters) {
-            addAdapter(adapter)
-        }
-    }
 
     /**
      * Appends the given adapter to the existing list of adapters and notifies the observers of

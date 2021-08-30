@@ -26,7 +26,8 @@ import java.util.*
  * between an adapter implementation and merging logic.
  */
 internal class ConcatFragmentStatePagerAdapterController(
-    private val mConcatAdapter: ConcatFragmentStatePagerAdapter
+    private val mConcatAdapter: ConcatFragmentStatePagerAdapter,
+    adapters: List<GetItemDataFragmentStatePagerAdapter>
 ) : NestedFragmentStatePagerAdapterWrapper.Callback {
 
     private val mWrappers = ArrayList<NestedFragmentStatePagerAdapterWrapper>()
@@ -57,6 +58,12 @@ internal class ConcatFragmentStatePagerAdapterController(
             }
             return adapters
         }
+
+    init {
+        for (adapter in adapters) {
+            addAdapter(adapter)
+        }
+    }
 
     fun getData(globalPosition: Int): Any {
         val count = totalCount
