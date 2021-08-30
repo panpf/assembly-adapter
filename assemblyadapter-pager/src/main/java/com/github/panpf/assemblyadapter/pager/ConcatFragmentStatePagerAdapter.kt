@@ -18,14 +18,15 @@ package com.github.panpf.assemblyadapter.pager
 import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.internal.ConcatFragmentStatePagerAdapterController
-import com.github.panpf.assemblyadapter.pager.internal.FragmentStatePagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.refreshable.PagerAdapterRefreshHelper
 import java.util.*
 
 /**
- * An [FragmentStatePagerAdapter] implementation that presents the contents of multiple adapters in sequence.
+ * An [GetItemDataFragmentStatePagerAdapter] implementation that presents the contents of multiple adapters in sequence.
  */
 @Deprecated(
     message = "Switch to 'androidx.viewpager2.widget.ViewPager2' and use 'androidx.recyclerview.widget.ConcatAdapter' instead.",
@@ -37,36 +38,36 @@ import java.util.*
 open class ConcatFragmentStatePagerAdapter(
     fm: FragmentManager,
     @Behavior behavior: Int,
-    adapters: List<FragmentStatePagerAdapter>
-) : FragmentStatePagerAdapter(fm, behavior), AbsoluteAdapterPositionAdapter {
+    adapters: List<GetItemDataFragmentStatePagerAdapter>
+) : GetItemDataFragmentStatePagerAdapter(fm, behavior), AbsoluteAdapterPositionAdapter {
 
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
     private val mController: ConcatFragmentStatePagerAdapterController =
         ConcatFragmentStatePagerAdapterController(this)
-    private var refreshHelper: FragmentStatePagerAdapterRefreshHelper? =
-        FragmentStatePagerAdapterRefreshHelper()
 
-    // To support ConcatFragmentStatePagerAdapter nesting
-    override var nextItemAbsoluteAdapterPosition: Int? = null
+    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper(this)
 
     /**
      * Disable the function of refreshing item when the data set changes.
      *
-     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
+     * By default, [PagerAdapter] will not refresh the item when the dataset changes.
      *
-     * [ConcatFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * [ArrayPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
      * method return POSITION_NONE when the dataset changes.
      */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else FragmentStatePagerAdapterRefreshHelper()
+                refreshHelper = if (disable) null else PagerAdapterRefreshHelper(this)
                 notifyDataSetChanged()
             }
         }
+
+    // To support ConcatFragmentStatePagerAdapter nesting
+    override var nextItemAbsoluteAdapterPosition: Int? = null
 
     /**
      * Returns an unmodifiable copy of the list of adapters in this [ConcatFragmentStatePagerAdapter].
@@ -75,7 +76,7 @@ open class ConcatFragmentStatePagerAdapter(
      *
      * @return A copy of the list of adapters in this ConcatPagerAdapter.
      */
-    val adapters: List<FragmentStatePagerAdapter>
+    val adapters: List<GetItemDataFragmentStatePagerAdapter>
         get() = Collections.unmodifiableList(mController.copyOfAdapters)
 
     /**
@@ -86,7 +87,7 @@ open class ConcatFragmentStatePagerAdapter(
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        vararg adapters: FragmentStatePagerAdapter
+        vararg adapters: GetItemDataFragmentStatePagerAdapter
     ) : this(fm, behavior, adapters.toList())
 
     /**
@@ -96,7 +97,7 @@ open class ConcatFragmentStatePagerAdapter(
      */
     constructor(
         fm: FragmentManager,
-        adapters: List<FragmentStatePagerAdapter>
+        adapters: List<GetItemDataFragmentStatePagerAdapter>
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, adapters)
 
     /**
@@ -106,7 +107,7 @@ open class ConcatFragmentStatePagerAdapter(
      */
     constructor(
         fm: FragmentManager,
-        vararg adapters: FragmentStatePagerAdapter
+        vararg adapters: GetItemDataFragmentStatePagerAdapter
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, adapters.toList())
 
     init {
@@ -125,7 +126,7 @@ open class ConcatFragmentStatePagerAdapter(
      * @see .addAdapter
      * @see .removeAdapter
      */
-    open fun addAdapter(adapter: FragmentStatePagerAdapter): Boolean {
+    open fun addAdapter(adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -141,7 +142,7 @@ open class ConcatFragmentStatePagerAdapter(
      * @see .addAdapter
      * @see .removeAdapter
      */
-    open fun addAdapter(index: Int, adapter: FragmentStatePagerAdapter): Boolean {
+    open fun addAdapter(index: Int, adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -152,7 +153,7 @@ open class ConcatFragmentStatePagerAdapter(
      * @return `true` if the adapter was previously added to this `ConcatPagerAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    open fun removeAdapter(adapter: FragmentStatePagerAdapter): Boolean {
+    open fun removeAdapter(adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -160,10 +161,14 @@ open class ConcatFragmentStatePagerAdapter(
         return mController.totalCount
     }
 
+    override fun getItemData(position: Int): Any {
+        return mController.getData(position)
+    }
+
     override fun getItem(position: Int): Fragment {
         return mController.getItem(position, nextItemAbsoluteAdapterPosition).apply {
             nextItemAbsoluteAdapterPosition = null
-            refreshHelper?.bindNotifyDataSetChangedNumber(this)
+            refreshHelper?.bindPositionAndData(this, position, getItemData(position))
         }
     }
 
@@ -175,11 +180,6 @@ open class ConcatFragmentStatePagerAdapter(
         return mController.getPageWidth(position)
     }
 
-    override fun notifyDataSetChanged() {
-        refreshHelper?.onNotifyDataSetChanged()
-        super.notifyDataSetChanged()
-    }
-
     override fun getItemPosition(item: Any): Int {
         if (refreshHelper?.isItemPositionChanged(item as Fragment) == true) {
             return POSITION_NONE
@@ -187,7 +187,7 @@ open class ConcatFragmentStatePagerAdapter(
         return super.getItemPosition(item)
     }
 
-    open fun findLocalAdapterAndPosition(position: Int): Pair<FragmentStatePagerAdapter, Int> {
+    open fun findLocalAdapterAndPosition(position: Int): Pair<GetItemDataFragmentStatePagerAdapter, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 

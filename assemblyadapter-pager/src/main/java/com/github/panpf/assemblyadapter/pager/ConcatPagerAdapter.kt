@@ -18,35 +18,36 @@ package com.github.panpf.assemblyadapter.pager
 import android.os.Parcelable
 import android.view.View
 import android.view.ViewGroup
-import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.internal.ConcatPagerAdapterController
-import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataPagerAdapter
+import com.github.panpf.assemblyadapter.pager.refreshable.PagerAdapterRefreshHelper
 import java.util.*
 
 /**
- * An [PagerAdapter] implementation that presents the contents of multiple adapters in sequence.
+ * An [GetItemDataPagerAdapter] implementation that presents the contents of multiple adapters in sequence.
  */
-open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
+open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItemDataPagerAdapter() {
 
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
     private val mController: ConcatPagerAdapterController = ConcatPagerAdapterController(this)
-    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
+
+    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper(this)
 
     /**
      * Disable the function of refreshing item when the data set changes.
      *
-     * By default, [PagerAdapter] will not refresh the item when the dataset changes.
+     * By default, [GetItemDataPagerAdapter] will not refresh the item when the dataset changes.
      *
-     * [ConcatPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * [ArrayPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
      * method return POSITION_NONE when the dataset changes.
      */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
         get() = refreshHelper != null
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
+                refreshHelper = if (disable) null else PagerAdapterRefreshHelper(this)
                 notifyDataSetChanged()
             }
         }
@@ -58,7 +59,7 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      *
      * @return A copy of the list of adapters in this ConcatPagerAdapter.
      */
-    val adapters: List<PagerAdapter>
+    val adapters: List<GetItemDataPagerAdapter>
         get() = Collections.unmodifiableList(mController.copyOfAdapters)
 
     /**
@@ -66,7 +67,7 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      *
      * @param adapters The list of adapters to add
      */
-    constructor(vararg adapters: PagerAdapter) : this(adapters.toList())
+    constructor(vararg adapters: GetItemDataPagerAdapter) : this(adapters.toList())
 
     init {
         for (adapter in adapters) {
@@ -84,7 +85,7 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      * @see .addAdapter
      * @see .removeAdapter
      */
-    open fun addAdapter(adapter: PagerAdapter): Boolean {
+    open fun addAdapter(adapter: GetItemDataPagerAdapter): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -100,7 +101,7 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      * @see .addAdapter
      * @see .removeAdapter
      */
-    open fun addAdapter(index: Int, adapter: PagerAdapter): Boolean {
+    open fun addAdapter(index: Int, adapter: GetItemDataPagerAdapter): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -111,7 +112,7 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
      * @return `true` if the adapter was previously added to this `ConcatPagerAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    open fun removeAdapter(adapter: PagerAdapter): Boolean {
+    open fun removeAdapter(adapter: GetItemDataPagerAdapter): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -119,9 +120,15 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
         return mController.totalCount
     }
 
+    override fun getItemData(position: Int): Any {
+        return mController.getData(position)
+    }
+
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         return mController.instantiateItem(container, position).apply {
-            refreshHelper?.bindNotifyDataSetChangedNumber(this as View)
+            if (this is View) {
+                refreshHelper?.bindPositionAndData(this, position, getItemData(position))
+            }
         }
     }
 
@@ -161,11 +168,6 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
         return mController.getPageWidth(position)
     }
 
-    override fun notifyDataSetChanged() {
-        refreshHelper?.onNotifyDataSetChanged()
-        super.notifyDataSetChanged()
-    }
-
     override fun getItemPosition(item: Any): Int {
         if (refreshHelper?.isItemPositionChanged(item as View) == true) {
             return POSITION_NONE
@@ -173,7 +175,7 @@ open class ConcatPagerAdapter(adapters: List<PagerAdapter>) : PagerAdapter() {
         return super.getItemPosition(item)
     }
 
-    open fun findLocalAdapterAndPosition(position: Int): Pair<PagerAdapter, Int> {
+    open fun findLocalAdapterAndPosition(position: Int): Pair<GetItemDataPagerAdapter, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 }

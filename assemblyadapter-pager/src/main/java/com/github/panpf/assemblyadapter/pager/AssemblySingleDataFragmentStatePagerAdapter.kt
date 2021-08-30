@@ -18,10 +18,10 @@ package com.github.panpf.assemblyadapter.pager
 import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
-import com.github.panpf.assemblyadapter.pager.internal.FragmentStatePagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentStatePagerAdapter
 
 /**
  * Single data version of [AssemblyFragmentStatePagerAdapter]
@@ -42,12 +42,9 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     @Behavior behavior: Int,
     private val itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
-) : FragmentStatePagerAdapter(fm, behavior),
+) : RefreshableFragmentStatePagerAdapter(fm, behavior),
     AssemblyAdapter<FragmentItemFactory<*>>,
     AbsoluteAdapterPositionAdapter {
-
-    private var refreshHelper: FragmentStatePagerAdapterRefreshHelper? =
-        FragmentStatePagerAdapterRefreshHelper()
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
 
@@ -58,23 +55,6 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         set(value) {
             field = value
             notifyDataSetChanged()
-        }
-
-    /**
-     * Disable the function of refreshing item when the data set changes.
-     *
-     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
-     *
-     * [AssemblySingleDataFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
-     * method return POSITION_NONE when the dataset changes.
-     */
-    var isDisableItemRefreshWhenDataSetChanged: Boolean
-        get() = refreshHelper != null
-        set(disable) {
-            if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else FragmentStatePagerAdapterRefreshHelper()
-                notifyDataSetChanged()
-            }
         }
 
     @Deprecated(
@@ -89,11 +69,21 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
 
     override fun getCount(): Int = if (data != null) 1 else 0
 
-    override fun getItem(position: Int): Fragment {
+    override fun getItemData(position: Int): Any {
         val count = count
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
         }
+        return data!!
+    }
+
+    override fun getFragment(position: Int): Fragment {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+
+        val data = data!!
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
         // set nextItemAbsoluteAdapterPosition null to support ConcatFragmentStatePagerAdapter nesting
@@ -102,22 +92,8 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
-            bindingAdapterPosition, absoluteAdapterPosition, this.data!!
-        ).apply {
-            refreshHelper?.bindNotifyDataSetChangedNumber(this)
-        }
-    }
-
-    override fun notifyDataSetChanged() {
-        refreshHelper?.onNotifyDataSetChanged()
-        super.notifyDataSetChanged()
-    }
-
-    override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item as Fragment) == true) {
-            return POSITION_NONE
-        }
-        return super.getItemPosition(item)
+            bindingAdapterPosition, absoluteAdapterPosition, data
+        )
     }
 
 

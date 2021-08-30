@@ -17,9 +17,8 @@ package com.github.panpf.assemblyadapter.pager
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapter
 
 /**
  * Single data version of [AssemblyPagerAdapter]
@@ -31,9 +30,7 @@ import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 open class AssemblySingleDataPagerAdapter<DATA : Any>(
     private val itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
-) : PagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
-
-    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
+) : RefreshablePagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
 
     /**
      * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
@@ -44,30 +41,23 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
             notifyDataSetChanged()
         }
 
-    /**
-     * Disable the function of refreshing item when the data set changes.
-     *
-     * By default, [PagerAdapter] will not refresh the item when the dataset changes.
-     *
-     * [AssemblySingleDataPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
-     * method return POSITION_NONE when the dataset changes.
-     */
-    var isDisableItemRefreshWhenDataSetChanged: Boolean
-        get() = refreshHelper != null
-        set(disable) {
-            if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
-                notifyDataSetChanged()
-            }
-        }
-
     override fun getCount(): Int = if (data != null) 1 else 0
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+    override fun getItemData(position: Int): Any {
         val count = count
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
         }
+        return data!!
+    }
+
+    override fun getView(container: ViewGroup, position: Int): View {
+        val count = count
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+
+        val data = data!!
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = container.getTag(R.id.aa_tag_absoluteAdapterPosition)
         // set tag absoluteAdapterPosition null to support ConcatPagerAdapter nesting
@@ -76,35 +66,9 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactory as PagerItemFactory<Any>
-        val itemView = itemFactory.dispatchCreateItemView(
-            container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data!!
+        return itemFactory.dispatchCreateItemView(
+            container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
         )
-        container.addView(itemView)
-        return itemView.apply {
-            refreshHelper?.bindNotifyDataSetChangedNumber(this)
-        }
-    }
-
-    override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        container.removeView(item as View)
-    }
-
-    override fun isViewFromObject(view: View, item: Any): Boolean = view === item
-
-    override fun notifyDataSetChanged() {
-        refreshHelper?.onNotifyDataSetChanged()
-        super.notifyDataSetChanged()
-    }
-
-    override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item as View) == true) {
-            return POSITION_NONE
-        }
-        return super.getItemPosition(item)
     }
 
 

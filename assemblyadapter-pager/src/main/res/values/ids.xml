@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="aa_tag_notifyDataSetChangedNumber" type="id" />
+    <item name="aa_tag_pager_refresh_position" type="id" />
+    <item name="aa_tag_pager_refresh_data" type="id" />
 </resources>

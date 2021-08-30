@@ -10,6 +10,7 @@
 * change: When the position parameter of AssemblySingleData\Adapter related methods exceeds the range of 0 to count, an IndexOutOfBoundsException will be thrown.
 * new: Assembly\*ExpandableListAdapter added getItemFactoryByChildPosition method
 * change: Assembly\*RecyclerAdapter no longer rewrite the getItemId method
+* fix: Fix the bug that \PagerAdapter trigger refresh even if the data is the same
 
 
 # v4.0.0-beta01

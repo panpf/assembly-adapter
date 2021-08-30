@@ -17,16 +17,17 @@ package com.github.panpf.assemblyadapter.pager.internal
 
 import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataFragmentStatePagerAdapter
 import java.util.*
 
 /**
  * All logic for the [ConcatFragmentStatePagerAdapter] is here so that we can clearly see a separation
  * between an adapter implementation and merging logic.
  */
-internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdapter: ConcatFragmentStatePagerAdapter) :
-    NestedFragmentStatePagerAdapterWrapper.Callback {
+internal class ConcatFragmentStatePagerAdapterController(
+    private val mConcatAdapter: ConcatFragmentStatePagerAdapter
+) : NestedFragmentStatePagerAdapterWrapper.Callback {
 
     private val mWrappers = ArrayList<NestedFragmentStatePagerAdapterWrapper>()
 
@@ -44,26 +45,36 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
             return total
         }
 
-    val copyOfAdapters: List<FragmentStatePagerAdapter>
+    val copyOfAdapters: List<GetItemDataFragmentStatePagerAdapter>
         get() {
             if (mWrappers.isEmpty()) {
                 return emptyList()
             }
-            val adapters: MutableList<FragmentStatePagerAdapter> = ArrayList(mWrappers.size)
+            val adapters: MutableList<GetItemDataFragmentStatePagerAdapter> =
+                ArrayList(mWrappers.size)
             for (wrapper in mWrappers) {
                 adapters.add(wrapper.adapter)
             }
             return adapters
         }
 
-    private fun findWrapperFor(adapter: FragmentStatePagerAdapter): NestedFragmentStatePagerAdapterWrapper? {
+    fun getData(globalPosition: Int): Any {
+        val count = totalCount
+        if (globalPosition < 0 || globalPosition >= count) {
+            throw IndexOutOfBoundsException("Index: $globalPosition, Size: $count")
+        }
+        val (localAdapter, localPosition) = findLocalAdapterAndPosition(globalPosition)
+        return localAdapter.getItemData(localPosition)
+    }
+
+    private fun findWrapperFor(adapter: GetItemDataFragmentStatePagerAdapter): NestedFragmentStatePagerAdapterWrapper? {
         val index = indexOfWrapper(adapter)
         return if (index == -1) {
             null
         } else mWrappers[index]
     }
 
-    private fun indexOfWrapper(adapter: FragmentStatePagerAdapter): Int {
+    private fun indexOfWrapper(adapter: GetItemDataFragmentStatePagerAdapter): Int {
         val limit = mWrappers.size
         for (i in 0 until limit) {
             if (mWrappers[i].adapter === adapter) {
@@ -78,7 +89,7 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
      *
      * @see ConcatFragmentStatePagerAdapter.addAdapter
      */
-    fun addAdapter(adapter: FragmentStatePagerAdapter): Boolean {
+    fun addAdapter(adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
         return addAdapter(mWrappers.size, adapter)
     }
 
@@ -89,7 +100,7 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
      * @see ConcatFragmentStatePagerAdapter.addAdapter
      */
     @SuppressLint("RestrictedApi")
-    fun addAdapter(index: Int, adapter: FragmentStatePagerAdapter): Boolean {
+    fun addAdapter(index: Int, adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
         if (index < 0 || index > mWrappers.size) {
             throw IndexOutOfBoundsException(
                 "Index must be between 0 and ${mWrappers.size}. Given:$index"
@@ -108,7 +119,7 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
         return true
     }
 
-    fun removeAdapter(adapter: FragmentStatePagerAdapter): Boolean {
+    fun removeAdapter(adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
         val index = indexOfWrapper(adapter)
         if (index == -1) {
             return false
@@ -151,7 +162,7 @@ internal class ConcatFragmentStatePagerAdapterController(private val mConcatAdap
         return pageWidth
     }
 
-    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<FragmentStatePagerAdapter, Int> {
+    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<GetItemDataFragmentStatePagerAdapter, Int> {
         var localPosition = globalPosition
         for (wrapper in mWrappers) {
             if (wrapper.cachedItemCount > localPosition) {

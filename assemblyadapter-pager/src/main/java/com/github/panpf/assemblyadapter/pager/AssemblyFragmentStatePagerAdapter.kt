@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
-import com.github.panpf.assemblyadapter.pager.internal.FragmentStatePagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentStatePagerAdapter
 
 /**
  * An implementation of [FragmentStatePagerAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
@@ -48,33 +48,14 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     @Behavior behavior: Int,
     itemFactoryList: List<FragmentItemFactory<*>>,
     initDataList: List<DATA>? = null
-) : FragmentStatePagerAdapter(fm, behavior),
+) : RefreshableFragmentStatePagerAdapter(fm, behavior),
     AssemblyAdapter<FragmentItemFactory<*>>,
     AbsoluteAdapterPositionAdapter {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
-    private var refreshHelper: FragmentStatePagerAdapterRefreshHelper? =
-        FragmentStatePagerAdapterRefreshHelper()
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
-
-    /**
-     * Disable the function of refreshing item when the data set changes.
-     *
-     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
-     *
-     * [AssemblyFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
-     * method return POSITION_NONE when the dataset changes.
-     */
-    var isDisableItemRefreshWhenDataSetChanged: Boolean
-        get() = refreshHelper != null
-        set(disable) {
-            if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else FragmentStatePagerAdapterRefreshHelper()
-                notifyDataSetChanged()
-            }
-        }
 
     /**
      * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
@@ -104,11 +85,15 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         itemDataStorage.submitList(list)
     }
 
+    override fun getItemData(position: Int): Any {
+        return itemDataStorage.getData(position) ?: Placeholder
+    }
+
     override fun getCount(): Int {
         return itemDataStorage.dataCount
     }
 
-    override fun getItem(position: Int): Fragment {
+    override fun getFragment(position: Int): Fragment {
         val data = itemDataStorage.getData(position) ?: Placeholder
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
@@ -122,21 +107,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         ) as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
-        ).apply {
-            refreshHelper?.bindNotifyDataSetChangedNumber(this)
-        }
-    }
-
-    override fun notifyDataSetChanged() {
-        refreshHelper?.onNotifyDataSetChanged()
-        super.notifyDataSetChanged()
-    }
-
-    override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item as Fragment) == true) {
-            return POSITION_NONE
-        }
-        return super.getItemPosition(item)
+        )
     }
 
 

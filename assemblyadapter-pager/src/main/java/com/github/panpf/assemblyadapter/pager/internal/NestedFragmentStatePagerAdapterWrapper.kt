@@ -16,14 +16,14 @@
 package com.github.panpf.assemblyadapter.pager.internal
 
 import android.database.DataSetObserver
-import androidx.fragment.app.FragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
+import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataFragmentStatePagerAdapter
 
 /**
  * Wrapper for each adapter in [ConcatFragmentStatePagerAdapter].
  */
 internal class NestedFragmentStatePagerAdapterWrapper(
-    val adapter: FragmentStatePagerAdapter,
+    val adapter: GetItemDataFragmentStatePagerAdapter,
     private val mCallback: Callback,
 ) {
 

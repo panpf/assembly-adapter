@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
-import com.github.panpf.assemblyadapter.pager.internal.FragmentStatePagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentStatePagerAdapter
 import java.util.*
 
 /**
@@ -39,12 +39,10 @@ open class ArrayFragmentStatePagerAdapter(
     fragmentManager: FragmentManager,
     @Behavior behavior: Int,
     templateFragmentList: List<Fragment>
-) : FragmentStatePagerAdapter(fragmentManager, behavior) {
+) : RefreshableFragmentStatePagerAdapter(fragmentManager, behavior) {
 
     private val itemDataStorage = ItemDataStorage(templateFragmentList) { notifyDataSetChanged() }
     private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
-    private var refreshHelper: FragmentStatePagerAdapterRefreshHelper? =
-        FragmentStatePagerAdapterRefreshHelper()
 
     /**
      * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
@@ -60,22 +58,9 @@ open class ArrayFragmentStatePagerAdapter(
     val currentPageTitleList: List<CharSequence>
         get() = pageTitleStorage?.readOnlyList ?: Collections.emptyList()
 
-    /**
-     * Disable the function of refreshing item when the data set changes.
-     *
-     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
-     *
-     * [ArrayFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
-     * method return POSITION_NONE when the dataset changes.
-     */
-    var isDisableItemRefreshWhenDataSetChanged: Boolean
-        get() = refreshHelper != null
-        set(disable) {
-            if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else FragmentStatePagerAdapterRefreshHelper()
-                notifyDataSetChanged()
-            }
-        }
+    override fun getItemData(position: Int): Any {
+        return itemDataStorage.getData(position)
+    }
 
     @Deprecated(
         """use {@link #FragmentArrayStatePagerAdapter(FragmentManager, int, List)} with
@@ -96,7 +81,7 @@ open class ArrayFragmentStatePagerAdapter(
      * Set the new page title list to be displayed.
      */
     open fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
-        (pageTitleStorage ?: ItemDataStorage<CharSequence>() {
+        (pageTitleStorage ?: ItemDataStorage<CharSequence> {
             notifyDataSetChanged()
         }.apply {
             this@ArrayFragmentStatePagerAdapter.pageTitleStorage = this
@@ -108,25 +93,12 @@ open class ArrayFragmentStatePagerAdapter(
         return itemDataStorage.dataCount
     }
 
-    override fun getItem(position: Int): Fragment {
+    override fun getFragment(position: Int): Fragment {
         // Keep the characteristics consistent with ArrayFragmentStateAdapter
         val templateFragment = itemDataStorage.getData(position)
         return templateFragment.javaClass.newInstance().apply {
             arguments = templateFragment.arguments
-            refreshHelper?.bindNotifyDataSetChangedNumber(this)
         }
-    }
-
-    override fun notifyDataSetChanged() {
-        refreshHelper?.onNotifyDataSetChanged()
-        super.notifyDataSetChanged()
-    }
-
-    override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item as Fragment) == true) {
-            return POSITION_NONE
-        }
-        return super.getItemPosition(item)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

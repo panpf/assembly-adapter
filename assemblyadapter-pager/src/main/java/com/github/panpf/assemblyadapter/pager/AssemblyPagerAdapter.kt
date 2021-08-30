@@ -22,7 +22,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapter
 
 /**
  * An implementation of [PagerAdapter], which implements multi-type adapters through standardized [PagerItemFactory].
@@ -37,28 +37,10 @@ import com.github.panpf.assemblyadapter.pager.internal.PagerAdapterRefreshHelper
 open class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
     initDataList: List<DATA>? = null
-) : PagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
+) : RefreshablePagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
-    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper()
-
-    /**
-     * Disable the function of refreshing item when the data set changes.
-     *
-     * By default, [PagerAdapter] will not refresh the item when the dataset changes.
-     *
-     * [AssemblyPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
-     * method return POSITION_NONE when the dataset changes.
-     */
-    var isDisableItemRefreshWhenDataSetChanged: Boolean
-        get() = refreshHelper != null
-        set(disable) {
-            if (disable != isDisableItemRefreshWhenDataSetChanged) {
-                refreshHelper = if (disable) null else PagerAdapterRefreshHelper()
-                notifyDataSetChanged()
-            }
-        }
 
     /**
      * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
@@ -82,7 +64,11 @@ open class AssemblyPagerAdapter<DATA>(
         return itemDataStorage.dataCount
     }
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+    override fun getItemData(position: Int): Any {
+        return itemDataStorage.getData(position) ?: Placeholder
+    }
+
+    override fun getView(container: ViewGroup, position: Int): View {
         val data = itemDataStorage.getData(position) ?: Placeholder
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
@@ -95,33 +81,9 @@ open class AssemblyPagerAdapter<DATA>(
         val itemFactory = itemFactoryStorage.getItemFactoryByData(
             data, "PagerItemFactory", "AssemblyPagerAdapter", "itemFactoryList"
         ) as PagerItemFactory<Any>
-        val itemView = itemFactory.dispatchCreateItemView(
+        return itemFactory.dispatchCreateItemView(
             container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
         )
-        container.addView(itemView)
-        return itemView.apply {
-            refreshHelper?.bindNotifyDataSetChangedNumber(this)
-        }
-    }
-
-    override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
-        container.removeView(item as View)
-    }
-
-    override fun isViewFromObject(view: View, item: Any): Boolean {
-        return view === item
-    }
-
-    override fun notifyDataSetChanged() {
-        refreshHelper?.onNotifyDataSetChanged()
-        super.notifyDataSetChanged()
-    }
-
-    override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item as View) == true) {
-            return POSITION_NONE
-        }
-        return super.getItemPosition(item)
     }
 
 
