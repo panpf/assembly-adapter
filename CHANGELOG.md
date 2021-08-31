@@ -1,17 +1,27 @@
-# new
+# v4.0.0-beta02
+
+recycler:
 * fix: Fix the bug of AbsoluteAdapterPosition error returned by ConcatAdapterAbsoluteHelper 
 * fix: ConcatAdapterLocalHelper now throws IndexOutOfBoundsException when position is out of range
 * change: AnyAdapterDataObserver change to SimpleAdapterDataObserver
-* fix: Fix the bug that the Insets.topAndBottomOf() method reverses start and top
-* change: The position priority of DividerConfig is now higher than spanIndex
-* fix: Fix the bug that GridDividerItemDecoration encounters an item with a spanSize greater than 1 and less than spanCount that its isLastSpan is calculated incorrectly
-* change: headerSide rename to sideHeader, footerSide rename to sideFooter
-* change: The expandable related classes in the list module are moved to the expandable directory
-* change: When the position parameter of AssemblySingleData\Adapter related methods exceeds the range of 0 to count, an IndexOutOfBoundsException will be thrown.
-* new: Assembly\*ExpandableListAdapter added getItemFactoryByChildPosition method
 * change: Assembly\*RecyclerAdapter no longer rewrite the getItemId method
-* fix: Fix the bug that \PagerAdapter trigger refresh even if the data is the same
+  
+recycler-divider:
+* fix: Fix the bug that the Insets.topAndBottomOf() method reverses start and top
+* fix: Fix the bug that GridDividerItemDecoration encounters an item with a spanSize greater than 1 and less than spanCount that its isLastSpan is calculated incorrectly
+* change: The position priority of DividerConfig is now higher than spanIndex
+* change: headerSide rename to sideHeader, footerSide rename to sideFooter
+
+list:
+* change: The expandable related classes in the list module are moved to the expandable directory
+* new: Assembly\*ExpandableListAdapter added getItemFactoryByChildPosition method
 * new: AssemblyListAdapter, AssemblySingleDataListAdapter, AssemblyExpandableListAdapter, AssemblySingleDataExpandableListAdapter now support hasStableIds
+
+pager:
+* fix: Fix the bug that \PagerAdapter trigger refresh even if the data is the same
+
+all:
+* change: When the position parameter of AssemblySingleData\Adapter related methods exceeds the range of 0 to count, an IndexOutOfBoundsException will be thrown.
 
 
 # v4.0.0-beta01
