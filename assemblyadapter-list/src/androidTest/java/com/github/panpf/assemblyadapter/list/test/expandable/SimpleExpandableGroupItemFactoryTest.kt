@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.list.expandable.test
+package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.content.Context
 import android.util.TypedValue
@@ -23,8 +23,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.list.expandable.SimpleExpandableGroupItemFactory
-import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.assemblyadapter.list.test.R
 import org.junit.Assert
 import org.junit.Test
@@ -54,6 +54,15 @@ class SimpleExpandableGroupItemFactoryTest {
             "test_data",
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).text
         )
+    }
+
+    private data class Strings(val name: String = "") : ExpandableGroup {
+
+        override fun getChildCount(): Int = name.length
+
+        override fun getChild(childPosition: Int): Any {
+            return name[childPosition].toString()
+        }
     }
 
     private class TestSimpleExpandableGroupItemFactory :

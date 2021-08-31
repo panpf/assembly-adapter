@@ -69,7 +69,7 @@ internal interface ListStableIdStorage {
      * and always replaces the local id w/ a globally available ID to be consistent.
      */
     class IsolatedStableIdStorage : ListStableIdStorage {
-        var mNextStableId: Long = 0
+        private var mNextStableId: Long = 0
         fun obtainId(): Long {
             return mNextStableId++
         }

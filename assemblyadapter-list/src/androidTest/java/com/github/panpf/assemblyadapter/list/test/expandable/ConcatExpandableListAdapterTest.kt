@@ -1,4 +1,4 @@
-package com.github.panpf.assemblyadapter.list.expandable.test
+package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.widget.BaseExpandableListAdapter
 import android.widget.ListView

@@ -1,22 +1,21 @@
-package com.github.panpf.assemblyadapter.list.expandable.test
+package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.view.View
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
-import com.github.panpf.assemblyadapter.list.expandable.ExtraExpandableChildItem
-import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
+import com.github.panpf.assemblyadapter.list.expandable.ExtraExpandableGroupItem
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
-class ExtraExpandableChildItemTest {
+class ExtraExpandableGroupItemTest {
 
     @Test
     @Suppress("RemoveExplicitTypeArguments")
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testExtraItem = TestExtraItem<Strings, String>(TextView(context))
+        val testExtraItem = TestExtraItem<Strings>(TextView(context))
 
         Assert.assertNull(testExtraItem.getExtraOrNull<String>("testKey"))
         Assert.assertEquals(
@@ -60,16 +59,22 @@ class ExtraExpandableChildItemTest {
         )
     }
 
-    private class TestExtraItem<GROUP : ExpandableGroup, CHILD : Any>(itemView: View) :
-        ExtraExpandableChildItem<GROUP, CHILD>(itemView) {
+    private data class Strings(val name: String = "") : ExpandableGroup {
+
+        override fun getChildCount(): Int = name.length
+
+        override fun getChild(childPosition: Int): Any {
+            return name[childPosition].toString()
+        }
+    }
+
+    private class TestExtraItem<DATA : ExpandableGroup>(itemView: View) :
+        ExtraExpandableGroupItem<DATA>(itemView) {
         override fun bindData(
-            groupBindingAdapterPosition: Int,
-            groupAbsoluteAdapterPosition: Int,
-            groupData: GROUP,
-            isLastChild: Boolean,
+            isExpanded: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: CHILD
+            data: DATA
         ) {
 
         }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.list.expandable.test
+package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.database.DataSetObserver
 import android.widget.FrameLayout
@@ -23,13 +23,21 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
-import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
 
 class AssemblyExpandableListAdapterTest {
+
+    private data class Strings(val name: String = "") : ExpandableGroup {
+
+        override fun getChildCount(): Int = name.length
+
+        override fun getChild(childPosition: Int): Any {
+            return name[childPosition].toString()
+        }
+    }
 
     private class StringsItemFactory :
         ViewItemFactory<Strings>(Strings::class, android.R.layout.activity_list_item)

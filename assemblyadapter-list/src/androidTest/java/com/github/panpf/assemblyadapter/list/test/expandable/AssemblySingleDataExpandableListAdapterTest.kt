@@ -1,4 +1,4 @@
-package com.github.panpf.assemblyadapter.list.expandable.test
+package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.database.DataSetObserver
 import android.widget.FrameLayout
@@ -6,13 +6,26 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
-import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
 
 class AssemblySingleDataExpandableListAdapterTest {
+
+    private data class Strings(val name: String = "") : ExpandableGroup {
+
+        override fun getChildCount(): Int = name.length
+
+        override fun getChild(childPosition: Int): Any {
+            return name[childPosition].toString()
+        }
+    }
+
+    private class StringsItemFactory :
+        ViewItemFactory<Strings>(Strings::class, android.R.layout.activity_list_item)
+
+    private class StringItemFactory :
+        ViewItemFactory<String>(String::class, android.R.layout.activity_list_item)
 
     @Test
     fun testConstructor() {
@@ -352,23 +365,5 @@ class AssemblySingleDataExpandableListAdapterTest {
                 getItemFactoryByChildPosition(0, 4)
             }
         }
-    }
-
-    private class StringsItemFactory :
-        ViewItemFactory<Strings>(Strings::class, android.R.layout.activity_list_item)
-
-    private class StringItemFactory :
-        ViewItemFactory<String>(String::class, android.R.layout.activity_list_item)
-
-    private class DatesItemFactory :
-        ViewItemFactory<Dates>(Dates::class, android.R.layout.activity_list_item)
-
-    private class DateItemFactory :
-        ViewItemFactory<Date>(Date::class, android.R.layout.activity_list_item)
-
-    private data class Dates(val name: String, val dateList: List<Date>?) : ExpandableGroup {
-        override fun getChildCount(): Int = dateList?.size ?: 0
-
-        override fun getChild(childPosition: Int): Any = dateList!![childPosition]
     }
 }

@@ -17,6 +17,8 @@ package com.github.panpf.assemblyadapter.list.test
 
 import android.database.DataSetObserver
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.Placeholder
@@ -25,30 +27,33 @@ import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
 
 class AssemblyListAdapterTest {
 
-    private class StringItemFactory :
-        ViewItemFactory<String>(String::class, android.R.layout.activity_list_item)
+    private class TextItemFactory : ViewItemFactory<String>(String::class, { context, _, _ ->
+        TextView(context)
+    })
 
-    private class DateItemFactory :
-        ViewItemFactory<Date>(Date::class, android.R.layout.activity_list_item)
+    private data class Image(val redId: Int)
+
+    private class ImageItemFactory : ViewItemFactory<Image>(Image::class, { context, _, _ ->
+        ImageView(context)
+    })
 
     private class PlaceholderItemFactory :
-        ViewItemFactory<Placeholder>(Placeholder::class, android.R.layout.activity_list_item)
+        ViewItemFactory<Placeholder>(Placeholder::class, android.R.layout.test_list_item)
 
     @Test
     fun testConstructor() {
-        AssemblyListAdapter<String>(listOf(StringItemFactory())).apply {
+        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
             Assert.assertEquals("", currentList.joinToString())
         }
 
-        AssemblyListAdapter(listOf(StringItemFactory()), listOf("hello")).apply {
+        AssemblyListAdapter(listOf(TextItemFactory()), listOf("hello")).apply {
             Assert.assertEquals("hello", currentList.joinToString())
         }
 
-        AssemblyListAdapter(listOf(StringItemFactory()), listOf("hello", "world")).apply {
+        AssemblyListAdapter(listOf(TextItemFactory()), listOf("hello", "world")).apply {
             Assert.assertEquals("hello, world", currentList.joinToString())
         }
 
@@ -60,7 +65,7 @@ class AssemblyListAdapterTest {
     @Test
     fun testPropertyCurrentListAndSubmitList() {
         var dataFromObserver: List<String>? = null
-        AssemblyListAdapter<String>(listOf(StringItemFactory())).apply {
+        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
             registerDataSetObserver(object : DataSetObserver() {
                 override fun onChanged() {
                     super.onChanged()
@@ -84,7 +89,7 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testMethodGetCount() {
-        AssemblyListAdapter<String>(listOf(StringItemFactory())).apply {
+        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
             Assert.assertEquals(0, count)
 
             submitList(listOf("hello"))
@@ -100,7 +105,7 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testMethodGetItem() {
-        AssemblyListAdapter<String>(listOf(StringItemFactory())).apply {
+        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItem(-1)
             }
@@ -119,13 +124,13 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testMethodGetItemId() {
-        AssemblyListAdapter<String>(listOf(StringItemFactory())).apply {
+        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(-1L, getItemId(0))
             Assert.assertEquals(-1L, getItemId(1))
         }
 
-        AssemblyListAdapter<String>(listOf(StringItemFactory()), hasStableIds = true).apply {
+        AssemblyListAdapter<String>(listOf(TextItemFactory()), hasStableIds = true).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }
@@ -138,7 +143,7 @@ class AssemblyListAdapterTest {
         }
 
         AssemblyListAdapter(
-            listOf(StringItemFactory()),
+            listOf(TextItemFactory()),
             initDataList = listOf("hello", "world"),
             hasStableIds = true
         ).apply {
@@ -155,18 +160,18 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testMethodGetViewTypeCount() {
-        AssemblyListAdapter<String>(listOf(StringItemFactory())).apply {
+        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
             Assert.assertEquals(1, viewTypeCount)
         }
 
-        AssemblyListAdapter<String>(listOf(StringItemFactory(), DateItemFactory())).apply {
+        AssemblyListAdapter<String>(listOf(TextItemFactory(), ImageItemFactory())).apply {
             Assert.assertEquals(2, viewTypeCount)
         }
     }
 
     @Test
     fun testMethodGetItemViewType() {
-        AssemblyListAdapter<Any>(listOf(StringItemFactory(), DateItemFactory())).apply {
+        AssemblyListAdapter<Any>(listOf(TextItemFactory(), ImageItemFactory())).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemViewType(-1)
             }
@@ -177,7 +182,7 @@ class AssemblyListAdapterTest {
                 getItemViewType(1)
             }
 
-            submitList(listOf(Date(), "hello"))
+            submitList(listOf(Image(android.R.drawable.alert_dark_frame), "hello"))
             Assert.assertEquals(1, getItemViewType(0))
             Assert.assertEquals(0, getItemViewType(1))
         }
@@ -187,7 +192,7 @@ class AssemblyListAdapterTest {
     fun testMethodGetView() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
-        AssemblyListAdapter<String>(listOf(StringItemFactory())).apply {
+        AssemblyListAdapter<Any>(listOf(TextItemFactory(), ImageItemFactory())).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getView(-1, null, parent)
             }
@@ -198,7 +203,11 @@ class AssemblyListAdapterTest {
                 getView(1, null, parent)
             }
 
-            submitList(listOf("hello"))
+            submitList(listOf("hello", Image(android.R.drawable.alert_dark_frame)))
+
+            Assert.assertTrue(getView(0, null, parent) is TextView)
+            Assert.assertTrue(getView(1, null, parent) is ImageView)
+
             val itemView = getView(0, null, parent)
             Assert.assertNotSame(itemView, getView(0, null, parent))
             Assert.assertSame(itemView, getView(0, itemView, parent))
@@ -207,8 +216,8 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        val stringItemFactory = StringItemFactory()
-        val dateItemFactory = DateItemFactory()
+        val stringItemFactory = TextItemFactory()
+        val dateItemFactory = ImageItemFactory()
         AssemblyListAdapter<Any>(listOf(stringItemFactory, dateItemFactory)).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
@@ -220,7 +229,7 @@ class AssemblyListAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            submitList(listOf(Date(), "hello"))
+            submitList(listOf(Image(android.R.drawable.alert_dark_frame), "hello"))
             Assert.assertSame(dateItemFactory, getItemFactoryByPosition(0))
             Assert.assertSame(stringItemFactory, getItemFactoryByPosition(1))
         }
@@ -231,7 +240,7 @@ class AssemblyListAdapterTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
 
-        AssemblyListAdapter<Any?>(listOf(StringItemFactory())).apply {
+        AssemblyListAdapter<Any?>(listOf(TextItemFactory())).apply {
             submitList(listOf("hello", null))
 
             Assert.assertEquals(0, getItemViewType(0))
@@ -250,7 +259,7 @@ class AssemblyListAdapterTest {
             }
         }
 
-        AssemblyListAdapter<Any?>(listOf(StringItemFactory(), PlaceholderItemFactory())).apply {
+        AssemblyListAdapter<Any?>(listOf(TextItemFactory(), PlaceholderItemFactory())).apply {
             submitList(listOf("hello", null))
 
             Assert.assertEquals(0, getItemViewType(0))

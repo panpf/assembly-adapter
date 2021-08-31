@@ -15,8 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.list.test
 
-import android.widget.BaseAdapter
-import android.widget.ListView
+import android.widget.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.Item
@@ -28,46 +27,53 @@ import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class ConcatListAdapterTest {
 
-    class DateItemFactory : ViewItemFactory<Date>(Date::class, android.R.layout.activity_list_item)
+    private class TextItemFactory : ViewItemFactory<String>(String::class, { context, _, _ ->
+        TextView(context)
+    })
+
+    private data class Image(val redId: Int)
+
+    private class ImageItemFactory : ViewItemFactory<Image>(Image::class, { context, _, _ ->
+        ImageView(context)
+    })
 
     @Test
     fun testConstructor() {
-        ConcatListAdapter(AssemblySingleDataListAdapter(DateItemFactory())).apply {
+        ConcatListAdapter(AssemblySingleDataListAdapter(ImageItemFactory())).apply {
             Assert.assertEquals(1, adapters.size)
         }
         ConcatListAdapter(
-            AssemblySingleDataListAdapter(DateItemFactory()),
-            AssemblySingleDataListAdapter(DateItemFactory())
+            AssemblySingleDataListAdapter(ImageItemFactory()),
+            AssemblySingleDataListAdapter(ImageItemFactory())
         ).apply {
             Assert.assertEquals(2, adapters.size)
         }
 
         ConcatListAdapter(
             ConcatListAdapter.Config.DEFAULT,
-            AssemblySingleDataListAdapter(DateItemFactory())
+            AssemblySingleDataListAdapter(ImageItemFactory())
         ).apply {
             Assert.assertEquals(1, adapters.size)
         }
         ConcatListAdapter(
             ConcatListAdapter.Config.DEFAULT,
-            AssemblySingleDataListAdapter(DateItemFactory()),
-            AssemblySingleDataListAdapter(DateItemFactory())
+            AssemblySingleDataListAdapter(ImageItemFactory()),
+            AssemblySingleDataListAdapter(ImageItemFactory())
         ).apply {
             Assert.assertEquals(2, adapters.size)
         }
 
-        ConcatListAdapter(listOf(AssemblySingleDataListAdapter(DateItemFactory()))).apply {
+        ConcatListAdapter(listOf(AssemblySingleDataListAdapter(ImageItemFactory()))).apply {
             Assert.assertEquals(1, adapters.size)
         }
         ConcatListAdapter(
             listOf(
-                AssemblySingleDataListAdapter(DateItemFactory()),
-                AssemblySingleDataListAdapter(DateItemFactory())
+                AssemblySingleDataListAdapter(ImageItemFactory()),
+                AssemblySingleDataListAdapter(ImageItemFactory())
             )
         ).apply {
             Assert.assertEquals(2, adapters.size)
@@ -75,15 +81,15 @@ class ConcatListAdapterTest {
 
         ConcatListAdapter(
             ConcatListAdapter.Config.DEFAULT,
-            listOf(AssemblySingleDataListAdapter(DateItemFactory()))
+            listOf(AssemblySingleDataListAdapter(ImageItemFactory()))
         ).apply {
             Assert.assertEquals(1, adapters.size)
         }
         ConcatListAdapter(
             ConcatListAdapter.Config.DEFAULT,
             listOf(
-                AssemblySingleDataListAdapter(DateItemFactory()),
-                AssemblySingleDataListAdapter(DateItemFactory())
+                AssemblySingleDataListAdapter(ImageItemFactory()),
+                AssemblySingleDataListAdapter(ImageItemFactory())
             )
         ).apply {
             Assert.assertEquals(2, adapters.size)
@@ -97,10 +103,10 @@ class ConcatListAdapterTest {
             Assert.assertEquals(0, count)
             Assert.assertEquals("", adapters.joinToString { it.count.toString() })
 
-            val adapter1 = AssemblySingleDataListAdapter(DateItemFactory(), Date())
-            val adapter2 = AssemblyListAdapter(listOf(DateItemFactory()), listOf(Date(), Date()))
+            val adapter1 = AssemblySingleDataListAdapter(TextItemFactory(), "a")
+            val adapter2 = AssemblyListAdapter(listOf(TextItemFactory()), listOf("b", "c"))
             val adapter3 =
-                AssemblyListAdapter(listOf(DateItemFactory()), listOf(Date(), Date(), Date()))
+                AssemblyListAdapter(listOf(TextItemFactory()), listOf("d", "e", "f"))
 
             addAdapter(adapter1)
             Assert.assertEquals(1, adapters.size)
@@ -134,87 +140,177 @@ class ConcatListAdapterTest {
         ConcatListAdapter().apply {
             Assert.assertEquals(0, viewTypeCount)
 
-            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+            addAdapter(AssemblySingleDataListAdapter(TextItemFactory(), "a"))
             Assert.assertEquals(1, viewTypeCount)
 
-            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
+            addAdapter(AssemblySingleDataListAdapter(TextItemFactory(), "b"))
             Assert.assertEquals(2, viewTypeCount)
 
-            addAdapter(AssemblyListAdapter<Any>(listOf(DateItemFactory(), DateItemFactory())))
+            addAdapter(AssemblyListAdapter<Any>(listOf(TextItemFactory(), TextItemFactory())))
             Assert.assertEquals(4, viewTypeCount)
         }
+
+        // todo 测试共享模式
     }
 
     @Test
     fun testMethodGetItemId() {
-        // NO_STABLE_IDS
-        ConcatListAdapter().apply {
-            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
-            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
-            addAdapter(AssemblyListAdapter<Any>(listOf(DateItemFactory()), listOf(Date(), Date())))
+        val currentTimeMillis = System.currentTimeMillis()
+        val data0 = currentTimeMillis.toString()
+        val data1 = (currentTimeMillis + 1).toString()
+        val data2 = (currentTimeMillis + 2).toString()
+        val data0ItemId = data0.hashCode().toLong()
+        val data1ItemId = data1.hashCode().toLong()
+        val data2ItemId = data2.hashCode().toLong()
 
+        // NO_STABLE_IDS
+        ConcatListAdapter(
+            AssemblySingleDataListAdapter(TextItemFactory(), data0),
+            AssemblyListAdapter<Any>(listOf(TextItemFactory()), listOf(data2, data1, data2)),
+            AssemblySingleDataListAdapter(TextItemFactory(), data1),
+        ).apply {
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(-1L, getItemId(0))
             Assert.assertEquals(-1L, getItemId(1))
             Assert.assertEquals(-1L, getItemId(2))
             Assert.assertEquals(-1L, getItemId(3))
+            Assert.assertEquals(-1L, getItemId(4))
             assertThrow(IllegalArgumentException::class) {
-                Assert.assertEquals(-1L, getItemId(4))
+                getItemId(5)
             }
         }
 
-        // todo complete test
-//        // ISOLATED_STABLE_IDS
-//        ConcatListAdapter(
-//            ConcatListAdapter.Config.Builder()
-//                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS).build()
-//        ).apply {
-//            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
-//            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
-//            addAdapter(AssemblyListAdapter<Any>(listOf(DateItemFactory()), listOf(Date(), Date())))
-//
-//            Assert.assertEquals(-1L, getItemId(-1))
-//            Assert.assertEquals(0L, getItemId(0))
-//            Assert.assertEquals(0L, getItemId(1))
-//            Assert.assertEquals(0L, getItemId(2))
-//            Assert.assertEquals(1L, getItemId(3))
-//            assertThrow(IllegalArgumentException::class) {
-//                Assert.assertEquals(4L, getItemId(4))
-//            }
-//        }
-//
-//        // SHARED_STABLE_IDS
-//        ConcatListAdapter(
-//            ConcatListAdapter.Config.Builder()
-//                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS).build()
-//        ).apply {
-//            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
-//            addAdapter(AssemblySingleDataListAdapter(DateItemFactory(), Date()))
-//            addAdapter(AssemblyListAdapter<Any>(listOf(DateItemFactory()), listOf(Date(), Date())))
-//
-//            Assert.assertEquals(-1L, getItemId(-1))
-//            Assert.assertEquals(0L, getItemId(0))
-//            Assert.assertEquals(0L, getItemId(1))
-//            Assert.assertEquals(0L, getItemId(2))
-//            Assert.assertEquals(1L, getItemId(3))
-//            Assert.assertEquals(4L, getItemId(4))
-//        }
+        // ISOLATED_STABLE_IDS
+        ConcatListAdapter(
+            ConcatListAdapter.Config.Builder()
+                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data0,
+                hasStableIds = true
+            ),
+            AssemblyListAdapter<Any>(
+                itemFactoryList = listOf(TextItemFactory()),
+                initDataList = listOf(data2, data1, data2),
+                hasStableIds = true
+            ),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data1,
+                hasStableIds = true
+            )
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            Assert.assertEquals(0L, getItemId(0))
+            Assert.assertEquals(1L, getItemId(1))
+            Assert.assertEquals(2L, getItemId(2))
+            Assert.assertEquals(1L, getItemId(3))
+            Assert.assertEquals(3L, getItemId(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItemId(5)
+            }
+        }
+
+        // SHARED_STABLE_IDS
+        ConcatListAdapter(
+            ConcatListAdapter.Config.Builder()
+                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data0,
+                hasStableIds = true
+            ),
+            AssemblyListAdapter<Any>(
+                itemFactoryList = listOf(TextItemFactory()),
+                initDataList = listOf(data2, data1, data2),
+                hasStableIds = true
+            ),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data1,
+                hasStableIds = true
+            ),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            Assert.assertEquals(data0ItemId, getItemId(0))
+            Assert.assertEquals(data2ItemId, getItemId(1))
+            Assert.assertEquals(data1ItemId, getItemId(2))
+            Assert.assertEquals(data2ItemId, getItemId(3))
+            Assert.assertEquals(data1ItemId, getItemId(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItemId(5)
+            }
+        }
     }
 
     @Test
+    fun testMethodGetView() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val parent = FrameLayout(context)
+        ConcatListAdapter(
+            ConcatListAdapter.Config.Builder()
+                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                initData = "a",
+                hasStableIds = true
+            ),
+            AssemblyListAdapter(
+                itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
+                initDataList = listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    "b",
+                    Image(android.R.drawable.btn_plus)
+                ),
+                hasStableIds = true
+            ),
+            AssemblySingleDataListAdapter(
+                itemFactory = ImageItemFactory(),
+                initData = Image(android.R.drawable.alert_dark_frame),
+                hasStableIds = true
+            ),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getView(-1, null, parent)
+            }
+            Assert.assertTrue(getView(0, null, parent) is TextView)
+            Assert.assertTrue(getView(1, null, parent) is ImageView)
+            Assert.assertTrue(getView(2, null, parent) is TextView)
+            Assert.assertTrue(getView(3, null, parent) is ImageView)
+            Assert.assertTrue(getView(4, null, parent) is ImageView)
+            assertThrow(IllegalArgumentException::class) {
+                getView(5, null, parent)
+            }
+
+            val itemView = getView(0, null, parent)
+            Assert.assertNotSame(itemView, getView(0, null, parent))
+            Assert.assertSame(itemView, getView(0, itemView, parent))
+        }
+    }
+
+    // todo test getCount、getItem、findLocalAdapterAndPosition
+
+    @Test
     fun testNestedAdapterPosition() {
-        val count1Adapter = AssemblySingleDataListAdapter(DateItemFactory(), Date())
+        val count1Adapter = AssemblySingleDataListAdapter(TextItemFactory(), "a")
         val count3Adapter = AssemblyListAdapter(
-            listOf(DateItemFactory()),
-            listOf(Date(), Date(), Date())
+            listOf(TextItemFactory()),
+            listOf("a", "a", "a")
         )
         val count5Adapter = AssemblyListAdapter(
-            listOf(DateItemFactory()),
-            listOf(Date(), Date(), Date(), Date(), Date())
+            listOf(TextItemFactory()),
+            listOf("a", "a", "a", "a", "a")
         )
         val count7Adapter = AssemblyListAdapter(
-            listOf(DateItemFactory()),
-            listOf(Date(), Date(), Date(), Date(), Date(), Date(), Date())
+            listOf(TextItemFactory()),
+            listOf("a", "a", "a", "a", "a", "a", "a")
         )
         val concatCount9Adapter = ConcatListAdapter(count1Adapter, count3Adapter, count5Adapter)
         val concatCount11Adapter = ConcatListAdapter(count1Adapter, count3Adapter, count7Adapter)

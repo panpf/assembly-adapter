@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.list.expandable.test
+package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.view.View
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItem
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
-import com.github.panpf.assemblyadapter.list.expandable.test.internal.Strings
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -61,6 +60,15 @@ class ExpandableChildItemTest {
         Assert.assertEquals(5, testExpandableChildItem.absoluteAdapterPosition)
         Assert.assertEquals("hello", testExpandableChildItem.dataOrNull)
         Assert.assertEquals("hello", testExpandableChildItem.dataOrThrow)
+    }
+
+    private data class Strings(val name: String = "") : ExpandableGroup {
+
+        override fun getChildCount(): Int = name.length
+
+        override fun getChild(childPosition: Int): Any {
+            return name[childPosition].toString()
+        }
     }
 
     private class TestExpandableChildItem<DATA : ExpandableGroup, CHILD : Any>(itemView: View) :
