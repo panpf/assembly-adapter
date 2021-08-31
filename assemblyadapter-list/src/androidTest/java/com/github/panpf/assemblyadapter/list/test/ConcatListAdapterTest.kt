@@ -137,20 +137,95 @@ class ConcatListAdapterTest {
 
     @Test
     fun testMethodGetViewTypeCount() {
+        // IsolateViewTypes true
         ConcatListAdapter().apply {
             Assert.assertEquals(0, viewTypeCount)
 
-            addAdapter(AssemblySingleDataListAdapter(TextItemFactory(), "a"))
+            addAdapter(AssemblySingleDataListAdapter(TextItemFactory()))
             Assert.assertEquals(1, viewTypeCount)
 
-            addAdapter(AssemblySingleDataListAdapter(TextItemFactory(), "b"))
+            addAdapter(AssemblySingleDataListAdapter(TextItemFactory()))
             Assert.assertEquals(2, viewTypeCount)
 
             addAdapter(AssemblyListAdapter<Any>(listOf(TextItemFactory(), TextItemFactory())))
             Assert.assertEquals(4, viewTypeCount)
         }
 
-        // todo 测试共享模式
+        // IsolateViewTypes false
+        ConcatListAdapter(
+            ConcatListAdapter.Config.Builder()
+                .setIsolateViewTypes(false)
+                .build()
+        ).apply {
+            Assert.assertEquals(0, viewTypeCount)
+
+            addAdapter(AssemblySingleDataListAdapter(TextItemFactory()))
+            Assert.assertEquals(1, viewTypeCount)
+
+            addAdapter(AssemblySingleDataListAdapter(TextItemFactory()))
+            Assert.assertEquals(2, viewTypeCount)
+
+            addAdapter(AssemblyListAdapter<Any>(listOf(TextItemFactory(), TextItemFactory())))
+            Assert.assertEquals(4, viewTypeCount)
+        }
+    }
+
+    @Test
+    fun testMethodGetItemViewType() {
+        // IsolateViewTypes true
+        ConcatListAdapter(
+            AssemblySingleDataListAdapter(TextItemFactory(), "a"),
+            AssemblyListAdapter(
+                listOf(TextItemFactory(), ImageItemFactory()),
+                listOf(
+                    Image(android.R.drawable.alert_dark_frame),
+                    "c",
+                    Image(android.R.drawable.arrow_up_float)
+                )
+            ),
+            AssemblySingleDataListAdapter(ImageItemFactory(), Image(android.R.drawable.btn_plus)),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                Assert.assertEquals(1, getItemViewType(-1))
+            }
+            Assert.assertEquals(0, getItemViewType(0))
+            Assert.assertEquals(1, getItemViewType(1))
+            Assert.assertEquals(2, getItemViewType(2))
+            Assert.assertEquals(1, getItemViewType(3))
+            Assert.assertEquals(3, getItemViewType(4))
+            assertThrow(IllegalArgumentException::class) {
+                Assert.assertEquals(1, getItemViewType(5))
+            }
+        }
+
+        // IsolateViewTypes false
+        ConcatListAdapter(
+            ConcatListAdapter.Config.Builder()
+                .setIsolateViewTypes(false)
+                .build(),
+            AssemblySingleDataListAdapter(TextItemFactory(), "a"),
+            AssemblyListAdapter(
+                listOf(TextItemFactory(), ImageItemFactory()),
+                listOf(
+                    Image(android.R.drawable.alert_dark_frame),
+                    "c",
+                    Image(android.R.drawable.arrow_up_float)
+                )
+            ),
+            AssemblySingleDataListAdapter(ImageItemFactory(), Image(android.R.drawable.btn_plus)),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                Assert.assertEquals(1, getItemViewType(-1))
+            }
+            Assert.assertEquals(0, getItemViewType(0))
+            Assert.assertEquals(1, getItemViewType(1))
+            Assert.assertEquals(0, getItemViewType(2))
+            Assert.assertEquals(1, getItemViewType(3))
+            Assert.assertEquals(0, getItemViewType(4))
+            assertThrow(IllegalArgumentException::class) {
+                Assert.assertEquals(1, getItemViewType(5))
+            }
+        }
     }
 
     @Test
@@ -295,7 +370,160 @@ class ConcatListAdapterTest {
         }
     }
 
-    // todo test getCount、getItem、findLocalAdapterAndPosition
+    @Test
+    fun testMethodGetCount() {
+        val headerAdapter = AssemblySingleDataListAdapter(itemFactory = TextItemFactory())
+        val bodyAdapter = AssemblyListAdapter<Any>(listOf(TextItemFactory(), ImageItemFactory()))
+        val footerHeader = AssemblySingleDataListAdapter(itemFactory = ImageItemFactory())
+        ConcatListAdapter(headerAdapter, bodyAdapter, footerHeader).apply {
+            Assert.assertEquals(0, count)
+
+            headerAdapter.data = "hello"
+            Assert.assertEquals(1, count)
+
+            bodyAdapter.submitList(
+                listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    "world",
+                    Image(android.R.drawable.btn_plus)
+                )
+            )
+            Assert.assertEquals(4, count)
+
+            footerHeader.data = Image(android.R.drawable.btn_default)
+            Assert.assertEquals(5, count)
+
+            bodyAdapter.submitList(listOf("world"))
+            Assert.assertEquals(3, count)
+
+            bodyAdapter.submitList(null)
+            Assert.assertEquals(2, count)
+
+            footerHeader.data = null
+            Assert.assertEquals(1, count)
+
+            headerAdapter.data = null
+            Assert.assertEquals(0, count)
+        }
+    }
+
+    @Test
+    fun testMethodGetItem() {
+        ConcatListAdapter(
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                initData = "hello",
+            ),
+            AssemblyListAdapter(
+                itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
+                initDataList = listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    "world",
+                    Image(android.R.drawable.btn_plus)
+                ),
+            ),
+            AssemblySingleDataListAdapter(
+                itemFactory = ImageItemFactory(),
+                initData = Image(android.R.drawable.alert_dark_frame),
+            ),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(-1)
+            }
+            Assert.assertEquals("hello", getItem(0))
+            Assert.assertEquals(Image(android.R.drawable.bottom_bar), getItem(1))
+            Assert.assertEquals("world", getItem(2))
+            Assert.assertEquals(Image(android.R.drawable.btn_plus), getItem(3))
+            Assert.assertEquals(Image(android.R.drawable.alert_dark_frame), getItem(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItem(5)
+            }
+        }
+    }
+
+    @Test
+    fun testMethodHasStableIds() {
+        ConcatListAdapter(AssemblySingleDataListAdapter(TextItemFactory())).apply {
+            Assert.assertFalse(hasStableIds())
+        }
+
+        ConcatListAdapter(
+            ConcatListAdapter.Config.Builder()
+                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                hasStableIds = true
+            )
+        ).apply {
+            Assert.assertTrue(hasStableIds())
+        }
+
+        ConcatListAdapter(
+            ConcatListAdapter.Config.Builder()
+                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                hasStableIds = true
+            )
+        ).apply {
+            Assert.assertTrue(hasStableIds())
+        }
+    }
+
+    @Test
+    fun testMethodFindLocalAdapterAndPosition() {
+        val headerAdapter = AssemblySingleDataListAdapter(
+            itemFactory = TextItemFactory(),
+            initData = "hello",
+        )
+        val bodyAdapter = AssemblyListAdapter(
+            itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
+            initDataList = listOf(
+                Image(android.R.drawable.bottom_bar),
+                "world",
+                Image(android.R.drawable.btn_plus)
+            ),
+        )
+        val footerAdapter = AssemblySingleDataListAdapter(
+            itemFactory = ImageItemFactory(),
+            initData = Image(android.R.drawable.alert_dark_frame),
+        )
+        ConcatListAdapter(
+            headerAdapter,
+            bodyAdapter,
+            footerAdapter,
+        ).apply {
+            findLocalAdapterAndPosition(-1).apply {
+                Assert.assertSame(headerAdapter, first)
+                Assert.assertEquals(-1, second)
+            }
+            findLocalAdapterAndPosition(0).apply {
+                Assert.assertSame(headerAdapter, first)
+                Assert.assertEquals(0, second)
+            }
+            findLocalAdapterAndPosition(1).apply {
+                Assert.assertSame(bodyAdapter, first)
+                Assert.assertEquals(0, second)
+            }
+            findLocalAdapterAndPosition(2).apply {
+                Assert.assertSame(bodyAdapter, first)
+                Assert.assertEquals(1, second)
+            }
+            findLocalAdapterAndPosition(3).apply {
+                Assert.assertSame(bodyAdapter, first)
+                Assert.assertEquals(2, second)
+            }
+            findLocalAdapterAndPosition(4).apply {
+                Assert.assertSame(footerAdapter, first)
+                Assert.assertEquals(0, second)
+            }
+            assertThrow(IllegalArgumentException::class) {
+                findLocalAdapterAndPosition(5)
+            }
+        }
+    }
 
     @Test
     fun testNestedAdapterPosition() {

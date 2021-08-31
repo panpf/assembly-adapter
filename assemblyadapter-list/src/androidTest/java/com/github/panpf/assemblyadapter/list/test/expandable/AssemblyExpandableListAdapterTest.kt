@@ -16,7 +16,7 @@
 package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.database.DataSetObserver
-import android.widget.FrameLayout
+import android.widget.*
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.Placeholder
@@ -43,13 +43,17 @@ class AssemblyExpandableListAdapterTest {
         ViewItemFactory<Strings>(Strings::class, android.R.layout.activity_list_item)
 
     private class StringItemFactory :
-        ViewItemFactory<String>(String::class, android.R.layout.activity_list_item)
+        ViewItemFactory<String>(String::class, { context, _, _ ->
+            TextView(context)
+        })
 
     private class DatesItemFactory :
-        ViewItemFactory<Dates>(Dates::class, android.R.layout.activity_list_item)
+        ViewItemFactory<Dates>(Dates::class, android.R.layout.expandable_list_content)
 
     private class DateItemFactory :
-        ViewItemFactory<Date>(Date::class, android.R.layout.activity_list_item)
+        ViewItemFactory<Date>(Date::class, { context, _, _ ->
+            ImageView(context)
+        })
 
     private class PlaceholderItemFactory :
         ViewItemFactory<Placeholder>(Placeholder::class, android.R.layout.activity_list_item)
@@ -323,8 +327,8 @@ class AssemblyExpandableListAdapterTest {
     fun testMethodGetGroupAndChildView() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
-        AssemblyExpandableListAdapter<Strings, String>(
-            listOf(StringsItemFactory(), StringItemFactory())
+        AssemblyExpandableListAdapter<Any, Any>(
+            listOf(StringsItemFactory(), StringItemFactory(), DatesItemFactory(), DateItemFactory())
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupView(-1, false, null, parent)
@@ -345,7 +349,12 @@ class AssemblyExpandableListAdapterTest {
                 getChildView(1, 1, false, null, parent)
             }
 
-            submitList(listOf(Strings("hello")))
+            submitList(listOf(Strings("hello"), Dates("dates", listOf(Date(), Date()))))
+
+            Assert.assertTrue(getGroupView(0, false, null, parent) is LinearLayout)
+            Assert.assertTrue(getChildView(0, 0, false, null, parent) is TextView)
+            Assert.assertTrue(getGroupView(1, false, null, parent) is ExpandableListView)
+            Assert.assertTrue(getChildView(1, 0, false, null, parent) is ImageView)
 
             val groupView = getGroupView(0, false, null, parent)
             Assert.assertNotSame(groupView, getGroupView(0, false, null, parent))

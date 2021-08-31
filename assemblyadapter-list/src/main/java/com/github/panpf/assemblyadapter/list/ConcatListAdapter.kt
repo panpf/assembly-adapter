@@ -40,6 +40,7 @@ open class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : Base
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
+    @Suppress("LeakingThis")
     private val mController = ConcatListAdapterController(this, config, adapters)
 
     /**
