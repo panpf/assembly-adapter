@@ -16,83 +16,113 @@
 package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.database.DataSetObserver
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
+import com.github.panpf.assemblyadapter.list.expandable.ViewExpandableGroupItemFactory
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
 
 class AssemblyExpandableListAdapterTest {
 
-    private data class Strings(val name: String = "") : ExpandableGroup {
+    private data class Text(val text: String)
 
-        override fun getChildCount(): Int = name.length
+    private data class TextGroup(val list: List<Text>) : ExpandableGroup {
+
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.text }
+
+        constructor(vararg texts: String) : this(texts.map { Text(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
 
         override fun getChild(childPosition: Int): Any {
-            return name[childPosition].toString()
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
         }
     }
 
-    private class StringsItemFactory :
-        ViewItemFactory<Strings>(Strings::class, android.R.layout.activity_list_item)
+    private class TextItemFactory : ViewItemFactory<Text>(Text::class, { context, _, _ ->
+        TextView(context)
+    })
 
-    private class StringItemFactory :
-        ViewItemFactory<String>(String::class, { context, _, _ ->
-            TextView(context)
+    private class TextGroupItemFactory :
+        ViewExpandableGroupItemFactory<TextGroup>(TextGroup::class, { context, _, _ ->
+            FrameLayout(context)
         })
 
-    private class DatesItemFactory :
-        ViewItemFactory<Dates>(Dates::class, android.R.layout.expandable_list_content)
+    private data class Image(val resId: Int)
 
-    private class DateItemFactory :
-        ViewItemFactory<Date>(Date::class, { context, _, _ ->
-            ImageView(context)
+    private data class ImageGroup(val list: List<Image>) : ExpandableGroup {
+
+        @Suppress("unused")
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.resId.toString() }
+
+        constructor(vararg resIds: Int) : this(resIds.map { Image(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
+
+        override fun getChild(childPosition: Int): Any {
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
+        }
+    }
+
+    private class ImageItemFactory : ViewItemFactory<Image>(Image::class, { context, _, _ ->
+        ImageView(context)
+    })
+
+    private class ImageGroupItemFactory :
+        ViewExpandableGroupItemFactory<ImageGroup>(ImageGroup::class, { context, _, _ ->
+            LinearLayout(context)
         })
+
 
     private class PlaceholderItemFactory :
         ViewItemFactory<Placeholder>(Placeholder::class, android.R.layout.activity_list_item)
 
-    private data class Dates(val name: String, val dateList: List<Date>?) : ExpandableGroup {
-        override fun getChildCount(): Int = dateList?.size ?: 0
-
-        override fun getChild(childPosition: Int): Any = dateList!![childPosition]
-    }
-
     @Test
     fun testConstructor() {
-        AssemblyExpandableListAdapter<Strings, String>(listOf(StringsItemFactory())).apply {
-            Assert.assertEquals("", currentList.joinToString { it.name })
+        AssemblyExpandableListAdapter<TextGroup, Text>(listOf(TextGroupItemFactory())).apply {
+            Assert.assertEquals("", currentList.joinToString { it.listJoinToString })
         }
 
-        AssemblyExpandableListAdapter<Strings, String>(
-            listOf(StringsItemFactory()),
-            listOf(Strings("hello"))
+        AssemblyExpandableListAdapter<TextGroup, Text>(
+            listOf(TextGroupItemFactory()),
+            listOf(TextGroup("hello"))
         ).apply {
-            Assert.assertEquals("hello", currentList.joinToString { it.name })
+            Assert.assertEquals("[hello]", currentList.joinToString { it.listJoinToString })
         }
 
-        AssemblyExpandableListAdapter<Strings, String>(
-            listOf(StringsItemFactory()),
-            listOf(Strings("hello"), Strings("world"))
+        AssemblyExpandableListAdapter<TextGroup, Text>(
+            listOf(TextGroupItemFactory()),
+            listOf(TextGroup("hello"), TextGroup("world"))
         ).apply {
-            Assert.assertEquals("hello, world", currentList.joinToString { it.name })
+            Assert.assertEquals(
+                "[hello], [world]",
+                currentList.joinToString { it.listJoinToString })
         }
 
         assertThrow(IllegalArgumentException::class) {
-            AssemblyExpandableListAdapter<Strings, String>(listOf())
+            AssemblyExpandableListAdapter<TextGroup, Text>(listOf())
         }
     }
 
     @Test
     fun testPropertyCurrentListAndSubmitList() {
-        var dataFromObserver: List<Strings>? = null
-        AssemblyExpandableListAdapter<Strings, String>(listOf(StringsItemFactory())).apply {
+        var dataFromObserver: List<TextGroup>? = null
+        AssemblyExpandableListAdapter<TextGroup, Text>(listOf(TextGroupItemFactory())).apply {
             registerDataSetObserver(object : DataSetObserver() {
                 override fun onChanged() {
                     super.onChanged()
@@ -100,33 +130,53 @@ class AssemblyExpandableListAdapterTest {
                 }
             })
 
-            Assert.assertEquals("", currentList.joinToString { it.name })
-            Assert.assertNull(dataFromObserver)
+            Assert.assertEquals("", currentList.joinToString { it.listJoinToString })
+            Assert.assertEquals(
+                "",
+                (dataFromObserver ?: emptyList()).joinToString { it.listJoinToString })
 
-            submitList(listOf(Strings("hello")))
-            Assert.assertEquals("hello", currentList.joinToString { it.name })
+            submitList(listOf(TextGroup("hello")))
+            Assert.assertEquals(
+                "[hello]",
+                currentList.joinToString { it.listJoinToString }
+            )
+            Assert.assertEquals(
+                "[hello]",
+                (dataFromObserver ?: emptyList()).joinToString { it.listJoinToString }
+            )
 
-            submitList(listOf(Strings("hello"), Strings("world")))
-            Assert.assertEquals("hello, world", currentList.joinToString { it.name })
+            submitList(listOf(TextGroup("hello"), TextGroup("world")))
+            Assert.assertEquals(
+                "[hello], [world]",
+                currentList.joinToString { it.listJoinToString }
+            )
+            Assert.assertEquals(
+                "[hello], [world]",
+                (dataFromObserver ?: emptyList()).joinToString { it.listJoinToString }
+            )
 
             submitList(null)
-            Assert.assertEquals("", currentList.joinToString { it.name })
+            Assert.assertEquals("", currentList.joinToString { it.listJoinToString })
+            Assert.assertEquals(
+                "",
+                (dataFromObserver ?: emptyList()).joinToString { it.listJoinToString }
+            )
         }
     }
 
     @Test
     fun testMethodGetGroupAndChildCount() {
-        AssemblyExpandableListAdapter<Strings, String>(listOf(StringsItemFactory())).apply {
+        AssemblyExpandableListAdapter<TextGroup, Text>(listOf(TextGroupItemFactory())).apply {
             Assert.assertEquals(0, groupCount)
             assertThrow(IndexOutOfBoundsException::class) {
                 getChildrenCount(0)
             }
 
-            submitList(listOf(Strings("hello")))
+            submitList(listOf(TextGroup("h", "e", "l", "l", "o")))
             Assert.assertEquals(1, groupCount)
             Assert.assertEquals(5, getChildrenCount(0))
 
-            submitList(listOf(Strings("good"), Strings("ok"), Strings("bye")))
+            submitList(listOf(TextGroup("g", "o", "o", "d"), TextGroup("o", "k"), TextGroup("b", "y", "e")))
             Assert.assertEquals(3, groupCount)
             Assert.assertEquals(4, getChildrenCount(0))
             Assert.assertEquals(2, getChildrenCount(1))
@@ -142,7 +192,7 @@ class AssemblyExpandableListAdapterTest {
 
     @Test
     fun testMethodGetGroupAndChild() {
-        AssemblyExpandableListAdapter<Strings, String>(listOf(StringsItemFactory())).apply {
+        AssemblyExpandableListAdapter<TextGroup, Text>(listOf(TextGroupItemFactory())).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroup(-1)
             }
@@ -153,37 +203,31 @@ class AssemblyExpandableListAdapterTest {
                 getGroup(1)
             }
 
-            submitList(listOf(Strings("hello"), Strings("world")))
-            Assert.assertEquals("hello", getGroup(0).name)
-            assertThrow(StringIndexOutOfBoundsException::class) {
+            submitList(listOf(TextGroup("hello", "good"), TextGroup("world", "bye")))
+            Assert.assertEquals("[hello, good]", getGroup(0).listJoinToString)
+            assertThrow(IndexOutOfBoundsException::class) {
                 getChild(0, -1)
             }
-            Assert.assertEquals("h", getChild(0, 0))
-            Assert.assertEquals("e", getChild(0, 1))
-            Assert.assertEquals("l", getChild(0, 2))
-            Assert.assertEquals("l", getChild(0, 3))
-            Assert.assertEquals("o", getChild(0, 4))
-            assertThrow(StringIndexOutOfBoundsException::class) {
-                getChild(0, 5)
+            Assert.assertEquals(Text("hello"), getChild(0, 0))
+            Assert.assertEquals(Text("good"), getChild(0, 1))
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChild(0, 2)
             }
-            Assert.assertEquals("world", getGroup(1).name)
-            assertThrow(StringIndexOutOfBoundsException::class) {
+            Assert.assertEquals("[world, bye]", getGroup(1).listJoinToString)
+            assertThrow(IndexOutOfBoundsException::class) {
                 getChild(1, -1)
             }
-            Assert.assertEquals("w", getChild(1, 0))
-            Assert.assertEquals("o", getChild(1, 1))
-            Assert.assertEquals("r", getChild(1, 2))
-            Assert.assertEquals("l", getChild(1, 3))
-            Assert.assertEquals("d", getChild(1, 4))
-            assertThrow(StringIndexOutOfBoundsException::class) {
-                getChild(1, 5)
+            Assert.assertEquals(Text("world"), getChild(1, 0))
+            Assert.assertEquals(Text("bye"), getChild(1, 1))
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChild(1, 2)
             }
         }
     }
 
     @Test
     fun testMethodGetGroupAndChildId() {
-        AssemblyExpandableListAdapter<Strings, String>(listOf(StringsItemFactory())).apply {
+        AssemblyExpandableListAdapter<TextGroup, Text>(listOf(TextGroupItemFactory())).apply {
             Assert.assertEquals(-1L, getGroupId(-1))
             Assert.assertEquals(-1L, getGroupId(0))
             Assert.assertEquals(-1L, getGroupId(1))
@@ -192,8 +236,8 @@ class AssemblyExpandableListAdapterTest {
             Assert.assertEquals(-1L, getChildId(1, 1))
         }
 
-        AssemblyExpandableListAdapter<Strings, String>(
-            listOf(StringsItemFactory()),
+        AssemblyExpandableListAdapter<TextGroup, Text>(
+            listOf(TextGroupItemFactory()),
             hasStableIds = true
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
@@ -216,9 +260,9 @@ class AssemblyExpandableListAdapterTest {
             }
         }
 
-        AssemblyExpandableListAdapter<Strings, String>(
-            listOf(StringsItemFactory()),
-            initDataList = listOf(Strings("hello"), Strings("world")),
+        AssemblyExpandableListAdapter<TextGroup, Text>(
+            listOf(TextGroupItemFactory()),
+            initDataList = listOf(TextGroup("hello", "good"), TextGroup("world", "bye")),
             hasStableIds = true
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
@@ -228,30 +272,24 @@ class AssemblyExpandableListAdapterTest {
                 getChildId(-1, -1)
             }
 
-            Assert.assertEquals("hello".hashCode().toLong(), getGroupId(0))
-            assertThrow(StringIndexOutOfBoundsException::class) {
+            Assert.assertEquals(getGroup(0).hashCode().toLong(), getGroupId(0))
+            assertThrow(IndexOutOfBoundsException::class) {
                 getChildId(0, -1)
             }
             Assert.assertEquals(getChild(0, 0).hashCode().toLong(), getChildId(0, 0))
             Assert.assertEquals(getChild(0, 1).hashCode().toLong(), getChildId(0, 1))
-            Assert.assertEquals(getChild(0, 2).hashCode().toLong(), getChildId(0, 2))
-            Assert.assertEquals(getChild(0, 3).hashCode().toLong(), getChildId(0, 3))
-            Assert.assertEquals(getChild(0, 4).hashCode().toLong(), getChildId(0, 4))
-            assertThrow(StringIndexOutOfBoundsException::class) {
-                getChildId(0, 5)
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildId(0, 2)
             }
 
-            Assert.assertEquals("world".hashCode().toLong(), getGroupId(1))
-            assertThrow(StringIndexOutOfBoundsException::class) {
+            Assert.assertEquals(getGroup(1).hashCode().toLong(), getGroupId(1))
+            assertThrow(IndexOutOfBoundsException::class) {
                 getChildId(1, -1)
             }
             Assert.assertEquals(getChild(1, 0).hashCode().toLong(), getChildId(1, 0))
             Assert.assertEquals(getChild(1, 1).hashCode().toLong(), getChildId(1, 1))
-            Assert.assertEquals(getChild(1, 2).hashCode().toLong(), getChildId(1, 2))
-            Assert.assertEquals(getChild(1, 3).hashCode().toLong(), getChildId(1, 3))
-            Assert.assertEquals(getChild(1, 4).hashCode().toLong(), getChildId(1, 4))
-            assertThrow(StringIndexOutOfBoundsException::class) {
-                getChildId(1, 5)
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildId(1, 2)
             }
 
             assertThrow(IndexOutOfBoundsException::class) {
@@ -265,15 +303,15 @@ class AssemblyExpandableListAdapterTest {
 
     @Test
     fun testMethodGetGroupAndChildTypeCount() {
-        AssemblyExpandableListAdapter<Strings, String>(listOf(StringsItemFactory())).apply {
+        AssemblyExpandableListAdapter<TextGroup, Text>(listOf(TextGroupItemFactory())).apply {
             Assert.assertEquals(1, groupTypeCount)
             Assert.assertEquals(1, childTypeCount)
         }
 
-        AssemblyExpandableListAdapter<Strings, String>(
+        AssemblyExpandableListAdapter<TextGroup, Text>(
             listOf(
-                StringsItemFactory(),
-                DateItemFactory()
+                TextGroupItemFactory(),
+                ImageItemFactory()
             )
         ).apply {
             Assert.assertEquals(2, groupTypeCount)
@@ -285,10 +323,10 @@ class AssemblyExpandableListAdapterTest {
     fun testMethodGetItemViewType() {
         AssemblyExpandableListAdapter<Any, Any>(
             listOf(
-                StringsItemFactory(),
-                StringItemFactory(),
-                DatesItemFactory(),
-                DateItemFactory()
+                TextGroupItemFactory(),
+                TextItemFactory(),
+                ImageGroupItemFactory(),
+                ImageItemFactory()
             )
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
@@ -312,8 +350,8 @@ class AssemblyExpandableListAdapterTest {
 
             submitList(
                 listOf(
-                    Dates("dates", listOf(Date(), Date())),
-                    Strings("hello")
+                    ImageGroup(android.R.drawable.btn_default, android.R.drawable.btn_dialog),
+                    TextGroup("hello")
                 )
             )
             Assert.assertEquals(2, getGroupType(0))
@@ -328,7 +366,12 @@ class AssemblyExpandableListAdapterTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
         AssemblyExpandableListAdapter<Any, Any>(
-            listOf(StringsItemFactory(), StringItemFactory(), DatesItemFactory(), DateItemFactory())
+            listOf(
+                TextGroupItemFactory(),
+                TextItemFactory(),
+                ImageGroupItemFactory(),
+                ImageItemFactory()
+            )
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupView(-1, false, null, parent)
@@ -349,35 +392,40 @@ class AssemblyExpandableListAdapterTest {
                 getChildView(1, 1, false, null, parent)
             }
 
-            submitList(listOf(Strings("hello"), Dates("dates", listOf(Date(), Date()))))
+            submitList(
+                listOf(
+                    TextGroup("hello", "world"),
+                    ImageGroup(android.R.drawable.btn_default, android.R.drawable.btn_dialog)
+                )
+            )
 
-            Assert.assertTrue(getGroupView(0, false, null, parent) is LinearLayout)
+            Assert.assertTrue(getGroupView(0, false, null, parent) is FrameLayout)
             Assert.assertTrue(getChildView(0, 0, false, null, parent) is TextView)
-            Assert.assertTrue(getGroupView(1, false, null, parent) is ExpandableListView)
+            Assert.assertTrue(getGroupView(1, false, null, parent) is LinearLayout)
             Assert.assertTrue(getChildView(1, 0, false, null, parent) is ImageView)
 
             val groupView = getGroupView(0, false, null, parent)
             Assert.assertNotSame(groupView, getGroupView(0, false, null, parent))
             Assert.assertSame(groupView, getGroupView(0, false, groupView, parent))
 
-            assertThrow(StringIndexOutOfBoundsException::class) {
+            assertThrow(IndexOutOfBoundsException::class) {
                 getChildView(0, -1, false, null, parent)
             }
-            val childView = getGroupView(0, false, null, parent)
+            val childView = getChildView(0, 0, false, null, parent)
             Assert.assertNotSame(childView, getChildView(0, 0, false, null, parent))
-            Assert.assertSame(childView, getChildView(0, 1, false, childView, parent))
-            assertThrow(StringIndexOutOfBoundsException::class) {
-                getChildView(0, 5, false, null, parent)
+            Assert.assertSame(childView, getChildView(0, 0, false, childView, parent))
+            assertThrow(IndexOutOfBoundsException::class) {
+                getChildView(0, 2, false, null, parent)
             }
         }
     }
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        val stringsItemFactory = StringsItemFactory()
-        val datesItemFactory = DatesItemFactory()
-        val stringItemFactory = StringItemFactory()
-        val dateItemFactory = DateItemFactory()
+        val stringsItemFactory = TextGroupItemFactory()
+        val datesItemFactory = ImageGroupItemFactory()
+        val stringItemFactory = TextItemFactory()
+        val dateItemFactory = ImageItemFactory()
         AssemblyExpandableListAdapter<Any, Any>(
             listOf(stringsItemFactory, stringItemFactory, datesItemFactory, dateItemFactory)
         ).apply {
@@ -391,7 +439,12 @@ class AssemblyExpandableListAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            submitList(listOf(Dates("dates", listOf(Date(), Date())), Strings("hello")))
+            submitList(
+                listOf(
+                    ImageGroup(android.R.drawable.btn_default, android.R.drawable.btn_dialog),
+                    TextGroup("hello", "world")
+                )
+            )
             Assert.assertSame(datesItemFactory, getItemFactoryByPosition(0))
             Assert.assertSame(dateItemFactory, getItemFactoryByChildPosition(0, 0))
             Assert.assertSame(dateItemFactory, getItemFactoryByChildPosition(0, 1))
@@ -406,8 +459,8 @@ class AssemblyExpandableListAdapterTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
 
-        AssemblyExpandableListAdapter<Strings?, String>(listOf(StringsItemFactory())).apply {
-            submitList(listOf(Strings("hello"), null))
+        AssemblyExpandableListAdapter<TextGroup?, Text>(listOf(TextGroupItemFactory())).apply {
+            submitList(listOf(TextGroup("hello"), null))
 
             Assert.assertEquals(0, getGroupType(0))
             assertThrow(NotFoundMatchedItemFactoryException::class) {
@@ -425,13 +478,13 @@ class AssemblyExpandableListAdapterTest {
             }
         }
 
-        AssemblyExpandableListAdapter<Strings?, String>(
+        AssemblyExpandableListAdapter<TextGroup?, Text>(
             listOf(
-                StringsItemFactory(),
+                TextGroupItemFactory(),
                 PlaceholderItemFactory()
             )
         ).apply {
-            submitList(listOf(Strings("hello"), null))
+            submitList(listOf(TextGroup("hello"), null))
 
             Assert.assertEquals(0, getGroupType(0))
             Assert.assertEquals(1, getGroupType(1))

@@ -31,49 +31,98 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ConcatListAdapterTest {
 
-    private class TextItemFactory : ViewItemFactory<String>(String::class, { context, _, _ ->
+    private data class Text(val text: String)
+
+    private class TextItemFactory : ViewItemFactory<Text>(Text::class, { context, _, _ ->
         TextView(context)
     })
 
-    private data class Image(val redId: Int)
+    private data class Image(val resId: Int)
 
     private class ImageItemFactory : ViewItemFactory<Image>(Image::class, { context, _, _ ->
         ImageView(context)
     })
 
     @Test
+    fun testConfig() {
+        ConcatListAdapter.Config.DEFAULT.apply {
+            Assert.assertEquals(true, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatListAdapter.Config.Builder().build().apply {
+            Assert.assertEquals(true, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatListAdapter.Config.Builder().setIsolateViewTypes(false).build().apply {
+            Assert.assertEquals(false, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatListAdapter.Config.Builder()
+            .setStableIdMode(ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS).build()
+            .apply {
+                Assert.assertEquals(true, this.isolateViewTypes)
+                Assert.assertEquals(
+                    ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS,
+                    this.stableIdMode
+                )
+            }
+
+        ConcatListAdapter.Config.Builder()
+            .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS).build()
+            .apply {
+                Assert.assertEquals(true, this.isolateViewTypes)
+                Assert.assertEquals(
+                    ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS,
+                    this.stableIdMode
+                )
+            }
+    }
+
+    @Test
     fun testConstructor() {
-        ConcatListAdapter(AssemblySingleDataListAdapter(ImageItemFactory())).apply {
+        ConcatListAdapter(AssemblySingleDataListAdapter(TextItemFactory())).apply {
             Assert.assertEquals(1, adapters.size)
         }
         ConcatListAdapter(
-            AssemblySingleDataListAdapter(ImageItemFactory()),
-            AssemblySingleDataListAdapter(ImageItemFactory())
+            AssemblySingleDataListAdapter(TextItemFactory()),
+            AssemblySingleDataListAdapter(TextItemFactory())
         ).apply {
             Assert.assertEquals(2, adapters.size)
         }
 
         ConcatListAdapter(
             ConcatListAdapter.Config.DEFAULT,
-            AssemblySingleDataListAdapter(ImageItemFactory())
+            AssemblySingleDataListAdapter(TextItemFactory())
         ).apply {
             Assert.assertEquals(1, adapters.size)
         }
         ConcatListAdapter(
             ConcatListAdapter.Config.DEFAULT,
-            AssemblySingleDataListAdapter(ImageItemFactory()),
-            AssemblySingleDataListAdapter(ImageItemFactory())
+            AssemblySingleDataListAdapter(TextItemFactory()),
+            AssemblySingleDataListAdapter(TextItemFactory())
         ).apply {
             Assert.assertEquals(2, adapters.size)
         }
 
-        ConcatListAdapter(listOf(AssemblySingleDataListAdapter(ImageItemFactory()))).apply {
+        ConcatListAdapter(listOf(AssemblySingleDataListAdapter(TextItemFactory()))).apply {
             Assert.assertEquals(1, adapters.size)
         }
         ConcatListAdapter(
             listOf(
-                AssemblySingleDataListAdapter(ImageItemFactory()),
-                AssemblySingleDataListAdapter(ImageItemFactory())
+                AssemblySingleDataListAdapter(TextItemFactory()),
+                AssemblySingleDataListAdapter(TextItemFactory())
             )
         ).apply {
             Assert.assertEquals(2, adapters.size)
@@ -81,15 +130,15 @@ class ConcatListAdapterTest {
 
         ConcatListAdapter(
             ConcatListAdapter.Config.DEFAULT,
-            listOf(AssemblySingleDataListAdapter(ImageItemFactory()))
+            listOf(AssemblySingleDataListAdapter(TextItemFactory()))
         ).apply {
             Assert.assertEquals(1, adapters.size)
         }
         ConcatListAdapter(
             ConcatListAdapter.Config.DEFAULT,
             listOf(
-                AssemblySingleDataListAdapter(ImageItemFactory()),
-                AssemblySingleDataListAdapter(ImageItemFactory())
+                AssemblySingleDataListAdapter(TextItemFactory()),
+                AssemblySingleDataListAdapter(TextItemFactory())
             )
         ).apply {
             Assert.assertEquals(2, adapters.size)
@@ -103,10 +152,10 @@ class ConcatListAdapterTest {
             Assert.assertEquals(0, count)
             Assert.assertEquals("", adapters.joinToString { it.count.toString() })
 
-            val adapter1 = AssemblySingleDataListAdapter(TextItemFactory(), "a")
-            val adapter2 = AssemblyListAdapter(listOf(TextItemFactory()), listOf("b", "c"))
+            val adapter1 = AssemblySingleDataListAdapter(TextItemFactory(), Text("a"))
+            val adapter2 = AssemblyListAdapter(listOf(TextItemFactory()), listOf(Text("b"), Text("c")))
             val adapter3 =
-                AssemblyListAdapter(listOf(TextItemFactory()), listOf("d", "e", "f"))
+                AssemblyListAdapter(listOf(TextItemFactory()), listOf(Text("d"), Text("e"), Text("f")))
 
             addAdapter(adapter1)
             Assert.assertEquals(1, adapters.size)
@@ -174,19 +223,19 @@ class ConcatListAdapterTest {
     fun testMethodGetItemViewType() {
         // IsolateViewTypes true
         ConcatListAdapter(
-            AssemblySingleDataListAdapter(TextItemFactory(), "a"),
+            AssemblySingleDataListAdapter(TextItemFactory(), Text("a")),
             AssemblyListAdapter(
                 listOf(TextItemFactory(), ImageItemFactory()),
                 listOf(
                     Image(android.R.drawable.alert_dark_frame),
-                    "c",
+                    Text("c"),
                     Image(android.R.drawable.arrow_up_float)
                 )
             ),
             AssemblySingleDataListAdapter(ImageItemFactory(), Image(android.R.drawable.btn_plus)),
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                Assert.assertEquals(1, getItemViewType(-1))
+                getItemViewType(-1)
             }
             Assert.assertEquals(0, getItemViewType(0))
             Assert.assertEquals(1, getItemViewType(1))
@@ -194,7 +243,7 @@ class ConcatListAdapterTest {
             Assert.assertEquals(1, getItemViewType(3))
             Assert.assertEquals(3, getItemViewType(4))
             assertThrow(IllegalArgumentException::class) {
-                Assert.assertEquals(1, getItemViewType(5))
+                getItemViewType(5)
             }
         }
 
@@ -203,19 +252,19 @@ class ConcatListAdapterTest {
             ConcatListAdapter.Config.Builder()
                 .setIsolateViewTypes(false)
                 .build(),
-            AssemblySingleDataListAdapter(TextItemFactory(), "a"),
+            AssemblySingleDataListAdapter(TextItemFactory(), Text("a")),
             AssemblyListAdapter(
                 listOf(TextItemFactory(), ImageItemFactory()),
                 listOf(
                     Image(android.R.drawable.alert_dark_frame),
-                    "c",
+                    Text("c"),
                     Image(android.R.drawable.arrow_up_float)
                 )
             ),
             AssemblySingleDataListAdapter(ImageItemFactory(), Image(android.R.drawable.btn_plus)),
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                Assert.assertEquals(1, getItemViewType(-1))
+                getItemViewType(-1)
             }
             Assert.assertEquals(0, getItemViewType(0))
             Assert.assertEquals(1, getItemViewType(1))
@@ -223,7 +272,7 @@ class ConcatListAdapterTest {
             Assert.assertEquals(1, getItemViewType(3))
             Assert.assertEquals(0, getItemViewType(4))
             assertThrow(IllegalArgumentException::class) {
-                Assert.assertEquals(1, getItemViewType(5))
+                getItemViewType(5)
             }
         }
     }
@@ -231,18 +280,27 @@ class ConcatListAdapterTest {
     @Test
     fun testMethodGetItemId() {
         val currentTimeMillis = System.currentTimeMillis()
-        val data0 = currentTimeMillis.toString()
-        val data1 = (currentTimeMillis + 1).toString()
-        val data2 = (currentTimeMillis + 2).toString()
+        val data0 = Text(currentTimeMillis.toString())
+        val data1 = Text((currentTimeMillis + 1).toString())
+        val data2 = Text((currentTimeMillis + 2).toString())
         val data0ItemId = data0.hashCode().toLong()
         val data1ItemId = data1.hashCode().toLong()
         val data2ItemId = data2.hashCode().toLong()
 
         // NO_STABLE_IDS
         ConcatListAdapter(
-            AssemblySingleDataListAdapter(TextItemFactory(), data0),
-            AssemblyListAdapter<Any>(listOf(TextItemFactory()), listOf(data2, data1, data2)),
-            AssemblySingleDataListAdapter(TextItemFactory(), data1),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data0
+            ),
+            AssemblyListAdapter<Any>(
+                itemFactoryList = listOf(TextItemFactory()),
+                initDataList = listOf(data2, data1, data2)
+            ),
+            AssemblySingleDataListAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data1
+            ),
         ).apply {
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(-1L, getItemId(0))
@@ -334,14 +392,14 @@ class ConcatListAdapterTest {
                 .build(),
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
-                initData = "a",
+                initData = Text("a"),
                 hasStableIds = true
             ),
             AssemblyListAdapter(
                 itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
                 initDataList = listOf(
                     Image(android.R.drawable.bottom_bar),
-                    "b",
+                    Text("b"),
                     Image(android.R.drawable.btn_plus)
                 ),
                 hasStableIds = true
@@ -378,13 +436,13 @@ class ConcatListAdapterTest {
         ConcatListAdapter(headerAdapter, bodyAdapter, footerHeader).apply {
             Assert.assertEquals(0, count)
 
-            headerAdapter.data = "hello"
+            headerAdapter.data = Text("hello")
             Assert.assertEquals(1, count)
 
             bodyAdapter.submitList(
                 listOf(
                     Image(android.R.drawable.bottom_bar),
-                    "world",
+                    Text("world"),
                     Image(android.R.drawable.btn_plus)
                 )
             )
@@ -393,7 +451,7 @@ class ConcatListAdapterTest {
             footerHeader.data = Image(android.R.drawable.btn_default)
             Assert.assertEquals(5, count)
 
-            bodyAdapter.submitList(listOf("world"))
+            bodyAdapter.submitList(listOf(Text("world")))
             Assert.assertEquals(3, count)
 
             bodyAdapter.submitList(null)
@@ -412,13 +470,13 @@ class ConcatListAdapterTest {
         ConcatListAdapter(
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
-                initData = "hello",
+                initData = Text("hello"),
             ),
             AssemblyListAdapter(
                 itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
                 initDataList = listOf(
                     Image(android.R.drawable.bottom_bar),
-                    "world",
+                    Text("world"),
                     Image(android.R.drawable.btn_plus)
                 ),
             ),
@@ -430,9 +488,9 @@ class ConcatListAdapterTest {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItem(-1)
             }
-            Assert.assertEquals("hello", getItem(0))
+            Assert.assertEquals(Text("hello"), getItem(0))
             Assert.assertEquals(Image(android.R.drawable.bottom_bar), getItem(1))
-            Assert.assertEquals("world", getItem(2))
+            Assert.assertEquals(Text("world"), getItem(2))
             Assert.assertEquals(Image(android.R.drawable.btn_plus), getItem(3))
             Assert.assertEquals(Image(android.R.drawable.alert_dark_frame), getItem(4))
             assertThrow(IllegalArgumentException::class) {
@@ -476,13 +534,13 @@ class ConcatListAdapterTest {
     fun testMethodFindLocalAdapterAndPosition() {
         val headerAdapter = AssemblySingleDataListAdapter(
             itemFactory = TextItemFactory(),
-            initData = "hello",
+            initData = Text("hello"),
         )
         val bodyAdapter = AssemblyListAdapter(
             itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
             initDataList = listOf(
                 Image(android.R.drawable.bottom_bar),
-                "world",
+                Text("world"),
                 Image(android.R.drawable.btn_plus)
             ),
         )
@@ -527,18 +585,18 @@ class ConcatListAdapterTest {
 
     @Test
     fun testNestedAdapterPosition() {
-        val count1Adapter = AssemblySingleDataListAdapter(TextItemFactory(), "a")
+        val count1Adapter = AssemblySingleDataListAdapter(TextItemFactory(), Text("a"))
         val count3Adapter = AssemblyListAdapter(
             listOf(TextItemFactory()),
-            listOf("a", "a", "a")
+            listOf(Text("a"), Text("a"), Text("a"))
         )
         val count5Adapter = AssemblyListAdapter(
             listOf(TextItemFactory()),
-            listOf("a", "a", "a", "a", "a")
+            listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val count7Adapter = AssemblyListAdapter(
             listOf(TextItemFactory()),
-            listOf("a", "a", "a", "a", "a", "a", "a")
+            listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val concatCount9Adapter = ConcatListAdapter(count1Adapter, count3Adapter, count5Adapter)
         val concatCount11Adapter = ConcatListAdapter(count1Adapter, count3Adapter, count7Adapter)
@@ -645,52 +703,5 @@ class ConcatListAdapterTest {
         verifyAdapterPosition(concatNestingCount16Adapter, 13, 4, 13)
         verifyAdapterPosition(concatNestingCount16Adapter, 14, 5, 14)
         verifyAdapterPosition(concatNestingCount16Adapter, 15, 6, 15)
-    }
-
-    @Test
-    fun testConfig() {
-        ConcatListAdapter.Config.DEFAULT.apply {
-            Assert.assertEquals(true, this.isolateViewTypes)
-            Assert.assertEquals(
-                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
-                this.stableIdMode
-            )
-        }
-
-        ConcatListAdapter.Config.Builder().build().apply {
-            Assert.assertEquals(true, this.isolateViewTypes)
-            Assert.assertEquals(
-                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
-                this.stableIdMode
-            )
-        }
-
-        ConcatListAdapter.Config.Builder().setIsolateViewTypes(false).build().apply {
-            Assert.assertEquals(false, this.isolateViewTypes)
-            Assert.assertEquals(
-                ConcatListAdapter.Config.StableIdMode.NO_STABLE_IDS,
-                this.stableIdMode
-            )
-        }
-
-        ConcatListAdapter.Config.Builder()
-            .setStableIdMode(ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS).build()
-            .apply {
-                Assert.assertEquals(true, this.isolateViewTypes)
-                Assert.assertEquals(
-                    ConcatListAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS,
-                    this.stableIdMode
-                )
-            }
-
-        ConcatListAdapter.Config.Builder()
-            .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS).build()
-            .apply {
-                Assert.assertEquals(true, this.isolateViewTypes)
-                Assert.assertEquals(
-                    ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS,
-                    this.stableIdMode
-                )
-            }
     }
 }

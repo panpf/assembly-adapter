@@ -129,7 +129,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
                     )
             }
             is ExpandableChildItem<*, *> -> {
-                throw IllegalArgumentException("groupData '${groupData.javaClass.name}' need a matching GroupItemFactory, not ChildItemFactory")
+                throw IllegalArgumentException("groupData '${groupData.javaClass.name}' can not match ExpandableChildItemFactory")
             }
             else -> {
                 groupItem.dispatchBindData(
@@ -223,7 +223,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
                     )
             }
             is ExpandableGroupItem<*> -> {
-                throw IllegalArgumentException("childData '${childData.javaClass.name}' need a matching ChildItemFactory, not GroupItemFactory")
+                throw IllegalArgumentException("childData '${childData.javaClass.name}' can not match ExpandableGroupItemFactory")
             }
             else -> {
                 childItem.dispatchBindData(childPosition, childPosition, childData)

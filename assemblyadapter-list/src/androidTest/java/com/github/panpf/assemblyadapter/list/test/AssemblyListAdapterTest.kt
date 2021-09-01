@@ -30,11 +30,13 @@ import org.junit.Test
 
 class AssemblyListAdapterTest {
 
-    private class TextItemFactory : ViewItemFactory<String>(String::class, { context, _, _ ->
+    private data class Text(val text: String)
+
+    private class TextItemFactory : ViewItemFactory<Text>(Text::class, { context, _, _ ->
         TextView(context)
     })
 
-    private data class Image(val redId: Int)
+    private data class Image(val resId: Int)
 
     private class ImageItemFactory : ViewItemFactory<Image>(Image::class, { context, _, _ ->
         ImageView(context)
@@ -45,27 +47,27 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testConstructor() {
-        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory())).apply {
             Assert.assertEquals("", currentList.joinToString())
         }
 
-        AssemblyListAdapter(listOf(TextItemFactory()), listOf("hello")).apply {
-            Assert.assertEquals("hello", currentList.joinToString())
+        AssemblyListAdapter(listOf(TextItemFactory()), listOf(Text("hello"))).apply {
+            Assert.assertEquals("hello", currentList.joinToString { it.text })
         }
 
-        AssemblyListAdapter(listOf(TextItemFactory()), listOf("hello", "world")).apply {
-            Assert.assertEquals("hello, world", currentList.joinToString())
+        AssemblyListAdapter(listOf(TextItemFactory()), listOf(Text("hello"), Text("world"))).apply {
+            Assert.assertEquals("hello, world", currentList.joinToString { it.text })
         }
 
         assertThrow(IllegalArgumentException::class) {
-            AssemblyListAdapter<String>(listOf())
+            AssemblyListAdapter<Text>(listOf())
         }
     }
 
     @Test
     fun testPropertyCurrentListAndSubmitList() {
-        var dataFromObserver: List<String>? = null
-        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
+        var dataFromObserver: List<Text>? = null
+        AssemblyListAdapter<Text>(listOf(TextItemFactory())).apply {
             registerDataSetObserver(object : DataSetObserver() {
                 override fun onChanged() {
                     super.onChanged()
@@ -73,29 +75,34 @@ class AssemblyListAdapterTest {
                 }
             })
 
-            Assert.assertEquals("", currentList.joinToString())
-            Assert.assertNull(dataFromObserver)
+            Assert.assertEquals("", currentList.joinToString { it.text })
+            Assert.assertEquals("", (dataFromObserver ?: emptyList()).joinToString { it.text })
 
-            submitList(listOf("hello"))
-            Assert.assertEquals("hello", currentList.joinToString())
+            submitList(listOf(Text("hello")))
+            Assert.assertEquals("hello", currentList.joinToString { it.text })
+            Assert.assertEquals("hello", (dataFromObserver ?: emptyList()).joinToString { it.text })
 
-            submitList(listOf("hello", "world"))
-            Assert.assertEquals("hello, world", currentList.joinToString())
+            submitList(listOf(Text("hello"), Text("world")))
+            Assert.assertEquals("hello, world", currentList.joinToString { it.text })
+            Assert.assertEquals(
+                "hello, world",
+                (dataFromObserver ?: emptyList()).joinToString { it.text })
 
             submitList(null)
             Assert.assertEquals("", currentList.joinToString())
+            Assert.assertEquals("", (dataFromObserver ?: emptyList()).joinToString())
         }
     }
 
     @Test
     fun testMethodGetCount() {
-        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory())).apply {
             Assert.assertEquals(0, count)
 
-            submitList(listOf("hello"))
+            submitList(listOf(Text("hello")))
             Assert.assertEquals(1, count)
 
-            submitList(listOf("hello", "world"))
+            submitList(listOf(Text("hello"), Text("world")))
             Assert.assertEquals(2, count)
 
             submitList(null)
@@ -105,7 +112,7 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testMethodGetItem() {
-        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory())).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItem(-1)
             }
@@ -116,21 +123,21 @@ class AssemblyListAdapterTest {
                 getItem(1)
             }
 
-            submitList(listOf("hello", "world"))
-            Assert.assertEquals("hello", getItem(0))
-            Assert.assertEquals("world", getItem(1))
+            submitList(listOf(Text("hello"), Text("world")))
+            Assert.assertEquals(Text("hello"), getItem(0))
+            Assert.assertEquals(Text("world"), getItem(1))
         }
     }
 
     @Test
     fun testMethodGetItemId() {
-        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory())).apply {
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(-1L, getItemId(0))
             Assert.assertEquals(-1L, getItemId(1))
         }
 
-        AssemblyListAdapter<String>(listOf(TextItemFactory()), hasStableIds = true).apply {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory()), hasStableIds = true).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }
@@ -160,11 +167,11 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testMethodGetViewTypeCount() {
-        AssemblyListAdapter<String>(listOf(TextItemFactory())).apply {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory())).apply {
             Assert.assertEquals(1, viewTypeCount)
         }
 
-        AssemblyListAdapter<String>(listOf(TextItemFactory(), ImageItemFactory())).apply {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory(), ImageItemFactory())).apply {
             Assert.assertEquals(2, viewTypeCount)
         }
     }
@@ -182,7 +189,7 @@ class AssemblyListAdapterTest {
                 getItemViewType(1)
             }
 
-            submitList(listOf(Image(android.R.drawable.alert_dark_frame), "hello"))
+            submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
             Assert.assertEquals(1, getItemViewType(0))
             Assert.assertEquals(0, getItemViewType(1))
         }
@@ -203,7 +210,7 @@ class AssemblyListAdapterTest {
                 getView(1, null, parent)
             }
 
-            submitList(listOf("hello", Image(android.R.drawable.alert_dark_frame)))
+            submitList(listOf(Text("hello"), Image(android.R.drawable.alert_dark_frame)))
 
             Assert.assertTrue(getView(0, null, parent) is TextView)
             Assert.assertTrue(getView(1, null, parent) is ImageView)
@@ -229,7 +236,7 @@ class AssemblyListAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            submitList(listOf(Image(android.R.drawable.alert_dark_frame), "hello"))
+            submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
             Assert.assertSame(dateItemFactory, getItemFactoryByPosition(0))
             Assert.assertSame(stringItemFactory, getItemFactoryByPosition(1))
         }
@@ -241,7 +248,7 @@ class AssemblyListAdapterTest {
         val parent = FrameLayout(context)
 
         AssemblyListAdapter<Any?>(listOf(TextItemFactory())).apply {
-            submitList(listOf("hello", null))
+            submitList(listOf(Text("hello"), null))
 
             Assert.assertEquals(0, getItemViewType(0))
             assertThrow(NotFoundMatchedItemFactoryException::class) {
@@ -260,7 +267,7 @@ class AssemblyListAdapterTest {
         }
 
         AssemblyListAdapter<Any?>(listOf(TextItemFactory(), PlaceholderItemFactory())).apply {
-            submitList(listOf("hello", null))
+            submitList(listOf(Text("hello"), null))
 
             Assert.assertEquals(0, getItemViewType(0))
             Assert.assertEquals(1, getItemViewType(1))
@@ -272,4 +279,6 @@ class AssemblyListAdapterTest {
             getItemFactoryByPosition(1)
         }
     }
+
+    // todo test NotFoundMatchedItemFactoryException
 }
