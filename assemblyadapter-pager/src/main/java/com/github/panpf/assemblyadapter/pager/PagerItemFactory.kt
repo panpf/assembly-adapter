@@ -24,6 +24,8 @@ import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.internal.Matchable
+import com.github.panpf.assemblyadapter.pager.internal.PagerOnChickListenerWrapper
+import com.github.panpf.assemblyadapter.pager.internal.PagerOnLongClickListenerWrapper
 import kotlin.reflect.KClass
 
 /**
@@ -172,11 +174,14 @@ abstract class PagerItemFactory<DATA : Any>(final override val dataClass: KClass
                 } else {
                     itemView
                 }
-                targetView.setOnClickListener { view ->
-                    clickListenerHolder.listener.onClick(
-                        view.context, view, bindingAdapterPosition, absoluteAdapterPosition, data
+                targetView.setOnClickListener(
+                    PagerOnChickListenerWrapper(
+                        clickListenerHolder.listener,
+                        bindingAdapterPosition,
+                        absoluteAdapterPosition,
+                        data
                     )
-                }
+                )
             } else if (holder is ClickListenerStorage.LongClickListenerHolder<*>) {
                 @Suppress("UNCHECKED_CAST")
                 val longClickListenerHolder =
@@ -188,11 +193,14 @@ abstract class PagerItemFactory<DATA : Any>(final override val dataClass: KClass
                 } else {
                     itemView
                 }
-                targetView.setOnLongClickListener { view ->
-                    longClickListenerHolder.listener.onLongClick(
-                        view.context, view, bindingAdapterPosition, absoluteAdapterPosition, data
+                targetView.setOnLongClickListener(
+                    PagerOnLongClickListenerWrapper(
+                        longClickListenerHolder.listener,
+                        bindingAdapterPosition,
+                        absoluteAdapterPosition,
+                        data
                     )
-                }
+                )
             }
         }
     }

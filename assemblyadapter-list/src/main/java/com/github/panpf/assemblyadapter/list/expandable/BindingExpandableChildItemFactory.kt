@@ -35,7 +35,7 @@ abstract class BindingExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, C
     dataClass: KClass<CHILD_DATA>
 ) : ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA>(dataClass) {
 
-    final override fun createItem(parent: ViewGroup): BindingExpandableChildItem<GROUP_DATA, CHILD_DATA, VIEW_BINDING> {
+    final override fun createExpandableChildItem(parent: ViewGroup): BindingExpandableChildItem<GROUP_DATA, CHILD_DATA, VIEW_BINDING> {
         val context = parent.context
         val binding = createItemViewBinding(context, LayoutInflater.from(context), parent)
         return BindingExpandableChildItem(this, binding)

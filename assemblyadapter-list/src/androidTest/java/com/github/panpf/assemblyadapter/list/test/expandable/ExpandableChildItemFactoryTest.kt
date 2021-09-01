@@ -24,9 +24,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.common.item.R
-import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItem
-import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItemFactory
-import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
+import com.github.panpf.assemblyadapter.internal.OnClickListenerWrapper
+import com.github.panpf.assemblyadapter.internal.OnLongClickListenerWrapper
+import com.github.panpf.assemblyadapter.list.expandable.*
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildOnClickListenerWrapper
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildOnLongClickListenerWrapper
 import com.github.panpf.tools4j.reflect.ktx.callMethod
 import com.github.panpf.tools4j.reflect.ktx.getFieldValue
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -90,10 +92,35 @@ class ExpandableChildItemFactoryTest {
                 .getFieldValue<View.OnClickListener>("mOnClickListener")
             val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
                 .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
-            Assert.assertNotNull(itemOnClickListener)
-            Assert.assertNotNull(itemOnLongClickListener)
-            Assert.assertNotNull(viewOnClickListener)
-            Assert.assertNotNull(viewOnLongClickListener)
+            Assert.assertTrue(itemOnClickListener is OnClickListenerWrapper<*>)
+            Assert.assertTrue(itemOnLongClickListener is OnLongClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnClickListener is OnClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnLongClickListener is OnLongClickListenerWrapper<*>)
+        }
+
+        TextExpandableChildItemFactory().apply {
+            setOnChildItemClickListener(TestOnChildClickListener())
+            setOnChildItemLongClickListener(TestOnChildLongClickListener())
+            setOnChildViewClickListener(R.id.aa_tag_clickBindItem, TestOnChildClickListener())
+            setOnChildViewLongClickListener(
+                R.id.aa_tag_clickBindItem,
+                TestOnChildLongClickListener()
+            )
+            val item = dispatchCreateItem(FrameLayout(context))
+            val rootView = item.itemView
+            val childView = item.itemView.findViewById<TextView>(R.id.aa_tag_clickBindItem)
+            val itemOnClickListener = rootView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnClickListener>("mOnClickListener")
+            val itemOnLongClickListener = rootView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
+            val viewOnClickListener = childView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnClickListener>("mOnClickListener")
+            val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
+            Assert.assertTrue(itemOnClickListener is ChildOnClickListenerWrapper<*, *>)
+            Assert.assertTrue(itemOnLongClickListener is ChildOnLongClickListenerWrapper<*, *>)
+            Assert.assertTrue(viewOnClickListener is ChildOnClickListenerWrapper<*, *>)
+            Assert.assertTrue(viewOnLongClickListener is ChildOnLongClickListenerWrapper<*, *>)
         }
 
         assertThrow(IllegalArgumentException::class) {
@@ -134,7 +161,7 @@ class ExpandableChildItemFactoryTest {
 
     private class TextExpandableChildItemFactory :
         ExpandableChildItemFactory<TextGroup, Text>(Text::class) {
-        override fun createItem(parent: ViewGroup): ExpandableChildItem<TextGroup, Text> {
+        override fun createExpandableChildItem(parent: ViewGroup): ExpandableChildItem<TextGroup, Text> {
             return TextExpandableChildItem(FrameLayout(parent.context).apply {
                 addView(TextView(parent.context).apply {
                     id = R.id.aa_tag_clickBindItem
@@ -181,5 +208,35 @@ class ExpandableChildItemFactoryTest {
         ): Boolean {
             return false
         }
+    }
+
+    private class TestOnChildClickListener : OnChildClickListener<TextGroup, Text> {
+        override fun onClick(
+            context: Context,
+            view: View,
+            groupBindingAdapterPosition: Int,
+            groupAbsoluteAdapterPosition: Int,
+            groupData: TextGroup,
+            isLastChild: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: Text
+        ) {
+
+        }
+    }
+
+    private class TestOnChildLongClickListener : OnChildLongClickListener<TextGroup, Text> {
+        override fun onLongClick(
+            context: Context,
+            view: View,
+            groupBindingAdapterPosition: Int,
+            groupAbsoluteAdapterPosition: Int,
+            groupData: TextGroup,
+            isLastChild: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: Text
+        ): Boolean = false
     }
 }

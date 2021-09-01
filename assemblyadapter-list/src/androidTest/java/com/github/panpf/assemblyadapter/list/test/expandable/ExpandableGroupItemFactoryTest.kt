@@ -24,6 +24,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.common.item.R
+import com.github.panpf.assemblyadapter.internal.OnClickListenerWrapper
+import com.github.panpf.assemblyadapter.internal.OnLongClickListenerWrapper
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroupItem
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroupItemFactory
@@ -90,10 +92,10 @@ class ExpandableGroupItemFactoryTest {
                 .getFieldValue<View.OnClickListener>("mOnClickListener")
             val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
                 .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
-            Assert.assertNotNull(itemOnClickListener)
-            Assert.assertNotNull(itemOnLongClickListener)
-            Assert.assertNotNull(viewOnClickListener)
-            Assert.assertNotNull(viewOnLongClickListener)
+            Assert.assertTrue(itemOnClickListener is OnClickListenerWrapper<*>)
+            Assert.assertTrue(itemOnLongClickListener is OnLongClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnClickListener is OnClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnLongClickListener is OnLongClickListenerWrapper<*>)
         }
 
         assertThrow(IllegalArgumentException::class) {
@@ -135,7 +137,7 @@ class ExpandableGroupItemFactoryTest {
 
     private class TextExpandableGroupItemFactory :
         ExpandableGroupItemFactory<TextGroup>(TextGroup::class) {
-        override fun createItem(parent: ViewGroup): ExpandableGroupItem<TextGroup> {
+        override fun createExpandableGroupItem(parent: ViewGroup): ExpandableGroupItem<TextGroup> {
             return TextExpandableGroupItem(FrameLayout(parent.context).apply {
                 addView(TextView(parent.context).apply {
                     id = R.id.aa_tag_clickBindItem

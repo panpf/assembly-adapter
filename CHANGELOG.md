@@ -1,3 +1,8 @@
+# new
+
+list:
+* new: ExpandableChildItemFactory added setOnChildViewClickListener, setOnChildViewLongClickListener, setOnChildItemClickListener, setOnChildItemLongClickListener method
+
 # v4.0.0-beta02
 
 recycler:

@@ -12,7 +12,7 @@ class CompatExpandableGroupItemFactory(val itemFactory: CompatAssemblyItemFactor
         return itemFactory.match(data)
     }
 
-    override fun createItem(parent: ViewGroup): ExpandableGroupItem<ExpandableGroup> {
+    override fun createExpandableGroupItem(parent: ViewGroup): ExpandableGroupItem<ExpandableGroup> {
         return CompatExpandableGroupItem(itemFactory.dispatchCreateItem(parent))
     }
 

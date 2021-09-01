@@ -18,9 +18,7 @@ package com.github.panpf.assemblyadapter
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
-import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.internal.Matchable
+import com.github.panpf.assemblyadapter.internal.*
 import kotlin.reflect.KClass
 
 /**
@@ -147,17 +145,7 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
                     itemView
                 }
                 targetView.setTag(R.id.aa_tag_clickBindItem, item)
-                targetView.setOnClickListener { view ->
-                    @Suppress("UNCHECKED_CAST")
-                    val bindItem = view.getTag(R.id.aa_tag_clickBindItem) as Item<DATA>
-                    clickListenerHolder.listener.onClick(
-                        view.context,
-                        view,
-                        bindItem.bindingAdapterPosition,
-                        bindItem.absoluteAdapterPosition,
-                        bindItem.dataOrThrow
-                    )
-                }
+                targetView.setOnClickListener(OnClickListenerWrapper(clickListenerHolder.listener))
             } else if (holder is ClickListenerStorage.LongClickListenerHolder<*>) {
                 @Suppress("UNCHECKED_CAST")
                 val longClickListenerHolder =
@@ -170,17 +158,7 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
                     itemView
                 }
                 targetView.setTag(R.id.aa_tag_clickBindItem, item)
-                targetView.setOnLongClickListener { view ->
-                    @Suppress("UNCHECKED_CAST")
-                    val bindItem = view.getTag(R.id.aa_tag_clickBindItem) as Item<DATA>
-                    longClickListenerHolder.listener.onLongClick(
-                        view.context,
-                        view,
-                        bindItem.bindingAdapterPosition,
-                        bindItem.absoluteAdapterPosition,
-                        bindItem.dataOrThrow
-                    )
-                }
+                targetView.setOnLongClickListener(OnLongClickListenerWrapper(longClickListenerHolder.listener))
             }
         }
     }

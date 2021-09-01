@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.list.expandable
 
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import kotlin.reflect.KClass
 
@@ -35,5 +36,9 @@ abstract class ExpandableGroupItemFactory<DATA : ExpandableGroup>(
     dataClass: KClass<DATA>
 ) : ItemFactory<DATA>(dataClass) {
 
-    abstract override fun createItem(parent: ViewGroup): ExpandableGroupItem<DATA>
+    final override fun createItem(parent: ViewGroup): Item<DATA> {
+        return createExpandableGroupItem(parent)
+    }
+
+    abstract fun createExpandableGroupItem(parent: ViewGroup): ExpandableGroupItem<DATA>
 }

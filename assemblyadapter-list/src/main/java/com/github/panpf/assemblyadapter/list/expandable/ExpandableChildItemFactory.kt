@@ -17,7 +17,15 @@ package com.github.panpf.assemblyadapter.list.expandable
 
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import androidx.annotation.IdRes
+import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.OnClickListener
+import com.github.panpf.assemblyadapter.OnLongClickListener
+import com.github.panpf.assemblyadapter.common.item.R
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildClickListenerStorage
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildOnClickListenerWrapper
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildOnLongClickListenerWrapper
 import kotlin.reflect.KClass
 
 /**
@@ -35,5 +43,112 @@ abstract class ExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DA
     dataClass: KClass<CHILD_DATA>
 ) : ItemFactory<CHILD_DATA>(dataClass) {
 
-    abstract override fun createItem(parent: ViewGroup): ExpandableChildItem<GROUP_DATA, CHILD_DATA>
+    private var childClickListenerStorage: ChildClickListenerStorage<GROUP_DATA, CHILD_DATA>? = null
+
+    final override fun createItem(parent: ViewGroup): Item<CHILD_DATA> {
+        return createExpandableChildItem(parent).apply {
+            registerChildClickListener(this)
+        }
+    }
+
+    abstract fun createExpandableChildItem(parent: ViewGroup): ExpandableChildItem<GROUP_DATA, CHILD_DATA>
+
+    /**
+     * Set the click listener of the specified View in the child item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
+    fun setOnChildViewClickListener(
+        @IdRes viewId: Int,
+        onClickListener: OnChildClickListener<GROUP_DATA, CHILD_DATA>
+    ): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onClickListener)
+        return this
+    }
+
+    /**
+     * Set the long click listener of the specified View in the child item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onLongClickListener Implementation of long click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
+    fun setOnChildViewLongClickListener(
+        @IdRes viewId: Int,
+        onLongClickListener: OnChildLongClickListener<GROUP_DATA, CHILD_DATA>
+    ): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onLongClickListener)
+        return this
+    }
+
+    /**
+     * Set the click listener of the child item view
+     *
+     * @param onClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
+    fun setOnChildItemClickListener(onClickListener: OnChildClickListener<GROUP_DATA, CHILD_DATA>): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+        getClickListenerManagerOrCreate().add(onClickListener)
+        return this
+    }
+
+    /**
+     * Set the long click listener of the child item view
+     *
+     * @param onLongClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
+    fun setOnChildItemLongClickListener(onLongClickListener: OnChildLongClickListener<GROUP_DATA, CHILD_DATA>): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+        getClickListenerManagerOrCreate().add(onLongClickListener)
+        return this
+    }
+
+    private fun getClickListenerManagerOrCreate(): ChildClickListenerStorage<GROUP_DATA, CHILD_DATA> {
+        return (childClickListenerStorage
+            ?: (ChildClickListenerStorage<GROUP_DATA, CHILD_DATA>().apply {
+                this@ExpandableChildItemFactory.childClickListenerStorage = this
+            }))
+    }
+
+    private fun registerChildClickListener(item: ExpandableChildItem<GROUP_DATA, CHILD_DATA>) {
+        val clickListenerManager = childClickListenerStorage ?: return
+        val itemView = item.itemView
+        for (holder in clickListenerManager.holders) {
+            if (holder is ChildClickListenerStorage.ClickListenerHolder<*, *>) {
+                @Suppress("UNCHECKED_CAST")
+                val clickListenerHolder =
+                    holder as ChildClickListenerStorage.ClickListenerHolder<GROUP_DATA, CHILD_DATA>
+                val viewId = clickListenerHolder.viewId
+                val targetView = if (viewId != -1) {
+                    itemView.findViewById(viewId)
+                        ?: throw IllegalArgumentException("Not found click bind target view by id $viewId")
+                } else {
+                    itemView
+                }
+                targetView.setTag(R.id.aa_tag_clickBindItem, item)
+                targetView.setOnClickListener(ChildOnClickListenerWrapper(clickListenerHolder.listener))
+            } else if (holder is ChildClickListenerStorage.LongClickListenerHolder<*, *>) {
+                @Suppress("UNCHECKED_CAST")
+                val longClickListenerHolder =
+                    holder as ChildClickListenerStorage.LongClickListenerHolder<GROUP_DATA, CHILD_DATA>
+                val viewId = longClickListenerHolder.viewId
+                val targetView = if (viewId != -1) {
+                    itemView.findViewById(viewId)
+                        ?: throw IllegalArgumentException("Not found long click bind target view by id $viewId")
+                } else {
+                    itemView
+                }
+                targetView.setTag(R.id.aa_tag_clickBindItem, item)
+                targetView.setOnLongClickListener(
+                    ChildOnLongClickListenerWrapper(longClickListenerHolder.listener)
+                )
+            }
+        }
+    }
 }
