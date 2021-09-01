@@ -3,6 +3,7 @@ package com.github.panpf.assemblyadapter.list.test.expandable
 import android.database.DataSetObserver
 import android.widget.FrameLayout
 import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
@@ -313,10 +314,7 @@ class AssemblySingleDataExpandableListAdapterTest {
         val groupItemFactory = StringsItemFactory()
         val childItemFactory = StringItemFactory()
         AssemblySingleDataExpandableListAdapter<Strings, String>(
-            listOf(
-                groupItemFactory,
-                childItemFactory
-            )
+            listOf(groupItemFactory, childItemFactory)
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
@@ -327,22 +325,6 @@ class AssemblySingleDataExpandableListAdapterTest {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(1)
             }
-
-            data = Strings("test")
-            Assert.assertSame(groupItemFactory, getItemFactoryByPosition(0))
-        }
-    }
-
-    @Test
-    fun testMethodGetItemFactoryByChildPosition() {
-        val groupItemFactory = StringsItemFactory()
-        val childItemFactory = StringItemFactory()
-        AssemblySingleDataExpandableListAdapter<Strings, String>(
-            listOf(
-                groupItemFactory,
-                childItemFactory
-            )
-        ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByChildPosition(-1, 0)
             }
@@ -354,6 +336,54 @@ class AssemblySingleDataExpandableListAdapterTest {
             }
 
             data = Strings("test")
+
+            Assert.assertSame(groupItemFactory, getItemFactoryByPosition(0))
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(0, -1)
+            }
+            Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 0))
+            Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 1))
+            Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 2))
+            Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 3))
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(0, 4)
+            }
+        }
+
+        AssemblySingleDataExpandableListAdapter<Strings, String>(
+            listOf(groupItemFactory)
+        ).apply {
+            data = Strings("test")
+
+            Assert.assertSame(groupItemFactory, getItemFactoryByPosition(0))
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(0, -1)
+            }
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 0))
+            }
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 1))
+            }
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 2))
+            }
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(childItemFactory, getItemFactoryByChildPosition(0, 3))
+            }
+            assertThrow(StringIndexOutOfBoundsException::class) {
+                getItemFactoryByChildPosition(0, 4)
+            }
+        }
+
+        AssemblySingleDataExpandableListAdapter<Strings, String>(
+            listOf(childItemFactory)
+        ).apply {
+            data = Strings("test")
+
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(groupItemFactory, getItemFactoryByPosition(0))
+            }
             assertThrow(StringIndexOutOfBoundsException::class) {
                 getItemFactoryByChildPosition(0, -1)
             }

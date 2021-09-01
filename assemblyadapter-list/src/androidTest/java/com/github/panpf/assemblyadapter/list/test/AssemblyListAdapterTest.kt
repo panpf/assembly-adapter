@@ -223,9 +223,9 @@ class AssemblyListAdapterTest {
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        val stringItemFactory = TextItemFactory()
-        val dateItemFactory = ImageItemFactory()
-        AssemblyListAdapter<Any>(listOf(stringItemFactory, dateItemFactory)).apply {
+        val textItemFactory = TextItemFactory()
+        val imageItemFactory = ImageItemFactory()
+        AssemblyListAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
             }
@@ -237,8 +237,28 @@ class AssemblyListAdapterTest {
             }
 
             submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
-            Assert.assertSame(dateItemFactory, getItemFactoryByPosition(0))
-            Assert.assertSame(stringItemFactory, getItemFactoryByPosition(1))
+            Assert.assertSame(imageItemFactory, getItemFactoryByPosition(0))
+            Assert.assertSame(textItemFactory, getItemFactoryByPosition(1))
+        }
+
+        AssemblyListAdapter(
+            listOf(textItemFactory),
+            listOf(Image(android.R.drawable.alert_dark_frame), Text("hello"))
+        ).apply {
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByPosition(0)
+            }
+            Assert.assertSame(textItemFactory, getItemFactoryByPosition(1))
+        }
+
+        AssemblyListAdapter(
+            listOf(imageItemFactory),
+            listOf(Image(android.R.drawable.alert_dark_frame), Text("hello"))
+        ).apply {
+            Assert.assertSame(imageItemFactory, getItemFactoryByPosition(0))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByPosition(1)
+            }
         }
     }
 
@@ -279,6 +299,4 @@ class AssemblyListAdapterTest {
             getItemFactoryByPosition(1)
         }
     }
-
-    // todo test NotFoundMatchedItemFactoryException
 }

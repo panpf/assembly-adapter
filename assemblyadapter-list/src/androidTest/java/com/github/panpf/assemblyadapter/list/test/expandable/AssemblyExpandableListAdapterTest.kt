@@ -176,7 +176,13 @@ class AssemblyExpandableListAdapterTest {
             Assert.assertEquals(1, groupCount)
             Assert.assertEquals(5, getChildrenCount(0))
 
-            submitList(listOf(TextGroup("g", "o", "o", "d"), TextGroup("o", "k"), TextGroup("b", "y", "e")))
+            submitList(
+                listOf(
+                    TextGroup("g", "o", "o", "d"),
+                    TextGroup("o", "k"),
+                    TextGroup("b", "y", "e")
+                )
+            )
             Assert.assertEquals(3, groupCount)
             Assert.assertEquals(4, getChildrenCount(0))
             Assert.assertEquals(2, getChildrenCount(1))
@@ -422,12 +428,12 @@ class AssemblyExpandableListAdapterTest {
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        val stringsItemFactory = TextGroupItemFactory()
-        val datesItemFactory = ImageGroupItemFactory()
-        val stringItemFactory = TextItemFactory()
-        val dateItemFactory = ImageItemFactory()
+        val textGroupItemFactory = TextGroupItemFactory()
+        val imageGroupItemFactory = ImageGroupItemFactory()
+        val textItemFactory = TextItemFactory()
+        val imageItemFactory = ImageItemFactory()
         AssemblyExpandableListAdapter<Any, Any>(
-            listOf(stringsItemFactory, stringItemFactory, datesItemFactory, dateItemFactory)
+            listOf(textGroupItemFactory, textItemFactory, imageGroupItemFactory, imageItemFactory)
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
@@ -445,12 +451,58 @@ class AssemblyExpandableListAdapterTest {
                     TextGroup("hello", "world")
                 )
             )
-            Assert.assertSame(datesItemFactory, getItemFactoryByPosition(0))
-            Assert.assertSame(dateItemFactory, getItemFactoryByChildPosition(0, 0))
-            Assert.assertSame(dateItemFactory, getItemFactoryByChildPosition(0, 1))
-            Assert.assertSame(stringsItemFactory, getItemFactoryByPosition(1))
-            Assert.assertSame(stringItemFactory, getItemFactoryByChildPosition(1, 0))
-            Assert.assertSame(stringItemFactory, getItemFactoryByChildPosition(1, 1))
+            Assert.assertSame(imageGroupItemFactory, getItemFactoryByPosition(0))
+            Assert.assertSame(imageItemFactory, getItemFactoryByChildPosition(0, 0))
+            Assert.assertSame(imageItemFactory, getItemFactoryByChildPosition(0, 1))
+            Assert.assertSame(textGroupItemFactory, getItemFactoryByPosition(1))
+            Assert.assertSame(textItemFactory, getItemFactoryByChildPosition(1, 0))
+            Assert.assertSame(textItemFactory, getItemFactoryByChildPosition(1, 1))
+        }
+
+        AssemblyExpandableListAdapter<Any, Any>(
+            listOf(textGroupItemFactory, textItemFactory)
+        ).apply {
+            submitList(
+                listOf(
+                    ImageGroup(android.R.drawable.btn_default, android.R.drawable.btn_dialog),
+                    TextGroup("hello", "world")
+                )
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(imageGroupItemFactory, getItemFactoryByPosition(0))
+            }
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(imageItemFactory, getItemFactoryByChildPosition(0, 0))
+            }
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(imageItemFactory, getItemFactoryByChildPosition(0, 1))
+            }
+            Assert.assertSame(textGroupItemFactory, getItemFactoryByPosition(1))
+            Assert.assertSame(textItemFactory, getItemFactoryByChildPosition(1, 0))
+            Assert.assertSame(textItemFactory, getItemFactoryByChildPosition(1, 1))
+        }
+
+        AssemblyExpandableListAdapter<Any, Any>(
+            listOf(imageGroupItemFactory, imageItemFactory)
+        ).apply {
+            submitList(
+                listOf(
+                    ImageGroup(android.R.drawable.btn_default, android.R.drawable.btn_dialog),
+                    TextGroup("hello", "world")
+                )
+            )
+            Assert.assertSame(imageGroupItemFactory, getItemFactoryByPosition(0))
+            Assert.assertSame(imageItemFactory, getItemFactoryByChildPosition(0, 0))
+            Assert.assertSame(imageItemFactory, getItemFactoryByChildPosition(0, 1))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(textGroupItemFactory, getItemFactoryByPosition(1))
+            }
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(textItemFactory, getItemFactoryByChildPosition(1, 0))
+            }
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                Assert.assertSame(textItemFactory, getItemFactoryByChildPosition(1, 1))
+            }
         }
     }
 
