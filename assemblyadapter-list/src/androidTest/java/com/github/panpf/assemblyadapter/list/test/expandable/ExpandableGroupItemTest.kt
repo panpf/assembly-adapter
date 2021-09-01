@@ -30,7 +30,7 @@ class ExpandableGroupItemTest {
     @Suppress("RemoveExplicitTypeArguments")
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testExpandableGroupItem = TestExpandableGroupItem<Strings>(TextView(context))
+        val testExpandableGroupItem = TextExpandableGroupItem(TextView(context))
 
         Assert.assertNotNull(testExpandableGroupItem.context)
         Assert.assertNull(testExpandableGroupItem.dataOrNull)
@@ -41,31 +41,42 @@ class ExpandableGroupItemTest {
         Assert.assertEquals(-1, testExpandableGroupItem.absoluteAdapterPosition)
         Assert.assertFalse(testExpandableGroupItem.isExpanded)
 
-        testExpandableGroupItem.dispatchGroupBindData(true, 4, 5, Strings("testData"))
+        testExpandableGroupItem.dispatchGroupBindData(true, 4, 5, TextGroup("hello", "world"))
         Assert.assertTrue(testExpandableGroupItem.isExpanded)
-        Assert.assertEquals("testData", testExpandableGroupItem.dataOrNull?.name)
-        Assert.assertEquals("testData", testExpandableGroupItem.dataOrThrow.name)
+        Assert.assertEquals("[hello, world]", testExpandableGroupItem.dataOrNull?.listJoinToString)
+        Assert.assertEquals("[hello, world]", testExpandableGroupItem.dataOrThrow.listJoinToString)
         Assert.assertEquals(4, testExpandableGroupItem.bindingAdapterPosition)
         Assert.assertEquals(5, testExpandableGroupItem.absoluteAdapterPosition)
     }
 
-    private data class Strings(val name: String = "") : ExpandableGroup {
+    private data class Text(val text: String)
 
-        override fun getChildCount(): Int = name.length
+    private data class TextGroup(val list: List<Text>) : ExpandableGroup {
+
+        @Suppress("unused")
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.text }
+
+        @Suppress("unused")
+        constructor(vararg texts: String) : this(texts.map { Text(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
 
         override fun getChild(childPosition: Int): Any {
-            return name[childPosition].toString()
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
         }
     }
 
-    private class TestExpandableGroupItem<DATA : ExpandableGroup>(itemView: View) :
-        ExpandableGroupItem<DATA>(itemView) {
+    private class TextExpandableGroupItem(itemView: View) :
+        ExpandableGroupItem<TextGroup>(itemView) {
 
         override fun bindData(
             isExpanded: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: DATA
+            data: TextGroup
         ) {
         }
     }

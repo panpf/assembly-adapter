@@ -16,7 +16,6 @@
 package com.github.panpf.assemblyadapter.list.test.expandable
 
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
@@ -35,9 +34,9 @@ class ViewExpandableGroupItemFactoryTest {
         val parent = FrameLayout(context)
 
         val itemFactory =
-            ViewExpandableGroupItemFactory(Strings::class, R.layout.item_test)
+            ViewExpandableGroupItemFactory(TextGroup::class, R.layout.item_test)
         val item =
-            itemFactory.dispatchCreateItem(parent) as SimpleExpandableGroupItemFactory.SimpleExpandableGroupItem<Strings>
+            itemFactory.dispatchCreateItem(parent) as SimpleExpandableGroupItemFactory.SimpleExpandableGroupItem<TextGroup>
 
         Assert.assertEquals(
             "",
@@ -48,7 +47,7 @@ class ViewExpandableGroupItemFactoryTest {
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item.dispatchGroupBindData(true, 0, 0, Strings("test_data"))
+        item.dispatchGroupBindData(true, 0, 0, TextGroup("hello", "world"))
         Assert.assertEquals(
             "",
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).text
@@ -56,11 +55,11 @@ class ViewExpandableGroupItemFactoryTest {
 
 
         val itemFactory2 = ViewExpandableGroupItemFactory(
-            Strings::class,
+            TextGroup::class,
             LayoutInflater.from(context).inflate(R.layout.item_test, parent, false)
         )
         val item2 =
-            itemFactory2.dispatchCreateItem(parent) as SimpleExpandableGroupItemFactory.SimpleExpandableGroupItem<Strings>
+            itemFactory2.dispatchCreateItem(parent) as SimpleExpandableGroupItemFactory.SimpleExpandableGroupItem<TextGroup>
 
         Assert.assertEquals(
             "",
@@ -71,7 +70,7 @@ class ViewExpandableGroupItemFactoryTest {
             item2.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item2.dispatchGroupBindData(true, 0, 0, Strings("test_data"))
+        item2.dispatchGroupBindData(true, 0, 0, TextGroup("hello", "world"))
         Assert.assertEquals(
             "",
             item2.itemView.findViewById<TextView>(R.id.testItemTitleText).text
@@ -79,11 +78,11 @@ class ViewExpandableGroupItemFactoryTest {
 
 
         val itemFactory3 =
-            ViewExpandableGroupItemFactory(Strings::class) { _, inflater, parent: ViewGroup ->
+            ViewExpandableGroupItemFactory(TextGroup::class) { _, inflater, _ ->
                 inflater.inflate(R.layout.item_test, parent, false)
             }
         val item3 =
-            itemFactory3.dispatchCreateItem(parent) as SimpleExpandableGroupItemFactory.SimpleExpandableGroupItem<Strings>
+            itemFactory3.dispatchCreateItem(parent) as SimpleExpandableGroupItemFactory.SimpleExpandableGroupItem<TextGroup>
 
         Assert.assertEquals(
             "",
@@ -94,19 +93,29 @@ class ViewExpandableGroupItemFactoryTest {
             item3.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item3.dispatchGroupBindData(true, 0, 0, Strings("test_data"))
+        item3.dispatchGroupBindData(true, 0, 0, TextGroup("hello", "world"))
         Assert.assertEquals(
             "",
             item3.itemView.findViewById<TextView>(R.id.testItemTitleText).text
         )
     }
 
-    private data class Strings(val name: String = "") : ExpandableGroup {
+    private data class Text(val text: String)
 
-        override fun getChildCount(): Int = name.length
+    private data class TextGroup(val list: List<Text>) : ExpandableGroup {
+
+        @Suppress("unused")
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.text }
+
+        constructor(vararg texts: String) : this(texts.map { Text(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
 
         override fun getChild(childPosition: Int): Any {
-            return name[childPosition].toString()
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
         }
     }
 }

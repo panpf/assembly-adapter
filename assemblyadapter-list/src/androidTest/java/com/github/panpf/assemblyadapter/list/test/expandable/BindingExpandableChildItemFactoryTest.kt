@@ -23,30 +23,40 @@ class BindingExpandableChildItemFactoryTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
 
-        val itemFactory = TestBindingExpandableChildItemFactory()
+        val itemFactory = TextBindingExpandableChildItemFactory()
         val item =
             itemFactory.dispatchCreateItem(parent)
-                    as BindingExpandableChildItemFactory.BindingExpandableChildItem<Strings, String, ItemBindingTestBinding>
+                    as BindingExpandableChildItemFactory.BindingExpandableChildItem<TextGroup, Text, ItemBindingTestBinding>
 
         Assert.assertEquals("", item.binding.testItemTitleText.text)
         Assert.assertEquals(30f, item.binding.testItemTitleText.textSize)
 
-        item.dispatchChildBindData(0, 0, Strings("test_data"), true, 1, 1, "test_value")
-        Assert.assertEquals("test_value", item.binding.testItemTitleText.text)
+        item.dispatchChildBindData(0, 0, TextGroup("hello", "world"), true, 1, 1, Text("world"))
+        Assert.assertEquals("world", item.binding.testItemTitleText.text)
     }
 
-    private data class Strings(val name: String = "") : ExpandableGroup {
+    private data class Text(val text: String)
 
-        override fun getChildCount(): Int = name.length
+    private data class TextGroup(val list: List<Text>) : ExpandableGroup {
+
+        @Suppress("unused")
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.text }
+
+        constructor(vararg texts: String) : this(texts.map { Text(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
 
         override fun getChild(childPosition: Int): Any {
-            return name[childPosition].toString()
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
         }
     }
 
-    private class TestBindingExpandableChildItemFactory :
-        BindingExpandableChildItemFactory<Strings, String, ItemBindingTestBinding>(
-            String::class
+    private class TextBindingExpandableChildItemFactory :
+        BindingExpandableChildItemFactory<TextGroup, Text, ItemBindingTestBinding>(
+            Text::class
         ) {
 
         override fun createItemViewBinding(
@@ -58,7 +68,7 @@ class BindingExpandableChildItemFactoryTest {
         override fun initItem(
             context: Context,
             binding: ItemBindingTestBinding,
-            item: BindingExpandableChildItem<Strings, String, ItemBindingTestBinding>
+            item: BindingExpandableChildItem<TextGroup, Text, ItemBindingTestBinding>
         ) {
             binding.testItemTitleText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 30f)
         }
@@ -66,16 +76,16 @@ class BindingExpandableChildItemFactoryTest {
         override fun bindItemData(
             context: Context,
             binding: ItemBindingTestBinding,
-            item: BindingExpandableChildItem<Strings, String, ItemBindingTestBinding>,
+            item: BindingExpandableChildItem<TextGroup, Text, ItemBindingTestBinding>,
             groupBindingAdapterPosition: Int,
             groupAbsoluteAdapterPosition: Int,
-            groupData: Strings,
+            groupData: TextGroup,
             isLastChild: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: String
+            data: Text
         ) {
-            binding.testItemTitleText.text = data
+            binding.testItemTitleText.text = data.text
         }
     }
 

@@ -153,9 +153,13 @@ class ConcatListAdapterTest {
             Assert.assertEquals("", adapters.joinToString { it.count.toString() })
 
             val adapter1 = AssemblySingleDataListAdapter(TextItemFactory(), Text("a"))
-            val adapter2 = AssemblyListAdapter(listOf(TextItemFactory()), listOf(Text("b"), Text("c")))
+            val adapter2 =
+                AssemblyListAdapter(listOf(TextItemFactory()), listOf(Text("b"), Text("c")))
             val adapter3 =
-                AssemblyListAdapter(listOf(TextItemFactory()), listOf(Text("d"), Text("e"), Text("f")))
+                AssemblyListAdapter(
+                    listOf(TextItemFactory()),
+                    listOf(Text("d"), Text("e"), Text("f"))
+                )
 
             addAdapter(adapter1)
             Assert.assertEquals(1, adapters.size)

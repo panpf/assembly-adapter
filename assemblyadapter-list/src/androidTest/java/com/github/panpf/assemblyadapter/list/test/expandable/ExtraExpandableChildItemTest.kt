@@ -15,7 +15,7 @@ class ExtraExpandableChildItemTest {
     @Suppress("RemoveExplicitTypeArguments")
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testExtraItem = TestExtraItem<Strings, String>(TextView(context))
+        val testExtraItem = TextChildExtraItem(TextView(context))
 
         Assert.assertNull(testExtraItem.getExtraOrNull<String>("testKey"))
         Assert.assertEquals(
@@ -59,25 +59,36 @@ class ExtraExpandableChildItemTest {
         )
     }
 
-    private data class Strings(val name: String = "") : ExpandableGroup {
+    private data class Text(val text: String)
 
-        override fun getChildCount(): Int = name.length
+    private data class TextGroup(val list: List<Text>) : ExpandableGroup {
+
+        @Suppress("unused")
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.text }
+
+        @Suppress("unused")
+        constructor(vararg texts: String) : this(texts.map { Text(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
 
         override fun getChild(childPosition: Int): Any {
-            return name[childPosition].toString()
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
         }
     }
 
-    private class TestExtraItem<GROUP : ExpandableGroup, CHILD : Any>(itemView: View) :
-        ExtraExpandableChildItem<GROUP, CHILD>(itemView) {
+    private class TextChildExtraItem(itemView: View) :
+        ExtraExpandableChildItem<TextGroup, Text>(itemView) {
         override fun bindData(
             groupBindingAdapterPosition: Int,
             groupAbsoluteAdapterPosition: Int,
-            groupData: GROUP,
+            groupData: TextGroup,
             isLastChild: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: CHILD
+            data: Text
         ) {
 
         }

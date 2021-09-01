@@ -32,32 +32,31 @@ import com.github.panpf.tools4j.reflect.ktx.getFieldValue
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import kotlin.reflect.KClass
 
 class ExpandableGroupItemFactoryTest {
 
     @Test
     fun testMethodMatchData() {
-        val testItemFactory = TestExpandableGroupItemFactory(Strings::class)
+        val testItemFactory = TextExpandableGroupItemFactory()
 
         Assert.assertFalse(testItemFactory.matchData(1))
         Assert.assertFalse(testItemFactory.matchData(false))
-        Assert.assertTrue(testItemFactory.matchData(Strings("string")))
+        Assert.assertTrue(testItemFactory.matchData(TextGroup("string")))
     }
 
     @Test
     fun testMethodDispatchCreateItem() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testItemFactory = TestExpandableGroupItemFactory(Strings::class)
+        val testItemFactory = TextExpandableGroupItemFactory()
 
         val item = testItemFactory.dispatchCreateItem(FrameLayout(context))
-        Assert.assertTrue(item is TestExpandableGroupItem)
+        Assert.assertTrue(item is TextExpandableGroupItem)
     }
 
     @Test
     fun testMethodSetOnViewClickListener() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        TestExpandableGroupItemFactory(Strings::class).apply {
+        TextExpandableGroupItemFactory().apply {
             val item = dispatchCreateItem(FrameLayout(context))
             val rootView = item.itemView
             val childView = item.itemView.findViewById<TextView>(R.id.aa_tag_clickBindItem)
@@ -75,7 +74,7 @@ class ExpandableGroupItemFactoryTest {
             Assert.assertNull(viewOnLongClickListener)
         }
 
-        TestExpandableGroupItemFactory(ExpandableGroup::class).apply {
+        TextExpandableGroupItemFactory().apply {
             setOnItemClickListener(TestOnClickListener())
             setOnItemLongClickListener(TestOnLongClickListener())
             setOnViewClickListener(R.id.aa_tag_clickBindItem, TestOnClickListener())
@@ -98,13 +97,13 @@ class ExpandableGroupItemFactoryTest {
         }
 
         assertThrow(IllegalArgumentException::class) {
-            TestExpandableGroupItemFactory(ExpandableGroup::class).apply {
+            TextExpandableGroupItemFactory().apply {
                 setOnViewClickListener(R.id.aa_tag_absoluteAdapterPosition, TestOnClickListener())
             }.dispatchCreateItem(FrameLayout(context))
         }
 
         assertThrow(IllegalArgumentException::class) {
-            TestExpandableGroupItemFactory(ExpandableGroup::class).apply {
+            TextExpandableGroupItemFactory().apply {
                 setOnViewLongClickListener(
                     R.id.aa_tag_absoluteAdapterPosition,
                     TestOnLongClickListener()
@@ -114,19 +113,30 @@ class ExpandableGroupItemFactoryTest {
     }
 
 
-    private data class Strings(val name: String = "") : ExpandableGroup {
+    private data class Text(val text: String)
 
-        override fun getChildCount(): Int = name.length
+    private data class TextGroup(val list: List<Text>) : ExpandableGroup {
+
+        @Suppress("unused")
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.text }
+
+        @Suppress("unused")
+        constructor(vararg texts: String) : this(texts.map { Text(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
 
         override fun getChild(childPosition: Int): Any {
-            return name[childPosition].toString()
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
         }
     }
 
-    private class TestExpandableGroupItemFactory<DATA : ExpandableGroup>(dataClass: KClass<DATA>) :
-        ExpandableGroupItemFactory<DATA>(dataClass) {
-        override fun createItem(parent: ViewGroup): ExpandableGroupItem<DATA> {
-            return TestExpandableGroupItem(FrameLayout(parent.context).apply {
+    private class TextExpandableGroupItemFactory :
+        ExpandableGroupItemFactory<TextGroup>(TextGroup::class) {
+        override fun createItem(parent: ViewGroup): ExpandableGroupItem<TextGroup> {
+            return TextExpandableGroupItem(FrameLayout(parent.context).apply {
                 addView(TextView(parent.context).apply {
                     id = R.id.aa_tag_clickBindItem
                 })
@@ -134,37 +144,37 @@ class ExpandableGroupItemFactoryTest {
         }
     }
 
-    private class TestExpandableGroupItem<DATA : ExpandableGroup>(itemView: View) :
-        ExpandableGroupItem<DATA>(itemView) {
+    private class TextExpandableGroupItem(itemView: View) :
+        ExpandableGroupItem<TextGroup>(itemView) {
         override fun bindData(
             isExpanded: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: DATA
+            data: TextGroup
         ) {
 
         }
     }
 
-    private class TestOnClickListener : OnClickListener<ExpandableGroup> {
+    private class TestOnClickListener : OnClickListener<TextGroup> {
         override fun onClick(
             context: Context,
             view: View,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: ExpandableGroup
+            data: TextGroup
         ) {
 
         }
     }
 
-    private class TestOnLongClickListener : OnLongClickListener<ExpandableGroup> {
+    private class TestOnLongClickListener : OnLongClickListener<TextGroup> {
         override fun onLongClick(
             context: Context,
             view: View,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: ExpandableGroup
+            data: TextGroup
         ): Boolean {
             return false
         }

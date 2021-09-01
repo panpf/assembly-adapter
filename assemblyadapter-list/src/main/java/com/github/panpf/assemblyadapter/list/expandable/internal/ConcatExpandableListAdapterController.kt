@@ -20,8 +20,8 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import com.github.panpf.assemblyadapter.list.expandable.ConcatExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.R
+import com.github.panpf.assemblyadapter.list.expandable.ConcatExpandableListAdapter
 import java.util.*
 
 /**

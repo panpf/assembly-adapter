@@ -30,8 +30,7 @@ class ExpandableChildItemTest {
     @Suppress("RemoveExplicitTypeArguments")
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testExpandableChildItem =
-            TestExpandableChildItem<Strings, Any>(TextView(context))
+        val testExpandableChildItem = TextExpandableChildItem(TextView(context))
 
         Assert.assertNotNull(testExpandableChildItem.context)
         Assert.assertNull(testExpandableChildItem.groupDataOrNull)
@@ -49,39 +48,56 @@ class ExpandableChildItemTest {
         }
 
         testExpandableChildItem.dispatchChildBindData(
-            2, 3, Strings("testData"), true, 4, 5, "hello"
+            2, 3, TextGroup("hello", "world"), true, 4, 5, Text("hello")
         )
-        Assert.assertEquals("testData", testExpandableChildItem.groupDataOrNull?.name)
-        Assert.assertEquals("testData", testExpandableChildItem.groupDataOrThrow.name)
+        Assert.assertEquals(
+            "[hello, world]",
+            testExpandableChildItem.groupDataOrNull?.listJoinToString
+        )
+        Assert.assertEquals(
+            "[hello, world]",
+            testExpandableChildItem.groupDataOrThrow.listJoinToString
+        )
         Assert.assertEquals(2, testExpandableChildItem.groupBindingAdapterPosition)
         Assert.assertEquals(3, testExpandableChildItem.groupAbsoluteAdapterPosition)
         Assert.assertTrue(testExpandableChildItem.isLastChild)
         Assert.assertEquals(4, testExpandableChildItem.bindingAdapterPosition)
         Assert.assertEquals(5, testExpandableChildItem.absoluteAdapterPosition)
-        Assert.assertEquals("hello", testExpandableChildItem.dataOrNull)
-        Assert.assertEquals("hello", testExpandableChildItem.dataOrThrow)
+        Assert.assertEquals(Text("hello"), testExpandableChildItem.dataOrNull)
+        Assert.assertEquals(Text("hello"), testExpandableChildItem.dataOrThrow)
     }
 
-    private data class Strings(val name: String = "") : ExpandableGroup {
+    private data class Text(val text: String)
 
-        override fun getChildCount(): Int = name.length
+    private data class TextGroup(val list: List<Text>) : ExpandableGroup {
+
+        @Suppress("unused")
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.text }
+
+        @Suppress("unused")
+        constructor(vararg texts: String) : this(texts.map { Text(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
 
         override fun getChild(childPosition: Int): Any {
-            return name[childPosition].toString()
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
         }
     }
 
-    private class TestExpandableChildItem<DATA : ExpandableGroup, CHILD : Any>(itemView: View) :
-        ExpandableChildItem<DATA, CHILD>(itemView) {
+    private class TextExpandableChildItem(itemView: View) :
+        ExpandableChildItem<TextGroup, Text>(itemView) {
 
         override fun bindData(
             groupBindingAdapterPosition: Int,
             groupAbsoluteAdapterPosition: Int,
-            groupData: DATA,
+            groupData: TextGroup,
             isLastChild: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: CHILD
+            data: Text
         ) {
         }
     }

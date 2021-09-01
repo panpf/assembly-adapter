@@ -15,7 +15,7 @@ class ExtraExpandableGroupItemTest {
     @Suppress("RemoveExplicitTypeArguments")
     fun test() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testExtraItem = TestExtraItem<Strings>(TextView(context))
+        val testExtraItem = TextGroupExtraItem(TextView(context))
 
         Assert.assertNull(testExtraItem.getExtraOrNull<String>("testKey"))
         Assert.assertEquals(
@@ -59,22 +59,33 @@ class ExtraExpandableGroupItemTest {
         )
     }
 
-    private data class Strings(val name: String = "") : ExpandableGroup {
+    private data class Text(val text: String)
 
-        override fun getChildCount(): Int = name.length
+    private data class TextGroup(val list: List<Text>) : ExpandableGroup {
+
+        @Suppress("unused")
+        val listJoinToString: String
+            get() = list.joinToString(prefix = "[", postfix = "]") { it.text }
+
+        @Suppress("unused")
+        constructor(vararg texts: String) : this(texts.map { Text(it) }.toList())
+
+        override fun getChildCount(): Int = list.size
 
         override fun getChild(childPosition: Int): Any {
-            return name[childPosition].toString()
+            // Shield the differences in exceptions thrown by different versions of the ArrayList get method
+            return list.getOrNull(childPosition)
+                ?: throw IndexOutOfBoundsException("Index: $childPosition, Size: ${list.size}")
         }
     }
 
-    private class TestExtraItem<DATA : ExpandableGroup>(itemView: View) :
-        ExtraExpandableGroupItem<DATA>(itemView) {
+    private class TextGroupExtraItem(itemView: View) :
+        ExtraExpandableGroupItem<TextGroup>(itemView) {
         override fun bindData(
             isExpanded: Boolean,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: DATA
+            data: TextGroup
         ) {
 
         }

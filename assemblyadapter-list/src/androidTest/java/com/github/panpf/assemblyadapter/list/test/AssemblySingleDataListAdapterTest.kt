@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.list.test
 
 import android.database.DataSetObserver
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
@@ -26,25 +27,27 @@ import org.junit.Test
 
 class AssemblySingleDataListAdapterTest {
 
-    private class TestItemFactory :
-        ViewItemFactory<String>(String::class, android.R.layout.activity_list_item)
+    private data class Text(val text: String)
+
+    private class TextItemFactory : ViewItemFactory<Text>(Text::class, { context, _, _ ->
+        TextView(context)
+    })
 
     @Test
     fun testConstructor() {
-        AssemblySingleDataListAdapter(TestItemFactory()).apply {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
             Assert.assertNull(data)
         }
 
-        AssemblySingleDataListAdapter(TestItemFactory(), "123456").apply {
-            Assert.assertNotNull(data)
-            Assert.assertEquals("123456", data)
+        AssemblySingleDataListAdapter(TextItemFactory(), Text("hello")).apply {
+            Assert.assertEquals(Text("hello"), data)
         }
     }
 
     @Test
     fun testPropertyData() {
-        var dataFromObserver: String? = null
-        AssemblySingleDataListAdapter(TestItemFactory()).apply {
+        var dataFromObserver: Text? = null
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
             registerDataSetObserver(object : DataSetObserver() {
                 override fun onChanged() {
                     super.onChanged()
@@ -55,22 +58,22 @@ class AssemblySingleDataListAdapterTest {
             Assert.assertNull(data)
             Assert.assertNull(dataFromObserver)
 
-            data = "Test data changed notify invoke"
-            Assert.assertEquals("Test data changed notify invoke", data)
-            Assert.assertEquals("Test data changed notify invoke", dataFromObserver)
+            data = Text("hello")
+            Assert.assertEquals(Text("hello"), data)
+            Assert.assertEquals(Text("hello"), dataFromObserver)
 
-            data = "Test data changed notify invoke2"
-            Assert.assertEquals("Test data changed notify invoke2", data)
-            Assert.assertEquals("Test data changed notify invoke2", dataFromObserver)
+            data = Text("world")
+            Assert.assertEquals(Text("world"), data)
+            Assert.assertEquals(Text("world"), dataFromObserver)
         }
     }
 
     @Test
     fun testMethodGetCount() {
-        AssemblySingleDataListAdapter(TestItemFactory()).apply {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
             Assert.assertEquals(0, count)
 
-            data = "Test count"
+            data = Text("hello")
             Assert.assertEquals(1, count)
 
             data = null
@@ -80,7 +83,7 @@ class AssemblySingleDataListAdapterTest {
 
     @Test
     fun testMethodGetItem() {
-        AssemblySingleDataListAdapter(TestItemFactory()).apply {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItem(-1)
             }
@@ -91,20 +94,20 @@ class AssemblySingleDataListAdapterTest {
                 getItem(1)
             }
 
-            data = "test"
-            Assert.assertEquals("test", getItem(0))
+            data = Text("hello")
+            Assert.assertEquals(Text("hello"), getItem(0))
         }
     }
 
     @Test
     fun testMethodGetItemId() {
-        AssemblySingleDataListAdapter(TestItemFactory()).apply {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(-1L, getItemId(0))
             Assert.assertEquals(-1L, getItemId(1))
         }
 
-        AssemblySingleDataListAdapter(TestItemFactory(), hasStableIds = true).apply {
+        AssemblySingleDataListAdapter(TextItemFactory(), hasStableIds = true).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }
@@ -117,8 +120,8 @@ class AssemblySingleDataListAdapterTest {
         }
 
         AssemblySingleDataListAdapter(
-            TestItemFactory(),
-            initData = "hello",
+            TextItemFactory(),
+            initData = Text("hello"),
             hasStableIds = true
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
@@ -133,14 +136,14 @@ class AssemblySingleDataListAdapterTest {
 
     @Test
     fun testMethodGetViewTypeCount() {
-        AssemblySingleDataListAdapter(TestItemFactory()).apply {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
             Assert.assertEquals(1, viewTypeCount)
         }
     }
 
     @Test
     fun testMethodGetItemViewType() {
-        AssemblySingleDataListAdapter(TestItemFactory()).apply {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemViewType(-1)
             }
@@ -151,7 +154,7 @@ class AssemblySingleDataListAdapterTest {
                 getItemViewType(1)
             }
 
-            data = "test"
+            data = Text("test")
             Assert.assertEquals(0, getItemViewType(0))
         }
     }
@@ -160,7 +163,7 @@ class AssemblySingleDataListAdapterTest {
     fun testMethodGetView() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
-        AssemblySingleDataListAdapter(TestItemFactory()).apply {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getView(-1, null, parent)
             }
@@ -171,7 +174,7 @@ class AssemblySingleDataListAdapterTest {
                 getView(1, null, parent)
             }
 
-            data = "test"
+            data = Text("test")
             val itemView = getView(0, null, parent)
             Assert.assertNotSame(itemView, getView(0, null, parent))
             Assert.assertSame(itemView, getView(0, itemView, parent))
@@ -180,7 +183,7 @@ class AssemblySingleDataListAdapterTest {
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        val itemFactory = TestItemFactory()
+        val itemFactory = TextItemFactory()
         AssemblySingleDataListAdapter(itemFactory).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
@@ -192,7 +195,7 @@ class AssemblySingleDataListAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            data = "test"
+            data = Text("test")
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }
