@@ -2,6 +2,7 @@
 
 list:
 * new: ExpandableChildItemFactory added setOnChildViewClickListener, setOnChildViewLongClickListener, setOnChildItemClickListener, setOnChildItemLongClickListener method
+* change: ItemId move to common-core module
 
 # v4.0.0-beta02
 

@@ -21,6 +21,7 @@ import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.ItemId
 
 /**
  * Single data version of [AssemblyListAdapter]
