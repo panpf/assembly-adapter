@@ -434,13 +434,13 @@ class AssemblySingleDataExpandableListAdapterTest {
             Assert.assertNotNull(childSelectable)
 
             assertThrow(IndexOutOfBoundsException::class) {
-                childSelectable(0, -1)
+                isChildSelectable(0, -1)
             }
-            Assert.assertFalse(childSelectable(0, 0))
-            Assert.assertFalse(childSelectable(0, 1))
-            Assert.assertTrue(childSelectable(0, 2))
+            Assert.assertFalse(isChildSelectable(0, 0))
+            Assert.assertFalse(isChildSelectable(0, 1))
+            Assert.assertTrue(isChildSelectable(0, 2))
             assertThrow(IndexOutOfBoundsException::class) {
-                childSelectable(0, 3)
+                isChildSelectable(0, 3)
             }
         }
     }

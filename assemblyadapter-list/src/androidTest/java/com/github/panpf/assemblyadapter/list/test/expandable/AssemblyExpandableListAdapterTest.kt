@@ -592,22 +592,22 @@ class AssemblyExpandableListAdapterTest {
             Assert.assertNotNull(childSelectable)
 
             assertThrow(IndexOutOfBoundsException::class) {
-                childSelectable(-1, 0)
+                isChildSelectable(-1, 0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                childSelectable(0, -1)
+                isChildSelectable(0, -1)
             }
-            Assert.assertFalse(childSelectable(0, 0))
+            Assert.assertFalse(isChildSelectable(0, 0))
             assertThrow(IndexOutOfBoundsException::class) {
-                childSelectable(0, 1)
+                isChildSelectable(0, 1)
             }
-            Assert.assertFalse(childSelectable(1, 0))
-            Assert.assertFalse(childSelectable(1, 1))
-            Assert.assertTrue(childSelectable(1, 2))
-            Assert.assertFalse(childSelectable(2, 0))
-            Assert.assertFalse(childSelectable(2, 1))
+            Assert.assertFalse(isChildSelectable(1, 0))
+            Assert.assertFalse(isChildSelectable(1, 1))
+            Assert.assertTrue(isChildSelectable(1, 2))
+            Assert.assertFalse(isChildSelectable(2, 0))
+            Assert.assertFalse(isChildSelectable(2, 1))
             assertThrow(IndexOutOfBoundsException::class) {
-                childSelectable(3, 0)
+                isChildSelectable(3, 0)
             }
         }
     }
