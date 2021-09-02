@@ -36,13 +36,15 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 class ConcatFragmentStatePagerAdapterTest {
 
-    class DateFragmentItemFactory : ViewFragmentItemFactory<Date>(
-        Date::class, android.R.layout.activity_list_item
+    private data class Text(val text: String)
+
+    private class TextFragmentItemFactory : ViewFragmentItemFactory<Text>(
+        Text::class, android.R.layout.activity_list_item
     ) {
         override fun createFragment(
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: Date
+            data: Text
         ): Fragment {
             return super.createFragment(bindingAdapterPosition, absoluteAdapterPosition, data)
                 .apply {
@@ -64,23 +66,23 @@ class ConcatFragmentStatePagerAdapterTest {
 
         val count1Adapter = AssemblySingleDataFragmentStatePagerAdapter(
             activity.supportFragmentManager,
-            DateFragmentItemFactory(),
-            Date()
+            TextFragmentItemFactory(),
+            Text("a")
         )
         val count3Adapter = AssemblyFragmentStatePagerAdapter(
             activity.supportFragmentManager,
-            listOf(DateFragmentItemFactory()),
-            listOf(Date(), Date(), Date())
+            listOf(TextFragmentItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"))
         )
         val count5Adapter = AssemblyFragmentStatePagerAdapter(
             activity.supportFragmentManager,
-            listOf(DateFragmentItemFactory()),
-            listOf(Date(), Date(), Date(), Date(), Date())
+            listOf(TextFragmentItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val count7Adapter = AssemblyFragmentStatePagerAdapter(
             activity.supportFragmentManager,
-            listOf(DateFragmentItemFactory()),
-            listOf(Date(), Date(), Date(), Date(), Date(), Date(), Date())
+            listOf(TextFragmentItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val concatCount9Adapter = ConcatFragmentStatePagerAdapter(
             activity.supportFragmentManager, count1Adapter, count3Adapter, count5Adapter

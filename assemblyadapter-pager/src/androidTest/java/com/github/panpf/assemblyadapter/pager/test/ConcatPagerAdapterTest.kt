@@ -29,20 +29,21 @@ import com.github.panpf.assemblyadapter.pager.ViewPagerItemFactory
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class ConcatPagerAdapterTest {
 
-    class DatePagerItemFactory : ViewPagerItemFactory<Date>(
-        Date::class, android.R.layout.activity_list_item
+    private data class Text(val text: String)
+
+    private class TextPagerItemFactory : ViewPagerItemFactory<Text>(
+        Text::class, android.R.layout.activity_list_item
     ) {
         override fun createItemView(
             context: Context,
             parent: ViewGroup,
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: Date
+            data: Text
         ): View {
             return super.createItemView(
                 context,
@@ -59,18 +60,18 @@ class ConcatPagerAdapterTest {
 
     @Test
     fun testNestedAdapterPosition() {
-        val count1Adapter = AssemblySingleDataPagerAdapter(DatePagerItemFactory(), Date())
+        val count1Adapter = AssemblySingleDataPagerAdapter(TextPagerItemFactory(), Text("a"))
         val count3Adapter = AssemblyPagerAdapter(
-            listOf(DatePagerItemFactory()),
-            listOf(Date(), Date(), Date())
+            listOf(TextPagerItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"))
         )
         val count5Adapter = AssemblyPagerAdapter(
-            listOf(DatePagerItemFactory()),
-            listOf(Date(), Date(), Date(), Date(), Date())
+            listOf(TextPagerItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val count7Adapter = AssemblyPagerAdapter(
-            listOf(DatePagerItemFactory()),
-            listOf(Date(), Date(), Date(), Date(), Date(), Date(), Date())
+            listOf(TextPagerItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val concatCount9Adapter = ConcatPagerAdapter(count1Adapter, count3Adapter, count5Adapter)
         val concatCount11Adapter = ConcatPagerAdapter(count1Adapter, count3Adapter, count7Adapter)
