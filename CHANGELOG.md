@@ -10,6 +10,7 @@ list:
 recycler:
 * new: Recycler related Adapter now rewrites getItemId() method to support obtaining stable itemId through ItemId interface or hashCode
 * new: AssemblyRecyclerAdapter, AssemblyRecyclerListAdapter, AssemblySingleDataRecyclerAdapter, AssemblySingleDataRecyclerListAdapter added getItem(Int) method
+* fix: Fix the bug that the disableByPosition, disableBySpanIndex, personaliseByPosition, personaliseBySpanIndex functions of Assembly\*DividerItemDecoration do not work
 
 # v4.0.0-beta02
 

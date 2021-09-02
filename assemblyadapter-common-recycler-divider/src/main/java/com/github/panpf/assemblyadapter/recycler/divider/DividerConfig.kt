@@ -57,10 +57,10 @@ open class DividerConfig(
     }
 
     open class Builder(val divider: Divider) {
-        private var disableByPositionArray: SparseArrayCompat<Boolean>? = null
-        private var disableBySpanIndexArray: SparseArrayCompat<Boolean>? = null
-        private var personaliseByPositionArray: SparseArrayCompat<Divider>? = null
-        private var personaliseBySpanIndexArray: SparseArrayCompat<Divider>? = null
+        protected var disableByPositionArray: SparseArrayCompat<Boolean>? = null
+        protected var disableBySpanIndexArray: SparseArrayCompat<Boolean>? = null
+        protected var personaliseByPositionArray: SparseArrayCompat<Divider>? = null
+        protected var personaliseBySpanIndexArray: SparseArrayCompat<Divider>? = null
 
         /**
          * The item with the specified position disables this divider

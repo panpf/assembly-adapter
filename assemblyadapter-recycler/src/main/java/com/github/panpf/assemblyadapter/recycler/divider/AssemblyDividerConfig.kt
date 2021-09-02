@@ -86,11 +86,7 @@ class AssemblyDividerConfig constructor(
     }
 
     class Builder(divider: Divider) : DividerConfig.Builder(divider) {
-        private var disableByPositionArray: SparseArrayCompat<Boolean>? = null
-        private var disableBySpanIndexArray: SparseArrayCompat<Boolean>? = null
         private var disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>? = null
-        private var personaliseByPositionArray: SparseArrayCompat<Divider>? = null
-        private var personaliseBySpanIndexArray: SparseArrayCompat<Divider>? = null
         private var personaliseByItemFactoryClassMap: ArrayMap<Class<*>, Divider>? = null
 
         override fun disableByPosition(position: Int): Builder {
