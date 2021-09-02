@@ -1,5 +1,6 @@
 package com.github.panpf.assemblyadapter.recycler.test
 
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
@@ -12,25 +13,27 @@ import org.junit.Test
 
 class AssemblySingleDataRecyclerAdapterTest {
 
-    private class TestItemFactory :
-        ViewItemFactory<String>(String::class, android.R.layout.activity_list_item)
+    private data class Text(val text: String)
+
+    private class TextItemFactory : ViewItemFactory<Text>(Text::class, { context, _, _ ->
+        TextView(context)
+    })
 
     @Test
     fun testConstructor() {
-        AssemblySingleDataRecyclerAdapter(TestItemFactory()).apply {
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
             Assert.assertNull(data)
         }
 
-        AssemblySingleDataRecyclerAdapter(TestItemFactory(), "123456").apply {
-            Assert.assertNotNull(data)
-            Assert.assertEquals("123456", data)
+        AssemblySingleDataRecyclerAdapter(TextItemFactory(), Text("hello")).apply {
+            Assert.assertEquals(Text("hello"), data)
         }
     }
 
     @Test
     fun testPropertyData() {
-        var dataFromObserver: String? = null
-        AssemblySingleDataRecyclerAdapter(TestItemFactory()).apply {
+        var dataFromObserver: Text? = null
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
             registerAdapterDataObserver(SimpleAdapterDataObserver {
                 dataFromObserver = data
             })
@@ -38,22 +41,22 @@ class AssemblySingleDataRecyclerAdapterTest {
             Assert.assertNull(data)
             Assert.assertNull(dataFromObserver)
 
-            data = "Test data changed notify invoke"
-            Assert.assertEquals("Test data changed notify invoke", data)
-            Assert.assertEquals("Test data changed notify invoke", dataFromObserver)
+            data = Text("hello")
+            Assert.assertEquals(Text("hello"), data)
+            Assert.assertEquals(Text("hello"), dataFromObserver)
 
-            data = "Test data changed notify invoke2"
-            Assert.assertEquals("Test data changed notify invoke2", data)
-            Assert.assertEquals("Test data changed notify invoke2", dataFromObserver)
+            data = Text("world")
+            Assert.assertEquals(Text("world"), data)
+            Assert.assertEquals(Text("world"), dataFromObserver)
         }
     }
 
     @Test
     fun testMethodGetCount() {
-        AssemblySingleDataRecyclerAdapter(TestItemFactory()).apply {
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
             Assert.assertEquals(0, itemCount)
 
-            data = "Test count"
+            data = Text("hello")
             Assert.assertEquals(1, itemCount)
 
             data = null
@@ -62,8 +65,63 @@ class AssemblySingleDataRecyclerAdapterTest {
     }
 
     @Test
+    fun testMethodGetItem() {
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(1)
+            }
+
+            data = Text("hello")
+            Assert.assertEquals(Text("hello"), getItem(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemId() {
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
+            Assert.assertEquals(-1L, getItemId(-1))
+            Assert.assertEquals(-1L, getItemId(0))
+            Assert.assertEquals(-1L, getItemId(1))
+        }
+
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
+            setHasStableIds(true)
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(1)
+            }
+        }
+
+        AssemblySingleDataRecyclerAdapter(
+            TextItemFactory(),
+            initData = Text("hello"),
+        ).apply {
+            setHasStableIds(true)
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            Assert.assertEquals(getItem(0).hashCode().toLong(), getItemId(0))
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(1)
+            }
+        }
+    }
+
+
+    @Test
     fun testMethodGetItemViewType() {
-        AssemblySingleDataRecyclerAdapter(TestItemFactory()).apply {
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemViewType(-1)
             }
@@ -74,7 +132,7 @@ class AssemblySingleDataRecyclerAdapterTest {
                 getItemViewType(1)
             }
 
-            data = "test"
+            data = Text("hello")
             Assert.assertEquals(0, getItemViewType(0))
         }
     }
@@ -85,27 +143,24 @@ class AssemblySingleDataRecyclerAdapterTest {
         val parent = RecyclerView(context).apply {
             layoutManager = LinearLayoutManager(context)
         }
-        AssemblySingleDataRecyclerAdapter(TestItemFactory()).apply {
-            val viewHolder = createViewHolder(parent, 0)
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
+            data = Text("hello")
 
-            assertThrow(IndexOutOfBoundsException::class) {
-                bindViewHolder(viewHolder, -1)
+            assertThrow(IllegalArgumentException::class) {
+                onCreateViewHolder(parent, -1)
             }
-            assertThrow(IndexOutOfBoundsException::class) {
-                bindViewHolder(viewHolder, 0)
-            }
-            assertThrow(IndexOutOfBoundsException::class) {
-                bindViewHolder(viewHolder, 1)
-            }
+            Assert.assertTrue(onCreateViewHolder(parent, 0).itemView is TextView)
 
-            data = "test"
-            bindViewHolder(viewHolder, 0)
+            assertThrow(IllegalArgumentException::class) {
+                onBindViewHolder(object : RecyclerView.ViewHolder(TextView(context)) {}, 0)
+            }
+            onBindViewHolder(onCreateViewHolder(parent, 0), 0)
         }
     }
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        val itemFactory = TestItemFactory()
+        val itemFactory = TextItemFactory()
         AssemblySingleDataRecyclerAdapter(itemFactory).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
@@ -117,7 +172,7 @@ class AssemblySingleDataRecyclerAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            data = "test"
+            data = Text("hello")
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }

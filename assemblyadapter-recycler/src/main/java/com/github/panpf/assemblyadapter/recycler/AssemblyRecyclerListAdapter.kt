@@ -50,13 +50,13 @@ open class AssemblyRecyclerListAdapter<DATA>
         initDataList: List<DATA>? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     ) : super(diffCallback) {
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
         if (diffCallback is KeyEqualsDiffItemCallback) {
             KeyEqualsDiffItemCallback.checkDataClass(
                 itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
             )
         }
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         submitList(initDataList)
     }
 
@@ -73,13 +73,13 @@ open class AssemblyRecyclerListAdapter<DATA>
         itemFactoryList: List<ItemFactory<*>>,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     ) : super(diffCallback) {
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
         if (diffCallback is KeyEqualsDiffItemCallback) {
             KeyEqualsDiffItemCallback.checkDataClass(
                 itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
             )
         }
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     }
 
     /**
@@ -95,11 +95,16 @@ open class AssemblyRecyclerListAdapter<DATA>
     @Suppress("LeakingThis")
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
-        initDataList: List<DATA>? = null,
+        initDataList: List<DATA>?,
         config: AsyncDifferConfig<DATA>,
     ) : super(config) {
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+        if (config.diffCallback is KeyEqualsDiffItemCallback) {
+            KeyEqualsDiffItemCallback.checkDataClass(
+                itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
+            )
+        }
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         submitList(initDataList)
     }
 
@@ -116,8 +121,17 @@ open class AssemblyRecyclerListAdapter<DATA>
         itemFactoryList: List<ItemFactory<*>>,
         config: AsyncDifferConfig<DATA>,
     ) : super(config) {
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
+        if (config.diffCallback is KeyEqualsDiffItemCallback) {
+            KeyEqualsDiffItemCallback.checkDataClass(
+                itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
+            )
+        }
+        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    }
+
+    public override fun getItem(position: Int): DATA {
+        return super.getItem(position)
     }
 
     override fun getItemId(position: Int): Long {

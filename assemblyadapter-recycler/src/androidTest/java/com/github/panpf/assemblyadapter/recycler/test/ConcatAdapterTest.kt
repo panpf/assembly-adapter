@@ -1,5 +1,8 @@
 package com.github.panpf.assemblyadapter.recycler.test
 
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -9,30 +12,457 @@ import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
-import org.junit.Assert.assertEquals
+import com.github.panpf.tools4j.test.ktx.assertThrow
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class ConcatAdapterTest {
 
-    class DateItemFactory : ViewItemFactory<Date>(Date::class, android.R.layout.activity_list_item)
+    private data class Text(val text: String)
+
+    private class TextItemFactory : ViewItemFactory<Text>(Text::class, { context, _, _ ->
+        TextView(context)
+    })
+
+    private data class Image(val resId: Int)
+
+    private class ImageItemFactory : ViewItemFactory<Image>(Image::class, { context, _, _ ->
+        ImageView(context)
+    })
+
+    @Test
+    fun testConfig() {
+        ConcatAdapter.Config.DEFAULT.apply {
+            Assert.assertEquals(true, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatAdapter.Config.Builder().build().apply {
+            Assert.assertEquals(true, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build().apply {
+            Assert.assertEquals(false, this.isolateViewTypes)
+            Assert.assertEquals(
+                ConcatAdapter.Config.StableIdMode.NO_STABLE_IDS,
+                this.stableIdMode
+            )
+        }
+
+        ConcatAdapter.Config.Builder()
+            .setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS).build()
+            .apply {
+                Assert.assertEquals(true, this.isolateViewTypes)
+                Assert.assertEquals(
+                    ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS,
+                    this.stableIdMode
+                )
+            }
+
+        ConcatAdapter.Config.Builder()
+            .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS).build()
+            .apply {
+                Assert.assertEquals(true, this.isolateViewTypes)
+                Assert.assertEquals(
+                    ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS,
+                    this.stableIdMode
+                )
+            }
+    }
+
+    @Test
+    fun testConstructor() {
+        ConcatAdapter(AssemblySingleDataRecyclerAdapter(TextItemFactory())).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatAdapter(
+            AssemblySingleDataRecyclerAdapter(TextItemFactory()),
+            AssemblySingleDataRecyclerAdapter(TextItemFactory())
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatAdapter(
+            ConcatAdapter.Config.DEFAULT,
+            AssemblySingleDataRecyclerAdapter(TextItemFactory())
+        ).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatAdapter(
+            ConcatAdapter.Config.DEFAULT,
+            AssemblySingleDataRecyclerAdapter(TextItemFactory()),
+            AssemblySingleDataRecyclerAdapter(TextItemFactory())
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatAdapter(listOf(AssemblySingleDataRecyclerAdapter(TextItemFactory()))).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatAdapter(
+            listOf(
+                AssemblySingleDataRecyclerAdapter(TextItemFactory()),
+                AssemblySingleDataRecyclerAdapter(TextItemFactory())
+            )
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatAdapter(
+            ConcatAdapter.Config.DEFAULT,
+            listOf(AssemblySingleDataRecyclerAdapter(TextItemFactory()))
+        ).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatAdapter(
+            ConcatAdapter.Config.DEFAULT,
+            listOf(
+                AssemblySingleDataRecyclerAdapter(TextItemFactory()),
+                AssemblySingleDataRecyclerAdapter(TextItemFactory())
+            )
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+    }
+
+    @Test
+    fun testMethodAddAndRemoveAdapter() {
+        ConcatAdapter().apply {
+            Assert.assertEquals(0, adapters.size)
+            Assert.assertEquals(0, itemCount)
+            Assert.assertEquals("", adapters.joinToString { it.itemCount.toString() })
+
+            val adapter1 = AssemblySingleDataRecyclerAdapter(TextItemFactory(), Text("a"))
+            val adapter2 =
+                AssemblyRecyclerAdapter(listOf(TextItemFactory()), listOf(Text("b"), Text("c")))
+            val adapter3 =
+                AssemblyRecyclerAdapter(
+                    listOf(TextItemFactory()),
+                    listOf(Text("d"), Text("e"), Text("f"))
+                )
+
+            addAdapter(adapter1)
+            Assert.assertEquals(1, adapters.size)
+            Assert.assertEquals(1, itemCount)
+            Assert.assertEquals("1", adapters.joinToString { it.itemCount.toString() })
+
+            addAdapter(adapter3)
+            Assert.assertEquals(2, adapters.size)
+            Assert.assertEquals(4, itemCount)
+            Assert.assertEquals("1, 3", adapters.joinToString { it.itemCount.toString() })
+
+            addAdapter(1, adapter2)
+            Assert.assertEquals(3, adapters.size)
+            Assert.assertEquals(6, itemCount)
+            Assert.assertEquals("1, 2, 3", adapters.joinToString { it.itemCount.toString() })
+
+            removeAdapter(adapter1)
+            Assert.assertEquals(2, adapters.size)
+            Assert.assertEquals(5, itemCount)
+            Assert.assertEquals("2, 3", adapters.joinToString { it.itemCount.toString() })
+
+            removeAdapter(adapter3)
+            Assert.assertEquals(1, adapters.size)
+            Assert.assertEquals(2, itemCount)
+            Assert.assertEquals("2", adapters.joinToString { it.itemCount.toString() })
+        }
+    }
+
+    @Test
+    fun testMethodGetItemViewType() {
+        // IsolateViewTypes true
+        ConcatAdapter(
+            AssemblySingleDataRecyclerAdapter(TextItemFactory(), Text("a")),
+            AssemblyRecyclerAdapter(
+                listOf(TextItemFactory(), ImageItemFactory()),
+                listOf(
+                    Image(android.R.drawable.alert_dark_frame),
+                    Text("c"),
+                    Image(android.R.drawable.arrow_up_float)
+                )
+            ),
+            AssemblySingleDataRecyclerAdapter(
+                ImageItemFactory(),
+                Image(android.R.drawable.btn_plus)
+            ),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemViewType(-1)
+            }
+            Assert.assertEquals(0, getItemViewType(0))
+            Assert.assertEquals(1, getItemViewType(1))
+            Assert.assertEquals(2, getItemViewType(2))
+            Assert.assertEquals(1, getItemViewType(3))
+            Assert.assertEquals(3, getItemViewType(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItemViewType(5)
+            }
+        }
+
+        // IsolateViewTypes false
+        ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setIsolateViewTypes(false)
+                .build(),
+            AssemblySingleDataRecyclerAdapter(TextItemFactory(), Text("a")),
+            AssemblyRecyclerAdapter(
+                listOf(TextItemFactory(), ImageItemFactory()),
+                listOf(
+                    Image(android.R.drawable.alert_dark_frame),
+                    Text("c"),
+                    Image(android.R.drawable.arrow_up_float)
+                )
+            ),
+            AssemblySingleDataRecyclerAdapter(
+                ImageItemFactory(),
+                Image(android.R.drawable.btn_plus)
+            ),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemViewType(-1)
+            }
+            Assert.assertEquals(0, getItemViewType(0))
+            Assert.assertEquals(1, getItemViewType(1))
+            Assert.assertEquals(0, getItemViewType(2))
+            Assert.assertEquals(1, getItemViewType(3))
+            Assert.assertEquals(0, getItemViewType(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItemViewType(5)
+            }
+        }
+    }
+
+    @Test
+    fun testMethodGetItemId() {
+        val currentTimeMillis = System.currentTimeMillis()
+        val data0 = Text(currentTimeMillis.toString())
+        val data1 = Text((currentTimeMillis + 1).toString())
+        val data2 = Text((currentTimeMillis + 2).toString())
+        val data0ItemId = data0.hashCode().toLong()
+        val data1ItemId = data1.hashCode().toLong()
+        val data2ItemId = data2.hashCode().toLong()
+
+        // NO_STABLE_IDS
+        ConcatAdapter(
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data0
+            ),
+            AssemblyRecyclerAdapter<Any>(
+                itemFactoryList = listOf(TextItemFactory()),
+                initDataList = listOf(data2, data1, data2)
+            ),
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data1
+            ),
+        ).apply {
+            Assert.assertEquals(-1L, getItemId(-1))
+            Assert.assertEquals(-1L, getItemId(0))
+            Assert.assertEquals(-1L, getItemId(1))
+            Assert.assertEquals(-1L, getItemId(2))
+            Assert.assertEquals(-1L, getItemId(3))
+            Assert.assertEquals(-1L, getItemId(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItemId(5)
+            }
+        }
+
+        // ISOLATED_STABLE_IDS
+        ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data0,
+            ).apply { setHasStableIds(true) },
+            AssemblyRecyclerAdapter<Any>(
+                itemFactoryList = listOf(TextItemFactory()),
+                initDataList = listOf(data2, data1, data2),
+            ).apply { setHasStableIds(true) },
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data1,
+            ).apply { setHasStableIds(true) }
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            Assert.assertEquals(0L, getItemId(0))
+            Assert.assertEquals(1L, getItemId(1))
+            Assert.assertEquals(2L, getItemId(2))
+            Assert.assertEquals(1L, getItemId(3))
+            Assert.assertEquals(3L, getItemId(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItemId(5)
+            }
+        }
+
+        // SHARED_STABLE_IDS
+        ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data0,
+            ).apply { setHasStableIds(true) },
+            AssemblyRecyclerAdapter<Any>(
+                itemFactoryList = listOf(TextItemFactory()),
+                initDataList = listOf(data2, data1, data2),
+            ).apply { setHasStableIds(true) },
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+                initData = data1,
+            ).apply { setHasStableIds(true) },
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            Assert.assertEquals(data0ItemId, getItemId(0))
+            Assert.assertEquals(data2ItemId, getItemId(1))
+            Assert.assertEquals(data1ItemId, getItemId(2))
+            Assert.assertEquals(data2ItemId, getItemId(3))
+            Assert.assertEquals(data1ItemId, getItemId(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItemId(5)
+            }
+        }
+    }
+
+    @Test
+    fun testMethodCreateAndBindViewHolder() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val parent = FrameLayout(context)
+        ConcatAdapter(
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+                initData = Text("a"),
+            ),
+            AssemblyRecyclerAdapter(
+                itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
+                initDataList = listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    Text("b"),
+                    Image(android.R.drawable.btn_plus)
+                ),
+            ),
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = ImageItemFactory(),
+                initData = Image(android.R.drawable.alert_dark_frame),
+            ),
+        ).apply {
+            assertThrow(IllegalArgumentException::class) {
+                onCreateViewHolder(parent, -1)
+            }
+            Assert.assertTrue(onCreateViewHolder(parent, getItemViewType(0)).itemView is TextView)
+            Assert.assertTrue(onCreateViewHolder(parent, getItemViewType(1)).itemView is ImageView)
+            Assert.assertTrue(onCreateViewHolder(parent, getItemViewType(2)).itemView is TextView)
+            Assert.assertTrue(onCreateViewHolder(parent, getItemViewType(3)).itemView is ImageView)
+            Assert.assertTrue(onCreateViewHolder(parent, getItemViewType(4)).itemView is ImageView)
+
+            assertThrow(IllegalArgumentException::class) {
+                onBindViewHolder(object : RecyclerView.ViewHolder(TextView(context)) {}, 0)
+            }
+            onBindViewHolder(onCreateViewHolder(parent, getItemViewType(0)), 0)
+            onBindViewHolder(onCreateViewHolder(parent, getItemViewType(1)), 1)
+            onBindViewHolder(onCreateViewHolder(parent, getItemViewType(2)), 2)
+            onBindViewHolder(onCreateViewHolder(parent, getItemViewType(3)), 3)
+            onBindViewHolder(onCreateViewHolder(parent, getItemViewType(4)), 4)
+        }
+    }
+
+    @Test
+    fun testMethodGetCount() {
+        val headerAdapter = AssemblySingleDataRecyclerAdapter(itemFactory = TextItemFactory())
+        val bodyAdapter =
+            AssemblyRecyclerAdapter<Any>(listOf(TextItemFactory(), ImageItemFactory()))
+        val footerHeader = AssemblySingleDataRecyclerAdapter(itemFactory = ImageItemFactory())
+        ConcatAdapter(headerAdapter, bodyAdapter, footerHeader).apply {
+            Assert.assertEquals(0, itemCount)
+
+            headerAdapter.data = Text("hello")
+            Assert.assertEquals(1, itemCount)
+
+            bodyAdapter.submitList(
+                listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    Text("world"),
+                    Image(android.R.drawable.btn_plus)
+                )
+            )
+            Assert.assertEquals(4, itemCount)
+
+            footerHeader.data = Image(android.R.drawable.btn_default)
+            Assert.assertEquals(5, itemCount)
+
+            bodyAdapter.submitList(listOf(Text("world")))
+            Assert.assertEquals(3, itemCount)
+
+            bodyAdapter.submitList(null)
+            Assert.assertEquals(2, itemCount)
+
+            footerHeader.data = null
+            Assert.assertEquals(1, itemCount)
+
+            headerAdapter.data = null
+            Assert.assertEquals(0, itemCount)
+        }
+    }
+
+    @Test
+    fun testMethodHasStableIds() {
+        ConcatAdapter(AssemblySingleDataRecyclerAdapter(TextItemFactory())).apply {
+            Assert.assertFalse(hasStableIds())
+        }
+
+        ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+            ).apply { setHasStableIds(true) }
+        ).apply {
+            Assert.assertTrue(hasStableIds())
+        }
+
+        ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
+                .build(),
+            AssemblySingleDataRecyclerAdapter(
+                itemFactory = TextItemFactory(),
+            ).apply { setHasStableIds(true) }
+        ).apply {
+            Assert.assertTrue(hasStableIds())
+        }
+    }
 
     @Test
     fun testNestedAdapterPosition() {
-        val count1Adapter = AssemblySingleDataRecyclerAdapter(DateItemFactory(), Date())
+        val count1Adapter = AssemblySingleDataRecyclerAdapter(TextItemFactory(), Text("a"))
         val count3Adapter = AssemblyRecyclerAdapter(
-            listOf(DateItemFactory()),
-            listOf(Date(), Date(), Date())
+            listOf(TextItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"))
         )
         val count5Adapter = AssemblyRecyclerAdapter(
-            listOf(DateItemFactory()),
-            listOf(Date(), Date(), Date(), Date(), Date())
+            listOf(TextItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val count7Adapter = AssemblyRecyclerAdapter(
-            listOf(DateItemFactory()),
-            listOf(Date(), Date(), Date(), Date(), Date(), Date(), Date())
+            listOf(TextItemFactory()),
+            listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val concatCount9Adapter = ConcatAdapter(count1Adapter, count3Adapter, count5Adapter)
         val concatCount11Adapter = ConcatAdapter(count1Adapter, count3Adapter, count7Adapter)
@@ -41,14 +471,14 @@ class ConcatAdapterTest {
             count1Adapter, ConcatAdapter(count3Adapter, count5Adapter), count7Adapter
         )
 
-        assertEquals("count1Adapter.itemCount", 1, count1Adapter.itemCount)
-        assertEquals("count3Adapter.itemCount", 3, count3Adapter.itemCount)
-        assertEquals("count5Adapter.itemCount", 5, count5Adapter.itemCount)
-        assertEquals("count7Adapter.itemCount", 7, count7Adapter.itemCount)
-        assertEquals("count7Adapter.itemCount", 9, concatCount9Adapter.itemCount)
-        assertEquals("count7Adapter.itemCount", 11, concatCount11Adapter.itemCount)
-        assertEquals("count12Adapter.itemCount", 13, concatCount13Adapter.itemCount)
-        assertEquals("count15Adapter.itemCount", 16, concatNestingCount16Adapter.itemCount)
+        Assert.assertEquals("count1Adapter.itemCount", 1, count1Adapter.itemCount)
+        Assert.assertEquals("count3Adapter.itemCount", 3, count3Adapter.itemCount)
+        Assert.assertEquals("count5Adapter.itemCount", 5, count5Adapter.itemCount)
+        Assert.assertEquals("count7Adapter.itemCount", 7, count7Adapter.itemCount)
+        Assert.assertEquals("count7Adapter.itemCount", 9, concatCount9Adapter.itemCount)
+        Assert.assertEquals("count7Adapter.itemCount", 11, concatCount11Adapter.itemCount)
+        Assert.assertEquals("count12Adapter.itemCount", 13, concatCount13Adapter.itemCount)
+        Assert.assertEquals("count15Adapter.itemCount", 16, concatNestingCount16Adapter.itemCount)
 
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = RecyclerView(context).apply {
@@ -60,11 +490,11 @@ class ConcatAdapterTest {
                 val viewHolder = adapter.createViewHolder(parent, itemType)
                 adapter.bindViewHolder(viewHolder, position)
                 val item = (viewHolder as RecyclerViewHolderWrapper<*>).wrappedItem
-                assertEquals(
+                Assert.assertEquals(
                     "count${adapter.itemCount}Adapter. position(${position}). item.bindingAdapterPosition",
                     expectedBindingAdapterPosition, item.bindingAdapterPosition
                 )
-                assertEquals(
+                Assert.assertEquals(
                     "count${adapter.itemCount}Adapter. position(${position}). item.absoluteAdapterPosition",
                     expectedAbsoluteAdapterPosition, item.absoluteAdapterPosition
                 )

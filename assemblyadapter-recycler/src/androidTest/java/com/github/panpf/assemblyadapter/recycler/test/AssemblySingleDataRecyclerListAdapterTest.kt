@@ -1,41 +1,175 @@
 package com.github.panpf.assemblyadapter.recycler.test
 
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.ViewItemFactory
-import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerListAdapter
-import com.github.panpf.assemblyadapter.recycler.InstanceDiffItemCallback
-import com.github.panpf.assemblyadapter.recycler.SimpleAdapterDataObserver
+import com.github.panpf.assemblyadapter.recycler.*
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
 class AssemblySingleDataRecyclerListAdapterTest {
 
-    private class TestItemFactory :
-        ViewItemFactory<String>(String::class, android.R.layout.activity_list_item)
+    private data class Text(val text: String) : DiffKey {
+        override val diffKey: Any = "Text:$text"
+    }
+
+    private class TextItemFactory : ViewItemFactory<Text>(Text::class, { context, _, _ ->
+        TextView(context)
+    })
+
+    private data class NoDiffKey(val name: String = "")
+
+    private class NoDiffKeyItemFactory :
+        ViewItemFactory<NoDiffKey>(NoDiffKey::class, { context, _, _ ->
+            ImageView(context)
+        })
 
     @Test
     fun testConstructor() {
-        AssemblySingleDataRecyclerListAdapter(TestItemFactory(), InstanceDiffItemCallback()).apply {
-            Assert.assertNull(data)
+        /**
+         * ItemFactory, List, ItemCallback
+         */
+        // ItemFactory
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            null,
+            KeyEqualsDiffItemCallback()
+        )
+
+        // List
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            null,
+            KeyEqualsDiffItemCallback()
+        ).apply {
+            Assert.assertEquals(0, itemCount)
+        }
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            Text("hello"),
+            KeyEqualsDiffItemCallback()
+        ).apply {
+            Assert.assertEquals(1, itemCount)
         }
 
-        AssemblySingleDataRecyclerListAdapter(
-            TestItemFactory(),
-            "123456",
-            InstanceDiffItemCallback()
-        ).apply {
-            Assert.assertNotNull(data)
-            Assert.assertEquals("123456", data)
+        // ItemCallback
+        assertThrow(IllegalArgumentException::class) {
+            AssemblySingleDataRecyclerListAdapter(
+                NoDiffKeyItemFactory(),
+                null,
+                KeyEqualsDiffItemCallback()
+            )
         }
+        AssemblySingleDataRecyclerListAdapter(
+            NoDiffKeyItemFactory(),
+            null,
+            InstanceDiffItemCallback()
+        )
+
+        // ItemFactory, List
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory(), null)
+        assertThrow(IllegalArgumentException::class) {
+            AssemblySingleDataRecyclerListAdapter(NoDiffKeyItemFactory(), null)
+        }
+
+        // ItemFactory
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory())
+        assertThrow(IllegalArgumentException::class) {
+            AssemblySingleDataRecyclerListAdapter(NoDiffKeyItemFactory())
+        }
+
+
+        /**
+         * ItemFactory ItemCallback
+         */
+        // ItemFactory
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            KeyEqualsDiffItemCallback()
+        )
+
+        // ItemCallback
+        assertThrow(IllegalArgumentException::class) {
+            AssemblySingleDataRecyclerListAdapter(
+                NoDiffKeyItemFactory(),
+                KeyEqualsDiffItemCallback()
+            )
+        }
+        AssemblySingleDataRecyclerListAdapter(NoDiffKeyItemFactory(), InstanceDiffItemCallback())
+
+
+        /**
+         * ItemFactory, List, AsyncDifferConfig<DATA>
+         */
+        // ItemFactory
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            null,
+            AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
+        )
+
+        // List
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            null,
+            AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
+        ).apply {
+            Assert.assertEquals(0, itemCount)
+        }
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            Text("hello"),
+            AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
+        ).apply {
+            Assert.assertEquals(1, itemCount)
+        }
+
+        // ItemCallback
+        assertThrow(IllegalArgumentException::class) {
+            AssemblySingleDataRecyclerListAdapter(
+                NoDiffKeyItemFactory(),
+                null,
+                AsyncDifferConfig.Builder<NoDiffKey>(KeyEqualsDiffItemCallback()).build()
+            )
+        }
+        AssemblySingleDataRecyclerListAdapter(
+            NoDiffKeyItemFactory(),
+            null,
+            AsyncDifferConfig.Builder<NoDiffKey>(InstanceDiffItemCallback()).build()
+        )
+
+
+        /**
+         * ItemFactory DiffUtil.AsyncDifferConfig<DATA>
+         */
+        // ItemFactory
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
+        )
+
+        // ItemCallback
+        assertThrow(IllegalArgumentException::class) {
+            AssemblySingleDataRecyclerListAdapter(
+                NoDiffKeyItemFactory(),
+                AsyncDifferConfig.Builder<NoDiffKey>(KeyEqualsDiffItemCallback()).build()
+            )
+        }
+        AssemblySingleDataRecyclerListAdapter(
+            NoDiffKeyItemFactory(),
+            AsyncDifferConfig.Builder<NoDiffKey>(InstanceDiffItemCallback()).build()
+        )
     }
 
     @Test
     fun testPropertyData() {
-        var dataFromObserver: String? = null
-        AssemblySingleDataRecyclerListAdapter(TestItemFactory(), InstanceDiffItemCallback()).apply {
+        var dataFromObserver: Text? = null
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
             registerAdapterDataObserver(SimpleAdapterDataObserver {
                 dataFromObserver = data
             })
@@ -43,36 +177,92 @@ class AssemblySingleDataRecyclerListAdapterTest {
             Assert.assertNull(data)
             Assert.assertNull(dataFromObserver)
 
-            data = "Test data changed notify invoke"
-            Thread.sleep(100)
-            Assert.assertEquals("Test data changed notify invoke", data)
-            Assert.assertEquals("Test data changed notify invoke", dataFromObserver)
+            data = Text("hello")
+            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Assert.assertEquals(Text("hello"), data)
+            Assert.assertEquals(Text("hello"), dataFromObserver)
 
-            data = "Test data changed notify invoke2"
-            Thread.sleep(100)
-            Assert.assertEquals("Test data changed notify invoke2", data)
-            Assert.assertEquals("Test data changed notify invoke2", dataFromObserver)
+            data = Text("world")
+            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Assert.assertEquals(Text("world"), data)
+            Assert.assertEquals(Text("world"), dataFromObserver)
         }
     }
 
     @Test
     fun testMethodGetCount() {
-        AssemblySingleDataRecyclerListAdapter(TestItemFactory(), InstanceDiffItemCallback()).apply {
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
             Assert.assertEquals(0, itemCount)
 
-            data = "Test count"
-            Thread.sleep(100)
+            data = Text("hello")
+            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, itemCount)
 
             data = null
-            Thread.sleep(100)
+            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, itemCount)
         }
     }
 
     @Test
+    fun testMethodGetItem() {
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(1)
+            }
+
+            data = Text("hello")
+            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Assert.assertEquals(Text("hello"), getItem(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemId() {
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
+            Assert.assertEquals(-1L, getItemId(-1))
+            Assert.assertEquals(-1L, getItemId(0))
+            Assert.assertEquals(-1L, getItemId(1))
+        }
+
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
+            setHasStableIds(true)
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(1)
+            }
+        }
+
+        AssemblySingleDataRecyclerListAdapter(
+            TextItemFactory(),
+            initData = Text("hello"),
+        ).apply {
+            setHasStableIds(true)
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(-1)
+            }
+            Assert.assertEquals(getItem(0).hashCode().toLong(), getItemId(0))
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemId(1)
+            }
+        }
+    }
+
+
+    @Test
     fun testMethodGetItemViewType() {
-        AssemblySingleDataRecyclerListAdapter(TestItemFactory(), InstanceDiffItemCallback()).apply {
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemViewType(-1)
             }
@@ -83,8 +273,8 @@ class AssemblySingleDataRecyclerListAdapterTest {
                 getItemViewType(1)
             }
 
-            data = "test"
-            Thread.sleep(100)
+            data = Text("hello")
+            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, getItemViewType(0))
         }
     }
@@ -95,29 +285,26 @@ class AssemblySingleDataRecyclerListAdapterTest {
         val parent = RecyclerView(context).apply {
             layoutManager = LinearLayoutManager(context)
         }
-        AssemblySingleDataRecyclerListAdapter(TestItemFactory(), InstanceDiffItemCallback()).apply {
-            val viewHolder = createViewHolder(parent, 0)
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
+            data = Text("hello")
+            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
 
-            assertThrow(IndexOutOfBoundsException::class) {
-                bindViewHolder(viewHolder, -1)
+            assertThrow(IllegalArgumentException::class) {
+                onCreateViewHolder(parent, -1)
             }
-            assertThrow(IndexOutOfBoundsException::class) {
-                bindViewHolder(viewHolder, 0)
-            }
-            assertThrow(IndexOutOfBoundsException::class) {
-                bindViewHolder(viewHolder, 1)
-            }
+            Assert.assertTrue(onCreateViewHolder(parent, 0).itemView is TextView)
 
-            data = "test"
-            Thread.sleep(100)
-            bindViewHolder(viewHolder, 0)
+            assertThrow(IllegalArgumentException::class) {
+                onBindViewHolder(object : RecyclerView.ViewHolder(TextView(context)) {}, 0)
+            }
+            onBindViewHolder(onCreateViewHolder(parent, 0), 0)
         }
     }
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        val itemFactory = TestItemFactory()
-        AssemblySingleDataRecyclerListAdapter(itemFactory, InstanceDiffItemCallback()).apply {
+        val itemFactory = TextItemFactory()
+        AssemblySingleDataRecyclerListAdapter(itemFactory).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
             }
@@ -128,8 +315,8 @@ class AssemblySingleDataRecyclerListAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            data = "test"
-            Thread.sleep(100)
+            data = Text("hello")
+            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }

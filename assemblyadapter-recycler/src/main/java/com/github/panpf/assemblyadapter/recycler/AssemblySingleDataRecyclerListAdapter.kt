@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.github.panpf.assemblyadapter.*
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
@@ -27,7 +28,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
 open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<ItemFactory<*>> {
 
-    private val itemFactory: ItemFactory<DATA>
+    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<*>>
 
     /**
      * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
@@ -45,7 +46,6 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     /**
      * Create an AssemblySingleDataRecyclerListAdapter that provides DiffUtil.ItemCallback externally
      *
-     *
      * @param itemFactory Can match data's [ItemFactory]
      * @param initData Initial data
      * @param diffCallback DiffUtil comparison data callback, the default is [KeyEqualsDiffItemCallback]
@@ -57,7 +57,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         initData: DATA? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     ) : super(diffCallback) {
-        this.itemFactory = itemFactory
+        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
         data = initData
         if (diffCallback is KeyEqualsDiffItemCallback) {
             KeyEqualsDiffItemCallback.checkDataClass(
@@ -79,7 +79,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         itemFactory: ItemFactory<DATA>,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     ) : super(diffCallback) {
-        this.itemFactory = itemFactory
+        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
         if (diffCallback is KeyEqualsDiffItemCallback) {
             KeyEqualsDiffItemCallback.checkDataClass(
                 listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
@@ -101,7 +101,12 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         initData: DATA?,
         config: AsyncDifferConfig<DATA>,
     ) : super(config) {
-        this.itemFactory = itemFactory
+        if (config.diffCallback is KeyEqualsDiffItemCallback) {
+            KeyEqualsDiffItemCallback.checkDataClass(
+                listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
+            )
+        }
+        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
         data = initData
     }
 
@@ -117,7 +122,12 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         itemFactory: ItemFactory<DATA>,
         config: AsyncDifferConfig<DATA>,
     ) : super(config) {
-        this.itemFactory = itemFactory
+        if (config.diffCallback is KeyEqualsDiffItemCallback) {
+            KeyEqualsDiffItemCallback.checkDataClass(
+                listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
+            )
+        }
+        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
     }
 
     override fun submitList(list: List<DATA>?) {
@@ -134,13 +144,13 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         super.submitList(list, commitCallback)
     }
 
+    public override fun getItem(position: Int): DATA {
+        return super.getItem(position)
+    }
+
     override fun getItemId(position: Int): Long {
         return if (hasStableIds()) {
-            val count = itemCount
-            if (position < 0 || position >= count) {
-                throw IndexOutOfBoundsException("Index: $position, Size: $count")
-            }
-            val data = data!!
+            val data = getItem(position)
             if (data is ItemId) data.itemId else data.hashCode().toLong()
         } else {
             RecyclerView.NO_ID
@@ -148,14 +158,14 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
     override fun getItemViewType(position: Int): Int {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return 0
+        val data = getItem(position)
+        return itemFactoryStorage.getItemTypeByData(
+            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
         return RecyclerViewHolderWrapper(item).apply {
             val layoutManager =
@@ -168,16 +178,13 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
+            val data = getItem(position)
             val absoluteAdapterPosition =
                 holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
-            item.dispatchBindData(position, absoluteAdapterPosition, data!!)
+            item.dispatchBindData(position, absoluteAdapterPosition, data)
         } else {
             throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }
@@ -185,10 +192,9 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return itemFactory
+        val data = getItem(position)
+        return itemFactoryStorage.getItemFactoryByData(
+            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+        )
     }
 }
