@@ -95,8 +95,8 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
     override fun getGroupId(groupPosition: Int): Long {
         return if (hasStableIds()) {
-            val data = getGroup(groupPosition)
-            if (data is ItemId) data.itemId else data.hashCode().toLong()
+            val groupData = getGroup(groupPosition)
+            if (groupData is ItemId) groupData.itemId else groupData.hashCode().toLong()
         } else {
             -1
         }
@@ -105,24 +105,16 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
     override fun getGroupTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getGroupType(groupPosition: Int): Int {
-        val groupCount = groupCount
-        if (groupPosition < 0 || groupPosition >= groupCount) {
-            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
-        }
+        val groupData = getGroup(groupPosition)
         return itemFactoryStorage.getItemTypeByData(
-            data!!, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
+            groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         )
     }
 
     override fun getGroupView(
         groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
-        val groupCount = groupCount
-        if (groupPosition < 0 || groupPosition >= groupCount) {
-            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
-        }
-
-        val groupData = data!!
+        val groupData = getGroup(groupPosition)
         val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         ).dispatchCreateItem(parent).apply {
@@ -163,21 +155,12 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        val groupCount = groupCount
-        if (groupPosition < 0 || groupPosition >= groupCount) {
-            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
-        }
-        val groupData = data!!
+        val groupData = getGroup(groupPosition)
         return if (groupData is ExpandableGroup) groupData.getChildCount() else 0
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): CHILD_DATA {
-        val groupCount = groupCount
-        if (groupPosition < 0 || groupPosition >= groupCount) {
-            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
-        }
-
-        val groupData = data!!
+        val groupData = getGroup(groupPosition)
         if (groupData is ExpandableGroup) {
             @Suppress("UNCHECKED_CAST")
             return groupData.getChild(childPosition) as CHILD_DATA
@@ -188,8 +171,8 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {
         return if (hasStableIds) {
-            val data = getChild(groupPosition, childPosition)!!
-            if (data is ItemId) data.itemId else data.hashCode().toLong()
+            val childData = getChild(groupPosition, childPosition)!!
+            if (childData is ItemId) childData.itemId else childData.hashCode().toLong()
         } else {
             -1
         }
@@ -208,11 +191,7 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
         groupPosition: Int, childPosition: Int, isLastChild: Boolean,
         convertView: View?, parent: ViewGroup
     ): View {
-        val groupCount = groupCount
-        if (groupPosition < 0 || groupPosition >= groupCount) {
-            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
-        }
-        val groupData = data!!
+        val groupData = getGroup(groupPosition)
         val childData = getChild(groupPosition, childPosition)!!
         val childItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             childData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
@@ -255,18 +234,15 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
-        val groupCount = groupCount
-        if (groupPosition < 0 || groupPosition >= groupCount) {
-            throw IndexOutOfBoundsException("Index: $groupPosition, Size: $groupCount")
-        }
+        getChild(groupPosition, childPosition)!!
         return isChildSelectable?.invoke(groupPosition, childPosition) == true
     }
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val data = getGroup(position)
+        val groupData = getGroup(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
+            groupData, "ItemFactory", "AssemblySingleDataExpandableListAdapter", "itemFactoryList"
         )
     }
 
@@ -277,9 +253,9 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
      * @throws NotFoundMatchedItemFactoryException No ItemFactory can match the data corresponding to [childPosition]
      */
     fun getItemFactoryByChildPosition(groupPosition: Int, childPosition: Int): ItemFactory<*> {
-        val data = getChild(groupPosition, childPosition) ?: Placeholder
+        val childData = getChild(groupPosition, childPosition)!!
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
+            childData, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
         )
     }
 

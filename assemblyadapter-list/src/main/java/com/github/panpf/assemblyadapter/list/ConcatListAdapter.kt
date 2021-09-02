@@ -139,6 +139,9 @@ open class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : Base
         return mController.totalCount
     }
 
+    val itemCount: Int
+        get() = mController.totalCount
+
     override fun getItem(position: Int): Any? {
         return mController.getItem(position)
     }

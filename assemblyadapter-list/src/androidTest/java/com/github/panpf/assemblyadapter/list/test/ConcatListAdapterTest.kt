@@ -427,9 +427,11 @@ class ConcatListAdapterTest {
         val footerHeader = AssemblySingleDataListAdapter(itemFactory = ImageItemFactory())
         ConcatListAdapter(headerAdapter, bodyAdapter, footerHeader).apply {
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
 
             headerAdapter.data = Text("hello")
             Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
 
             bodyAdapter.submitList(
                 listOf(
@@ -439,21 +441,27 @@ class ConcatListAdapterTest {
                 )
             )
             Assert.assertEquals(4, count)
+            Assert.assertEquals(4, itemCount)
 
             footerHeader.data = Image(android.R.drawable.btn_default)
             Assert.assertEquals(5, count)
+            Assert.assertEquals(5, itemCount)
 
             bodyAdapter.submitList(listOf(Text("world")))
             Assert.assertEquals(3, count)
+            Assert.assertEquals(3, itemCount)
 
             bodyAdapter.submitList(null)
             Assert.assertEquals(2, count)
+            Assert.assertEquals(2, itemCount)
 
             footerHeader.data = null
             Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
 
             headerAdapter.data = null
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
         }
     }
 

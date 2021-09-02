@@ -394,4 +394,7 @@ class AssemblySingleDataExpandableListAdapterTest {
             }
         }
     }
+
+    // todo test hasObservers
+    // todo test isChildSelectable
 }

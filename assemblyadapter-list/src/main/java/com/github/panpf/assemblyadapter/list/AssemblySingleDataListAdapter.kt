@@ -19,11 +19,9 @@ import android.database.DataSetObserver
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.*
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
-import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.ItemId
 
 /**
  * Single data version of [AssemblyListAdapter]
@@ -33,12 +31,13 @@ import com.github.panpf.assemblyadapter.ItemId
  * @see ItemFactory
  */
 open class AssemblySingleDataListAdapter<DATA : Any>(
-    private val itemFactory: ItemFactory<DATA>,
+    itemFactory: ItemFactory<DATA>,
     initData: DATA? = null,
 ) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     private var hasStableIds = false
     private val adapterDataObservable = AdapterDataObservable()
+    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
 
     var data: DATA? = initData
         set(value) {
@@ -47,6 +46,9 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
         }
 
     override fun getCount(): Int = if (data != null) 1 else 0
+
+    val itemCount: Int
+        get() = if (data != null) 1 else 0
 
     override fun getItem(position: Int): Any {
         val count = count
@@ -90,22 +92,19 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
     override fun getViewTypeCount(): Int = 1
 
     override fun getItemViewType(position: Int): Int {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return 0
+        val data = getItem(position)
+        return itemFactoryStorage.getItemTypeByData(
+            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+        )
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        val itemView = convertView ?: itemFactory
-            .dispatchCreateItem(parent).apply {
-                itemView.setTag(R.id.aa_tag_item, this)
-            }.itemView
+        val data = getItem(position)
+        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
+            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+        ).dispatchCreateItem(parent).apply {
+            itemView.setTag(R.id.aa_tag_item, this)
+        }.itemView
 
         @Suppress("UnnecessaryVariable")
         val bindingAdapterPosition = position
@@ -116,17 +115,16 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
 
         @Suppress("UNCHECKED_CAST")
         val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
-        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data!!)
+        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
         return itemView
     }
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return itemFactory
+        val data = getItem(position)
+        return itemFactoryStorage.getItemFactoryByData(
+            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+        )
     }
 
     override fun registerDataSetObserver(observer: DataSetObserver?) {

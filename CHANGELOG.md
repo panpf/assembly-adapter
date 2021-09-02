@@ -4,6 +4,10 @@ list:
 * new: ExpandableChildItemFactory added setOnChildViewClickListener, setOnChildViewLongClickListener, setOnChildItemClickListener, setOnChildItemLongClickListener method
 * change: ItemId move to common-core module
 * change: hasStableIds changed from constructor attribute to setHasStableIds() method
+* new: AssemblyListAdapter, AssemblySingleDataListAdapter, ConcatListAdapter added itemCount property
+
+recycler:
+* new: Recycler related Adapter now rewrites getItemId() method to support obtaining stable itemId through ItemId interface or hashCode
 
 # v4.0.0-beta02
 

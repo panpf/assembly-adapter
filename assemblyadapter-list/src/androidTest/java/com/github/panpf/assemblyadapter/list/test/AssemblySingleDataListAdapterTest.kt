@@ -72,12 +72,15 @@ class AssemblySingleDataListAdapterTest {
     fun testMethodGetCount() {
         AssemblySingleDataListAdapter(TextItemFactory()).apply {
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
 
             data = Text("hello")
             Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
 
             data = null
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
         }
     }
 
@@ -155,7 +158,7 @@ class AssemblySingleDataListAdapterTest {
                 getItemViewType(1)
             }
 
-            data = Text("test")
+            data = Text("hello")
             Assert.assertEquals(0, getItemViewType(0))
         }
     }
@@ -175,7 +178,7 @@ class AssemblySingleDataListAdapterTest {
                 getView(1, null, parent)
             }
 
-            data = Text("test")
+            data = Text("hello")
             val itemView = getView(0, null, parent)
             Assert.assertNotSame(itemView, getView(0, null, parent))
             Assert.assertSame(itemView, getView(0, itemView, parent))
@@ -196,8 +199,10 @@ class AssemblySingleDataListAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            data = Text("test")
+            data = Text("hello")
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }
+
+    // todo test hasObservers
 }

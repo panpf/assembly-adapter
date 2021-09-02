@@ -548,4 +548,7 @@ class AssemblyExpandableListAdapterTest {
             getItemFactoryByPosition(1)
         }
     }
+
+    // todo test hasObservers
+    // todo test isChildSelectable
 }

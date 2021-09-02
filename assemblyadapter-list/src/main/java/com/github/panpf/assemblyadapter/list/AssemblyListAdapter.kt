@@ -66,6 +66,9 @@ open class AssemblyListAdapter<DATA>(
         return itemDataStorage.dataCount
     }
 
+    val itemCount: Int
+        get() = itemDataStorage.dataCount
+
     override fun getItem(position: Int): DATA {
         return itemDataStorage.getData(position)
     }
@@ -135,7 +138,7 @@ open class AssemblyListAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItem(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         )
