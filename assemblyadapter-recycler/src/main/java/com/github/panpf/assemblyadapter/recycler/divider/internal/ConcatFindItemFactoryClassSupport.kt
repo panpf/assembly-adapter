@@ -19,8 +19,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper
 import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassSupport
 
-class ConcatFindItemFactoryClassSupport(private val findItemFactoryClassSupport: FindItemFactoryClassSupport) :
-    FindItemFactoryClassSupport {
+class ConcatFindItemFactoryClassSupport(
+    private val findItemFactoryClassSupport: FindItemFactoryClassSupport
+) : FindItemFactoryClassSupport {
 
     private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
 
