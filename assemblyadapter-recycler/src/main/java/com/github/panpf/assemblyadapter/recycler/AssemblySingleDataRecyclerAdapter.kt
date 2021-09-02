@@ -18,9 +18,7 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
-import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
@@ -44,6 +42,19 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
             field = value
             notifyDataSetChanged()
         }
+
+    override fun getItemId(position: Int): Long {
+        return if (hasStableIds()) {
+            val count = itemCount
+            if (position < 0 || position >= count) {
+                throw IndexOutOfBoundsException("Index: $position, Size: $count")
+            }
+            val data = data!!
+            if (data is ItemId) data.itemId else data.hashCode().toLong()
+        } else {
+            RecyclerView.NO_ID
+        }
+    }
 
     override fun getItemCount(): Int = if (data != null) 1 else 0
 

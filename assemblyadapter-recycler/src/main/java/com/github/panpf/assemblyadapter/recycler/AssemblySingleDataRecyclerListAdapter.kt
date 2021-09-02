@@ -17,10 +17,7 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
-import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.Placeholder
+import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
@@ -135,6 +132,19 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
             "Cannot submit a list with size greater than 1"
         }
         super.submitList(list, commitCallback)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return if (hasStableIds()) {
+            val count = itemCount
+            if (position < 0 || position >= count) {
+                throw IndexOutOfBoundsException("Index: $position, Size: $count")
+            }
+            val data = data!!
+            if (data is ItemId) data.itemId else data.hashCode().toLong()
+        } else {
+            RecyclerView.NO_ID
+        }
     }
 
     override fun getItemViewType(position: Int): Int {

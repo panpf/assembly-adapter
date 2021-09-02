@@ -18,10 +18,7 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
-import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.Placeholder
+import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
@@ -39,7 +36,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
  */
 open class AssemblyRecyclerAdapter<DATA>(
     itemFactoryList: List<ItemFactory<*>>,
-    initDataList: List<DATA>? = null
+    initDataList: List<DATA>? = null,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
@@ -61,6 +58,15 @@ open class AssemblyRecyclerAdapter<DATA>(
      */
     fun submitList(dataList: List<DATA>?) {
         itemDataStorage.submitList(dataList)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return if (hasStableIds()) {
+            val data = itemDataStorage.getData(position) ?: Placeholder
+            if (data is ItemId) data.itemId else data.hashCode().toLong()
+        } else {
+            RecyclerView.NO_ID
+        }
     }
 
     override fun getItemCount(): Int {
