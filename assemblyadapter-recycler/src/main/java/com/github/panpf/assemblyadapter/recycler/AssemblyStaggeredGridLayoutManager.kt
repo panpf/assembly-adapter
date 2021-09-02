@@ -73,7 +73,7 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
         this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
 
-    override fun isFullSpanByItemFactory(itemFactory: ItemFactory<*>): Boolean {
-        return fullSpanItemFactoryList.contains(itemFactory.javaClass)
+    override fun isFullSpanByItemFactoryClass(itemFactoryClass: Class<out ItemFactory<*>>): Boolean {
+        return fullSpanItemFactoryList.contains(itemFactoryClass)
     }
 }

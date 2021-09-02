@@ -119,15 +119,21 @@ class AssemblyGridLayoutManager : GridLayoutManager {
 
     private fun getSpanSizeImpl(position: Int): Int {
         val adapter = recyclerView?.adapter
-        val gridLayoutItemSpanMap = gridLayoutItemSpanMap
-        if (adapter != null && position >= 0 && position < adapter.itemCount) {
+        return if (adapter != null && position >= 0 && position < adapter.itemCount) {
             val itemFactory = findItemFactory(adapter, position)
             val itemSpan = gridLayoutItemSpanMap[itemFactory.javaClass]
             if (itemSpan != null) {
-                return if (itemSpan.isFullSpan()) spanCount else itemSpan.size.coerceAtLeast(1)
+                if (itemSpan.isFullSpan()) {
+                    spanCount
+                } else {
+                    itemSpan.size.coerceAtLeast(1).coerceAtMost(spanCount)
+                }
+            } else {
+                1
             }
+        } else {
+            1
         }
-        return 1
     }
 
     private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<*> {

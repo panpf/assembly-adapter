@@ -369,10 +369,8 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                     val (localAdapter, localPosition) = concatAdapterLocalHelper
                         .findLocalAdapterAndPosition(adapter, position)
                     if (localAdapter is AssemblyAdapter<*> && layoutManager is FullSpanSupport) {
-                        layoutManager.isFullSpanByItemFactory(
-                            localAdapter.getItemFactoryByPosition(
-                                localPosition
-                            ) as ItemFactory<*>
+                        layoutManager.isFullSpanByItemFactoryClass(
+                            (localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>).javaClass
                         )
                     } else {
                         false

@@ -46,7 +46,7 @@ open class AssemblyLoadStateAdapter(
                 (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
             if (layoutManager is StaggeredGridLayoutManager && layoutManager is FullSpanSupport) {
                 (itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
-                    .isFullSpan = layoutManager.isFullSpanByItemFactory(itemFactory)
+                    .isFullSpan = layoutManager.isFullSpanByItemFactoryClass(itemFactory.javaClass)
             }
         }
     }
