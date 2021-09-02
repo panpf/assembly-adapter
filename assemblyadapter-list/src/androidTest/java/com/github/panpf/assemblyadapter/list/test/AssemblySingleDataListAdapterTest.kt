@@ -107,7 +107,8 @@ class AssemblySingleDataListAdapterTest {
             Assert.assertEquals(-1L, getItemId(1))
         }
 
-        AssemblySingleDataListAdapter(TextItemFactory(), hasStableIds = true).apply {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
+            setHasStableIds(true)
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }
@@ -122,8 +123,8 @@ class AssemblySingleDataListAdapterTest {
         AssemblySingleDataListAdapter(
             TextItemFactory(),
             initData = Text("hello"),
-            hasStableIds = true
         ).apply {
+            setHasStableIds(true)
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }

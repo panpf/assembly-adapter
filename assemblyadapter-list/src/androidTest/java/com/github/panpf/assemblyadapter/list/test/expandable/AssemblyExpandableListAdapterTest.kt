@@ -244,8 +244,8 @@ class AssemblyExpandableListAdapterTest {
 
         AssemblyExpandableListAdapter<TextGroup, Text>(
             listOf(TextGroupItemFactory()),
-            hasStableIds = true
         ).apply {
+            setHasStableIds(true)
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupId(-1)
             }
@@ -269,8 +269,8 @@ class AssemblyExpandableListAdapterTest {
         AssemblyExpandableListAdapter<TextGroup, Text>(
             listOf(TextGroupItemFactory()),
             initDataList = listOf(TextGroup("hello", "good"), TextGroup("world", "bye")),
-            hasStableIds = true
         ).apply {
+            setHasStableIds(true)
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupId(-1)
             }

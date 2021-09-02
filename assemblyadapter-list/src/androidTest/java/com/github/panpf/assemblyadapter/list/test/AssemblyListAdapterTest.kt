@@ -137,7 +137,8 @@ class AssemblyListAdapterTest {
             Assert.assertEquals(-1L, getItemId(1))
         }
 
-        AssemblyListAdapter<Text>(listOf(TextItemFactory()), hasStableIds = true).apply {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory())).apply {
+            setHasStableIds(true)
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }
@@ -152,8 +153,8 @@ class AssemblyListAdapterTest {
         AssemblyListAdapter(
             listOf(TextItemFactory()),
             initDataList = listOf("hello", "world"),
-            hasStableIds = true
         ).apply {
+            setHasStableIds(true)
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }

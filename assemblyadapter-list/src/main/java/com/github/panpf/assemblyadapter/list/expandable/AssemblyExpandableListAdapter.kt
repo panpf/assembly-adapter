@@ -15,6 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.list.expandable
 
+import android.database.DataSetObserver
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
@@ -23,6 +24,7 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.ItemId
 import com.github.panpf.assemblyadapter.list.R
+import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
 
 /**
  * An implementation of [BaseExpandableListAdapter], which implements multi-type adapters through standardized [ItemFactory] or [ExpandableGroupItemFactory] or [ExpandableChildItemFactory].
@@ -41,11 +43,12 @@ import com.github.panpf.assemblyadapter.list.R
 open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     itemFactoryList: List<ItemFactory<*>>,
     initDataList: List<GROUP_DATA>? = null,
-    private val hasStableIds: Boolean = false,
 ) : BaseExpandableListAdapter(), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+    private var hasStableIds = false
+    private val adapterDataObservable = AdapterDataObservable()
 
     /**
      * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
@@ -68,6 +71,25 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
 
+    /**
+     * Indicates whether each item in the data set can be represented with a unique identifier
+     * of type [java.lang.Long].
+     *
+     * @param hasStableIds Whether items in data set have unique identifiers or not.
+     * @see hasStableIds
+     * @see getGroupId
+     * @see getChildId
+     */
+    fun setHasStableIds(hasStableIds: Boolean) {
+        if (hasObservers()) {
+            throw IllegalStateException(
+                "Cannot change whether this adapter has "
+                        + "stable IDs while the adapter has registered observers."
+            )
+        }
+        this.hasStableIds = hasStableIds
+    }
+
     override fun hasStableIds(): Boolean = hasStableIds
 
 
@@ -76,7 +98,7 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     override fun getGroup(groupPosition: Int): GROUP_DATA = itemDataStorage.getData(groupPosition)
 
     override fun getGroupId(groupPosition: Int): Long {
-        return if (hasStableIds) {
+        return if (hasStableIds()) {
             val data = getGroup(groupPosition) ?: Placeholder
             if (data is ItemId) data.itemId else data.hashCode().toLong()
         } else {
@@ -242,5 +264,24 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
         )
+    }
+
+    override fun registerDataSetObserver(observer: DataSetObserver?) {
+        super.registerDataSetObserver(observer)
+        adapterDataObservable.registerObserver(observer)
+    }
+
+    override fun unregisterDataSetObserver(observer: DataSetObserver?) {
+        super.unregisterDataSetObserver(observer)
+        adapterDataObservable.unregisterObserver(observer)
+    }
+
+    /**
+     * Returns true if one or more observers are attached to this adapter.
+     *
+     * @return true if this adapter has observers
+     */
+    fun hasObservers(): Boolean {
+        return adapterDataObservable.hasObservers()
     }
 }

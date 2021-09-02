@@ -325,18 +325,15 @@ class ConcatListAdapterTest {
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
                 initData = data0,
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
             AssemblyListAdapter<Any>(
                 itemFactoryList = listOf(TextItemFactory()),
                 initDataList = listOf(data2, data1, data2),
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
                 initData = data1,
-                hasStableIds = true
-            )
+            ).apply { setHasStableIds(true) }
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
@@ -359,18 +356,15 @@ class ConcatListAdapterTest {
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
                 initData = data0,
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
             AssemblyListAdapter<Any>(
                 itemFactoryList = listOf(TextItemFactory()),
                 initDataList = listOf(data2, data1, data2),
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
                 initData = data1,
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
@@ -391,13 +385,9 @@ class ConcatListAdapterTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
         ConcatListAdapter(
-            ConcatListAdapter.Config.Builder()
-                .setStableIdMode(ConcatListAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
-                .build(),
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
                 initData = Text("a"),
-                hasStableIds = true
             ),
             AssemblyListAdapter(
                 itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
@@ -406,12 +396,10 @@ class ConcatListAdapterTest {
                     Text("b"),
                     Image(android.R.drawable.btn_plus)
                 ),
-                hasStableIds = true
             ),
             AssemblySingleDataListAdapter(
                 itemFactory = ImageItemFactory(),
                 initData = Image(android.R.drawable.alert_dark_frame),
-                hasStableIds = true
             ),
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
@@ -515,8 +503,7 @@ class ConcatListAdapterTest {
                 .build(),
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
-                hasStableIds = true
-            )
+            ).apply { setHasStableIds(true) }
         ).apply {
             Assert.assertTrue(hasStableIds())
         }
@@ -527,8 +514,7 @@ class ConcatListAdapterTest {
                 .build(),
             AssemblySingleDataListAdapter(
                 itemFactory = TextItemFactory(),
-                hasStableIds = true
-            )
+            ).apply { setHasStableIds(true) }
         ).apply {
             Assert.assertTrue(hasStableIds())
         }

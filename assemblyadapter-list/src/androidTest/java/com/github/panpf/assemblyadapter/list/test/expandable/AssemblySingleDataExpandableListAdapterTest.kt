@@ -163,8 +163,8 @@ class AssemblySingleDataExpandableListAdapterTest {
 
         AssemblySingleDataExpandableListAdapter<TextGroup, Text>(
             TextGroupItemFactory(),
-            hasStableIds = true
         ).apply {
+            setHasStableIds(true)
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupId(-1)
             }
@@ -188,8 +188,8 @@ class AssemblySingleDataExpandableListAdapterTest {
         AssemblySingleDataExpandableListAdapter<TextGroup, Text>(
             TextGroupItemFactory(),
             initData = TextGroup("hello", "world"),
-            hasStableIds = true
         ).apply {
+            setHasStableIds(true)
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupId(-1)
             }

@@ -15,11 +15,13 @@
  */
 package com.github.panpf.assemblyadapter.list
 
+import android.database.DataSetObserver
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.ItemId
 
@@ -33,8 +35,10 @@ import com.github.panpf.assemblyadapter.ItemId
 open class AssemblySingleDataListAdapter<DATA : Any>(
     private val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null,
-    private val hasStableIds: Boolean = false,
 ) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>> {
+
+    private var hasStableIds = false
+    private val adapterDataObservable = AdapterDataObservable()
 
     var data: DATA? = initData
         set(value) {
@@ -52,12 +56,30 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
         return data!!
     }
 
+    /**
+     * Indicates whether each item in the data set can be represented with a unique identifier
+     * of type [java.lang.Long].
+     *
+     * @param hasStableIds Whether items in data set have unique identifiers or not.
+     * @see hasStableIds
+     * @see getItemId
+     */
+    fun setHasStableIds(hasStableIds: Boolean) {
+        if (hasObservers()) {
+            throw IllegalStateException(
+                "Cannot change whether this adapter has "
+                        + "stable IDs while the adapter has registered observers."
+            )
+        }
+        this.hasStableIds = hasStableIds
+    }
+
     override fun hasStableIds(): Boolean {
         return hasStableIds
     }
 
     override fun getItemId(position: Int): Long {
-        return if (hasStableIds) {
+        return if (hasStableIds()) {
             val data = getItem(position)
             if (data is ItemId) data.itemId else data.hashCode().toLong()
         } else {
@@ -105,5 +127,24 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
         }
         return itemFactory
+    }
+
+    override fun registerDataSetObserver(observer: DataSetObserver?) {
+        super.registerDataSetObserver(observer)
+        adapterDataObservable.registerObserver(observer)
+    }
+
+    override fun unregisterDataSetObserver(observer: DataSetObserver?) {
+        super.unregisterDataSetObserver(observer)
+        adapterDataObservable.unregisterObserver(observer)
+    }
+
+    /**
+     * Returns true if one or more observers are attached to this adapter.
+     *
+     * @return true if this adapter has observers
+     */
+    fun hasObservers(): Boolean {
+        return adapterDataObservable.hasObservers()
     }
 }

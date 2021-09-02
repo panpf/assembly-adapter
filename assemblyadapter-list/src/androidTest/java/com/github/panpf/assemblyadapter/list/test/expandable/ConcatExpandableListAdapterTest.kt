@@ -465,18 +465,15 @@ class ConcatExpandableListAdapterTest {
             AssemblySingleDataExpandableListAdapter<Any, Any>(
                 itemFactoryList = listOf(TextGroupItemFactory(), TextItemFactory()),
                 initData = data0,
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
             AssemblyExpandableListAdapter<Any, Any>(
                 itemFactoryList = listOf(TextGroupItemFactory(), TextItemFactory()),
                 initDataList = listOf(data2, data1, data2),
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
             AssemblySingleDataExpandableListAdapter<Any, Any>(
                 itemFactoryList = listOf(TextGroupItemFactory(), TextItemFactory()),
                 initData = data1,
-                hasStableIds = true
-            )
+            ).apply { setHasStableIds(true) }
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupId(-1)
@@ -511,18 +508,15 @@ class ConcatExpandableListAdapterTest {
             AssemblySingleDataExpandableListAdapter<Any, Any>(
                 itemFactoryList = listOf(TextGroupItemFactory(), TextItemFactory()),
                 initData = data0,
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
             AssemblyExpandableListAdapter<Any, Any>(
                 itemFactoryList = listOf(TextGroupItemFactory(), TextItemFactory()),
                 initDataList = listOf(data2, data1, data2),
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
             AssemblySingleDataExpandableListAdapter<Any, Any>(
                 itemFactoryList = listOf(TextGroupItemFactory(), TextItemFactory()),
                 initData = data1,
-                hasStableIds = true
-            ),
+            ).apply { setHasStableIds(true) },
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroupId(-1)
@@ -555,13 +549,9 @@ class ConcatExpandableListAdapterTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
         ConcatExpandableListAdapter(
-            ConcatExpandableListAdapter.Config.Builder()
-                .setStableIdMode(ConcatExpandableListAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
-                .build(),
             AssemblySingleDataExpandableListAdapter<TextGroup, Text>(
                 itemFactoryList = listOf(TextGroupItemFactory(), TextItemFactory()),
                 initData = TextGroup("a"),
-                hasStableIds = true
             ),
             AssemblyExpandableListAdapter<Any, Any>(
                 itemFactoryList = listOf(
@@ -575,12 +565,10 @@ class ConcatExpandableListAdapterTest {
                     TextGroup("b"),
                     ImageGroup(android.R.drawable.btn_plus)
                 ),
-                hasStableIds = true
             ),
             AssemblySingleDataExpandableListAdapter<ImageGroup, Image>(
                 itemFactoryList = listOf(ImageGroupItemFactory(), ImageItemFactory()),
                 initData = ImageGroup(android.R.drawable.alert_dark_frame),
-                hasStableIds = true
             ),
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
@@ -741,8 +729,7 @@ class ConcatExpandableListAdapterTest {
                 .build(),
             AssemblySingleDataExpandableListAdapter<Text, Any>(
                 itemFactory = TextItemFactory(),
-                hasStableIds = true
-            )
+            ).apply { setHasStableIds(true) }
         ).apply {
             Assert.assertTrue(hasStableIds())
         }
@@ -753,8 +740,7 @@ class ConcatExpandableListAdapterTest {
                 .build(),
             AssemblySingleDataExpandableListAdapter<Text, Any>(
                 itemFactory = TextItemFactory(),
-                hasStableIds = true
-            )
+            ).apply { setHasStableIds(true) }
         ).apply {
             Assert.assertTrue(hasStableIds())
         }
