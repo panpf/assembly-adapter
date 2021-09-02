@@ -16,6 +16,7 @@
 package com.github.panpf.assemblyadapter.recycler.paging
 
 import android.view.ViewGroup
+import androidx.paging.ItemSnapshotList
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -51,6 +52,13 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 ), AssemblyAdapter<ItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+
+    /**
+     * Returns a new [ItemSnapshotList] representing the currently presented items, including any
+     * placeholders if they are enabled.
+     */
+    val currentList: ItemSnapshotList<DATA>
+        get() = snapshot()
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }

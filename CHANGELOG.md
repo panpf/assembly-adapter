@@ -12,6 +12,12 @@ recycler:
 * new: AssemblyRecyclerAdapter, AssemblyRecyclerListAdapter, AssemblySingleDataRecyclerAdapter, AssemblySingleDataRecyclerListAdapter added getItem(Int) method
 * fix: Fix the bug that the disableByPosition, disableBySpanIndex, personaliseByPosition, personaliseBySpanIndex functions of Assembly\*DividerItemDecoration do not work
 
+recycler-paging:
+* new: AssemblyPagingDataAdapter added currentList property
+
+pager2-paging:
+* new: AssemblyPagingDataAdapter added currentList property
+
 # v4.0.0-beta02
 
 recycler:

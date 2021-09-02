@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.paging.ItemSnapshotList
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -59,6 +60,13 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
+
+    /**
+     * Returns a new [ItemSnapshotList] representing the currently presented items, including any
+     * placeholders if they are enabled.
+     */
+    val currentList: ItemSnapshotList<DATA>
+        get() = snapshot()
 
     /**
      * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblyPagingDataFragmentStateAdapter]
