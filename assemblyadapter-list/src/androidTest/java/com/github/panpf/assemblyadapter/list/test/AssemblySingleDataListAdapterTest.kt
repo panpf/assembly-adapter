@@ -20,6 +20,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.ViewItemFactory
+import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
@@ -204,5 +205,25 @@ class AssemblySingleDataListAdapterTest {
         }
     }
 
-    // todo test hasObservers
+    @Test
+    fun testMethodHasObservers() {
+        AssemblySingleDataListAdapter(TextItemFactory()).apply {
+            Assert.assertFalse(hasObservers())
+
+            val dataObserver1 = object : DataSetObserver() {}
+            val dataObserver2 = object : DataSetObserver() {}
+
+            registerDataSetObserver(dataObserver1)
+            Assert.assertTrue(hasObservers())
+
+            registerDataSetObserver(dataObserver2)
+            Assert.assertTrue(hasObservers())
+
+            unregisterDataSetObserver(dataObserver1)
+            Assert.assertTrue(hasObservers())
+
+            unregisterDataSetObserver(dataObserver2)
+            Assert.assertFalse(hasObservers())
+        }
+    }
 }

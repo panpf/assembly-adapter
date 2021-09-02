@@ -144,12 +144,12 @@ open class AssemblyListAdapter<DATA>(
         )
     }
 
-    override fun registerDataSetObserver(observer: DataSetObserver?) {
+    override fun registerDataSetObserver(observer: DataSetObserver) {
         super.registerDataSetObserver(observer)
         adapterDataObservable.registerObserver(observer)
     }
 
-    override fun unregisterDataSetObserver(observer: DataSetObserver?) {
+    override fun unregisterDataSetObserver(observer: DataSetObserver) {
         super.unregisterDataSetObserver(observer)
         adapterDataObservable.unregisterObserver(observer)
     }

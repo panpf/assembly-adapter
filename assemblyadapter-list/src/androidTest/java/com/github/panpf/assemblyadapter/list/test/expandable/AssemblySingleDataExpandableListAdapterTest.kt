@@ -395,6 +395,53 @@ class AssemblySingleDataExpandableListAdapterTest {
         }
     }
 
-    // todo test hasObservers
-    // todo test isChildSelectable
+    @Test
+    fun testMethodHasObservers() {
+        AssemblySingleDataExpandableListAdapter<TextGroup, Text>(
+            listOf(TextGroupItemFactory(), TextItemFactory())
+        ).apply {
+            Assert.assertFalse(hasObservers())
+
+            val dataObserver1 = object : DataSetObserver() {}
+            val dataObserver2 = object : DataSetObserver() {}
+
+            registerDataSetObserver(dataObserver1)
+            Assert.assertTrue(hasObservers())
+
+            registerDataSetObserver(dataObserver2)
+            Assert.assertTrue(hasObservers())
+
+            unregisterDataSetObserver(dataObserver1)
+            Assert.assertTrue(hasObservers())
+
+            unregisterDataSetObserver(dataObserver2)
+            Assert.assertFalse(hasObservers())
+        }
+    }
+
+    @Test
+    fun testMethodIsChildSelectable() {
+        AssemblySingleDataExpandableListAdapter<TextGroup, Text>(
+            listOf(TextGroupItemFactory(), TextItemFactory()),
+            TextGroup("hello", "world", "good"),
+        ).apply {
+            Assert.assertNull(childSelectable)
+
+            childSelectable = { adapter, groupPosition, childPosition ->
+                adapter.getChild(groupPosition, childPosition)
+                groupPosition == 0 && childPosition == 2
+            }
+            Assert.assertNotNull(childSelectable)
+
+            assertThrow(IndexOutOfBoundsException::class) {
+                childSelectable(0, -1)
+            }
+            Assert.assertFalse(childSelectable(0, 0))
+            Assert.assertFalse(childSelectable(0, 1))
+            Assert.assertTrue(childSelectable(0, 2))
+            assertThrow(IndexOutOfBoundsException::class) {
+                childSelectable(0, 3)
+            }
+        }
+    }
 }

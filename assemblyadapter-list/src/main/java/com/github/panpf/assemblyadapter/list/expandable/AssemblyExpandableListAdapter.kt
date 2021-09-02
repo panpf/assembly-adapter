@@ -22,7 +22,6 @@ import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.ItemId
 import com.github.panpf.assemblyadapter.list.R
 import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
 
@@ -57,7 +56,9 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     val currentList: List<GROUP_DATA>
         get() = itemDataStorage.readOnlyList
 
-    var isChildSelectable: ((groupPosition: Int, childPosition: Int) -> Boolean)? = null
+    var childSelectable: ((
+        adapter: AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>, groupPosition: Int, childPosition: Int
+    ) -> Boolean)? = null
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
@@ -238,8 +239,7 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
-        getChild(groupPosition, childPosition)!!
-        return isChildSelectable?.invoke(groupPosition, childPosition) == true
+        return childSelectable?.invoke(this, groupPosition, childPosition) == true
     }
 
 
@@ -263,12 +263,12 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         )
     }
 
-    override fun registerDataSetObserver(observer: DataSetObserver?) {
+    override fun registerDataSetObserver(observer: DataSetObserver) {
         super.registerDataSetObserver(observer)
         adapterDataObservable.registerObserver(observer)
     }
 
-    override fun unregisterDataSetObserver(observer: DataSetObserver?) {
+    override fun unregisterDataSetObserver(observer: DataSetObserver) {
         super.unregisterDataSetObserver(observer)
         adapterDataObservable.unregisterObserver(observer)
     }

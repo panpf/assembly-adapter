@@ -5,10 +5,11 @@ list:
 * change: ItemId move to common-core module
 * change: hasStableIds changed from constructor attribute to setHasStableIds(Boolean) method
 * new: AssemblyListAdapter, AssemblySingleDataListAdapter, ConcatListAdapter added itemCount property
-* new: AssemblyRecyclerAdapter, AssemblyRecyclerListAdapter, AssemblySingleDataRecyclerAdapter, AssemblySingleDataRecyclerListAdapter added getItem(Int) method
+* change: AssemblyExpandableListAdapter, AssemblySingleDataExpandableListAdapter isChildSelectable rename to childSelectable
 
 recycler:
 * new: Recycler related Adapter now rewrites getItemId() method to support obtaining stable itemId through ItemId interface or hashCode
+* new: AssemblyRecyclerAdapter, AssemblyRecyclerListAdapter, AssemblySingleDataRecyclerAdapter, AssemblySingleDataRecyclerListAdapter added getItem(Int) method
 
 # v4.0.0-beta02
 

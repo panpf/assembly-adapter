@@ -305,5 +305,25 @@ class AssemblyListAdapterTest {
         }
     }
 
-    // todo test hasObservers
+    @Test
+    fun testMethodHasObservers() {
+        AssemblyListAdapter<Text>(listOf(TextItemFactory())).apply {
+            Assert.assertFalse(hasObservers())
+
+            val dataObserver1 = object : DataSetObserver() {}
+            val dataObserver2 = object : DataSetObserver() {}
+
+            registerDataSetObserver(dataObserver1)
+            Assert.assertTrue(hasObservers())
+
+            registerDataSetObserver(dataObserver2)
+            Assert.assertTrue(hasObservers())
+
+            unregisterDataSetObserver(dataObserver1)
+            Assert.assertTrue(hasObservers())
+
+            unregisterDataSetObserver(dataObserver2)
+            Assert.assertFalse(hasObservers())
+        }
+    }
 }
