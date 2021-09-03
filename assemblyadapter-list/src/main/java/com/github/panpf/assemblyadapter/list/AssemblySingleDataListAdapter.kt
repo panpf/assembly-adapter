@@ -50,7 +50,7 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
     val itemCount: Int
         get() = if (data != null) 1 else 0
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): DATA {
         val count = count
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
@@ -120,7 +120,7 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
         val data = getItem(position)
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"

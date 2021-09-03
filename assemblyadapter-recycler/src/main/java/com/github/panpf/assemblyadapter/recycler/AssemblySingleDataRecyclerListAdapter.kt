@@ -28,7 +28,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
 open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<ItemFactory<*>> {
 
-    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<*>>
+    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<DATA>>
 
     /**
      * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
@@ -191,7 +191,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
         val data = getItem(position)
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"

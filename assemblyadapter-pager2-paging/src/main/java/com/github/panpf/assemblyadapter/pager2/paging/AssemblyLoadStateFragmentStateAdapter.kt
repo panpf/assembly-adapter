@@ -111,7 +111,7 @@ open class AssemblyLoadStateFragmentStateAdapter(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<LoadState> {
         val count = itemCount
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
