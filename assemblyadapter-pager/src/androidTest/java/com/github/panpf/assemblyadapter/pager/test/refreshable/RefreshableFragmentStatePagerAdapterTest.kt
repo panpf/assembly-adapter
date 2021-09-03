@@ -13,15 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager.refreshable
+package com.github.panpf.assemblyadapter.pager.test.refreshable
 
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+class RefreshableFragmentStatePagerAdapterTest {
 
-abstract class GetItemDataFragmentStatePagerAdapter(
-    fragmentManager: FragmentManager,
-    behavior: Int
-) : FragmentStatePagerAdapter(fragmentManager, behavior) {
-
-    abstract fun getItemData(position: Int): Any
+    // todo Supplementary test
 }

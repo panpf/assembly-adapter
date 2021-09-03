@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler.test.divider
+package com.github.panpf.assemblyadapter.recycler.test.divider.internal
 
+import android.R
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -46,7 +47,7 @@ class AssemblyFindItemFactoryClassSupportTest {
     fun test() {
         val adapter = AssemblyRecyclerAdapter(
             itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
-            initDataList = listOf(Text("hello"), Image(android.R.drawable.btn_default))
+            initDataList = listOf(Text("hello"), Image(R.drawable.btn_default))
         )
 
         val errorAdapter =

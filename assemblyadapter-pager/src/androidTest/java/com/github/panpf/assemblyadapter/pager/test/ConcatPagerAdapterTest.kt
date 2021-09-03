@@ -58,6 +58,8 @@ class ConcatPagerAdapterTest {
         }
     }
 
+    // todo Supplementary test
+
     @Test
     fun testNestedAdapterPosition() {
         val count1Adapter = AssemblySingleDataPagerAdapter(TextPagerItemFactory(), Text("a"))

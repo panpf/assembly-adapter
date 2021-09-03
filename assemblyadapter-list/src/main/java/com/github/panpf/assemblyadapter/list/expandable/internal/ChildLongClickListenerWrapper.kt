@@ -6,8 +6,8 @@ import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItem
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.list.expandable.OnChildLongClickListener
 
-class ChildOnLongClickListenerWrapper<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(
-    val onChildLongClickListener: OnChildLongClickListener<GROUP_DATA, CHILD_DATA>
+class ChildLongClickListenerWrapper<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any>(
+    private val onChildLongClickListener: OnChildLongClickListener<GROUP_DATA, CHILD_DATA>
 ) : View.OnLongClickListener {
 
     override fun onLongClick(view: View): Boolean {

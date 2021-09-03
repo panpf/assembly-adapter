@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler.divider.test
+package com.github.panpf.assemblyadapter.recycler.divider.test.internal
 
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView

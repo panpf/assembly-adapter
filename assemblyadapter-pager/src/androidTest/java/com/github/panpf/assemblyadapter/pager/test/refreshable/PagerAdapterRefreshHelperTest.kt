@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.pager.test
+package com.github.panpf.assemblyadapter.pager.test.refreshable
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,6 +24,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.pager.refreshable.PagerAdapterRefreshHelper
+import com.github.panpf.assemblyadapter.pager.test.R
 import com.github.panpf.tools4a.test.ktx.launchFragmentInContainerWithOn
 import org.junit.Assert
 import org.junit.Test

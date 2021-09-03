@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.core.test
+package com.github.panpf.assemblyadapter.core.test.internal
 
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.tools4j.test.ktx.assertThrow

@@ -56,6 +56,8 @@ class ConcatFragmentStatePagerAdapterTest {
         }
     }
 
+    // todo Supplementary test
+
     @Test
     fun testNestedAdapterPosition() {
         val activity = runBlocking {
@@ -111,7 +113,6 @@ class ConcatFragmentStatePagerAdapterTest {
         Assert.assertEquals("count12Adapter.count", 13, concatCount13Adapter.count)
         Assert.assertEquals("count15Adapter.count", 16, concatNestingCount16Adapter.count)
 
-        val context = InstrumentationRegistry.getInstrumentation().context
         val verifyAdapterPosition: (FragmentStatePagerAdapter, Int, Int, Int) -> Unit =
             { adapter, position, expectedBindingAdapterPosition, expectedAbsoluteAdapterPosition ->
                 val itemFragment = runBlocking {

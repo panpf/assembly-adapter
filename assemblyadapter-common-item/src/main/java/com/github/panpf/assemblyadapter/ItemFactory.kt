@@ -145,7 +145,7 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
                     itemView
                 }
                 targetView.setTag(R.id.aa_tag_clickBindItem, item)
-                targetView.setOnClickListener(OnClickListenerWrapper(clickListenerHolder.listener))
+                targetView.setOnClickListener(ClickListenerWrapper(clickListenerHolder.listener))
             } else if (holder is ClickListenerStorage.LongClickListenerHolder<*>) {
                 @Suppress("UNCHECKED_CAST")
                 val longClickListenerHolder =
@@ -158,7 +158,7 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
                     itemView
                 }
                 targetView.setTag(R.id.aa_tag_clickBindItem, item)
-                targetView.setOnLongClickListener(OnLongClickListenerWrapper(longClickListenerHolder.listener))
+                targetView.setOnLongClickListener(LongClickListenerWrapper(longClickListenerHolder.listener))
             }
         }
     }

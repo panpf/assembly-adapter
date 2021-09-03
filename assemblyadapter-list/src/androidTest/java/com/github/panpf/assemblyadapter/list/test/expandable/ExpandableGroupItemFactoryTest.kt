@@ -24,8 +24,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.common.item.R
-import com.github.panpf.assemblyadapter.internal.OnClickListenerWrapper
-import com.github.panpf.assemblyadapter.internal.OnLongClickListenerWrapper
+import com.github.panpf.assemblyadapter.internal.ClickListenerWrapper
+import com.github.panpf.assemblyadapter.internal.LongClickListenerWrapper
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroupItem
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroupItemFactory
@@ -92,10 +92,10 @@ class ExpandableGroupItemFactoryTest {
                 .getFieldValue<View.OnClickListener>("mOnClickListener")
             val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
                 .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
-            Assert.assertTrue(itemOnClickListener is OnClickListenerWrapper<*>)
-            Assert.assertTrue(itemOnLongClickListener is OnLongClickListenerWrapper<*>)
-            Assert.assertTrue(viewOnClickListener is OnClickListenerWrapper<*>)
-            Assert.assertTrue(viewOnLongClickListener is OnLongClickListenerWrapper<*>)
+            Assert.assertTrue(itemOnClickListener is ClickListenerWrapper<*>)
+            Assert.assertTrue(itemOnLongClickListener is LongClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnClickListener is ClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnLongClickListener is LongClickListenerWrapper<*>)
         }
 
         assertThrow(IllegalArgumentException::class) {

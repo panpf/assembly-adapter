@@ -24,8 +24,8 @@ import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.list.expandable.internal.ChildClickListenerStorage
-import com.github.panpf.assemblyadapter.list.expandable.internal.ChildOnClickListenerWrapper
-import com.github.panpf.assemblyadapter.list.expandable.internal.ChildOnLongClickListenerWrapper
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildClickListenerWrapper
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildLongClickListenerWrapper
 import kotlin.reflect.KClass
 
 /**
@@ -132,7 +132,7 @@ abstract class ExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DA
                     itemView
                 }
                 targetView.setTag(R.id.aa_tag_clickBindItem, item)
-                targetView.setOnClickListener(ChildOnClickListenerWrapper(clickListenerHolder.listener))
+                targetView.setOnClickListener(ChildClickListenerWrapper(clickListenerHolder.listener))
             } else if (holder is ChildClickListenerStorage.LongClickListenerHolder<*, *>) {
                 @Suppress("UNCHECKED_CAST")
                 val longClickListenerHolder =
@@ -146,7 +146,7 @@ abstract class ExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DA
                 }
                 targetView.setTag(R.id.aa_tag_clickBindItem, item)
                 targetView.setOnLongClickListener(
-                    ChildOnLongClickListenerWrapper(longClickListenerHolder.listener)
+                    ChildLongClickListenerWrapper(longClickListenerHolder.listener)
                 )
             }
         }

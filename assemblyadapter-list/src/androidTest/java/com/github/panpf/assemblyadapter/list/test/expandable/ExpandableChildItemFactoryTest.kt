@@ -24,11 +24,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.common.item.R
-import com.github.panpf.assemblyadapter.internal.OnClickListenerWrapper
-import com.github.panpf.assemblyadapter.internal.OnLongClickListenerWrapper
+import com.github.panpf.assemblyadapter.internal.ClickListenerWrapper
+import com.github.panpf.assemblyadapter.internal.LongClickListenerWrapper
 import com.github.panpf.assemblyadapter.list.expandable.*
-import com.github.panpf.assemblyadapter.list.expandable.internal.ChildOnClickListenerWrapper
-import com.github.panpf.assemblyadapter.list.expandable.internal.ChildOnLongClickListenerWrapper
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildClickListenerWrapper
+import com.github.panpf.assemblyadapter.list.expandable.internal.ChildLongClickListenerWrapper
 import com.github.panpf.tools4j.reflect.ktx.callMethod
 import com.github.panpf.tools4j.reflect.ktx.getFieldValue
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -92,10 +92,10 @@ class ExpandableChildItemFactoryTest {
                 .getFieldValue<View.OnClickListener>("mOnClickListener")
             val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
                 .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
-            Assert.assertTrue(itemOnClickListener is OnClickListenerWrapper<*>)
-            Assert.assertTrue(itemOnLongClickListener is OnLongClickListenerWrapper<*>)
-            Assert.assertTrue(viewOnClickListener is OnClickListenerWrapper<*>)
-            Assert.assertTrue(viewOnLongClickListener is OnLongClickListenerWrapper<*>)
+            Assert.assertTrue(itemOnClickListener is ClickListenerWrapper<*>)
+            Assert.assertTrue(itemOnLongClickListener is LongClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnClickListener is ClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnLongClickListener is LongClickListenerWrapper<*>)
         }
 
         TextExpandableChildItemFactory().apply {
@@ -117,10 +117,10 @@ class ExpandableChildItemFactoryTest {
                 .getFieldValue<View.OnClickListener>("mOnClickListener")
             val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
                 .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
-            Assert.assertTrue(itemOnClickListener is ChildOnClickListenerWrapper<*, *>)
-            Assert.assertTrue(itemOnLongClickListener is ChildOnLongClickListenerWrapper<*, *>)
-            Assert.assertTrue(viewOnClickListener is ChildOnClickListenerWrapper<*, *>)
-            Assert.assertTrue(viewOnLongClickListener is ChildOnLongClickListenerWrapper<*, *>)
+            Assert.assertTrue(itemOnClickListener is ChildClickListenerWrapper<*, *>)
+            Assert.assertTrue(itemOnLongClickListener is ChildLongClickListenerWrapper<*, *>)
+            Assert.assertTrue(viewOnClickListener is ChildClickListenerWrapper<*, *>)
+            Assert.assertTrue(viewOnLongClickListener is ChildLongClickListenerWrapper<*, *>)
         }
 
         assertThrow(IllegalArgumentException::class) {

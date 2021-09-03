@@ -5,8 +5,8 @@ import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.common.item.R
 
-class OnLongClickListenerWrapper<DATA : Any>(
-    val onLongClickListener: OnLongClickListener<DATA>
+class LongClickListenerWrapper<DATA : Any>(
+    private val onLongClickListener: OnLongClickListener<DATA>
 ) : View.OnLongClickListener {
 
     override fun onLongClick(view: View): Boolean {
