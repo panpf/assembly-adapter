@@ -15,7 +15,37 @@
  */
 package com.github.panpf.assemblyadapter.pager.test.internal
 
+import android.widget.TextView
+import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.OnClickListener
+import com.github.panpf.assemblyadapter.pager.internal.PagerChickListenerWrapper
+import org.junit.Assert
+import org.junit.Test
+
 class PagerChickListenerWrapperTest {
 
-    // todo Supplementary test
+    @Test
+    fun test() {
+        var bindingAdapterPosition: Int? = null
+        var absoluteAdapterPosition: Int? = null
+        var data: String? = null
+        val clickListener =
+            OnClickListener<String> { _, _, _bindingAdapterPosition, _absoluteAdapterPosition, _data ->
+                bindingAdapterPosition = _bindingAdapterPosition
+                absoluteAdapterPosition = _absoluteAdapterPosition
+                data = _data
+            }
+
+        Assert.assertNull(bindingAdapterPosition)
+        Assert.assertNull(absoluteAdapterPosition)
+        Assert.assertNull(data)
+
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val itemView = TextView(context)
+        PagerChickListenerWrapper(clickListener, 2, 7, "hello").onClick(itemView)
+
+        Assert.assertEquals(2, bindingAdapterPosition)
+        Assert.assertEquals(7, absoluteAdapterPosition)
+        Assert.assertEquals("hello", data)
+    }
 }
