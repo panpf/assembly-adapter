@@ -18,10 +18,10 @@ package com.github.panpf.assemblyadapter.pager.refreshable
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
-abstract class GetItemDataFragmentStatePagerAdapter(
+abstract class GetItemDataFragmentStatePagerAdapter<DATA>(
     fragmentManager: FragmentManager,
     behavior: Int
 ) : FragmentStatePagerAdapter(fragmentManager, behavior) {
 
-    abstract fun getItemData(position: Int): Any
+    abstract fun getItemData(position: Int): DATA
 }

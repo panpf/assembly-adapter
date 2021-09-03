@@ -20,9 +20,9 @@ import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.ArrayPagerAdapter
 
-abstract class RefreshablePagerAdapter : GetItemDataPagerAdapter() {
+abstract class RefreshablePagerAdapter<DATA> : GetItemDataPagerAdapter<DATA>() {
 
-    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper(this)
+    private var refreshHelper: PagerAdapterRefreshHelper<DATA>? = PagerAdapterRefreshHelper(this)
 
     /**
      * Disable the function of refreshing item when the data set changes.

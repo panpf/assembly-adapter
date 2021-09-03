@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.pager
 import android.view.View
 import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapter
 
 /**
@@ -28,9 +29,11 @@ import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapte
  * @see PagerItemFactory
  */
 open class AssemblySingleDataPagerAdapter<DATA : Any>(
-    private val itemFactory: PagerItemFactory<DATA>,
+    itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
-) : RefreshablePagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
+) : RefreshablePagerAdapter<DATA>(), AssemblyAdapter<PagerItemFactory<*>> {
+
+    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
 
     /**
      * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
@@ -43,7 +46,7 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
 
     override fun getCount(): Int = if (data != null) 1 else 0
 
-    override fun getItemData(position: Int): Any {
+    override fun getItemData(position: Int): DATA {
         val count = count
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
@@ -52,12 +55,7 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
     }
 
     override fun getView(container: ViewGroup, position: Int): View {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-
-        val data = data!!
+        val data = getItemData(position)
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = container.getTag(R.id.aa_tag_absoluteAdapterPosition)
         // set tag absoluteAdapterPosition null to support ConcatPagerAdapter nesting
@@ -65,18 +63,16 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactory as PagerItemFactory<Any>
-        return itemFactory.dispatchCreateItemView(
+        return getItemFactoryByPosition(position).dispatchCreateItemView(
             container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return itemFactory
+    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<DATA> {
+        val data = getItemData(position)
+        return itemFactoryStorage.getItemFactoryByData(
+            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+        )
     }
 }

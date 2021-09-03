@@ -26,29 +26,29 @@ import com.github.panpf.assemblyadapter.pager.R
 /**
  * Realize that [PagerAdapter] can refresh correctly when calling notifyDataSetChanged
  */
-internal class PagerAdapterRefreshHelper(
+internal class PagerAdapterRefreshHelper<DATA>(
     val getCount: () -> Int,
     val getData: (position: Int) -> Any?
 ) {
 
-    constructor(pagerAdapter: GetItemDataPagerAdapter) : this(
+    constructor(pagerAdapter: GetItemDataPagerAdapter<DATA>) : this(
         { pagerAdapter.count },
         { pagerAdapter.getItemData(it) }
     )
 
-    constructor(pagerAdapter: GetItemDataFragmentStatePagerAdapter) : this(
+    constructor(pagerAdapter: GetItemDataFragmentStatePagerAdapter<DATA>) : this(
         { pagerAdapter.count },
         { pagerAdapter.getItemData(it) }
     )
 
-    fun bindPositionAndData(item: View, position: Int, data: Any) {
+    fun bindPositionAndData(item: View, position: Int, data: DATA) {
         item.apply {
             setTag(R.id.aa_tag_pager_refresh_position, position)
             setTag(R.id.aa_tag_pager_refresh_data, data)
         }
     }
 
-    fun bindPositionAndData(item: Fragment, position: Int, data: Any) {
+    fun bindPositionAndData(item: Fragment, position: Int, data: DATA) {
         item.lifecycle.addObserver(object : LifecycleEventObserver {
             override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                 if (source.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {

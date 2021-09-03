@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataPagerAdapte
  * Wrapper for each adapter in [ConcatPagerAdapter].
  */
 internal class NestedPagerAdapterWrapper(
-    val adapter: GetItemDataPagerAdapter,
+    val adapter: GetItemDataPagerAdapter<*>,
     private val mCallback: Callback
 ) {
 

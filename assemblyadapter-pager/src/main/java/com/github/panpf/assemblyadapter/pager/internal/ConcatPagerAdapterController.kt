@@ -30,7 +30,7 @@ import java.util.*
  */
 internal class ConcatPagerAdapterController(
     private val mConcatAdapter: ConcatPagerAdapter,
-    adapters: List<GetItemDataPagerAdapter>
+    adapters: List<GetItemDataPagerAdapter<*>>
 ) : NestedPagerAdapterWrapper.Callback {
 
     private val mWrappers = ArrayList<NestedPagerAdapterWrapper>()
@@ -38,12 +38,12 @@ internal class ConcatPagerAdapterController(
     // keep one of these around so that we can return wrapper & position w/o allocation ¯\_(ツ)_/¯
     private var mReusableHolder = PagerWrapperAndLocalPosition()
 
-    val copyOfAdapters: List<GetItemDataPagerAdapter>
+    val copyOfAdapters: List<GetItemDataPagerAdapter<*>>
         get() {
             if (mWrappers.isEmpty()) {
                 return emptyList()
             }
-            val adapters: MutableList<GetItemDataPagerAdapter> = ArrayList(mWrappers.size)
+            val adapters: MutableList<GetItemDataPagerAdapter<*>> = ArrayList(mWrappers.size)
             for (wrapper in mWrappers) {
                 adapters.add(wrapper.adapter)
             }
@@ -56,7 +56,7 @@ internal class ConcatPagerAdapterController(
         }
     }
 
-    fun getData(globalPosition: Int): Any {
+    fun getData(globalPosition: Int): Any? {
         val count = totalCount
         if (globalPosition < 0 || globalPosition >= count) {
             throw IndexOutOfBoundsException("Index: $globalPosition, Size: $count")
@@ -65,14 +65,14 @@ internal class ConcatPagerAdapterController(
         return localAdapter.getItemData(localPosition)
     }
 
-    private fun findWrapperFor(adapter: GetItemDataPagerAdapter): NestedPagerAdapterWrapper? {
+    private fun findWrapperFor(adapter: GetItemDataPagerAdapter<*>): NestedPagerAdapterWrapper? {
         val index = indexOfWrapper(adapter)
         return if (index == -1) {
             null
         } else mWrappers[index]
     }
 
-    private fun indexOfWrapper(adapter: GetItemDataPagerAdapter): Int {
+    private fun indexOfWrapper(adapter: GetItemDataPagerAdapter<*>): Int {
         val limit = mWrappers.size
         for (i in 0 until limit) {
             if (mWrappers[i].adapter === adapter) {
@@ -87,7 +87,7 @@ internal class ConcatPagerAdapterController(
      *
      * @see ConcatPagerAdapter.addAdapter
      */
-    fun addAdapter(adapter: GetItemDataPagerAdapter): Boolean {
+    fun addAdapter(adapter: GetItemDataPagerAdapter<*>): Boolean {
         return addAdapter(mWrappers.size, adapter)
     }
 
@@ -98,7 +98,7 @@ internal class ConcatPagerAdapterController(
      * @see ConcatPagerAdapter.addAdapter
      */
     @SuppressLint("RestrictedApi")
-    fun addAdapter(index: Int, adapter: GetItemDataPagerAdapter): Boolean {
+    fun addAdapter(index: Int, adapter: GetItemDataPagerAdapter<*>): Boolean {
         if (index < 0 || index > mWrappers.size) {
             throw IndexOutOfBoundsException(
                 "Index must be between 0 and ${mWrappers.size}. Given:$index"
@@ -117,7 +117,7 @@ internal class ConcatPagerAdapterController(
         return true
     }
 
-    fun removeAdapter(adapter: GetItemDataPagerAdapter): Boolean {
+    fun removeAdapter(adapter: GetItemDataPagerAdapter<*>): Boolean {
         val index = indexOfWrapper(adapter)
         if (index == -1) {
             return false
@@ -226,7 +226,7 @@ internal class ConcatPagerAdapterController(
         return pageWidth
     }
 
-    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<GetItemDataPagerAdapter, Int> {
+    fun findLocalAdapterAndPosition(globalPosition: Int): Pair<GetItemDataPagerAdapter<*>, Int> {
         var localPosition = globalPosition
         for (wrapper in mWrappers) {
             if (wrapper.cachedItemCount > localPosition) {

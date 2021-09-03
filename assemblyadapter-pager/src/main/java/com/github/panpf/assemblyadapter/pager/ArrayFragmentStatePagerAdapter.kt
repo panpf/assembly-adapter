@@ -39,7 +39,7 @@ open class ArrayFragmentStatePagerAdapter(
     fragmentManager: FragmentManager,
     @Behavior behavior: Int,
     templateFragmentList: List<Fragment>
-) : RefreshableFragmentStatePagerAdapter(fragmentManager, behavior) {
+) : RefreshableFragmentStatePagerAdapter<Fragment>(fragmentManager, behavior) {
 
     private val itemDataStorage = ItemDataStorage(templateFragmentList) { notifyDataSetChanged() }
     private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
@@ -58,7 +58,7 @@ open class ArrayFragmentStatePagerAdapter(
     val currentPageTitleList: List<CharSequence>
         get() = pageTitleStorage?.readOnlyList ?: Collections.emptyList()
 
-    override fun getItemData(position: Int): Any {
+    override fun getItemData(position: Int): Fragment {
         return itemDataStorage.getData(position)
     }
 
@@ -95,7 +95,7 @@ open class ArrayFragmentStatePagerAdapter(
 
     override fun getFragment(position: Int): Fragment {
         // Keep the characteristics consistent with ArrayFragmentStateAdapter
-        val templateFragment = itemDataStorage.getData(position)
+        val templateFragment = getItemData(position)
         return templateFragment.javaClass.newInstance().apply {
             arguments = templateFragment.arguments
         }

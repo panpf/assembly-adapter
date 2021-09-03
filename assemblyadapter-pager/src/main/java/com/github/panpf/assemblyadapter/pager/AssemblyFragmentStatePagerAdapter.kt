@@ -48,7 +48,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     @Behavior behavior: Int,
     itemFactoryList: List<FragmentItemFactory<*>>,
     initDataList: List<DATA>? = null
-) : RefreshableFragmentStatePagerAdapter(fm, behavior),
+) : RefreshableFragmentStatePagerAdapter<DATA>(fm, behavior),
     AssemblyAdapter<FragmentItemFactory<*>>,
     AbsoluteAdapterPositionAdapter {
 
@@ -85,8 +85,8 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         itemDataStorage.submitList(list)
     }
 
-    override fun getItemData(position: Int): Any {
-        return itemDataStorage.getData(position) ?: Placeholder
+    override fun getItemData(position: Int): DATA {
+        return itemDataStorage.getData(position)
     }
 
     override fun getCount(): Int {
@@ -94,7 +94,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     }
 
     override fun getFragment(position: Int): Fragment {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
@@ -112,7 +112,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(
             data, "FragmentItemFactory", "AssemblyFragmentStatePagerAdapter", "itemFactoryList"
         )

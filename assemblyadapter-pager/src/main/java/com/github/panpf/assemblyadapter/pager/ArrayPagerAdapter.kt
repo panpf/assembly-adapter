@@ -25,7 +25,7 @@ import java.util.*
 /**
  * An implementation of [PagerAdapter], The data is provided by the [View] list passed in from the outside.
  */
-open class ArrayPagerAdapter(viewList: List<View>) : RefreshablePagerAdapter() {
+open class ArrayPagerAdapter(viewList: List<View>) : RefreshablePagerAdapter<View>() {
 
     private val itemDataStorage = ItemDataStorage(viewList) { notifyDataSetChanged() }
     private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
@@ -67,12 +67,12 @@ open class ArrayPagerAdapter(viewList: List<View>) : RefreshablePagerAdapter() {
         return itemDataStorage.dataCount
     }
 
-    override fun getItemData(position: Int): Any {
+    override fun getItemData(position: Int): View {
         return itemDataStorage.getData(position)
     }
 
     override fun getView(container: ViewGroup, position: Int): View {
-        return itemDataStorage.getData(position)
+        return getItemData(position)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

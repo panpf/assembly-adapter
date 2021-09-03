@@ -19,6 +19,7 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentStatePagerAdapter
 
@@ -39,11 +40,13 @@ import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentSta
 open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     fm: FragmentManager,
     @Behavior behavior: Int,
-    private val itemFactory: FragmentItemFactory<DATA>,
+    itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
-) : RefreshableFragmentStatePagerAdapter(fm, behavior),
+) : RefreshableFragmentStatePagerAdapter<DATA>(fm, behavior),
     AssemblyAdapter<FragmentItemFactory<*>>,
     AbsoluteAdapterPositionAdapter {
+
+    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
 
@@ -68,7 +71,7 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
 
     override fun getCount(): Int = if (data != null) 1 else 0
 
-    override fun getItemData(position: Int): Any {
+    override fun getItemData(position: Int): DATA {
         val count = count
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
@@ -77,31 +80,24 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     }
 
     override fun getFragment(position: Int): Fragment {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-
-        val data = data!!
+        val data = getItemData(position)
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
         // set nextItemAbsoluteAdapterPosition null to support ConcatFragmentStatePagerAdapter nesting
         nextItemAbsoluteAdapterPosition = null
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactory as FragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(
+        return getItemFactoryByPosition(position).dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return itemFactory
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<DATA> {
+        val data = getItemData(position)
+        return itemFactoryStorage.getItemFactoryByData(
+            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+        )
     }
 
 

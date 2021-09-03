@@ -34,7 +34,7 @@ class PagerAdapterRefreshHelperTest {
     @Test
     fun testView() {
         var list = listOf("data0", "data1", "data2")
-        val pagerAdapterRefreshHelper = PagerAdapterRefreshHelper(
+        val pagerAdapterRefreshHelper = PagerAdapterRefreshHelper<String>(
             { list.size },
             { position -> list[position] }
         )
@@ -117,7 +117,7 @@ class PagerAdapterRefreshHelperTest {
     @Test
     fun testFragment() {
         var list = listOf("data0", "data1", "data2")
-        val pagerAdapterRefreshHelper = PagerAdapterRefreshHelper(
+        val pagerAdapterRefreshHelper = PagerAdapterRefreshHelper<String>(
             { list.size },
             { position -> list[position] }
         )

@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataFragmentSta
  * Wrapper for each adapter in [ConcatFragmentStatePagerAdapter].
  */
 internal class NestedFragmentStatePagerAdapterWrapper(
-    val adapter: GetItemDataFragmentStatePagerAdapter,
+    val adapter: GetItemDataFragmentStatePagerAdapter<*>,
     private val mCallback: Callback,
 ) {
 

@@ -170,18 +170,18 @@ class AssemblyFragmentStateAdapterTest {
             fragment, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(-1)
+                getItemData(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(0)
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(1)
+                getItemData(1)
             }
 
             submitList(listOf(Text("hello"), Text("world")))
-            Assert.assertEquals(Text("hello"), getItem(0))
-            Assert.assertEquals(Text("world"), getItem(1))
+            Assert.assertEquals(Text("hello"), getItemData(0))
+            Assert.assertEquals(Text("world"), getItemData(1))
         }
     }
 

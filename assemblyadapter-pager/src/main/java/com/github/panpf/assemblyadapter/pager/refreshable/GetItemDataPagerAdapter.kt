@@ -17,7 +17,7 @@ package com.github.panpf.assemblyadapter.pager.refreshable
 
 import androidx.viewpager.widget.PagerAdapter
 
-abstract class GetItemDataPagerAdapter : PagerAdapter() {
+abstract class GetItemDataPagerAdapter<DATA> : PagerAdapter() {
 
-    abstract fun getItemData(position: Int): Any
+    abstract fun getItemData(position: Int): DATA
 }

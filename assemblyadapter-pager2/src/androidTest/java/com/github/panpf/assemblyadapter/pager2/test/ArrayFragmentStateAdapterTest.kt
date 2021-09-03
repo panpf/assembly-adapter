@@ -112,18 +112,18 @@ class ArrayFragmentStateAdapterTest {
         val fragment = fragmentScenario.getFragmentSync()
         ArrayFragmentStateAdapter(fragment, listOf()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(-1)
+                getItemData(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(0)
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(1)
+                getItemData(1)
             }
 
             submitList(listOf(TextFragment(), ImageFragment()))
-            Assert.assertTrue(getItem(0) is TextFragment)
-            Assert.assertTrue(getItem(1) is ImageFragment)
+            Assert.assertTrue(getItemData(0) is TextFragment)
+            Assert.assertTrue(getItemData(1) is ImageFragment)
         }
     }
 

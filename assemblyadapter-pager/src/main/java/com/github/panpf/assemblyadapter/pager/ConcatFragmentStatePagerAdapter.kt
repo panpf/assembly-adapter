@@ -38,15 +38,15 @@ import java.util.*
 open class ConcatFragmentStatePagerAdapter(
     fm: FragmentManager,
     @Behavior behavior: Int,
-    adapters: List<GetItemDataFragmentStatePagerAdapter>
-) : GetItemDataFragmentStatePagerAdapter(fm, behavior), AbsoluteAdapterPositionAdapter {
+    adapters: List<GetItemDataFragmentStatePagerAdapter<*>>
+) : GetItemDataFragmentStatePagerAdapter<Any?>(fm, behavior), AbsoluteAdapterPositionAdapter {
 
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
     private val mController = ConcatFragmentStatePagerAdapterController(this, adapters)
 
-    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper(this)
+    private var refreshHelper: PagerAdapterRefreshHelper<Any?>? = PagerAdapterRefreshHelper(this)
 
     /**
      * Disable the function of refreshing item when the data set changes.
@@ -75,7 +75,7 @@ open class ConcatFragmentStatePagerAdapter(
      *
      * @return A copy of the list of adapters in this ConcatPagerAdapter.
      */
-    val adapters: List<GetItemDataFragmentStatePagerAdapter>
+    val adapters: List<GetItemDataFragmentStatePagerAdapter<*>>
         get() = Collections.unmodifiableList(mController.copyOfAdapters)
 
     /**
@@ -86,7 +86,7 @@ open class ConcatFragmentStatePagerAdapter(
     constructor(
         fm: FragmentManager,
         @Behavior behavior: Int,
-        vararg adapters: GetItemDataFragmentStatePagerAdapter
+        vararg adapters: GetItemDataFragmentStatePagerAdapter<*>
     ) : this(fm, behavior, adapters.toList())
 
     /**
@@ -96,7 +96,7 @@ open class ConcatFragmentStatePagerAdapter(
      */
     constructor(
         fm: FragmentManager,
-        adapters: List<GetItemDataFragmentStatePagerAdapter>
+        adapters: List<GetItemDataFragmentStatePagerAdapter<*>>
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, adapters)
 
     /**
@@ -106,7 +106,7 @@ open class ConcatFragmentStatePagerAdapter(
      */
     constructor(
         fm: FragmentManager,
-        vararg adapters: GetItemDataFragmentStatePagerAdapter
+        vararg adapters: GetItemDataFragmentStatePagerAdapter<*>
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, adapters.toList())
 
     /**
@@ -119,7 +119,7 @@ open class ConcatFragmentStatePagerAdapter(
      * @see .addAdapter
      * @see .removeAdapter
      */
-    open fun addAdapter(adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
+    open fun addAdapter(adapter: GetItemDataFragmentStatePagerAdapter<*>): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -135,7 +135,7 @@ open class ConcatFragmentStatePagerAdapter(
      * @see .addAdapter
      * @see .removeAdapter
      */
-    open fun addAdapter(index: Int, adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
+    open fun addAdapter(index: Int, adapter: GetItemDataFragmentStatePagerAdapter<*>): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -146,7 +146,7 @@ open class ConcatFragmentStatePagerAdapter(
      * @return `true` if the adapter was previously added to this `ConcatPagerAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    open fun removeAdapter(adapter: GetItemDataFragmentStatePagerAdapter): Boolean {
+    open fun removeAdapter(adapter: GetItemDataFragmentStatePagerAdapter<*>): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -154,7 +154,7 @@ open class ConcatFragmentStatePagerAdapter(
         return mController.totalCount
     }
 
-    override fun getItemData(position: Int): Any {
+    override fun getItemData(position: Int): Any? {
         return mController.getData(position)
     }
 
@@ -180,7 +180,7 @@ open class ConcatFragmentStatePagerAdapter(
         return super.getItemPosition(item)
     }
 
-    open fun findLocalAdapterAndPosition(position: Int): Pair<GetItemDataFragmentStatePagerAdapter, Int> {
+    open fun findLocalAdapterAndPosition(position: Int): Pair<GetItemDataFragmentStatePagerAdapter<*>, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 

@@ -26,14 +26,14 @@ import java.util.*
 /**
  * An [GetItemDataPagerAdapter] implementation that presents the contents of multiple adapters in sequence.
  */
-open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItemDataPagerAdapter() {
+open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter<*>>) : GetItemDataPagerAdapter<Any?>() {
 
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
      */
     private val mController = ConcatPagerAdapterController(this, adapters)
 
-    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper(this)
+    private var refreshHelper: PagerAdapterRefreshHelper<Any?>? = PagerAdapterRefreshHelper(this)
 
     /**
      * Disable the function of refreshing item when the data set changes.
@@ -59,7 +59,7 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
      *
      * @return A copy of the list of adapters in this ConcatPagerAdapter.
      */
-    val adapters: List<GetItemDataPagerAdapter>
+    val adapters: List<GetItemDataPagerAdapter<*>>
         get() = Collections.unmodifiableList(mController.copyOfAdapters)
 
     /**
@@ -67,7 +67,7 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
      *
      * @param adapters The list of adapters to add
      */
-    constructor(vararg adapters: GetItemDataPagerAdapter) : this(adapters.toList())
+    constructor(vararg adapters: GetItemDataPagerAdapter<*>) : this(adapters.toList())
 
     /**
      * Appends the given adapter to the existing list of adapters and notifies the observers of
@@ -79,7 +79,7 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
      * @see .addAdapter
      * @see .removeAdapter
      */
-    open fun addAdapter(adapter: GetItemDataPagerAdapter): Boolean {
+    open fun addAdapter(adapter: GetItemDataPagerAdapter<*>): Boolean {
         return mController.addAdapter(adapter)
     }
 
@@ -95,7 +95,7 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
      * @see .addAdapter
      * @see .removeAdapter
      */
-    open fun addAdapter(index: Int, adapter: GetItemDataPagerAdapter): Boolean {
+    open fun addAdapter(index: Int, adapter: GetItemDataPagerAdapter<*>): Boolean {
         return mController.addAdapter(index, adapter)
     }
 
@@ -106,7 +106,7 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
      * @return `true` if the adapter was previously added to this `ConcatPagerAdapter` and
      * now removed or `false` if it couldn't be found.
      */
-    open fun removeAdapter(adapter: GetItemDataPagerAdapter): Boolean {
+    open fun removeAdapter(adapter: GetItemDataPagerAdapter<*>): Boolean {
         return mController.removeAdapter(adapter)
     }
 
@@ -114,7 +114,7 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
         return mController.totalCount
     }
 
-    override fun getItemData(position: Int): Any {
+    override fun getItemData(position: Int): Any? {
         return mController.getData(position)
     }
 
@@ -169,7 +169,7 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter>) : GetItem
         return super.getItemPosition(item)
     }
 
-    open fun findLocalAdapterAndPosition(position: Int): Pair<GetItemDataPagerAdapter, Int> {
+    open fun findLocalAdapterAndPosition(position: Int): Pair<GetItemDataPagerAdapter<*>, Int> {
         return mController.findLocalAdapterAndPosition(position)
     }
 }

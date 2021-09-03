@@ -20,12 +20,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
-abstract class RefreshableFragmentStatePagerAdapter(
+abstract class RefreshableFragmentStatePagerAdapter<DATA>(
     fragmentManager: FragmentManager,
     @Behavior behavior: Int
-) : GetItemDataFragmentStatePagerAdapter(fragmentManager, behavior) {
+) : GetItemDataFragmentStatePagerAdapter<DATA>(fragmentManager, behavior) {
 
-    private var refreshHelper: PagerAdapterRefreshHelper? = PagerAdapterRefreshHelper(this)
+    private var refreshHelper: PagerAdapterRefreshHelper<DATA>? = PagerAdapterRefreshHelper(this)
 
     /**
      * Disable the function of refreshing item when the data set changes.

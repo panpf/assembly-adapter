@@ -37,7 +37,7 @@ import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapte
 open class AssemblyPagerAdapter<DATA>(
     itemFactoryList: List<PagerItemFactory<*>>,
     initDataList: List<DATA>? = null
-) : RefreshablePagerAdapter(), AssemblyAdapter<PagerItemFactory<*>> {
+) : RefreshablePagerAdapter<DATA>(), AssemblyAdapter<PagerItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
@@ -64,12 +64,12 @@ open class AssemblyPagerAdapter<DATA>(
         return itemDataStorage.dataCount
     }
 
-    override fun getItemData(position: Int): Any {
-        return itemDataStorage.getData(position) ?: Placeholder
+    override fun getItemData(position: Int): DATA {
+        return itemDataStorage.getData(position)
     }
 
     override fun getView(container: ViewGroup, position: Int): View {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = container.getTag(R.id.aa_tag_absoluteAdapterPosition)
@@ -88,7 +88,7 @@ open class AssemblyPagerAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): PagerItemFactory<*> {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(
             data, "PagerItemFactory", "AssemblyPagerAdapter", "itemFactoryList"
         )
