@@ -93,4 +93,24 @@ class AssemblyLoadStateAdapterTest {
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }
+
+    @Test
+    fun testDisplayLoadStateAsItem() {
+        AssemblyLoadStateAdapter(LoadStateItemFactory()).apply {
+            Assert.assertTrue(displayLoadStateAsItem(LoadState.Loading))
+            Assert.assertTrue(displayLoadStateAsItem(LoadState.Error(Exception())))
+            Assert.assertFalse(displayLoadStateAsItem(LoadState.NotLoading(false)))
+            Assert.assertFalse(displayLoadStateAsItem(LoadState.NotLoading(true)))
+        }
+
+        AssemblyLoadStateAdapter(
+            itemFactory = LoadStateItemFactory(),
+            alwaysShowWhenEndOfPaginationReached = true
+        ).apply {
+            Assert.assertTrue(displayLoadStateAsItem(LoadState.Loading))
+            Assert.assertTrue(displayLoadStateAsItem(LoadState.Error(Exception())))
+            Assert.assertFalse(displayLoadStateAsItem(LoadState.NotLoading(false)))
+            Assert.assertTrue(displayLoadStateAsItem(LoadState.NotLoading(true)))
+        }
+    }
 }

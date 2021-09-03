@@ -22,6 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 
@@ -36,10 +37,7 @@ open class AssemblyLoadStateFragmentStateAdapter(
     lifecycle: Lifecycle,
     private val itemFactory: FragmentItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
-) : LoadStateFragmentStateAdapter(
-    fragmentManager,
-    lifecycle
-) {
+) : LoadStateFragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<FragmentItemFactory<*>> {
 
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
@@ -79,6 +77,14 @@ open class AssemblyLoadStateFragmentStateAdapter(
         alwaysShowWhenEndOfPaginationReached
     )
 
+    fun getItem(position: Int): LoadState {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+        return loadState
+    }
+
     override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
         return loadState is LoadState.Loading
                 || loadState is LoadState.Error
@@ -86,6 +92,11 @@ open class AssemblyLoadStateFragmentStateAdapter(
     }
 
     override fun onCreateFragment(position: Int, loadState: LoadState): Fragment {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
@@ -97,6 +108,15 @@ open class AssemblyLoadStateFragmentStateAdapter(
         return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, loadState
         )
+    }
+
+
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
+        val count = itemCount
+        if (position < 0 || position >= count) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+        }
+        return itemFactory
     }
 
 

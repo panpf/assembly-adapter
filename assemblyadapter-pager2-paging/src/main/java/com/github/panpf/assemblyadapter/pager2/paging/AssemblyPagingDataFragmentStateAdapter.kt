@@ -122,6 +122,12 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        val data = peek(position) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(
+            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
+        )
+    }
 
     override fun createFragment(position: Int): Fragment {
         // Here you must use the getItem method to trigger append load
