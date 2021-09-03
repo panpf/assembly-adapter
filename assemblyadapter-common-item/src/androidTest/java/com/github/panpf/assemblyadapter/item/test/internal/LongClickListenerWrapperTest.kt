@@ -15,7 +15,55 @@
  */
 package com.github.panpf.assemblyadapter.item.test.internal
 
+import android.view.View
+import android.widget.TextView
+import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.OnLongClickListener
+import com.github.panpf.assemblyadapter.common.item.R
+import com.github.panpf.assemblyadapter.internal.LongClickListenerWrapper
+import org.junit.Assert
+import org.junit.Test
+
 class LongClickListenerWrapperTest {
 
-    // todo Supplementary test
+    private class TestItem(itemView: View) : Item<String>(itemView) {
+        override fun bindData(
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: String
+        ) {
+
+        }
+    }
+
+    @Test
+    fun test() {
+        var bindingAdapterPosition: Int? = null
+        var absoluteAdapterPosition: Int? = null
+        var data: String? = null
+        val longClickListener =
+            OnLongClickListener<String> { _, _, _bindingAdapterPosition, _absoluteAdapterPosition, _data ->
+                bindingAdapterPosition = _bindingAdapterPosition
+                absoluteAdapterPosition = _absoluteAdapterPosition
+                data = _data
+                false
+            }
+
+        Assert.assertNull(bindingAdapterPosition)
+        Assert.assertNull(absoluteAdapterPosition)
+        Assert.assertNull(data)
+
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val itemView = TextView(context).apply {
+            setTag(R.id.aa_tag_clickBindItem, TestItem(this).apply {
+                dispatchBindData(2, 7, "hello")
+            })
+        }
+        LongClickListenerWrapper(longClickListener).onLongClick(itemView)
+
+        Assert.assertEquals(2, bindingAdapterPosition)
+        Assert.assertEquals(7, absoluteAdapterPosition)
+        Assert.assertEquals("hello", data)
+    }
 }
