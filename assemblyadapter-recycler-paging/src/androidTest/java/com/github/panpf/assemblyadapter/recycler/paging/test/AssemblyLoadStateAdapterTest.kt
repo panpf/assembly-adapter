@@ -1,0 +1,96 @@
+/*
+ * Copyright (C) 2021 panpf <panpfpanpf@outlook.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.github.panpf.assemblyadapter.recycler.paging.test
+
+import android.widget.TextView
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.ViewItemFactory
+import com.github.panpf.assemblyadapter.recycler.paging.AssemblyLoadStateAdapter
+import com.github.panpf.tools4j.test.ktx.assertThrow
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+
+@RunWith(AndroidJUnit4::class)
+class AssemblyLoadStateAdapterTest {
+
+    class LoadStateItemFactory : ViewItemFactory<LoadState>(LoadState::class, { context, _, _ ->
+        TextView(context)
+    })
+
+    @Test
+    fun testConstructor() {
+        AssemblyLoadStateAdapter(LoadStateItemFactory())
+        AssemblyLoadStateAdapter(LoadStateItemFactory(), true)
+    }
+
+    @Test
+    fun testMethodGetItem() {
+        AssemblyLoadStateAdapter(LoadStateItemFactory()).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(1)
+            }
+
+            loadState = LoadState.Loading
+            Assert.assertEquals(LoadState.Loading, getItem(0))
+        }
+    }
+
+    @Test
+    fun testMethodCreateAndBindViewHolder() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val parent = RecyclerView(context).apply {
+            layoutManager = LinearLayoutManager(context)
+        }
+        AssemblyLoadStateAdapter(LoadStateItemFactory()).apply {
+            loadState = LoadState.Loading
+
+            onCreateViewHolder(parent, -1)
+            Assert.assertTrue(onCreateViewHolder(parent, 0).itemView is TextView)
+
+            onBindViewHolder(onCreateViewHolder(parent, 0), 0)
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByPosition() {
+        val itemFactory = LoadStateItemFactory()
+        AssemblyLoadStateAdapter(itemFactory).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(1)
+            }
+
+            loadState = LoadState.Loading
+            Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        }
+    }
+}

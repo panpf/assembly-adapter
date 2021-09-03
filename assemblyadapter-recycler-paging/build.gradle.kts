@@ -34,7 +34,7 @@ dependencies {
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")
     androidTestImplementation("androidx.test:rules:${property("ANDROIDX_TEST_RULES")}")
     androidTestImplementation("androidx.test.ext:junit-ktx:${property("ANDROIDX_TEST_EXT")}")
-    androidTestImplementation("androidx.fragment:fragment:${property("ANDROIDX_FRAGMENT")}")
+//    androidTestImplementation("androidx.fragment:fragment:${property("ANDROIDX_FRAGMENT")}")
     androidTestImplementation("io.github.panpf.tools4j:tools4j-test-ktx:${property("TOOLS4J")}")
     androidTestImplementation("io.github.panpf.tools4a:tools4a-test-ktx:${property("TOOLS4A")}")
 }
