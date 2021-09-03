@@ -45,7 +45,7 @@ class ViewItemFactoryTest {
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item.dispatchBindData(0, 0, "test_data")
+        item.dispatchBindData(0, 0, "hello")
         Assert.assertEquals(
             "",
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).text
@@ -67,7 +67,7 @@ class ViewItemFactoryTest {
             item2.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item2.dispatchBindData(0, 0, "test_data")
+        item2.dispatchBindData(0, 0, "hello")
         Assert.assertEquals(
             "",
             item2.itemView.findViewById<TextView>(R.id.testItemTitleText).text
@@ -88,7 +88,7 @@ class ViewItemFactoryTest {
             item3.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item3.dispatchBindData(0, 0, "test_data")
+        item3.dispatchBindData(0, 0, "hello")
         Assert.assertEquals(
             "",
             item3.itemView.findViewById<TextView>(R.id.testItemTitleText).text

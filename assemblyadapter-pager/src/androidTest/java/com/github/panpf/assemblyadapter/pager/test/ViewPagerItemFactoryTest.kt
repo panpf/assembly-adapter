@@ -15,7 +15,65 @@
  */
 package com.github.panpf.assemblyadapter.pager.test
 
+import android.view.LayoutInflater
+import android.widget.FrameLayout
+import android.widget.TextView
+import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.pager.ViewPagerItemFactory
+import org.junit.Assert
+import org.junit.Test
+
 class ViewPagerItemFactoryTest {
 
-    // todo Supplementary test
+    @Test
+    fun test() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val parent = FrameLayout(context)
+
+        val itemFactory = ViewPagerItemFactory(String::class, R.layout.item_test)
+        val itemView = itemFactory.dispatchCreateItemView(context, parent, 0, 1, "hello")
+
+        Assert.assertEquals(
+            "",
+            itemView.findViewById<TextView>(R.id.testItemTitleText).text
+        )
+        Assert.assertEquals(
+            14f,
+            itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
+        )
+
+
+        val itemFactory2 = ViewPagerItemFactory(
+            String::class,
+            LayoutInflater.from(context).inflate(R.layout.item_test, parent, false)
+        )
+        val itemView2 = itemFactory2.dispatchCreateItemView(context, parent, 0, 1, "hello")
+
+        Assert.assertEquals(
+            "",
+            itemView2.findViewById<TextView>(R.id.testItemTitleText).text
+        )
+        Assert.assertEquals(
+            14f,
+            itemView2.findViewById<TextView>(R.id.testItemTitleText).textSize
+        )
+
+
+        val itemFactory3 =
+            ViewPagerItemFactory(String::class) { _, inflater, parent, bindingAdapterPosition, absoluteAdapterPosition, data ->
+                inflater.inflate(R.layout.item_test, parent, false).apply {
+                    findViewById<TextView>(R.id.testItemTitleText).text = data
+                }
+            }
+        val itemView3 = itemFactory3.dispatchCreateItemView(context, parent, 0, 1, "hello")
+
+        Assert.assertEquals(
+            "hello",
+            itemView3.findViewById<TextView>(R.id.testItemTitleText).text
+        )
+        Assert.assertEquals(
+            14f,
+            itemView3.findViewById<TextView>(R.id.testItemTitleText).textSize
+        )
+    }
 }

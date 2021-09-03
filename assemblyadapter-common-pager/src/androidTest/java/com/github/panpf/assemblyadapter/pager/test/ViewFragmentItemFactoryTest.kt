@@ -38,7 +38,7 @@ class ViewFragmentItemFactoryTest {
         val fragment = itemFactory.dispatchCreateFragment(
             0,
             0,
-            "test_data"
+            "hello"
         ) as ViewFragmentItemFactory.ViewFragment
 
         val itemView = fragment.onCreateView(LayoutInflater.from(context), parent, null)

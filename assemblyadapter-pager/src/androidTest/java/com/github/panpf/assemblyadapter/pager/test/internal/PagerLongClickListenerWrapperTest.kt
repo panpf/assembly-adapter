@@ -22,7 +22,7 @@ import com.github.panpf.assemblyadapter.pager.internal.PagerLongClickListenerWra
 import org.junit.Assert
 import org.junit.Test
 
-class PagerLongChickListenerWrapperTest {
+class PagerLongClickListenerWrapperTest {
 
     @Test
     fun test() {

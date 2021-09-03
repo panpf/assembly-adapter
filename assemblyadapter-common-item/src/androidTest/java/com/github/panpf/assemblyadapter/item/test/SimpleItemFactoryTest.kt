@@ -48,9 +48,9 @@ class SimpleItemFactoryTest {
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).textSize
         )
 
-        item.dispatchBindData(0, 0, "test_data")
+        item.dispatchBindData(0, 0, "hello")
         Assert.assertEquals(
-            "test_data",
+            "hello",
             item.itemView.findViewById<TextView>(R.id.testItemTitleText).text
         )
     }

@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.internal.ClickListenerStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.internal.Matchable
-import com.github.panpf.assemblyadapter.pager.internal.PagerChickListenerWrapper
+import com.github.panpf.assemblyadapter.pager.internal.PagerClickListenerWrapper
 import com.github.panpf.assemblyadapter.pager.internal.PagerLongClickListenerWrapper
 import kotlin.reflect.KClass
 
@@ -175,7 +175,7 @@ abstract class PagerItemFactory<DATA : Any>(final override val dataClass: KClass
                     itemView
                 }
                 targetView.setOnClickListener(
-                    PagerChickListenerWrapper(
+                    PagerClickListenerWrapper(
                         clickListenerHolder.listener,
                         bindingAdapterPosition,
                         absoluteAdapterPosition,

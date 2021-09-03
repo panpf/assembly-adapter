@@ -42,7 +42,7 @@ class FragmentItemFactoryTest {
     fun testMethodDispatchCreateFragment() {
         val testItemFactory = TestFragmentItemFactory(String::class)
 
-        val fragment = testItemFactory.dispatchCreateFragment(0, 0, "test_data")
+        val fragment = testItemFactory.dispatchCreateFragment(0, 0, "hello")
         Assert.assertTrue(fragment is TestFragment)
     }
 

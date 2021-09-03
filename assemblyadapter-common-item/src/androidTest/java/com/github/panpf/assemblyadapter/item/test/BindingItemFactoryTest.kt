@@ -44,8 +44,8 @@ class BindingItemFactoryTest {
         Assert.assertEquals("", item.binding.bindingTestItemTitleText.text)
         Assert.assertEquals(30f, item.binding.bindingTestItemTitleText.textSize)
 
-        item.dispatchBindData(0, 0, "test_data")
-        Assert.assertEquals("test_data", item.binding.bindingTestItemTitleText.text)
+        item.dispatchBindData(0, 0, "hello")
+        Assert.assertEquals("hello", item.binding.bindingTestItemTitleText.text)
     }
 
     private class TestBindingItemFactory :

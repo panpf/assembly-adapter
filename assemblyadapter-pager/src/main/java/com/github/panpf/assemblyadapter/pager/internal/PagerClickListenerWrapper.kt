@@ -18,7 +18,7 @@ package com.github.panpf.assemblyadapter.pager.internal
 import android.view.View
 import com.github.panpf.assemblyadapter.OnClickListener
 
-class PagerChickListenerWrapper<DATA : Any>(
+class PagerClickListenerWrapper<DATA : Any>(
     private val onClickListener: OnClickListener<DATA>,
     private val bindingAdapterPosition: Int,
     private val absoluteAdapterPosition: Int,

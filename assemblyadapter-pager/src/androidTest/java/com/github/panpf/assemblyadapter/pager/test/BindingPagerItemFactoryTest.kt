@@ -15,7 +15,70 @@
  */
 package com.github.panpf.assemblyadapter.pager.test
 
+import android.content.Context
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.viewbinding.ViewBinding
+import com.github.panpf.assemblyadapter.pager.BindingPagerItemFactory
+import org.junit.Assert
+import org.junit.Test
+
 class BindingPagerItemFactoryTest {
 
-    // todo Supplementary test
+    @Test
+    fun test() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val parent = FrameLayout(context)
+
+        val itemFactory = StringPagerBindingItemFactory()
+        itemFactory.dispatchCreateItemView(context, parent, 0, 1, "hello").apply {
+            val textView = findViewById<TextView>(R.id.testItemTitleText)
+            Assert.assertEquals(30f, textView.textSize)
+            Assert.assertEquals("hello", textView.text)
+        }
+    }
+
+    private class StringPagerBindingItemFactory :
+        BindingPagerItemFactory<String, ItemBindingTestBinding>(String::class) {
+
+        override fun createItemViewBinding(
+            context: Context,
+            inflater: LayoutInflater,
+            parent: ViewGroup,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: String
+        ) = ItemBindingTestBinding.inflate(inflater, parent, false).apply {
+            bindingTestItemTitleText.setTextSize(TypedValue.COMPLEX_UNIT_PX, 30f)
+            bindingTestItemTitleText.text = data
+        }
+    }
+
+    private class ItemBindingTestBinding(
+        private val root: LinearLayout,
+        val bindingTestItemTitleText: TextView
+    ) : ViewBinding {
+
+        override fun getRoot(): View = root
+
+        companion object {
+            fun inflate(
+                inflater: LayoutInflater,
+                parent: ViewGroup?,
+                attach: Boolean
+            ): ItemBindingTestBinding {
+                val itemView = inflater.inflate(R.layout.item_test, parent, attach)
+                return ItemBindingTestBinding(
+                    itemView as LinearLayout,
+                    itemView.findViewById(R.id.testItemTitleText)
+                )
+            }
+        }
+    }
 }

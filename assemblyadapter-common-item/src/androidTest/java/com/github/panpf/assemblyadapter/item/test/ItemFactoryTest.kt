@@ -33,23 +33,22 @@ import com.github.panpf.tools4j.reflect.ktx.getFieldValue
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import kotlin.reflect.KClass
 
 class ItemFactoryTest {
 
     @Test
     fun testMethodMatchData() {
-        val testItemFactory = TestItemFactory(String::class)
+        val testItemFactory = StringItemFactory()
 
         Assert.assertFalse(testItemFactory.matchData(1))
         Assert.assertFalse(testItemFactory.matchData(false))
-        Assert.assertTrue(testItemFactory.matchData("string"))
+        Assert.assertTrue(testItemFactory.matchData("hello"))
     }
 
     @Test
     fun testMethodDispatchCreateItem() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val testItemFactory = TestItemFactory(String::class)
+        val testItemFactory = StringItemFactory()
 
         val item = testItemFactory.dispatchCreateItem(FrameLayout(context))
         Assert.assertTrue(item is TestItem)
@@ -58,7 +57,7 @@ class ItemFactoryTest {
     @Test
     fun testMethodSetOnViewClickListener() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        TestItemFactory(String::class).apply {
+        StringItemFactory().apply {
             val item = dispatchCreateItem(FrameLayout(context))
             val rootView = item.itemView
             val childView = item.itemView.findViewById<TextView>(R.id.aa_tag_clickBindItem)
@@ -76,7 +75,7 @@ class ItemFactoryTest {
             Assert.assertNull(viewOnLongClickListener)
         }
 
-        TestItemFactory(String::class).apply {
+        StringItemFactory().apply {
             setOnItemClickListener(TestOnClickListener())
             setOnItemLongClickListener(TestOnLongClickListener())
             setOnViewClickListener(R.id.aa_tag_clickBindItem, TestOnClickListener())
@@ -99,13 +98,13 @@ class ItemFactoryTest {
         }
 
         assertThrow(IllegalArgumentException::class) {
-            TestItemFactory(String::class).apply {
+            StringItemFactory().apply {
                 setOnViewClickListener(R.id.aa_tag_absoluteAdapterPosition, TestOnClickListener())
             }.dispatchCreateItem(FrameLayout(context))
         }
 
         assertThrow(IllegalArgumentException::class) {
-            TestItemFactory(String::class).apply {
+            StringItemFactory().apply {
                 setOnViewLongClickListener(
                     R.id.aa_tag_absoluteAdapterPosition,
                     TestOnLongClickListener()
@@ -115,9 +114,8 @@ class ItemFactoryTest {
     }
 
 
-    private class TestItemFactory<DATA : Any>(dataClass: KClass<DATA>) :
-        ItemFactory<DATA>(dataClass) {
-        override fun createItem(parent: ViewGroup): Item<DATA> {
+    private class StringItemFactory : ItemFactory<String>(String::class) {
+        override fun createItem(parent: ViewGroup): Item<String> {
             return TestItem(FrameLayout(parent.context).apply {
                 addView(TextView(parent.context).apply {
                     id = R.id.aa_tag_clickBindItem
@@ -126,11 +124,11 @@ class ItemFactoryTest {
         }
     }
 
-    private class TestItem<DATA : Any>(itemView: View) : Item<DATA>(itemView) {
+    private class TestItem(itemView: View) : Item<String>(itemView) {
         override fun bindData(
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
-            data: DATA
+            data: String
         ) {
 
         }

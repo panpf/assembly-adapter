@@ -18,11 +18,11 @@ package com.github.panpf.assemblyadapter.pager.test.internal
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.OnClickListener
-import com.github.panpf.assemblyadapter.pager.internal.PagerChickListenerWrapper
+import com.github.panpf.assemblyadapter.pager.internal.PagerClickListenerWrapper
 import org.junit.Assert
 import org.junit.Test
 
-class PagerChickListenerWrapperTest {
+class PagerClickListenerWrapperTest {
 
     @Test
     fun test() {
@@ -42,7 +42,7 @@ class PagerChickListenerWrapperTest {
 
         val context = InstrumentationRegistry.getInstrumentation().context
         val itemView = TextView(context)
-        PagerChickListenerWrapper(clickListener, 2, 7, "hello").onClick(itemView)
+        PagerClickListenerWrapper(clickListener, 2, 7, "hello").onClick(itemView)
 
         Assert.assertEquals(2, bindingAdapterPosition)
         Assert.assertEquals(7, absoluteAdapterPosition)
