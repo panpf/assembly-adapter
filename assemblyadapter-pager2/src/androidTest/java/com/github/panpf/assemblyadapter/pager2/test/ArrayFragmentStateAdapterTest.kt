@@ -37,14 +37,14 @@ class ArrayFragmentStateAdapterTest {
             TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
 
-        ArrayFragmentStateAdapter(fragment, listOf()).apply {
+        ArrayFragmentStateAdapter(fragment).apply {
             Assert.assertEquals(0, currentList.size)
         }
         ArrayFragmentStateAdapter(fragment, listOf(TextFragment(), ImageFragment())).apply {
             Assert.assertEquals(2, currentList.size)
         }
 
-        ArrayFragmentStateAdapter(fragment.requireActivity(), listOf()).apply {
+        ArrayFragmentStateAdapter(fragment.requireActivity()).apply {
             Assert.assertEquals(0, currentList.size)
         }
         ArrayFragmentStateAdapter(
@@ -54,11 +54,7 @@ class ArrayFragmentStateAdapterTest {
             Assert.assertEquals(2, currentList.size)
         }
 
-        ArrayFragmentStateAdapter(
-            fragment.childFragmentManager,
-            fragment.lifecycle,
-            listOf()
-        ).apply {
+        ArrayFragmentStateAdapter(fragment.childFragmentManager, fragment.lifecycle).apply {
             Assert.assertEquals(0, currentList.size)
         }
         ArrayFragmentStateAdapter(
@@ -74,7 +70,7 @@ class ArrayFragmentStateAdapterTest {
     fun testPropertyCurrentListAndSubmitList() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        ArrayFragmentStateAdapter(fragment, listOf()).apply {
+        ArrayFragmentStateAdapter(fragment).apply {
             Assert.assertEquals(0, currentList.size)
 
             submitList(listOf(TextFragment()))
@@ -92,7 +88,7 @@ class ArrayFragmentStateAdapterTest {
     fun testMethodGetCount() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        ArrayFragmentStateAdapter(fragment, listOf()).apply {
+        ArrayFragmentStateAdapter(fragment).apply {
             Assert.assertEquals(0, itemCount)
 
             submitList(listOf(TextFragment()))
@@ -107,10 +103,10 @@ class ArrayFragmentStateAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodGetItemData() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        ArrayFragmentStateAdapter(fragment, listOf()).apply {
+        ArrayFragmentStateAdapter(fragment).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemData(-1)
             }
@@ -132,7 +128,7 @@ class ArrayFragmentStateAdapterTest {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
 
-        ArrayFragmentStateAdapter(fragment, listOf()).apply {
+        ArrayFragmentStateAdapter(fragment).apply {
             assertThrow(UnsupportedOperationException::class) {
                 setHasStableIds(true)
             }
@@ -141,7 +137,7 @@ class ArrayFragmentStateAdapterTest {
             Assert.assertEquals(1L, getItemId(1))
         }
 
-        ArrayFragmentStateAdapter(fragment, listOf()).apply {
+        ArrayFragmentStateAdapter(fragment).apply {
             assertThrow(UnsupportedOperationException::class) {
                 setHasStableIds(true)
             }
@@ -161,7 +157,7 @@ class ArrayFragmentStateAdapterTest {
     fun testMethodGetItemViewType() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        ArrayFragmentStateAdapter(fragment, listOf()).apply {
+        ArrayFragmentStateAdapter(fragment).apply {
             getItemViewType(0)
             getItemViewType(0)
             getItemViewType(0)
@@ -176,11 +172,17 @@ class ArrayFragmentStateAdapterTest {
     fun testMethodCreateFragment() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        ArrayFragmentStateAdapter(fragment, listOf()).apply {
+        ArrayFragmentStateAdapter(fragment).apply {
             submitList(listOf(TextFragment(), ImageFragment()))
 
-            Assert.assertTrue(createFragment(0) is TextFragment)
-            Assert.assertTrue(createFragment(1) is ImageFragment)
+            createFragment(0).apply {
+                Assert.assertTrue(this is TextFragment)
+                Assert.assertNotSame(getItemData(0), this)
+            }
+            createFragment(1).apply {
+                Assert.assertTrue(this is ImageFragment)
+                Assert.assertNotSame(getItemData(1), this)
+            }
         }
     }
 }

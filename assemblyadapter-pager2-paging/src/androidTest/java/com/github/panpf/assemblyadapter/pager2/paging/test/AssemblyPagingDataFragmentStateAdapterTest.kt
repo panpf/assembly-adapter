@@ -280,7 +280,7 @@ class AssemblyPagingDataFragmentStateAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodPeek() {
         val fragmentScenario = PagingTestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val pagingDataAdapter: AssemblyPagingDataFragmentStateAdapter<Any> =

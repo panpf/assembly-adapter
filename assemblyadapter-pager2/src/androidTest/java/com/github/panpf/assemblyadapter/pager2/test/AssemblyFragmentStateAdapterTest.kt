@@ -163,7 +163,7 @@ class AssemblyFragmentStateAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodGetItemData() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         AssemblyFragmentStateAdapter<Any>(

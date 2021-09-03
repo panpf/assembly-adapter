@@ -663,7 +663,7 @@ class ConcatExpandableListAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodGetGroupAndChild() {
         ConcatExpandableListAdapter(
             AssemblySingleDataExpandableListAdapter<TextGroup, Any>(
                 itemFactoryList = listOf(TextGroupItemFactory(), TextItemFactory()),

@@ -196,7 +196,7 @@ class AssemblyPagingDataAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodPeek() {
         val fragmentScenario = PagingTestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val pagingDataAdapter: AssemblyPagingDataAdapter<Any> = fragment.pagingDataAdapter
