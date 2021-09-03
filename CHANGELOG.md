@@ -18,6 +18,9 @@ recycler-paging:
 pager2-paging:
 * new: AssemblyPagingDataAdapter added currentList property
 
+pager:
+* fix: Fix the bug that the value of the isDisableItemRefreshWhenDataSetChanged property of the refreshable PagerAdapter is wrong
+
 # v4.0.0-beta02
 
 recycler:

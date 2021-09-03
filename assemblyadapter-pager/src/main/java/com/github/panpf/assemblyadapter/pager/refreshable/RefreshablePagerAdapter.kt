@@ -33,7 +33,7 @@ abstract class RefreshablePagerAdapter<DATA> : GetItemDataPagerAdapter<DATA>() {
      * method return POSITION_NONE when the dataset changes.
      */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
-        get() = refreshHelper != null
+        get() = refreshHelper == null
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
                 refreshHelper = if (disable) null else PagerAdapterRefreshHelper(this)
@@ -50,13 +50,6 @@ abstract class RefreshablePagerAdapter<DATA> : GetItemDataPagerAdapter<DATA>() {
 
     abstract fun getView(container: ViewGroup, position: Int): View
 
-    override fun getItemPosition(item: Any): Int {
-        if (refreshHelper?.isItemPositionChanged(item as View) == true) {
-            return POSITION_NONE
-        }
-        return super.getItemPosition(item)
-    }
-
     override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
         val count = count
         if (position < 0 || position >= count) {
@@ -67,5 +60,12 @@ abstract class RefreshablePagerAdapter<DATA> : GetItemDataPagerAdapter<DATA>() {
 
     override fun isViewFromObject(view: View, item: Any): Boolean {
         return view === item
+    }
+
+    override fun getItemPosition(item: Any): Int {
+        if (refreshHelper?.isItemPositionChanged(item as View) == true) {
+            return POSITION_NONE
+        }
+        return super.getItemPosition(item)
     }
 }

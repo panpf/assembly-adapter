@@ -36,7 +36,7 @@ abstract class RefreshableFragmentStatePagerAdapter<DATA>(
      * method return POSITION_NONE when the dataset changes.
      */
     var isDisableItemRefreshWhenDataSetChanged: Boolean
-        get() = refreshHelper != null
+        get() = refreshHelper == null
         set(disable) {
             if (disable != isDisableItemRefreshWhenDataSetChanged) {
                 refreshHelper = if (disable) null else PagerAdapterRefreshHelper(this)
