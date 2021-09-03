@@ -37,8 +37,8 @@ import java.util.*
 )
 open class ArrayFragmentStatePagerAdapter(
     fragmentManager: FragmentManager,
-    @Behavior behavior: Int,
-    templateFragmentList: List<Fragment>
+    @Behavior behavior: Int = BEHAVIOR_SET_USER_VISIBLE_HINT,
+    templateFragmentList: List<Fragment>? = null
 ) : RefreshableFragmentStatePagerAdapter<Fragment>(fragmentManager, behavior) {
 
     private val itemDataStorage = ItemDataStorage(templateFragmentList) { notifyDataSetChanged() }
@@ -66,7 +66,7 @@ open class ArrayFragmentStatePagerAdapter(
         """use {@link #FragmentArrayStatePagerAdapter(FragmentManager, int, List)} with
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
     )
-    constructor(fm: FragmentManager, fragments: List<Fragment>) : this(
+    constructor(fm: FragmentManager, fragments: List<Fragment>? = null) : this(
         fm, BEHAVIOR_SET_USER_VISIBLE_HINT, fragments
     )
 

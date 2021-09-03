@@ -30,7 +30,7 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 open class ArrayFragmentStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    templateFragmentList: List<Fragment>
+    templateFragmentList: List<Fragment>? = null
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     private val itemDataStorage = ItemDataStorage(templateFragmentList) { notifyDataSetChanged() }
@@ -46,14 +46,14 @@ open class ArrayFragmentStateAdapter(
      * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [ArrayFragmentStateAdapter]
      */
     constructor(
-        fragmentActivity: FragmentActivity, fragments: List<Fragment>
+        fragmentActivity: FragmentActivity, fragments: List<Fragment>? = null
     ) : this(fragmentActivity.supportFragmentManager, fragmentActivity.lifecycle, fragments)
 
     /**
      * Get [FragmentManager] and [Lifecycle] from [Fragment] to create [ArrayFragmentStateAdapter]
      */
     constructor(
-        fragment: Fragment, fragments: List<Fragment>
+        fragment: Fragment, fragments: List<Fragment>? = null
     ) : this(fragment.childFragmentManager, fragment.lifecycle, fragments)
 
 
