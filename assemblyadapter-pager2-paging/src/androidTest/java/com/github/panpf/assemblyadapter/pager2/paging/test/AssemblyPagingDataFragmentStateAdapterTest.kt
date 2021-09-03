@@ -56,6 +56,8 @@ class AssemblyPagingDataFragmentStateAdapterTest {
         ): Fragment = TextFragment()
     }
 
+    class TextFragment : Fragment()
+
     data class Image(val resId: Int) : DiffKey {
         override val diffKey: Any = "Image:$resId"
     }
@@ -68,6 +70,8 @@ class AssemblyPagingDataFragmentStateAdapterTest {
         ): Fragment = ImageFragment()
     }
 
+    class ImageFragment : Fragment()
+
     private data class NoDiffKey(val name: String = "")
 
     private class NoDiffKeyItemFactory : FragmentItemFactory<NoDiffKey>(NoDiffKey::class) {
@@ -77,10 +81,6 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             data: NoDiffKey
         ): Fragment = NoDiffKeyFragment()
     }
-
-    class TextFragment : Fragment()
-
-    class ImageFragment : Fragment()
 
     class NoDiffKeyFragment : Fragment()
 

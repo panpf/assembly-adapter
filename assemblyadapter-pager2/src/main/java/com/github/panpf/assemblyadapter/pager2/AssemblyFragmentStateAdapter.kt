@@ -109,8 +109,19 @@ open class AssemblyFragmentStateAdapter<DATA>(
         return itemDataStorage.dataCount
     }
 
+    fun getItem(position: Int): DATA {
+        return itemDataStorage.getData(position)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val data = getItem(position) ?: Placeholder
+        return itemFactoryStorage.getItemTypeByData(
+            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
+        )
+    }
+
     override fun createFragment(position: Int): Fragment {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItem(position) ?: Placeholder
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
@@ -131,7 +142,7 @@ open class AssemblyFragmentStateAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
-        val data = itemDataStorage.getData(position) ?: Placeholder
+        val data = getItem(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(
             data, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
         )

@@ -67,6 +67,10 @@ open class ArrayFragmentStateAdapter(
 
     override fun getItemCount(): Int = itemDataStorage.dataCount
 
+    fun getItem(position: Int): Fragment {
+        return itemDataStorage.getData(position)
+    }
+
     override fun createFragment(position: Int): Fragment {
         // https://developer.android.com/training/animation/vp2-migration
         // The official document clearly states that it is necessary to ensure that the new instance returned by this method each time is not reusable

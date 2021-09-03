@@ -22,6 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 
@@ -35,12 +36,13 @@ import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    private val itemFactory: FragmentItemFactory<DATA>,
+    itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
 ) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<FragmentItemFactory<*>> {
 
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
+    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
 
     /**
      * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
@@ -82,11 +84,23 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
 
     override fun getItemCount(): Int = if (data != null) 1 else 0
 
-    override fun createFragment(position: Int): Fragment {
+    fun getItem(position: Int): DATA {
         val count = itemCount
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
         }
+        return data!!
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val data = getItem(position)
+        return itemFactoryStorage.getItemTypeByData(
+            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
+        )
+    }
+
+    override fun createFragment(position: Int): Fragment {
+        val data = getItem(position)
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter != null) {
@@ -94,19 +108,17 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
         } else {
             bindingAdapterPosition
         }
-
-        return itemFactory.dispatchCreateFragment(
-            bindingAdapterPosition, absoluteAdapterPosition, data!!
+        return getItemFactoryByPosition(position).dispatchCreateFragment(
+            bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return itemFactory
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<DATA> {
+        val data = getItem(position)
+        return itemFactoryStorage.getItemFactoryByData(
+            data, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
+        )
     }
 
 
