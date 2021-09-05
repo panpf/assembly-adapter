@@ -28,9 +28,7 @@ import org.junit.Test
 
 class AssemblyFragmentStateAdapterTest {
 
-    data class Text(val text: String) : DiffKey {
-        override val diffKey: Any = "Text:$text"
-    }
+    data class Text(val text: String)
 
     class TextFragmentItemFactory : FragmentItemFactory<Text>(Text::class) {
         override fun createFragment(
@@ -42,9 +40,7 @@ class AssemblyFragmentStateAdapterTest {
 
     class TextFragment : Fragment()
 
-    data class Image(val resId: Int) : DiffKey {
-        override val diffKey: Any = "Image:$resId"
-    }
+    data class Image(val resId: Int)
 
     class ImageFragmentItemFactory : FragmentItemFactory<Image>(Image::class) {
         override fun createFragment(

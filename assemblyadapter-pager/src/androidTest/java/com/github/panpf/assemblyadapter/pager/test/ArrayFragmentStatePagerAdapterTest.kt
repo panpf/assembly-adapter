@@ -133,17 +133,26 @@ class ArrayFragmentStatePagerAdapterTest {
     }
 
     @Test
-    fun testMethodGetFragment() {
+    fun testMethodGetItem() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         ArrayFragmentStatePagerAdapter(fragment.childFragmentManager).apply {
             submitList(listOf(TextFragment(), ImageFragment()))
 
-            getFragment(0).apply {
+            var item0: Fragment? = null
+            fragmentScenario.onFragment {
+                item0 = getItem(0)
+            }
+            item0!!.apply {
                 Assert.assertTrue(this is TextFragment)
                 Assert.assertNotSame(getItemData(0), this)
             }
-            getFragment(1).apply {
+
+            var item1: Fragment? = null
+            fragmentScenario.onFragment {
+                item1 = getItem(1)
+            }
+            item1!!.apply {
                 Assert.assertTrue(this is ImageFragment)
                 Assert.assertNotSame(getItemData(1), this)
             }

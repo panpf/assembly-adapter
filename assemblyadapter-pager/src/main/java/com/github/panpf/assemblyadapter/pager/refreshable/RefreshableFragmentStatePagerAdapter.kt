@@ -56,7 +56,7 @@ abstract class RefreshableFragmentStatePagerAdapter<DATA>(
         }
     }
 
-    abstract fun getFragment(position: Int): Fragment
+    protected abstract fun getFragment(position: Int): Fragment
 
     override fun getItemPosition(item: Any): Int {
         if (refreshHelper?.isItemPositionChanged(item as Fragment) == true) {

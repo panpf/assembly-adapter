@@ -48,7 +48,7 @@ abstract class RefreshablePagerAdapter<DATA> : GetItemDataPagerAdapter<DATA>() {
         }
     }
 
-    abstract fun getView(container: ViewGroup, position: Int): View
+    protected abstract fun getView(container: ViewGroup, position: Int): View
 
     override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
         val count = count

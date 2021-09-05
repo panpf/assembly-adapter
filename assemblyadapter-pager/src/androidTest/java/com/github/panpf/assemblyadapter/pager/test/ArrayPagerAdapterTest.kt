@@ -110,14 +110,14 @@ class ArrayPagerAdapterTest {
     }
 
     @Test
-    fun testMethodGetFragment() {
+    fun testMethodInstantiateItem() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
         ArrayPagerAdapter().apply {
             submitList(listOf(TextView(context), ImageView(context)))
 
-            Assert.assertTrue(getView(parent, 0) is TextView)
-            Assert.assertTrue(getView(parent, 1) is ImageView)
+            Assert.assertTrue(instantiateItem(parent, 0) is TextView)
+            Assert.assertTrue(instantiateItem(parent, 1) is ImageView)
         }
     }
 }
