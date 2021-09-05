@@ -493,7 +493,7 @@ class ConcatListAdapterTest {
             Assert.assertEquals(Text("world"), getItem(2))
             Assert.assertEquals(Image(android.R.drawable.btn_plus), getItem(3))
             Assert.assertEquals(Image(android.R.drawable.alert_dark_frame), getItem(4))
-            assertThrow(IllegalArgumentException::class) {
+            assertThrow(IndexOutOfBoundsException::class) {
                 getItem(5)
             }
         }
