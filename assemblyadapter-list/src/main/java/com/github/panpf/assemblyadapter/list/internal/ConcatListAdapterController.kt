@@ -190,10 +190,6 @@ internal class ConcatListAdapterController(
     }
 
     fun getItem(globalPosition: Int): Any? {
-        val count = totalCount
-        if (globalPosition < 0 || globalPosition >= count) {
-            throw IndexOutOfBoundsException("Index: $globalPosition, Size: $count")
-        }
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalPosition)
         val item = wrapperAndPos.mWrapper!!.adapter.getItem(wrapperAndPos.mLocalPosition)
         releaseWrapperAndLocalPosition(wrapperAndPos)

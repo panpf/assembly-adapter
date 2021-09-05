@@ -57,10 +57,6 @@ internal class ConcatPagerAdapterController(
     }
 
     fun getData(globalPosition: Int): Any? {
-        val count = totalCount
-        if (globalPosition < 0 || globalPosition >= count) {
-            throw IndexOutOfBoundsException("Index: $globalPosition, Size: $count")
-        }
         val (localAdapter, localPosition) = findLocalAdapterAndPosition(globalPosition)
         return localAdapter.getItemData(localPosition)
     }

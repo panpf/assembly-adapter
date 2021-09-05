@@ -211,10 +211,6 @@ internal class ConcatExpandableListAdapterController(
     }
 
     fun getGroup(globalGroupPosition: Int): Any? {
-        val count = groupCount
-        if (globalGroupPosition < 0 || globalGroupPosition >= count) {
-            throw IndexOutOfBoundsException("Index: $globalGroupPosition, Size: $count")
-        }
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
         val group = wrapperAndPos.mWrapper!!.adapter.getGroup(wrapperAndPos.mLocalPosition)
         releaseWrapperAndLocalPosition(wrapperAndPos)
@@ -261,10 +257,7 @@ internal class ConcatExpandableListAdapterController(
     }
 
     fun getChild(globalGroupPosition: Int, childPosition: Int): Any? {
-        val count = groupCount
-        if (globalGroupPosition < 0 || globalGroupPosition >= count) {
-            throw IndexOutOfBoundsException("Index: $globalGroupPosition, Size: $count")
-        }
+
         val wrapperAndPos = findWrapperAndLocalPositionInternal(globalGroupPosition)
         val group =
             wrapperAndPos.mWrapper!!.adapter.getChild(wrapperAndPos.mLocalPosition, childPosition)

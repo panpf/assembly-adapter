@@ -695,7 +695,7 @@ class ConcatExpandableListAdapterTest {
             Assert.assertEquals(TextGroup("world"), getGroup(2))
             Assert.assertEquals(ImageGroup(android.R.drawable.btn_plus), getGroup(3))
             Assert.assertEquals(ImageGroup(android.R.drawable.alert_dark_frame), getGroup(4))
-            assertThrow(IndexOutOfBoundsException::class) {
+            assertThrow(IllegalArgumentException::class) {
                 getGroup(5)
             }
 
@@ -707,7 +707,7 @@ class ConcatExpandableListAdapterTest {
             Assert.assertEquals(Text("world"), getChild(2, 0))
             Assert.assertEquals(Image(android.R.drawable.btn_plus), getChild(3, 0))
             Assert.assertEquals(Image(android.R.drawable.alert_dark_frame), getChild(4, 0))
-            assertThrow(IndexOutOfBoundsException::class) {
+            assertThrow(IllegalArgumentException::class) {
                 getChild(5, 0)
             }
         }
