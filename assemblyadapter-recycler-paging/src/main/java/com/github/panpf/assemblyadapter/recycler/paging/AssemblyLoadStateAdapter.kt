@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
@@ -33,9 +34,11 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
  * @param alwaysShowWhenEndOfPaginationReached If true, it will still be displayed at the end of pagination reached
  */
 open class AssemblyLoadStateAdapter(
-    private val itemFactory: ItemFactory<LoadState>,
+    itemFactory: ItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
 ) : LoadStateAdapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
+
+    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
 
     fun getItemData(position: Int): LoadState {
         val count = itemCount
@@ -48,6 +51,9 @@ open class AssemblyLoadStateAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup, loadState: LoadState
     ): RecyclerView.ViewHolder {
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(
+            loadState, "ItemFactory", "AssemblyLoadStateAdapter", "itemFactory"
+        )
         val item = itemFactory.dispatchCreateItem(parent)
         return RecyclerViewHolderWrapper(item).apply {
             val layoutManager =
@@ -79,10 +85,9 @@ open class AssemblyLoadStateAdapter(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<LoadState> {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return itemFactory
+        val data = getItemData(position)
+        return itemFactoryStorage.getItemFactoryByData(
+            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+        )
     }
 }

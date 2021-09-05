@@ -23,6 +23,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 
@@ -35,12 +36,14 @@ import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 open class AssemblyLoadStateFragmentStateAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    private val itemFactory: FragmentItemFactory<LoadState>,
+    itemFactory: FragmentItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
-) : LoadStateFragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<FragmentItemFactory<*>> {
+) : LoadStateFragmentStateAdapter(fragmentManager, lifecycle),
+    AssemblyAdapter<FragmentItemFactory<*>> {
 
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
+    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
 
 
     /**
@@ -92,11 +95,10 @@ open class AssemblyLoadStateFragmentStateAdapter(
     }
 
     override fun onCreateFragment(position: Int, loadState: LoadState): Fragment {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-
+        val data = getItemData(position)
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(
+            loadState, "ItemFactory", "AssemblyLoadStateAdapter", "itemFactory"
+        )
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
@@ -106,17 +108,16 @@ open class AssemblyLoadStateFragmentStateAdapter(
         }
 
         return itemFactory.dispatchCreateFragment(
-            bindingAdapterPosition, absoluteAdapterPosition, loadState
+            bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<LoadState> {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return itemFactory
+        val data = getItemData(position)
+        return itemFactoryStorage.getItemFactoryByData(
+            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+        )
     }
 
 
