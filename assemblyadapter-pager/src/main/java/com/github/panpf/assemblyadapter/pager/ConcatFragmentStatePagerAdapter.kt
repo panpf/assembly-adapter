@@ -154,6 +154,9 @@ open class ConcatFragmentStatePagerAdapter(
         return mController.totalCount
     }
 
+    val itemCount: Int
+        get() = mController.totalCount
+
     override fun getItemData(position: Int): Any? {
         return mController.getData(position)
     }

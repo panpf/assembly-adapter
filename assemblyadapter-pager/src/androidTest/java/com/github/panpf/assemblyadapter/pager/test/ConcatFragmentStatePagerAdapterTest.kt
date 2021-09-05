@@ -16,90 +16,629 @@
 package com.github.panpf.assemblyadapter.pager.test
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblySingleDataFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
-import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
+import com.github.panpf.tools4a.test.ktx.getFragmentSync
+import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
+import com.github.panpf.tools4j.test.ktx.assertThrow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class ConcatFragmentStatePagerAdapterTest {
 
-    private data class Text(val text: String)
+    data class Text(val text: String)
 
-    private class TextFragmentItemFactory : ViewFragmentItemFactory<Text>(
-        Text::class, android.R.layout.activity_list_item
-    ) {
+    class TextFragmentItemFactory : FragmentItemFactory<Text>(Text::class) {
         override fun createFragment(
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
             data: Text
-        ): Fragment {
-            return super.createFragment(bindingAdapterPosition, absoluteAdapterPosition, data)
-                .apply {
-                    arguments = Bundle().apply {
-                        putInt("bindingAdapterPosition", bindingAdapterPosition)
-                        putInt("absoluteAdapterPosition", absoluteAdapterPosition)
-                    }
-                }
+        ): Fragment = TextFragment().apply {
+            arguments = Bundle().apply {
+                putInt("bindingAdapterPosition", bindingAdapterPosition)
+                putInt("absoluteAdapterPosition", absoluteAdapterPosition)
+            }
         }
     }
 
-    // todo Supplementary test
+    class TextFragment : Fragment() {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? = TextView(requireContext())
+    }
+
+    data class Image(val resId: Int)
+
+    class ImageFragmentItemFactory : FragmentItemFactory<Image>(Image::class) {
+        override fun createFragment(
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: Image
+        ): Fragment = ImageFragment()
+    }
+
+    class ImageFragment : Fragment() {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? = ImageView(requireContext())
+    }
+
+    class TestFragment : Fragment()
+
+
+    @Test
+    fun testConstructor() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                TextFragmentItemFactory()
+            )
+        ).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                TextFragmentItemFactory()
+            ),
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                TextFragmentItemFactory()
+            )
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            listOf(
+                AssemblySingleDataFragmentStatePagerAdapter(
+                    fragment.childFragmentManager,
+                    TextFragmentItemFactory()
+                )
+            )
+        ).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            listOf(
+                AssemblySingleDataFragmentStatePagerAdapter(
+                    fragment.childFragmentManager,
+                    TextFragmentItemFactory()
+                ),
+                AssemblySingleDataFragmentStatePagerAdapter(
+                    fragment.childFragmentManager,
+                    TextFragmentItemFactory()
+                )
+            )
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                TextFragmentItemFactory()
+            )
+        ).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                TextFragmentItemFactory()
+            ),
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                TextFragmentItemFactory()
+            )
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            listOf(
+                AssemblySingleDataFragmentStatePagerAdapter(
+                    fragment.childFragmentManager,
+                    TextFragmentItemFactory()
+                )
+            )
+        ).apply {
+            Assert.assertEquals(1, adapters.size)
+        }
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+            listOf(
+                AssemblySingleDataFragmentStatePagerAdapter(
+                    fragment.childFragmentManager,
+                    TextFragmentItemFactory()
+                ),
+                AssemblySingleDataFragmentStatePagerAdapter(
+                    fragment.childFragmentManager,
+                    TextFragmentItemFactory()
+                )
+            )
+        ).apply {
+            Assert.assertEquals(2, adapters.size)
+        }
+    }
+
+    @Test
+    fun testPropertyIsDisableItemRefreshWhenDataSetChanged() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+
+        ConcatFragmentStatePagerAdapter(fragment.childFragmentManager).apply {
+            Assert.assertFalse(isDisableItemRefreshWhenDataSetChanged)
+
+            isDisableItemRefreshWhenDataSetChanged = true
+            Assert.assertTrue(isDisableItemRefreshWhenDataSetChanged)
+
+            isDisableItemRefreshWhenDataSetChanged = false
+            Assert.assertFalse(isDisableItemRefreshWhenDataSetChanged)
+        }
+    }
+
+    @Test
+    fun testMethodAddAndRemoveAdapter() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+
+        ConcatFragmentStatePagerAdapter(fragment.childFragmentManager).apply {
+            Assert.assertEquals(0, adapters.size)
+            Assert.assertEquals(0, count)
+            Assert.assertEquals("", adapters.joinToString { it.count.toString() })
+
+            val adapter1 = AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                TextFragmentItemFactory(),
+                Text("a")
+            )
+            val adapter2 = AssemblyFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                listOf(TextFragmentItemFactory()),
+                listOf(Text("b"), Text("c"))
+            )
+            val adapter3 = AssemblyFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                listOf(TextFragmentItemFactory()),
+                listOf(Text("d"), Text("e"), Text("f"))
+            )
+
+            addAdapter(adapter1)
+            Assert.assertEquals(1, adapters.size)
+            Assert.assertEquals(1, count)
+            Assert.assertEquals("1", adapters.joinToString { it.count.toString() })
+
+            addAdapter(adapter3)
+            Assert.assertEquals(2, adapters.size)
+            Assert.assertEquals(4, count)
+            Assert.assertEquals("1, 3", adapters.joinToString { it.count.toString() })
+
+            addAdapter(1, adapter2)
+            Assert.assertEquals(3, adapters.size)
+            Assert.assertEquals(6, count)
+            Assert.assertEquals("1, 2, 3", adapters.joinToString { it.count.toString() })
+
+            removeAdapter(adapter1)
+            Assert.assertEquals(2, adapters.size)
+            Assert.assertEquals(5, count)
+            Assert.assertEquals("2, 3", adapters.joinToString { it.count.toString() })
+
+            removeAdapter(adapter3)
+            Assert.assertEquals(1, adapters.size)
+            Assert.assertEquals(2, count)
+            Assert.assertEquals("2", adapters.joinToString { it.count.toString() })
+        }
+    }
+
+    @Test
+    fun testMethodGetCount() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+
+        val headerAdapter =
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                TextFragmentItemFactory()
+            )
+        val bodyAdapter = AssemblyFragmentStatePagerAdapter<Any>(
+            fragment.childFragmentManager,
+            listOf(
+                TextFragmentItemFactory(),
+                ImageFragmentItemFactory()
+            )
+        )
+        val footerHeader =
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                ImageFragmentItemFactory()
+            )
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            headerAdapter,
+            bodyAdapter,
+            footerHeader
+        ).apply {
+            Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
+
+            headerAdapter.data = Text("hello")
+            Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
+
+            bodyAdapter.submitList(
+                listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    Text("world"),
+                    Image(android.R.drawable.btn_plus)
+                )
+            )
+            Assert.assertEquals(4, count)
+            Assert.assertEquals(4, itemCount)
+
+            footerHeader.data = Image(android.R.drawable.btn_default)
+            Assert.assertEquals(5, count)
+            Assert.assertEquals(5, itemCount)
+
+            bodyAdapter.submitList(listOf(Text("world")))
+            Assert.assertEquals(3, count)
+            Assert.assertEquals(3, itemCount)
+
+            bodyAdapter.submitList(null)
+            Assert.assertEquals(2, count)
+            Assert.assertEquals(2, itemCount)
+
+            footerHeader.data = null
+            Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
+
+            headerAdapter.data = null
+            Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
+        }
+    }
+
+    @Test
+    fun testMethodGetItemData() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                itemFactory = TextFragmentItemFactory(),
+                initData = Text("hello"),
+            ),
+            AssemblyFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                itemFactoryList = listOf(
+                    TextFragmentItemFactory(),
+                    ImageFragmentItemFactory()
+                ),
+                initDataList = listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    Text("world"),
+                    Image(android.R.drawable.btn_plus)
+                ),
+            ),
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                itemFactory = ImageFragmentItemFactory(),
+                initData = Image(android.R.drawable.alert_dark_frame),
+            ),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(-1)
+            }
+            Assert.assertEquals(Text("hello"), getItemData(0))
+            Assert.assertEquals(Image(android.R.drawable.bottom_bar), getItemData(1))
+            Assert.assertEquals(Text("world"), getItemData(2))
+            Assert.assertEquals(Image(android.R.drawable.btn_plus), getItemData(3))
+            Assert.assertEquals(Image(android.R.drawable.alert_dark_frame), getItemData(4))
+            assertThrow(IllegalArgumentException::class) {
+                getItemData(5)
+            }
+        }
+    }
+
+    @Test
+    fun testMethodGetItem() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val context = InstrumentationRegistry.getInstrumentation().context
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                itemFactory = TextFragmentItemFactory(),
+                initData = Text("a"),
+            ),
+            AssemblyFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                itemFactoryList = listOf(
+                    TextFragmentItemFactory(),
+                    ImageFragmentItemFactory()
+                ),
+                initDataList = listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    Text("b"),
+                    Image(android.R.drawable.btn_plus)
+                ),
+            ),
+            AssemblySingleDataFragmentStatePagerAdapter(
+                fragment.childFragmentManager,
+                itemFactory = ImageFragmentItemFactory(),
+                initData = Image(android.R.drawable.alert_dark_frame),
+            ),
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(-1)
+            }
+            var item0: Fragment? = null
+            var item1: Fragment? = null
+            var item2: Fragment? = null
+            var item3: Fragment? = null
+            var item4: Fragment? = null
+            fragmentScenario.onFragment {
+                item0 = getItem(0)
+                item1 = getItem(1)
+                item2 = getItem(2)
+                item4 = getItem(4)
+                item3 = getItem(3)
+            }
+            Assert.assertTrue(item0 is TextFragment)
+            Assert.assertTrue(item1 is ImageFragment)
+            Assert.assertTrue(item2 is TextFragment)
+            Assert.assertTrue(item3 is ImageFragment)
+            Assert.assertTrue(item4 is ImageFragment)
+            assertThrow(IllegalArgumentException::class) {
+                getItem(5)
+            }
+        }
+    }
+
+    @Test
+    fun testMethodFindLocalAdapterAndPosition() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+
+        val headerAdapter = AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactory = TextFragmentItemFactory(),
+            initData = Text("hello"),
+        )
+        val bodyAdapter = AssemblyFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactoryList = listOf(
+                TextFragmentItemFactory(),
+                ImageFragmentItemFactory()
+            ),
+            initDataList = listOf(
+                Image(android.R.drawable.bottom_bar),
+                Text("world"),
+                Image(android.R.drawable.btn_plus)
+            ),
+        )
+        val footerAdapter = AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactory = ImageFragmentItemFactory(),
+            initData = Image(android.R.drawable.alert_dark_frame),
+        )
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            headerAdapter,
+            bodyAdapter,
+            footerAdapter,
+        ).apply {
+            findLocalAdapterAndPosition(-1).apply {
+                Assert.assertSame(headerAdapter, first)
+                Assert.assertEquals(-1, second)
+            }
+            findLocalAdapterAndPosition(0).apply {
+                Assert.assertSame(headerAdapter, first)
+                Assert.assertEquals(0, second)
+            }
+            findLocalAdapterAndPosition(1).apply {
+                Assert.assertSame(bodyAdapter, first)
+                Assert.assertEquals(0, second)
+            }
+            findLocalAdapterAndPosition(2).apply {
+                Assert.assertSame(bodyAdapter, first)
+                Assert.assertEquals(1, second)
+            }
+            findLocalAdapterAndPosition(3).apply {
+                Assert.assertSame(bodyAdapter, first)
+                Assert.assertEquals(2, second)
+            }
+            findLocalAdapterAndPosition(4).apply {
+                Assert.assertSame(footerAdapter, first)
+                Assert.assertEquals(0, second)
+            }
+            assertThrow(IllegalArgumentException::class) {
+                findLocalAdapterAndPosition(5)
+            }
+        }
+    }
+
+    @Test
+    fun testMethodGetItemPosition() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val headerAdapter = AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactory = TextFragmentItemFactory(),
+            initData = Text("a"),
+        )
+        val bodyAdapter = AssemblyFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactoryList = listOf(
+                TextFragmentItemFactory(),
+                ImageFragmentItemFactory()
+            ),
+            initDataList = listOf(
+                Image(android.R.drawable.bottom_bar),
+                Text("b"),
+                Image(android.R.drawable.btn_plus)
+            ),
+        )
+        val footerAdapter = AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactory = ImageFragmentItemFactory(),
+            initData = Image(android.R.drawable.alert_dark_frame),
+        )
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            headerAdapter,
+            bodyAdapter,
+            footerAdapter
+        ).apply {
+            var item0: Fragment? = null
+            var item1: Fragment? = null
+            var item2: Fragment? = null
+            var item3: Fragment? = null
+            var item4: Fragment? = null
+            fragmentScenario.onFragment {
+                item0 = getItem(0)
+                item1 = getItem(1)
+                item2 = getItem(2)
+                item3 = getItem(3)
+                item4 = getItem(4)
+            }
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item2!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item3!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item4!!))
+
+            fragmentScenario.onFragment {
+                fragment.childFragmentManager.beginTransaction()
+                    .add(item0!!, null)
+                    .add(item1!!, null)
+                    .add(item2!!, null)
+                    .add(item3!!, null)
+                    .add(item4!!, null)
+                    .commit()
+            }
+            Thread.sleep(100)
+
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item2!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item3!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item4!!))
+
+            headerAdapter.data = Text("good")
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item2!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item3!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item4!!))
+
+            bodyAdapter.submitList(
+                listOf(
+                    Image(android.R.drawable.bottom_bar),
+                    Text("b"),
+                    Image(android.R.drawable.btn_dialog)
+                )
+            )
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item2!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item3!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item4!!))
+
+            isDisableItemRefreshWhenDataSetChanged = true
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item2!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item3!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item4!!))
+
+            isDisableItemRefreshWhenDataSetChanged = false
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item2!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item3!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item4!!))
+        }
+    }
 
     @Test
     fun testNestedAdapterPosition() {
-        val activity = runBlocking {
-            withContext(Dispatchers.Main) {
-                FragmentActivity()
-            }
-        }
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+
 
         val count1Adapter = AssemblySingleDataFragmentStatePagerAdapter(
-            activity.supportFragmentManager,
+            fragment.childFragmentManager,
             TextFragmentItemFactory(),
             Text("a")
         )
         val count3Adapter = AssemblyFragmentStatePagerAdapter(
-            activity.supportFragmentManager,
+            fragment.childFragmentManager,
             listOf(TextFragmentItemFactory()),
             listOf(Text("a"), Text("a"), Text("a"))
         )
         val count5Adapter = AssemblyFragmentStatePagerAdapter(
-            activity.supportFragmentManager,
+            fragment.childFragmentManager,
             listOf(TextFragmentItemFactory()),
             listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val count7Adapter = AssemblyFragmentStatePagerAdapter(
-            activity.supportFragmentManager,
+            fragment.childFragmentManager,
             listOf(TextFragmentItemFactory()),
             listOf(Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"), Text("a"))
         )
         val concatCount9Adapter = ConcatFragmentStatePagerAdapter(
-            activity.supportFragmentManager, count1Adapter, count3Adapter, count5Adapter
+            fragment.childFragmentManager, count1Adapter, count3Adapter, count5Adapter
         )
         val concatCount11Adapter = ConcatFragmentStatePagerAdapter(
-            activity.supportFragmentManager, count1Adapter, count3Adapter, count7Adapter
+            fragment.childFragmentManager, count1Adapter, count3Adapter, count7Adapter
         )
         val concatCount13Adapter = ConcatFragmentStatePagerAdapter(
-            activity.supportFragmentManager, count1Adapter, count5Adapter, count7Adapter
+            fragment.childFragmentManager, count1Adapter, count5Adapter, count7Adapter
         )
         val concatNestingCount16Adapter = ConcatFragmentStatePagerAdapter(
-            activity.supportFragmentManager,
+            fragment.childFragmentManager,
             count1Adapter,
             ConcatFragmentStatePagerAdapter(
-                activity.supportFragmentManager, count3Adapter, count5Adapter
+                fragment.childFragmentManager, count3Adapter, count5Adapter
             ),
             count7Adapter
         )
