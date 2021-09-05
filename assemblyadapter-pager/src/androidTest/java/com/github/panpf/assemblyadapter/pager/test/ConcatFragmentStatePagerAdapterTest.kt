@@ -600,6 +600,61 @@ class ConcatFragmentStatePagerAdapterTest {
     }
 
     @Test
+    fun testMethodGetItemPosition2() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val headerAdapter = AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactory = TextFragmentItemFactory(),
+        )
+        val bodyAdapter = AssemblyFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactoryList = listOf(TextFragmentItemFactory()),
+            initDataList = listOf(Text("b"), Text("c"), Text("d")),
+        )
+        val footerAdapter = AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactory = TextFragmentItemFactory(),
+        )
+        ConcatFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            headerAdapter,
+            bodyAdapter,
+            footerAdapter
+        ).apply {
+            var item0: Fragment? = null
+            var item1: Fragment? = null
+            var item2: Fragment? = null
+            fragmentScenario.onFragment {
+                item0 = getItem(0)
+                item1 = getItem(1)
+                item2 = getItem(2)
+            }
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item2!!))
+
+            fragmentScenario.onFragment {
+                fragment.childFragmentManager.beginTransaction()
+                    .add(item0!!, null)
+                    .add(item1!!, null)
+                    .add(item2!!, null)
+                    .commit()
+            }
+            Thread.sleep(100)
+
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item2!!))
+
+            headerAdapter.data = Text("a")
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item0!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item1!!))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item2!!))
+        }
+    }
+
+    @Test
     fun testNestedAdapterPosition() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()

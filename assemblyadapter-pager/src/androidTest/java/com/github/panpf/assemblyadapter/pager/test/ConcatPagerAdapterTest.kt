@@ -442,6 +442,34 @@ class ConcatPagerAdapterTest {
     }
 
     @Test
+    fun testMethodGetItemPosition2() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val container = FrameLayout(context)
+        val headerAdapter = AssemblySingleDataPagerAdapter(
+            itemFactory = TextPagerItemFactory(),
+        )
+        val bodyAdapter = AssemblyPagerAdapter(
+            itemFactoryList = listOf(TextPagerItemFactory()),
+            initDataList = listOf(Text("b"), Text("c"), Text("d")),
+        )
+        val footerAdapter = AssemblySingleDataPagerAdapter(
+            itemFactory = TextPagerItemFactory(),
+        )
+        ConcatPagerAdapter(headerAdapter, bodyAdapter, footerAdapter).apply {
+            val item0 = instantiateItem(container, 0)
+            val item1 = instantiateItem(container, 1)
+            val item2 = instantiateItem(container, 2)
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item0))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item1))
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item2))
+            headerAdapter.data = Text("a")
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item0))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item1))
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item2))
+        }
+    }
+
+    @Test
     fun testNestedAdapterPosition() {
         val count1Adapter = AssemblySingleDataPagerAdapter(TextPagerItemFactory(), Text("a"))
         val count3Adapter = AssemblyPagerAdapter(
