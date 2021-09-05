@@ -41,7 +41,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
                 super.submitList(null)
             }
         }
-        get() = if (itemCount > 0) getItem(0) else null
+        get() = if (itemCount > 0) getItemData(0) else null
 
     /**
      * Create an AssemblySingleDataRecyclerListAdapter that provides DiffUtil.ItemCallback externally
@@ -144,13 +144,13 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         super.submitList(list, commitCallback)
     }
 
-    public override fun getItem(position: Int): DATA {
-        return super.getItem(position)
+    fun getItemData(position: Int): DATA {
+        return getItem(position)
     }
 
     override fun getItemId(position: Int): Long {
         return if (hasStableIds()) {
-            val data = getItem(position)
+            val data = getItemData(position)
             if (data is ItemId) data.itemId else data.hashCode().toLong()
         } else {
             RecyclerView.NO_ID
@@ -158,7 +158,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
     override fun getItemViewType(position: Int): Int {
-        val data = getItem(position)
+        val data = getItemData(position)
         return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
         )
@@ -181,7 +181,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
-            val data = getItem(position)
+            val data = getItemData(position)
             val absoluteAdapterPosition =
                 holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
             item.dispatchBindData(position, absoluteAdapterPosition, data)
@@ -192,7 +192,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
-        val data = getItem(position)
+        val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
         )

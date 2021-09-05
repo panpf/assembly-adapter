@@ -85,6 +85,9 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         itemDataStorage.submitList(list)
     }
 
+    val itemCount: Int
+        get() = itemDataStorage.dataCount
+
     override fun getItemData(position: Int): DATA {
         return itemDataStorage.getData(position)
     }

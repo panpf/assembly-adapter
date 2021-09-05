@@ -58,10 +58,6 @@ open class ArrayFragmentStatePagerAdapter(
     val currentPageTitleList: List<CharSequence>
         get() = pageTitleStorage?.readOnlyList ?: Collections.emptyList()
 
-    override fun getItemData(position: Int): Fragment {
-        return itemDataStorage.getData(position)
-    }
-
     @Deprecated(
         """use {@link #FragmentArrayStatePagerAdapter(FragmentManager, int, List)} with
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
@@ -86,6 +82,13 @@ open class ArrayFragmentStatePagerAdapter(
         }.apply {
             this@ArrayFragmentStatePagerAdapter.pageTitleStorage = this
         }).submitList(pageTitleList)
+    }
+
+    val itemCount: Int
+        get() = itemDataStorage.dataCount
+
+    override fun getItemData(position: Int): Fragment {
+        return itemDataStorage.getData(position)
     }
 
 

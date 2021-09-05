@@ -624,12 +624,14 @@ class ConcatExpandableListAdapterTest {
         )
         ConcatExpandableListAdapter(headerAdapter, bodyAdapter, footerHeader).apply {
             Assert.assertEquals(0, groupCount)
+            Assert.assertEquals(0, itemCount)
             assertThrow(IllegalArgumentException::class) {
                 getChildrenCount(0)
             }
 
             headerAdapter.data = TextGroup("hello")
             Assert.assertEquals(1, groupCount)
+            Assert.assertEquals(1, itemCount)
             Assert.assertEquals(1, getChildrenCount(0))
 
             bodyAdapter.submitList(
@@ -640,25 +642,31 @@ class ConcatExpandableListAdapterTest {
                 )
             )
             Assert.assertEquals(4, groupCount)
+            Assert.assertEquals(4, itemCount)
             Assert.assertEquals(1, getChildrenCount(1))
             Assert.assertEquals(2, getChildrenCount(2))
             Assert.assertEquals(1, getChildrenCount(3))
 
             footerHeader.data = ImageGroup(android.R.drawable.btn_default)
             Assert.assertEquals(5, groupCount)
+            Assert.assertEquals(5, itemCount)
             Assert.assertEquals(1, getChildrenCount(4))
 
             bodyAdapter.submitList(listOf(TextGroup("world")))
             Assert.assertEquals(3, groupCount)
+            Assert.assertEquals(3, itemCount)
 
             bodyAdapter.submitList(null)
             Assert.assertEquals(2, groupCount)
+            Assert.assertEquals(2, itemCount)
 
             footerHeader.data = null
             Assert.assertEquals(1, groupCount)
+            Assert.assertEquals(1, itemCount)
 
             headerAdapter.data = null
             Assert.assertEquals(0, groupCount)
+            Assert.assertEquals(0, itemCount)
         }
     }
 
@@ -690,13 +698,24 @@ class ConcatExpandableListAdapterTest {
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroup(-1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(-1)
+            }
             Assert.assertEquals(TextGroup("hello"), getGroup(0))
+            Assert.assertEquals(TextGroup("hello"), getItemData(0))
             Assert.assertEquals(ImageGroup(android.R.drawable.bottom_bar), getGroup(1))
+            Assert.assertEquals(ImageGroup(android.R.drawable.bottom_bar), getItemData(1))
             Assert.assertEquals(TextGroup("world"), getGroup(2))
+            Assert.assertEquals(TextGroup("world"), getItemData(2))
             Assert.assertEquals(ImageGroup(android.R.drawable.btn_plus), getGroup(3))
+            Assert.assertEquals(ImageGroup(android.R.drawable.btn_plus), getItemData(3))
             Assert.assertEquals(ImageGroup(android.R.drawable.alert_dark_frame), getGroup(4))
+            Assert.assertEquals(ImageGroup(android.R.drawable.alert_dark_frame), getItemData(4))
             assertThrow(IllegalArgumentException::class) {
                 getGroup(5)
+            }
+            assertThrow(IllegalArgumentException::class) {
+                getItemData(5)
             }
 
             assertThrow(IndexOutOfBoundsException::class) {

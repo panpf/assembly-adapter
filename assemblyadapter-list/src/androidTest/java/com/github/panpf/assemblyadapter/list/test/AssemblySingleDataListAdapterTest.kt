@@ -92,14 +92,24 @@ class AssemblySingleDataListAdapterTest {
                 getItem(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
                 getItem(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
                 getItem(1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(1)
+            }
 
             data = Text("hello")
             Assert.assertEquals(Text("hello"), getItem(0))
+            Assert.assertEquals(Text("hello"), getItemData(0))
         }
     }
 

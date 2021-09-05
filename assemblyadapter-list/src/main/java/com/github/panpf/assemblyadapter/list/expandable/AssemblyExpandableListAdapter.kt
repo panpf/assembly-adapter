@@ -94,6 +94,13 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     override fun hasStableIds(): Boolean = hasStableIds
 
 
+    val itemCount: Int
+        get() = itemDataStorage.dataCount
+
+    fun getItemData(position: Int): GROUP_DATA {
+        return itemDataStorage.getData(position)
+    }
+
     override fun getGroupCount(): Int = itemDataStorage.dataCount
 
     override fun getGroup(groupPosition: Int): GROUP_DATA = itemDataStorage.getData(groupPosition)

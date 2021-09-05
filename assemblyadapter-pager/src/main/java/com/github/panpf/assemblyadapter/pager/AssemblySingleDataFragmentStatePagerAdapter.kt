@@ -69,7 +69,8 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         initData: DATA? = null
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactory, initData)
 
-    override fun getCount(): Int = if (data != null) 1 else 0
+    val itemCount: Int
+        get() = if (data != null) 1 else 0
 
     override fun getItemData(position: Int): DATA {
         val count = count
@@ -78,6 +79,8 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         }
         return data!!
     }
+
+    override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun getFragment(position: Int): Fragment {
         val data = getItemData(position)

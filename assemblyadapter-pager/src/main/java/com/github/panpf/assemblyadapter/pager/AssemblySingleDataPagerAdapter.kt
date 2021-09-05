@@ -44,7 +44,8 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
             notifyDataSetChanged()
         }
 
-    override fun getCount(): Int = if (data != null) 1 else 0
+    val itemCount: Int
+        get() = if (data != null) 1 else 0
 
     override fun getItemData(position: Int): DATA {
         val count = count
@@ -53,6 +54,8 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
         }
         return data!!
     }
+
+    override fun getCount(): Int = if (data != null) 1 else 0
 
     override fun getView(container: ViewGroup, position: Int): View {
         val data = getItemData(position)

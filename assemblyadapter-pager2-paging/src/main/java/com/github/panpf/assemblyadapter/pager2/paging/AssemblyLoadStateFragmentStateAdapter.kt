@@ -77,7 +77,7 @@ open class AssemblyLoadStateFragmentStateAdapter(
         alwaysShowWhenEndOfPaginationReached
     )
 
-    fun getItem(position: Int): LoadState {
+    fun getItemData(position: Int): LoadState {
         val count = itemCount
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")

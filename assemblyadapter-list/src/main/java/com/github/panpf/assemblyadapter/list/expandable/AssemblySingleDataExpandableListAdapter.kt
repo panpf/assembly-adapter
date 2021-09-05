@@ -83,6 +83,17 @@ open class AssemblySingleDataExpandableListAdapter<GROUP_DATA : Any, CHILD_DATA>
 
     override fun hasStableIds(): Boolean = hasStableIds
 
+    val itemCount: Int
+        get() = if (data != null) 1 else 0
+
+    fun getItemData(position: Int): GROUP_DATA {
+        val groupCount = groupCount
+        if (position < 0 || position >= groupCount) {
+            throw IndexOutOfBoundsException("Index: $position, Size: $groupCount")
+        }
+        return data!!
+    }
+
 
     override fun getGroupCount(): Int = if (data != null) 1 else 0
 

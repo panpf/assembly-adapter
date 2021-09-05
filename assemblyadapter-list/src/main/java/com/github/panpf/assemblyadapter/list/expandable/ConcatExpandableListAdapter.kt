@@ -127,6 +127,13 @@ open class ConcatExpandableListAdapter(
         return mController.removeAdapter(adapter)
     }
 
+    val itemCount: Int
+        get() = mController.groupCount
+
+    fun getItemData(position: Int): Any? {
+        return mController.getGroup(position)
+    }
+
     override fun getGroupCount(): Int {
         return mController.groupCount
     }

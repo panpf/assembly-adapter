@@ -37,7 +37,7 @@ open class AssemblyLoadStateAdapter(
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
 ) : LoadStateAdapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
 
-    fun getItem(position: Int): LoadState {
+    fun getItemData(position: Int): LoadState {
         val count = itemCount
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")

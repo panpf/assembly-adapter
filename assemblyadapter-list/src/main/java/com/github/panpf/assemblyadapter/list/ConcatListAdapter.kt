@@ -119,6 +119,21 @@ open class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : Base
         return mController.removeAdapter(adapter)
     }
 
+    override fun getCount(): Int {
+        return mController.totalCount
+    }
+
+    val itemCount: Int
+        get() = mController.totalCount
+
+    fun getItemData(position: Int): Any? {
+        return mController.getItem(position)
+    }
+
+    override fun getItem(position: Int): Any? {
+        return mController.getItem(position)
+    }
+
     override fun getViewTypeCount(): Int {
         return mController.getItemViewTypeCount()
     }
@@ -133,17 +148,6 @@ open class ConcatListAdapter(config: Config, adapters: List<BaseAdapter>) : Base
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return mController.getView(position, convertView, parent)
-    }
-
-    override fun getCount(): Int {
-        return mController.totalCount
-    }
-
-    val itemCount: Int
-        get() = mController.totalCount
-
-    override fun getItem(position: Int): Any? {
-        return mController.getItem(position)
     }
 
     override fun hasStableIds(): Boolean {

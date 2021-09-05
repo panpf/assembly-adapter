@@ -488,13 +488,24 @@ class ConcatListAdapterTest {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItem(-1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(-1)
+            }
             Assert.assertEquals(Text("hello"), getItem(0))
+            Assert.assertEquals(Text("hello"), getItemData(0))
             Assert.assertEquals(Image(android.R.drawable.bottom_bar), getItem(1))
+            Assert.assertEquals(Image(android.R.drawable.bottom_bar), getItemData(1))
             Assert.assertEquals(Text("world"), getItem(2))
+            Assert.assertEquals(Text("world"), getItemData(2))
             Assert.assertEquals(Image(android.R.drawable.btn_plus), getItem(3))
+            Assert.assertEquals(Image(android.R.drawable.btn_plus), getItemData(3))
             Assert.assertEquals(Image(android.R.drawable.alert_dark_frame), getItem(4))
+            Assert.assertEquals(Image(android.R.drawable.alert_dark_frame), getItemData(4))
             assertThrow(IllegalArgumentException::class) {
                 getItem(5)
+            }
+            assertThrow(IllegalArgumentException::class) {
+                getItemData(5)
             }
         }
     }

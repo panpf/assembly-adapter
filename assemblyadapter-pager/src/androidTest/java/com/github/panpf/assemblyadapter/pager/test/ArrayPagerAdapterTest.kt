@@ -77,15 +77,19 @@ class ArrayPagerAdapterTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         ArrayPagerAdapter().apply {
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
 
             submitList(listOf(TextView(context)))
             Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
 
             submitList(listOf(TextView(context), ImageView(context)))
             Assert.assertEquals(2, count)
+            Assert.assertEquals(2, itemCount)
 
             submitList(null)
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
         }
     }
 

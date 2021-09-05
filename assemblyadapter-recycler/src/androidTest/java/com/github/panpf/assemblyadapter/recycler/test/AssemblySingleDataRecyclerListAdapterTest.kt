@@ -220,21 +220,21 @@ class AssemblySingleDataRecyclerListAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodGetItemData() {
         AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(-1)
+                getItemData(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(0)
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(1)
+                getItemData(1)
             }
 
             data = Text("hello")
             Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
-            Assert.assertEquals(Text("hello"), getItem(0))
+            Assert.assertEquals(Text("hello"), getItemData(0))
         }
     }
 
@@ -267,7 +267,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }
-            Assert.assertEquals(getItem(0).hashCode().toLong(), getItemId(0))
+            Assert.assertEquals(getItemData(0).hashCode().toLong(), getItemId(0))
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(1)
             }

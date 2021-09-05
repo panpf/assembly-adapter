@@ -123,17 +123,17 @@ class AssemblySingleDataFragmentStateAdapterTest {
         TestFragment::class.launchFragmentInContainerWithOn { fragment ->
             AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
                 assertThrow(IndexOutOfBoundsException::class) {
-                    getItem(-1)
+                    getItemData(-1)
                 }
                 assertThrow(IndexOutOfBoundsException::class) {
-                    getItem(0)
+                    getItemData(0)
                 }
                 assertThrow(IndexOutOfBoundsException::class) {
-                    getItem(1)
+                    getItemData(1)
                 }
 
                 data = Text("hello")
-                Assert.assertEquals(Text("hello"), getItem(0))
+                Assert.assertEquals(Text("hello"), getItemData(0))
             }
         }
     }

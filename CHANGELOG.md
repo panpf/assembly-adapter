@@ -21,6 +21,9 @@ pager2-paging:
 pager:
 * fix: Fix the bug that the value of the isDisableItemRefreshWhenDataSetChanged property of the refreshable PagerAdapter is wrong
 
+all:
+* new: Unified increase itemCount property and getItemData method
+
 # v4.0.0-beta02
 
 recycler:

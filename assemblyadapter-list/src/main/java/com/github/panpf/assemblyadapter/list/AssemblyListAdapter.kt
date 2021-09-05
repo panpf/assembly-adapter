@@ -62,15 +62,19 @@ open class AssemblyListAdapter<DATA>(
         itemDataStorage.submitList(list)
     }
 
+    val itemCount: Int
+        get() = itemDataStorage.dataCount
+
+    fun getItemData(position: Int): DATA {
+        return itemDataStorage.getData(position)
+    }
+
     override fun getCount(): Int {
         return itemDataStorage.dataCount
     }
 
-    val itemCount: Int
-        get() = itemDataStorage.dataCount
-
     override fun getItem(position: Int): DATA {
-        return itemDataStorage.getData(position)
+        return getItemData(position)
     }
 
     /**
@@ -97,7 +101,7 @@ open class AssemblyListAdapter<DATA>(
 
     override fun getItemId(position: Int): Long {
         return if (hasStableIds()) {
-            val data = getItem(position) ?: Placeholder
+            val data = getItemData(position) ?: Placeholder
             if (data is ItemId) data.itemId else data.hashCode().toLong()
         } else {
             -1
@@ -109,14 +113,14 @@ open class AssemblyListAdapter<DATA>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val data = getItem(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
         return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         )
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val data = getItem(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
         val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         ).dispatchCreateItem(parent).apply {
@@ -138,7 +142,7 @@ open class AssemblyListAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val data = getItem(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         )

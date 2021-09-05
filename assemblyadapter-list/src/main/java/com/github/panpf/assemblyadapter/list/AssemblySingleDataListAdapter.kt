@@ -19,7 +19,10 @@ import android.database.DataSetObserver
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.github.panpf.assemblyadapter.*
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.ItemId
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
 
@@ -45,17 +48,21 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
             notifyDataSetChanged()
         }
 
-    override fun getCount(): Int = if (data != null) 1 else 0
-
     val itemCount: Int
         get() = if (data != null) 1 else 0
 
-    override fun getItem(position: Int): DATA {
+    fun getItemData(position: Int): DATA {
         val count = count
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
         }
         return data!!
+    }
+
+    override fun getCount(): Int = if (data != null) 1 else 0
+
+    override fun getItem(position: Int): DATA {
+        return getItemData(position)
     }
 
     /**
@@ -82,7 +89,7 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
 
     override fun getItemId(position: Int): Long {
         return if (hasStableIds()) {
-            val data = getItem(position)
+            val data = getItemData(position)
             if (data is ItemId) data.itemId else data.hashCode().toLong()
         } else {
             -1
@@ -92,14 +99,14 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
     override fun getViewTypeCount(): Int = 1
 
     override fun getItemViewType(position: Int): Int {
-        val data = getItem(position)
+        val data = getItemData(position)
         return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         )
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val data = getItem(position)
+        val data = getItemData(position)
         val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         ).dispatchCreateItem(parent).apply {
@@ -121,7 +128,7 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
-        val data = getItem(position)
+        val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
         )

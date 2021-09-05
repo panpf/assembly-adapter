@@ -121,15 +121,26 @@ class AssemblyListAdapterTest {
                 getItem(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
                 getItem(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
                 getItem(1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(1)
+            }
 
             submitList(listOf(Text("hello"), Text("world")))
             Assert.assertEquals(Text("hello"), getItem(0))
+            Assert.assertEquals(Text("hello"), getItemData(0))
             Assert.assertEquals(Text("world"), getItem(1))
+            Assert.assertEquals(Text("world"), getItemData(1))
         }
     }
 

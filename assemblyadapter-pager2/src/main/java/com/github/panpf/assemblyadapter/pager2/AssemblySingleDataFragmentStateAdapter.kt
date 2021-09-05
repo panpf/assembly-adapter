@@ -84,7 +84,7 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
 
     override fun getItemCount(): Int = if (data != null) 1 else 0
 
-    fun getItem(position: Int): DATA {
+    fun getItemData(position: Int): DATA {
         val count = itemCount
         if (position < 0 || position >= count) {
             throw IndexOutOfBoundsException("Index: $position, Size: $count")
@@ -93,14 +93,14 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val data = getItem(position)
+        val data = getItemData(position)
         return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
         )
     }
 
     override fun createFragment(position: Int): Fragment {
-        val data = getItem(position)
+        val data = getItemData(position)
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter != null) {
@@ -115,7 +115,7 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
 
 
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<DATA> {
-        val data = getItem(position)
+        val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
             data, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
         )

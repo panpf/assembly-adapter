@@ -64,13 +64,13 @@ open class AssemblyRecyclerAdapter<DATA>(
         return itemDataStorage.dataCount
     }
 
-    fun getItem(position: Int): DATA {
+    fun getItemData(position: Int): DATA {
         return itemDataStorage.getData(position)
     }
 
     override fun getItemId(position: Int): Long {
         return if (hasStableIds()) {
-            val data = getItem(position) ?: Placeholder
+            val data = getItemData(position) ?: Placeholder
             if (data is ItemId) data.itemId else data.hashCode().toLong()
         } else {
             RecyclerView.NO_ID
@@ -78,7 +78,7 @@ open class AssemblyRecyclerAdapter<DATA>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val data = getItem(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
         return itemFactoryStorage.getItemTypeByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
         )
@@ -101,7 +101,7 @@ open class AssemblyRecyclerAdapter<DATA>(
         if (holder is RecyclerViewHolderWrapper<*>) {
             @Suppress("UNCHECKED_CAST")
             val item = holder.wrappedItem as Item<Any>
-            val data = getItem(position) ?: Placeholder
+            val data = getItemData(position) ?: Placeholder
             val absoluteAdapterPosition =
                 holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
             item.dispatchBindData(position, absoluteAdapterPosition, data)
@@ -112,7 +112,7 @@ open class AssemblyRecyclerAdapter<DATA>(
 
 
     override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
-        val data = getItem(position) ?: Placeholder
+        val data = getItemData(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(
             data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
         )

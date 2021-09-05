@@ -105,15 +105,19 @@ class AssemblyFragmentStatePagerAdapterTest {
             fragment.childFragmentManager, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
 
             submitList(listOf(Text("hello")))
             Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
 
             submitList(listOf(Text("hello"), Text("world")))
             Assert.assertEquals(2, count)
+            Assert.assertEquals(2, itemCount)
 
             submitList(null)
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
         }
     }
 

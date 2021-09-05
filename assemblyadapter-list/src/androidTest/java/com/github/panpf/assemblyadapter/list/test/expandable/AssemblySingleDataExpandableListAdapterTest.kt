@@ -103,16 +103,19 @@ class AssemblySingleDataExpandableListAdapterTest {
             )
         ).apply {
             Assert.assertEquals(0, groupCount)
+            Assert.assertEquals(0, itemCount)
             assertThrow(IndexOutOfBoundsException::class) {
                 getChildrenCount(0)
             }
 
             data = TextGroup("hello", "world")
             Assert.assertEquals(1, groupCount)
+            Assert.assertEquals(1, itemCount)
             Assert.assertEquals(2, getChildrenCount(0))
 
             data = null
             Assert.assertEquals(0, groupCount)
+            Assert.assertEquals(0, itemCount)
             assertThrow(IndexOutOfBoundsException::class) {
                 getChildrenCount(0)
             }
@@ -131,14 +134,24 @@ class AssemblySingleDataExpandableListAdapterTest {
                 getGroup(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
                 getGroup(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroup(1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(1)
+            }
 
             data = TextGroup("hello", "world")
             Assert.assertEquals("[hello, world]", getGroup(0).listJoinToString)
+            Assert.assertEquals("[hello, world]", getItemData(0).listJoinToString)
             assertThrow(IndexOutOfBoundsException::class) {
                 getChild(0, -1)
             }

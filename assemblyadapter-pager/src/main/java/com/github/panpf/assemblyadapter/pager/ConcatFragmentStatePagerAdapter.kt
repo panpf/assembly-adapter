@@ -150,15 +150,15 @@ open class ConcatFragmentStatePagerAdapter(
         return mController.removeAdapter(adapter)
     }
 
-    override fun getCount(): Int {
-        return mController.totalCount
-    }
-
     val itemCount: Int
         get() = mController.totalCount
 
     override fun getItemData(position: Int): Any? {
         return mController.getData(position)
+    }
+
+    override fun getCount(): Int {
+        return mController.totalCount
     }
 
     override fun getItem(position: Int): Fragment {

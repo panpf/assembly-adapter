@@ -243,15 +243,15 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             Assert.assertEquals("", currentList.joinToString())
 
             fragment.submitList(listOf(Text("hello")))
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals("Text(text=hello)", currentList.joinToString())
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals("Text(text=hello), Text(text=world)", currentList.joinToString())
 
             fragment.submitList(null)
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals("", currentList.joinToString())
         }
     }
@@ -266,40 +266,40 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             fragment.submitList(listOf(Text("hello")))
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals(1, itemCount)
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals(2, itemCount)
 
             fragment.submitList(null)
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals(0, itemCount)
         }
     }
 
     @Test
-    fun testMethodPeek() {
+    fun testMethodGetItemData() {
         val fragmentScenario = PagingTestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val pagingDataAdapter: AssemblyPagingDataFragmentStateAdapter<Any> =
             fragment.pagingDataAdapter
         pagingDataAdapter.apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                peek(-1)
+                getItemData(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                peek(0)
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                peek(1)
+                getItemData(1)
             }
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(30)
-            Assert.assertEquals(Text("hello"), peek(0))
-            Assert.assertEquals(Text("world"), peek(1))
+            Thread.sleep(100)
+            Assert.assertEquals(Text("hello"), getItemData(0))
+            Assert.assertEquals(Text("world"), getItemData(1))
         }
     }
 
@@ -331,7 +331,7 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             Assert.assertEquals(1L, getItemId(1))
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(0L, getItemId(0))
             Assert.assertEquals(1L, getItemId(1))
@@ -357,7 +357,7 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             }
 
             fragment.submitList(listOf(Image(R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals(1, getItemViewType(0))
             Assert.assertEquals(0, getItemViewType(1))
         }
@@ -371,7 +371,7 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             fragment.pagingDataAdapter
         pagingDataAdapter.apply {
             fragment.submitList(listOf(Text("hello"), Image(R.drawable.alert_dark_frame)))
-            Thread.sleep(30)
+            Thread.sleep(100)
 
             Assert.assertTrue(createFragment(0) is TextFragment)
             Assert.assertTrue(createFragment(1) is ImageFragment)
@@ -396,7 +396,7 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             }
 
             fragment.submitList(listOf(Image(R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(30)
+            Thread.sleep(100)
             Assert.assertEquals(ImageFragmentItemFactory::class, getItemFactoryByPosition(0)::class)
             Assert.assertEquals(TextFragmentItemFactory::class, getItemFactoryByPosition(1)::class)
         }

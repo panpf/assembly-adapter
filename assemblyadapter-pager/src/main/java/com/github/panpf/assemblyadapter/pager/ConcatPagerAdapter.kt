@@ -26,7 +26,8 @@ import java.util.*
 /**
  * An [GetItemDataPagerAdapter] implementation that presents the contents of multiple adapters in sequence.
  */
-open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter<*>>) : GetItemDataPagerAdapter<Any?>() {
+open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter<*>>) :
+    GetItemDataPagerAdapter<Any?>() {
 
     /**
      * Bulk of the logic is in the controller to keep this class isolated to the public API.
@@ -110,15 +111,15 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter<*>>) : GetI
         return mController.removeAdapter(adapter)
     }
 
-    override fun getCount(): Int {
-        return mController.totalCount
-    }
-
     val itemCount: Int
         get() = mController.totalCount
 
     override fun getItemData(position: Int): Any? {
         return mController.getData(position)
+    }
+
+    override fun getCount(): Int {
+        return mController.totalCount
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {

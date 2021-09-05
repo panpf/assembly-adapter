@@ -62,13 +62,15 @@ open class ArrayPagerAdapter(viewList: List<View>? = null) : RefreshablePagerAda
         }).submitList(pageTitleList)
     }
 
-
-    override fun getCount(): Int {
-        return itemDataStorage.dataCount
-    }
+    val itemCount: Int
+        get() = itemDataStorage.dataCount
 
     override fun getItemData(position: Int): View {
         return itemDataStorage.getData(position)
+    }
+
+    override fun getCount(): Int {
+        return itemDataStorage.dataCount
     }
 
     override fun getView(container: ViewGroup, position: Int): View {

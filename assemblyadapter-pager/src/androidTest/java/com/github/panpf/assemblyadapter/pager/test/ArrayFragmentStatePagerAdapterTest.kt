@@ -99,15 +99,19 @@ class ArrayFragmentStatePagerAdapterTest {
         val fragment = fragmentScenario.getFragmentSync()
         ArrayFragmentStatePagerAdapter(fragment.childFragmentManager).apply {
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
 
             submitList(listOf(TextFragment()))
             Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
 
             submitList(listOf(TextFragment(), ImageFragment()))
             Assert.assertEquals(2, count)
+            Assert.assertEquals(2, itemCount)
 
             submitList(null)
             Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
         }
     }
 

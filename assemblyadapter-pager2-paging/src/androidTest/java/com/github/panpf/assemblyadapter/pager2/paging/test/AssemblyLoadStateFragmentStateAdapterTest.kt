@@ -71,17 +71,17 @@ class AssemblyLoadStateFragmentStateAdapterTest {
         val fragment = fragmentScenario.getFragmentSync()
         AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(-1)
+                getItemData(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(0)
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(1)
+                getItemData(1)
             }
 
             loadState = LoadState.Loading
-            Assert.assertEquals(LoadState.Loading, getItem(0))
+            Assert.assertEquals(LoadState.Loading, getItemData(0))
         }
     }
 

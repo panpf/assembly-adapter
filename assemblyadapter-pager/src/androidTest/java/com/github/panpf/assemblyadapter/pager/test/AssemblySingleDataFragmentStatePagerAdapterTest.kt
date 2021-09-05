@@ -87,12 +87,15 @@ class AssemblySingleDataFragmentStatePagerAdapterTest {
 
             AssemblySingleDataFragmentStatePagerAdapter(fragmentManager, TestItemFactory()).apply {
                 Assert.assertEquals(0, count)
+                Assert.assertEquals(0, itemCount)
 
                 data = "Test count"
                 Assert.assertEquals(1, count)
+                Assert.assertEquals(1, itemCount)
 
                 data = null
                 Assert.assertEquals(0, count)
+                Assert.assertEquals(0, itemCount)
             }
         }
     }

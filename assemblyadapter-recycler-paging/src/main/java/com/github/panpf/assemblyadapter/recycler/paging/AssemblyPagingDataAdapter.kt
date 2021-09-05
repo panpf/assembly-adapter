@@ -70,6 +70,10 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
         }
     }
 
+    fun getItemData(position: Int): DATA? {
+        return peek(position)
+    }
+
     override fun getItemViewType(position: Int): Int {
         val data = peek(position) ?: Placeholder
         return itemFactoryStorage.getItemTypeByData(

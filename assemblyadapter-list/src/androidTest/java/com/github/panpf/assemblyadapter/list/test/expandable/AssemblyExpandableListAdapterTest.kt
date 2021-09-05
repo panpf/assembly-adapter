@@ -168,12 +168,14 @@ class AssemblyExpandableListAdapterTest {
     fun testMethodGetGroupAndChildCount() {
         AssemblyExpandableListAdapter<TextGroup, Text>(listOf(TextGroupItemFactory())).apply {
             Assert.assertEquals(0, groupCount)
+            Assert.assertEquals(0, itemCount)
             assertThrow(IndexOutOfBoundsException::class) {
                 getChildrenCount(0)
             }
 
             submitList(listOf(TextGroup("h", "e", "l", "l", "o")))
             Assert.assertEquals(1, groupCount)
+            Assert.assertEquals(1, itemCount)
             Assert.assertEquals(5, getChildrenCount(0))
 
             submitList(
@@ -184,12 +186,14 @@ class AssemblyExpandableListAdapterTest {
                 )
             )
             Assert.assertEquals(3, groupCount)
+            Assert.assertEquals(3, itemCount)
             Assert.assertEquals(4, getChildrenCount(0))
             Assert.assertEquals(2, getChildrenCount(1))
             Assert.assertEquals(3, getChildrenCount(2))
 
             submitList(null)
             Assert.assertEquals(0, groupCount)
+            Assert.assertEquals(0, itemCount)
             assertThrow(IndexOutOfBoundsException::class) {
                 getChildrenCount(0)
             }
@@ -203,14 +207,24 @@ class AssemblyExpandableListAdapterTest {
                 getGroup(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
                 getGroup(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
                 getGroup(1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(1)
+            }
 
             submitList(listOf(TextGroup("hello", "good"), TextGroup("world", "bye")))
             Assert.assertEquals("[hello, good]", getGroup(0).listJoinToString)
+            Assert.assertEquals("[hello, good]", getItemData(0).listJoinToString)
             assertThrow(IndexOutOfBoundsException::class) {
                 getChild(0, -1)
             }
@@ -220,6 +234,7 @@ class AssemblyExpandableListAdapterTest {
                 getChild(0, 2)
             }
             Assert.assertEquals("[world, bye]", getGroup(1).listJoinToString)
+            Assert.assertEquals("[world, bye]", getItemData(1).listJoinToString)
             assertThrow(IndexOutOfBoundsException::class) {
                 getChild(1, -1)
             }

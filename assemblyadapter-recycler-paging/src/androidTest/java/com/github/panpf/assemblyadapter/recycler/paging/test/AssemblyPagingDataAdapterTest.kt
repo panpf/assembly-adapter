@@ -196,25 +196,25 @@ class AssemblyPagingDataAdapterTest {
     }
 
     @Test
-    fun testMethodPeek() {
+    fun testMethodGetItemData() {
         val fragmentScenario = PagingTestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val pagingDataAdapter: AssemblyPagingDataAdapter<Any> = fragment.pagingDataAdapter
         pagingDataAdapter.apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                peek(-1)
+                getItemData(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                peek(0)
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                peek(1)
+                getItemData(1)
             }
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
             Thread.sleep(30)
-            Assert.assertEquals(Text("hello"), peek(0))
-            Assert.assertEquals(Text("world"), peek(1))
+            Assert.assertEquals(Text("hello"), getItemData(0))
+            Assert.assertEquals(Text("world"), getItemData(1))
         }
     }
 

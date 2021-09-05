@@ -60,12 +60,15 @@ open class AssemblyPagerAdapter<DATA>(
         itemDataStorage.submitList(list)
     }
 
-    override fun getCount(): Int {
-        return itemDataStorage.dataCount
-    }
+    val itemCount: Int
+        get() = itemDataStorage.dataCount
 
     override fun getItemData(position: Int): DATA {
         return itemDataStorage.getData(position)
+    }
+
+    override fun getCount(): Int {
+        return itemDataStorage.dataCount
     }
 
     override fun getView(container: ViewGroup, position: Int): View {

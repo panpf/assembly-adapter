@@ -80,20 +80,20 @@ class AssemblySingleDataRecyclerAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodGetItemData() {
         AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(-1)
+                getItemData(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(0)
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(1)
+                getItemData(1)
             }
 
             data = Text("hello")
-            Assert.assertEquals(Text("hello"), getItem(0))
+            Assert.assertEquals(Text("hello"), getItemData(0))
         }
     }
 
@@ -126,7 +126,7 @@ class AssemblySingleDataRecyclerAdapterTest {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }
-            Assert.assertEquals(getItem(0).hashCode().toLong(), getItemId(0))
+            Assert.assertEquals(getItemData(0).hashCode().toLong(), getItemId(0))
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(1)
             }

@@ -260,22 +260,22 @@ class AssemblyRecyclerListAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodGetItemData() {
         AssemblyRecyclerListAdapter<Text>(listOf(TextItemFactory())).apply {
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(-1)
+                getItemData(-1)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(0)
+                getItemData(0)
             }
             assertThrow(IndexOutOfBoundsException::class) {
-                getItem(1)
+                getItemData(1)
             }
 
             submitList(listOf(Text("hello"), Text("world")))
             Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
-            Assert.assertEquals(Text("hello"), getItem(0))
-            Assert.assertEquals(Text("world"), getItem(1))
+            Assert.assertEquals(Text("hello"), getItemData(0))
+            Assert.assertEquals(Text("world"), getItemData(1))
         }
     }
 
@@ -308,8 +308,8 @@ class AssemblyRecyclerListAdapterTest {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(-1)
             }
-            Assert.assertEquals(getItem(0).hashCode().toLong(), getItemId(0))
-            Assert.assertEquals(getItem(1).hashCode().toLong(), getItemId(1))
+            Assert.assertEquals(getItemData(0).hashCode().toLong(), getItemId(0))
+            Assert.assertEquals(getItemData(1).hashCode().toLong(), getItemId(1))
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemId(2)
             }

@@ -50,11 +50,7 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataFragmentStateAdapter<DATA, RecyclerView.ViewHolder>(
-    fragmentManager,
-    lifecycle,
-    diffCallback,
-    mainDispatcher,
-    workerDispatcher
+    fragmentManager, lifecycle, diffCallback, mainDispatcher, workerDispatcher
 ), AssemblyAdapter<FragmentItemFactory<*>> {
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
@@ -120,6 +116,10 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
                 itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
             )
         }
+    }
+
+    fun getItemData(position: Int): DATA? {
+        return peek(position)
     }
 
     override fun getItemViewType(position: Int): Int {
