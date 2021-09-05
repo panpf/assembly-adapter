@@ -1,16 +1,16 @@
-# new
+# v4.0.0-rc01
 
 list:
-* new: ExpandableChildItemFactory added setOnChildViewClickListener, setOnChildViewLongClickListener, setOnChildItemClickListener, setOnChildItemLongClickListener method
 * change: ItemId move to common-core module
 * change: hasStableIds changed from constructor attribute to setHasStableIds(Boolean) method
-* new: AssemblyListAdapter, AssemblySingleDataListAdapter, ConcatListAdapter added itemCount property
 * change: AssemblyExpandableListAdapter, AssemblySingleDataExpandableListAdapter isChildSelectable rename to childSelectable
+* new: ExpandableChildItemFactory added setOnChildViewClickListener, setOnChildViewLongClickListener, setOnChildItemClickListener, setOnChildItemLongClickListener method
+* new: AssemblyListAdapter, AssemblySingleDataListAdapter, ConcatListAdapter added itemCount property
 
 recycler:
+* fix: Fix the bug that the disableByPosition, disableBySpanIndex, personaliseByPosition, personaliseBySpanIndex functions of Assembly\*DividerItemDecoration do not work
 * new: Recycler related Adapter now rewrites getItemId() method to support obtaining stable itemId through ItemId interface or hashCode
 * new: AssemblyRecyclerAdapter, AssemblyRecyclerListAdapter, AssemblySingleDataRecyclerAdapter, AssemblySingleDataRecyclerListAdapter added getItem(Int) method
-* fix: Fix the bug that the disableByPosition, disableBySpanIndex, personaliseByPosition, personaliseBySpanIndex functions of Assembly\*DividerItemDecoration do not work
 
 recycler-paging:
 * new: AssemblyPagingDataAdapter added currentList property
