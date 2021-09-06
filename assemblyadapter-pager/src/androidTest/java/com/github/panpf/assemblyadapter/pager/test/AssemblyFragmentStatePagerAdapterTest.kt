@@ -15,10 +15,10 @@
  */
 package com.github.panpf.assemblyadapter.pager.test
 
-import android.R
 import androidx.fragment.app.Fragment
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.GetPageTitle
 import com.github.panpf.tools4a.test.ktx.getFragmentSync
 import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -27,7 +27,9 @@ import org.junit.Test
 
 class AssemblyFragmentStatePagerAdapterTest {
 
-    data class Text(val text: String)
+    data class Text(val text: String) : GetPageTitle {
+        override val pageTitle: CharSequence = "PageTitle-Text-$text"
+    }
 
     class TextFragmentItemFactory : FragmentItemFactory<Text>(Text::class) {
         override fun createFragment(
@@ -39,7 +41,9 @@ class AssemblyFragmentStatePagerAdapterTest {
 
     class TextFragment : Fragment()
 
-    data class Image(val resId: Int)
+    data class Image(val resId: Int) : GetPageTitle {
+        override val pageTitle: CharSequence = "PageTitle-Image-$resId"
+    }
 
     class ImageFragmentItemFactory : FragmentItemFactory<Image>(Image::class) {
         override fun createFragment(
@@ -64,14 +68,15 @@ class AssemblyFragmentStatePagerAdapterTest {
             )
         }
         AssemblyFragmentStatePagerAdapter<Any>(
-            fragment.childFragmentManager, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
+            fragment.childFragmentManager,
+            listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
             Assert.assertEquals(0, currentList.size)
         }
         AssemblyFragmentStatePagerAdapter<Any>(
             fragment.childFragmentManager,
             listOf(TextFragmentItemFactory(), ImageFragmentItemFactory()),
-            listOf(Text("hello"), Image(R.drawable.btn_default))
+            listOf(Text("hello"), Image(android.R.drawable.btn_default))
         ).apply {
             Assert.assertEquals(2, currentList.size)
         }
@@ -82,7 +87,8 @@ class AssemblyFragmentStatePagerAdapterTest {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         AssemblyFragmentStatePagerAdapter<Any>(
-            fragment.childFragmentManager, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
+            fragment.childFragmentManager,
+            listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
             Assert.assertEquals("", currentList.joinToString())
 
@@ -102,7 +108,8 @@ class AssemblyFragmentStatePagerAdapterTest {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         AssemblyFragmentStatePagerAdapter<Any>(
-            fragment.childFragmentManager, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
+            fragment.childFragmentManager,
+            listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
             Assert.assertEquals(0, count)
             Assert.assertEquals(0, itemCount)
@@ -126,7 +133,8 @@ class AssemblyFragmentStatePagerAdapterTest {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         AssemblyFragmentStatePagerAdapter<Any>(
-            fragment.childFragmentManager, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
+            fragment.childFragmentManager,
+            listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemData(-1)
@@ -149,9 +157,10 @@ class AssemblyFragmentStatePagerAdapterTest {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         AssemblyFragmentStatePagerAdapter<Any>(
-            fragment.childFragmentManager, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
+            fragment.childFragmentManager,
+            listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
-            submitList(listOf(Text("hello"), Image(R.drawable.alert_dark_frame)))
+            submitList(listOf(Text("hello"), Image(android.R.drawable.alert_dark_frame)))
 
             var item0: Fragment? = null
             fragmentScenario.onFragment {
@@ -172,7 +181,8 @@ class AssemblyFragmentStatePagerAdapterTest {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         AssemblyFragmentStatePagerAdapter<Any>(
-            fragment.childFragmentManager, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
+            fragment.childFragmentManager,
+            listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
@@ -184,9 +194,61 @@ class AssemblyFragmentStatePagerAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            submitList(listOf(Image(R.drawable.alert_dark_frame), Text("hello")))
+            submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
             Assert.assertEquals(ImageFragmentItemFactory::class, getItemFactoryByPosition(0)::class)
             Assert.assertEquals(TextFragmentItemFactory::class, getItemFactoryByPosition(1)::class)
+        }
+    }
+
+    @Test
+    fun testMethodGetPageTitle() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblyFragmentStatePagerAdapter<Any>(
+            fragment.childFragmentManager,
+            listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
+        ).apply {
+            Assert.assertEquals(0, currentPageTitleList.size)
+            Assert.assertNull(getPageTitle(0))
+
+            submitPageTitleList(listOf("hello"))
+            Assert.assertEquals(1, currentPageTitleList.size)
+            Assert.assertEquals("hello", getPageTitle(0))
+            Assert.assertNull(getPageTitle(1))
+
+            submitPageTitleList(listOf("hello", "world"))
+            Assert.assertEquals(2, currentPageTitleList.size)
+            Assert.assertEquals("hello", getPageTitle(0))
+            Assert.assertEquals("world", getPageTitle(1))
+            Assert.assertNull(getPageTitle(2))
+
+            submitPageTitleList(null)
+            Assert.assertEquals(0, currentPageTitleList.size)
+            Assert.assertNull(getPageTitle(0))
+
+            submitList(listOf(Text("hello")))
+            Assert.assertEquals(0, currentPageTitleList.size)
+            Assert.assertEquals(1, currentList.size)
+            Assert.assertEquals(Text("hello"), getItemData(0))
+            Assert.assertEquals("PageTitle-Text-hello", getPageTitle(0))
+            Assert.assertNull(getPageTitle(1))
+
+            submitList(listOf(Text("hello"), Image(android.R.drawable.btn_default)))
+            Assert.assertEquals(0, currentPageTitleList.size)
+            Assert.assertEquals(2, currentList.size)
+            Assert.assertEquals(Text("hello"), getItemData(0))
+            Assert.assertEquals("PageTitle-Text-hello", getPageTitle(0))
+            Assert.assertEquals(Image(android.R.drawable.btn_default), getItemData(1))
+            Assert.assertEquals(
+                "PageTitle-Image-${android.R.drawable.btn_default}",
+                getPageTitle(1)
+            )
+            Assert.assertNull(getPageTitle(2))
+
+            submitList(null)
+            Assert.assertEquals(0, currentPageTitleList.size)
+            Assert.assertEquals(0, currentList.size)
+            Assert.assertNull(getPageTitle(0))
         }
     }
 }

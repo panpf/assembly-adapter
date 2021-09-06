@@ -57,22 +57,6 @@ class ArrayPagerAdapterTest {
     }
 
     @Test
-    fun testPropertyCurrentPageTitleListAndSubmitPageTitleList() {
-        ArrayPagerAdapter().apply {
-            Assert.assertEquals(0, currentPageTitleList.size)
-
-            submitPageTitleList(listOf("hello"))
-            Assert.assertEquals(1, currentPageTitleList.size)
-
-            submitPageTitleList(listOf("hello", "world"))
-            Assert.assertEquals(2, currentPageTitleList.size)
-
-            submitPageTitleList(null)
-            Assert.assertEquals(0, currentPageTitleList.size)
-        }
-    }
-
-    @Test
     fun testMethodGetCount() {
         val context = InstrumentationRegistry.getInstrumentation().context
         ArrayPagerAdapter().apply {
@@ -122,6 +106,29 @@ class ArrayPagerAdapterTest {
 
             Assert.assertTrue(instantiateItem(parent, 0) is TextView)
             Assert.assertTrue(instantiateItem(parent, 1) is ImageView)
+        }
+    }
+
+    @Test
+    fun testMethodGetPageTitle() {
+        ArrayPagerAdapter().apply {
+            Assert.assertEquals(0, currentPageTitleList.size)
+            Assert.assertNull(getPageTitle(0))
+
+            submitPageTitleList(listOf("hello"))
+            Assert.assertEquals(1, currentPageTitleList.size)
+            Assert.assertEquals("hello", getPageTitle(0))
+            Assert.assertNull(getPageTitle(1))
+
+            submitPageTitleList(listOf("hello", "world"))
+            Assert.assertEquals(2, currentPageTitleList.size)
+            Assert.assertEquals("hello", getPageTitle(0))
+            Assert.assertEquals("world", getPageTitle(1))
+            Assert.assertNull(getPageTitle(2))
+
+            submitPageTitleList(null)
+            Assert.assertEquals(0, currentPageTitleList.size)
+            Assert.assertNull(getPageTitle(0))
         }
     }
 }

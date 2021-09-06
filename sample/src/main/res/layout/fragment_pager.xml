@@ -1,33 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/pagerTabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tabTextColor="#88FFFFFF"
+        app:tabSelectedTextColor="#FFFFFFFF"
+        app:tabIndicatorColor="#FFFFFFFF"
+        android:background="@color/colorPrimary"
+        app:tabMode="scrollable"/>
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pagerPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:divider="@null"
         android:groupIndicator="@null"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pagerTabLayout" />
 
     <TextView
         android:id="@+id/pagerPageNumberText"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="right|end|bottom"
         android:layout_margin="40dp"
         android:background="@drawable/bg_page_number"
         android:gravity="center"
         android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:text="1/23" />
 
     <ProgressBar
         android:id="@+id/pagerProgressBar"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_gravity="center"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,6 +70,9 @@ class PagerViewPlaceholderFragment : BaseBindingFragment<FragmentPagerBinding>()
                 }
             })
         }
+
+        binding.pagerTabLayout.setupWithViewPager(binding.pagerPager, true)
+
         updatePageNumber(binding)
 
         registered = false
@@ -84,12 +87,15 @@ class PagerViewPlaceholderFragment : BaseBindingFragment<FragmentPagerBinding>()
 
                 viewModel.appsOverviewData.observe(viewLifecycleOwner) {
                     appsOverviewAdapter.data = it
+                    appsOverviewAdapter.currentPageTitle = "OVERVIEW"
                     updatePageNumber(binding)
                 }
 
-                viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-                    pagerAdapter.submitList(it)
+                viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) { list ->
+                    pagerAdapter.submitList(list)
+                    pagerAdapter.submitPageTitleList(list.map { it.title })
                     footerLoadStateAdapter.data = LoadState.NotLoading(true)
+                    footerLoadStateAdapter.currentPageTitle = "END"
                     updatePageNumber(binding)
                 }
             }

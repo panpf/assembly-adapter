@@ -15,41 +15,57 @@
  */
 package com.github.panpf.assemblyadapter.pager.test
 
+import android.content.Context
 import android.database.DataSetObserver
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblySingleDataPagerAdapter
-import com.github.panpf.assemblyadapter.pager.ViewPagerItemFactory
+import com.github.panpf.assemblyadapter.pager.GetPageTitle
+import com.github.panpf.assemblyadapter.pager.PagerItemFactory
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
 class AssemblySingleDataPagerAdapterTest {
 
-    private class TestItemFactory :
-        ViewPagerItemFactory<String>(String::class, android.R.layout.activity_list_item)
+    data class Text(val text: String) : GetPageTitle {
+        override val pageTitle: CharSequence = "PageTitle-Text-$text"
+    }
+
+    class TextPagerItemFactory : PagerItemFactory<Text>(Text::class) {
+
+        override fun createItemView(
+            context: Context,
+            parent: ViewGroup,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: Text
+        ): View = TextView(context)
+    }
 
     @Test
     fun testConstructor() {
-        AssemblySingleDataPagerAdapter(TestItemFactory()).apply {
+        AssemblySingleDataPagerAdapter(TextPagerItemFactory()).apply {
             Assert.assertNull(data)
         }
 
         AssemblySingleDataPagerAdapter(
-            TestItemFactory(),
-            "123456"
+            TextPagerItemFactory(),
+            Text("hello")
         ).apply {
             Assert.assertNotNull(data)
-            Assert.assertEquals("123456", data)
+            Assert.assertEquals(Text("hello"), data)
         }
     }
 
     @Test
     fun testPropertyData() {
-        var dataFromObserver: String? = null
-        AssemblySingleDataPagerAdapter(TestItemFactory()).apply {
+        var dataFromObserver: Text? = null
+        AssemblySingleDataPagerAdapter(TextPagerItemFactory()).apply {
             registerDataSetObserver(object : DataSetObserver() {
                 override fun onChanged() {
                     super.onChanged()
@@ -60,23 +76,23 @@ class AssemblySingleDataPagerAdapterTest {
             Assert.assertNull(data)
             Assert.assertNull(dataFromObserver)
 
-            data = "Test data changed notify invoke"
-            Assert.assertEquals("Test data changed notify invoke", data)
-            Assert.assertEquals("Test data changed notify invoke", dataFromObserver)
+            data = Text("hello")
+            Assert.assertEquals(Text("hello"), data)
+            Assert.assertEquals(Text("hello"), dataFromObserver)
 
-            data = "Test data changed notify invoke2"
-            Assert.assertEquals("Test data changed notify invoke2", data)
-            Assert.assertEquals("Test data changed notify invoke2", dataFromObserver)
+            data = Text("world")
+            Assert.assertEquals(Text("world"), data)
+            Assert.assertEquals(Text("world"), dataFromObserver)
         }
     }
 
     @Test
     fun testMethodGetCount() {
-        AssemblySingleDataPagerAdapter(TestItemFactory()).apply {
+        AssemblySingleDataPagerAdapter(TextPagerItemFactory()).apply {
             Assert.assertEquals(0, count)
             Assert.assertEquals(0, itemCount)
 
-            data = "Test count"
+            data = Text("hello")
             Assert.assertEquals(1, count)
             Assert.assertEquals(1, itemCount)
 
@@ -90,7 +106,7 @@ class AssemblySingleDataPagerAdapterTest {
     fun testMethodInstantiateItem() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
-        AssemblySingleDataPagerAdapter(TestItemFactory()).apply {
+        AssemblySingleDataPagerAdapter(TextPagerItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 instantiateItem(parent, -1)
             }
@@ -101,7 +117,7 @@ class AssemblySingleDataPagerAdapterTest {
                 instantiateItem(parent, 1)
             }
 
-            data = "test"
+            data = Text("hello")
             Assert.assertTrue(instantiateItem(parent, 0) is View)
         }
     }
@@ -110,8 +126,8 @@ class AssemblySingleDataPagerAdapterTest {
     fun testMethodDestroyItem() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
-        AssemblySingleDataPagerAdapter(TestItemFactory()).apply {
-            data = "test"
+        AssemblySingleDataPagerAdapter(TextPagerItemFactory()).apply {
+            data = Text("hello")
             val item = instantiateItem(parent, 0)
             Assert.assertTrue(item is View)
 
@@ -132,8 +148,8 @@ class AssemblySingleDataPagerAdapterTest {
     fun testMethodIsViewFromObject() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
-        AssemblySingleDataPagerAdapter(TestItemFactory()).apply {
-            data = "test"
+        AssemblySingleDataPagerAdapter(TextPagerItemFactory()).apply {
+            data = Text("hello")
             val item = instantiateItem(parent, 0)
             Assert.assertTrue(item is View)
             Assert.assertTrue(isViewFromObject(item as View, item))
@@ -145,15 +161,15 @@ class AssemblySingleDataPagerAdapterTest {
     fun testMethodGetItemPosition() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
-        AssemblySingleDataPagerAdapter(TestItemFactory()).apply {
-            data = "test"
+        AssemblySingleDataPagerAdapter(TextPagerItemFactory()).apply {
+            data = Text("hello")
             val item = instantiateItem(parent, 0)
             Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item))
 
             notifyDataSetChanged()
             Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item))
 
-            data = "test1"
+            data = Text("world")
             Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item))
 
             data = null
@@ -163,7 +179,7 @@ class AssemblySingleDataPagerAdapterTest {
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        val itemFactory = TestItemFactory()
+        val itemFactory = TextPagerItemFactory()
         AssemblySingleDataPagerAdapter(itemFactory).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
@@ -175,8 +191,36 @@ class AssemblySingleDataPagerAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            data = "test"
+            data = Text("hello")
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetPageTitle() {
+        AssemblySingleDataPagerAdapter(TextPagerItemFactory()).apply {
+            Assert.assertNull(currentPageTitle)
+            Assert.assertNull(getPageTitle(0))
+
+            currentPageTitle = "hello"
+            Assert.assertNotNull(currentPageTitle)
+            Assert.assertEquals("hello", getPageTitle(0))
+            Assert.assertNull(getPageTitle(1))
+
+            currentPageTitle = null
+            Assert.assertNull(currentPageTitle)
+            Assert.assertNull(getPageTitle(0))
+
+            data = Text("hello")
+            Assert.assertNotNull(data)
+            Assert.assertNull(currentPageTitle)
+            Assert.assertEquals("PageTitle-Text-hello", getPageTitle(0))
+            Assert.assertNull(getPageTitle(1))
+
+            data = null
+            Assert.assertNull(data)
+            Assert.assertNull(currentPageTitle)
+            Assert.assertNull(getPageTitle(0))
         }
     }
 }

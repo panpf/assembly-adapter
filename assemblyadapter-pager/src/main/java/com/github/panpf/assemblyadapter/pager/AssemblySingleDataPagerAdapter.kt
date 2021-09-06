@@ -44,6 +44,15 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
             notifyDataSetChanged()
         }
 
+    /**
+     * Get the current page title.
+     */
+    var currentPageTitle: CharSequence? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     val itemCount: Int
         get() = if (data != null) 1 else 0
 
@@ -69,6 +78,20 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
         return getItemFactoryByPosition(position).dispatchCreateItemView(
             container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
         )
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return if (position == 0) {
+            val currentPageTitle = currentPageTitle
+            if (currentPageTitle != null) {
+                currentPageTitle
+            } else {
+                val data = data
+                if (data is GetPageTitle) data.pageTitle else null
+            }
+        } else {
+            null
+        }
     }
 
 

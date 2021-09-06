@@ -77,11 +77,16 @@ open class ArrayFragmentStatePagerAdapter(
      * Set the new page title list to be displayed.
      */
     open fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
-        (pageTitleStorage ?: ItemDataStorage<CharSequence> {
+        if (pageTitleList != null && pageTitleList.isNotEmpty()) {
+            (pageTitleStorage ?: ItemDataStorage<CharSequence> {
+                notifyDataSetChanged()
+            }.apply {
+                this@ArrayFragmentStatePagerAdapter.pageTitleStorage = this
+            }).submitList(pageTitleList)
+        } else {
+            pageTitleStorage = null
             notifyDataSetChanged()
-        }.apply {
-            this@ArrayFragmentStatePagerAdapter.pageTitleStorage = this
-        }).submitList(pageTitleList)
+        }
     }
 
     val itemCount: Int
@@ -105,7 +110,13 @@ open class ArrayFragmentStatePagerAdapter(
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return pageTitleStorage?.getData(position)
+        val pageTitleStorage = pageTitleStorage
+        return if (pageTitleStorage != null) {
+            pageTitleStorage.getDataOrNull(position)
+        } else {
+            val itemData = itemDataStorage.getDataOrNull(position)
+            if (itemData is GetPageTitle) itemData.pageTitle else null
+        }
     }
 
 

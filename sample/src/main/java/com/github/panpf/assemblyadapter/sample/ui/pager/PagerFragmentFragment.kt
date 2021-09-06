@@ -76,6 +76,8 @@ class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
             })
         }
 
+        binding.pagerTabLayout.setupWithViewPager(binding.pagerPager, true)
+
         viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.pagerProgressBar.isVisible = it == true
             binding.pagerPageNumberText.isVisible = it != true
@@ -83,12 +85,15 @@ class PagerFragmentFragment : BaseBindingFragment<FragmentPagerBinding>() {
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
+            appsOverviewAdapter.currentPageTitle = "OVERVIEW"
             updatePageNumber(binding)
         }
 
-        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
-            pagerAdapter.submitList(it)
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) { list ->
+            pagerAdapter.submitList(list)
+            pagerAdapter.submitPageTitleList(list.map { it.title })
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
+            footerLoadStateAdapter.currentPageTitle = "END"
             updatePageNumber(binding)
         }
     }

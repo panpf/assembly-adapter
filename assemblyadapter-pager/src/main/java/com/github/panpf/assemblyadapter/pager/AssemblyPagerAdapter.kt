@@ -23,6 +23,7 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapter
+import java.util.*
 
 /**
  * An implementation of [PagerAdapter], which implements multi-type adapters through standardized [PagerItemFactory].
@@ -41,6 +42,7 @@ open class AssemblyPagerAdapter<DATA>(
 
     private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+    private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
 
     /**
      * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
@@ -48,6 +50,13 @@ open class AssemblyPagerAdapter<DATA>(
      */
     val currentList: List<DATA>
         get() = itemDataStorage.readOnlyList
+
+    /**
+     * Get the current page title list. If a null list is submitted through [submitPageTitleList], or no list is submitted, an empty list will be returned.
+     * The returned list may not change-changes to the content must be passed through [submitPageTitleList].
+     */
+    val currentPageTitleList: List<CharSequence>
+        get() = pageTitleStorage?.readOnlyList ?: Collections.emptyList()
 
     init {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
@@ -58,6 +67,22 @@ open class AssemblyPagerAdapter<DATA>(
      */
     fun submitList(list: List<DATA>?) {
         itemDataStorage.submitList(list)
+    }
+
+    /**
+     * Set the new page title list to be displayed.
+     */
+    open fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
+        if (pageTitleList != null && pageTitleList.isNotEmpty()) {
+            (pageTitleStorage ?: ItemDataStorage<CharSequence> {
+                notifyDataSetChanged()
+            }.apply {
+                this@AssemblyPagerAdapter.pageTitleStorage = this
+            }).submitList(pageTitleList)
+        } else {
+            pageTitleStorage = null
+            notifyDataSetChanged()
+        }
     }
 
     val itemCount: Int
@@ -87,6 +112,16 @@ open class AssemblyPagerAdapter<DATA>(
         return itemFactory.dispatchCreateItemView(
             container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
         )
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        val pageTitleStorage = pageTitleStorage
+        return if (pageTitleStorage != null) {
+            pageTitleStorage.getDataOrNull(position)
+        } else {
+            val itemData = itemDataStorage.getDataOrNull(position)
+            if (itemData is GetPageTitle) itemData.pageTitle else null
+        }
     }
 
 

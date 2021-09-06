@@ -3,6 +3,9 @@
 recycler: 
 improve: AssemblySingleDataRecyclerAdapter now uses notifyItem\* method to update data
 
+pager:
+new: Assembly\*PagerAdapter adds getPageTitle support
+
 # v4.0.0-rc01
 
 list:

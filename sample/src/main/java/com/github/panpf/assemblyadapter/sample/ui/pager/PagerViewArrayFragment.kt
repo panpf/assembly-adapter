@@ -48,19 +48,23 @@ class PagerViewArrayFragment : BaseBindingFragment<FragmentPagerBinding>() {
             })
         }
 
+        binding.pagerTabLayout.setupWithViewPager(binding.pagerPager, true)
+
         viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.pagerProgressBar.isVisible = it == true
             binding.pagerPageNumberText.isVisible = it != true
         }
 
-        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) { list ->
             val itemFactory = AppGroupPagerItemFactory(requireActivity())
-            val viewList = 0.until(it.size).map { position ->
+            val viewList = 0.until(list.size).map { position ->
                 itemFactory.dispatchCreateItemView(
-                    requireContext(), binding.pagerPager, position, position, it[position]
+                    requireContext(), binding.pagerPager, position, position, list[position]
                 )
             }
-            binding.pagerPager.adapter = ArrayPagerAdapter(viewList)
+            binding.pagerPager.adapter = ArrayPagerAdapter(viewList).apply {
+                submitPageTitleList(list.map { it.title })
+            }
             updatePageNumber(binding)
         }
     }

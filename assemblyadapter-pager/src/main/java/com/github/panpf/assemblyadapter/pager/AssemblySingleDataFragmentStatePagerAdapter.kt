@@ -59,6 +59,15 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
             notifyDataSetChanged()
         }
 
+    /**
+     * Get the current page title.
+     */
+    var currentPageTitle: CharSequence? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     @Deprecated(
         """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List)} with
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
@@ -93,6 +102,20 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         return getItemFactoryByPosition(position).dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return if (position == 0) {
+            val currentPageTitle = currentPageTitle
+            if (currentPageTitle != null) {
+                currentPageTitle
+            } else {
+                val data = data
+                if (data is GetPageTitle) data.pageTitle else null
+            }
+        } else {
+            null
+        }
     }
 
 

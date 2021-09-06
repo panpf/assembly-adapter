@@ -49,21 +49,25 @@ class PagerFragmentArrayFragment : BaseBindingFragment<FragmentPagerBinding>() {
             })
         }
 
+        binding.pagerTabLayout.setupWithViewPager(binding.pagerPager, true)
+
         viewModel.loadingData.observe(viewLifecycleOwner) {
             binding.pagerProgressBar.isVisible = it == true
             binding.pagerPageNumberText.isVisible = it != true
         }
 
-        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) { list ->
             val itemFactory = AppGroupFragmentItemFactory()
-            val fragmentList = 0.until(it.size).map { position ->
-                itemFactory.dispatchCreateFragment(position, position, it[position])
+            val fragmentList = 0.until(list.size).map { position ->
+                itemFactory.dispatchCreateFragment(position, position, list[position])
             }
             binding.pagerPager.adapter = ArrayFragmentStatePagerAdapter(
                 childFragmentManager,
                 FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
                 fragmentList
-            )
+            ).apply {
+                submitPageTitleList(list.map { it.title })
+            }
             updatePageNumber(binding)
         }
     }

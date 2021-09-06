@@ -49,6 +49,16 @@ class ItemDataStorage<DATA>(
     }
 
     /**
+     * Get the data item associated with the specified [position] in the data set. If not return null
+     *
+     * @param position Position of the item whose data we want within the adapter's data set.
+     * @return The data at the specified position. If not return null
+     */
+    fun getDataOrNull(position: Int): DATA? {
+        return readOnlyList.getOrNull(position)
+    }
+
+    /**
      * Set up a new data list. Will copy the data of [list], pass in null to clear the data set
      */
     fun submitList(list: List<DATA>?) {
