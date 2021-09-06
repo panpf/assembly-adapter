@@ -16,7 +16,6 @@ import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListPlaceholder
 import com.github.panpf.assemblyadapter.sample.ui.list.ListFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListPlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager.*
-import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentArrayFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPagingFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPlaceholderFragment
@@ -64,15 +63,12 @@ class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
 
         ListSeparator("ViewPager"),
         Link("ViewPager - View", PagerViewFragment()),
-        Link("ViewPager - View - Array", PagerViewArrayFragment()),
         Link("ViewPager - View - Placeholder", PagerViewPlaceholderFragment()),
         Link("ViewPager - Fragment", PagerFragmentFragment()),
-        Link("ViewPager - Fragment - Array", PagerFragmentArrayFragment()),
         Link("ViewPager - Fragment - Placeholder", PagerFragmentPlaceholderFragment()),
 
         ListSeparator("ViewPager2"),
         Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
-        Link("ViewPager2 - Fragment - Array", Pager2FragmentArrayFragment()),
         Link("ViewPager2 - Fragment - Placeholder", Pager2FragmentPlaceholderFragment()),
         Link("ViewPager2 - Fragment - Paging", Pager2FragmentPagingFragment()),
     )

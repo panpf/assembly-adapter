@@ -18,7 +18,6 @@ package com.github.panpf.assemblyadapter.pager.refreshable
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
-import com.github.panpf.assemblyadapter.pager.ArrayPagerAdapter
 
 abstract class RefreshablePagerAdapter<DATA> : GetItemDataPagerAdapter<DATA>() {
 
@@ -29,7 +28,7 @@ abstract class RefreshablePagerAdapter<DATA> : GetItemDataPagerAdapter<DATA>() {
      *
      * By default, [PagerAdapter] will not refresh the item when the dataset changes.
      *
-     * [ArrayPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * [RefreshablePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
      * method return POSITION_NONE when the dataset changes.
      */
     var isDisableItemRefreshWhenDataSetChanged: Boolean

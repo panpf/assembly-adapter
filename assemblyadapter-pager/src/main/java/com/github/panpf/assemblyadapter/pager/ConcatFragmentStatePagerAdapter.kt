@@ -18,7 +18,7 @@ package com.github.panpf.assemblyadapter.pager
 import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.internal.ConcatFragmentStatePagerAdapterController
 import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataFragmentStatePagerAdapter
@@ -51,9 +51,9 @@ open class ConcatFragmentStatePagerAdapter(
     /**
      * Disable the function of refreshing item when the data set changes.
      *
-     * By default, [PagerAdapter] will not refresh the item when the dataset changes.
+     * By default, [FragmentStatePagerAdapter] will not refresh the item when the dataset changes.
      *
-     * [ArrayPagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
+     * [ConcatFragmentStatePagerAdapter] triggers the refresh of the item by letting the [getItemPosition]
      * method return POSITION_NONE when the dataset changes.
      */
     var isDisableItemRefreshWhenDataSetChanged: Boolean

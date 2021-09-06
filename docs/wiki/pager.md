@@ -11,10 +11,8 @@ AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager：
 * [AssemblyPagerAdapter]: 多类型 Adapter 实现
 * [AssemblySingleDataPagerAdapter]：单数据实现
 * [ConcatPagerAdapter]: 连接 Adapter 实现
-* [ArrayPagerAdapter]: View 数组实现
 * [AssemblyFragmentStatePagerAdapter]: 多类型 Adapter 实现
 * [AssemblySingleDataFragmentStatePagerAdapter]：单数据实现
-* [ArrayFragmentStatePagerAdapter]: Fragment 数组实现
 
 ### Concat 支持
 
@@ -42,7 +40,6 @@ AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager2：
 
 * [AssemblyFragmentStateAdapter]: 多类型 Adapter 实现
 * [AssemblySingleDataFragmentStateAdapter]：单数据实现
-* [ArrayFragmentStateAdapter]: Fragment 数组实现
 * [PagingDataFragmentStateAdapter]：Paging 实现
 * [LoadStateFragmentStateAdapter]：LoadState 实现
 * [AssemblyPagingDataFragmentStateAdapter]：多类型 + Paging Adapter 实现
@@ -60,15 +57,12 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
     * [AppGroupPagerItemFactory]
     * [AppGroupFragmentItemFactory]
 * PagerAdapter
-    * [PagerViewArrayFragment]
     * [PagerViewFragment]
     * [PagerViewPlaceholderFragment]
 * PagerFragmentStatePagerAdapter
-    * [PagerFragmentArrayFragment]
     * [PagerFragmentFragment]
     * [PagerFragmentPlaceholderFragment]
 * PagerFragmentStateAdapter
-    * [Pager2FragmentArrayFragment]
     * [Pager2FragmentFragment]
     * [Pager2FragmentPagingFragment]
     * [Pager2FragmentPlaceholderFragment]
@@ -77,19 +71,13 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 
 [AppGroupFragmentItemFactory]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/item/pager/AppGroupFragmentItemFactory.kt
 
-[PagerViewArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewArrayFragment.kt
-
 [PagerViewFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewFragment.kt
 
 [PagerViewPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewPlaceholderFragment.kt
 
-[PagerFragmentArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentArrayFragment.kt
-
 [PagerFragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentFragment.kt
 
 [PagerFragmentPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentPlaceholderFragment.kt
-
-[Pager2FragmentArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentArrayFragment.kt
 
 [Pager2FragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentFragment.kt
 
@@ -105,8 +93,6 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 
 [ConcatPagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatPagerAdapter.kt
 
-[ArrayPagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayPagerAdapter.kt
-
 [ConcatFragmentStatePagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatFragmentStatePagerAdapter.kt
 
 [AssemblySingleDataFragmentStatePagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblySingleDataFragmentStatePagerAdapter.kt
@@ -116,8 +102,6 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 [AssemblyFragmentStateAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateAdapter.kt
 
 [AssemblySingleDataFragmentStateAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateAdapter.kt
-
-[ArrayFragmentStateAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/ArrayFragmentStateAdapter.kt
 
 [PagingDataFragmentStateAdapter]: ../../assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/PagingDataFragmentStateAdapter.kt
 

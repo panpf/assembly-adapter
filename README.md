@@ -88,17 +88,14 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
         * [AssemblyPagerAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataPagerAdapter]：单数据实现
         * [ConcatPagerAdapter]：连接 Adapter 实现
-        * [ArrayPagerAdapter]：View 数组实现
     * [FragmentStatePagerAdapter]
         * [AssemblyFragmentStatePagerAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataFragmentStatePagerAdapter]：单数据实现
         * [ConcatFragmentStatePagerAdapter]：连接 Adapter 实现
-        * [ArrayFragmentStatePagerAdapter]：Fragment 数组实现
 * [assemblyadapter-pager2]
     * [FragmentStateAdapter]
         * [AssemblyFragmentStateAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataFragmentStateAdapter]：单数据实现
-        * [ArrayFragmentStateAdapter]：Fragment 数组实现
 * [assemblyadapter-pager2-paging]
     * [FragmentStateAdapter]
         * [PagingDataFragmentStateAdapter]：Paging 实现
@@ -351,10 +348,6 @@ Please view the [CHANGELOG.md] file
 
 [AssemblyLoadStateAdapter]: assemblyadapter-recycler-paging/src/main/java/com/github/panpf/assemblyadapter/recycler/paging/AssemblyLoadStateAdapter.kt
 
-[ArrayPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayPagerAdapter.kt
-
-[ArrayFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayFragmentStatePagerAdapter.kt
-
 [AssemblyPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyPagerAdapter.kt
 
 [AssemblyFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblyFragmentStatePagerAdapter.kt
@@ -366,8 +359,6 @@ Please view the [CHANGELOG.md] file
 [ConcatPagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatPagerAdapter.kt
 
 [ConcatFragmentStatePagerAdapter]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatFragmentStatePagerAdapter.kt
-
-[ArrayFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/ArrayFragmentStateAdapter.kt
 
 [AssemblyFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateAdapter.kt
 
