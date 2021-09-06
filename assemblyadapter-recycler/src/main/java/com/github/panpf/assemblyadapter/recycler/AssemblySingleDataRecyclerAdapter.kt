@@ -38,12 +38,20 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
 
     /**
-     * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
+     * The only data of the current adapter, notifyItem\* will be triggered when the data changes
      */
     var data: DATA? = initData
         set(value) {
+            val oldItem = field != null
+            val newItem = value != null
             field = value
-            notifyDataSetChanged()
+            if (oldItem && !newItem) {
+                notifyItemRemoved(0)
+            } else if (newItem && !oldItem) {
+                notifyItemInserted(0)
+            } else if (oldItem && newItem) {
+                notifyItemChanged(0)
+            }
         }
 
     override fun getItemCount(): Int = if (data != null) 1 else 0

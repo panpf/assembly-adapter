@@ -167,7 +167,6 @@ open class ConcatPagerAdapter(adapters: List<GetItemDataPagerAdapter<*>>) :
     }
 
     override fun getItemPosition(item: Any): Int {
-        // todo 找到具体的 local Adapter 来实现此方法
         if (refreshHelper?.isItemPositionChanged(item as View) == true) {
             return POSITION_NONE
         }

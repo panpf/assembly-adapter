@@ -1,3 +1,8 @@
+# new
+
+recycler: 
+improve: AssemblySingleDataRecyclerAdapter now uses notifyItem\* method to update data
+
 # v4.0.0-rc01
 
 list:

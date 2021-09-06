@@ -31,7 +31,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<DATA>>
 
     /**
-     * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
+     * The only data of the current adapter, notifyItem\* will be triggered when the data changes
      */
     var data: DATA?
         set(value) {
