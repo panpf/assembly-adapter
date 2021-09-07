@@ -6,6 +6,7 @@ recycler:
 * change:
   [AssemblyRecyclerListAdapter] and [AssemblySingleDataRecyclerListAdapter] now do not support
   setHasStableIds and getItemId
+* new: Added [IntactItemFactory]
 
 pager:
 
@@ -112,6 +113,8 @@ all:
 [IntactPagerItemFactory]: assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/IntactPagerItemFactory.kt
 
 [IntactFragmentItemFactory]: assemblyadapter-common-pager/src/main/java/com/github/panpf/assemblyadapter/pager/IntactFragmentItemFactory.kt
+
+[IntactItemFactory]: assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/IntactItemFactory.kt
 
 [FragmentStateListAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/FragmentStateListAdapter.kt
 
