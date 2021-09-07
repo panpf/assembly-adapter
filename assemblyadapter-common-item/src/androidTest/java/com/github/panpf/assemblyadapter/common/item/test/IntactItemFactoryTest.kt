@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.IntactItemFactory
 import org.junit.Assert
 import org.junit.Test
 
-class IntactPagerItemFactoryTest {
+class IntactItemFactoryTest {
 
     @Test
     fun test() {
