@@ -87,7 +87,7 @@ open class AssemblyLoadStateAdapter(
     override fun getItemFactoryByPosition(position: Int): ItemFactory<LoadState> {
         val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+            data, "ItemFactory", "AssemblyLoadStateAdapter", "itemFactory"
         )
     }
 }

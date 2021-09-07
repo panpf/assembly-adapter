@@ -116,7 +116,7 @@ open class AssemblyFragmentStateAdapter<DATA>(
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position) ?: Placeholder
         return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
+            data, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
         )
     }
 

@@ -143,7 +143,7 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
 
         @Suppress("UNCHECKED_CAST")
         val itemFactory = itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblyPagingFragmentStateAdapter", "itemFactoryList"
+            data, "FragmentItemFactory", "AssemblyPagingDataFragmentStateAdapter", "itemFactoryList"
         ) as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
@@ -154,7 +154,7 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
         val data = peek(position) ?: Placeholder
         return itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblyPagingFragmentStateAdapter", "itemFactoryList"
+            data, "FragmentItemFactory", "AssemblyPagingDataFragmentStateAdapter", "itemFactoryList"
         )
     }
 

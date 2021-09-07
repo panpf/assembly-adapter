@@ -122,7 +122,7 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<DATA> {
         val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+            data, "FragmentItemFactory", "AssemblySingleDataFragmentStatePagerAdapter", "itemFactory"
         )
     }
 

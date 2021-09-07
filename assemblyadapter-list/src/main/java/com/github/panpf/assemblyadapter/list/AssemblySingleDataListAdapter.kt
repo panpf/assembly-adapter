@@ -101,14 +101,14 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position)
         return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+            data, "ItemFactory", "AssemblySingleDataListAdapter", "itemFactory"
         )
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val data = getItemData(position)
         val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+            data, "ItemFactory", "AssemblySingleDataListAdapter", "itemFactory"
         ).dispatchCreateItem(parent).apply {
             itemView.setTag(R.id.aa_tag_item, this)
         }.itemView
@@ -130,7 +130,7 @@ open class AssemblySingleDataListAdapter<DATA : Any>(
     override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
         val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+            data, "ItemFactory", "AssemblySingleDataListAdapter", "itemFactory"
         )
     }
 

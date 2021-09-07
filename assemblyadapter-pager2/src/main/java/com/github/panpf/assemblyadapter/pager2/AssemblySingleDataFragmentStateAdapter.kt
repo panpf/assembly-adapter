@@ -103,7 +103,7 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position)
         return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
+            data, "FragmentItemFactory", "AssemblySingleDataFragmentStateAdapter", "itemFactory"
         )
     }
 
@@ -125,7 +125,7 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<DATA> {
         val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
+            data, "FragmentItemFactory", "AssemblySingleDataFragmentStateAdapter", "itemFactory"
         )
     }
 

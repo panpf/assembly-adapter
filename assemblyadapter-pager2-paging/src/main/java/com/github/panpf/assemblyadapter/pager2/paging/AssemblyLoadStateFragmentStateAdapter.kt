@@ -97,7 +97,7 @@ open class AssemblyLoadStateFragmentStateAdapter(
     override fun onCreateFragment(position: Int, loadState: LoadState): Fragment {
         val data = getItemData(position)
         val itemFactory = itemFactoryStorage.getItemFactoryByData(
-            loadState, "ItemFactory", "AssemblyLoadStateAdapter", "itemFactory"
+            loadState, "FragmentItemFactory", "AssemblyLoadStateFragmentStateAdapter", "itemFactory"
         )
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
@@ -116,7 +116,7 @@ open class AssemblyLoadStateFragmentStateAdapter(
     override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<LoadState> {
         val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+            data, "FragmentItemFactory", "AssemblyLoadStateFragmentStateAdapter", "itemFactory"
         )
     }
 

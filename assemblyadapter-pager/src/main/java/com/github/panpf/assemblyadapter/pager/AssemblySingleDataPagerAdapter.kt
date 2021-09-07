@@ -98,7 +98,7 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
     override fun getItemFactoryByPosition(position: Int): PagerItemFactory<DATA> {
         val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+            data, "PagerItemFactory", "AssemblySingleDataPagerAdapter", "itemFactory"
         )
     }
 }

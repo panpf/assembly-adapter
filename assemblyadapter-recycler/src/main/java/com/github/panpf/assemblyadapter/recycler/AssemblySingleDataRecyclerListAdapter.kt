@@ -57,13 +57,13 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         initData: DATA? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     ) : super(diffCallback) {
-        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
-        data = initData
         if (diffCallback is KeyEqualsDiffItemCallback) {
             KeyEqualsDiffItemCallback.checkDataClass(
                 listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
             )
         }
+        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+        this.data = initData
     }
 
     /**
@@ -78,14 +78,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     constructor(
         itemFactory: ItemFactory<DATA>,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
-    ) : super(diffCallback) {
-        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
-        if (diffCallback is KeyEqualsDiffItemCallback) {
-            KeyEqualsDiffItemCallback.checkDataClass(
-                listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
-            )
-        }
-    }
+    ) : this(itemFactory, null, diffCallback)
 
     /**
      * Create an AssemblySingleDataRecyclerListAdapter that provides AsyncDifferConfig externally
@@ -107,7 +100,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
             )
         }
         this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
-        data = initData
+        this.data = initData
     }
 
     /**
@@ -121,14 +114,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     constructor(
         itemFactory: ItemFactory<DATA>,
         config: AsyncDifferConfig<DATA>,
-    ) : super(config) {
-        if (config.diffCallback is KeyEqualsDiffItemCallback) {
-            KeyEqualsDiffItemCallback.checkDataClass(
-                listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
-            )
-        }
-        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
-    }
+    ) : this(itemFactory, null, config)
 
     override fun submitList(list: List<DATA>?) {
         require(list?.size ?: 0 > 1) {
@@ -160,7 +146,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position)
         return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+            data, "ItemFactory", "AssemblySingleDataRecyclerListAdapter", "itemFactory"
         )
     }
 
@@ -194,7 +180,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
         val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+            data, "ItemFactory", "AssemblySingleDataRecyclerListAdapter", "itemFactory"
         )
     }
 }

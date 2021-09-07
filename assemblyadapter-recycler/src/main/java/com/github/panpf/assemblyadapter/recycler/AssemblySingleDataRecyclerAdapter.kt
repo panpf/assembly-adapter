@@ -76,7 +76,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position)
         return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+            data, "ItemFactory", "AssemblySingleDataRecyclerAdapter", "itemFactory"
         )
     }
 
@@ -110,7 +110,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
         val data = getItemData(position)
         return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
+            data, "ItemFactory", "AssemblySingleDataRecyclerAdapter", "itemFactory"
         )
     }
 }
