@@ -18,18 +18,16 @@ package com.github.panpf.assemblyadapter.pager2.test
 import androidx.fragment.app.Fragment
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter
-import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.panpf.assemblyadapter.recycler.SimpleAdapterDataObserver
-import com.github.panpf.tools4a.test.ktx.launchFragmentInContainerWithOn
+import com.github.panpf.tools4a.test.ktx.getFragmentSync
+import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
 class AssemblySingleDataFragmentStateAdapterTest {
 
-    data class Text(val text: String) : DiffKey {
-        override val diffKey: Any = "Text:$text"
-    }
+    data class Text(val text: String)
 
     class TextFragmentItemFactory : FragmentItemFactory<Text>(Text::class) {
         override fun createFragment(
@@ -45,137 +43,137 @@ class AssemblySingleDataFragmentStateAdapterTest {
 
     @Test
     fun testConstructor() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            AssemblySingleDataFragmentStateAdapter(
-                fragment,
-                TextFragmentItemFactory()
-            ).apply {
-                Assert.assertNull(data)
-            }
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStateAdapter(
+            fragment,
+            TextFragmentItemFactory()
+        ).apply {
+            Assert.assertNull(data)
+        }
 
-            AssemblySingleDataFragmentStateAdapter(
-                fragment,
-                TextFragmentItemFactory(),
-                Text("hello")
-            ).apply {
-                Assert.assertNotNull(data)
-                Assert.assertEquals(Text("hello"), data)
-            }
+        AssemblySingleDataFragmentStateAdapter(
+            fragment,
+            TextFragmentItemFactory(),
+            Text("hello")
+        ).apply {
+            Assert.assertNotNull(data)
+            Assert.assertEquals(Text("hello"), data)
+        }
 
-            AssemblySingleDataFragmentStateAdapter(
-                fragment.requireActivity(),
-                TextFragmentItemFactory()
-            ).apply {
-                Assert.assertNull(data)
-            }
+        AssemblySingleDataFragmentStateAdapter(
+            fragment.requireActivity(),
+            TextFragmentItemFactory()
+        ).apply {
+            Assert.assertNull(data)
+        }
 
-            AssemblySingleDataFragmentStateAdapter(
-                fragment.requireActivity(),
-                TextFragmentItemFactory(),
-                Text("hello")
-            ).apply {
-                Assert.assertNotNull(data)
-                Assert.assertEquals(Text("hello"), data)
-            }
+        AssemblySingleDataFragmentStateAdapter(
+            fragment.requireActivity(),
+            TextFragmentItemFactory(),
+            Text("hello")
+        ).apply {
+            Assert.assertNotNull(data)
+            Assert.assertEquals(Text("hello"), data)
         }
     }
 
     @Test
     fun testPropertyData() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            var dataFromObserver: Text? = null
-            AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
-                registerAdapterDataObserver(SimpleAdapterDataObserver {
-                    dataFromObserver = data
-                })
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        var dataFromObserver: Text? = null
+        AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
+            registerAdapterDataObserver(SimpleAdapterDataObserver {
+                dataFromObserver = data
+            })
 
-                Assert.assertNull(data)
-                Assert.assertNull(dataFromObserver)
+            Assert.assertNull(data)
+            Assert.assertNull(dataFromObserver)
 
-                data = Text("hello")
-                Assert.assertEquals(Text("hello"), data)
-                Assert.assertEquals(Text("hello"), dataFromObserver)
+            data = Text("hello")
+            Assert.assertEquals(Text("hello"), data)
+            Assert.assertEquals(Text("hello"), dataFromObserver)
 
-                data = Text("world")
-                Assert.assertEquals(Text("world"), data)
-                Assert.assertEquals(Text("world"), dataFromObserver)
-            }
+            data = Text("world")
+            Assert.assertEquals(Text("world"), data)
+            Assert.assertEquals(Text("world"), dataFromObserver)
         }
     }
 
     @Test
     fun testMethodGetItemCount() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
-                Assert.assertEquals(0, itemCount)
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
+            Assert.assertEquals(0, itemCount)
 
-                data = Text("hello")
-                Assert.assertEquals(1, itemCount)
+            data = Text("hello")
+            Assert.assertEquals(1, itemCount)
 
-                data = null
-                Assert.assertEquals(0, itemCount)
-            }
+            data = null
+            Assert.assertEquals(0, itemCount)
         }
     }
 
     @Test
-    fun testMethodGetItem() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemData(-1)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemData(0)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemData(1)
-                }
-
-                data = Text("hello")
-                Assert.assertEquals(Text("hello"), getItemData(0))
+    fun testMethodGetItemData() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(-1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemData(1)
+            }
+
+            data = Text("hello")
+            Assert.assertEquals(Text("hello"), getItemData(0))
         }
     }
 
     @Test
     fun testMethodCreateFragment() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
-                assertThrow(IndexOutOfBoundsException::class) {
-                    createFragment(-1)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    createFragment(0)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    createFragment(1)
-                }
-
-                data = Text("hello")
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStateAdapter(fragment, TextFragmentItemFactory()).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                createFragment(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
                 createFragment(0)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                createFragment(1)
+            }
+
+            data = Text("hello")
+            createFragment(0)
         }
     }
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            val itemFactory = TextFragmentItemFactory()
-            AssemblySingleDataFragmentStateAdapter(fragment, itemFactory).apply {
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemFactoryByPosition(-1)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemFactoryByPosition(0)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemFactoryByPosition(1)
-                }
-
-                data = Text("hello")
-                Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val itemFactory = TextFragmentItemFactory()
+        AssemblySingleDataFragmentStateAdapter(fragment, itemFactory).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(-1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(1)
+            }
+
+            data = Text("hello")
+            Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }
 }

@@ -19,7 +19,6 @@ import android.R
 import androidx.fragment.app.Fragment
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter
-import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.panpf.tools4a.test.ktx.getFragmentSync
 import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -69,7 +68,7 @@ class AssemblyFragmentStateAdapterTest {
         ).apply {
             Assert.assertEquals(0, currentList.size)
         }
-        AssemblyFragmentStateAdapter<Any>(
+        AssemblyFragmentStateAdapter(
             fragment,
             listOf(TextFragmentItemFactory(), ImageFragmentItemFactory()),
             listOf(Text("hello"), Image(R.drawable.btn_default))
@@ -88,7 +87,7 @@ class AssemblyFragmentStateAdapterTest {
         ).apply {
             Assert.assertEquals(0, currentList.size)
         }
-        AssemblyFragmentStateAdapter<Any>(
+        AssemblyFragmentStateAdapter(
             fragment.requireActivity(),
             listOf(TextFragmentItemFactory(), ImageFragmentItemFactory()),
             listOf(Text("hello"), Image(R.drawable.btn_default))
@@ -108,7 +107,7 @@ class AssemblyFragmentStateAdapterTest {
         ).apply {
             Assert.assertEquals(0, currentList.size)
         }
-        AssemblyFragmentStateAdapter<Any>(
+        AssemblyFragmentStateAdapter(
             fragment.childFragmentManager,
             fragment.lifecycle,
             listOf(TextFragmentItemFactory(), ImageFragmentItemFactory()),

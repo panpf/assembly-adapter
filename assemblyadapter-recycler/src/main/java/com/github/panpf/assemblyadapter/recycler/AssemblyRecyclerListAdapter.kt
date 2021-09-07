@@ -61,28 +61,6 @@ open class AssemblyRecyclerListAdapter<DATA>
     }
 
     /**
-     * Create an AssemblyRecyclerListAdapter that provides DiffUtil.ItemCallback externally
-     *
-     * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
-     * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
-     * @param diffCallback DiffUtil comparison data callback, the default is [KeyEqualsDiffItemCallback]
-     * @see ItemFactory
-     * @see KeyEqualsDiffItemCallback
-     */
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
-    ) : super(diffCallback) {
-        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
-        if (diffCallback is KeyEqualsDiffItemCallback) {
-            KeyEqualsDiffItemCallback.checkDataClass(
-                itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
-            )
-        }
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
-    }
-
-    /**
      * Create an AssemblyRecyclerListAdapter that provides AsyncDifferConfig externally
      *
      * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
@@ -95,7 +73,7 @@ open class AssemblyRecyclerListAdapter<DATA>
     @Suppress("LeakingThis")
     constructor(
         itemFactoryList: List<ItemFactory<*>>,
-        initDataList: List<DATA>?,
+        initDataList: List<DATA>? = null,
         config: AsyncDifferConfig<DATA>,
     ) : super(config) {
         require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
@@ -106,28 +84,6 @@ open class AssemblyRecyclerListAdapter<DATA>
         }
         itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
         submitList(initDataList)
-    }
-
-    /**
-     * Create an AssemblyRecyclerListAdapter that provides AsyncDifferConfig externally
-     *
-     * @param itemFactoryList The collection of [ItemFactory] passed in from outside, cannot be empty.
-     * Each type of data in the data set must have a matching [ItemFactory], otherwise an exception will be thrown
-     * @param config AsyncDifferConfig
-     * @see ItemFactory
-     * @see AsyncDifferConfig
-     */
-    constructor(
-        itemFactoryList: List<ItemFactory<*>>,
-        config: AsyncDifferConfig<DATA>,
-    ) : super(config) {
-        require(itemFactoryList.isNotEmpty()) { "itemFactoryList Can not be empty" }
-        if (config.diffCallback is KeyEqualsDiffItemCallback) {
-            KeyEqualsDiffItemCallback.checkDataClass(
-                itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
-            )
-        }
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
     }
 
     fun getItemData(position: Int): DATA {

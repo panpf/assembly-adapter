@@ -120,18 +120,24 @@ class AssemblyRecyclerListAdapterTest {
          */
         // ItemFactory
         assertThrow(IllegalArgumentException::class) {
-            AssemblyRecyclerListAdapter<Text>(listOf(), KeyEqualsDiffItemCallback())
+            AssemblyRecyclerListAdapter<Text>(listOf(), diffCallback = KeyEqualsDiffItemCallback())
         }
-        AssemblyRecyclerListAdapter<Text>(listOf(TextItemFactory()), KeyEqualsDiffItemCallback())
+        AssemblyRecyclerListAdapter<Text>(
+            listOf(TextItemFactory()),
+            diffCallback = KeyEqualsDiffItemCallback()
+        )
 
         // ItemCallback
         assertThrow(IllegalArgumentException::class) {
             AssemblyRecyclerListAdapter<Any>(
                 listOf(NoDiffKeyItemFactory()),
-                KeyEqualsDiffItemCallback()
+                diffCallback = KeyEqualsDiffItemCallback()
             )
         }
-        AssemblyRecyclerListAdapter<Any>(listOf(NoDiffKeyItemFactory()), InstanceDiffItemCallback())
+        AssemblyRecyclerListAdapter<Any>(
+            listOf(NoDiffKeyItemFactory()),
+            diffCallback = InstanceDiffItemCallback()
+        )
 
 
         /**
@@ -189,24 +195,24 @@ class AssemblyRecyclerListAdapterTest {
         assertThrow(IllegalArgumentException::class) {
             AssemblyRecyclerListAdapter<Text>(
                 listOf(),
-                AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
+                config = AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
             )
         }
         AssemblyRecyclerListAdapter<Text>(
             listOf(TextItemFactory()),
-            AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
+            config = AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
         )
 
         // ItemCallback
         assertThrow(IllegalArgumentException::class) {
             AssemblyRecyclerListAdapter<Any>(
                 listOf(NoDiffKeyItemFactory()),
-                AsyncDifferConfig.Builder<Any>(KeyEqualsDiffItemCallback()).build()
+                config = AsyncDifferConfig.Builder<Any>(KeyEqualsDiffItemCallback()).build()
             )
         }
         AssemblyRecyclerListAdapter<Any>(
             listOf(NoDiffKeyItemFactory()),
-            AsyncDifferConfig.Builder<Any>(InstanceDiffItemCallback()).build()
+            config = AsyncDifferConfig.Builder<Any>(InstanceDiffItemCallback()).build()
         )
     }
 

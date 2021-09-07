@@ -105,17 +105,17 @@ class AssemblySingleDataRecyclerListAdapterTest {
         // ItemFactory
         AssemblySingleDataRecyclerListAdapter(
             TextItemFactory(),
-            KeyEqualsDiffItemCallback()
+            diffCallback = KeyEqualsDiffItemCallback()
         )
 
         // ItemCallback
         assertThrow(IllegalArgumentException::class) {
             AssemblySingleDataRecyclerListAdapter(
                 NoDiffKeyItemFactory(),
-                KeyEqualsDiffItemCallback()
+                diffCallback = KeyEqualsDiffItemCallback()
             )
         }
-        AssemblySingleDataRecyclerListAdapter(NoDiffKeyItemFactory(), InstanceDiffItemCallback())
+        AssemblySingleDataRecyclerListAdapter(NoDiffKeyItemFactory(), diffCallback = InstanceDiffItemCallback())
 
 
         /**
@@ -148,14 +148,12 @@ class AssemblySingleDataRecyclerListAdapterTest {
         assertThrow(IllegalArgumentException::class) {
             AssemblySingleDataRecyclerListAdapter(
                 NoDiffKeyItemFactory(),
-                null,
-                AsyncDifferConfig.Builder<NoDiffKey>(KeyEqualsDiffItemCallback()).build()
+                config = AsyncDifferConfig.Builder<NoDiffKey>(KeyEqualsDiffItemCallback()).build()
             )
         }
         AssemblySingleDataRecyclerListAdapter(
             NoDiffKeyItemFactory(),
-            null,
-            AsyncDifferConfig.Builder<NoDiffKey>(InstanceDiffItemCallback()).build()
+            config = AsyncDifferConfig.Builder<NoDiffKey>(InstanceDiffItemCallback()).build()
         )
 
 
@@ -165,19 +163,19 @@ class AssemblySingleDataRecyclerListAdapterTest {
         // ItemFactory
         AssemblySingleDataRecyclerListAdapter(
             TextItemFactory(),
-            AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
+            config = AsyncDifferConfig.Builder<Text>(KeyEqualsDiffItemCallback()).build()
         )
 
         // ItemCallback
         assertThrow(IllegalArgumentException::class) {
             AssemblySingleDataRecyclerListAdapter(
                 NoDiffKeyItemFactory(),
-                AsyncDifferConfig.Builder<NoDiffKey>(KeyEqualsDiffItemCallback()).build()
+                config = AsyncDifferConfig.Builder<NoDiffKey>(KeyEqualsDiffItemCallback()).build()
             )
         }
         AssemblySingleDataRecyclerListAdapter(
             NoDiffKeyItemFactory(),
-            AsyncDifferConfig.Builder<NoDiffKey>(InstanceDiffItemCallback()).build()
+            config = AsyncDifferConfig.Builder<NoDiffKey>(InstanceDiffItemCallback()).build()
         )
     }
 
@@ -193,12 +191,12 @@ class AssemblySingleDataRecyclerListAdapterTest {
             Assert.assertNull(dataFromObserver)
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), data)
             Assert.assertEquals(Text("hello"), dataFromObserver)
 
             data = Text("world")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("world"), data)
             Assert.assertEquals(Text("world"), dataFromObserver)
         }
@@ -210,11 +208,11 @@ class AssemblySingleDataRecyclerListAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, itemCount)
 
             data = null
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, itemCount)
         }
     }
@@ -233,7 +231,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), getItemData(0))
         }
     }
@@ -275,7 +273,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, getItemViewType(0))
         }
     }
@@ -288,7 +286,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
         }
         AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
 
             assertThrow(IllegalArgumentException::class) {
                 onCreateViewHolder(parent, -1)
@@ -317,7 +315,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }

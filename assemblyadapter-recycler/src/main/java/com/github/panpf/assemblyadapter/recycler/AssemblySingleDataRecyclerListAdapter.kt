@@ -67,20 +67,6 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
     /**
-     * Create an AssemblySingleDataRecyclerListAdapter that provides DiffUtil.ItemCallback externally
-     *
-     *
-     * @param itemFactory Can match data's [ItemFactory]
-     * @param diffCallback DiffUtil comparison data callback, the default is [KeyEqualsDiffItemCallback]
-     * @see ItemFactory
-     * @see KeyEqualsDiffItemCallback
-     */
-    constructor(
-        itemFactory: ItemFactory<DATA>,
-        diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
-    ) : this(itemFactory, null, diffCallback)
-
-    /**
      * Create an AssemblySingleDataRecyclerListAdapter that provides AsyncDifferConfig externally
      *
      * @param itemFactory Can match data's [ItemFactory]
@@ -91,7 +77,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
      */
     constructor(
         itemFactory: ItemFactory<DATA>,
-        initData: DATA?,
+        initData: DATA? = null,
         config: AsyncDifferConfig<DATA>,
     ) : super(config) {
         if (config.diffCallback is KeyEqualsDiffItemCallback) {
@@ -102,19 +88,6 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
         this.data = initData
     }
-
-    /**
-     * Create an AssemblySingleDataRecyclerListAdapter that provides AsyncDifferConfig externally
-     *
-     * @param itemFactory Can match data's [ItemFactory]
-     * @param config AsyncDifferConfig
-     * @see ItemFactory
-     * @see AsyncDifferConfig
-     */
-    constructor(
-        itemFactory: ItemFactory<DATA>,
-        config: AsyncDifferConfig<DATA>,
-    ) : this(itemFactory, null, config)
 
     override fun submitList(list: List<DATA>?) {
         require(list?.size ?: 0 > 1) {

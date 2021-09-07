@@ -26,7 +26,8 @@ import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblySingleDataFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager.GetPageTitle
-import com.github.panpf.tools4a.test.ktx.launchFragmentInContainerWithOn
+import com.github.panpf.tools4a.test.ktx.getFragmentSync
+import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -57,101 +58,95 @@ class AssemblySingleDataFragmentStatePagerAdapterTest {
 
     @Test
     fun testConstructor() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            val fragmentManager = fragment.childFragmentManager
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            TextFragmentItemFactory()
+        ).apply {
+            Assert.assertNull(data)
+        }
 
-            AssemblySingleDataFragmentStatePagerAdapter(
-                fragmentManager,
-                TextFragmentItemFactory()
-            ).apply {
-                Assert.assertNull(data)
-            }
-
-            AssemblySingleDataFragmentStatePagerAdapter(
-                fragmentManager,
-                TextFragmentItemFactory(),
-                Text("hello")
-            ).apply {
-                Assert.assertNotNull(data)
-                Assert.assertEquals(Text("hello"), data)
-            }
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            TextFragmentItemFactory(),
+            Text("hello")
+        ).apply {
+            Assert.assertNotNull(data)
+            Assert.assertEquals(Text("hello"), data)
         }
     }
 
     @Test
     fun testPropertyData() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            val fragmentManager = fragment.childFragmentManager
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        var dataFromObserver: Text? = null
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            TextFragmentItemFactory()
+        ).apply {
+            registerDataSetObserver(object : DataSetObserver() {
+                override fun onChanged() {
+                    super.onChanged()
+                    dataFromObserver = data
+                }
+            })
 
-            var dataFromObserver: Text? = null
-            AssemblySingleDataFragmentStatePagerAdapter(
-                fragmentManager,
-                TextFragmentItemFactory()
-            ).apply {
-                registerDataSetObserver(object : DataSetObserver() {
-                    override fun onChanged() {
-                        super.onChanged()
-                        dataFromObserver = data
-                    }
-                })
+            Assert.assertNull(data)
+            Assert.assertNull(dataFromObserver)
 
-                Assert.assertNull(data)
-                Assert.assertNull(dataFromObserver)
+            data = Text("hello")
+            Assert.assertEquals(Text("hello"), data)
+            Assert.assertEquals(Text("hello"), dataFromObserver)
 
-                data = Text("hello")
-                Assert.assertEquals(Text("hello"), data)
-                Assert.assertEquals(Text("hello"), dataFromObserver)
-
-                data = Text("world")
-                Assert.assertEquals(Text("world"), data)
-                Assert.assertEquals(Text("world"), dataFromObserver)
-            }
+            data = Text("world")
+            Assert.assertEquals(Text("world"), data)
+            Assert.assertEquals(Text("world"), dataFromObserver)
         }
     }
 
     @Test
     fun testMethodGetCount() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            val fragmentManager = fragment.childFragmentManager
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            TextFragmentItemFactory()
+        ).apply {
+            Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
 
-            AssemblySingleDataFragmentStatePagerAdapter(
-                fragmentManager,
-                TextFragmentItemFactory()
-            ).apply {
-                Assert.assertEquals(0, count)
-                Assert.assertEquals(0, itemCount)
+            data = Text("hello")
+            Assert.assertEquals(1, count)
+            Assert.assertEquals(1, itemCount)
 
-                data = Text("hello")
-                Assert.assertEquals(1, count)
-                Assert.assertEquals(1, itemCount)
-
-                data = null
-                Assert.assertEquals(0, count)
-                Assert.assertEquals(0, itemCount)
-            }
+            data = null
+            Assert.assertEquals(0, count)
+            Assert.assertEquals(0, itemCount)
         }
     }
 
     @Test
     fun testMethodGetItem() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            val fragmentManager = fragment.childFragmentManager
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            TextFragmentItemFactory()
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(-1)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItem(1)
+            }
 
-            AssemblySingleDataFragmentStatePagerAdapter(
-                fragmentManager,
-                TextFragmentItemFactory()
-            ).apply {
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItem(-1)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItem(0)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItem(1)
-                }
-
-                data = Text("hello")
+            data = Text("hello")
+            fragmentScenario.onFragment {
                 getItem(0)
             }
         }
@@ -159,92 +154,90 @@ class AssemblySingleDataFragmentStatePagerAdapterTest {
 
     @Test
     fun testMethodGetItemPosition() {
-        var item: Fragment? = null
-        var adapter: AssemblySingleDataFragmentStatePagerAdapter<Text>? = null
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            TextFragmentItemFactory(),
+            Text("hello")
+        ).apply {
+            var item: Fragment? = null
+            fragmentScenario.onFragment {
+                item = getItem(0)
+            }
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item!!))
 
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            val fragmentManager = fragment.childFragmentManager
+            fragmentScenario.onFragment {
+                fragment.childFragmentManager.beginTransaction()
+                    .add(item!!, null)
+                    .commit()
+            }
+            Thread.sleep(100)
 
-            val newAdapter = AssemblySingleDataFragmentStatePagerAdapter(
-                fragmentManager,
-                TextFragmentItemFactory(),
-                Text("hello")
-            )
-            adapter = newAdapter
+            Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, getItemPosition(item!!))
 
-            val newItem = newAdapter.getItem(0)
-            item = newItem
-            Assert.assertEquals(PagerAdapter.POSITION_NONE, newAdapter.getItemPosition(newItem))
+            data = Text("world")
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item!!))
 
-            fragmentManager.beginTransaction()
-                .add(newItem, null)
-                .commit()
+            data = null
+            Assert.assertEquals(PagerAdapter.POSITION_NONE, getItemPosition(item!!))
         }
-        Thread.sleep(100)
-
-        Assert.assertEquals(PagerAdapter.POSITION_UNCHANGED, adapter!!.getItemPosition(item!!))
-
-        adapter!!.data = Text("world")
-        Assert.assertEquals(PagerAdapter.POSITION_NONE, adapter!!.getItemPosition(item!!))
-
-        adapter!!.data = null
-        Assert.assertEquals(PagerAdapter.POSITION_NONE, adapter!!.getItemPosition(item!!))
     }
 
     @Test
     fun testMethodGetItemFactoryByPosition() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            val fragmentManager = fragment.childFragmentManager
-
-            val itemFactory = TextFragmentItemFactory()
-            AssemblySingleDataFragmentStatePagerAdapter(fragmentManager, itemFactory).apply {
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemFactoryByPosition(-1)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemFactoryByPosition(0)
-                }
-                assertThrow(IndexOutOfBoundsException::class) {
-                    getItemFactoryByPosition(1)
-                }
-
-                data = Text("hello")
-                Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val itemFactory = TextFragmentItemFactory()
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            itemFactory
+        ).apply {
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(-1)
             }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(0)
+            }
+            assertThrow(IndexOutOfBoundsException::class) {
+                getItemFactoryByPosition(1)
+            }
+
+            data = Text("hello")
+            Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }
 
     @Test
     fun testMethodGetPageTitle() {
-        TestFragment::class.launchFragmentInContainerWithOn { fragment ->
-            val fragmentManager = fragment.childFragmentManager
-            AssemblySingleDataFragmentStatePagerAdapter(
-                fragmentManager,
-                TextFragmentItemFactory()
-            ).apply {
-                Assert.assertNull(currentPageTitle)
-                Assert.assertNull(getPageTitle(0))
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            TextFragmentItemFactory()
+        ).apply {
+            Assert.assertNull(currentPageTitle)
+            Assert.assertNull(getPageTitle(0))
 
-                currentPageTitle = "hello"
-                Assert.assertNotNull(currentPageTitle)
-                Assert.assertEquals("hello", getPageTitle(0))
-                Assert.assertNull(getPageTitle(1))
+            currentPageTitle = "hello"
+            Assert.assertNotNull(currentPageTitle)
+            Assert.assertEquals("hello", getPageTitle(0))
+            Assert.assertNull(getPageTitle(1))
 
-                currentPageTitle = null
-                Assert.assertNull(currentPageTitle)
-                Assert.assertNull(getPageTitle(0))
+            currentPageTitle = null
+            Assert.assertNull(currentPageTitle)
+            Assert.assertNull(getPageTitle(0))
 
-                data = Text("hello")
-                Assert.assertNotNull(data)
-                Assert.assertNull(currentPageTitle)
-                Assert.assertEquals("PageTitle-Text-hello", getPageTitle(0))
-                Assert.assertNull(getPageTitle(1))
+            data = Text("hello")
+            Assert.assertNotNull(data)
+            Assert.assertNull(currentPageTitle)
+            Assert.assertEquals("PageTitle-Text-hello", getPageTitle(0))
+            Assert.assertNull(getPageTitle(1))
 
-                data = null
-                Assert.assertNull(data)
-                Assert.assertNull(currentPageTitle)
-                Assert.assertNull(getPageTitle(0))
-            }
+            data = null
+            Assert.assertNull(data)
+            Assert.assertNull(currentPageTitle)
+            Assert.assertNull(getPageTitle(0))
         }
     }
 }
