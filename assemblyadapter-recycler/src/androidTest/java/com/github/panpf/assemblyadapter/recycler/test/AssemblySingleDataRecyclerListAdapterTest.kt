@@ -244,33 +244,19 @@ class AssemblySingleDataRecyclerListAdapterTest {
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(-1L, getItemId(0))
             Assert.assertEquals(-1L, getItemId(1))
-        }
 
-        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
-            setHasStableIds(true)
-            assertThrow(IndexOutOfBoundsException::class) {
-                getItemId(-1)
+            assertThrow(UnsupportedOperationException::class) {
+                setHasStableIds(true)
             }
-            assertThrow(IndexOutOfBoundsException::class) {
-                getItemId(0)
-            }
-            assertThrow(IndexOutOfBoundsException::class) {
-                getItemId(1)
-            }
-        }
+            Assert.assertEquals(-1L, getItemId(-1))
+            Assert.assertEquals(-1L, getItemId(0))
+            Assert.assertEquals(-1L, getItemId(1))
 
-        AssemblySingleDataRecyclerListAdapter(
-            TextItemFactory(),
-            initData = Text("hello"),
-        ).apply {
-            setHasStableIds(true)
-            assertThrow(IndexOutOfBoundsException::class) {
-                getItemId(-1)
-            }
-            Assert.assertEquals(getItemData(0).hashCode().toLong(), getItemId(0))
-            assertThrow(IndexOutOfBoundsException::class) {
-                getItemId(1)
-            }
+            submitList(listOf(Text("hello"), Text("world")))
+            Assert.assertEquals(-1L, getItemId(-1))
+            Assert.assertEquals(-1L, getItemId(0))
+            Assert.assertEquals(-1L, getItemId(1))
+            Assert.assertEquals(-1L, getItemId(2))
         }
     }
 

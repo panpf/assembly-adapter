@@ -134,13 +134,29 @@ open class AssemblyRecyclerListAdapter<DATA>
         return getItem(position)
     }
 
-    override fun getItemId(position: Int): Long {
-        return if (hasStableIds()) {
-            val data = getItemData(position) ?: Placeholder
-            if (data is ItemId) data.itemId else data.hashCode().toLong()
-        } else {
-            RecyclerView.NO_ID
-        }
+    /**
+     * Note: [getItemId] is final, because stable IDs are unnecessary and therefore unsupported.
+     *
+     * [AssemblyRecyclerListAdapter]'s async diffing means that efficient change animations are handled for
+     * you, without the performance drawbacks of [RecyclerView.Adapter.notifyDataSetChanged].
+     * Instead, the diffCallback parameter of the [AssemblyRecyclerListAdapter] serves the same
+     * functionality - informing the adapter and [RecyclerView] how items are changed and moved.
+     */
+    final override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
+
+    /**
+     * Stable ids are unsupported by [AssemblyRecyclerListAdapter]. Calling this method is an error and will
+     * result in an [UnsupportedOperationException].
+     *
+     * @param hasStableIds Whether items in data set have unique identifiers or not.
+     *
+     * @throws UnsupportedOperationException Always thrown, since this is unsupported by
+     * [AssemblyRecyclerListAdapter].
+     */
+    final override fun setHasStableIds(hasStableIds: Boolean) {
+        throw UnsupportedOperationException("Stable ids are unsupported on PagingDataAdapter.")
     }
 
     override fun getItemViewType(position: Int): Int {

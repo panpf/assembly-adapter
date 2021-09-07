@@ -2,6 +2,7 @@
 
 recycler: 
 improve: AssemblySingleDataRecyclerAdapter now uses notifyItem\* method to update data
+change: AssemblyRecyclerListAdapter and AssemblySingleDataRecyclerListAdapter now do not support setHasStableIds and getItemId
 
 pager:
 new: Assembly\*PagerAdapter adds getPageTitle support
