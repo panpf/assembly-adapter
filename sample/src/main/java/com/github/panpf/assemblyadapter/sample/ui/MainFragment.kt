@@ -16,9 +16,10 @@ import com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListPlaceholder
 import com.github.panpf.assemblyadapter.sample.ui.list.ListFragment
 import com.github.panpf.assemblyadapter.sample.ui.list.ListPlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.pager.*
-import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPagingFragment
-import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2FragmentPlaceholderFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2Fragment
+import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2ListFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2PagingFragment
+import com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2PlaceholderFragment
 import com.github.panpf.assemblyadapter.sample.ui.recycler.*
 
 class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
@@ -26,8 +27,8 @@ class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
     private val links = listOf(
         ListSeparator("RecyclerView - Linear"),
         Link("RecyclerView - Linear", RecyclerLinearFragment()),
-        Link("RecyclerView - Linear - Placeholder", RecyclerLinearPlaceholderFragment()),
         Link("RecyclerView - Linear - Paging", RecyclerLinearPagingFragment()),
+        Link("RecyclerView - Linear - Placeholder", RecyclerLinearPlaceholderFragment()),
         Link("RecyclerView - Linear - Divider - Vertical", RecyclerLinearDividerVerFragment()),
         Link("RecyclerView - Linear - Divider - Horizontal", RecyclerLinearDividerHorFragment()),
 
@@ -68,9 +69,10 @@ class MainFragment : BaseBindingFragment<FragmentMainBinding>() {
         Link("ViewPager - Fragment - Placeholder", PagerFragmentPlaceholderFragment()),
 
         ListSeparator("ViewPager2"),
-        Link("ViewPager2 - Fragment", Pager2FragmentFragment()),
-        Link("ViewPager2 - Fragment - Placeholder", Pager2FragmentPlaceholderFragment()),
-        Link("ViewPager2 - Fragment - Paging", Pager2FragmentPagingFragment()),
+        Link("ViewPager2", Pager2Fragment()),
+        Link("ViewPager2 - List", Pager2ListFragment()),
+        Link("ViewPager2 - Paging", Pager2PagingFragment()),
+        Link("ViewPager2 - Placeholder", Pager2PlaceholderFragment()),
     )
 
     override fun createViewBinding(

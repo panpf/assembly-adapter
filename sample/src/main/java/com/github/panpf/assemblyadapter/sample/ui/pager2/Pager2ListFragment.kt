@@ -21,24 +21,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateListAdapter
 import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter
-import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingDataFragmentStateAdapter
+import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateListAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.MyLoadStateFragmentStateAdapter
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupPagingAppsViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import com.github.panpf.assemblyadapter.sample.item.pager.LoadStateFragmentItemFactory
+import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupOverviewAppsViewModel
 
-class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>() {
+class Pager2ListFragment : BaseBindingFragment<FragmentPager2Binding>() {
 
-    private val viewModel by viewModels<PagerPinyinGroupPagingAppsViewModel>()
+    private val viewModel by viewModels<PagerPinyinGroupOverviewAppsViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -47,12 +45,17 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
     }
 
     override fun onInitData(binding: FragmentPager2Binding, savedInstanceState: Bundle?) {
-        val appsOverviewAdapter = AssemblySingleDataFragmentStateAdapter(
+        val appsOverviewAdapter = AssemblySingleDataFragmentStateListAdapter(
             this,
             AppsOverviewFragmentItemFactory()
         )
-        val pagingDataAdapter = AssemblyPagingDataFragmentStateAdapter<Any>(
-            this, listOf(AppGroupFragmentItemFactory())
+        val fragmentStateAdapter = AssemblyFragmentStateListAdapter<Any>(
+            this,
+            listOf(AppGroupFragmentItemFactory())
+        )
+        val footerLoadStateAdapter = AssemblySingleDataFragmentStateAdapter(
+            this,
+            LoadStateFragmentItemFactory()
         )
         binding.pager2Pager.apply {
             adapter = ConcatAdapter(
@@ -61,12 +64,10 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
                     .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
                     .build(),
                 appsOverviewAdapter,
-                pagingDataAdapter.withLoadStateFooter(
-                    MyLoadStateFragmentStateAdapter(this@Pager2FragmentPagingFragment)
-                )
+                fragmentStateAdapter,
+                footerLoadStateAdapter
             )
-            registerOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     updatePageNumber(binding)
@@ -74,11 +75,9 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
             })
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            pagingDataAdapter.loadStateFlow.collect {
-                binding.pager2ProgressBar.isVisible = it.refresh is LoadState.Loading
-                binding.pager2PageNumberText.isVisible = it.refresh !is LoadState.Loading
-            }
+        viewModel.loadingData.observe(viewLifecycleOwner) {
+            binding.pager2ProgressBar.isVisible = it == true
+            binding.pager2PageNumberText.isVisible = it != true
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -86,11 +85,10 @@ class Pager2FragmentPagingFragment : BaseBindingFragment<FragmentPager2Binding>(
             updatePageNumber(binding)
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.pinyinFlatChunkedAppListDataFlow.collect {
-                pagingDataAdapter.submitData(it)
-                updatePageNumber(binding)
-            }
+        viewModel.pinyinGroupAppListData.observe(viewLifecycleOwner) {
+            fragmentStateAdapter.submitList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
+            updatePageNumber(binding)
         }
     }
 

@@ -24,8 +24,8 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerListAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerListAdapter
-import com.github.panpf.assemblyadapter.recycler.InstanceDiffItemCallback
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.*
@@ -54,9 +54,8 @@ class RecyclerListAdapterPlaceholderFragment : BaseBindingFragment<FragmentRecyc
         ).apply {
             submitList(arrayOfNulls<Any?>(100).toList())
         }
-        val footerLoadStateAdapter = AssemblySingleDataRecyclerListAdapter(
+        val footerLoadStateAdapter = AssemblySingleDataRecyclerAdapter(
             LoadStateItemFactory(requireActivity()),
-            InstanceDiffItemCallback()
         )
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)

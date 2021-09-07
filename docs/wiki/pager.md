@@ -40,6 +40,9 @@ AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager2：
 
 * [AssemblyFragmentStateAdapter]: 多类型 Adapter 实现
 * [AssemblySingleDataFragmentStateAdapter]：单数据实现
+* [FragmentStateListAdapter]：AsyncListDiffer 实现
+* [AssemblyFragmentStateListAdapter]：多类型 Adapter AsyncListDiffer 实现
+* [AssemblySingleDataFragmentStateListAdapter]：单数据 AsyncListDiffer 实现
 * [PagingDataFragmentStateAdapter]：Paging 实现
 * [LoadStateFragmentStateAdapter]：LoadState 实现
 * [AssemblyPagingDataFragmentStateAdapter]：多类型 + Paging Adapter 实现
@@ -63,9 +66,9 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
     * [PagerFragmentFragment]
     * [PagerFragmentPlaceholderFragment]
 * PagerFragmentStateAdapter
-    * [Pager2FragmentFragment]
-    * [Pager2FragmentPagingFragment]
-    * [Pager2FragmentPlaceholderFragment]
+    * [Pager2Fragment]
+    * [Pager2PagingFragment]
+    * [Pager2PlaceholderFragment]
 
 [AppGroupPagerItemFactory]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/item/pager/AppGroupPagerItemFactory.kt
 
@@ -79,11 +82,11 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 
 [PagerFragmentPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentPlaceholderFragment.kt
 
-[Pager2FragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentFragment.kt
+[Pager2Fragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2Fragment.kt
 
-[Pager2FragmentPagingFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentPagingFragment.kt
+[Pager2PagingFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2PagingFragment.kt
 
-[Pager2FragmentPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentPlaceholderFragment.kt
+[Pager2PlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2PlaceholderFragment.kt
 
 [README]: ../../README.md
 
@@ -102,6 +105,12 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 [AssemblyFragmentStateAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateAdapter.kt
 
 [AssemblySingleDataFragmentStateAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateAdapter.kt
+
+[FragmentStateListAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/FragmentStateListAdapter.kt
+
+[AssemblyFragmentStateListAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateListAdapter.kt
+
+[AssemblySingleDataFragmentStateListAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateListAdapter.kt
 
 [PagingDataFragmentStateAdapter]: ../../assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/PagingDataFragmentStateAdapter.kt
 

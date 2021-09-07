@@ -27,17 +27,17 @@ AssemblyAdapter 也为 [BaseExpandableListAdapter] 提供了支持，如下：
 
 [AppGroupPlaceholderItemFactory]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/item/AppGroupPlaceholderItemFactory.kt
 
-[ExpandableGroup]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ExpandableGroup.kt
+[ExpandableGroup]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/ExpandableGroup.kt
 
-[ExpandableGroupItemFactory]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ExpandableGroupItemFactory.kt
+[ExpandableGroupItemFactory]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/ExpandableGroupItemFactory.kt
 
-[ExpandableChildItemFactory]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ExpandableChildItemFactory.kt
+[ExpandableChildItemFactory]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/ExpandableChildItemFactory.kt
 
-[AssemblyExpandableListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyExpandableListAdapter.kt
+[AssemblyExpandableListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/AssemblyExpandableListAdapter.kt
 
-[AssemblySingleDataExpandableListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataExpandableListAdapter.kt
+[AssemblySingleDataExpandableListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/AssemblySingleDataExpandableListAdapter.kt
 
-[ConcatExpandableListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatExpandableListAdapter.kt
+[ConcatExpandableListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/ConcatExpandableListAdapter.kt
 
 [ExpandableListFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/list/ExpandableListFragment.kt
 

@@ -96,6 +96,9 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
     * [FragmentStateAdapter]
         * [AssemblyFragmentStateAdapter]：多类型 Adapter 实现
         * [AssemblySingleDataFragmentStateAdapter]：单数据实现
+        * [FragmentStateListAdapter]：AsyncListDiffer 实现
+            * [AssemblyFragmentStateListAdapter]：多类型 Adapter AsyncListDiffer 实现
+            * [AssemblySingleDataFragmentStateListAdapter]：单数据 AsyncListDiffer 实现
 * [assemblyadapter-pager2-paging]
     * [FragmentStateAdapter]
         * [PagingDataFragmentStateAdapter]：Paging 实现
@@ -322,15 +325,15 @@ Please view the [CHANGELOG.md] file
 
 [AssemblyListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyListAdapter.kt
 
-[AssemblyExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblyExpandableListAdapter.kt
+[AssemblyExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/AssemblyExpandableListAdapter.kt
 
 [AssemblySingleDataListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataListAdapter.kt
 
-[AssemblySingleDataExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/AssemblySingleDataExpandableListAdapter.kt
+[AssemblySingleDataExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/AssemblySingleDataExpandableListAdapter.kt
 
 [ConcatListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatListAdapter.kt
 
-[ConcatExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatExpandableListAdapter.kt
+[ConcatExpandableListAdapter]: assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/ConcatExpandableListAdapter.kt
 
 [AssemblyRecyclerAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblyRecyclerAdapter.kt
 
@@ -363,6 +366,12 @@ Please view the [CHANGELOG.md] file
 [AssemblyFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateAdapter.kt
 
 [AssemblySingleDataFragmentStateAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateAdapter.kt
+
+[FragmentStateListAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/FragmentStateListAdapter.kt
+
+[AssemblyFragmentStateListAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateListAdapter.kt
+
+[AssemblySingleDataFragmentStateListAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateListAdapter.kt
 
 [AssemblyPagingDataFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/AssemblyPagingDataFragmentStateAdapter.kt
 

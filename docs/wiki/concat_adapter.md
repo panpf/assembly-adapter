@@ -14,7 +14,7 @@ AssemblyAdapter 为常用的几种 Adapter 提供了 Concat 支持，如下：
 * [ListFragment]
 * [ExpandableListFragment]
 * [PagerViewFragment]
-* [Pager2FragmentFragment]
+* [Pager2Fragment]
 
 [ListFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/list/ListFragment.kt
 
@@ -22,11 +22,11 @@ AssemblyAdapter 为常用的几种 Adapter 提供了 Concat 支持，如下：
 
 [PagerViewFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewFragment.kt
 
-[Pager2FragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentFragment.kt
+[Pager2Fragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2Fragment.kt
 
 [ConcatListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatListAdapter.kt
 
-[ConcatExpandableListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/ConcatExpandableListAdapter.kt
+[ConcatExpandableListAdapter]: ../../assemblyadapter-list/src/main/java/com/github/panpf/assemblyadapter/list/expandable/ConcatExpandableListAdapter.kt
 
 [ConcatPagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatPagerAdapter.kt
 

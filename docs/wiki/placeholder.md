@@ -28,7 +28,7 @@ val recyclerAdapter = AssemblyRecyclerAdapter(
 * [ExpandableListPlaceholderFragment]
 * [PagerFragmentPlaceholderFragment]
 * [PagerViewPlaceholderFragment]
-* [Pager2FragmentPlaceholderFragment]
+* [Pager2PlaceholderFragment]
 * [RecyclerLinearPlaceholderFragment]
 * [RecyclerListAdapterPlaceholderFragment]
 
@@ -44,7 +44,7 @@ val recyclerAdapter = AssemblyRecyclerAdapter(
 
 [PagerFragmentPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentPlaceholderFragment.kt
 
-[Pager2FragmentPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentPlaceholderFragment.kt
+[Pager2PlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2PlaceholderFragment.kt
 
 [RecyclerLinearPlaceholderFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerLinearPlaceholderFragment.kt
 

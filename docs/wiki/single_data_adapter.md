@@ -30,7 +30,7 @@ footerLoadStateAdapter.data = LoadState.NotLoading(true)
 * [ExpandableListFragment]
 * [PagerViewFragment]
 * [PagerFragmentFragment]
-* [Pager2FragmentFragment]
+* [Pager2Fragment]
 * [RecyclerLinearFragment]
 * [RecyclerGridFragment]
 * [RecyclerStaggeredGridFragment]
@@ -43,7 +43,7 @@ footerLoadStateAdapter.data = LoadState.NotLoading(true)
 
 [PagerFragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentFragment.kt
 
-[Pager2FragmentFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2FragmentFragment.kt
+[Pager2Fragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2Fragment.kt
 
 [RecyclerLinearFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerLinearFragment.kt
 
