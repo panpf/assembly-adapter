@@ -66,7 +66,7 @@ class AssemblyLoadStateFragmentStateAdapterTest {
     }
 
     @Test
-    fun testMethodGetItem() {
+    fun testMethodGetItemData() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateItemFactory()).apply {
