@@ -7,6 +7,9 @@ pager:
 new: Assembly\*PagerAdapter adds getPageTitle support
 change: Added IntactPagerItemFactory and IntactFragmentItemFactory to replace ArrayPagerAdapter, ArrayFragmentStatePagerAdapter, ArrayFragmentStateAdapter
 
+recycler2:
+improve: AssemblySingleDataFragmentStateAdapter now uses notifyItem\* method to update data
+
 # v4.0.0-rc01
 
 list:
