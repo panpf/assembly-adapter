@@ -61,14 +61,14 @@ dependencies {
 AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分别如下：
 
 1. Adapter：
-    2. 定义 data 列表
-    3. 重写 getItemCount、getItemId 方法
-    4. 根据不同的 data 匹配不同的 ItemFactory
-    5. 使用匹配的 ItemFactory 重写 getItemViewType、onCreateViewHolder、onBindViewHolder 方法
+    * 定义 data 列表
+    * 重写 getItemCount、getItemId 方法
+    * 根据不同的 data 匹配不同的 ItemFactory
+    * 使用匹配的 ItemFactory 重写 getItemViewType、onCreateViewHolder、onBindViewHolder 方法
 2. ItemFactory
-    3. 定义目标 data 的 class
-    4. 创建 item view
-    5. 绑定 data
+    * 定义目标 data 的 class
+    * 创建 item view
+    * 绑定 data
 
 ### <span id="support_adapters"> 支持的 Adapter </span>
 
