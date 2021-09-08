@@ -90,14 +90,14 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
     override fun submitList(list: List<DATA>?) {
-        require(list?.size ?: 0 > 1) {
+        require(list?.size ?: 0 <= 1) {
             "Cannot submit a list with size greater than 1"
         }
         super.submitList(list)
     }
 
     override fun submitList(list: List<DATA>?, commitCallback: Runnable?) {
-        require(list?.size ?: 0 > 1) {
+        require(list?.size ?: 0 <= 1) {
             "Cannot submit a list with size greater than 1"
         }
         super.submitList(list, commitCallback)

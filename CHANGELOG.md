@@ -1,3 +1,11 @@
+# new
+
+recycler:
+* fix: Fix the bug that the list size exceeds 1 but no exception is thrown when submitting data through submitList of AssemblySingleDataRecyclerListAdapter
+
+pager2:
+* fix: Fix the bug that the list size exceeds 1 but no exception is thrown when submitting data through submitList of AssemblySingleDataFragmentStateListAdapter
+
 # v4.0.0-rc02
 
 recycler:

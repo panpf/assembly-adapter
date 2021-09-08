@@ -181,24 +181,35 @@ class AssemblySingleDataRecyclerListAdapterTest {
 
     @Test
     fun testPropertyData() {
-        var dataFromObserver: Text? = null
         AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
-            registerAdapterDataObserver(SimpleAdapterDataObserver {
-                dataFromObserver = data
-            })
-
             Assert.assertNull(data)
-            Assert.assertNull(dataFromObserver)
+            Assert.assertEquals(0, currentList.size)
 
             data = Text("hello")
             Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), data)
-            Assert.assertEquals(Text("hello"), dataFromObserver)
+            Assert.assertEquals(1, currentList.size)
 
             data = Text("world")
             Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("world"), data)
-            Assert.assertEquals(Text("world"), dataFromObserver)
+            Assert.assertEquals(1, currentList.size)
+
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")))
+            }
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")), null)
+            }
+            submitList(listOf(Text("good")))
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Assert.assertEquals(Text("good"), data)
+            Assert.assertEquals(1, currentList.size)
+
+            data = null
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Assert.assertNull(data)
+            Assert.assertEquals(0, currentList.size)
         }
     }
 

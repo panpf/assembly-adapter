@@ -134,23 +134,34 @@ class AssemblySingleDataFragmentStateListAdapterTest {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         AssemblySingleDataFragmentStateListAdapter(fragment, TextFragmentItemFactory()).apply {
-            var dataFromObserver: Text? = null
-            registerAdapterDataObserver(SimpleAdapterDataObserver {
-                dataFromObserver = data
-            })
-
             Assert.assertNull(data)
-            Assert.assertNull(dataFromObserver)
+            Assert.assertEquals(0, currentList.size)
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), data)
-            Assert.assertEquals(Text("hello"), dataFromObserver)
+            Assert.assertEquals(1, currentList.size)
 
             data = Text("world")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("world"), data)
-            Assert.assertEquals(Text("world"), dataFromObserver)
+            Assert.assertEquals(1, currentList.size)
+
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")))
+            }
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")), null)
+            }
+            submitList(listOf(Text("good")))
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Assert.assertEquals(Text("good"), data)
+            Assert.assertEquals(1, currentList.size)
+
+            data = null
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Assert.assertNull(data)
+            Assert.assertEquals(0, currentList.size)
         }
     }
 
@@ -162,11 +173,11 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, itemCount)
 
             data = null
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, itemCount)
         }
     }
@@ -187,7 +198,7 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), getItemData(0))
         }
     }
@@ -208,7 +219,7 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             createFragment(0)
         }
     }
@@ -230,7 +241,7 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }
