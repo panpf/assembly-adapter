@@ -11,8 +11,10 @@ AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager：
 * [AssemblyPagerAdapter]: 多类型 Adapter 实现
 * [AssemblySingleDataPagerAdapter]：单数据实现
 * [ConcatPagerAdapter]: 连接 Adapter 实现
+* [ArrayPagerAdapter]: View 数组实现
 * [AssemblyFragmentStatePagerAdapter]: 多类型 Adapter 实现
 * [AssemblySingleDataFragmentStatePagerAdapter]：单数据实现
+* [ArrayFragmentStatePagerAdapter]: Fragment 数组实现
 
 ### Concat 支持
 
@@ -23,10 +25,11 @@ AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager：
 
 ViewPager 有一个一直以来都存在的 bug，就是在 PagerAdapter 数据改变时即使调用了 `notifyDataSetChanged` 方法 ViewPager 也不会刷新其内容
 
-原因是 ViewPager 在收到数据改变回调时会通过 PagerAdapter 的 getItemPosition 方法依次获取当前显示的 item 的 position，只有 position
-是 PagerAdapter.POSITION_NONE 时才会更新
+原因是 ViewPager 在收到数据改变回调时会通过 PagerAdapter 的 getItemPosition 方法依次获取当前显示的 item 的 position，只有 position 是
+PagerAdapter.POSITION_NONE 时才会更新
 
-而 PagerAdapter 的 getItemPosition 方法默认返回值是 PagerAdapter.POSITION_UNCHANGED，所以我们需要重写 getItemPosition 方法，在 item 对应的数据改变时返回 PagerAdapter.POSITION_NONE 即可
+而 PagerAdapter 的 getItemPosition 方法默认返回值是 PagerAdapter.POSITION_UNCHANGED，所以我们需要重写 getItemPosition
+方法，在 item 对应的数据改变时返回 PagerAdapter.POSITION_NONE 即可
 
 AssemblyAdapter 提供的所有 Pager 相关 Adapter 都重写了 getItemPosition 方法对数刷新提供了支持可放心使用
 
@@ -40,6 +43,7 @@ AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager2：
 
 * [AssemblyFragmentStateAdapter]: 多类型 Adapter 实现
 * [AssemblySingleDataFragmentStateAdapter]：单数据实现
+* [ArrayFragmentStateAdapter]: Fragment 数组实现
 * [FragmentStateListAdapter]：AsyncListDiffer 实现
 * [AssemblyFragmentStateListAdapter]：多类型 Adapter AsyncListDiffer 实现
 * [AssemblySingleDataFragmentStateListAdapter]：单数据 AsyncListDiffer 实现
@@ -62,13 +66,16 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 * PagerAdapter
     * [PagerViewFragment]
     * [PagerViewPlaceholderFragment]
+    * [PagerViewArrayFragment]
 * PagerFragmentStatePagerAdapter
     * [PagerFragmentFragment]
     * [PagerFragmentPlaceholderFragment]
+    * [PagerFragmentArrayFragment]
 * PagerFragmentStateAdapter
     * [Pager2Fragment]
     * [Pager2PagingFragment]
     * [Pager2PlaceholderFragment]
+    * [Pager2ArrayFragment]
 
 [AppGroupPagerItemFactory]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/item/pager/AppGroupPagerItemFactory.kt
 
@@ -96,6 +103,10 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 
 [ConcatPagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatPagerAdapter.kt
 
+[ArrayPagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayPagerAdapter.kt
+
+[ArrayFragmentStatePagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ArrayFragmentStatePagerAdapter.kt
+
 [ConcatFragmentStatePagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/ConcatFragmentStatePagerAdapter.kt
 
 [AssemblySingleDataFragmentStatePagerAdapter]: ../../assemblyadapter-pager/src/main/java/com/github/panpf/assemblyadapter/pager/AssemblySingleDataFragmentStatePagerAdapter.kt
@@ -105,6 +116,8 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 [AssemblyFragmentStateAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateAdapter.kt
 
 [AssemblySingleDataFragmentStateAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateAdapter.kt
+
+[ArrayFragmentStateAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/ArrayFragmentStateAdapter.kt
 
 [FragmentStateListAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/FragmentStateListAdapter.kt
 
@@ -133,3 +146,9 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 [ConcatAdapter]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/ConcatAdapter
 
 [PagingDataAdapter]: https://developer.android.google.cn/reference/androidx/paging/PagingDataAdapter
+
+[PagerViewArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerViewArrayFragment.kt
+
+[PagerFragmentArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager/PagerFragmentArrayFragment.kt
+
+[Pager2ArrayFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/pager2/Pager2ArrayFragment.kt

@@ -1,4 +1,7 @@
 # new
+* restore: Restore ArrayFragmentStateAdapter, ArrayPagerAdapter, ArrayFragmentStatePagerAdapter
+
+# v4.0.0-rc03
 
 recycler:
 * fix: Fix the bug that the list size exceeds 1 but no exception is thrown when submitting data through submitList of AssemblySingleDataRecyclerListAdapter
