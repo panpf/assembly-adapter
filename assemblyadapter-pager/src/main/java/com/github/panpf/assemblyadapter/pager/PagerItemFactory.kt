@@ -114,6 +114,28 @@ abstract class PagerItemFactory<DATA : Any>(final override val dataClass: KClass
     }
 
     /**
+     * Set the click listener of the specified View in the item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onClickListener Implementation of click listener
+     * @return [PagerItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
+    fun setOnViewClickListener(
+        @IdRes viewId: Int,
+        onClickListener: (
+            context: Context,
+            view: View,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        ) -> Unit
+    ): PagerItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onClickListener)
+        return this
+    }
+
+    /**
      * Set the long click listener of the specified View in the item view
      *
      * @param viewId Specify the id of the View
@@ -124,6 +146,28 @@ abstract class PagerItemFactory<DATA : Any>(final override val dataClass: KClass
     fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
+    ): PagerItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onLongClickListener)
+        return this
+    }
+
+    /**
+     * Set the long click listener of the specified View in the item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onLongClickListener Implementation of long click listener
+     * @return [PagerItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
+    fun setOnViewLongClickListener(
+        @IdRes viewId: Int,
+        onLongClickListener: (
+            context: Context,
+            view: View,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        ) -> Boolean
     ): PagerItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(viewId, onLongClickListener)
         return this
@@ -142,6 +186,26 @@ abstract class PagerItemFactory<DATA : Any>(final override val dataClass: KClass
     }
 
     /**
+     * Set the click listener of the item view
+     *
+     * @param onClickListener Implementation of click listener
+     * @return [PagerItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
+    fun setOnItemClickListener(
+        onClickListener: (
+            context: Context,
+            view: View,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        ) -> Unit
+    ): PagerItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(onClickListener)
+        return this
+    }
+
+    /**
      * Set the long click listener of the item view
      *
      * @param onLongClickListener Implementation of click listener
@@ -149,6 +213,26 @@ abstract class PagerItemFactory<DATA : Any>(final override val dataClass: KClass
      * @see OnLongClickListener
      */
     fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): PagerItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(onLongClickListener)
+        return this
+    }
+
+    /**
+     * Set the long click listener of the item view
+     *
+     * @param onLongClickListener Implementation of click listener
+     * @return [PagerItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
+    fun setOnItemLongClickListener(
+        onLongClickListener: (
+            context: Context,
+            view: View,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        ) -> Boolean
+    ): PagerItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }

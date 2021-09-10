@@ -97,6 +97,36 @@ class ItemFactoryTest {
             Assert.assertTrue(viewOnLongClickListener is LongClickListenerWrapper<*>)
         }
 
+        StringItemFactory().apply {
+            setOnItemClickListener { _, _, _, _, _ ->
+
+            }
+            setOnItemLongClickListener { _, _, _, _, _ ->
+                false
+            }
+            setOnViewClickListener(R.id.aa_tag_clickBindItem) { _, _, _, _, _ ->
+
+            }
+            setOnViewLongClickListener(R.id.aa_tag_clickBindItem) { _, _, _, _, _ ->
+                false
+            }
+            val item = dispatchCreateItem(FrameLayout(context))
+            val rootView = item.itemView
+            val childView = item.itemView.findViewById<TextView>(R.id.aa_tag_clickBindItem)
+            val itemOnClickListener = rootView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnClickListener>("mOnClickListener")
+            val itemOnLongClickListener = rootView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
+            val viewOnClickListener = childView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnClickListener>("mOnClickListener")
+            val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
+            Assert.assertTrue(itemOnClickListener is ClickListenerWrapper<*>)
+            Assert.assertTrue(itemOnLongClickListener is LongClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnClickListener is ClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnLongClickListener is LongClickListenerWrapper<*>)
+        }
+
         assertThrow(IllegalArgumentException::class) {
             StringItemFactory().apply {
                 setOnViewClickListener(R.id.aa_tag_absoluteAdapterPosition, TestOnClickListener())
