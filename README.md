@@ -191,7 +191,7 @@ class AppInfoItemFactory : BindingItemFactory<AppInfo, ItemAppInfoBinding>(AppIn
         data: AppInfo
     ) {
         /*
-         * 在此处绑定项 item view 的数据。这个方法会经常执行
+         * 在此处绑定 item view 的数据。这个方法会经常执行
          */
         binding.appItemNameText.text = data.name
         binding.appItemVersionText.text = "v${data.versionName}"
