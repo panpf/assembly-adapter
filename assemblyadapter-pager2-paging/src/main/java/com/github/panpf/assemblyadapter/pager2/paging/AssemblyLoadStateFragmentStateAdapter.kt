@@ -26,6 +26,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
+import kotlin.reflect.KClass
 
 /**
  * An implementation of [LoadStateFragmentStateAdapter], Realize the display of [LoadState] through standardized [FragmentItemFactory].
@@ -39,11 +40,16 @@ open class AssemblyLoadStateFragmentStateAdapter(
     itemFactory: FragmentItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
 ) : LoadStateFragmentStateAdapter(fragmentManager, lifecycle),
-    AssemblyAdapter<FragmentItemFactory<*>> {
+    AssemblyAdapter<LoadState, FragmentItemFactory<out Any>> {
 
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
-    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+    private val itemFactoryStorage = ItemFactoryStorage<FragmentItemFactory<out Any>>(
+        listOf(itemFactory),
+        "FragmentItemFactory",
+        "AssemblyLoadStateFragmentStateAdapter",
+        "itemFactory"
+    )
 
 
     /**
@@ -96,9 +102,6 @@ open class AssemblyLoadStateFragmentStateAdapter(
 
     override fun onCreateFragment(position: Int, loadState: LoadState): Fragment {
         val data = getItemData(position)
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(
-            loadState, "FragmentItemFactory", "AssemblyLoadStateFragmentStateAdapter", "itemFactory"
-        )
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val parentAdapter = recyclerView?.adapter
         val absoluteAdapterPosition = if (parentAdapter is ConcatAdapter) {
@@ -107,17 +110,29 @@ open class AssemblyLoadStateFragmentStateAdapter(
             bindingAdapterPosition
         }
 
+        val itemFactory =
+            itemFactoryStorage.getItemFactoryByData(loadState) as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<LoadState> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblyLoadStateFragmentStateAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: LoadState): FragmentItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 
 

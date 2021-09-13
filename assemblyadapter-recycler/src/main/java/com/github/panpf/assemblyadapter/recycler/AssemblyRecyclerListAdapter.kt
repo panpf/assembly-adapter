@@ -17,10 +17,14 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
-import com.github.panpf.assemblyadapter.*
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
+import kotlin.reflect.KClass
 
 /**
  * An implementation of [ListAdapter], which implements multi-type adapters through standardized [ItemFactory].
@@ -30,9 +34,9 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
  * @see ItemFactory
  */
 open class AssemblyRecyclerListAdapter<DATA>
-    : ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<ItemFactory<*>> {
+    : ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<DATA, ItemFactory<out Any>> {
 
-    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<*>>
+    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<out Any>>
 
     /**
      * Create an AssemblyRecyclerListAdapter that provides DiffUtil.ItemCallback externally
@@ -46,7 +50,7 @@ open class AssemblyRecyclerListAdapter<DATA>
      */
     @Suppress("LeakingThis")
     constructor(
-        itemFactoryList: List<ItemFactory<*>>,
+        itemFactoryList: List<ItemFactory<out Any>>,
         initDataList: List<DATA>? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     ) : super(diffCallback) {
@@ -56,7 +60,9 @@ open class AssemblyRecyclerListAdapter<DATA>
                 itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
             )
         }
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+        itemFactoryStorage = ItemFactoryStorage(
+            itemFactoryList, "ItemFactory", "AssemblyRecyclerListAdapter", "itemFactoryList"
+        )
         submitList(initDataList)
     }
 
@@ -72,7 +78,7 @@ open class AssemblyRecyclerListAdapter<DATA>
      */
     @Suppress("LeakingThis")
     constructor(
-        itemFactoryList: List<ItemFactory<*>>,
+        itemFactoryList: List<ItemFactory<out Any>>,
         initDataList: List<DATA>? = null,
         config: AsyncDifferConfig<DATA>,
     ) : super(config) {
@@ -82,7 +88,9 @@ open class AssemblyRecyclerListAdapter<DATA>
                 itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
             )
         }
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+        itemFactoryStorage = ItemFactoryStorage(
+            itemFactoryList, "ItemFactory", "AssemblyRecyclerListAdapter", "itemFactoryList"
+        )
         submitList(initDataList)
     }
 
@@ -117,9 +125,7 @@ open class AssemblyRecyclerListAdapter<DATA>
 
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblyRecyclerListAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -149,10 +155,20 @@ open class AssemblyRecyclerListAdapter<DATA>
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
         val data = getItemData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyRecyclerListAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): ItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as ItemFactory<Any>
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 }

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyLoadStateAdapter
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -91,6 +92,38 @@ class AssemblyLoadStateAdapterTest {
 
             loadState = LoadState.Loading
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val itemFactory = LoadStateItemFactory()
+
+        AssemblyLoadStateAdapter(itemFactory).apply {
+            Assert.assertSame(itemFactory, getItemFactoryByData(LoadState.Loading))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val itemFactory = LoadStateItemFactory()
+
+        AssemblyLoadStateAdapter(itemFactory).apply {
+            Assert.assertSame(
+                itemFactory,
+                getItemFactoryByItemFactoryClass(LoadStateItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
+            }
+
+            Assert.assertSame(
+                itemFactory,
+                getItemFactoryByItemFactoryClass(LoadStateItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+            }
         }
     }
 

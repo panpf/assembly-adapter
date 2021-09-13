@@ -26,6 +26,7 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentStatePagerAdapter
 import java.util.*
+import kotlin.reflect.KClass
 
 /**
  * An implementation of [FragmentStatePagerAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
@@ -47,13 +48,18 @@ import java.util.*
 open class AssemblyFragmentStatePagerAdapter<DATA>(
     fm: FragmentManager,
     @Behavior behavior: Int,
-    itemFactoryList: List<FragmentItemFactory<*>>,
+    itemFactoryList: List<FragmentItemFactory<out Any>>,
     initDataList: List<DATA>? = null
 ) : RefreshableFragmentStatePagerAdapter<DATA>(fm, behavior),
-    AssemblyAdapter<FragmentItemFactory<*>>,
+    AssemblyAdapter<DATA, FragmentItemFactory<out Any>>,
     AbsoluteAdapterPositionAdapter {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(
+        itemFactoryList,
+        "FragmentItemFactory",
+        "AssemblyFragmentStatePagerAdapter",
+        "itemFactoryList"
+    )
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
     private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
 
@@ -74,12 +80,12 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         get() = pageTitleStorage?.readOnlyList ?: Collections.emptyList()
 
     @Deprecated(
-        """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List<AssemblyFragmentItemFactory<*>>, List<DATA>)} with
+        """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List<AssemblyFragmentItemFactory<Any>>, List<DATA>)} with
       {@link #BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT}"""
     )
     constructor(
         fm: FragmentManager,
-        itemFactoryList: List<FragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<out Any>>,
         initDataList: List<DATA>? = null
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactoryList, initDataList)
 
@@ -130,9 +136,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         nextItemAbsoluteAdapterPosition = null
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblyFragmentStatePagerAdapter", "itemFactoryList"
-        ) as FragmentItemFactory<Any>
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
@@ -149,11 +153,23 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
         val data = getItemData(position) ?: Placeholder
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
         return itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblyFragmentStatePagerAdapter", "itemFactoryList"
-        )
+            data ?: Placeholder
+        ) as FragmentItemFactory<Any>
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 
 

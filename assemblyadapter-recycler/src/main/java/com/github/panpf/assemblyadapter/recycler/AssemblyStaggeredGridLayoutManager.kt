@@ -27,7 +27,7 @@ import kotlin.reflect.KClass
  */
 class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanSupport {
 
-    private val fullSpanItemFactoryList: List<Class<out ItemFactory<*>>>
+    private val fullSpanItemFactoryList: List<Class<out ItemFactory<out Any>>>
 
     /**
      * Constructor used when layout manager is set in XML by RecyclerView attribute
@@ -40,7 +40,7 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
         attrs: AttributeSet?,
         defStyleAttr: Int,
         defStyleRes: Int,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
@@ -55,7 +55,7 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
     constructor(
         spanCount: Int,
         orientation: Int,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>
     ) : super(spanCount, orientation) {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
@@ -68,12 +68,12 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
      */
     constructor(
         spanCount: Int,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<*>>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>
     ) : super(spanCount, VERTICAL) {
         this.fullSpanItemFactoryList = fullSpanItemFactoryList.map { it.java }
     }
 
-    override fun isFullSpanByItemFactoryClass(itemFactoryClass: Class<out ItemFactory<*>>): Boolean {
+    override fun isFullSpanByItemFactoryClass(itemFactoryClass: Class<out ItemFactory<out Any>>): Boolean {
         return fullSpanItemFactoryList.contains(itemFactoryClass)
     }
 }

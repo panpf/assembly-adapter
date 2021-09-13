@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.pager2.paging.test
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +27,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewpager2.widget.ViewPager2
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.paging.AssemblyPagingDataFragmentStateAdapter
 import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.panpf.tools4a.test.ktx.getFragmentSync
@@ -40,6 +41,7 @@ import kotlinx.coroutines.launch
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class AssemblyPagingDataFragmentStateAdapterTest {
@@ -243,15 +245,15 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             Assert.assertEquals("", currentList.joinToString())
 
             fragment.submitList(listOf(Text("hello")))
-            Thread.sleep(30)
+            Thread.sleep(50)
             Assert.assertEquals("Text(text=hello)", currentList.joinToString())
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(30)
+            Thread.sleep(50)
             Assert.assertEquals("Text(text=hello), Text(text=world)", currentList.joinToString())
 
             fragment.submitList(null)
-            Thread.sleep(30)
+            Thread.sleep(50)
             Assert.assertEquals("", currentList.joinToString())
         }
     }
@@ -266,15 +268,15 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             fragment.submitList(listOf(Text("hello")))
-            Thread.sleep(30)
+            Thread.sleep(50)
             Assert.assertEquals(1, itemCount)
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(30)
+            Thread.sleep(50)
             Assert.assertEquals(2, itemCount)
 
             fragment.submitList(null)
-            Thread.sleep(30)
+            Thread.sleep(50)
             Assert.assertEquals(0, itemCount)
         }
     }
@@ -297,7 +299,7 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             }
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(30)
+            Thread.sleep(50)
             Assert.assertEquals(Text("hello"), getItemData(0))
             Assert.assertEquals(Text("world"), getItemData(1))
         }
@@ -331,7 +333,7 @@ class AssemblyPagingDataFragmentStateAdapterTest {
             Assert.assertEquals(1L, getItemId(1))
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(30)
+            Thread.sleep(50)
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(0L, getItemId(0))
             Assert.assertEquals(1L, getItemId(1))
@@ -356,8 +358,8 @@ class AssemblyPagingDataFragmentStateAdapterTest {
                 getItemViewType(1)
             }
 
-            fragment.submitList(listOf(Image(R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(30)
+            fragment.submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
+            Thread.sleep(50)
             Assert.assertEquals(1, getItemViewType(0))
             Assert.assertEquals(0, getItemViewType(1))
         }
@@ -370,8 +372,8 @@ class AssemblyPagingDataFragmentStateAdapterTest {
         val pagingDataAdapter: AssemblyPagingDataFragmentStateAdapter<Any> =
             fragment.pagingDataAdapter
         pagingDataAdapter.apply {
-            fragment.submitList(listOf(Text("hello"), Image(R.drawable.alert_dark_frame)))
-            Thread.sleep(30)
+            fragment.submitList(listOf(Text("hello"), Image(android.R.drawable.alert_dark_frame)))
+            Thread.sleep(50)
 
             Assert.assertTrue(createFragment(0) is TextFragment)
             Assert.assertTrue(createFragment(1) is ImageFragment)
@@ -395,10 +397,63 @@ class AssemblyPagingDataFragmentStateAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            fragment.submitList(listOf(Image(R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(30)
+            fragment.submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
+            Thread.sleep(50)
             Assert.assertEquals(ImageFragmentItemFactory::class, getItemFactoryByPosition(0)::class)
             Assert.assertEquals(TextFragmentItemFactory::class, getItemFactoryByPosition(1)::class)
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val fragmentScenario = PagingTestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val textItemFactory = TextFragmentItemFactory()
+        val imageItemFactory = ImageFragmentItemFactory()
+
+        AssemblyPagingDataFragmentStateAdapter<Any>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByData(Image(android.R.drawable.alert_dark_frame))
+            )
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(Date())
+            }
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val fragmentScenario = PagingTestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val textItemFactory = TextFragmentItemFactory()
+        val imageItemFactory = ImageFragmentItemFactory()
+
+        AssemblyPagingDataFragmentStateAdapter<Any>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
+            }
+
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class.java)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+            }
         }
     }
 }

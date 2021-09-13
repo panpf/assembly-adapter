@@ -17,7 +17,9 @@ package com.github.panpf.assemblyadapter.pager2.paging.test
 
 import androidx.fragment.app.Fragment
 import androidx.paging.LoadState
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.paging.AssemblyLoadStateFragmentStateAdapter
 import com.github.panpf.tools4a.test.ktx.getFragmentSync
 import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
@@ -27,7 +29,7 @@ import org.junit.Test
 
 class AssemblyLoadStateFragmentStateAdapterTest {
 
-    class LoadStateItemFactory : FragmentItemFactory<LoadState>(LoadState::class) {
+    class LoadStateFragmentItemFactory : FragmentItemFactory<LoadState>(LoadState::class) {
         override fun createFragment(
             bindingAdapterPosition: Int,
             absoluteAdapterPosition: Int,
@@ -43,24 +45,27 @@ class AssemblyLoadStateFragmentStateAdapterTest {
     fun testConstructor() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateItemFactory())
-        AssemblyLoadStateFragmentStateAdapter(fragment.requireActivity(), LoadStateItemFactory())
+        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateFragmentItemFactory())
+        AssemblyLoadStateFragmentStateAdapter(
+            fragment.requireActivity(),
+            LoadStateFragmentItemFactory()
+        )
         AssemblyLoadStateFragmentStateAdapter(
             fragment.childFragmentManager,
             fragment.lifecycle,
-            LoadStateItemFactory()
+            LoadStateFragmentItemFactory()
         )
 
-        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateItemFactory(), true)
+        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateFragmentItemFactory(), true)
         AssemblyLoadStateFragmentStateAdapter(
             fragment.requireActivity(),
-            LoadStateItemFactory(),
+            LoadStateFragmentItemFactory(),
             true
         )
         AssemblyLoadStateFragmentStateAdapter(
             fragment.childFragmentManager,
             fragment.lifecycle,
-            LoadStateItemFactory(),
+            LoadStateFragmentItemFactory(),
             true
         )
     }
@@ -69,7 +74,7 @@ class AssemblyLoadStateFragmentStateAdapterTest {
     fun testMethodGetItemData() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateItemFactory()).apply {
+        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateFragmentItemFactory()).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemData(-1)
             }
@@ -89,7 +94,7 @@ class AssemblyLoadStateFragmentStateAdapterTest {
     fun testMethodCreateFragment() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateItemFactory()).apply {
+        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateFragmentItemFactory()).apply {
             loadState = LoadState.Loading
 
             assertThrow(IndexOutOfBoundsException::class) {
@@ -106,7 +111,7 @@ class AssemblyLoadStateFragmentStateAdapterTest {
     fun testMethodGetItemFactoryByPosition() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        val itemFactory = LoadStateItemFactory()
+        val itemFactory = LoadStateFragmentItemFactory()
         AssemblyLoadStateFragmentStateAdapter(fragment, itemFactory).apply {
             assertThrow(IndexOutOfBoundsException::class) {
                 getItemFactoryByPosition(-1)
@@ -124,11 +129,47 @@ class AssemblyLoadStateFragmentStateAdapterTest {
     }
 
     @Test
+    fun testMethodGetItemFactoryByData() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val itemFactory = LoadStateFragmentItemFactory()
+
+        AssemblyLoadStateFragmentStateAdapter(fragment, itemFactory).apply {
+            Assert.assertSame(itemFactory, getItemFactoryByData(LoadState.Loading))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val itemFactory = LoadStateFragmentItemFactory()
+
+        AssemblyLoadStateFragmentStateAdapter(fragment, itemFactory).apply {
+            Assert.assertSame(
+                itemFactory,
+                getItemFactoryByItemFactoryClass(LoadStateFragmentItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
+            }
+
+            Assert.assertSame(
+                itemFactory,
+                getItemFactoryByItemFactoryClass(LoadStateFragmentItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+            }
+        }
+    }
+
+    @Test
     fun testDisplayLoadStateAsItem() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
 
-        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateItemFactory()).apply {
+        AssemblyLoadStateFragmentStateAdapter(fragment, LoadStateFragmentItemFactory()).apply {
             Assert.assertTrue(displayLoadStateAsItem(LoadState.Loading))
             Assert.assertTrue(displayLoadStateAsItem(LoadState.Error(Exception())))
             Assert.assertFalse(displayLoadStateAsItem(LoadState.NotLoading(false)))
@@ -137,7 +178,7 @@ class AssemblyLoadStateFragmentStateAdapterTest {
 
         AssemblyLoadStateFragmentStateAdapter(
             fragment,
-            itemFactory = LoadStateItemFactory(),
+            itemFactory = LoadStateFragmentItemFactory(),
             alwaysShowWhenEndOfPaginationReached = true
         ).apply {
             Assert.assertTrue(displayLoadStateAsItem(LoadState.Loading))

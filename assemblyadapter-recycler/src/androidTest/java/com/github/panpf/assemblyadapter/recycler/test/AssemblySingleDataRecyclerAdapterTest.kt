@@ -15,10 +15,12 @@
  */
 package com.github.panpf.assemblyadapter.recycler.test
 
+import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.SimpleAdapterDataObserver
@@ -189,6 +191,38 @@ class AssemblySingleDataRecyclerAdapterTest {
 
             data = Text("hello")
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val textItemFactory = TextItemFactory()
+
+        AssemblySingleDataRecyclerAdapter(textItemFactory).apply {
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val textItemFactory = TextItemFactory()
+
+        AssemblySingleDataRecyclerAdapter(textItemFactory).apply {
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
+            }
+
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+            }
         }
     }
 }

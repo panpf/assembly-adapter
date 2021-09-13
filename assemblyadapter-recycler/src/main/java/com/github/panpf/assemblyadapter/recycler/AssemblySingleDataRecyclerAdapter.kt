@@ -22,6 +22,7 @@ import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
+import kotlin.reflect.KClass
 
 /**
  * Single data version of [AssemblyRecyclerAdapter]
@@ -33,9 +34,11 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
 open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<DATA, ItemFactory<out Any>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+    private val itemFactoryStorage = ItemFactoryStorage<ItemFactory<out Any>>(
+        listOf(itemFactory), "ItemFactory", "AssemblySingleDataRecyclerAdapter", "itemFactory"
+    )
 
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
@@ -75,9 +78,7 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
 
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblySingleDataRecyclerAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -107,10 +108,20 @@ open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblySingleDataRecyclerAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): ItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 }

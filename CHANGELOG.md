@@ -1,5 +1,6 @@
 # new
 * restore: Restore ArrayFragmentStateAdapter, ArrayPagerAdapter, ArrayFragmentStatePagerAdapter
+* new: All Assembly\*Adapter add getItemFactoryByData(Any) and getItemFactoryByItemFactoryClass(KClass) methods
 
 # v4.0.0-rc03
 

@@ -30,6 +30,7 @@ import com.github.panpf.assemblyadapter.list.expandable.ViewExpandableGroupItemF
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
+import java.util.*
 
 class AssemblyExpandableListAdapterTest {
 
@@ -447,6 +448,7 @@ class AssemblyExpandableListAdapterTest {
         val imageGroupItemFactory = ImageGroupItemFactory()
         val textItemFactory = TextItemFactory()
         val imageItemFactory = ImageItemFactory()
+        
         AssemblyExpandableListAdapter<Any, Any>(
             listOf(textGroupItemFactory, textItemFactory, imageGroupItemFactory, imageItemFactory)
         ).apply {
@@ -518,6 +520,90 @@ class AssemblyExpandableListAdapterTest {
             assertThrow(NotFoundMatchedItemFactoryException::class) {
                 Assert.assertSame(textItemFactory, getItemFactoryByChildPosition(1, 1))
             }
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val textItemFactory = TextItemFactory()
+        val imageItemFactory = ImageItemFactory()
+        val placeholderItemFactory = PlaceholderItemFactory()
+
+        AssemblyExpandableListAdapter<Any, Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByData(Image(android.R.drawable.alert_dark_frame))
+            )
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(Date())
+            }
+
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByChildData(Image(android.R.drawable.alert_dark_frame))
+            )
+            Assert.assertSame(textItemFactory, getItemFactoryByChildData(Text("hello")))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByChildData(Date())
+            }
+        }
+
+        AssemblyExpandableListAdapter<Any?, Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(null)
+            }
+        }
+        AssemblyExpandableListAdapter<Any?, Any>(
+            listOf(textItemFactory, imageItemFactory, placeholderItemFactory)
+        ).apply {
+            Assert.assertSame(placeholderItemFactory, getItemFactoryByData(null))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val textItemFactory = TextItemFactory()
+        val imageItemFactory = ImageItemFactory()
+        val placeholderItemFactory = PlaceholderItemFactory()
+
+        AssemblyExpandableListAdapter<Any, Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageItemFactory::class)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
+            }
+
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageItemFactory::class.java)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+            }
+        }
+        AssemblyExpandableListAdapter<Any?, Any>(
+            listOf(textItemFactory, imageItemFactory, placeholderItemFactory)
+        ).apply {
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderItemFactory::class)
+            )
+
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderItemFactory::class.java)
+            )
         }
     }
 

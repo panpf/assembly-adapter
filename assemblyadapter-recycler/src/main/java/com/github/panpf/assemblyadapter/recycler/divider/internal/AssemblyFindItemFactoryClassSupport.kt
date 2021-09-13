@@ -25,7 +25,7 @@ class AssemblyFindItemFactoryClassSupport : FindItemFactoryClassSupport {
         adapter: RecyclerView.Adapter<*>,
         position: Int
     ): Class<*>? {
-        return if (adapter is AssemblyAdapter<*>) {
+        return if (adapter is AssemblyAdapter<*, *>) {
             adapter.getItemFactoryByPosition(position).javaClass
         } else {
             null

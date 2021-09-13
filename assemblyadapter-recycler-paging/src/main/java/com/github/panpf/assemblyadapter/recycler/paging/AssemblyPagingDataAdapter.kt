@@ -31,6 +31,7 @@ import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlin.reflect.KClass
 
 /**
  * An implementation of [PagingDataAdapter], which implements multi-type adapters through standardized [ItemFactory].
@@ -43,15 +44,17 @@ import kotlinx.coroutines.Dispatchers
  * @see ItemFactory
  */
 open class AssemblyPagingDataAdapter<DATA : Any>(
-    itemFactoryList: List<ItemFactory<*>>,
+    itemFactoryList: List<ItemFactory<out Any>>,
     diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     workerDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PagingDataAdapter<DATA, RecyclerView.ViewHolder>(
     diffCallback, mainDispatcher, workerDispatcher
-), AssemblyAdapter<ItemFactory<*>> {
+), AssemblyAdapter<DATA, ItemFactory<out Any>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(
+        itemFactoryList, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
+    )
 
     /**
      * Returns a new [ItemSnapshotList] representing the currently presented items, including any
@@ -76,9 +79,7 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
 
     override fun getItemViewType(position: Int): Int {
         val data = peek(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -109,10 +110,20 @@ open class AssemblyPagingDataAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
         val data = peek(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyPagingDataAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): ItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 }

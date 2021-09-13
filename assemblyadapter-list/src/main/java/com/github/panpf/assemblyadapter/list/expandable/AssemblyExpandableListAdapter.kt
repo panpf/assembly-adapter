@@ -24,6 +24,7 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.R
 import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
+import kotlin.reflect.KClass
 
 /**
  * An implementation of [BaseExpandableListAdapter], which implements multi-type adapters through standardized [ItemFactory] or [ExpandableGroupItemFactory] or [ExpandableChildItemFactory].
@@ -39,12 +40,14 @@ import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
  * @see ExpandableGroupItemFactory
  * @see ExpandableChildItemFactory
  */
-open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
-    itemFactoryList: List<ItemFactory<*>>,
+open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA: Any>(
+    itemFactoryList: List<ItemFactory<out Any>>,
     initDataList: List<GROUP_DATA>? = null,
-) : BaseExpandableListAdapter(), AssemblyAdapter<ItemFactory<*>> {
+) : BaseExpandableListAdapter(), AssemblyAdapter<GROUP_DATA, ItemFactory<out Any>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(
+        itemFactoryList, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
+    )
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
     private var hasStableIds = false
     private val adapterDataObservable = AdapterDataObservable()
@@ -118,20 +121,17 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     override fun getGroupType(groupPosition: Int): Int {
         val groupData = getGroup(groupPosition) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(
-            groupData, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemTypeByData(groupData)
     }
 
     override fun getGroupView(
         groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup
     ): View {
         val groupData = getGroup(groupPosition) ?: Placeholder
-        val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
-            groupData, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
-        ).dispatchCreateItem(parent).apply {
-            itemView.setTag(R.id.aa_tag_item, this)
-        }.itemView
+        val groupItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(groupData)
+            .dispatchCreateItem(parent).apply {
+                itemView.setTag(R.id.aa_tag_item, this)
+            }.itemView
 
         @Suppress("UnnecessaryVariable")
         val groupBindingAdapterPosition = groupPosition
@@ -184,7 +184,7 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {
         return if (hasStableIds) {
-            val childData = getChild(groupPosition, childPosition)!!
+            val childData = getChild(groupPosition, childPosition)
             if (childData is ItemId) childData.itemId else childData.hashCode().toLong()
         } else {
             -1
@@ -194,10 +194,8 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     override fun getChildTypeCount(): Int = itemFactoryStorage.itemTypeCount
 
     override fun getChildType(groupPosition: Int, childPosition: Int): Int {
-        val childData = getChild(groupPosition, childPosition)!!
-        return itemFactoryStorage.getItemTypeByData(
-            childData, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
-        )
+        val childData = getChild(groupPosition, childPosition)
+        return itemFactoryStorage.getItemTypeByData(childData)
     }
 
     override fun getChildView(
@@ -205,12 +203,11 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
         convertView: View?, parent: ViewGroup
     ): View {
         val groupData = getGroup(groupPosition)!!
-        val childData = getChild(groupPosition, childPosition)!!
-        val childItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
-            childData, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
-        ).dispatchCreateItem(parent).apply {
-            itemView.setTag(R.id.aa_tag_item, this)
-        }.itemView
+        val childData = getChild(groupPosition, childPosition)
+        val childItemView = convertView ?: itemFactoryStorage.getItemFactoryByData(childData)
+            .dispatchCreateItem(parent).apply {
+                itemView.setTag(R.id.aa_tag_item, this)
+            }.itemView
 
         @Suppress("UnnecessaryVariable") val groupBindingAdapterPosition = groupPosition
         val groupAbsolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
@@ -250,11 +247,9 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
         val groupData = getGroup(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(
-            groupData, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemFactoryByData(groupData) as ItemFactory<Any>
     }
 
     /**
@@ -263,11 +258,25 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA>(
      * @throws IndexOutOfBoundsException If the [groupPosition] or [childPosition] is out of range
      * @throws NotFoundMatchedItemFactoryException No ItemFactory can match the data corresponding to [childPosition]
      */
-    fun getItemFactoryByChildPosition(groupPosition: Int, childPosition: Int): ItemFactory<*> {
-        val childData = getChild(groupPosition, childPosition)!!
-        return itemFactoryStorage.getItemFactoryByData(
-            childData, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
-        )
+    fun getItemFactoryByChildPosition(groupPosition: Int, childPosition: Int): ItemFactory<Any> {
+        val childData = getChild(groupPosition, childPosition)
+        return itemFactoryStorage.getItemFactoryByData(childData) as ItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: GROUP_DATA): ItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as ItemFactory<Any>
+    }
+
+    fun getItemFactoryByChildData(data: CHILD_DATA): ItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 
     override fun registerDataSetObserver(observer: DataSetObserver) {

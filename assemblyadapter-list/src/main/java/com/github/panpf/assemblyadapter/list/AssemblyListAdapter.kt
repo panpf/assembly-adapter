@@ -23,6 +23,7 @@ import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
+import kotlin.reflect.KClass
 
 /**
  * An implementation of [BaseAdapter], which implements multi-type adapters through standardized [ItemFactory].
@@ -35,11 +36,13 @@ import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
  * @see ItemFactory
  */
 open class AssemblyListAdapter<DATA>(
-    itemFactoryList: List<ItemFactory<*>>,
+    itemFactoryList: List<ItemFactory<out Any>>,
     initDataList: List<DATA>? = null,
-) : BaseAdapter(), AssemblyAdapter<ItemFactory<*>> {
+) : BaseAdapter(), AssemblyAdapter<DATA, ItemFactory<out Any>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+    private val itemFactoryStorage = ItemFactoryStorage(
+        itemFactoryList, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
+    )
     private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
     private var hasStableIds = false
     private val adapterDataObservable = AdapterDataObservable()
@@ -114,18 +117,15 @@ open class AssemblyListAdapter<DATA>(
 
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val data = getItemData(position) ?: Placeholder
-        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
-        ).dispatchCreateItem(parent).apply {
-            itemView.setTag(R.id.aa_tag_item, this)
-        }.itemView
+        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(data)
+            .dispatchCreateItem(parent).apply {
+                itemView.setTag(R.id.aa_tag_item, this)
+            }.itemView
 
         @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
         val absolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
@@ -141,11 +141,21 @@ open class AssemblyListAdapter<DATA>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
         val data = getItemData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): ItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as ItemFactory<Any>
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 
     override fun registerDataSetObserver(observer: DataSetObserver) {

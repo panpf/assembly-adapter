@@ -22,8 +22,11 @@ import com.github.panpf.assemblyadapter.Placeholder
 /**
  * Matching ItemFactory by data or itemType
  */
-class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>>(
+class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>> constructor(
     initItemFactoryList: List<ITEM_FACTORY>,
+    private val itemFactoryName: String,
+    private val adapterName: String,
+    private val itemFactoryPropertyName: String
 ) {
 
     private val itemFactoryList: List<ITEM_FACTORY> = initItemFactoryList.toList()
@@ -32,12 +35,17 @@ class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>>(
             this[itemFactory] = index
         }
     }
+    private val itemFactoryClassMap by lazy {
+        ArrayMap<Class<out ITEM_FACTORY>, ITEM_FACTORY>().apply {
+            initItemFactoryList.forEach { itemFactory ->
+                this[itemFactory.javaClass] = itemFactory
+            }
+        }
+    }
 
     val itemTypeCount = initItemFactoryList.size
 
-    fun getItemFactoryByData(
-        data: Any, itemFactoryName: String, adapterName: String, itemFactoryPropertyName: String
-    ): ITEM_FACTORY {
+    fun getItemFactoryByData(data: Any): ITEM_FACTORY {
         val itemFactory = itemFactoryList.find { it.matchData(data) }
         return when {
             itemFactory != null -> itemFactory
@@ -51,6 +59,13 @@ class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>>(
         }
     }
 
+    fun <T : ITEM_FACTORY> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return (itemFactoryClassMap[itemFactoryClass]
+            ?: throw NotFoundMatchedItemFactoryException(
+                "Need to add an '${itemFactoryClass.name}' to the $adapterName's $itemFactoryPropertyName property"
+            )) as T
+    }
+
     fun getItemFactoryByItemType(itemType: Int): ITEM_FACTORY {
         require(itemType >= 0 && itemType < itemFactoryList.size) {
             "Unknown item type: $itemType"
@@ -58,11 +73,8 @@ class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>>(
         return itemFactoryList[itemType]
     }
 
-    fun getItemTypeByData(
-        data: Any, itemFactoryName: String, adapterName: String, itemFactoryPropertyName: String
-    ): Int {
-        val itemFactory =
-            getItemFactoryByData(data, itemFactoryName, adapterName, itemFactoryPropertyName)
+    fun getItemTypeByData(data: Any): Int {
+        val itemFactory = getItemFactoryByData(data)
         return itemTypeBindMap[itemFactory]!!
     }
 }

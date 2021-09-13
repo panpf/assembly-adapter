@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapter
+import kotlin.reflect.KClass
 
 /**
  * Single data version of [AssemblyPagerAdapter]
@@ -31,9 +32,11 @@ import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapte
 open class AssemblySingleDataPagerAdapter<DATA : Any>(
     itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
-) : RefreshablePagerAdapter<DATA>(), AssemblyAdapter<PagerItemFactory<*>> {
+) : RefreshablePagerAdapter<DATA>(), AssemblyAdapter<DATA, PagerItemFactory<out Any>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+    private val itemFactoryStorage = ItemFactoryStorage<PagerItemFactory<out Any>>(
+        listOf(itemFactory), "PagerItemFactory", "AssemblySingleDataPagerAdapter", "itemFactory"
+    )
 
     /**
      * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
@@ -75,7 +78,8 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
         val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
 
         @Suppress("UNCHECKED_CAST")
-        return getItemFactoryByPosition(position).dispatchCreateItemView(
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
+        return itemFactory.dispatchCreateItemView(
             container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
@@ -95,10 +99,20 @@ open class AssemblySingleDataPagerAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<DATA> {
+    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<Any> {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "PagerItemFactory", "AssemblySingleDataPagerAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): PagerItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
+    }
+
+    override fun <T : PagerItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : PagerItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 }

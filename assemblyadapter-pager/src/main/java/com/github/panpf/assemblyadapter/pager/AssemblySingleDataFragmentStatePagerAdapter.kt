@@ -19,9 +19,11 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentStatePagerAdapter
+import kotlin.reflect.KClass
 
 /**
  * Single data version of [AssemblyFragmentStatePagerAdapter]
@@ -43,10 +45,15 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
 ) : RefreshableFragmentStatePagerAdapter<DATA>(fm, behavior),
-    AssemblyAdapter<FragmentItemFactory<*>>,
+    AssemblyAdapter<DATA, FragmentItemFactory<out Any>>,
     AbsoluteAdapterPositionAdapter {
 
-    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+    private val itemFactoryStorage = ItemFactoryStorage<FragmentItemFactory<out Any>>(
+        listOf(itemFactory),
+        "FragmentItemFactory",
+        "AssemblySingleDataFragmentStatePagerAdapter",
+        "itemFactory"
+    )
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
 
@@ -99,7 +106,8 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         nextItemAbsoluteAdapterPosition = null
 
         @Suppress("UNCHECKED_CAST")
-        return getItemFactoryByPosition(position).dispatchCreateFragment(
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+        return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
@@ -119,11 +127,21 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<DATA> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblySingleDataFragmentStatePagerAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 
 

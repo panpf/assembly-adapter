@@ -28,6 +28,7 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
+import kotlin.reflect.KClass
 
 /**
  * Single data version of [FragmentStateListAdapter]
@@ -35,11 +36,11 @@ import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
  * @see FragmentItemFactory
  */
 open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStateListAdapter<DATA>,
-    AssemblyAdapter<FragmentItemFactory<*>> {
+    AssemblyAdapter<DATA, FragmentItemFactory<out Any>> {
 
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
-    private val itemFactoryStorage: ItemFactoryStorage<FragmentItemFactory<DATA>>
+    private val itemFactoryStorage: ItemFactoryStorage<FragmentItemFactory<out Any>>
 
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
@@ -72,7 +73,12 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStat
                 listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
             )
         }
-        itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+        itemFactoryStorage = ItemFactoryStorage(
+            listOf(itemFactory),
+            "FragmentItemFactory",
+            "AssemblySingleDataFragmentStateListAdapter",
+            "itemFactory"
+        )
         data = initData
     }
 
@@ -126,7 +132,12 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStat
                 listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
             )
         }
-        itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+        itemFactoryStorage = ItemFactoryStorage(
+            listOf(itemFactory),
+            "FragmentItemFactory",
+            "AssemblySingleDataFragmentStateListAdapter",
+            "itemFactory"
+        )
         data = initData
     }
 
@@ -182,9 +193,7 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStat
 
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(
-            data, "FragmentItemFactory", "AssemblySingleDataFragmentStateListAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -196,17 +205,28 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStat
         } else {
             bindingAdapterPosition
         }
-        return getItemFactoryByPosition(position).dispatchCreateFragment(
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+        return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<DATA> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblySingleDataFragmentStateListAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 
 

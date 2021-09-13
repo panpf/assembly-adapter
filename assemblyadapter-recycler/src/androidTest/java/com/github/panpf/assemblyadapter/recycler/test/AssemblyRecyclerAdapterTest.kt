@@ -28,6 +28,7 @@ import com.github.panpf.assemblyadapter.recycler.SimpleAdapterDataObserver
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
+import java.util.*
 
 class AssemblyRecyclerAdapterTest {
 
@@ -245,6 +246,85 @@ class AssemblyRecyclerAdapterTest {
             assertThrow(NotFoundMatchedItemFactoryException::class) {
                 getItemFactoryByPosition(1)
             }
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val textItemFactory = TextItemFactory()
+        val imageItemFactory = ImageItemFactory()
+        val placeholderItemFactory = PlaceholderItemFactory()
+
+        AssemblyRecyclerAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByData(Image(android.R.drawable.alert_dark_frame))
+            )
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(Date())
+            }
+        }
+
+        AssemblyRecyclerAdapter<Any?>(listOf(textItemFactory, imageItemFactory)).apply {
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(null)
+            }
+        }
+        AssemblyRecyclerAdapter<Any?>(
+            listOf(
+                textItemFactory,
+                imageItemFactory,
+                placeholderItemFactory
+            )
+        ).apply {
+            Assert.assertSame(placeholderItemFactory, getItemFactoryByData(null))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val textItemFactory = TextItemFactory()
+        val imageItemFactory = ImageItemFactory()
+        val placeholderItemFactory = PlaceholderItemFactory()
+
+        AssemblyRecyclerAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageItemFactory::class)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
+            }
+
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageItemFactory::class.java)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+            }
+        }
+        AssemblyRecyclerAdapter<Any?>(
+            listOf(textItemFactory, imageItemFactory, placeholderItemFactory)
+        ).apply {
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderItemFactory::class)
+            )
+
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderItemFactory::class.java)
+            )
         }
     }
 

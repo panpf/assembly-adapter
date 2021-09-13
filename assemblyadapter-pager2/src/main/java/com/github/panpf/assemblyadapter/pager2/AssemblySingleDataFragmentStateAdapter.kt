@@ -22,9 +22,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
+import kotlin.reflect.KClass
 
 /**
  * Single data version of [AssemblyFragmentStateAdapter]
@@ -38,11 +40,16 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     lifecycle: Lifecycle,
     itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
-) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<FragmentItemFactory<*>> {
+) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<DATA, FragmentItemFactory<out Any>> {
 
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
-    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+    private val itemFactoryStorage = ItemFactoryStorage<FragmentItemFactory<out Any>>(
+        listOf(itemFactory),
+        "FragmentItemFactory",
+        "AssemblySingleDataFragmentStateAdapter",
+        "itemFactory"
+    )
 
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
@@ -102,9 +109,7 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
 
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(
-            data, "FragmentItemFactory", "AssemblySingleDataFragmentStateAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -116,17 +121,28 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
         } else {
             bindingAdapterPosition
         }
-        return getItemFactoryByPosition(position).dispatchCreateFragment(
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+        return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<DATA> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblySingleDataFragmentStateAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 
 

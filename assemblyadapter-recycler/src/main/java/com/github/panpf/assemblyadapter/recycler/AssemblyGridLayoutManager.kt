@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
 class AssemblyGridLayoutManager : GridLayoutManager {
 
     private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
-    private val gridLayoutItemSpanMap: Map<Class<out ItemFactory<*>>, ItemSpan>
+    private val gridLayoutItemSpanMap: Map<Class<out ItemFactory<out Any>>, ItemSpan>
     private val spanSizeLookup = object : SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             return getSpanSizeImpl(position)
@@ -51,7 +51,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         attrs: AttributeSet?,
         defStyleAttr: Int,
         defStyleRes: Int,
-        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
+        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
@@ -71,7 +71,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         spanCount: Int,
         orientation: Int,
         reverseLayout: Boolean,
-        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
+        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
     ) : super(context, spanCount, orientation, reverseLayout) {
         this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
@@ -88,7 +88,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     constructor(
         context: Context,
         spanCount: Int,
-        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<*>>, ItemSpan>
+        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
     ) : super(context, spanCount) {
         this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
@@ -136,13 +136,13 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         }
     }
 
-    private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<*> {
+    private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<Any> {
         val (localAdapter, localPosition) = concatAdapterLocalHelper.findLocalAdapterAndPosition(
             adapter,
             position
         )
-        return if (localAdapter is AssemblyAdapter<*>) {
-            localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<*>
+        return if (localAdapter is AssemblyAdapter<*, *>) {
+            localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<Any>
         } else {
             throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
         }

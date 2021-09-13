@@ -9,10 +9,10 @@ import kotlin.reflect.KClass
 class AssemblyStickyItemDecoration :
     StickyItemDecoration {
 
-    private val stickyItemFactoryList: List<Class<out ItemFactory<*>>>
+    private val stickyItemFactoryList: List<Class<out ItemFactory<out Any>>>
     private var findItemFactoryClassByPosition: (adapter: RecyclerView.Adapter<*>, position: Int) -> Class<*>? =
         { adapter, position ->
-            if (adapter is AssemblyAdapter<*>) {
+            if (adapter is AssemblyAdapter<*, *>) {
                 adapter.getItemFactoryByPosition(position).javaClass
             } else {
                 null
@@ -21,14 +21,14 @@ class AssemblyStickyItemDecoration :
 
     constructor(
         stickyItemContainer: ViewGroup,
-        stickyItemFactoryList: List<KClass<out ItemFactory<*>>>
+        stickyItemFactoryList: List<KClass<out ItemFactory<out Any>>>
     ) : super(stickyItemContainer) {
         this.stickyItemFactoryList = stickyItemFactoryList.map { it.java }
     }
 
     constructor(
         stickyItemContainer: ViewGroup,
-        vararg itemFactoryClass: KClass<out ItemFactory<*>>
+        vararg itemFactoryClass: KClass<out ItemFactory<out Any>>
     ) : super(stickyItemContainer) {
         this.stickyItemFactoryList = itemFactoryClass.map { it.java }
     }

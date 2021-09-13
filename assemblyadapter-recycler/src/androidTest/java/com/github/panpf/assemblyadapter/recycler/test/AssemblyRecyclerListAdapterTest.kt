@@ -28,6 +28,7 @@ import com.github.panpf.assemblyadapter.recycler.*
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
+import java.util.*
 
 class AssemblyRecyclerListAdapterTest {
 
@@ -228,19 +229,19 @@ class AssemblyRecyclerListAdapterTest {
             Assert.assertEquals("", (dataFromObserver ?: emptyList()).joinToString { it.text })
 
             submitList(listOf(Text("hello")))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals("hello", currentList.joinToString { it.text })
             Assert.assertEquals("hello", (dataFromObserver ?: emptyList()).joinToString { it.text })
 
             submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals("hello, world", currentList.joinToString { it.text })
             Assert.assertEquals(
                 "hello, world",
                 (dataFromObserver ?: emptyList()).joinToString { it.text })
 
             submitList(null)
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals("", currentList.joinToString())
             Assert.assertEquals("", (dataFromObserver ?: emptyList()).joinToString())
         }
@@ -252,15 +253,15 @@ class AssemblyRecyclerListAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             submitList(listOf(Text("hello")))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, itemCount)
 
             submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(2, itemCount)
 
             submitList(null)
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, itemCount)
         }
     }
@@ -279,7 +280,7 @@ class AssemblyRecyclerListAdapterTest {
             }
 
             submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), getItemData(0))
             Assert.assertEquals(Text("world"), getItemData(1))
         }
@@ -321,7 +322,7 @@ class AssemblyRecyclerListAdapterTest {
             }
 
             submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, getItemViewType(0))
             Assert.assertEquals(0, getItemViewType(1))
         }
@@ -333,7 +334,7 @@ class AssemblyRecyclerListAdapterTest {
         val parent = FrameLayout(context)
         AssemblyRecyclerListAdapter<Any>(listOf(TextItemFactory(), ImageItemFactory())).apply {
             submitList(listOf(Text("hello"), Image(android.R.drawable.alert_dark_frame)))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
 
             assertThrow(IllegalArgumentException::class) {
                 onCreateViewHolder(parent, -1)
@@ -365,7 +366,7 @@ class AssemblyRecyclerListAdapterTest {
             }
 
             submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertSame(imageItemFactory, getItemFactoryByPosition(0))
             Assert.assertSame(textItemFactory, getItemFactoryByPosition(1))
         }
@@ -392,13 +393,92 @@ class AssemblyRecyclerListAdapterTest {
     }
 
     @Test
+    fun testMethodGetItemFactoryByData() {
+        val textItemFactory = TextItemFactory()
+        val imageItemFactory = ImageItemFactory()
+        val placeholderItemFactory = PlaceholderItemFactory()
+
+        AssemblyRecyclerListAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByData(Image(android.R.drawable.alert_dark_frame))
+            )
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(Date())
+            }
+        }
+
+        AssemblyRecyclerListAdapter<Any?>(listOf(textItemFactory, imageItemFactory)).apply {
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(null)
+            }
+        }
+        AssemblyRecyclerListAdapter<Any?>(
+            listOf(
+                textItemFactory,
+                imageItemFactory,
+                placeholderItemFactory
+            )
+        ).apply {
+            Assert.assertSame(placeholderItemFactory, getItemFactoryByData(null))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val textItemFactory = TextItemFactory()
+        val imageItemFactory = ImageItemFactory()
+        val placeholderItemFactory = PlaceholderItemFactory()
+
+        AssemblyRecyclerListAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageItemFactory::class)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
+            }
+
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageItemFactory::class.java)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+            }
+        }
+        AssemblyRecyclerListAdapter<Any?>(
+            listOf(textItemFactory, imageItemFactory, placeholderItemFactory)
+        ).apply {
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderItemFactory::class)
+            )
+
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderItemFactory::class.java)
+            )
+        }
+    }
+
+    @Test
     fun testPlaceholder() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = FrameLayout(context)
 
         AssemblyRecyclerListAdapter<Any?>(listOf(TextItemFactory())).apply {
             submitList(listOf(Text("hello"), null))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
 
             Assert.assertEquals(0, getItemViewType(0))
             assertThrow(NotFoundMatchedItemFactoryException::class) {
@@ -423,7 +503,7 @@ class AssemblyRecyclerListAdapterTest {
             )
         ).apply {
             submitList(listOf(Text("hello"), null))
-            Thread.sleep(10)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
 
             Assert.assertEquals(0, getItemViewType(0))
             Assert.assertEquals(1, getItemViewType(1))

@@ -26,6 +26,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
+import kotlin.reflect.KClass
 
 /**
  * An implementation of [LoadStateAdapter], Realize the display of [LoadState] through standardized [ItemFactory].
@@ -36,9 +37,11 @@ import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrap
 open class AssemblyLoadStateAdapter(
     itemFactory: ItemFactory<LoadState>,
     private val alwaysShowWhenEndOfPaginationReached: Boolean = false,
-) : LoadStateAdapter<RecyclerView.ViewHolder>(), AssemblyAdapter<ItemFactory<*>> {
+) : LoadStateAdapter<RecyclerView.ViewHolder>(), AssemblyAdapter<LoadState, ItemFactory<out Any>> {
 
-    private val itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+    private val itemFactoryStorage = ItemFactoryStorage<ItemFactory<out Any>>(
+        listOf(itemFactory), "ItemFactory", "AssemblyLoadStateAdapter", "itemFactory"
+    )
 
     fun getItemData(position: Int): LoadState {
         val count = itemCount
@@ -51,9 +54,7 @@ open class AssemblyLoadStateAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup, loadState: LoadState
     ): RecyclerView.ViewHolder {
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(
-            loadState, "ItemFactory", "AssemblyLoadStateAdapter", "itemFactory"
-        )
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(loadState)
         val item = itemFactory.dispatchCreateItem(parent)
         return RecyclerViewHolderWrapper(item).apply {
             val layoutManager =
@@ -84,10 +85,20 @@ open class AssemblyLoadStateAdapter(
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<LoadState> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblyLoadStateAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: LoadState): ItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 }

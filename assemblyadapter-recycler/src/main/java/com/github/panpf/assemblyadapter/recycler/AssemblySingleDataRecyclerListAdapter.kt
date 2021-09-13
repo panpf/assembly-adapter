@@ -17,18 +17,22 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
-import com.github.panpf.assemblyadapter.*
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
+import kotlin.reflect.KClass
 
 /**
  * Single data version of [AssemblyRecyclerListAdapter]
  */
 open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
-    ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<ItemFactory<*>> {
+    ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<DATA, ItemFactory<out Any>> {
 
-    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<DATA>>
+    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<out Any>>
 
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
@@ -62,7 +66,12 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
                 listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
             )
         }
-        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+        this.itemFactoryStorage = ItemFactoryStorage(
+            listOf(itemFactory),
+            "ItemFactory",
+            "AssemblySingleDataRecyclerListAdapter",
+            "itemFactory"
+        )
         this.data = initData
     }
 
@@ -85,7 +94,12 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
                 listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
             )
         }
-        this.itemFactoryStorage = ItemFactoryStorage(listOf(itemFactory))
+        this.itemFactoryStorage = ItemFactoryStorage(
+            listOf(itemFactory),
+            "ItemFactory",
+            "AssemblySingleDataRecyclerListAdapter",
+            "itemFactory"
+        )
         this.data = initData
     }
 
@@ -106,6 +120,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     fun getItemData(position: Int): DATA {
         return getItem(position)
     }
+
     /**
      * Note: [getItemId] is final, because stable IDs are unnecessary and therefore unsupported.
      *
@@ -133,9 +148,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
 
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(
-            data, "ItemFactory", "AssemblySingleDataRecyclerListAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -165,10 +178,20 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<DATA> {
+    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
         val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "ItemFactory", "AssemblySingleDataRecyclerListAdapter", "itemFactory"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): ItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 }

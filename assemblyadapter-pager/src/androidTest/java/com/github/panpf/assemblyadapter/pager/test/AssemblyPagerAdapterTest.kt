@@ -22,12 +22,16 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.pager.AssemblyPagerAdapter
 import com.github.panpf.assemblyadapter.pager.GetPageTitle
 import com.github.panpf.assemblyadapter.pager.PagerItemFactory
+import com.github.panpf.assemblyadapter.pager.ViewPagerItemFactory
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
+import java.util.*
 
 class AssemblyPagerAdapterTest {
 
@@ -60,6 +64,9 @@ class AssemblyPagerAdapterTest {
             data: Image
         ): View = ImageView(context)
     }
+
+    private class PlaceholderPagerItemFactory :
+        ViewPagerItemFactory<Placeholder>(Placeholder::class, android.R.layout.test_list_item)
 
     @Test
     fun testConstructor() {
@@ -175,6 +182,85 @@ class AssemblyPagerAdapterTest {
             )
             Assert.assertEquals(ImagePagerItemFactory::class, getItemFactoryByPosition(0)::class)
             Assert.assertEquals(TextPagerItemFactory::class, getItemFactoryByPosition(1)::class)
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val textItemFactory = TextPagerItemFactory()
+        val imageItemFactory = ImagePagerItemFactory()
+        val placeholderItemFactory = PlaceholderPagerItemFactory()
+
+        AssemblyPagerAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByData(Image(android.R.drawable.alert_dark_frame))
+            )
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(Date())
+            }
+        }
+
+        AssemblyPagerAdapter<Any?>(listOf(textItemFactory, imageItemFactory)).apply {
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(null)
+            }
+        }
+        AssemblyPagerAdapter<Any?>(
+            listOf(
+                textItemFactory,
+                imageItemFactory,
+                placeholderItemFactory
+            )
+        ).apply {
+            Assert.assertSame(placeholderItemFactory, getItemFactoryByData(null))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val textItemFactory = TextPagerItemFactory()
+        val imageItemFactory = ImagePagerItemFactory()
+        val placeholderItemFactory = PlaceholderPagerItemFactory()
+
+        AssemblyPagerAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImagePagerItemFactory::class)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextPagerItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewPagerItemFactory::class)
+            }
+
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImagePagerItemFactory::class.java)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextPagerItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewPagerItemFactory::class.java)
+            }
+        }
+        AssemblyPagerAdapter<Any?>(
+            listOf(textItemFactory, imageItemFactory, placeholderItemFactory)
+        ).apply {
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderPagerItemFactory::class)
+            )
+
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderPagerItemFactory::class.java)
+            )
         }
     }
 

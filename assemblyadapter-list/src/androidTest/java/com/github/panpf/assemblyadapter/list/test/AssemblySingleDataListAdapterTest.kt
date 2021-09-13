@@ -19,8 +19,8 @@ import android.database.DataSetObserver
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.ViewItemFactory
-import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
@@ -212,6 +212,38 @@ class AssemblySingleDataListAdapterTest {
 
             data = Text("hello")
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val textItemFactory = TextItemFactory()
+
+        AssemblySingleDataListAdapter(textItemFactory).apply {
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val textItemFactory = TextItemFactory()
+
+        AssemblySingleDataListAdapter(textItemFactory).apply {
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
+            }
+
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+            }
         }
     }
 

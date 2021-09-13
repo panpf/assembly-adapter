@@ -28,6 +28,7 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
+import kotlin.reflect.KClass
 
 /**
  * An implementation of [FragmentStateListAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
@@ -37,9 +38,9 @@ import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
  * @see FragmentItemFactory
  */
 open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DATA>,
-    AssemblyAdapter<FragmentItemFactory<*>> {
+    AssemblyAdapter<DATA, FragmentItemFactory<out Any>> {
 
-    private val itemFactoryStorage: ItemFactoryStorage<FragmentItemFactory<*>>
+    private val itemFactoryStorage: ItemFactoryStorage<FragmentItemFactory<out Any>>
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
 
@@ -53,7 +54,7 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
     constructor(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
-        itemFactoryList: List<FragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<out Any>>,
         initDataList: List<DATA>? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback()
     ) : super(fragmentManager, lifecycle, diffCallback) {
@@ -63,7 +64,12 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
                 itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
             )
         }
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+        itemFactoryStorage = ItemFactoryStorage(
+            itemFactoryList,
+            "FragmentItemFactory",
+            "AssemblyFragmentStateListAdapter",
+            "itemFactoryList"
+        )
         submitList(initDataList)
     }
 
@@ -76,7 +82,7 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
      */
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactoryList: List<FragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<out Any>>,
         initDataList: List<DATA>? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback()
     ) : this(
@@ -96,7 +102,7 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
      */
     constructor(
         fragment: Fragment,
-        itemFactoryList: List<FragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<out Any>>,
         initDataList: List<DATA>? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback()
     ) : this(
@@ -117,7 +123,7 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
     constructor(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
-        itemFactoryList: List<FragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<out Any>>,
         initDataList: List<DATA>? = null,
         config: AsyncDifferConfig<DATA>
     ) : super(fragmentManager, lifecycle, config) {
@@ -127,7 +133,12 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
                 itemFactoryList.map { it.dataClass }.filter { it.java != Placeholder::class.java }
             )
         }
-        itemFactoryStorage = ItemFactoryStorage(itemFactoryList)
+        itemFactoryStorage = ItemFactoryStorage(
+            itemFactoryList,
+            "FragmentItemFactory",
+            "AssemblyFragmentStateListAdapter",
+            "itemFactoryList"
+        )
         submitList(initDataList)
     }
 
@@ -140,7 +151,7 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
      */
     constructor(
         fragmentActivity: FragmentActivity,
-        itemFactoryList: List<FragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<out Any>>,
         initDataList: List<DATA>? = null,
         config: AsyncDifferConfig<DATA>
     ) : this(
@@ -160,7 +171,7 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
      */
     constructor(
         fragment: Fragment,
-        itemFactoryList: List<FragmentItemFactory<*>>,
+        itemFactoryList: List<FragmentItemFactory<out Any>>,
         initDataList: List<DATA>? = null,
         config: AsyncDifferConfig<DATA>
     ) : this(
@@ -177,9 +188,7 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
 
     override fun getItemViewType(position: Int): Int {
         val data = getItemData(position) ?: Placeholder
-        return itemFactoryStorage.getItemTypeByData(
-            data, "FragmentItemFactory", "AssemblyFragmentStateListAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemTypeByData(data)
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -194,20 +203,28 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
         }
 
         @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblyFragmentStateListAdapter", "itemFactoryList"
-        ) as FragmentItemFactory<Any>
+        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
         return itemFactory.dispatchCreateFragment(
             bindingAdapterPosition, absoluteAdapterPosition, data
         )
     }
 
 
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<*> {
+    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
         val data = getItemData(position) ?: Placeholder
-        return itemFactoryStorage.getItemFactoryByData(
-            data, "FragmentItemFactory", "AssemblyFragmentStateListAdapter", "itemFactoryList"
-        )
+        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    }
+
+    override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
+        return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as FragmentItemFactory<Any>
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
+    }
+
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

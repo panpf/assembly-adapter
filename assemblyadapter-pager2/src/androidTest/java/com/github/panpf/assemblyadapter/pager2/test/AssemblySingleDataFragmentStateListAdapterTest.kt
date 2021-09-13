@@ -17,11 +17,12 @@ package com.github.panpf.assemblyadapter.pager2.test
 
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.AsyncDifferConfig
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateListAdapter
 import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
-import com.github.panpf.assemblyadapter.recycler.SimpleAdapterDataObserver
 import com.github.panpf.tools4a.test.ktx.getFragmentSync
 import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -138,12 +139,12 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             Assert.assertEquals(0, currentList.size)
 
             data = Text("hello")
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), data)
             Assert.assertEquals(1, currentList.size)
 
             data = Text("world")
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("world"), data)
             Assert.assertEquals(1, currentList.size)
 
@@ -154,12 +155,12 @@ class AssemblySingleDataFragmentStateListAdapterTest {
                 submitList(listOf(Text("good"), Text("bye")), null)
             }
             submitList(listOf(Text("good")))
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("good"), data)
             Assert.assertEquals(1, currentList.size)
 
             data = null
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertNull(data)
             Assert.assertEquals(0, currentList.size)
         }
@@ -173,11 +174,11 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             data = Text("hello")
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, itemCount)
 
             data = null
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, itemCount)
         }
     }
@@ -198,7 +199,7 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), getItemData(0))
         }
     }
@@ -219,7 +220,7 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             createFragment(0)
         }
     }
@@ -241,8 +242,48 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(30)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val textItemFactory = TextFragmentItemFactory()
+
+        AssemblySingleDataFragmentStateListAdapter(fragment, textItemFactory).apply {
+            Assert.assertSame(
+                textItemFactory, getItemFactoryByData(
+                    Text("hello")
+                )
+            )
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val textItemFactory = TextFragmentItemFactory()
+
+        AssemblySingleDataFragmentStateListAdapter(fragment, textItemFactory).apply {
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
+            }
+
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+            }
         }
     }
 }

@@ -23,18 +23,32 @@ import com.github.panpf.tools4j.test.ktx.assertNoThrow
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
+import java.util.*
 import kotlin.reflect.KClass
 
 class ItemFactoryStorageTest {
 
+    open class TestItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA>
+
+    class StringItemFactory : TestItemFactory<String>(String::class)
+
+    class IntItemFactory : TestItemFactory<Int>(Int::class)
+
+    class BooleanItemFactory : TestItemFactory<Boolean>(Boolean::class)
+
+    class DateItemFactory : TestItemFactory<Date>(Date::class)
+
     @Test
     fun testConstructor() {
         assertNoThrow {
-            ItemFactoryStorage(listOf())
+            ItemFactoryStorage(listOf(), "ItemFactory", "TestAdapter", "itemFactoryList")
         }
 
         assertNoThrow {
-            ItemFactoryStorage(listOf(TestItemFactory(String::class)))
+            ItemFactoryStorage(
+                listOf(TestItemFactory(String::class)),
+                "ItemFactory", "TestAdapter", "itemFactoryList"
+            )
         }
     }
 
@@ -42,29 +56,30 @@ class ItemFactoryStorageTest {
     fun testPropertyItemTypeCount() {
         Assert.assertEquals(
             0,
-            ItemFactoryStorage(listOf()).itemTypeCount
+            ItemFactoryStorage(
+                listOf(),
+                "ItemFactory", "TestAdapter", "itemFactoryList"
+            ).itemTypeCount
         )
         Assert.assertEquals(
             1,
-            ItemFactoryStorage(listOf(IntItemFactory())).itemTypeCount
+            ItemFactoryStorage(
+                listOf(IntItemFactory()),
+                "ItemFactory", "TestAdapter", "itemFactoryList"
+            ).itemTypeCount
         )
         Assert.assertEquals(
             2,
             ItemFactoryStorage(
-                listOf(
-                    IntItemFactory(),
-                    StringItemFactory(),
-                )
+                listOf(IntItemFactory(), StringItemFactory()),
+                "ItemFactory", "TestAdapter", "itemFactoryList"
             ).itemTypeCount
         )
         Assert.assertEquals(
             3,
             ItemFactoryStorage(
-                listOf(
-                    IntItemFactory(),
-                    StringItemFactory(),
-                    BooleanItemFactory()
-                )
+                listOf(IntItemFactory(), StringItemFactory(), BooleanItemFactory()),
+                "ItemFactory", "TestAdapter", "itemFactoryList"
             ).itemTypeCount
         )
     }
@@ -72,55 +87,69 @@ class ItemFactoryStorageTest {
     @Test
     fun testMethodGetItemFactoryByData() {
         val itemFactoryStorage = ItemFactoryStorage(
-            listOf(
-                IntItemFactory(),
-                StringItemFactory(),
-                BooleanItemFactory()
-            )
+            listOf(IntItemFactory(), StringItemFactory(), BooleanItemFactory()),
+            "ItemFactory", "TestAdapter", "itemFactoryList"
         )
 
         Assert.assertEquals(
             IntItemFactory::class,
-            itemFactoryStorage.getItemFactoryByData(
-                3, "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )::class
+            itemFactoryStorage.getItemFactoryByData(3)::class
         )
 
         Assert.assertEquals(
             StringItemFactory::class,
-            itemFactoryStorage.getItemFactoryByData(
-                "3", "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )::class
+            itemFactoryStorage.getItemFactoryByData("3")::class
         )
 
         Assert.assertEquals(
             BooleanItemFactory::class,
-            itemFactoryStorage.getItemFactoryByData(
-                true, "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )::class
+            itemFactoryStorage.getItemFactoryByData(true)::class
         )
 
         assertThrow(NotFoundMatchedItemFactoryException::class) {
-            itemFactoryStorage.getItemFactoryByData(
-                3L, "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )::class
+            itemFactoryStorage.getItemFactoryByData(3L)::class
         }
 
         assertThrow(NotFoundMatchedItemFactoryException::class) {
-            itemFactoryStorage.getItemFactoryByData(
-                Placeholder, "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )
+            itemFactoryStorage.getItemFactoryByData(Placeholder)
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val intItemFactory = IntItemFactory()
+        val stringItemFactory = StringItemFactory()
+        val booleanItemFactory = BooleanItemFactory()
+        val itemFactoryStorage = ItemFactoryStorage(
+            listOf(intItemFactory, stringItemFactory, booleanItemFactory),
+            "ItemFactory", "TestAdapter", "itemFactoryList"
+        )
+
+        Assert.assertSame(
+            intItemFactory,
+            itemFactoryStorage.getItemFactoryByItemFactoryClass(IntItemFactory::class.java)
+        )
+
+        Assert.assertSame(
+            stringItemFactory,
+            itemFactoryStorage.getItemFactoryByItemFactoryClass(StringItemFactory::class.java)
+        )
+
+        Assert.assertSame(
+            booleanItemFactory,
+            itemFactoryStorage.getItemFactoryByItemFactoryClass(BooleanItemFactory::class.java)
+        )
+
+        assertThrow(NotFoundMatchedItemFactoryException::class) {
+            itemFactoryStorage.getItemFactoryByItemFactoryClass(DateItemFactory::class.java)
         }
     }
 
     @Test
     fun testMethodGetItemFactoryByItemType() {
         val itemFactoryStorage = ItemFactoryStorage(
-            listOf(
-                IntItemFactory(),
-                StringItemFactory(),
-                BooleanItemFactory()
-            )
+            listOf(IntItemFactory(), StringItemFactory(), BooleanItemFactory()),
+            "ItemFactory", "TestAdapter", "itemFactoryList"
         )
 
         Assert.assertEquals(
@@ -150,52 +179,22 @@ class ItemFactoryStorageTest {
     @Test
     fun testMethodGetItemTypeByData() {
         val itemFactoryStorage = ItemFactoryStorage(
-            listOf(
-                IntItemFactory(),
-                StringItemFactory(),
-                BooleanItemFactory()
-            )
+            listOf(IntItemFactory(), StringItemFactory(), BooleanItemFactory()),
+            "ItemFactory", "TestAdapter", "itemFactoryList"
         )
 
-        Assert.assertEquals(
-            0,
-            itemFactoryStorage.getItemTypeByData(
-                3, "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )
-        )
+        Assert.assertEquals(0, itemFactoryStorage.getItemTypeByData(3))
 
-        Assert.assertEquals(
-            1,
-            itemFactoryStorage.getItemTypeByData(
-                "3", "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )
-        )
+        Assert.assertEquals(1, itemFactoryStorage.getItemTypeByData("3"))
 
-        Assert.assertEquals(
-            2,
-            itemFactoryStorage.getItemTypeByData(
-                true, "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )
-        )
+        Assert.assertEquals(2, itemFactoryStorage.getItemTypeByData(true))
 
         assertThrow(NotFoundMatchedItemFactoryException::class) {
-            itemFactoryStorage.getItemTypeByData(
-                3L, "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )
+            itemFactoryStorage.getItemTypeByData(3L)
         }
 
         assertThrow(NotFoundMatchedItemFactoryException::class) {
-            itemFactoryStorage.getItemTypeByData(
-                Placeholder, "TestItemFactory", "TestAdapter", "itemFactoryList"
-            )
+            itemFactoryStorage.getItemTypeByData(Placeholder)
         }
     }
-
-    open class TestItemFactory<DATA : Any>(override val dataClass: KClass<DATA>) : Matchable<DATA>
-
-    class StringItemFactory : TestItemFactory<String>(String::class)
-
-    class IntItemFactory : TestItemFactory<Int>(Int::class)
-
-    class BooleanItemFactory : TestItemFactory<Boolean>(Boolean::class)
 }

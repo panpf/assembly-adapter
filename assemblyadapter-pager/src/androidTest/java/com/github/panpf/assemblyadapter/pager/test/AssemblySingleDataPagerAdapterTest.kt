@@ -23,9 +23,8 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.viewpager.widget.PagerAdapter
-import com.github.panpf.assemblyadapter.pager.AssemblySingleDataPagerAdapter
-import com.github.panpf.assemblyadapter.pager.GetPageTitle
-import com.github.panpf.assemblyadapter.pager.PagerItemFactory
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
+import com.github.panpf.assemblyadapter.pager.*
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -193,6 +192,38 @@ class AssemblySingleDataPagerAdapterTest {
 
             data = Text("hello")
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val textItemFactory = TextPagerItemFactory()
+
+        AssemblySingleDataPagerAdapter(textItemFactory).apply {
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val textItemFactory = TextPagerItemFactory()
+
+        AssemblySingleDataPagerAdapter(textItemFactory).apply {
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextPagerItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewPagerItemFactory::class)
+            }
+
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextPagerItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewPagerItemFactory::class.java)
+            }
         }
     }
 

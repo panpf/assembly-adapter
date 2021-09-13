@@ -409,6 +409,39 @@ class AssemblySingleDataExpandableListAdapterTest {
     }
 
     @Test
+    fun testMethodGetItemFactoryByData() {
+        val textItemFactory = TextItemFactory()
+
+        AssemblySingleDataExpandableListAdapter<Text, Any>(textItemFactory).apply {
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+            Assert.assertSame(textItemFactory, getItemFactoryByChildData(Text("hello")))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val textItemFactory = TextItemFactory()
+
+        AssemblySingleDataExpandableListAdapter<Text, Any>(textItemFactory).apply {
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(TextGroupItemFactory::class)
+            }
+
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(TextGroupItemFactory::class.java)
+            }
+        }
+    }
+
+    @Test
     fun testMethodHasObservers() {
         AssemblySingleDataExpandableListAdapter<TextGroup, Text>(
             listOf(TextGroupItemFactory(), TextItemFactory())

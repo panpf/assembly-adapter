@@ -23,9 +23,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.pager.AssemblySingleDataFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager.GetPageTitle
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.tools4a.test.ktx.getFragmentSync
 import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -205,6 +207,48 @@ class AssemblySingleDataFragmentStatePagerAdapterTest {
 
             data = Text("hello")
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val textItemFactory = TextFragmentItemFactory()
+
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            textItemFactory
+        ).apply {
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val textItemFactory = TextFragmentItemFactory()
+
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            textItemFactory
+        ).apply {
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
+            }
+
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+            }
         }
     }
 

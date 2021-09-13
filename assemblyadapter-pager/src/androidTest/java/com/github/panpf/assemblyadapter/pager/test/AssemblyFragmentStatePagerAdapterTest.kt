@@ -16,14 +16,18 @@
 package com.github.panpf.assemblyadapter.pager.test
 
 import androidx.fragment.app.Fragment
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.pager.AssemblyFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.pager.GetPageTitle
+import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.tools4a.test.ktx.getFragmentSync
 import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
+import java.util.*
 
 class AssemblyFragmentStatePagerAdapterTest {
 
@@ -56,6 +60,9 @@ class AssemblyFragmentStatePagerAdapterTest {
     class ImageFragment : Fragment()
 
     class TestFragment : Fragment()
+
+    class PlaceholderFragmentItemFactory :
+        ViewFragmentItemFactory<Placeholder>(Placeholder::class, android.R.layout.test_list_item)
 
     @Test
     fun testConstructor() {
@@ -197,6 +204,100 @@ class AssemblyFragmentStatePagerAdapterTest {
             submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
             Assert.assertEquals(ImageFragmentItemFactory::class, getItemFactoryByPosition(0)::class)
             Assert.assertEquals(TextFragmentItemFactory::class, getItemFactoryByPosition(1)::class)
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByData() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val textItemFactory = TextFragmentItemFactory()
+        val imageItemFactory = ImageFragmentItemFactory()
+        val placeholderItemFactory = PlaceholderFragmentItemFactory()
+
+        AssemblyFragmentStatePagerAdapter<Any>(
+            fragment.childFragmentManager,
+            listOf(textItemFactory, imageItemFactory)
+        ).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByData(Image(android.R.drawable.alert_dark_frame))
+            )
+            Assert.assertSame(textItemFactory, getItemFactoryByData(Text("hello")))
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(Date())
+            }
+        }
+
+        AssemblyFragmentStatePagerAdapter<Any?>(
+            fragment.childFragmentManager,
+            listOf(textItemFactory, imageItemFactory)
+        ).apply {
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByData(null)
+            }
+        }
+        AssemblyFragmentStatePagerAdapter<Any?>(
+            fragment.childFragmentManager,
+            listOf(
+                textItemFactory,
+                imageItemFactory,
+                placeholderItemFactory
+            )
+        ).apply {
+            Assert.assertSame(placeholderItemFactory, getItemFactoryByData(null))
+        }
+    }
+
+    @Test
+    fun testMethodGetItemFactoryByItemFactoryClass() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        val textItemFactory = TextFragmentItemFactory()
+        val imageItemFactory = ImageFragmentItemFactory()
+        val placeholderItemFactory = PlaceholderFragmentItemFactory()
+
+        AssemblyFragmentStatePagerAdapter<Any>(
+            fragment.childFragmentManager,
+            listOf(textItemFactory, imageItemFactory)
+        ).apply {
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
+            }
+
+            Assert.assertSame(
+                imageItemFactory,
+                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class.java)
+            )
+            Assert.assertSame(
+                textItemFactory,
+                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
+            )
+            assertThrow(NotFoundMatchedItemFactoryException::class) {
+                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+            }
+        }
+        AssemblyFragmentStatePagerAdapter<Any?>(
+            fragment.childFragmentManager,
+            listOf(textItemFactory, imageItemFactory, placeholderItemFactory)
+        ).apply {
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderFragmentItemFactory::class)
+            )
+
+            Assert.assertSame(
+                placeholderItemFactory,
+                getItemFactoryByItemFactoryClass(PlaceholderFragmentItemFactory::class.java)
+            )
         }
     }
 
