@@ -242,7 +242,6 @@ RecyclerView(activity).adapter = appAdapter
 * [BaseExpandableListAdapter 支持][docs_expandable_list_adapter]
 * [通过 AssemblySingleData*Adapter 实现只有一条数据的 Adapter][docs_single_data_adapter]
 * [使用占位符 Placeholder][docs_placeholder]
-* [使用新版 4.* API 兼容旧版 3.* API][docs_old_api_compat]
 
 ## 更新日志
 
@@ -301,8 +300,6 @@ Please view the [CHANGELOG.md] file
 [docs_item_factory]: docs/wiki/item_factory.md
 
 [docs_single_data_adapter]: docs/wiki/single_data_adapter.md
-
-[docs_old_api_compat]: docs/wiki/old_api_compat.md
 
 [docs_concat_adapter]: docs/wiki/concat_adapter.md
 

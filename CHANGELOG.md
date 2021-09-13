@@ -112,8 +112,6 @@ all:
 
 新版本使用方法请参考 [README.md](README.md)
 
-同时提供了使用 4.0 API 实现的兼容 3.\* API 的一些类，请参考 [使用新版 4.* API 兼容旧版 3.* API](docs/wiki/old_api_compat.md)
-
 
 [AssemblySingleDataRecyclerAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblySingleDataRecyclerAdapter.kt
 
