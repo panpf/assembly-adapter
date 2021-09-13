@@ -96,7 +96,7 @@ class PagerItemFactoryTest {
             Assert.assertTrue(this is FrameLayout)
         }
     }
-    
+
     @Test
     fun testMethodSetOnViewClickListener() {
         val context = InstrumentationRegistry.getInstrumentation().context
@@ -122,6 +122,35 @@ class PagerItemFactoryTest {
             setOnItemLongClickListener(TestOnLongClickListener())
             setOnViewClickListener(aa_tag_clickBindItem, TestOnClickListener())
             setOnViewLongClickListener(aa_tag_clickBindItem, TestOnLongClickListener())
+            val rootView = dispatchCreateItemView(context, FrameLayout(context), 0, 1, "hello")
+            val childView = rootView.findViewById<TextView>(aa_tag_clickBindItem)
+            val itemOnClickListener = rootView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnClickListener>("mOnClickListener")
+            val itemOnLongClickListener = rootView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
+            val viewOnClickListener = childView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnClickListener>("mOnClickListener")
+            val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
+            Assert.assertTrue(itemOnClickListener is PagerClickListenerWrapper<*>)
+            Assert.assertTrue(itemOnLongClickListener is PagerLongClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnClickListener is PagerClickListenerWrapper<*>)
+            Assert.assertTrue(viewOnLongClickListener is PagerLongClickListenerWrapper<*>)
+        }
+
+        StringPagerItemFactory().apply {
+            setOnItemClickListener { _, _, _, _, _ ->
+
+            }
+            setOnItemLongClickListener { _, _, _, _, _ ->
+                false
+            }
+            setOnViewClickListener(aa_tag_clickBindItem) { _, _, _, _, _ ->
+
+            }
+            setOnViewLongClickListener(aa_tag_clickBindItem) { _, _, _, _, _ ->
+                false
+            }
             val rootView = dispatchCreateItemView(context, FrameLayout(context), 0, 1, "hello")
             val childView = rootView.findViewById<TextView>(aa_tag_clickBindItem)
             val itemOnClickListener = rootView.callMethod<Any>("getListenerInfo")!!

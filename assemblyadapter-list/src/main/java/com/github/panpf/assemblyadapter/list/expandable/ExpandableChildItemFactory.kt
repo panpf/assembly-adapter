@@ -15,6 +15,8 @@
  */
 package com.github.panpf.assemblyadapter.list.expandable
 
+import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import androidx.annotation.IdRes
@@ -70,6 +72,32 @@ abstract class ExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DA
     }
 
     /**
+     * Set the click listener of the specified View in the child item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
+    fun setOnChildViewClickListener(
+        @IdRes viewId: Int,
+        onClickListener: (
+            context: Context,
+            view: View,
+            groupBindingAdapterPosition: Int,
+            groupAbsoluteAdapterPosition: Int,
+            groupData: GROUP_DATA,
+            isLastChild: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: CHILD_DATA
+        ) -> Unit
+    ): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onClickListener)
+        return this
+    }
+
+    /**
      * Set the long click listener of the specified View in the child item view
      *
      * @param viewId Specify the id of the View
@@ -86,13 +114,65 @@ abstract class ExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DA
     }
 
     /**
+     * Set the long click listener of the specified View in the child item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onLongClickListener Implementation of long click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
+    fun setOnChildViewLongClickListener(
+        @IdRes viewId: Int,
+        onLongClickListener: (
+            context: Context,
+            view: View,
+            groupBindingAdapterPosition: Int,
+            groupAbsoluteAdapterPosition: Int,
+            groupData: GROUP_DATA,
+            isLastChild: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: CHILD_DATA
+        ) -> Boolean
+    ): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onLongClickListener)
+        return this
+    }
+
+    /**
      * Set the click listener of the child item view
      *
      * @param onClickListener Implementation of click listener
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnClickListener
      */
-    fun setOnChildItemClickListener(onClickListener: OnChildClickListener<GROUP_DATA, CHILD_DATA>): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+    fun setOnChildItemClickListener(
+        onClickListener: OnChildClickListener<GROUP_DATA, CHILD_DATA>
+    ): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+        getClickListenerManagerOrCreate().add(onClickListener)
+        return this
+    }
+
+    /**
+     * Set the click listener of the child item view
+     *
+     * @param onClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
+    fun setOnChildItemClickListener(
+        onClickListener: (
+            context: Context,
+            view: View,
+            groupBindingAdapterPosition: Int,
+            groupAbsoluteAdapterPosition: Int,
+            groupData: GROUP_DATA,
+            isLastChild: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: CHILD_DATA
+        ) -> Unit
+    ): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
         getClickListenerManagerOrCreate().add(onClickListener)
         return this
     }
@@ -104,7 +184,33 @@ abstract class ExpandableChildItemFactory<GROUP_DATA : ExpandableGroup, CHILD_DA
      * @return [ItemFactory] itself, easy to implement chain call
      * @see OnLongClickListener
      */
-    fun setOnChildItemLongClickListener(onLongClickListener: OnChildLongClickListener<GROUP_DATA, CHILD_DATA>): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+    fun setOnChildItemLongClickListener(
+        onLongClickListener: OnChildLongClickListener<GROUP_DATA, CHILD_DATA>
+    ): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
+        getClickListenerManagerOrCreate().add(onLongClickListener)
+        return this
+    }
+
+    /**
+     * Set the long click listener of the child item view
+     *
+     * @param onLongClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
+    fun setOnChildItemLongClickListener(
+        onLongClickListener: (
+            context: Context,
+            view: View,
+            groupBindingAdapterPosition: Int,
+            groupAbsoluteAdapterPosition: Int,
+            groupData: GROUP_DATA,
+            isLastChild: Boolean,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: CHILD_DATA
+        ) -> Boolean
+    ): ExpandableChildItemFactory<GROUP_DATA, CHILD_DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }

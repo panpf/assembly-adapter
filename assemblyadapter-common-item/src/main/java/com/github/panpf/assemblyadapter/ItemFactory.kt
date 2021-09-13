@@ -15,6 +15,8 @@
  */
 package com.github.panpf.assemblyadapter
 
+import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.common.item.R
@@ -85,6 +87,28 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
     }
 
     /**
+     * Set the click listener of the specified View in the item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
+    fun setOnViewClickListener(
+        @IdRes viewId: Int,
+        onClickListener: (
+            context: Context,
+            view: View,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        ) -> Unit
+    ): ItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onClickListener)
+        return this
+    }
+
+    /**
      * Set the long click listener of the specified View in the item view
      *
      * @param viewId Specify the id of the View
@@ -95,6 +119,28 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
     fun setOnViewLongClickListener(
         @IdRes viewId: Int,
         onLongClickListener: OnLongClickListener<DATA>
+    ): ItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(viewId, onLongClickListener)
+        return this
+    }
+
+    /**
+     * Set the long click listener of the specified View in the item view
+     *
+     * @param viewId Specify the id of the View
+     * @param onLongClickListener Implementation of long click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
+    fun setOnViewLongClickListener(
+        @IdRes viewId: Int,
+        onLongClickListener: (
+            context: Context,
+            view: View,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        ) -> Boolean
     ): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(viewId, onLongClickListener)
         return this
@@ -113,6 +159,26 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
     }
 
     /**
+     * Set the click listener of the item view
+     *
+     * @param onClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnClickListener
+     */
+    fun setOnItemClickListener(
+        onClickListener: (
+            context: Context,
+            view: View,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        ) -> Unit
+    ): ItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(onClickListener)
+        return this
+    }
+
+    /**
      * Set the long click listener of the item view
      *
      * @param onLongClickListener Implementation of click listener
@@ -120,6 +186,26 @@ abstract class ItemFactory<DATA : Any>(final override val dataClass: KClass<DATA
      * @see OnLongClickListener
      */
     fun setOnItemLongClickListener(onLongClickListener: OnLongClickListener<DATA>): ItemFactory<DATA> {
+        getClickListenerManagerOrCreate().add(onLongClickListener)
+        return this
+    }
+
+    /**
+     * Set the long click listener of the item view
+     *
+     * @param onLongClickListener Implementation of click listener
+     * @return [ItemFactory] itself, easy to implement chain call
+     * @see OnLongClickListener
+     */
+    fun setOnItemLongClickListener(
+        onLongClickListener: (
+            context: Context,
+            view: View,
+            bindingAdapterPosition: Int,
+            absoluteAdapterPosition: Int,
+            data: DATA
+        ) -> Boolean
+    ): ItemFactory<DATA> {
         getClickListenerManagerOrCreate().add(onLongClickListener)
         return this
     }

@@ -1,4 +1,7 @@
 # new
+* new: The set\*ClickListener series methods of ItemFactory, ExpandableChildItemFactory, PagerItemFactory add kotlin function overloading methods
+
+# v4.0.0-rc04
 * restore: Restore ArrayFragmentStateAdapter, ArrayPagerAdapter, ArrayFragmentStatePagerAdapter
 * new: All Assembly\*Adapter add getItemFactoryByData(Any) and getItemFactoryByItemFactoryClass(KClass) methods
 

@@ -123,6 +123,36 @@ class ExpandableChildItemFactoryTest {
             Assert.assertTrue(viewOnLongClickListener is ChildLongClickListenerWrapper<*, *>)
         }
 
+        TextExpandableChildItemFactory().apply {
+            setOnChildItemClickListener { _, _, _, _, _, _, _, _, _ ->
+
+            }
+            setOnChildItemLongClickListener{ _, _, _, _, _, _, _, _, _ ->
+                false
+            }
+            setOnChildViewClickListener(R.id.aa_tag_clickBindItem){ _, _, _, _, _, _, _, _, _ ->
+
+            }
+            setOnChildViewLongClickListener(R.id.aa_tag_clickBindItem){ _, _, _, _, _, _, _, _, _ ->
+                false
+            }
+            val item = dispatchCreateItem(FrameLayout(context))
+            val rootView = item.itemView
+            val childView = item.itemView.findViewById<TextView>(R.id.aa_tag_clickBindItem)
+            val itemOnClickListener = rootView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnClickListener>("mOnClickListener")
+            val itemOnLongClickListener = rootView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
+            val viewOnClickListener = childView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnClickListener>("mOnClickListener")
+            val viewOnLongClickListener = childView.callMethod<Any>("getListenerInfo")!!
+                .getFieldValue<View.OnLongClickListener>("mOnLongClickListener")
+            Assert.assertTrue(itemOnClickListener is ChildClickListenerWrapper<*, *>)
+            Assert.assertTrue(itemOnLongClickListener is ChildLongClickListenerWrapper<*, *>)
+            Assert.assertTrue(viewOnClickListener is ChildClickListenerWrapper<*, *>)
+            Assert.assertTrue(viewOnLongClickListener is ChildLongClickListenerWrapper<*, *>)
+        }
+
         assertThrow(IllegalArgumentException::class) {
             TextExpandableChildItemFactory().apply {
                 setOnViewClickListener(R.id.aa_tag_absoluteAdapterPosition, TestOnClickListener())
