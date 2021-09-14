@@ -35,7 +35,7 @@ import androidx.fragment.app.FragmentManager
 open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     fm: FragmentManager,
     @Behavior behavior: Int,
-    itemFactory: FragmentItemFactory<DATA>,
+    val itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
 ) : AssemblyFragmentStatePagerAdapter<DATA>(fm, behavior, listOf(itemFactory)) {
 

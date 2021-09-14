@@ -30,7 +30,7 @@ import kotlin.reflect.KClass
  * @see PagerItemFactory
  */
 open class AssemblySingleDataPagerAdapter<DATA : Any>(
-    itemFactory: PagerItemFactory<DATA>,
+    val itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
 ) : AssemblyPagerAdapter<DATA>(listOf(itemFactory)) {
 

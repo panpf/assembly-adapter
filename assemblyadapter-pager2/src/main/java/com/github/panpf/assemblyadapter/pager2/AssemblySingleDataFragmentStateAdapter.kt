@@ -31,7 +31,7 @@ import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    itemFactory: FragmentItemFactory<DATA>,
+    val itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
 ) : AssemblyFragmentStateAdapter<DATA>(fragmentManager, lifecycle, listOf(itemFactory)) {
 

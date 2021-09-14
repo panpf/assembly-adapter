@@ -32,6 +32,8 @@ import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
 open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> :
     AssemblyFragmentStateListAdapter<DATA> {
 
+    val itemFactory: FragmentItemFactory<DATA>
+
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
      */
@@ -58,6 +60,7 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> :
         initData: DATA? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback()
     ) : super(fragmentManager, lifecycle, listOf(itemFactory), null, diffCallback) {
+        this.itemFactory = itemFactory
         if (initData != null) {
             this.data = initData
         }
@@ -108,6 +111,7 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> :
         initData: DATA? = null,
         config: AsyncDifferConfig<DATA>
     ) : super(fragmentManager, lifecycle, listOf(itemFactory), null, config) {
+        this.itemFactory = itemFactory
         if (initData != null) {
             this.data = initData
         }

@@ -24,6 +24,8 @@ import com.github.panpf.assemblyadapter.ItemFactory
  */
 open class AssemblySingleDataRecyclerListAdapter<DATA : Any> : AssemblyRecyclerListAdapter<DATA> {
 
+    val itemFactory: ItemFactory<DATA>
+
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
      */
@@ -51,6 +53,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> : AssemblyRecyclerL
         initData: DATA? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
     ) : super(listOf(itemFactory), null, diffCallback) {
+        this.itemFactory = itemFactory
         if (initData != null) {
             this.data = initData
         }
@@ -70,6 +73,7 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> : AssemblyRecyclerL
         initData: DATA? = null,
         config: AsyncDifferConfig<DATA>,
     ) : super(listOf(itemFactory), null, config) {
+        this.itemFactory = itemFactory
         if (initData != null) {
             this.data = initData
         }

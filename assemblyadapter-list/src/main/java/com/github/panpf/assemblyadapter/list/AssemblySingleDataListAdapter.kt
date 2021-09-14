@@ -25,7 +25,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
  * @see ItemFactory
  */
 open class AssemblySingleDataListAdapter<DATA : Any>(
-    itemFactory: ItemFactory<DATA>,
+    val itemFactory: ItemFactory<DATA>,
     initData: DATA? = null,
 ) : AssemblyListAdapter<DATA>(listOf(itemFactory)) {
 
