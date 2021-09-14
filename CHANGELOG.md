@@ -4,6 +4,7 @@
 * new: ItemDataStorage.onDataListChanged function adds `oldList: List<DATA>` and `newList: List<DATA>` parameters
 * improve: Improve the implementation of AssemblySingleData\*Adapter
 * new: AssemblySingleData\*Adapter adds itemFactory property
+* new: Adds ArrayFragmentStateListAdapter
 
 # v4.0.0-rc04
 * restore: Restore ArrayFragmentStateAdapter, ArrayPagerAdapter, ArrayFragmentStatePagerAdapter

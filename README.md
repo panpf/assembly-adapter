@@ -76,50 +76,51 @@ AssemblyAdapter 将这一传统定义过程拆分为两个组件，其职责分�
 
 * [assemblyadapter-list]
     * [BaseAdapter]
-        * [AssemblyListAdapter]：多类型 Adapter 实现
+        * [AssemblyListAdapter]：多类型实现
         * [AssemblySingleDataListAdapter]：单数据实现
-        * [ConcatListAdapter]：连接 Adapter 实现
+        * [ConcatListAdapter]：连接实现
     * [BaseExpandableListAdapter]
-        * [AssemblyExpandableListAdapter]：多类型 Adapter 实现
+        * [AssemblyExpandableListAdapter]：多类型实现
         * [AssemblySingleDataExpandableListAdapter]：单数据实现
-        * [ConcatExpandableListAdapter]：连接 Adapter 实现
+        * [ConcatExpandableListAdapter]：连接实现
 * [assemblyadapter-pager]
     * [PagerAdapter]
-        * [AssemblyPagerAdapter]：多类型 Adapter 实现
+        * [AssemblyPagerAdapter]：多类型实现
         * [AssemblySingleDataPagerAdapter]：单数据实现
-        * [ConcatPagerAdapter]：连接 Adapter 实现
         * [ArrayPagerAdapter]：View 数组实现
+        * [ConcatPagerAdapter]：连接实现
     * [FragmentStatePagerAdapter]
-        * [AssemblyFragmentStatePagerAdapter]：多类型 Adapter 实现
+        * [AssemblyFragmentStatePagerAdapter]：多类型实现
         * [AssemblySingleDataFragmentStatePagerAdapter]：单数据实现
-        * [ConcatFragmentStatePagerAdapter]：连接 Adapter 实现
         * [ArrayFragmentStatePagerAdapter]：Fragment 数组实现
+        * [ConcatFragmentStatePagerAdapter]：连接实现
 * [assemblyadapter-pager2]
     * [FragmentStateAdapter]
-        * [AssemblyFragmentStateAdapter]：多类型 Adapter 实现
+        * [AssemblyFragmentStateAdapter]：多类型实现
         * [AssemblySingleDataFragmentStateAdapter]：单数据实现
         * [ArrayFragmentStateAdapter]：Fragment 数组实现
         * [FragmentStateListAdapter]：AsyncListDiffer 实现
-            * [AssemblyFragmentStateListAdapter]：多类型 Adapter AsyncListDiffer 实现
+            * [AssemblyFragmentStateListAdapter]：多类型 AsyncListDiffer 实现
             * [AssemblySingleDataFragmentStateListAdapter]：单数据 AsyncListDiffer 实现
+            * [ArrayFragmentStateListAdapter]：Fragment 数组 AsyncListDiffer 实现
 * [assemblyadapter-pager2-paging]
     * [FragmentStateAdapter]
         * [PagingDataFragmentStateAdapter]：Paging 实现
+            * [AssemblyPagingDataFragmentStateAdapter]：多类型 Paging 实现
         * [LoadStateFragmentStateAdapter]：LoadState 实现
-        * [AssemblyPagingDataFragmentStateAdapter]：多类型 + Paging Adapter 实现
-        * [AssemblyLoadStateFragmentStateAdapter]：多类型 + Paging 加载状态 Adapter 实现
+            * [AssemblyLoadStateFragmentStateAdapter]：多类型 LoadState 实现
 * [assemblyadapter-recycler]
     * [RecyclerView.Adapter]
-        * [AssemblyRecyclerAdapter]：多类型 Adapter 实现
+        * [AssemblyRecyclerAdapter]：多类型实现
         * [AssemblySingleDataRecyclerAdapter]：单数据实现
     * [ListAdapter]
-        * [AssemblyRecyclerListAdapter]：多类型 Adapter 实现
+        * [AssemblyRecyclerListAdapter]：多类型实现
         * [AssemblySingleDataRecyclerListAdapter]：单数据实现
 * [assemblyadapter-recycler-paging]
     * [PagingDataAdapter]
-        * [AssemblyPagingDataAdapter]：多类型 Adapter 实现
+        * [AssemblyPagingDataAdapter]：多类型 Paging 实现
     * [LoadStateAdapter]
-        * [AssemblyLoadStateAdapter]：Paging 加载状态 Adapter 实现
+        * [AssemblyLoadStateAdapter]：多类型 LoadState 实现
 
 ### 定义 ItemFactory
 
@@ -378,6 +379,8 @@ Please view the [CHANGELOG.md] file
 [AssemblyFragmentStateListAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateListAdapter.kt
 
 [AssemblySingleDataFragmentStateListAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateListAdapter.kt
+
+[ArrayFragmentStateListAdapter]: assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/ArrayFragmentStateListAdapter.kt
 
 [AssemblyPagingDataFragmentStateAdapter]: assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/AssemblyPagingDataFragmentStateAdapter.kt
 

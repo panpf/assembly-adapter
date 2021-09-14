@@ -8,11 +8,11 @@
 
 AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager：
 
-* [AssemblyPagerAdapter]: 多类型 Adapter 实现
+* [AssemblyPagerAdapter]: 多类型实现
 * [AssemblySingleDataPagerAdapter]：单数据实现
-* [ConcatPagerAdapter]: 连接 Adapter 实现
+* [ConcatPagerAdapter]: 连接实现
 * [ArrayPagerAdapter]: View 数组实现
-* [AssemblyFragmentStatePagerAdapter]: 多类型 Adapter 实现
+* [AssemblyFragmentStatePagerAdapter]: 多类型实现
 * [AssemblySingleDataFragmentStatePagerAdapter]：单数据实现
 * [ArrayFragmentStatePagerAdapter]: Fragment 数组实现
 
@@ -41,16 +41,17 @@ AssemblyAdapter 提供的所有 Pager 相关 Adapter 都重写了 getItemPositio
 
 AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager2：
 
-* [AssemblyFragmentStateAdapter]: 多类型 Adapter 实现
+* [AssemblyFragmentStateAdapter]: 多类型实现
 * [AssemblySingleDataFragmentStateAdapter]：单数据实现
 * [ArrayFragmentStateAdapter]: Fragment 数组实现
 * [FragmentStateListAdapter]：AsyncListDiffer 实现
-* [AssemblyFragmentStateListAdapter]：多类型 Adapter AsyncListDiffer 实现
-* [AssemblySingleDataFragmentStateListAdapter]：单数据 AsyncListDiffer 实现
+  * [AssemblyFragmentStateListAdapter]：多类型 AsyncListDiffer 实现
+  * [AssemblySingleDataFragmentStateListAdapter]：单数据 AsyncListDiffer 实现
+  * [ArrayFragmentStateListAdapter]：Fragment 数组 AsyncListDiffer 实现
 * [PagingDataFragmentStateAdapter]：Paging 实现
+  * [AssemblyPagingDataFragmentStateAdapter]：多类型 Paging 实现
 * [LoadStateFragmentStateAdapter]：LoadState 实现
-* [AssemblyPagingDataFragmentStateAdapter]：多类型 + Paging Adapter 实现
-* [AssemblyLoadStateFragmentStateAdapter]：多类型 + Paging 加载状态 Adapter 实现
+  * [AssemblyLoadStateFragmentStateAdapter]：多类型 LoadState 实现
 
 ### Paging 支持
 
@@ -124,6 +125,8 @@ AssemblyAdapter 提供了 [PagingDataFragmentStateAdapter] 和 [LoadStateFragmen
 [AssemblyFragmentStateListAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblyFragmentStateListAdapter.kt
 
 [AssemblySingleDataFragmentStateListAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/AssemblySingleDataFragmentStateListAdapter.kt
+
+[ArrayFragmentStateListAdapter]: ../../assemblyadapter-pager2/src/main/java/com/github/panpf/assemblyadapter/pager2/ArrayFragmentStateListAdapter.kt
 
 [PagingDataFragmentStateAdapter]: ../../assemblyadapter-pager2-paging/src/main/java/com/github/panpf/assemblyadapter/pager2/paging/PagingDataFragmentStateAdapter.kt
 
