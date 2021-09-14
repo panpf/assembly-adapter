@@ -63,7 +63,9 @@ open class AssemblyRecyclerListAdapter<DATA>
         itemFactoryStorage = ItemFactoryStorage(
             itemFactoryList, "ItemFactory", "AssemblyRecyclerListAdapter", "itemFactoryList"
         )
-        submitList(initDataList)
+        if (initDataList?.isNotEmpty() == true) {
+            submitList(initDataList)
+        }
     }
 
     /**
@@ -91,7 +93,9 @@ open class AssemblyRecyclerListAdapter<DATA>
         itemFactoryStorage = ItemFactoryStorage(
             itemFactoryList, "ItemFactory", "AssemblyRecyclerListAdapter", "itemFactoryList"
         )
-        submitList(initDataList)
+        if (initDataList?.isNotEmpty() == true) {
+            submitList(initDataList)
+        }
     }
 
     fun getItemData(position: Int): DATA {

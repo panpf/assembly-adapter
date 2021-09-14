@@ -2,6 +2,7 @@
 * new: The set\*ClickListener series methods of ItemFactory, ExpandableChildItemFactory, PagerItemFactory add kotlin function overloading methods
 * new: All Assembly\*Adapter add getItemFactoryByData(Any) and getItemFactoryByItemFactoryClass(KClass) methods
 * new: ItemDataStorage.onDataListChanged function adds `oldList: List<DATA>` and `newList: List<DATA>` parameters
+* improve: Improve the implementation of AssemblySingleData\*Adapter
 
 # v4.0.0-rc04
 * restore: Restore ArrayFragmentStateAdapter, ArrayPagerAdapter, ArrayFragmentStatePagerAdapter

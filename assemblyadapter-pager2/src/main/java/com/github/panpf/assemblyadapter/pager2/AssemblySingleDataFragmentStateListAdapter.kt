@@ -21,26 +21,16 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
-import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
-import kotlin.reflect.KClass
 
 /**
  * Single data version of [FragmentStateListAdapter]
  *
  * @see FragmentItemFactory
  */
-open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStateListAdapter<DATA>,
-    AssemblyAdapter<DATA, FragmentItemFactory<out Any>> {
-
-    private var recyclerView: RecyclerView? = null
-    private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
-    private val itemFactoryStorage: ItemFactoryStorage<FragmentItemFactory<out Any>>
+open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> :
+    AssemblyFragmentStateListAdapter<DATA> {
 
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
@@ -67,19 +57,10 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStat
         itemFactory: FragmentItemFactory<DATA>,
         initData: DATA? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback()
-    ) : super(fragmentManager, lifecycle, diffCallback) {
-        if (diffCallback is KeyEqualsDiffItemCallback) {
-            KeyEqualsDiffItemCallback.checkDataClass(
-                listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
-            )
+    ) : super(fragmentManager, lifecycle, listOf(itemFactory), null, diffCallback) {
+        if (initData != null) {
+            this.data = initData
         }
-        itemFactoryStorage = ItemFactoryStorage(
-            listOf(itemFactory),
-            "FragmentItemFactory",
-            "AssemblySingleDataFragmentStateListAdapter",
-            "itemFactory"
-        )
-        data = initData
     }
 
     /**
@@ -126,19 +107,10 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStat
         itemFactory: FragmentItemFactory<DATA>,
         initData: DATA? = null,
         config: AsyncDifferConfig<DATA>
-    ) : super(fragmentManager, lifecycle, config) {
-        if (config.diffCallback is KeyEqualsDiffItemCallback) {
-            KeyEqualsDiffItemCallback.checkDataClass(
-                listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
-            )
+    ) : super(fragmentManager, lifecycle, listOf(itemFactory), null, config) {
+        if (initData != null) {
+            this.data = initData
         }
-        itemFactoryStorage = ItemFactoryStorage(
-            listOf(itemFactory),
-            "FragmentItemFactory",
-            "AssemblySingleDataFragmentStateListAdapter",
-            "itemFactory"
-        )
-        data = initData
     }
 
     /**
@@ -185,58 +157,5 @@ open class AssemblySingleDataFragmentStateListAdapter<DATA : Any> : FragmentStat
             "Cannot submit a list with size greater than 1"
         }
         super.submitList(list, commitCallback)
-    }
-
-    fun getItemData(position: Int): DATA {
-        return getItem(position)
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(data)
-    }
-
-    override fun createFragment(position: Int): Fragment {
-        val data = getItemData(position)
-        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
-        val parentAdapter = recyclerView?.adapter
-        val absoluteAdapterPosition = if (parentAdapter != null) {
-            concatAdapterAbsoluteHelper.findAbsoluteAdapterPosition(parentAdapter, this, position)
-        } else {
-            bindingAdapterPosition
-        }
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(
-            bindingAdapterPosition, absoluteAdapterPosition, data
-        )
-    }
-
-
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-    }
-
-    override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
-        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
-    }
-
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        this.recyclerView = recyclerView
-    }
-
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-        this.recyclerView = null
     }
 }

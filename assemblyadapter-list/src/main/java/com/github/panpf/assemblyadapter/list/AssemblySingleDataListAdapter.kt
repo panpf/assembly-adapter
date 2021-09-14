@@ -15,14 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.list
 
-import android.database.DataSetObserver
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import com.github.panpf.assemblyadapter.*
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
-import kotlin.reflect.KClass
+import com.github.panpf.assemblyadapter.ItemFactory
 
 /**
  * Single data version of [AssemblyListAdapter]
@@ -34,130 +27,28 @@ import kotlin.reflect.KClass
 open class AssemblySingleDataListAdapter<DATA : Any>(
     itemFactory: ItemFactory<DATA>,
     initData: DATA? = null,
-) : BaseAdapter(), AssemblyAdapter<DATA, ItemFactory<out Any>> {
+) : AssemblyListAdapter<DATA>(listOf(itemFactory)) {
 
-    private var hasStableIds = false
-    private val adapterDataObservable = AdapterDataObservable()
-    private val itemFactoryStorage = ItemFactoryStorage<ItemFactory<out Any>>(
-        listOf(itemFactory), "ItemFactory", "AssemblySingleDataListAdapter", "itemFactory"
-    )
-
-    var data: DATA? = initData
+    var data: DATA?
         set(value) {
-            field = value
-            notifyDataSetChanged()
+            if (value != null) {
+                super.submitList(listOf(value))
+            } else {
+                super.submitList(null)
+            }
         }
+        get() = if (itemCount > 0) getItemData(0) else null
 
-    val itemCount: Int
-        get() = if (data != null) 1 else 0
-
-    fun getItemData(position: Int): DATA {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return data!!
-    }
-
-    override fun getCount(): Int = if (data != null) 1 else 0
-
-    override fun getItem(position: Int): DATA {
-        return getItemData(position)
-    }
-
-    /**
-     * Indicates whether each item in the data set can be represented with a unique identifier
-     * of type [java.lang.Long].
-     *
-     * @param hasStableIds Whether items in data set have unique identifiers or not.
-     * @see hasStableIds
-     * @see getItemId
-     */
-    fun setHasStableIds(hasStableIds: Boolean) {
-        if (hasObservers()) {
-            throw IllegalStateException(
-                "Cannot change whether this adapter has "
-                        + "stable IDs while the adapter has registered observers."
-            )
-        }
-        this.hasStableIds = hasStableIds
-    }
-
-    override fun hasStableIds(): Boolean {
-        return hasStableIds
-    }
-
-    override fun getItemId(position: Int): Long {
-        return if (hasStableIds()) {
-            val data = getItemData(position)
-            if (data is ItemId) data.itemId else data.hashCode().toLong()
-        } else {
-            -1
+    init {
+        if (initData != null) {
+            this.data = initData
         }
     }
 
-    override fun getViewTypeCount(): Int = 1
-
-    override fun getItemViewType(position: Int): Int {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(data)
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val data = getItemData(position)
-        val itemView = convertView ?: itemFactoryStorage.getItemFactoryByData(data)
-            .dispatchCreateItem(parent).apply {
-                itemView.setTag(R.id.aa_tag_item, this)
-            }.itemView
-
-        @Suppress("UnnecessaryVariable")
-        val bindingAdapterPosition = position
-        val absolutePositionObject = parent.getTag(R.id.aa_tag_absoluteAdapterPosition)
-        // set tag absoluteAdapterPosition null to support ConcatListAdapter nesting
-        parent.setTag(R.id.aa_tag_absoluteAdapterPosition, null)
-        val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
-
-        @Suppress("UNCHECKED_CAST")
-        val item = itemView.getTag(R.id.aa_tag_item) as Item<Any>
-        item.dispatchBindData(bindingAdapterPosition, absoluteAdapterPosition, data)
-        return itemView
-    }
-
-
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
-    }
-
-    override fun getItemFactoryByData(data: DATA): ItemFactory<Any> {
-        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
-    }
-
-
-    override fun registerDataSetObserver(observer: DataSetObserver) {
-        super.registerDataSetObserver(observer)
-        adapterDataObservable.registerObserver(observer)
-    }
-
-    override fun unregisterDataSetObserver(observer: DataSetObserver) {
-        super.unregisterDataSetObserver(observer)
-        adapterDataObservable.unregisterObserver(observer)
-    }
-
-    /**
-     * Returns true if one or more observers are attached to this adapter.
-     *
-     * @return true if this adapter has observers
-     */
-    fun hasObservers(): Boolean {
-        return adapterDataObservable.hasObservers()
+    override fun submitList(list: List<DATA>?) {
+        require(list?.size ?: 0 <= 1) {
+            "Cannot submit a list with size greater than 1"
+        }
+        super.submitList(list)
     }
 }

@@ -96,7 +96,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
     /**
      * Set the new list to be displayed.
      */
-    fun submitList(list: List<DATA>?) {
+    open fun submitList(list: List<DATA>?) {
         itemDataStorage.submitList(list)
     }
 
@@ -174,6 +174,9 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
 
 
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    @IntDef(BEHAVIOR_SET_USER_VISIBLE_HINT, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+    @IntDef(
+        BEHAVIOR_SET_USER_VISIBLE_HINT,
+        BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+    )
     private annotation class Behavior
 }

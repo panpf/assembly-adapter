@@ -15,14 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.recycler
 
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.*
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
-import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
-import kotlin.reflect.KClass
+import com.github.panpf.assemblyadapter.ItemFactory
 
 /**
  * Single data version of [AssemblyRecyclerAdapter]
@@ -34,94 +27,43 @@ import kotlin.reflect.KClass
 open class AssemblySingleDataRecyclerAdapter<DATA : Any>(
     itemFactory: ItemFactory<DATA>,
     initData: DATA? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AssemblyAdapter<DATA, ItemFactory<out Any>> {
-
-    private val itemFactoryStorage = ItemFactoryStorage<ItemFactory<out Any>>(
-        listOf(itemFactory), "ItemFactory", "AssemblySingleDataRecyclerAdapter", "itemFactory"
-    )
+) : AssemblyRecyclerAdapter<DATA>(listOf(itemFactory)) {
 
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
      */
-    var data: DATA? = initData
+    var data: DATA?
         set(value) {
-            val oldItem = field != null
-            val newItem = value != null
-            field = value
-            if (oldItem && !newItem) {
-                notifyItemRemoved(0)
-            } else if (newItem && !oldItem) {
-                notifyItemInserted(0)
-            } else if (oldItem && newItem) {
-                notifyItemChanged(0)
+            if (value != null) {
+                super.submitList(listOf(value))
+            } else {
+                super.submitList(null)
             }
         }
+        get() = if (itemCount > 0) getItemData(0) else null
 
-    override fun getItemCount(): Int = if (data != null) 1 else 0
-
-    fun getItemData(position: Int): DATA {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return data!!
-    }
-
-    override fun getItemId(position: Int): Long {
-        return if (hasStableIds()) {
-            val data = getItemData(position)
-            if (data is ItemId) data.itemId else data.hashCode().toLong()
-        } else {
-            RecyclerView.NO_ID
+    init {
+        if (initData != null) {
+            this.data = initData
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(data)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
-        val item = itemFactory.dispatchCreateItem(parent)
-        return RecyclerViewHolderWrapper(item).apply {
-            val layoutManager =
-                (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
-            if (layoutManager is StaggeredGridLayoutManager && layoutManager is FullSpanSupport) {
-                (itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
-                    .isFullSpan = layoutManager.isFullSpanByItemFactoryClass(itemFactory.javaClass)
-            }
+    override fun submitList(list: List<DATA>?) {
+        require(list?.size ?: 0 <= 1) {
+            "Cannot submit a list with size greater than 1"
         }
+        super.submitList(list)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is RecyclerViewHolderWrapper<*>) {
-            @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as Item<Any>
-            val data = getItemData(position)
-            val absoluteAdapterPosition =
-                holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
-            item.dispatchBindData(position, absoluteAdapterPosition, data)
-        } else {
-            throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
+    override fun onDataListChanged(oldList: List<DATA>, newList: List<DATA>) {
+        val oldItem = oldList.firstOrNull() != null
+        val newItem = newList.firstOrNull() != null
+        if (oldItem && !newItem) {
+            notifyItemRemoved(0)
+        } else if (newItem && !oldItem) {
+            notifyItemInserted(0)
+        } else if (oldItem && newItem) {
+            notifyItemChanged(0)
         }
-    }
-
-
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
-    }
-
-    override fun getItemFactoryByData(data: DATA): ItemFactory<Any> {
-        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 }

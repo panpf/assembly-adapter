@@ -83,28 +83,48 @@ class AssemblySingleDataFragmentStatePagerAdapterTest {
     fun testPropertyData() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
-        var dataFromObserver: Text? = null
         AssemblySingleDataFragmentStatePagerAdapter(
             fragment.childFragmentManager,
             TextFragmentItemFactory()
         ).apply {
-            registerDataSetObserver(object : DataSetObserver() {
-                override fun onChanged() {
-                    super.onChanged()
-                    dataFromObserver = data
-                }
-            })
-
             Assert.assertNull(data)
-            Assert.assertNull(dataFromObserver)
+            Assert.assertEquals(0, currentList.size)
 
             data = Text("hello")
             Assert.assertEquals(Text("hello"), data)
-            Assert.assertEquals(Text("hello"), dataFromObserver)
+            Assert.assertEquals(1, currentList.size)
 
             data = Text("world")
             Assert.assertEquals(Text("world"), data)
-            Assert.assertEquals(Text("world"), dataFromObserver)
+            Assert.assertEquals(1, currentList.size)
+
+            data = null
+            Assert.assertNull(data)
+            Assert.assertEquals(0, currentList.size)
+        }
+    }
+
+    @Test
+    fun testMethodSubmitList() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStatePagerAdapter(
+            fragment.childFragmentManager,
+            TextFragmentItemFactory()
+        ).apply {
+            Assert.assertEquals(0, currentList.size)
+
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")))
+            }
+            Assert.assertEquals(0, currentList.size)
+
+            submitList(listOf(Text("hello")))
+            Assert.assertEquals(1, currentList.size)
+            Assert.assertEquals(Text("hello"), data)
+
+            submitList(null)
+            Assert.assertEquals(0, currentList.size)
         }
     }
 

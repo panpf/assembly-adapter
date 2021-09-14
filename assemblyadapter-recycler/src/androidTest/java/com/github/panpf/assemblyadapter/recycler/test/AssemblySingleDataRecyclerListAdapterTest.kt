@@ -23,7 +23,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.ViewItemFactory
-import com.github.panpf.assemblyadapter.recycler.*
+import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerListAdapter
+import com.github.panpf.assemblyadapter.recycler.DiffKey
+import com.github.panpf.assemblyadapter.recycler.InstanceDiffItemCallback
+import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -116,7 +119,10 @@ class AssemblySingleDataRecyclerListAdapterTest {
                 diffCallback = KeyEqualsDiffItemCallback()
             )
         }
-        AssemblySingleDataRecyclerListAdapter(NoDiffKeyItemFactory(), diffCallback = InstanceDiffItemCallback())
+        AssemblySingleDataRecyclerListAdapter(
+            NoDiffKeyItemFactory(),
+            diffCallback = InstanceDiffItemCallback()
+        )
 
 
         /**
@@ -196,20 +202,40 @@ class AssemblySingleDataRecyclerListAdapterTest {
             Assert.assertEquals(Text("world"), data)
             Assert.assertEquals(1, currentList.size)
 
-            assertThrow(IllegalArgumentException::class) {
-                submitList(listOf(Text("good"), Text("bye")))
-            }
-            assertThrow(IllegalArgumentException::class) {
-                submitList(listOf(Text("good"), Text("bye")), null)
-            }
-            submitList(listOf(Text("good")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
-            Assert.assertEquals(Text("good"), data)
-            Assert.assertEquals(1, currentList.size)
-
             data = null
             Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertNull(data)
+            Assert.assertEquals(0, currentList.size)
+        }
+    }
+
+    @Test
+    fun testMethodSubmitList() {
+        AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
+            Assert.assertEquals(0, currentList.size)
+
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")))
+            }
+            Assert.assertEquals(0, currentList.size)
+
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")), null)
+            }
+            Assert.assertEquals(0, currentList.size)
+
+            submitList(listOf(Text("hello")))
+            Assert.assertEquals(1, currentList.size)
+            Assert.assertEquals(Text("hello"), data)
+
+            submitList(null)
+            Assert.assertEquals(0, currentList.size)
+
+            submitList(listOf(Text("good")), null)
+            Assert.assertEquals(1, currentList.size)
+            Assert.assertEquals(Text("good"), data)
+
+            submitList(null, null)
             Assert.assertEquals(0, currentList.size)
         }
     }

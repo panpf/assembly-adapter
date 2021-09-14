@@ -19,14 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
-import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
-import kotlin.reflect.KClass
 
 /**
  * Single data version of [AssemblyFragmentStateAdapter]
@@ -40,33 +33,20 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
     lifecycle: Lifecycle,
     itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
-) : FragmentStateAdapter(fragmentManager, lifecycle), AssemblyAdapter<DATA, FragmentItemFactory<out Any>> {
-
-    private var recyclerView: RecyclerView? = null
-    private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
-    private val itemFactoryStorage = ItemFactoryStorage<FragmentItemFactory<out Any>>(
-        listOf(itemFactory),
-        "FragmentItemFactory",
-        "AssemblySingleDataFragmentStateAdapter",
-        "itemFactory"
-    )
+) : AssemblyFragmentStateAdapter<DATA>(fragmentManager, lifecycle, listOf(itemFactory)) {
 
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
      */
-    var data: DATA? = initData
+    var data: DATA?
         set(value) {
-            val oldItem = field != null
-            val newItem = value != null
-            field = value
-            if (oldItem && !newItem) {
-                notifyItemRemoved(0)
-            } else if (newItem && !oldItem) {
-                notifyItemInserted(0)
-            } else if (oldItem && newItem) {
-                notifyItemChanged(0)
+            if (value != null) {
+                super.submitList(listOf(value))
+            } else {
+                super.submitList(null)
             }
         }
+        get() = if (itemCount > 0) getItemData(0) else null
 
     /**
      * Get [FragmentManager] and [Lifecycle] from [FragmentActivity] to create [AssemblySingleDataFragmentStateAdapter]
@@ -97,62 +77,28 @@ open class AssemblySingleDataFragmentStateAdapter<DATA : Any>(
         initData: DATA? = null
     ) : this(fragment.childFragmentManager, fragment.lifecycle, itemFactory, initData)
 
-    override fun getItemCount(): Int = if (data != null) 1 else 0
-
-    fun getItemData(position: Int): DATA {
-        val count = itemCount
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
+    init {
+        if (initData != null) {
+            this.data = initData
         }
-        return data!!
     }
 
-    override fun getItemViewType(position: Int): Int {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(data)
-    }
-
-    override fun createFragment(position: Int): Fragment {
-        val data = getItemData(position)
-        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
-        val parentAdapter = recyclerView?.adapter
-        val absoluteAdapterPosition = if (parentAdapter != null) {
-            concatAdapterAbsoluteHelper.findAbsoluteAdapterPosition(parentAdapter, this, position)
-        } else {
-            bindingAdapterPosition
+    override fun submitList(list: List<DATA>?) {
+        require(list?.size ?: 0 <= 1) {
+            "Cannot submit a list with size greater than 1"
         }
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(
-            bindingAdapterPosition, absoluteAdapterPosition, data
-        )
+        super.submitList(list)
     }
 
-
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-    }
-
-    override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
-        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
-    }
-
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        this.recyclerView = recyclerView
-    }
-
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-        this.recyclerView = null
+    override fun onDataListChanged(oldList: List<DATA>, newList: List<DATA>) {
+        val oldItem = oldList.firstOrNull() != null
+        val newItem = newList.firstOrNull() != null
+        if (oldItem && !newItem) {
+            notifyItemRemoved(0)
+        } else if (newItem && !oldItem) {
+            notifyItemInserted(0)
+        } else if (oldItem && newItem) {
+            notifyItemChanged(0)
+        }
     }
 }

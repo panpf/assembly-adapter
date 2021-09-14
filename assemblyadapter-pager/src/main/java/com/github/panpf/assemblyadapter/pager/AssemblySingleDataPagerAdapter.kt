@@ -32,87 +32,51 @@ import kotlin.reflect.KClass
 open class AssemblySingleDataPagerAdapter<DATA : Any>(
     itemFactory: PagerItemFactory<DATA>,
     initData: DATA? = null
-) : RefreshablePagerAdapter<DATA>(), AssemblyAdapter<DATA, PagerItemFactory<out Any>> {
-
-    private val itemFactoryStorage = ItemFactoryStorage<PagerItemFactory<out Any>>(
-        listOf(itemFactory), "PagerItemFactory", "AssemblySingleDataPagerAdapter", "itemFactory"
-    )
+) : AssemblyPagerAdapter<DATA>(listOf(itemFactory)) {
 
     /**
      * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
      */
-    var data: DATA? = initData
+    var data: DATA?
         set(value) {
-            field = value
-            notifyDataSetChanged()
+            if (value != null) {
+                super.submitList(listOf(value))
+            } else {
+                super.submitList(null)
+            }
         }
+        get() = if (itemCount > 0) getItemData(0) else null
 
     /**
      * Get the current page title.
      */
-    var currentPageTitle: CharSequence? = null
+    var currentPageTitle: CharSequence?
         set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    val itemCount: Int
-        get() = if (data != null) 1 else 0
-
-    override fun getItemData(position: Int): DATA {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return data!!
-    }
-
-    override fun getCount(): Int = if (data != null) 1 else 0
-
-    override fun getView(container: ViewGroup, position: Int): View {
-        val data = getItemData(position)
-        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
-        val absolutePositionObject = container.getTag(R.id.aa_tag_absoluteAdapterPosition)
-        // set tag absoluteAdapterPosition null to support ConcatPagerAdapter nesting
-        container.setTag(R.id.aa_tag_absoluteAdapterPosition, null)
-        val absoluteAdapterPosition = (absolutePositionObject as Int?) ?: bindingAdapterPosition
-
-        @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
-        return itemFactory.dispatchCreateItemView(
-            container.context, container, bindingAdapterPosition, absoluteAdapterPosition, data
-        )
-    }
-
-    override fun getPageTitle(position: Int): CharSequence? {
-        return if (position == 0) {
-            val currentPageTitle = currentPageTitle
-            if (currentPageTitle != null) {
-                currentPageTitle
+            if (value != null) {
+                super.submitPageTitleList(listOf(value))
             } else {
-                val data = data
-                if (data is GetPageTitle) data.pageTitle else null
+                super.submitPageTitleList(null)
             }
-        } else {
-            null
+        }
+        get() = currentPageTitleList.firstOrNull()
+
+    init {
+        if (initData != null) {
+            this.data = initData
         }
     }
 
-
-    override fun getItemFactoryByPosition(position: Int): PagerItemFactory<Any> {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
+    override fun submitList(list: List<DATA>?) {
+        require(list?.size ?: 0 <= 1) {
+            "Cannot submit a list with size greater than 1"
+        }
+        super.submitList(list)
     }
 
-    override fun getItemFactoryByData(data: DATA): PagerItemFactory<Any> {
-        return itemFactoryStorage.getItemFactoryByData(data) as PagerItemFactory<Any>
-    }
-
-    override fun <T : PagerItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : PagerItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
+        require(pageTitleList?.size ?: 0 <= 1) {
+            "Cannot submit a pageTitleList with size greater than 1"
+        }
+        super.submitPageTitleList(pageTitleList)
     }
 }

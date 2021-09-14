@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.recycler.test
 
-import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +22,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.ViewItemFactory
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.SimpleAdapterDataObserver
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
@@ -49,22 +47,40 @@ class AssemblySingleDataRecyclerAdapterTest {
 
     @Test
     fun testPropertyData() {
-        var dataFromObserver: Text? = null
         AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
-            registerAdapterDataObserver(SimpleAdapterDataObserver {
-                dataFromObserver = data
-            })
-
             Assert.assertNull(data)
-            Assert.assertNull(dataFromObserver)
+            Assert.assertEquals(0, currentList.size)
 
             data = Text("hello")
             Assert.assertEquals(Text("hello"), data)
-            Assert.assertEquals(Text("hello"), dataFromObserver)
+            Assert.assertEquals(1, currentList.size)
 
             data = Text("world")
             Assert.assertEquals(Text("world"), data)
-            Assert.assertEquals(Text("world"), dataFromObserver)
+            Assert.assertEquals(1, currentList.size)
+
+            data = null
+            Assert.assertNull(data)
+            Assert.assertEquals(0, currentList.size)
+        }
+    }
+
+    @Test
+    fun testMethodSubmitList() {
+        AssemblySingleDataRecyclerAdapter(TextItemFactory()).apply {
+            Assert.assertEquals(0, currentList.size)
+
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")))
+            }
+            Assert.assertEquals(0, currentList.size)
+
+            submitList(listOf(Text("hello")))
+            Assert.assertEquals(1, currentList.size)
+            Assert.assertEquals(Text("hello"), data)
+
+            submitList(null)
+            Assert.assertEquals(0, currentList.size)
         }
     }
 

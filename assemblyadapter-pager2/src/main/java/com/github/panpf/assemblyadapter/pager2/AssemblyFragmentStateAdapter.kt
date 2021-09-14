@@ -50,7 +50,9 @@ open class AssemblyFragmentStateAdapter<DATA>(
     private val itemFactoryStorage = ItemFactoryStorage(
         itemFactoryList, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
     )
-    private val itemDataStorage = ItemDataStorage(initDataList) { _, _ -> notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { oldList, newList ->
+        onDataListChanged(oldList, newList)
+    }
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
 
@@ -104,7 +106,7 @@ open class AssemblyFragmentStateAdapter<DATA>(
     /**
      * Set the new list to be displayed.
      */
-    fun submitList(list: List<DATA>?) {
+    open fun submitList(list: List<DATA>?) {
         itemDataStorage.submitList(list)
     }
 
@@ -168,5 +170,9 @@ open class AssemblyFragmentStateAdapter<DATA>(
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         this.recyclerView = null
+    }
+
+    protected open fun onDataListChanged(oldList: List<DATA>, newList: List<DATA>) {
+        notifyDataSetChanged()
     }
 }

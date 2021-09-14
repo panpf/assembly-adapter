@@ -16,14 +16,7 @@
 package com.github.panpf.assemblyadapter.pager
 
 import androidx.annotation.IntDef
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
-import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentStatePagerAdapter
-import kotlin.reflect.KClass
 
 /**
  * Single data version of [AssemblyFragmentStatePagerAdapter]
@@ -44,36 +37,7 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
     @Behavior behavior: Int,
     itemFactory: FragmentItemFactory<DATA>,
     initData: DATA? = null
-) : RefreshableFragmentStatePagerAdapter<DATA>(fm, behavior),
-    AssemblyAdapter<DATA, FragmentItemFactory<out Any>>,
-    AbsoluteAdapterPositionAdapter {
-
-    private val itemFactoryStorage = ItemFactoryStorage<FragmentItemFactory<out Any>>(
-        listOf(itemFactory),
-        "FragmentItemFactory",
-        "AssemblySingleDataFragmentStatePagerAdapter",
-        "itemFactory"
-    )
-
-    override var nextItemAbsoluteAdapterPosition: Int? = null
-
-    /**
-     * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
-     */
-    var data: DATA? = initData
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    /**
-     * Get the current page title.
-     */
-    var currentPageTitle: CharSequence? = null
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+) : AssemblyFragmentStatePagerAdapter<DATA>(fm, behavior, listOf(itemFactory)) {
 
     @Deprecated(
         """use {@link #AssemblyFragmentPagerAdapter(FragmentManager, int, List)} with
@@ -85,67 +49,57 @@ open class AssemblySingleDataFragmentStatePagerAdapter<DATA : Any>(
         initData: DATA? = null
     ) : this(fm, BEHAVIOR_SET_USER_VISIBLE_HINT, itemFactory, initData)
 
-    val itemCount: Int
-        get() = if (data != null) 1 else 0
-
-    override fun getItemData(position: Int): DATA {
-        val count = count
-        if (position < 0 || position >= count) {
-            throw IndexOutOfBoundsException("Index: $position, Size: $count")
-        }
-        return data!!
-    }
-
-    override fun getCount(): Int = if (data != null) 1 else 0
-
-    override fun getFragment(position: Int): Fragment {
-        val data = getItemData(position)
-        @Suppress("UnnecessaryVariable") val bindingAdapterPosition = position
-        val absoluteAdapterPosition = nextItemAbsoluteAdapterPosition ?: bindingAdapterPosition
-        // set nextItemAbsoluteAdapterPosition null to support ConcatFragmentStatePagerAdapter nesting
-        nextItemAbsoluteAdapterPosition = null
-
-        @Suppress("UNCHECKED_CAST")
-        val itemFactory = itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-        return itemFactory.dispatchCreateFragment(
-            bindingAdapterPosition, absoluteAdapterPosition, data
-        )
-    }
-
-    override fun getPageTitle(position: Int): CharSequence? {
-        return if (position == 0) {
-            val currentPageTitle = currentPageTitle
-            if (currentPageTitle != null) {
-                currentPageTitle
+    /**
+     * The only data of the current adapter, [notifyDataSetChanged] will be triggered when the data changes
+     */
+    var data: DATA?
+        set(value) {
+            if (value != null) {
+                super.submitList(listOf(value))
             } else {
-                val data = data
-                if (data is GetPageTitle) data.pageTitle else null
+                super.submitList(null)
             }
-        } else {
-            null
+        }
+        get() = if (itemCount > 0) getItemData(0) else null
+
+    /**
+     * Get the current page title.
+     */
+    var currentPageTitle: CharSequence?
+        set(value) {
+            if (value != null) {
+                super.submitPageTitleList(listOf(value))
+            } else {
+                super.submitPageTitleList(null)
+            }
+        }
+        get() = currentPageTitleList.firstOrNull()
+
+    init {
+        if (initData != null) {
+            this.data = initData
         }
     }
 
-
-    override fun getItemFactoryByPosition(position: Int): FragmentItemFactory<Any> {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
+    override fun submitList(list: List<DATA>?) {
+        require(list?.size ?: 0 <= 1) {
+            "Cannot submit a list with size greater than 1"
+        }
+        super.submitList(list)
     }
 
-    override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
-        return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
+        require(pageTitleList?.size ?: 0 <= 1) {
+            "Cannot submit a pageTitleList with size greater than 1"
+        }
+        super.submitPageTitleList(pageTitleList)
     }
 
 
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    @IntDef(BEHAVIOR_SET_USER_VISIBLE_HINT, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+    @IntDef(
+        BEHAVIOR_SET_USER_VISIBLE_HINT,
+        BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+    )
     private annotation class Behavior
 }

@@ -70,7 +70,9 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
             "AssemblyFragmentStateListAdapter",
             "itemFactoryList"
         )
-        submitList(initDataList)
+        if (initDataList?.isNotEmpty() == true) {
+            submitList(initDataList)
+        }
     }
 
     /**
@@ -139,7 +141,9 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
             "AssemblyFragmentStateListAdapter",
             "itemFactoryList"
         )
-        submitList(initDataList)
+        if (initDataList?.isNotEmpty() == true) {
+            submitList(initDataList)
+        }
     }
 
     /**

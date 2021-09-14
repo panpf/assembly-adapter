@@ -15,24 +15,14 @@
  */
 package com.github.panpf.assemblyadapter.recycler
 
-import android.view.ViewGroup
-import androidx.recyclerview.widget.*
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.Item
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.DiffUtil
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.Placeholder
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
-import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
-import kotlin.reflect.KClass
 
 /**
  * Single data version of [AssemblyRecyclerListAdapter]
  */
-open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
-    ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<DATA, ItemFactory<out Any>> {
-
-    private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<out Any>>
+open class AssemblySingleDataRecyclerListAdapter<DATA : Any> : AssemblyRecyclerListAdapter<DATA> {
 
     /**
      * The only data of the current adapter, notifyItem\* will be triggered when the data changes
@@ -60,19 +50,10 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         itemFactory: ItemFactory<DATA>,
         initData: DATA? = null,
         diffCallback: DiffUtil.ItemCallback<DATA> = KeyEqualsDiffItemCallback(),
-    ) : super(diffCallback) {
-        if (diffCallback is KeyEqualsDiffItemCallback) {
-            KeyEqualsDiffItemCallback.checkDataClass(
-                listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
-            )
+    ) : super(listOf(itemFactory), null, diffCallback) {
+        if (initData != null) {
+            this.data = initData
         }
-        this.itemFactoryStorage = ItemFactoryStorage(
-            listOf(itemFactory),
-            "ItemFactory",
-            "AssemblySingleDataRecyclerListAdapter",
-            "itemFactory"
-        )
-        this.data = initData
     }
 
     /**
@@ -88,19 +69,10 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
         itemFactory: ItemFactory<DATA>,
         initData: DATA? = null,
         config: AsyncDifferConfig<DATA>,
-    ) : super(config) {
-        if (config.diffCallback is KeyEqualsDiffItemCallback) {
-            KeyEqualsDiffItemCallback.checkDataClass(
-                listOf(itemFactory.dataClass).filter { it.java != Placeholder::class.java }
-            )
+    ) : super(listOf(itemFactory), null, config) {
+        if (initData != null) {
+            this.data = initData
         }
-        this.itemFactoryStorage = ItemFactoryStorage(
-            listOf(itemFactory),
-            "ItemFactory",
-            "AssemblySingleDataRecyclerListAdapter",
-            "itemFactory"
-        )
-        this.data = initData
     }
 
     override fun submitList(list: List<DATA>?) {
@@ -115,83 +87,5 @@ open class AssemblySingleDataRecyclerListAdapter<DATA : Any> :
             "Cannot submit a list with size greater than 1"
         }
         super.submitList(list, commitCallback)
-    }
-
-    fun getItemData(position: Int): DATA {
-        return getItem(position)
-    }
-
-    /**
-     * Note: [getItemId] is final, because stable IDs are unnecessary and therefore unsupported.
-     *
-     * [AssemblySingleDataRecyclerListAdapter]'s async diffing means that efficient change animations are handled for
-     * you, without the performance drawbacks of [RecyclerView.Adapter.notifyDataSetChanged].
-     * Instead, the diffCallback parameter of the [AssemblySingleDataRecyclerListAdapter] serves the same
-     * functionality - informing the adapter and [RecyclerView] how items are changed and moved.
-     */
-    final override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
-    }
-
-    /**
-     * Stable ids are unsupported by [AssemblySingleDataRecyclerListAdapter]. Calling this method is an error and will
-     * result in an [UnsupportedOperationException].
-     *
-     * @param hasStableIds Whether items in data set have unique identifiers or not.
-     *
-     * @throws UnsupportedOperationException Always thrown, since this is unsupported by
-     * [AssemblySingleDataRecyclerListAdapter].
-     */
-    final override fun setHasStableIds(hasStableIds: Boolean) {
-        throw UnsupportedOperationException("Stable ids are unsupported on PagingDataAdapter.")
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemTypeByData(data)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
-        val item = itemFactory.dispatchCreateItem(parent)
-        return RecyclerViewHolderWrapper(item).apply {
-            val layoutManager =
-                (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
-            if (layoutManager is StaggeredGridLayoutManager && layoutManager is FullSpanSupport) {
-                (itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
-                    .isFullSpan = layoutManager.isFullSpanByItemFactoryClass(itemFactory.javaClass)
-            }
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is RecyclerViewHolderWrapper<*>) {
-            @Suppress("UNCHECKED_CAST")
-            val item = holder.wrappedItem as Item<Any>
-            val data = getItemData(position)
-            val absoluteAdapterPosition =
-                holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
-            item.dispatchBindData(position, absoluteAdapterPosition, data)
-        } else {
-            throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
-        }
-    }
-
-
-    override fun getItemFactoryByPosition(position: Int): ItemFactory<Any> {
-        val data = getItemData(position)
-        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
-    }
-
-    override fun getItemFactoryByData(data: DATA): ItemFactory<Any> {
-        return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
     }
 }

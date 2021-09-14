@@ -70,7 +70,7 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA: Any>(
     /**
      * Set the new list to be displayed.
      */
-    fun submitList(list: List<GROUP_DATA>?) {
+    open fun submitList(list: List<GROUP_DATA>?) {
         itemDataStorage.submitList(list)
     }
 

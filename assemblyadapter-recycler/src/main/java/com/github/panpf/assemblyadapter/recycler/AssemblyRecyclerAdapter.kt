@@ -43,7 +43,9 @@ open class AssemblyRecyclerAdapter<DATA>(
     private val itemFactoryStorage = ItemFactoryStorage(
         itemFactoryList, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
     )
-    private val itemDataStorage = ItemDataStorage(initDataList) { _, _ -> notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { oldList, newList ->
+        onDataListChanged(oldList, newList)
+    }
 
     /**
      * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
@@ -59,8 +61,8 @@ open class AssemblyRecyclerAdapter<DATA>(
     /**
      * Set the new list to be displayed.
      */
-    fun submitList(dataList: List<DATA>?) {
-        itemDataStorage.submitList(dataList)
+    open fun submitList(list: List<DATA>?) {
+        itemDataStorage.submitList(list)
     }
 
     override fun getItemCount(): Int {
@@ -127,5 +129,9 @@ open class AssemblyRecyclerAdapter<DATA>(
 
     override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
         return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    }
+
+    protected open fun onDataListChanged(oldList: List<DATA>, newList: List<DATA>) {
+        notifyDataSetChanged()
     }
 }

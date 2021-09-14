@@ -148,20 +148,32 @@ class AssemblySingleDataFragmentStateListAdapterTest {
             Assert.assertEquals(Text("world"), data)
             Assert.assertEquals(1, currentList.size)
 
-            assertThrow(IllegalArgumentException::class) {
-                submitList(listOf(Text("good"), Text("bye")))
-            }
-            assertThrow(IllegalArgumentException::class) {
-                submitList(listOf(Text("good"), Text("bye")), null)
-            }
-            submitList(listOf(Text("good")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
-            Assert.assertEquals(Text("good"), data)
-            Assert.assertEquals(1, currentList.size)
-
             data = null
             Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertNull(data)
+            Assert.assertEquals(0, currentList.size)
+        }
+    }
+
+    @Test
+    fun testMethodSubmitList() {
+        val fragmentScenario = TestFragment::class.launchFragmentInContainer()
+        val fragment = fragmentScenario.getFragmentSync()
+        AssemblySingleDataFragmentStateListAdapter(fragment, TextFragmentItemFactory()).apply {
+            Assert.assertEquals(0, currentList.size)
+
+            assertThrow(IllegalArgumentException::class) {
+                submitList(listOf(Text("good"), Text("bye")))
+            }
+            Assert.assertEquals(0, currentList.size)
+
+            submitList(listOf(Text("hello")))
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Assert.assertEquals(1, currentList.size)
+            Assert.assertEquals(Text("hello"), data)
+
+            submitList(null)
+            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, currentList.size)
         }
     }

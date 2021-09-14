@@ -61,7 +61,7 @@ open class AssemblyListAdapter<DATA>(
     /**
      * Set the new list to be displayed.
      */
-    fun submitList(list: List<DATA>?) {
+    open fun submitList(list: List<DATA>?) {
         itemDataStorage.submitList(list)
     }
 
