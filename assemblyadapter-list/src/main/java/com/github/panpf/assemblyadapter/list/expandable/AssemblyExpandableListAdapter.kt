@@ -48,7 +48,7 @@ open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA: Any>(
     private val itemFactoryStorage = ItemFactoryStorage(
         itemFactoryList, "ItemFactory", "AssemblyExpandableListAdapter", "itemFactoryList"
     )
-    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { _, _ -> notifyDataSetChanged() }
     private var hasStableIds = false
     private val adapterDataObservable = AdapterDataObservable()
 

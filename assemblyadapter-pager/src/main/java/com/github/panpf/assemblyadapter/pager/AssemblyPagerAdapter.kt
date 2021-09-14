@@ -44,7 +44,7 @@ open class AssemblyPagerAdapter<DATA>(
     private val itemFactoryStorage = ItemFactoryStorage(
         itemFactoryList, "PagerItemFactory", "AssemblyPagerAdapter", "itemFactoryList"
     )
-    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { _, _ -> notifyDataSetChanged() }
     private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
 
     /**
@@ -77,7 +77,7 @@ open class AssemblyPagerAdapter<DATA>(
      */
     open fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
         if (pageTitleList != null && pageTitleList.isNotEmpty()) {
-            (pageTitleStorage ?: ItemDataStorage<CharSequence> {
+            (pageTitleStorage ?: ItemDataStorage<CharSequence> { _, _ ->
                 notifyDataSetChanged()
             }.apply {
                 this@AssemblyPagerAdapter.pageTitleStorage = this

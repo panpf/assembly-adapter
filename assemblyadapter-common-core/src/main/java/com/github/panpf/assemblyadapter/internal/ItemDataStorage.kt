@@ -20,9 +20,9 @@ import java.util.*
 /**
  * Responsible for managing data sets
  */
-class ItemDataStorage<DATA>(
+class ItemDataStorage<DATA> constructor(
     initDataList: List<DATA>? = null,
-    private val onDataListChanged: () -> Unit
+    private val onDataListChanged: (oldList: List<DATA>, newList: List<DATA>) -> Unit
 ) {
 
     var readOnlyList: List<DATA> =
@@ -62,8 +62,9 @@ class ItemDataStorage<DATA>(
      * Set up a new data list. Will copy the data of [list], pass in null to clear the data set
      */
     fun submitList(list: List<DATA>?) {
-        readOnlyList =
-            list?.run { Collections.unmodifiableList(this) } ?: Collections.emptyList()
-        onDataListChanged()
+        val oldList = readOnlyList
+        val newList = list?.run { Collections.unmodifiableList(this) } ?: Collections.emptyList()
+        readOnlyList = newList
+        onDataListChanged(oldList, newList)
     }
 }

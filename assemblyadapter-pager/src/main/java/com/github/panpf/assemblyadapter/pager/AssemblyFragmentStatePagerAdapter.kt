@@ -60,7 +60,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
         "AssemblyFragmentStatePagerAdapter",
         "itemFactoryList"
     )
-    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { _, _ -> notifyDataSetChanged() }
     private var pageTitleStorage: ItemDataStorage<CharSequence>? = null
 
     override var nextItemAbsoluteAdapterPosition: Int? = null
@@ -105,7 +105,7 @@ open class AssemblyFragmentStatePagerAdapter<DATA>(
      */
     open fun submitPageTitleList(pageTitleList: List<CharSequence>?) {
         if (pageTitleList != null && pageTitleList.isNotEmpty()) {
-            (pageTitleStorage ?: ItemDataStorage<CharSequence> {
+            (pageTitleStorage ?: ItemDataStorage<CharSequence> { _, _ ->
                 notifyDataSetChanged()
             }.apply {
                 this@AssemblyFragmentStatePagerAdapter.pageTitleStorage = this

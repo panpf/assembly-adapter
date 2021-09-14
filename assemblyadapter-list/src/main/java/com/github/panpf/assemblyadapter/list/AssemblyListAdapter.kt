@@ -43,7 +43,7 @@ open class AssemblyListAdapter<DATA>(
     private val itemFactoryStorage = ItemFactoryStorage(
         itemFactoryList, "ItemFactory", "AssemblyListAdapter", "itemFactoryList"
     )
-    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { _, _ -> notifyDataSetChanged() }
     private var hasStableIds = false
     private val adapterDataObservable = AdapterDataObservable()
 

@@ -50,7 +50,7 @@ open class AssemblyFragmentStateAdapter<DATA>(
     private val itemFactoryStorage = ItemFactoryStorage(
         itemFactoryList, "FragmentItemFactory", "AssemblyFragmentStateAdapter", "itemFactoryList"
     )
-    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { _, _ -> notifyDataSetChanged() }
     private var recyclerView: RecyclerView? = null
     private val concatAdapterAbsoluteHelper = ConcatAdapterAbsoluteHelper()
 

@@ -43,7 +43,7 @@ open class AssemblyRecyclerAdapter<DATA>(
     private val itemFactoryStorage = ItemFactoryStorage(
         itemFactoryList, "ItemFactory", "AssemblyRecyclerAdapter", "itemFactoryList"
     )
-    private val itemDataStorage = ItemDataStorage(initDataList) { notifyDataSetChanged() }
+    private val itemDataStorage = ItemDataStorage(initDataList) { _, _ -> notifyDataSetChanged() }
 
     /**
      * Get the current list. If a null list is submitted through [submitList], or no list is submitted, an empty list will be returned.
