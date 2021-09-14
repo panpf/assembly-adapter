@@ -1,21 +1,34 @@
-# new
-* new: The set\*ClickListener series methods of ItemFactory, ExpandableChildItemFactory, PagerItemFactory add kotlin function overloading methods
+# 4.0.0-rc05
+
+all:
+
+* new: The set\*ClickListener series methods of ItemFactory, ExpandableChildItemFactory,
+  PagerItemFactory add kotlin function overloading methods
 * new: All Assembly\*Adapter add getItemFactoryByData(Any) and getItemFactoryByClass(Class) methods
-* new: ItemDataStorage.onDataListChanged function adds `oldList: List<DATA>` and `newList: List<DATA>` parameters
+* new: ItemDataStorage.onDataListChanged function adds `oldList: List<DATA>`
+  and `newList: List<DATA>` parameters
 * improve: Improve the implementation of AssemblySingleData\*Adapter
 * new: AssemblySingleData\*Adapter adds itemFactory property
+
+pager2:
+
 * new: Adds ArrayFragmentStateListAdapter
 
 # v4.0.0-rc04
+
 * restore: Restore ArrayFragmentStateAdapter, ArrayPagerAdapter, ArrayFragmentStatePagerAdapter
 
 # v4.0.0-rc03
 
 recycler:
-* fix: Fix the bug that the list size exceeds 1 but no exception is thrown when submitting data through submitList of AssemblySingleDataRecyclerListAdapter
+
+* fix: Fix the bug that the list size exceeds 1 but no exception is thrown when submitting data
+  through submitList of AssemblySingleDataRecyclerListAdapter
 
 pager2:
-* fix: Fix the bug that the list size exceeds 1 but no exception is thrown when submitting data through submitList of AssemblySingleDataFragmentStateListAdapter
+
+* fix: Fix the bug that the list size exceeds 1 but no exception is thrown when submitting data
+  through submitList of AssemblySingleDataFragmentStateListAdapter
 
 # v4.0.0-rc02
 
