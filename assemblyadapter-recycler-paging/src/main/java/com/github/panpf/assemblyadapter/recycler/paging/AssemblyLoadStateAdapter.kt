@@ -26,7 +26,6 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
-import kotlin.reflect.KClass
 
 /**
  * An implementation of [LoadStateAdapter], Realize the display of [LoadState] through standardized [ItemFactory].
@@ -94,11 +93,7 @@ open class AssemblyLoadStateAdapter(
         return itemFactoryStorage.getItemFactoryByData(data) as ItemFactory<Any>
     }
 
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun <T : ItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
     }
 }

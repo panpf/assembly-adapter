@@ -31,7 +31,6 @@ import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlin.reflect.KClass
 
 /**
  * An implementation of [PagingDataFragmentStateAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
@@ -159,12 +158,8 @@ open class AssemblyPagingDataFragmentStateAdapter<DATA : Any>(
         return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
     }
 
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
     }
 
 

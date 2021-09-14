@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.pager2.test
 
-import android.R
 import androidx.fragment.app.Fragment
 import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
 import com.github.panpf.assemblyadapter.Placeholder
@@ -77,7 +76,7 @@ class AssemblyFragmentStateAdapterTest {
         AssemblyFragmentStateAdapter(
             fragment,
             listOf(TextFragmentItemFactory(), ImageFragmentItemFactory()),
-            listOf(Text("hello"), Image(R.drawable.btn_default))
+            listOf(Text("hello"), Image(android.R.drawable.btn_default))
         ).apply {
             Assert.assertEquals(2, currentList.size)
         }
@@ -96,7 +95,7 @@ class AssemblyFragmentStateAdapterTest {
         AssemblyFragmentStateAdapter(
             fragment.requireActivity(),
             listOf(TextFragmentItemFactory(), ImageFragmentItemFactory()),
-            listOf(Text("hello"), Image(R.drawable.btn_default))
+            listOf(Text("hello"), Image(android.R.drawable.btn_default))
         ).apply {
             Assert.assertEquals(2, currentList.size)
         }
@@ -117,7 +116,7 @@ class AssemblyFragmentStateAdapterTest {
             fragment.childFragmentManager,
             fragment.lifecycle,
             listOf(TextFragmentItemFactory(), ImageFragmentItemFactory()),
-            listOf(Text("hello"), Image(R.drawable.btn_default))
+            listOf(Text("hello"), Image(android.R.drawable.btn_default))
         ).apply {
             Assert.assertEquals(2, currentList.size)
         }
@@ -238,7 +237,7 @@ class AssemblyFragmentStateAdapterTest {
                 getItemViewType(1)
             }
 
-            submitList(listOf(Image(R.drawable.alert_dark_frame), Text("hello")))
+            submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
             Assert.assertEquals(1, getItemViewType(0))
             Assert.assertEquals(0, getItemViewType(1))
         }
@@ -251,7 +250,7 @@ class AssemblyFragmentStateAdapterTest {
         AssemblyFragmentStateAdapter<Any>(
             fragment, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
-            submitList(listOf(Text("hello"), Image(R.drawable.alert_dark_frame)))
+            submitList(listOf(Text("hello"), Image(android.R.drawable.alert_dark_frame)))
 
             Assert.assertTrue(createFragment(0) is TextFragment)
             Assert.assertTrue(createFragment(1) is ImageFragment)
@@ -275,7 +274,7 @@ class AssemblyFragmentStateAdapterTest {
                 getItemFactoryByPosition(1)
             }
 
-            submitList(listOf(Image(R.drawable.alert_dark_frame), Text("hello")))
+            submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
             Assert.assertEquals(ImageFragmentItemFactory::class, getItemFactoryByPosition(0)::class)
             Assert.assertEquals(TextFragmentItemFactory::class, getItemFactoryByPosition(1)::class)
         }
@@ -318,7 +317,7 @@ class AssemblyFragmentStateAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val textItemFactory = TextFragmentItemFactory()
@@ -328,26 +327,14 @@ class AssemblyFragmentStateAdapterTest {
         AssemblyFragmentStateAdapter<Any>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
             Assert.assertSame(
                 imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class)
+                getItemFactoryByClass(ImageFragmentItemFactory::class.java)
             )
             Assert.assertSame(
                 textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+                getItemFactoryByClass(TextFragmentItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
-            }
-
-            Assert.assertSame(
-                imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class.java)
-            )
-            Assert.assertSame(
-                textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+                getItemFactoryByClass(ViewFragmentItemFactory::class.java)
             }
         }
         AssemblyFragmentStateAdapter<Any?>(
@@ -356,12 +343,7 @@ class AssemblyFragmentStateAdapterTest {
         ).apply {
             Assert.assertSame(
                 placeholderItemFactory,
-                getItemFactoryByItemFactoryClass(PlaceholderFragmentItemFactory::class)
-            )
-
-            Assert.assertSame(
-                placeholderItemFactory,
-                getItemFactoryByItemFactoryClass(PlaceholderFragmentItemFactory::class.java)
+                getItemFactoryByClass(PlaceholderFragmentItemFactory::class.java)
             )
         }
     }

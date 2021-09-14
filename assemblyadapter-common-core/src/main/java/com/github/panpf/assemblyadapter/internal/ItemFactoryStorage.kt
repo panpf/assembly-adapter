@@ -59,7 +59,7 @@ class ItemFactoryStorage<ITEM_FACTORY : Matchable<*>> constructor(
         }
     }
 
-    fun <T : ITEM_FACTORY> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
+    fun <T : ITEM_FACTORY> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
         return (itemFactoryClassMap[itemFactoryClass]
             ?: throw NotFoundMatchedItemFactoryException(
                 "Need to add an '${itemFactoryClass.name}' to the $adapterName's $itemFactoryPropertyName property"

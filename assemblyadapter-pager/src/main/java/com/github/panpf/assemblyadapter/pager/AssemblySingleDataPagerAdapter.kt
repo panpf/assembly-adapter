@@ -15,13 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.pager
 
-import android.view.View
-import android.view.ViewGroup
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapter
-import kotlin.reflect.KClass
-
 /**
  * Single data version of [AssemblyPagerAdapter]
  *

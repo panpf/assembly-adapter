@@ -250,7 +250,7 @@ class AssemblyFragmentStatePagerAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val textItemFactory = TextFragmentItemFactory()
@@ -263,26 +263,14 @@ class AssemblyFragmentStatePagerAdapterTest {
         ).apply {
             Assert.assertSame(
                 imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class)
+                getItemFactoryByClass(ImageFragmentItemFactory::class.java)
             )
             Assert.assertSame(
                 textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+                getItemFactoryByClass(TextFragmentItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
-            }
-
-            Assert.assertSame(
-                imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class.java)
-            )
-            Assert.assertSame(
-                textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+                getItemFactoryByClass(ViewFragmentItemFactory::class.java)
             }
         }
         AssemblyFragmentStatePagerAdapter<Any?>(
@@ -291,12 +279,7 @@ class AssemblyFragmentStatePagerAdapterTest {
         ).apply {
             Assert.assertSame(
                 placeholderItemFactory,
-                getItemFactoryByItemFactoryClass(PlaceholderFragmentItemFactory::class)
-            )
-
-            Assert.assertSame(
-                placeholderItemFactory,
-                getItemFactoryByItemFactoryClass(PlaceholderFragmentItemFactory::class.java)
+                getItemFactoryByClass(PlaceholderFragmentItemFactory::class.java)
             )
         }
     }

@@ -424,7 +424,7 @@ class AssemblyPagingDataFragmentStateAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val fragmentScenario = PagingTestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val textItemFactory = TextFragmentItemFactory()
@@ -433,26 +433,14 @@ class AssemblyPagingDataFragmentStateAdapterTest {
         AssemblyPagingDataFragmentStateAdapter<Any>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
             Assert.assertSame(
                 imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class)
+                getItemFactoryByClass(ImageFragmentItemFactory::class.java)
             )
             Assert.assertSame(
                 textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+                getItemFactoryByClass(TextFragmentItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
-            }
-
-            Assert.assertSame(
-                imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImageFragmentItemFactory::class.java)
-            )
-            Assert.assertSame(
-                textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+                getItemFactoryByClass(ViewFragmentItemFactory::class.java)
             }
         }
     }

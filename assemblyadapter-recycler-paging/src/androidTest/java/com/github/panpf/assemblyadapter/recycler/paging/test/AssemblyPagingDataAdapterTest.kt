@@ -339,33 +339,21 @@ class AssemblyPagingDataAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val textItemFactory = TextItemFactory()
         val imageItemFactory = ImageItemFactory()
 
         AssemblyPagingDataAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
             Assert.assertSame(
                 imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImageItemFactory::class)
+                getItemFactoryByClass(ImageItemFactory::class.java)
             )
             Assert.assertSame(
                 textItemFactory,
-                getItemFactoryByItemFactoryClass(TextItemFactory::class)
+                getItemFactoryByClass(TextItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
-            }
-
-            Assert.assertSame(
-                imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImageItemFactory::class.java)
-            )
-            Assert.assertSame(
-                textItemFactory,
-                getItemFactoryByItemFactoryClass(TextItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+                getItemFactoryByClass(ViewItemFactory::class.java)
             }
         }
     }

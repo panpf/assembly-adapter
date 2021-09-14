@@ -28,7 +28,6 @@ import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
 import com.github.panpf.assemblyadapter.recycler.KeyEqualsDiffItemCallback
-import kotlin.reflect.KClass
 
 /**
  * An implementation of [FragmentStateListAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].
@@ -223,12 +222,8 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
         return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as FragmentItemFactory<Any>
     }
 
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

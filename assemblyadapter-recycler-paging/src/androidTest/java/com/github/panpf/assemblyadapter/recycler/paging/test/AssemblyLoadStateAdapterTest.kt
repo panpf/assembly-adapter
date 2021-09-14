@@ -105,24 +105,16 @@ class AssemblyLoadStateAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val itemFactory = LoadStateItemFactory()
 
         AssemblyLoadStateAdapter(itemFactory).apply {
             Assert.assertSame(
                 itemFactory,
-                getItemFactoryByItemFactoryClass(LoadStateItemFactory::class)
+                getItemFactoryByClass(LoadStateItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
-            }
-
-            Assert.assertSame(
-                itemFactory,
-                getItemFactoryByItemFactoryClass(LoadStateItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+                getItemFactoryByClass(ViewItemFactory::class.java)
             }
         }
     }

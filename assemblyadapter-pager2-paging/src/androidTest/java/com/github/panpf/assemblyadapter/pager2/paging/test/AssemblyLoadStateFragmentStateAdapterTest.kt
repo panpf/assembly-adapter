@@ -140,7 +140,7 @@ class AssemblyLoadStateFragmentStateAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val itemFactory = LoadStateFragmentItemFactory()
@@ -148,18 +148,10 @@ class AssemblyLoadStateFragmentStateAdapterTest {
         AssemblyLoadStateFragmentStateAdapter(fragment, itemFactory).apply {
             Assert.assertSame(
                 itemFactory,
-                getItemFactoryByItemFactoryClass(LoadStateFragmentItemFactory::class)
+                getItemFactoryByClass(LoadStateFragmentItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
-            }
-
-            Assert.assertSame(
-                itemFactory,
-                getItemFactoryByItemFactoryClass(LoadStateFragmentItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+                getItemFactoryByClass(ViewFragmentItemFactory::class.java)
             }
         }
     }

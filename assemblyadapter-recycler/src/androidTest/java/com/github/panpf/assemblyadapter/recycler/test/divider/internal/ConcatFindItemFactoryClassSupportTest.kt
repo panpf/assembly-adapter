@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.recycler.test.divider.internal
 
-import android.R
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.ConcatAdapter
@@ -51,7 +50,7 @@ class ConcatFindItemFactoryClassSupportTest {
         val adapter = ConcatAdapter(
             AssemblyRecyclerAdapter(
                 itemFactoryList = listOf(TextItemFactory(), ImageItemFactory()),
-                initDataList = listOf(Text("hello"), Image(R.drawable.btn_default))
+                initDataList = listOf(Text("hello"), Image(android.R.drawable.btn_default))
             ),
             AssemblySingleDataRecyclerAdapter(
                 itemFactory = DateItemFactory(),

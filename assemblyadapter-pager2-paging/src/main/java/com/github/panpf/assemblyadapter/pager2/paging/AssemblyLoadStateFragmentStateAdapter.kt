@@ -26,7 +26,6 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.FragmentItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterAbsoluteHelper
-import kotlin.reflect.KClass
 
 /**
  * An implementation of [LoadStateFragmentStateAdapter], Realize the display of [LoadState] through standardized [FragmentItemFactory].
@@ -127,12 +126,8 @@ open class AssemblyLoadStateFragmentStateAdapter(
         return itemFactoryStorage.getItemFactoryByData(data) as FragmentItemFactory<Any>
     }
 
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun <T : FragmentItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
     }
 
 

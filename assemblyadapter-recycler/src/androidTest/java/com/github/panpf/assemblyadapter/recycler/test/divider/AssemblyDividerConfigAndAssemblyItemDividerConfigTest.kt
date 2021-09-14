@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.recycler.test.divider
 
-import android.R
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -56,7 +55,7 @@ class AssemblyDividerConfigAndAssemblyItemDividerConfigTest {
                 listOf(
                     Date(), Date(), Date(), Date(), Date(),
                     Date(), Date(), Date(), Date(), Date(),
-                    Text(""), Date(), Image(R.drawable.btn_default), Date()
+                    Text(""), Date(), Image(android.R.drawable.btn_default), Date()
                 )
             )
         }

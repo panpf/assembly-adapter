@@ -23,7 +23,6 @@ import com.github.panpf.assemblyadapter.*
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
-import kotlin.reflect.KClass
 
 /**
  * An implementation of [BaseAdapter], which implements multi-type adapters through standardized [ItemFactory].
@@ -150,12 +149,8 @@ open class AssemblyListAdapter<DATA>(
         return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as ItemFactory<Any>
     }
 
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun <T : ItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
     }
 
     override fun registerDataSetObserver(observer: DataSetObserver) {

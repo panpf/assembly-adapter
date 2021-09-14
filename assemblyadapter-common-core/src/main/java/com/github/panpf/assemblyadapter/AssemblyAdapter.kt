@@ -16,7 +16,6 @@
 package com.github.panpf.assemblyadapter
 
 import com.github.panpf.assemblyadapter.internal.Matchable
-import kotlin.reflect.KClass
 
 /**
  * The adapter that implements the [AssemblyAdapter] interface can easily support any multi type of adapters by cooperating with the predefined ItemFactory
@@ -43,12 +42,5 @@ interface AssemblyAdapter<DATA, ITEM_FACTORY : Matchable<out Any>> {
      *
      * @throws NotFoundMatchedItemFactoryException No ItemFactory can match the [itemFactoryClass]
      */
-    fun <T : ITEM_FACTORY> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T
-
-    /**
-     * Get the ItemFactory of the specified [itemFactoryClass]
-     *
-     * @throws NotFoundMatchedItemFactoryException No ItemFactory can match the [itemFactoryClass]
-     */
-    fun <T : ITEM_FACTORY> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T
+    fun <T : ITEM_FACTORY> getItemFactoryByClass(itemFactoryClass: Class<T>): T
 }

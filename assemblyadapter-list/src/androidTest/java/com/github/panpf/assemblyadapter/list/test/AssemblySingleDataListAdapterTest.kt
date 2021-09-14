@@ -240,24 +240,16 @@ class AssemblySingleDataListAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val textItemFactory = TextItemFactory()
 
         AssemblySingleDataListAdapter(textItemFactory).apply {
             Assert.assertSame(
                 textItemFactory,
-                getItemFactoryByItemFactoryClass(TextItemFactory::class)
+                getItemFactoryByClass(TextItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewItemFactory::class)
-            }
-
-            Assert.assertSame(
-                textItemFactory,
-                getItemFactoryByItemFactoryClass(TextItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewItemFactory::class.java)
+                getItemFactoryByClass(ViewItemFactory::class.java)
             }
         }
     }

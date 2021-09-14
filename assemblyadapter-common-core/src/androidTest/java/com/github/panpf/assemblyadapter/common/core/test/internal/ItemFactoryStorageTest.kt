@@ -116,7 +116,7 @@ class ItemFactoryStorageTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val intItemFactory = IntItemFactory()
         val stringItemFactory = StringItemFactory()
         val booleanItemFactory = BooleanItemFactory()
@@ -127,21 +127,21 @@ class ItemFactoryStorageTest {
 
         Assert.assertSame(
             intItemFactory,
-            itemFactoryStorage.getItemFactoryByItemFactoryClass(IntItemFactory::class.java)
+            itemFactoryStorage.getItemFactoryByClass(IntItemFactory::class.java)
         )
 
         Assert.assertSame(
             stringItemFactory,
-            itemFactoryStorage.getItemFactoryByItemFactoryClass(StringItemFactory::class.java)
+            itemFactoryStorage.getItemFactoryByClass(StringItemFactory::class.java)
         )
 
         Assert.assertSame(
             booleanItemFactory,
-            itemFactoryStorage.getItemFactoryByItemFactoryClass(BooleanItemFactory::class.java)
+            itemFactoryStorage.getItemFactoryByClass(BooleanItemFactory::class.java)
         )
 
         assertThrow(NotFoundMatchedItemFactoryException::class) {
-            itemFactoryStorage.getItemFactoryByItemFactoryClass(DateItemFactory::class.java)
+            itemFactoryStorage.getItemFactoryByClass(DateItemFactory::class.java)
         }
     }
 

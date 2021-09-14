@@ -275,7 +275,7 @@ class AssemblySingleDataFragmentStateListAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val textItemFactory = TextFragmentItemFactory()
@@ -283,18 +283,10 @@ class AssemblySingleDataFragmentStateListAdapterTest {
         AssemblySingleDataFragmentStateListAdapter(fragment, textItemFactory).apply {
             Assert.assertSame(
                 textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+                getItemFactoryByClass(TextFragmentItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
-            }
-
-            Assert.assertSame(
-                textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+                getItemFactoryByClass(ViewFragmentItemFactory::class.java)
             }
         }
     }

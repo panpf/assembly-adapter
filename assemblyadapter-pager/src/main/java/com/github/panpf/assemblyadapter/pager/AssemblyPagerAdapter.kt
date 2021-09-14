@@ -24,7 +24,6 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapter
 import java.util.*
-import kotlin.reflect.KClass
 
 /**
  * An implementation of [PagerAdapter], which implements multi-type adapters through standardized [PagerItemFactory].
@@ -135,11 +134,7 @@ open class AssemblyPagerAdapter<DATA>(
         return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as PagerItemFactory<Any>
     }
 
-    override fun <T : PagerItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : PagerItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun <T : PagerItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
     }
 }

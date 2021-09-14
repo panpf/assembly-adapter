@@ -15,7 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.pager.test
 
-import android.database.DataSetObserver
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -245,7 +244,7 @@ class AssemblySingleDataFragmentStatePagerAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val fragmentScenario = TestFragment::class.launchFragmentInContainer()
         val fragment = fragmentScenario.getFragmentSync()
         val textItemFactory = TextFragmentItemFactory()
@@ -256,18 +255,10 @@ class AssemblySingleDataFragmentStatePagerAdapterTest {
         ).apply {
             Assert.assertSame(
                 textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class)
+                getItemFactoryByClass(TextFragmentItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class)
-            }
-
-            Assert.assertSame(
-                textItemFactory,
-                getItemFactoryByItemFactoryClass(TextFragmentItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewFragmentItemFactory::class.java)
+                getItemFactoryByClass(ViewFragmentItemFactory::class.java)
             }
         }
     }

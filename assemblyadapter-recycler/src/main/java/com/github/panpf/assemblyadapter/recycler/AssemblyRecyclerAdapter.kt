@@ -23,7 +23,6 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
-import kotlin.reflect.KClass
 
 /**
  * An implementation of [RecyclerView.Adapter], which implements multi-type adapters through standardized [ItemFactory].
@@ -123,12 +122,8 @@ open class AssemblyRecyclerAdapter<DATA>(
         return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as ItemFactory<Any>
     }
 
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: KClass<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass.java)
-    }
-
-    override fun <T : ItemFactory<out Any>> getItemFactoryByItemFactoryClass(itemFactoryClass: Class<T>): T {
-        return itemFactoryStorage.getItemFactoryByItemFactoryClass(itemFactoryClass)
+    override fun <T : ItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
+        return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
     }
 
     protected open fun onDataListChanged(oldList: List<DATA>, newList: List<DATA>) {

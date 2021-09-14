@@ -219,7 +219,7 @@ class AssemblyPagerAdapterTest {
     }
 
     @Test
-    fun testMethodGetItemFactoryByItemFactoryClass() {
+    fun testMethodGetItemFactoryByClass() {
         val textItemFactory = TextPagerItemFactory()
         val imageItemFactory = ImagePagerItemFactory()
         val placeholderItemFactory = PlaceholderPagerItemFactory()
@@ -227,26 +227,14 @@ class AssemblyPagerAdapterTest {
         AssemblyPagerAdapter<Any>(listOf(textItemFactory, imageItemFactory)).apply {
             Assert.assertSame(
                 imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImagePagerItemFactory::class)
+                getItemFactoryByClass(ImagePagerItemFactory::class.java)
             )
             Assert.assertSame(
                 textItemFactory,
-                getItemFactoryByItemFactoryClass(TextPagerItemFactory::class)
+                getItemFactoryByClass(TextPagerItemFactory::class.java)
             )
             assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewPagerItemFactory::class)
-            }
-
-            Assert.assertSame(
-                imageItemFactory,
-                getItemFactoryByItemFactoryClass(ImagePagerItemFactory::class.java)
-            )
-            Assert.assertSame(
-                textItemFactory,
-                getItemFactoryByItemFactoryClass(TextPagerItemFactory::class.java)
-            )
-            assertThrow(NotFoundMatchedItemFactoryException::class) {
-                getItemFactoryByItemFactoryClass(ViewPagerItemFactory::class.java)
+                getItemFactoryByClass(ViewPagerItemFactory::class.java)
             }
         }
         AssemblyPagerAdapter<Any?>(
@@ -254,12 +242,7 @@ class AssemblyPagerAdapterTest {
         ).apply {
             Assert.assertSame(
                 placeholderItemFactory,
-                getItemFactoryByItemFactoryClass(PlaceholderPagerItemFactory::class)
-            )
-
-            Assert.assertSame(
-                placeholderItemFactory,
-                getItemFactoryByItemFactoryClass(PlaceholderPagerItemFactory::class.java)
+                getItemFactoryByClass(PlaceholderPagerItemFactory::class.java)
             )
         }
     }
