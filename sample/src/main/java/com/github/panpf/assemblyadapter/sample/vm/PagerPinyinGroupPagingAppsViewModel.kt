@@ -23,7 +23,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
-import com.github.panpf.assemblyadapter.sample.ds.PinyinGroupAppsPagerSource
+import com.github.panpf.assemblyadapter.sample.ds.PinyinGroupAppsPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -40,7 +40,7 @@ class PagerPinyinGroupPagingAppsViewModel(application: Application) :
         Pager(
             PagingConfig(5, 1, false, 5),
             0,
-            PinyinGroupAppsPagerSource.Factory(getApplication())
+            PinyinGroupAppsPagingSource.Factory(getApplication())
         ).flow
 
     @OptIn(ExperimentalCoroutinesApi::class)

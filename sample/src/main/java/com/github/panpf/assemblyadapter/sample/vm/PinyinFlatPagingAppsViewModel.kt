@@ -26,7 +26,7 @@ import androidx.paging.insertSeparators
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
-import com.github.panpf.assemblyadapter.sample.ds.AppListPagerSource
+import com.github.panpf.assemblyadapter.sample.ds.AppListPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -41,9 +41,14 @@ class PinyinFlatPagingAppsViewModel(application: Application) :
      */
     val pinyinFlatAppListDataFlow: Flow<PagingData<Any>> =
         Pager(
-            PagingConfig(20, 5, false, 20),
-            0,
-            AppListPagerSource.Factory(getApplication())
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 5,
+                enablePlaceholders = false,
+                initialLoadSize = 20
+            ),
+            initialKey = 0,
+            pagingSourceFactory = AppListPagingSource.Factory(getApplication())
         ).flow.map {
             it.insertSeparators { before: AppInfo?, after: AppInfo? ->
                 withContext(Dispatchers.IO) {

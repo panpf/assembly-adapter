@@ -18,49 +18,48 @@ package com.github.panpf.assemblyadapter.sample.ds
 import android.content.Context
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.github.panpf.assemblyadapter.sample.util.PinyinFlatAppsHelper
+import com.github.panpf.assemblyadapter.sample.bean.AppInfo
+import com.github.panpf.assemblyadapter.sample.util.AppListHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PinyinFlatAppsPagerSource private constructor(
+class AppListPagingSource private constructor(
     private val context: Context, private val factory: Factory
-) : PagingSource<Int, Any>() {
+) : PagingSource<Int, AppInfo>() {
 
-    class Factory(val context: Context) : Function0<PinyinFlatAppsPagerSource> {
+    class Factory(val context: Context) : Function0<AppListPagingSource> {
 
-        var pinyinFlatAppsHelper: PinyinFlatAppsHelper? = null
+        var appListHelper: AppListHelper? = null
 
-        override fun invoke(): PinyinFlatAppsPagerSource {
-            return PinyinFlatAppsPagerSource(context, this)
+        override fun invoke(): AppListPagingSource {
+            return AppListPagingSource(context, this)
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Any>): Int? {
-        return 0
-    }
+    override fun getRefreshKey(state: PagingState<Int, AppInfo>): Int = 0
 
     /**
      * Contains the following class types: PinyinGroup、AppInfo
      */
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Any> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AppInfo> {
         if (params is LoadParams.Refresh) {
-            factory.pinyinFlatAppsHelper = null
+            factory.appListHelper = null
         } else {
             withContext(Dispatchers.IO) {
                 Thread.sleep(1500)
             }
         }
-        val pinyinFlatAppsHelper = factory.pinyinFlatAppsHelper ?: withContext(Dispatchers.IO) {
-            PinyinFlatAppsHelper(context)
+        val appListHelper = factory.appListHelper ?: withContext(Dispatchers.IO) {
+            AppListHelper(context)
         }.apply {
-            factory.pinyinFlatAppsHelper = this
+            factory.appListHelper = this
         }
         val startIndex = params.key!!
         val endIndexExclusive =
-            (startIndex + params.loadSize).coerceAtMost(pinyinFlatAppsHelper.count)
-        val result = pinyinFlatAppsHelper.getRange(startIndex, endIndexExclusive)
+            (startIndex + params.loadSize).coerceAtMost(appListHelper.count)
+        val result = appListHelper.getRange(startIndex, endIndexExclusive)
         val nextKey =
-            if (result.isNotEmpty() && endIndexExclusive < pinyinFlatAppsHelper.count) endIndexExclusive else null
+            if (result.isNotEmpty() && endIndexExclusive < appListHelper.count) endIndexExclusive else null
         return LoadResult.Page(result, null, nextKey)
     }
 }
