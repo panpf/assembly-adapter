@@ -27,7 +27,6 @@ import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutMana
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyStaggeredGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -79,11 +78,6 @@ class RecyclerStaggeredGridFragment : BaseBindingFragment<FragmentRecyclerBindin
                     disableByItemFactoryClass(ListSeparatorItemFactory::class)
                 }
             }
-            addItemDecoration(
-                AssemblyStickyItemDecoration(
-                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
-                )
-            )
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
             viewModel.refresh()

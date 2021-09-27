@@ -5,8 +5,8 @@
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerDividerHorizontalRecycler"
+        android:id="@+id/recyclerDividerVerRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="horizontal" />
+        android:scrollbars="vertical" />
 </LinearLayout>

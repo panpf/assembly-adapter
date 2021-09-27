@@ -32,7 +32,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerVerticalBinding
+import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerVerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
@@ -42,7 +42,7 @@ import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class RecyclerGridDividerVerFragment :
-    BaseBindingFragment<FragmentRecyclerDividerVerticalBinding>() {
+    BaseBindingFragment<FragmentRecyclerDividerVerBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
     private val menuViewModel by activityViewModels<MenuViewModel>()
@@ -52,12 +52,12 @@ class RecyclerGridDividerVerFragment :
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
-    ): FragmentRecyclerDividerVerticalBinding {
-        return FragmentRecyclerDividerVerticalBinding.inflate(inflater, parent, false)
+    ): FragmentRecyclerDividerVerBinding {
+        return FragmentRecyclerDividerVerBinding.inflate(inflater, parent, false)
     }
 
     override fun onInitData(
-        binding: FragmentRecyclerDividerVerticalBinding,
+        binding: FragmentRecyclerDividerVerBinding,
         savedInstanceState: Bundle?
     ) {
         val appsOverviewAdapter =
@@ -70,7 +70,7 @@ class RecyclerGridDividerVerFragment :
         )
         val footerLoadStateAdapter =
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
-        binding.recyclerDividerVerticalRecycler.apply {
+        binding.recyclerDividerVerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = AssemblyGridLayoutManager(
                 requireContext(),

@@ -20,37 +20,28 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.updatePadding
+import androidx.core.view.isVisible
+import androidx.paging.LoadState
 import com.github.panpf.assemblyadapter.BindingItemFactory
-import com.github.panpf.assemblyadapter.sample.R
-import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
-import com.github.panpf.assemblyadapter.sample.databinding.ItemAppsOverviewHorizontalBinding
+import com.github.panpf.assemblyadapter.sample.databinding.ItemLoadStateHorBinding
 
-class AppsOverviewHorizontalItemFactory(
-    private val activity: Activity,
-    private val hideStartMargin: Boolean = false
-) :
-    BindingItemFactory<AppsOverview, ItemAppsOverviewHorizontalBinding>(AppsOverview::class) {
+class LoadStateHorItemFactory(private val activity: Activity) :
+    BindingItemFactory<LoadState, ItemLoadStateHorBinding>(LoadState::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
-    ): ItemAppsOverviewHorizontalBinding {
-        return ItemAppsOverviewHorizontalBinding.inflate(inflater, parent, false)
-    }
+    ): ItemLoadStateHorBinding =
+        ItemLoadStateHorBinding.inflate(inflater, parent, false)
 
     override fun initItem(
         context: Context,
-        binding: ItemAppsOverviewHorizontalBinding,
-        item: BindingItem<AppsOverview, ItemAppsOverviewHorizontalBinding>
+        binding: ItemLoadStateHorBinding,
+        item: BindingItem<LoadState, ItemLoadStateHorBinding>
     ) {
-        if (hideStartMargin) {
-            binding.root.updatePadding(left = 0, right = 0)
-        }
-
         binding.root.setOnLongClickListener {
             AlertDialog.Builder(activity).apply {
                 setMessage(buildString {
-                    append("AppsOverview").appendLine()
+                    append("LoadState").appendLine()
                     appendLine()
                     append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
                     append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
@@ -62,14 +53,15 @@ class AppsOverviewHorizontalItemFactory(
 
     override fun bindItemData(
         context: Context,
-        binding: ItemAppsOverviewHorizontalBinding,
-        item: BindingItem<AppsOverview, ItemAppsOverviewHorizontalBinding>,
+        binding: ItemLoadStateHorBinding,
+        item: BindingItem<LoadState, ItemLoadStateHorBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
-        data: AppsOverview
+        data: LoadState
     ) {
-        binding.appsOverviewHorizontalItemContentText.text = context.getString(
-            R.string.apps_overview_item, data.count, data.userAppCount, data.groupCount
-        )
+        binding.loadStateHorItemLoadingLayout.isVisible = data is LoadState.Loading
+        binding.loadStateHorItemErrorText.isVisible = data is LoadState.Error
+        binding.loadStateHorItemEndText.isVisible =
+            data is LoadState.NotLoading && data.endOfPaginationReached
     }
 }

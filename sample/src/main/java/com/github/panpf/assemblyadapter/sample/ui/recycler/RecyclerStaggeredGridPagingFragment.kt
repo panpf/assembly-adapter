@@ -29,7 +29,6 @@ import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyStaggeredGri
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
-import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -83,11 +82,6 @@ class RecyclerStaggeredGridPagingFragment : BaseBindingFragment<FragmentRecycler
                     disableByItemFactoryClass(ListSeparatorItemFactory::class)
                 }
             }
-            addItemDecoration(
-                AssemblyStickyItemDecoration(
-                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
-                )
-            )
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
             viewModel.refresh()

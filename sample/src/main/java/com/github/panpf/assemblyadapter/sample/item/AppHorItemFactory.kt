@@ -25,26 +25,26 @@ import androidx.core.content.res.ResourcesCompat
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
-import com.github.panpf.assemblyadapter.sample.databinding.ItemAppHorizontalBinding
+import com.github.panpf.assemblyadapter.sample.databinding.ItemAppHorBinding
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
-class AppHorizontalItemFactory(
+class AppHorItemFactory(
     private val activity: Activity,
     private val showBg: Boolean = false
 ) :
-    BindingItemFactory<AppInfo, ItemAppHorizontalBinding>(AppInfo::class) {
+    BindingItemFactory<AppInfo, ItemAppHorBinding>(AppInfo::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
-    ): ItemAppHorizontalBinding {
-        return ItemAppHorizontalBinding.inflate(inflater, parent, false)
+    ): ItemAppHorBinding {
+        return ItemAppHorBinding.inflate(inflater, parent, false)
     }
 
     override fun initItem(
         context: Context,
-        binding: ItemAppHorizontalBinding,
-        item: BindingItem<AppInfo, ItemAppHorizontalBinding>
+        binding: ItemAppHorBinding,
+        item: BindingItem<AppInfo, ItemAppHorBinding>
     ) {
         if (!showBg) {
             binding.root.setBackgroundDrawable(null)
@@ -73,7 +73,7 @@ class AppHorizontalItemFactory(
             true
         }
 
-        binding.appHorizontalItemIconImage.options.shaper = RoundRectImageShaper(
+        binding.appHorItemIconImage.options.shaper = RoundRectImageShaper(
             context.resources.getDimension(R.dimen.app_icon_corner_radius)
         ).apply {
             setStroke(
@@ -85,16 +85,16 @@ class AppHorizontalItemFactory(
 
     override fun bindItemData(
         context: Context,
-        binding: ItemAppHorizontalBinding,
-        item: BindingItem<AppInfo, ItemAppHorizontalBinding>,
+        binding: ItemAppHorBinding,
+        item: BindingItem<AppInfo, ItemAppHorBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: AppInfo
     ) {
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
-        binding.appHorizontalItemIconImage.displayImage(appIconUri)
-        binding.appHorizontalItemNameText.text = data.name
-        binding.appHorizontalItemVersionText.text = "v${data.versionName}"
-        binding.appHorizontalItemSizeText.text = Formatter.formatFileSize(context, data.apkSize)
+        binding.appHorItemIconImage.displayImage(appIconUri)
+        binding.appHorItemNameText.text = data.name
+        binding.appHorItemVersionText.text = "v${data.versionName}"
+        binding.appHorItemSizeText.text = Formatter.formatFileSize(context, data.apkSize)
     }
 }

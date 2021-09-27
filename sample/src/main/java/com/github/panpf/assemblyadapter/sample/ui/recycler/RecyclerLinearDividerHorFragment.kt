@@ -31,17 +31,17 @@ import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorizontalBinding
-import com.github.panpf.assemblyadapter.sample.item.AppHorizontalItemFactory
-import com.github.panpf.assemblyadapter.sample.item.AppsOverviewHorizontalItemFactory
-import com.github.panpf.assemblyadapter.sample.item.ListSeparatorHorizontalItemFactory
-import com.github.panpf.assemblyadapter.sample.item.LoadStateHorizontalItemFactory
+import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
+import com.github.panpf.assemblyadapter.sample.item.AppHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateHorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.MenuViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class RecyclerLinearDividerHorFragment :
-    BaseBindingFragment<FragmentRecyclerDividerHorizontalBinding>() {
+    BaseBindingFragment<FragmentRecyclerDividerHorBinding>() {
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
     private val menuViewModel by activityViewModels<MenuViewModel>()
@@ -51,25 +51,25 @@ class RecyclerLinearDividerHorFragment :
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
-    ): FragmentRecyclerDividerHorizontalBinding {
-        return FragmentRecyclerDividerHorizontalBinding.inflate(inflater, parent, false)
+    ): FragmentRecyclerDividerHorBinding {
+        return FragmentRecyclerDividerHorBinding.inflate(inflater, parent, false)
     }
 
     override fun onInitData(
-        binding: FragmentRecyclerDividerHorizontalBinding,
+        binding: FragmentRecyclerDividerHorBinding,
         savedInstanceState: Bundle?
     ) {
         val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(AppsOverviewHorizontalItemFactory(requireActivity()))
+            AssemblySingleDataRecyclerAdapter(AppsOverviewHorItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
-                AppHorizontalItemFactory(requireActivity(), showBg = true),
-                ListSeparatorHorizontalItemFactory(requireActivity(), hideDivider = true)
+                AppHorItemFactory(requireActivity(), showBg = true),
+                ListSeparatorHorItemFactory(requireActivity(), hideDivider = true)
             )
         )
         val footerLoadStateAdapter =
-            AssemblySingleDataRecyclerAdapter(LoadStateHorizontalItemFactory(requireActivity()))
-        binding.recyclerDividerHorizontalRecycler.apply {
+            AssemblySingleDataRecyclerAdapter(LoadStateHorItemFactory(requireActivity()))
+        binding.recyclerDividerHorRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -116,19 +116,19 @@ class RecyclerLinearDividerHorFragment :
             val size = if (thickDivider) 5.dp2px else 1.dp2px
             divider(Divider.color(0x88FF0000.toInt(), size, insets)) {
                 personaliseByItemFactoryClass(
-                    ListSeparatorHorizontalItemFactory::class,
+                    ListSeparatorHorItemFactory::class,
                     Divider.color(0x8800FF00.toInt(), size, insets)
                 )
-                disableByItemFactoryClass(AppsOverviewHorizontalItemFactory::class)
+                disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
             }
             headerAndFooterDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
 
             sideHeaderAndFooterDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
                 personaliseByItemFactoryClass(
-                    ListSeparatorHorizontalItemFactory::class,
+                    ListSeparatorHorItemFactory::class,
                     Divider.color(0xFF00FF00.toInt(), size, insets)
                 )
-                disableByItemFactoryClass(AppsOverviewHorizontalItemFactory::class)
+                disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
             }
         }.build()
     }

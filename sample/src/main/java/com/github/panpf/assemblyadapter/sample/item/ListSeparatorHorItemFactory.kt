@@ -26,27 +26,27 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
-import com.github.panpf.assemblyadapter.sample.databinding.ItemListSeparatorHorizontalBinding
+import com.github.panpf.assemblyadapter.sample.databinding.ItemListSeparatorHorBinding
 
-open class ListSeparatorHorizontalItemFactory(
+open class ListSeparatorHorItemFactory(
     private val activity: Activity,
     private val hideStartMargin: Boolean = false,
     private val hideDivider: Boolean = false,
-) : BindingItemFactory<ListSeparator, ItemListSeparatorHorizontalBinding>(ListSeparator::class) {
+) : BindingItemFactory<ListSeparator, ItemListSeparatorHorBinding>(ListSeparator::class) {
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
-    ): ItemListSeparatorHorizontalBinding {
-        return ItemListSeparatorHorizontalBinding.inflate(inflater, parent, false)
+    ): ItemListSeparatorHorBinding {
+        return ItemListSeparatorHorBinding.inflate(inflater, parent, false)
     }
 
     override fun initItem(
         context: Context,
-        binding: ItemListSeparatorHorizontalBinding,
-        item: BindingItem<ListSeparator, ItemListSeparatorHorizontalBinding>
+        binding: ItemListSeparatorHorBinding,
+        item: BindingItem<ListSeparator, ItemListSeparatorHorBinding>
     ) {
         if (hideStartMargin) {
-            binding.listSeparatorHorizontalItemTitleText.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            binding.listSeparatorHorItemTitleText.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = 0
                 rightMargin = 0
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -55,7 +55,7 @@ open class ListSeparatorHorizontalItemFactory(
                 }
             }
         }
-        binding.listSeparatorHorizontalItemDividerView.isVisible = !hideDivider
+        binding.listSeparatorHorItemDividerView.isVisible = !hideDivider
 
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
@@ -85,12 +85,12 @@ open class ListSeparatorHorizontalItemFactory(
 
     override fun bindItemData(
         context: Context,
-        binding: ItemListSeparatorHorizontalBinding,
-        item: BindingItem<ListSeparator, ItemListSeparatorHorizontalBinding>,
+        binding: ItemListSeparatorHorBinding,
+        item: BindingItem<ListSeparator, ItemListSeparatorHorBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: ListSeparator
     ) {
-        binding.listSeparatorHorizontalItemTitleText.text = data.title
+        binding.listSeparatorHorItemTitleText.text = data.title
     }
 }

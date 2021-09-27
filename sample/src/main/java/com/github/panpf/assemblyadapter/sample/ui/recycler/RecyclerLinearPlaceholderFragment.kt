@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.*
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
@@ -58,11 +57,6 @@ class RecyclerLinearPlaceholderFragment : BaseBindingFragment<FragmentRecyclerBi
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(
-                AssemblyStickyItemDecoration(
-                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
-                )
-            )
         }
 
         registered = false

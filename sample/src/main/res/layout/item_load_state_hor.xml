@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/loadStateHorizontalItemLoadingLayout"
+        android:id="@+id/loadStateHorItemLoadingLayout"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -24,7 +24,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/loadStateHorizontalItemErrorText"
+        android:id="@+id/loadStateHorItemErrorText"
         android:layout_width="10dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
@@ -36,7 +36,7 @@
         android:text="@string/load_error" />
 
     <TextView
-        android:id="@+id/loadStateHorizontalItemEndText"
+        android:id="@+id/loadStateHorItemEndText"
         android:layout_width="10dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"

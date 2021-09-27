@@ -7,7 +7,7 @@
     android:background="?android:windowBackground">
 
     <TextView
-        android:id="@+id/listSeparatorHorizontalItemTitleText"
+        android:id="@+id/listSeparatorHorItemTitleText"
         android:layout_width="16dp"
         android:layout_height="0dp"
         android:layout_marginStart="26dp"
@@ -23,11 +23,11 @@
         tools:text="我是小尾巴" />
 
     <View
-        android:id="@+id/listSeparatorHorizontalItemDividerView"
+        android:id="@+id/listSeparatorHorItemDividerView"
         android:layout_width="0.5dp"
         android:layout_height="0dp"
         android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@id/listSeparatorHorizontalItemTitleText"
+        app:layout_constraintBottom_toBottomOf="@id/listSeparatorHorItemTitleText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/listSeparatorHorizontalItemTitleText" />
+        app:layout_constraintTop_toTopOf="@id/listSeparatorHorItemTitleText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

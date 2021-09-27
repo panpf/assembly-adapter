@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recyclerRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/recyclerRefreshLayout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <FrameLayout
-        android:id="@+id/recyclerStickyContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</FrameLayout>
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

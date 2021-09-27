@@ -27,7 +27,6 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.paging.AssemblyPagingDataAdapter
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
-import com.github.panpf.assemblyadapter.sample.base.sticky.AssemblyStickyItemDecoration
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -56,15 +55,10 @@ class RecyclerLinearPagingFragment : BaseBindingFragment<FragmentRecyclerBinding
             )
         )
         binding.recyclerRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = ConcatAdapter(
                 appsOverviewAdapter, pagingDataAdapter.withLoadStateFooter(
                     MyLoadStateAdapter(requireActivity())
-                )
-            )
-            layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(
-                AssemblyStickyItemDecoration(
-                    binding.recyclerStickyContainer, ListSeparatorItemFactory::class
                 )
             )
         }
