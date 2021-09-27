@@ -1,3 +1,11 @@
+# v4.0.0 Stable
+
+A new version, a new start, version 4.0 and version 3.0 are completely incompatible, but the two can coexist
+
+For how to use the new version, please refer to [README.md](README.md)
+
+4.0 The version adopts the new maven group, don’t worry about it will be automatically upgraded to version 4.0
+
 # 4.0.0-rc05
 
 all:
@@ -129,9 +137,9 @@ all:
 
 # v4.0.0-beta01
 
-全新版本，全新出发，4.0 版本 和 3.\* 版本完全不兼容，但两者可以共存
+A new version, a new start, version 4.0 and version 3.0 are completely incompatible, but the two can coexist
 
-新版本使用方法请参考 [README.md](README.md)
+For how to use the new version, please refer to [README.md](README.md)
 
 
 [AssemblySingleDataRecyclerAdapter]: assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/AssemblySingleDataRecyclerAdapter.kt
