@@ -97,6 +97,8 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 
 * [RecyclerLinearDividerHorFragment]
 * [RecyclerLinearDividerVerFragment]
+* [RecyclerGridDividerHorFragment]
+* [RecyclerGridDividerVerFragment]
 * [RecyclerStaggeredGridDividerHorFragment]
 * [RecyclerStaggeredGridDividerVerFragment]
 
@@ -107,6 +109,10 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 [RecyclerStaggeredGridDividerHorFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerStaggeredGridDividerHorFragment.kt
 
 [RecyclerStaggeredGridDividerVerFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerStaggeredGridDividerVerFragment.kt
+
+[RecyclerGridDividerHorFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerGridDividerHorFragment.kt
+
+[RecyclerGridDividerVerFragment]: ../../sample/src/main/java/com/github/panpf/assemblyadapter/sample/ui/recycler/RecyclerGridDividerVerFragment.kt
 
 [ItemFactory]: ../../assemblyadapter-common-item/src/main/java/com/github/panpf/assemblyadapter/ItemFactory.kt
 
