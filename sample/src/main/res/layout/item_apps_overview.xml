@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/appsOverviewItemContentText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,7 +11,7 @@
     android:paddingEnd="20dp"
     android:paddingRight="20dp"
     android:paddingBottom="14dp"
-    android:text="@string/apps_overview_item"
     android:textColor="@color/colorPrimaryDark"
     android:textSize="14sp"
-    android:textStyle="bold" />
+    android:textStyle="bold"
+    tools:text="@string/apps_overview_item" />

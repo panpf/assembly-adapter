@@ -17,9 +17,11 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,22 +31,21 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyLinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
-import com.github.panpf.assemblyadapter.sample.R
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerVerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.MenuViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class RecyclerLinearDividerVerFragment :
-    BaseBindingFragment<FragmentRecyclerDividerVerBinding>() {
+    ToolbarFragment<FragmentRecyclerDividerVerBinding>() {
+
+    private val args: RecyclerLinearDividerVerFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
-    private val menuViewModel by activityViewModels<MenuViewModel>()
 
     private var openedInsets = false
     private var thickDivider = true
@@ -55,10 +56,22 @@ class RecyclerLinearDividerVerFragment :
         return FragmentRecyclerDividerVerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(
+    override fun onInitViews(
+        toolbar: Toolbar,
         binding: FragmentRecyclerDividerVerBinding,
         savedInstanceState: Bundle?
     ) {
+        initMenu(toolbar, binding.recyclerDividerVerRecycler)
+    }
+
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentRecyclerDividerVerBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
@@ -72,19 +85,7 @@ class RecyclerLinearDividerVerFragment :
         binding.recyclerDividerVerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
-
             addItemDecoration(buildItemDecoration())
-            menuViewModel.menuInfoListData.postValue(buildMenuInfoList())
-            menuViewModel.menuClickEvent.listen(viewLifecycleOwner) {
-                if (it?.id == R.id.insets_switch) {
-                    openedInsets = !openedInsets
-                } else if (it?.id == R.id.divider_thickness_switch) {
-                    thickDivider = !thickDivider
-                }
-                menuViewModel.menuInfoListData.postValue(buildMenuInfoList())
-                removeItemDecorationAt(0)
-                addItemDecoration(buildItemDecoration())
-            }
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -96,17 +97,33 @@ class RecyclerLinearDividerVerFragment :
         }
     }
 
-    private fun buildMenuInfoList(): List<MenuViewModel.MenuInfo> {
-        return listOf(
-            MenuViewModel.MenuInfo(
-                R.id.insets_switch,
-                if (openedInsets) "Disable Insets" else "Enable Insets",
-            ),
-            MenuViewModel.MenuInfo(
-                R.id.divider_thickness_switch,
-                if (thickDivider) "Thin Divider" else "Thick Divider",
-            )
-        )
+    private fun initMenu(toolbar: Toolbar, recyclerView: RecyclerView) {
+        toolbar.menu.add(
+            0, 1, 0,
+            if (openedInsets) "Disable Insets" else "Enable Insets"
+        ).apply {
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }.setOnMenuItemClickListener {
+            openedInsets = !openedInsets
+            recyclerView.removeItemDecorationAt(0)
+            recyclerView.addItemDecoration(buildItemDecoration())
+            it.title =
+                if (openedInsets) "Disable Insets" else "Enable Insets"
+            true
+        }
+
+        toolbar.menu.add(
+            0, 2, 1,
+            if (thickDivider) "Thin Divider" else "Thick Divider"
+        ).apply {
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }.setOnMenuItemClickListener {
+            thickDivider = !thickDivider
+            recyclerView.removeItemDecorationAt(0)
+            recyclerView.addItemDecoration(buildItemDecoration())
+            it.title = if (thickDivider) "Thin Divider" else "Thick Divider"
+            true
+        }
     }
 
     private fun buildItemDecoration(): RecyclerView.ItemDecoration {

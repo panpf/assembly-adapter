@@ -18,13 +18,14 @@ package com.github.panpf.assemblyadapter.sample.ui.list
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
 import com.github.panpf.assemblyadapter.list.ConcatListAdapter
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
-import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -32,7 +33,9 @@ import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
-class ListFragment : BaseBindingFragment<FragmentListBinding>() {
+class ListFragment : ToolbarFragment<FragmentListBinding>() {
+
+    private val args: ListFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
@@ -42,9 +45,16 @@ class ListFragment : BaseBindingFragment<FragmentListBinding>() {
         return FragmentListBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentListBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentListBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter =
-            AssemblySingleDataListAdapter<AppsOverview>(AppsOverviewItemFactory(requireActivity()))
+            AssemblySingleDataListAdapter(AppsOverviewItemFactory(requireActivity()))
         val listAdapter = AssemblyListAdapter<Any>(
             listOf(AppItemFactory(requireActivity()), ListSeparatorItemFactory(requireActivity()))
         )

@@ -15,10 +15,10 @@
  */
 package com.github.panpf.assemblyadapter.sample.bean
 
-import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
 import com.github.panpf.assemblyadapter.recycler.DiffKey
 
-data class Link(val title: String, val fragment: Fragment) : DiffKey {
+data class Link(val title: String, val navDirections: NavDirections) : DiffKey {
 
     override val diffKey: String = title
 }

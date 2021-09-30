@@ -17,9 +17,11 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -30,22 +32,21 @@ import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
-import com.github.panpf.assemblyadapter.sample.R
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
 import com.github.panpf.assemblyadapter.sample.item.AppGridHorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewHorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorHorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateHorItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.MenuViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class RecyclerGridDividerHorFragment :
-    BaseBindingFragment<FragmentRecyclerDividerHorBinding>() {
+    ToolbarFragment<FragmentRecyclerDividerHorBinding>() {
+
+    private val args: RecyclerGridDividerHorFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
-    private val menuViewModel by activityViewModels<MenuViewModel>()
 
     private var openedInsets = false
     private var thickDivider = true
@@ -56,10 +57,22 @@ class RecyclerGridDividerHorFragment :
         return FragmentRecyclerDividerHorBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(
+    override fun onInitViews(
+        toolbar: Toolbar,
         binding: FragmentRecyclerDividerHorBinding,
         savedInstanceState: Bundle?
     ) {
+        initMenu(toolbar, binding.recyclerDividerHorRecycler)
+    }
+
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentRecyclerDividerHorBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(
                 AppsOverviewHorItemFactory(requireActivity())
@@ -82,19 +95,7 @@ class RecyclerGridDividerHorFragment :
                     LoadStateHorItemFactory::class to ItemSpan.fullSpan()
                 )
             )
-
             addItemDecoration(buildItemDecoration())
-            menuViewModel.menuInfoListData.postValue(buildMenuInfoList())
-            menuViewModel.menuClickEvent.listen(viewLifecycleOwner) {
-                if (it?.id == R.id.insets_switch) {
-                    openedInsets = !openedInsets
-                } else if (it?.id == R.id.divider_thickness_switch) {
-                    thickDivider = !thickDivider
-                }
-                menuViewModel.menuInfoListData.postValue(buildMenuInfoList())
-                removeItemDecorationAt(0)
-                addItemDecoration(buildItemDecoration())
-            }
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -107,17 +108,33 @@ class RecyclerGridDividerHorFragment :
         }
     }
 
-    private fun buildMenuInfoList(): List<MenuViewModel.MenuInfo> {
-        return listOf(
-            MenuViewModel.MenuInfo(
-                R.id.insets_switch,
-                if (openedInsets) "Disable Insets" else "Enable Insets",
-            ),
-            MenuViewModel.MenuInfo(
-                R.id.divider_thickness_switch,
-                if (thickDivider) "Thin Divider" else "Thick Divider",
-            )
-        )
+    private fun initMenu(toolbar: Toolbar, recyclerView: RecyclerView) {
+        toolbar.menu.add(
+            0, 1, 0,
+            if (openedInsets) "Disable Insets" else "Enable Insets"
+        ).apply {
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }.setOnMenuItemClickListener {
+            openedInsets = !openedInsets
+            recyclerView.removeItemDecorationAt(0)
+            recyclerView.addItemDecoration(buildItemDecoration())
+            it.title =
+                if (openedInsets) "Disable Insets" else "Enable Insets"
+            true
+        }
+
+        toolbar.menu.add(
+            0, 2, 1,
+            if (thickDivider) "Thin Divider" else "Thick Divider"
+        ).apply {
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }.setOnMenuItemClickListener {
+            thickDivider = !thickDivider
+            recyclerView.removeItemDecorationAt(0)
+            recyclerView.addItemDecoration(buildItemDecoration())
+            it.title = if (thickDivider) "Thin Divider" else "Thick Divider"
+            true
+        }
     }
 
     private fun buildItemDecoration(): RecyclerView.ItemDecoration {

@@ -19,17 +19,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.github.panpf.assemblyadapter.list.AssemblyListAdapter
 import com.github.panpf.assemblyadapter.list.AssemblySingleDataListAdapter
 import com.github.panpf.assemblyadapter.list.ConcatListAdapter
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding
 import com.github.panpf.assemblyadapter.sample.item.*
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
-class ListPlaceholderFragment : BaseBindingFragment<FragmentListBinding>() {
+class ListPlaceholderFragment : ToolbarFragment<FragmentListBinding>() {
+
+    private val args: ListPlaceholderFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
     private var registered = false
@@ -40,7 +44,14 @@ class ListPlaceholderFragment : BaseBindingFragment<FragmentListBinding>() {
         return FragmentListBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentListBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentListBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter =
             AssemblySingleDataListAdapter(AppsOverviewItemFactory(requireActivity()))
         val listAdapter = AssemblyListAdapter(

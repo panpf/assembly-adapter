@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -37,10 +38,12 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:${property("ANDROIDX_CONSTRAINTLAYOUT")}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${property("ANDROIDX_LIFECYCLE")}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${property("ANDROIDX_LIFECYCLE")}")
-    implementation("com.google.android.material:material:${property("GOOGLE_MATERIAL")}")
     implementation("androidx.paging:paging-common:${property("ANDROIDX_PAGING")}")
     implementation("androidx.paging:paging-runtime:${property("ANDROIDX_PAGING")}")
+    implementation("androidx.navigation:navigation-fragment-ktx:${property("ANDROIDX_NAVIGATION")}")
+    implementation("androidx.navigation:navigation-ui-ktx:${property("ANDROIDX_NAVIGATION")}")
 
+    implementation("com.google.android.material:material:${property("GOOGLE_MATERIAL")}")
     implementation("io.github.panpf.pagerindicator:pagerindicator:${property("PAGER_INDICATOR")}")
     implementation("io.github.panpf.sketch:sketch:${property("SKETCH_VERSION")}")
     implementation("io.github.panpf.tools4a:tools4a-dimen-ktx:${property("TOOLS4A")}")

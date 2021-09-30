@@ -16,21 +16,13 @@
 package com.github.panpf.assemblyadapter.sample
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
-import com.github.panpf.assemblyadapter.sample.databinding.AcivityMainBinding
-import com.github.panpf.assemblyadapter.sample.ui.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding = AcivityMainBinding.inflate(LayoutInflater.from(this), null, false)
-        setContentView(binding.root)
-
-        supportFragmentManager.beginTransaction()
-            .replace(binding.mainFragmentContainerView.id, MainFragment())
-            .commit()
+        setContentView(R.layout.activity_main)
     }
 }

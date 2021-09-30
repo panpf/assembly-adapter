@@ -20,9 +20,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.Placeholder
@@ -31,14 +33,16 @@ import com.github.panpf.assemblyadapter.pager.AssemblySingleDataFragmentStatePag
 import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.R
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.LoadStateFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupOverviewAppsViewModel
 
-class PagerFragmentPlaceholderFragment : BaseBindingFragment<FragmentPagerBinding>() {
+class PagerFragmentPlaceholderFragment : ToolbarFragment<FragmentPagerBinding>() {
+
+    private val args: PagerFragmentPlaceholderFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PagerPinyinGroupOverviewAppsViewModel>()
     private var registered = false
@@ -49,7 +53,14 @@ class PagerFragmentPlaceholderFragment : BaseBindingFragment<FragmentPagerBindin
         return FragmentPagerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentPagerBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter = AssemblySingleDataFragmentStatePagerAdapter(
             childFragmentManager,
             FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,

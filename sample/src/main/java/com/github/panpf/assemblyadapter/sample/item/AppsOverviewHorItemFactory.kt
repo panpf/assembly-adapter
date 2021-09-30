@@ -68,7 +68,7 @@ class AppsOverviewHorItemFactory(
         data: AppsOverview
     ) {
         binding.appsOverviewHorItemContentText.text = context.getString(
-            R.string.apps_overview_item, data.count, data.userAppCount, data.groupCount
+            R.string.apps_overview_item_hor, data.count, data.userAppCount, data.groupCount
         )
     }
 }

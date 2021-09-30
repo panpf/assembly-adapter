@@ -19,21 +19,25 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.github.panpf.assemblyadapter.pager2.AssemblyFragmentStateAdapter
 import com.github.panpf.assemblyadapter.pager2.AssemblySingleDataFragmentStateAdapter
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPager2Binding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.LoadStateFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupOverviewAppsViewModel
 
-class Pager2Fragment : BaseBindingFragment<FragmentPager2Binding>() {
+class Pager2Fragment : ToolbarFragment<FragmentPager2Binding>() {
+
+    private val args: Pager2FragmentArgs by navArgs()
 
     private val viewModel by viewModels<PagerPinyinGroupOverviewAppsViewModel>()
 
@@ -43,7 +47,14 @@ class Pager2Fragment : BaseBindingFragment<FragmentPager2Binding>() {
         return FragmentPager2Binding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentPager2Binding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentPager2Binding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter = AssemblySingleDataFragmentStateAdapter(
             this,
             AppsOverviewFragmentItemFactory()

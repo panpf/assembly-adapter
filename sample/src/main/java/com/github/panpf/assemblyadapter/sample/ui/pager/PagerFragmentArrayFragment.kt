@@ -19,17 +19,21 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.pager.ArrayFragmentStatePagerAdapter
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupFragmentItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupAppsViewModel
 
-class PagerFragmentArrayFragment : BaseBindingFragment<FragmentPagerBinding>() {
+class PagerFragmentArrayFragment : ToolbarFragment<FragmentPagerBinding>() {
+
+    private val args: PagerFragmentArrayFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PagerPinyinGroupAppsViewModel>()
 
@@ -39,7 +43,14 @@ class PagerFragmentArrayFragment : BaseBindingFragment<FragmentPagerBinding>() {
         return FragmentPagerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentPagerBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         binding.pagerPager.apply {
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {

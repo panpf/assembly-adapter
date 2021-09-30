@@ -19,12 +19,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.github.panpf.assemblyadapter.list.expandable.AssemblyExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.AssemblySingleDataExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.ConcatExpandableListAdapter
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
@@ -32,7 +34,9 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentExpandableLis
 import com.github.panpf.assemblyadapter.sample.item.*
 import com.github.panpf.assemblyadapter.sample.vm.PinyinGroupAppsViewModel
 
-class ExpandableListPlaceholderFragment : BaseBindingFragment<FragmentExpandableListBinding>() {
+class ExpandableListPlaceholderFragment : ToolbarFragment<FragmentExpandableListBinding>() {
+
+    private val args: ExpandableListPlaceholderFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PinyinGroupAppsViewModel>()
     private var registered = false
@@ -43,7 +47,14 @@ class ExpandableListPlaceholderFragment : BaseBindingFragment<FragmentExpandable
         return FragmentExpandableListBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentExpandableListBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentExpandableListBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter = AssemblySingleDataExpandableListAdapter<AppsOverview, Any>(
             AppsOverviewItemFactory(requireActivity())
         )

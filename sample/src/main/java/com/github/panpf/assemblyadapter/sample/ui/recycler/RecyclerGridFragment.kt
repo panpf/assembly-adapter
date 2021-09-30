@@ -18,7 +18,9 @@ package com.github.panpf.assemblyadapter.sample.ui.recycler
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
@@ -27,7 +29,7 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerItemDecoration
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
@@ -36,7 +38,9 @@ import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
-class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerGridFragment : ToolbarFragment<FragmentRecyclerBinding>() {
+
+    private val args: RecyclerGridFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
@@ -46,7 +50,14 @@ class RecyclerGridFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
         return FragmentRecyclerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentRecyclerBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(

@@ -2,6 +2,7 @@
     <string name="app_name">AssemblyAdapter</string>
     <string name="apps_overview">A total of %d startable apps\nAmong them, %d user apps\ncan be divided into %d groups by pinyin initials</string>
     <string name="apps_overview_item">Apps: %d (User: %d. Group: %d)</string>
+    <string name="apps_overview_item_hor">Apps: %d\nUser: %d\nGroup: %d</string>
     <string name="loading">Loading…</string>
     <string name="load_error">Load failed, click to reload</string>
     <string name="load_end">THE END</string>

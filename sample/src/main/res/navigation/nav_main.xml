@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.MainFragment"
+        android:label="MainFragment" />
+    <fragment
+        android:id="@+id/expandableListFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListFragment"
+        android:label="ExpandableListFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/expandableListPlaceholderFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.list.ExpandableListPlaceholderFragment"
+        android:label="ExpandableListPlaceholderFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.list.ListFragment"
+        android:label="ListFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPlaceholderFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.list.ListPlaceholderFragment"
+        android:label="ListPlaceholderFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagerFragmentArrayFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentArrayFragment"
+        android:label="PagerFragmentArrayFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagerFragmentFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentFragment"
+        android:label="PagerFragmentFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagerFragmentPlaceholderFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager.PagerFragmentPlaceholderFragment"
+        android:label="PagerFragmentPlaceholderFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagerViewArrayFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager.PagerViewArrayFragment"
+        android:label="PagerViewArrayFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagerViewFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager.PagerViewFragment"
+        android:label="PagerViewFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagerViewPlaceholderFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager.PagerViewPlaceholderFragment"
+        android:label="PagerViewPlaceholderFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pager2ArrayFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2ArrayFragment"
+        android:label="Pager2ArrayFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pager2Fragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2Fragment"
+        android:label="Pager2Fragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pager2ListFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2ListFragment"
+        android:label="Pager2ListFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pager2PagingFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2PagingFragment"
+        android:label="Pager2PagingFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pager2PlaceholderFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.pager2.Pager2PlaceholderFragment"
+        android:label="Pager2PlaceholderFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerGridDividerHorFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerGridDividerHorFragment"
+        android:label="RecyclerGridDividerHorFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerGridDividerVerFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerGridDividerVerFragment"
+        android:label="RecyclerGridDividerVerFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerGridFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerGridFragment"
+        android:label="RecyclerGridFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerGridPagingFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerGridPagingFragment"
+        android:label="RecyclerGridPagingFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerLinearDividerHorFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerLinearDividerHorFragment"
+        android:label="RecyclerLinearDividerHorFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerLinearDividerVerFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerLinearDividerVerFragment"
+        android:label="RecyclerLinearDividerVerFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerLinearFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerLinearFragment"
+        android:label="RecyclerLinearFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerLinearPagingFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerLinearPagingFragment"
+        android:label="RecyclerLinearPagingFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerLinearPlaceholderFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerLinearPlaceholderFragment"
+        android:label="RecyclerLinearPlaceholderFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerListAdapterLinearFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerListAdapterLinearFragment"
+        android:label="RecyclerListAdapterLinearFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerListAdapterPlaceholderFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerListAdapterPlaceholderFragment"
+        android:label="RecyclerListAdapterPlaceholderFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerStaggeredGridDividerHorFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerStaggeredGridDividerHorFragment"
+        android:label="RecyclerStaggeredGridDividerHorFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerStaggeredGridDividerVerFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerStaggeredGridDividerVerFragment"
+        android:label="RecyclerStaggeredGridDividerVerFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerStaggeredGridFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerStaggeredGridFragment"
+        android:label="RecyclerStaggeredGridFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerStaggeredGridPagingFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerStaggeredGridPagingFragment"
+        android:label="RecyclerStaggeredGridPagingFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_expandableListFragment"
+        app:destination="@id/expandableListFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_expandableListPlaceholderFragment"
+        app:destination="@id/expandableListPlaceholderFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_listFragment"
+        app:destination="@id/listFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_listPlaceholderFragment"
+        app:destination="@id/listPlaceholderFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pagerFragmentArrayFragment"
+        app:destination="@id/pagerFragmentArrayFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pagerFragmentFragment"
+        app:destination="@id/pagerFragmentFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pagerFragmentPlaceholderFragment"
+        app:destination="@id/pagerFragmentPlaceholderFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pagerViewArrayFragment"
+        app:destination="@id/pagerViewArrayFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pagerViewFragment"
+        app:destination="@id/pagerViewFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pagerViewPlaceholderFragment"
+        app:destination="@id/pagerViewPlaceholderFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pager2ArrayFragment"
+        app:destination="@id/pager2ArrayFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pager2Fragment"
+        app:destination="@id/pager2Fragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pager2ListFragment"
+        app:destination="@id/pager2ListFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pager2PagingFragment"
+        app:destination="@id/pager2PagingFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_pager2PlaceholderFragment"
+        app:destination="@id/pager2PlaceholderFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerGridDividerHorFragment"
+        app:destination="@id/recyclerGridDividerHorFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerGridDividerVerFragment"
+        app:destination="@id/recyclerGridDividerVerFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerGridFragment"
+        app:destination="@id/recyclerGridFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerGridPagingFragment"
+        app:destination="@id/recyclerGridPagingFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerLinearDividerHorFragment"
+        app:destination="@id/recyclerLinearDividerHorFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerLinearDividerVerFragment"
+        app:destination="@id/recyclerLinearDividerVerFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerLinearFragment"
+        app:destination="@id/recyclerLinearFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerLinearPagingFragment"
+        app:destination="@id/recyclerLinearPagingFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerLinearPlaceholderFragment"
+        app:destination="@id/recyclerLinearPlaceholderFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerListAdapterLinearFragment"
+        app:destination="@id/recyclerListAdapterLinearFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerListAdapterPlaceholderFragment"
+        app:destination="@id/recyclerListAdapterPlaceholderFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerStaggeredGridDividerHorFragment"
+        app:destination="@id/recyclerStaggeredGridDividerHorFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerStaggeredGridDividerVerFragment"
+        app:destination="@id/recyclerStaggeredGridDividerVerFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerStaggeredGridFragment"
+        app:destination="@id/recyclerStaggeredGridFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerStaggeredGridPagingFragment"
+        app:destination="@id/recyclerStaggeredGridPagingFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+</navigation>

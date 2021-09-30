@@ -20,10 +20,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.findNavController
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.bean.Link
 import com.github.panpf.assemblyadapter.sample.databinding.ItemLinkBinding
-import com.github.panpf.assemblyadapter.sample.ui.FragmentContainerActivity
 
 class LinkItemFactory(private val activity: Activity) :
     BindingItemFactory<Link, ItemLinkBinding>(Link::class) {
@@ -40,12 +40,7 @@ class LinkItemFactory(private val activity: Activity) :
         item: BindingItem<Link, ItemLinkBinding>
     ) {
         binding.root.setOnClickListener {
-            val data = item.dataOrThrow
-            val title = data.title.substringBefore(" - ", data.title)
-            val subTitle = data.title.substringAfter(" - ", "")
-            context.startActivity(
-                FragmentContainerActivity.createIntent(context, title, subTitle, data.fragment)
-            )
+            it.findNavController().navigate(item.dataOrThrow.navDirections)
         }
 
         binding.root.setOnLongClickListener {

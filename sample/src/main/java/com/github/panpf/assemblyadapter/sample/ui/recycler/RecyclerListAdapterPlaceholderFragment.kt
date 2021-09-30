@@ -19,19 +19,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerListAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerListAdapter
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.*
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
-class RecyclerListAdapterPlaceholderFragment : BaseBindingFragment<FragmentRecyclerBinding>() {
+class RecyclerListAdapterPlaceholderFragment : ToolbarFragment<FragmentRecyclerBinding>() {
+
+    private val args: RecyclerListAdapterPlaceholderFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
     private var registered = false
@@ -42,7 +46,14 @@ class RecyclerListAdapterPlaceholderFragment : BaseBindingFragment<FragmentRecyc
         return FragmentRecyclerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentRecyclerBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentRecyclerBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter =
             AssemblySingleDataRecyclerListAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerListAdapter<Any?>(

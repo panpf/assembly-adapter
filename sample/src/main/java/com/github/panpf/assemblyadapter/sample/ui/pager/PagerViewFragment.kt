@@ -19,21 +19,25 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.viewpager.widget.ViewPager
 import com.github.panpf.assemblyadapter.pager.AssemblyPagerAdapter
 import com.github.panpf.assemblyadapter.pager.AssemblySingleDataPagerAdapter
 import com.github.panpf.assemblyadapter.pager.ConcatPagerAdapter
-import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
+import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentPagerBinding
 import com.github.panpf.assemblyadapter.sample.item.pager.AppGroupPagerItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.AppsOverviewPagerItemFactory
 import com.github.panpf.assemblyadapter.sample.item.pager.LoadStatePagerItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PagerPinyinGroupOverviewAppsViewModel
 
-class PagerViewFragment : BaseBindingFragment<FragmentPagerBinding>() {
+class PagerViewFragment : ToolbarFragment<FragmentPagerBinding>() {
+
+    private val args: PagerViewFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PagerPinyinGroupOverviewAppsViewModel>()
 
@@ -43,7 +47,14 @@ class PagerViewFragment : BaseBindingFragment<FragmentPagerBinding>() {
         return FragmentPagerBinding.inflate(inflater, parent, false)
     }
 
-    override fun onInitData(binding: FragmentPagerBinding, savedInstanceState: Bundle?) {
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentPagerBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
         val appsOverviewAdapter = AssemblySingleDataPagerAdapter(AppsOverviewPagerItemFactory())
         val pagerAdapter = AssemblyPagerAdapter<Any>(
             listOf(AppGroupPagerItemFactory(requireActivity()))
