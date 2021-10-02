@@ -1,4 +1,4 @@
-# new
+# v4.0.1
 
 * fix: Fix the bug in Assembly\*DividerItemDecoration where position and spanIndex priority is lower than ItemFactory
 
