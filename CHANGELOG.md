@@ -1,3 +1,7 @@
+# new
+
+* fix: Fix the bug in Assembly\*DividerItemDecoration where position and spanIndex priority is lower than ItemFactory
+
 # v4.0.0 Stable
 
 A new version, a new start, version 4.0 and version 3.0 are completely incompatible, but the two can coexist

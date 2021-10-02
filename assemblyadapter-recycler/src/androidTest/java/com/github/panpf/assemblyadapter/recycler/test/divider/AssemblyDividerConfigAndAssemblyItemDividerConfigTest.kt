@@ -69,7 +69,8 @@ class AssemblyDividerConfigAndAssemblyItemDividerConfigTest {
             personaliseByPosition(7, Divider.space(7))
             personaliseBySpanIndex(3, Divider.space(3))
             personaliseByItemFactoryClass(ImageItemFactory::class, Divider.space(20))
-        }.build().toAssemblyItemDividerConfig(context, AssemblyFindItemFactoryClassSupport())
+        }.build()
+            .toAssemblyItemDividerConfig(context, AssemblyFindItemFactoryClassSupport())
             .apply {
                 Assert.assertEquals(
                     0,
@@ -128,6 +129,33 @@ class AssemblyDividerConfigAndAssemblyItemDividerConfigTest {
                 Assert.assertEquals(
                     3,
                     get(recyclerView, position = 13, spanIndex = 3)?.widthSize ?: 0
+                )
+            }
+    }
+
+    @Test
+    fun testPriority() {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val recyclerView = RecyclerView(context).apply {
+            adapter = AssemblyRecyclerAdapter(
+                listOf(TextItemFactory(), ImageItemFactory(), DateItemFactory()),
+                listOf(
+                    Date(), Date(), Date(), Date(), Date(),
+                    Date(), Date(), Date(), Date(), Date(),
+                    Text(""), Date(), Image(android.R.drawable.btn_default), Date()
+                )
+            )
+        }
+
+        AssemblyDividerConfig.Builder(Divider.space(10)).apply {
+            personaliseByPosition(9, Divider.space(9))
+            personaliseByItemFactoryClass(DateItemFactory::class, Divider.space(20))
+        }.build()
+            .toAssemblyItemDividerConfig(context, AssemblyFindItemFactoryClassSupport())
+            .apply {
+                Assert.assertEquals(
+                    9,
+                    get(recyclerView, position = 9, spanIndex = 4)?.widthSize ?: 0
                 )
             }
     }

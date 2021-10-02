@@ -21,12 +21,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassSupport
 
 class AssemblyItemDividerConfig(
-    itemDivider: ItemDivider,
-    disableByPositionArray: SparseArrayCompat<Boolean>?,
-    disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
+    private val itemDivider: ItemDivider,
+    private val disableByPositionArray: SparseArrayCompat<Boolean>?,
+    private val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
     private val disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>?,
-    personaliseByPositionArray: SparseArrayCompat<ItemDivider>?,
-    personaliseBySpanIndexArray: SparseArrayCompat<ItemDivider>?,
+    private val personaliseByPositionArray: SparseArrayCompat<ItemDivider>?,
+    private val personaliseBySpanIndexArray: SparseArrayCompat<ItemDivider>?,
     private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, ItemDivider>?,
     private val findItemFactoryClassSupport: FindItemFactoryClassSupport,
 ) : ItemDividerConfig(
@@ -38,23 +38,53 @@ class AssemblyItemDividerConfig(
 ) {
 
     override fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDivider? {
-        if (disableByItemFactoryClassMap != null || personaliseByItemFactoryClassMap != null) {
-            val adapter = parent.adapter
-            val itemFactoryClass = adapter?.let {
-                findItemFactoryClassSupport.findItemFactoryClassByPosition(it, position)
+        if (disableByPositionArray?.get(position, false) == true) {
+            return null
+        }
+
+        if (disableBySpanIndexArray?.get(spanIndex, false) == true) {
+            return null
+        }
+
+        var itemFactoryClass: Class<*>? = null
+        if (disableByItemFactoryClassMap != null) {
+            if (itemFactoryClass == null) {
+                itemFactoryClass = parent.adapter?.let {
+                    findItemFactoryClassSupport.findItemFactoryClassByPosition(it, position)
+                }
             }
             if (itemFactoryClass != null) {
-                if (disableByItemFactoryClassMap?.get(itemFactoryClass) == true) {
+                if (disableByItemFactoryClassMap[itemFactoryClass] == true) {
                     return null
                 }
+            }
+        }
 
+        val personaliseByPositionItemDivider = personaliseByPositionArray?.get(position)
+        if (personaliseByPositionItemDivider != null) {
+            return personaliseByPositionItemDivider
+        }
+
+        val personaliseBySpanIndexItemDivider = personaliseBySpanIndexArray?.get(spanIndex)
+        if (personaliseBySpanIndexItemDivider != null) {
+            return personaliseBySpanIndexItemDivider
+        }
+
+        if (personaliseByItemFactoryClassMap != null) {
+            if (itemFactoryClass == null) {
+                itemFactoryClass = parent.adapter?.let {
+                    findItemFactoryClassSupport.findItemFactoryClassByPosition(it, position)
+                }
+            }
+            if (itemFactoryClass != null) {
                 val personaliseItemDivider =
-                    personaliseByItemFactoryClassMap?.get(itemFactoryClass)
+                    personaliseByItemFactoryClassMap[itemFactoryClass]
                 if (personaliseItemDivider != null) {
                     return personaliseItemDivider
                 }
             }
         }
-        return super.get(parent, position, spanIndex)
+
+        return itemDivider
     }
 }
