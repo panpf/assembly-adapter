@@ -5,4 +5,10 @@
     <color name="primaryTranslucent">#886E75A4</color>
     <color name="app_icon_stroke">#DDDDDD</color>
     <color name="placeholder">#DADADA</color>
+    <color name="divider">#E53935</color>
+    <color name="divider_header">#88E53935</color>
+    <color name="divider_personalise">#00C853</color>
+    <color name="sideDivider">#00B8D4</color>
+    <color name="sideDivider_header">#8800B8D4</color>
+    <color name="sideDivider_personalise">#00C853</color>
 </resources>

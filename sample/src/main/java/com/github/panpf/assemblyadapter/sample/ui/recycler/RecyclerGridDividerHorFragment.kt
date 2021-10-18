@@ -32,6 +32,7 @@ import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
+import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
 import com.github.panpf.assemblyadapter.sample.item.AppGridHorItemFactory
@@ -141,20 +142,20 @@ class RecyclerGridDividerHorFragment :
         return AssemblyGridDividerItemDecoration.Builder(requireContext()).apply {
             val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
             val size = if (thickDivider) 5.dp2px else 1.dp2px
-            divider(Divider.color(0x88FF0000.toInt(), size, insets)) {
+            divider(Divider.colorRes(R.color.divider, size, insets)) {
                 personaliseByItemFactoryClass(
                     ListSeparatorHorItemFactory::class,
-                    Divider.color(0x8800FF00.toInt(), size, insets)
+                    Divider.colorRes(R.color.divider_personalise, size, insets)
                 )
                 disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
             }
-            headerAndFooterDivider(Divider.color(0xFFFF0000.toInt(), size, insets))
+            headerAndFooterDivider(Divider.colorRes(R.color.divider_header, size, insets))
 
-            sideDivider(Divider.color(0x880000FF.toInt(), size, insets))
-            sideHeaderAndFooterDivider(Divider.color(0xFF0000FF.toInt(), size, insets)) {
+            sideDivider(Divider.colorRes(R.color.sideDivider, size, insets))
+            sideHeaderAndFooterDivider(Divider.colorRes(R.color.sideDivider_header, size, insets)) {
                 personaliseByItemFactoryClass(
                     ListSeparatorHorItemFactory::class,
-                    Divider.color(0xFF00FF00.toInt(), size, insets)
+                    Divider.colorRes(R.color.sideDivider_personalise, size, insets)
                 )
                 disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
             }
