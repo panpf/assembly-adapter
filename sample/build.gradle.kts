@@ -17,7 +17,11 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            multiDexEnabled = true
+        }
         getByName("release") {
+            multiDexEnabled = true
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
@@ -31,8 +35,10 @@ android {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${property("KOTLINX_COROUTINES_ANDROID")}")
+    implementation("androidx.multidex:multidex:${property("ANDROIDX_MULTIDEX")}")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:${property("LEAK_CANARY")}")
 
-    implementation("androidx.core:core-ktx:${property("ANDROIDX_CORE_KTX")}")
+    implementation("androidx.core:core-ktx:${property("ANDROIDX_CORE")}")
     implementation("androidx.appcompat:appcompat:${property("ANDROIDX_APPCOMPAT")}")
     implementation("androidx.fragment:fragment-ktx:${property("ANDROIDX_FRAGMENT")}")
     implementation("androidx.constraintlayout:constraintlayout:${property("ANDROIDX_CONSTRAINTLAYOUT")}")
@@ -49,6 +55,7 @@ dependencies {
     implementation("io.github.panpf.tools4a:tools4a-dimen-ktx:${property("TOOLS4A")}")
     implementation("io.github.panpf.liveevent:liveevent:${property("LIVEEVENT")}")
     implementation("com.github.promeg:tinypinyin:${property("TINYPINYIN")}")
+    implementation("com.github.fondesa:recycler-view-divider:3.5.0")
 
     implementation(project(":assemblyadapter"))
 }

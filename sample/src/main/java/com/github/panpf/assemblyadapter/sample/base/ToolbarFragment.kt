@@ -42,6 +42,7 @@ abstract class ToolbarFragment<VIEW_BINDING : ViewBinding> : Fragment() {
     }
 
     override fun onDestroyView() {
+        this.toolbar = null
         this.binding = null
         super.onDestroyView()
     }
