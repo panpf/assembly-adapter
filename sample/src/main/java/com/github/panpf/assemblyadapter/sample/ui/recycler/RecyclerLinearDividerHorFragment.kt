@@ -85,14 +85,14 @@ class RecyclerLinearDividerHorFragment :
 
             add(
                 0, 1, 1,
-                if (dividerInsetsDpData.value!! > 0f) "Disable Insets" else "Enable Insets"
+                if (dividerInsetsDpData.value!! > 0f) "Disable Divider Insets" else "Enable Divider Insets"
             ).apply {
                 setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                 setOnMenuItemClickListener {
                     val newDividerInsets = if (dividerInsetsDpData.value!! > 0f) 0f else 2f
                     dividerInsetsDpData.postValue(newDividerInsets)
                     it.title =
-                        if (newDividerInsets > 0f) "Disable Insets" else "Enable Insets"
+                        if (newDividerInsets > 0f) "Disable Divider Insets" else "Enable Divider Insets"
                     true
                 }
             }
@@ -180,8 +180,8 @@ class RecyclerLinearDividerHorFragment :
                     addItemDecoration(requireContext().dividerBuilder().apply {
                         colorRes(R.color.divider)
                         size(dividerSize)
-                        showFirstDivider()
-                        showLastDivider()
+//                        showFirstDivider()
+//                        showLastDivider()
                         showSideDividers()
                         insets(dividerInsets, dividerInsets)
                     }.build())

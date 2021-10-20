@@ -23,9 +23,9 @@ class GridItemDividerProvider constructor(
     val headerDividerConfig: ItemDividerConfig?,
     val footerDividerConfig: ItemDividerConfig?,
     val sideDividerConfig: ItemDividerConfig?,
-    val sideHeaderAndFooterDividerConfig: ItemDividerConfig?,
+    val sideHeaderDividerConfig: ItemDividerConfig?,
+    val sideFooterDividerConfig: ItemDividerConfig?,
 ) {
-
     fun getItemDivider(
         view: View,
         parent: RecyclerView,
@@ -43,19 +43,55 @@ class GridItemDividerProvider constructor(
         isLastGroup: Boolean,
         isVerticalOrientation: Boolean,
         dividerType: ItemDivider.Type,
-    ): ItemDivider? = if (isVerticalOrientation) {
-        when (dividerType) {
-            ItemDivider.Type.START -> if (isFirstSpan) sideHeaderAndFooterDividerConfig else null
-            ItemDivider.Type.TOP -> if (isFirstGroup) headerDividerConfig else null
-            ItemDivider.Type.END -> if (isLastSpan) sideHeaderAndFooterDividerConfig else sideDividerConfig
-            ItemDivider.Type.BOTTOM -> if (isLastGroup) footerDividerConfig else dividerConfig
+        fromOffset: Boolean
+    ): ItemDivider? {
+        val finalDividerType = if (isVerticalOrientation) {
+            dividerType
+        } else {
+            when (dividerType) {
+                ItemDivider.Type.START -> ItemDivider.Type.TOP
+                ItemDivider.Type.END -> ItemDivider.Type.BOTTOM
+                ItemDivider.Type.TOP -> ItemDivider.Type.START
+                ItemDivider.Type.BOTTOM -> ItemDivider.Type.END
+            }
         }
-    } else {
-        when (dividerType) {
-            ItemDivider.Type.START -> if (isFirstGroup) headerDividerConfig else null
-            ItemDivider.Type.TOP -> if (isFirstSpan) sideHeaderAndFooterDividerConfig else null
-            ItemDivider.Type.END -> if (isLastGroup) footerDividerConfig else dividerConfig
-            ItemDivider.Type.BOTTOM -> if (isLastSpan) sideHeaderAndFooterDividerConfig else sideDividerConfig
+        val dividerConfig = if (isOnlySideHeader) {
+            when (finalDividerType) {
+                ItemDivider.Type.START -> if (isFirstSpan) sideHeaderDividerConfig else sideDividerConfig
+                ItemDivider.Type.END -> null
+                ItemDivider.Type.TOP -> if (isFirstGroup) headerDividerConfig else null
+                ItemDivider.Type.BOTTOM -> if (isLastGroup) footerDividerConfig else dividerConfig
+            }
+        } else if (isNoSideHeaderAndFooter && fromOffset) {
+            when (finalDividerType) {
+                ItemDivider.Type.START -> if (isFirstSpan) null else sideDividerConfig
+                ItemDivider.Type.END -> if (isLastSpan) null else sideDividerConfig
+                ItemDivider.Type.TOP -> if (isFirstGroup) headerDividerConfig else null
+                ItemDivider.Type.BOTTOM -> if (isLastGroup) footerDividerConfig else dividerConfig
+            }
+        } else {
+            when (finalDividerType) {
+                ItemDivider.Type.START -> if (isFirstSpan) sideHeaderDividerConfig else null
+                ItemDivider.Type.END -> if (isLastSpan) sideFooterDividerConfig else sideDividerConfig
+                ItemDivider.Type.TOP -> if (isFirstGroup) headerDividerConfig else null
+                ItemDivider.Type.BOTTOM -> if (isLastGroup) footerDividerConfig else dividerConfig
+            }
         }
-    }?.get(parent, position, spanIndex)
+        return dividerConfig?.get(parent, position, spanIndex)
+    }
+
+    val isHaveSide: Boolean =
+        sideDividerConfig != null
+
+    val isOnlySideHeader: Boolean =
+        sideHeaderDividerConfig != null && sideFooterDividerConfig == null
+
+    val isOnlySideFooter: Boolean =
+        sideHeaderDividerConfig != null && sideFooterDividerConfig == null
+
+    val isHaveSideHeaderAndFooter: Boolean =
+        sideHeaderDividerConfig != null && sideFooterDividerConfig != null
+
+    val isNoSideHeaderAndFooter: Boolean =
+        sideHeaderDividerConfig == null && sideFooterDividerConfig == null
 }

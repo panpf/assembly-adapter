@@ -27,7 +27,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.fondesa.recyclerviewdivider.staggeredDividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
@@ -38,7 +37,7 @@ import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
 import com.github.panpf.assemblyadapter.sample.item.*
-import com.github.panpf.assemblyadapter.sample.util.ThreeCombineMediatorLiveData
+import com.github.panpf.assemblyadapter.sample.util.FourCombineMediatorLiveData
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
@@ -50,11 +49,13 @@ class RecyclerStaggeredGridDividerHorFragment :
 
     private val dividerSizeDpData = MutableLiveData(5f)
     private val dividerInsetsDpData = MutableLiveData(0f)
-    private val useSelfDividerItemDecoration = MutableLiveData(true)
-    private val dividerParamsData = ThreeCombineMediatorLiveData(
+    private val sideHeaderDividerData = MutableLiveData(true)
+    private val sideFooterDividerData = MutableLiveData(true)
+    private val dividerParamsData = FourCombineMediatorLiveData(
         dividerSizeDpData,
         dividerInsetsDpData,
-        useSelfDividerItemDecoration,
+        sideHeaderDividerData,
+        sideFooterDividerData,
         initValue = true
     )
 
@@ -85,29 +86,29 @@ class RecyclerStaggeredGridDividerHorFragment :
             }
 
             add(
-                0, 1, 1,
-                if (dividerInsetsDpData.value!! > 0f) "Disable Insets" else "Enable Insets"
+                0, 2, 2,
+                if (sideHeaderDividerData.value!!) "Hide Side Header Divider" else "Show Side Header Divider"
             ).apply {
                 setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                 setOnMenuItemClickListener {
-                    val newDividerInsets = if (dividerInsetsDpData.value!! > 0f) 0f else 2f
-                    dividerInsetsDpData.postValue(newDividerInsets)
+                    val newValue = !sideHeaderDividerData.value!!
+                    sideHeaderDividerData.postValue(newValue)
                     it.title =
-                        if (newDividerInsets > 0f) "Disable Insets" else "Enable Insets"
+                        if (newValue) "Hide Side Header Divider" else "Show Side Header Divider"
                     true
                 }
             }
 
             add(
-                0, 2, 2,
-                if (useSelfDividerItemDecoration.value!!) "Use Other DividerItemDecoration" else "Use Self DividerItemDecoration"
+                0, 3, 3,
+                if (sideFooterDividerData.value!!) "Hide Side Footer Divider" else "Show Side Footer Divider"
             ).apply {
                 setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                 setOnMenuItemClickListener {
-                    val newValue = !useSelfDividerItemDecoration.value!!
-                    useSelfDividerItemDecoration.postValue(newValue)
+                    val newValue = !sideFooterDividerData.value!!
+                    sideFooterDividerData.postValue(newValue)
                     it.title =
-                        if (newValue) "Use Other DividerItemDecoration" else "Use Self DividerItemDecoration"
+                        if (newValue) "Hide Side Footer Divider" else "Show Side Footer Divider"
                     true
                 }
             }
@@ -132,7 +133,9 @@ class RecyclerStaggeredGridDividerHorFragment :
                     requireActivity(),
                     viewLifecycleOwner,
                     dividerSizeDpData,
-                    dividerInsetsDpData
+                    dividerInsetsDpData,
+                    sideHeaderDividerData,
+                    sideFooterDividerData,
                 ),
                 ListSeparatorHorItemFactory(requireActivity(), hideDivider = true)
             )
@@ -157,22 +160,22 @@ class RecyclerStaggeredGridDividerHorFragment :
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)
                 }
-                if (useSelfDividerItemDecoration.value!!) {
-                    addAssemblyStaggeredGridDividerItemDecoration {
-                        val insets = Insets.allOf(dividerInsets)
-                        divider(Divider.colorRes(R.color.divider, dividerSize, insets)) {
-                            personaliseByItemFactoryClass(
-                                ListSeparatorHorItemFactory::class,
-                                Divider.colorRes(R.color.divider_personalise, dividerSize, insets)
-                            )
-                            disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
-                        }
-                        headerAndFooterDivider(
-                            Divider.colorRes(R.color.divider_header, dividerSize, insets)
+                addAssemblyStaggeredGridDividerItemDecoration {
+                    val insets = Insets.allOf(dividerInsets)
+                    divider(Divider.colorRes(R.color.divider, dividerSize, insets)) {
+                        personaliseByItemFactoryClass(
+                            ListSeparatorHorItemFactory::class,
+                            Divider.colorRes(R.color.divider_personalise, dividerSize, insets)
                         )
+                        disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
+                    }
+                    headerAndFooterDivider(
+                        Divider.colorRes(R.color.divider_header, dividerSize, insets)
+                    )
 
-                        sideDivider(Divider.colorRes(R.color.sideDivider, dividerSize, insets))
-                        sideHeaderAndFooterDivider(
+                    sideDivider(Divider.colorRes(R.color.sideDivider, dividerSize, insets))
+                    if (sideHeaderDividerData.value == true) {
+                        sideHeaderDivider(
                             Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
                         ) {
                             personaliseByItemFactoryClass(
@@ -186,11 +189,21 @@ class RecyclerStaggeredGridDividerHorFragment :
                             disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
                         }
                     }
-                } else {
-                    addItemDecoration(requireContext().staggeredDividerBuilder().apply {
-                        colorRes(R.color.divider)
-                        size(dividerSize)
-                    }.build())
+                    if (sideFooterDividerData.value == true) {
+                        sideFooterDivider(
+                            Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
+                        ) {
+                            personaliseByItemFactoryClass(
+                                ListSeparatorHorItemFactory::class,
+                                Divider.colorRes(
+                                    R.color.sideDivider_personalise,
+                                    dividerSize,
+                                    insets
+                                )
+                            )
+                            disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
+                        }
+                    }
                 }
                 adapter?.notifyDataSetChanged() // The item width needs to be recalculated and refreshed to take effect
             }
