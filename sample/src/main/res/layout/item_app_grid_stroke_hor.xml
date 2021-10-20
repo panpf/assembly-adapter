@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#336E75A4">
 
     <LinearLayout
         android:id="@+id/appGridStrokeHorItemContentLayout"
-        android:layout_width="180dp"
+        android:layout_width="wrap_content"
         android:layout_height="84dp"
-        android:background="#336E75A4"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="12dp">
+        android:padding="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <me.panpf.sketch.SketchImageView
             android:id="@+id/appGridStrokeHorItemIconImage"
@@ -30,31 +33,35 @@
             tools:text="发顺丰就撒娇发牢骚 " />
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/appGridStrokeHorItemStrokeLayout"
-        android:layout_width="180dp"
-        android:layout_height="84dp">
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/grid_item_stroke"
+        app:layout_constraintBottom_toBottomOf="@id/appGridStrokeHorItemContentLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/appGridStrokeHorItemContentLayout" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/grid_item_stroke" />
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/grid_item_stroke"
+        app:layout_constraintBottom_toBottomOf="@id/appGridStrokeHorItemContentLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/appGridStrokeHorItemContentLayout" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grid_item_stroke" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/grid_item_stroke"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/appGridStrokeHorItemContentLayout" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right|end"
-            android:background="@color/grid_item_stroke" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:background="@color/grid_item_stroke" />
-    </FrameLayout>
-</FrameLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/grid_item_stroke"
+        app:layout_constraintBottom_toBottomOf="@id/appGridStrokeHorItemContentLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

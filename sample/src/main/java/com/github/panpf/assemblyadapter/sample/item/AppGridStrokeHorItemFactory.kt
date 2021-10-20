@@ -93,17 +93,6 @@ class AppGridStrokeHorItemFactory(
         binding: ItemAppGridStrokeHorBinding,
         item: BindingItem<AppInfo, ItemAppGridStrokeHorBinding>
     ) {
-        binding.root.apply {
-            getChildAt(0).updateLayoutParams<ViewGroup.LayoutParams> {
-                width = (itemSize * 2.0).toInt()
-                height = itemSize
-            }
-            getChildAt(1).updateLayoutParams<ViewGroup.LayoutParams> {
-                width = (itemSize * 2.0).toInt()
-                height = itemSize
-            }
-        }
-
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val launchIntent =
@@ -147,15 +136,6 @@ class AppGridStrokeHorItemFactory(
         binding.appGridStrokeHorItemContentLayout.apply {
             if (layoutParams.height != itemSize) {
                 updateLayoutParams<ViewGroup.LayoutParams> {
-                    width = (itemSize * 2.0).toInt()
-                    height = itemSize
-                }
-            }
-        }
-        binding.appGridStrokeHorItemStrokeLayout.apply {
-            if (layoutParams.height != itemSize) {
-                updateLayoutParams<ViewGroup.LayoutParams> {
-                    width = (itemSize * 2.0).toInt()
                     height = itemSize
                 }
             }

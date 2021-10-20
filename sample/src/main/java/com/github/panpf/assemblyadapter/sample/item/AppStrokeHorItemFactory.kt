@@ -132,13 +132,6 @@ class AppStrokeHorItemFactory(
                 }
             }
         }
-        binding.appStrokeHorItemStrokeLayout.apply {
-            if (layoutParams.height != itemSize) {
-                updateLayoutParams<ViewGroup.LayoutParams> {
-                    height = itemSize
-                }
-            }
-        }
 
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
         binding.appStrokeHorItemIconImage.displayImage(appIconUri)

@@ -144,15 +144,6 @@ class AppGridStrokeItemFactory(
             if (layoutParams.width != itemSize) {
                 updateLayoutParams<ViewGroup.LayoutParams> {
                     width = itemSize
-                    height = (itemSize * 1.5).toInt()
-                }
-            }
-        }
-        binding.appGridStrokeItemStrokeLayout.apply {
-            if (layoutParams.width != itemSize) {
-                updateLayoutParams<ViewGroup.LayoutParams> {
-                    width = itemSize
-                    height = (itemSize * 1.5).toInt()
                 }
             }
         }

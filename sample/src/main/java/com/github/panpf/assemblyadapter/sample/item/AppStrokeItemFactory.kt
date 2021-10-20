@@ -130,13 +130,6 @@ class AppStrokeItemFactory(
                 }
             }
         }
-        binding.appStrokeItemStrokeLayout.apply {
-            if (layoutParams.width != itemSize) {
-                updateLayoutParams<ViewGroup.LayoutParams> {
-                    width = itemSize
-                }
-            }
-        }
         
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
         binding.appStrokeItemIconImage.displayImage(appIconUri)
