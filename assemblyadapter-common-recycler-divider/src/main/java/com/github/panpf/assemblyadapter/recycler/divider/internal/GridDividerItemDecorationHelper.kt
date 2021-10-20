@@ -65,6 +65,13 @@ class GridDividerItemDecorationHelper(val itemDividerProvider: GridItemDividerPr
             isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.BOTTOM
         )
 
+        // 当我们希望显示 sideDivider, sideHeaderDivider, sideFooterDivider 并且 item 的宽度是 parent 的宽度减去所有 divider 后除以 spanCount 时，
+        // 如公式：'val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount'
+        // 按照 GridItemDividerProvider 的逻辑，第一个 item 的 start 和 end 将都会有 divider 显示
+        // 因为 GridLayoutManager 强制每个 item 的最大宽度为 parentWidth/spanCount，
+        // 所以第一个 item 的宽度会因为加上 start 和 end 的 divider 后超过 GridLayoutManager 限制的最大宽度，
+        // 这时 GridLayoutManager 会将 item 的宽度修改为最大宽度减去 start 和 end 的 divider，导致 item 最终的宽度不是我们希望的宽度
+        // 所以以下的代码都是为了解决这个问题
         if (isVerticalOrientation) {
             val sideDividerSize = startItemDivider?.widthSize ?: endItemDivider?.widthSize
             val showHeaderAndFooterSideDivider =
