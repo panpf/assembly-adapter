@@ -15,6 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.sample.item
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.text.format.Formatter
@@ -22,34 +23,66 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
-import com.github.panpf.assemblyadapter.sample.databinding.ItemAppHorBinding
+import com.github.panpf.assemblyadapter.sample.databinding.ItemAppStrokeHorBinding
+import com.github.panpf.assemblyadapter.sample.util.TwoCombineMediatorLiveData
+import com.github.panpf.tools4a.dimen.ktx.dp2px
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
-class AppHorItemFactory(
+class AppStrokeHorItemFactory(
     private val activity: Activity,
-    private val showBg: Boolean = false
-) :
-    BindingItemFactory<AppInfo, ItemAppHorBinding>(AppInfo::class) {
+    lifecycleOwner: LifecycleOwner,
+    private val dividerSizeDpData: LiveData<Float>,
+    private val dividerInsetsDpData: LiveData<Float>,
+) : BindingItemFactory<AppInfo, ItemAppStrokeHorBinding>(AppInfo::class) {
+
+    private var itemSize: Int = 0
+    private var parent: RecyclerView? = null
+    private val dividerParamsData = TwoCombineMediatorLiveData(
+        dividerSizeDpData,
+        dividerInsetsDpData,
+        initValue = true
+    )
+
+    init {
+        dividerParamsData.observe(lifecycleOwner) {
+            val parent = parent
+            if (it != null && parent != null) {
+                resetItemSize(parent, it.t1!!.dp2px, it.t2!!.dp2px)
+            }
+        }
+    }
+
+    private fun resetItemSize(parent: RecyclerView, dividerSize: Int, dividerInsets: Int) {
+        this.parent = parent
+        itemSize = parent.height - ((dividerSize + (dividerInsets * 2)) * 2)
+    }
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
-    ): ItemAppHorBinding {
-        return ItemAppHorBinding.inflate(inflater, parent, false)
+    ): ItemAppStrokeHorBinding {
+        if (parent is RecyclerView) {
+            resetItemSize(
+                parent,
+                dividerSizeDpData.value!!.dp2px,
+                dividerInsetsDpData.value!!.dp2px
+            )
+        }
+        return ItemAppStrokeHorBinding.inflate(inflater, parent, false)
     }
 
     override fun initItem(
         context: Context,
-        binding: ItemAppHorBinding,
-        item: BindingItem<AppInfo, ItemAppHorBinding>
+        binding: ItemAppStrokeHorBinding,
+        item: BindingItem<AppInfo, ItemAppStrokeHorBinding>
     ) {
-        if (!showBg) {
-            binding.root.setBackgroundDrawable(null)
-        }
-
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
             val launchIntent =
@@ -73,7 +106,7 @@ class AppHorItemFactory(
             true
         }
 
-        binding.appHorItemIconImage.options.shaper = RoundRectImageShaper(
+        binding.appStrokeHorItemIconImage.options.shaper = RoundRectImageShaper(
             context.resources.getDimension(R.dimen.app_icon_corner_radius)
         ).apply {
             setStroke(
@@ -83,18 +116,34 @@ class AppHorItemFactory(
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindItemData(
         context: Context,
-        binding: ItemAppHorBinding,
-        item: BindingItem<AppInfo, ItemAppHorBinding>,
+        binding: ItemAppStrokeHorBinding,
+        item: BindingItem<AppInfo, ItemAppStrokeHorBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: AppInfo
     ) {
+        binding.appStrokeHorItemContentLayout.apply {
+            if (layoutParams.height != itemSize) {
+                updateLayoutParams<ViewGroup.LayoutParams> {
+                    height = itemSize
+                }
+            }
+        }
+        binding.appStrokeHorItemStrokeLayout.apply {
+            if (layoutParams.height != itemSize) {
+                updateLayoutParams<ViewGroup.LayoutParams> {
+                    height = itemSize
+                }
+            }
+        }
+
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
-        binding.appHorItemIconImage.displayImage(appIconUri)
-        binding.appHorItemNameText.text = data.name
-        binding.appHorItemVersionText.text = "v${data.versionName}"
-        binding.appHorItemSizeText.text = Formatter.formatFileSize(context, data.apkSize)
+        binding.appStrokeHorItemIconImage.displayImage(appIconUri)
+        binding.appStrokeHorItemNameText.text = data.name
+        binding.appStrokeHorItemVersionText.text = "v${data.versionName}"
+        binding.appStrokeHorItemSizeText.text = Formatter.formatFileSize(context, data.apkSize)
     }
 }

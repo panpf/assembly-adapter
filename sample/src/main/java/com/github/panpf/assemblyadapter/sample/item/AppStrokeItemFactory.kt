@@ -23,25 +23,63 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewCompat
+import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
-import com.github.panpf.assemblyadapter.sample.databinding.ItemAppBinding
+import com.github.panpf.assemblyadapter.sample.databinding.ItemAppStrokeBinding
+import com.github.panpf.assemblyadapter.sample.util.TwoCombineMediatorLiveData
+import com.github.panpf.tools4a.dimen.ktx.dp2px
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
-class AppItemFactory(private val activity: Activity) :
-    BindingItemFactory<AppInfo, ItemAppBinding>(AppInfo::class) {
+class AppStrokeItemFactory(
+    private val activity: Activity,
+    lifecycleOwner: LifecycleOwner,
+    private val dividerSizeDpData: LiveData<Float>,
+    private val dividerInsetsDpData: LiveData<Float>,
+) : BindingItemFactory<AppInfo, ItemAppStrokeBinding>(AppInfo::class) {
+    
+    private var itemSize: Int = 0
+    private var parent: RecyclerView? = null
+    private val dividerParamsData = TwoCombineMediatorLiveData(
+        dividerSizeDpData,
+        dividerInsetsDpData,
+        initValue = true
+    )
+
+    init {
+        dividerParamsData.observe(lifecycleOwner) {
+            val parent = parent
+            if (it != null && parent != null) {
+                resetItemSize(parent, it.t1!!.dp2px, it.t2!!.dp2px)
+            }
+        }
+    }
+
+    private fun resetItemSize(parent: RecyclerView, dividerSize: Int, dividerInsets: Int) {
+        this.parent = parent
+        itemSize = parent.width - ((dividerSize + (dividerInsets * 2)) * 2)
+    }
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
-    ): ItemAppBinding {
-        return ItemAppBinding.inflate(inflater, parent, false)
+    ): ItemAppStrokeBinding {
+        if (parent is RecyclerView) {
+            resetItemSize(
+                parent,
+                dividerSizeDpData.value!!.dp2px,
+                dividerInsetsDpData.value!!.dp2px
+            )
+        }
+        return ItemAppStrokeBinding.inflate(inflater, parent, false)
     }
 
     override fun initItem(
-        context: Context, binding: ItemAppBinding, item: BindingItem<AppInfo, ItemAppBinding>
+        context: Context, binding: ItemAppStrokeBinding, item: BindingItem<AppInfo, ItemAppStrokeBinding>
     ) {
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
@@ -66,7 +104,7 @@ class AppItemFactory(private val activity: Activity) :
             true
         }
 
-        binding.appItemIconImage.options.shaper = RoundRectImageShaper(
+        binding.appStrokeItemIconImage.options.shaper = RoundRectImageShaper(
             context.resources.getDimension(R.dimen.app_icon_corner_radius)
         ).apply {
             setStroke(
@@ -79,16 +117,31 @@ class AppItemFactory(private val activity: Activity) :
     @SuppressLint("SetTextI18n")
     override fun bindItemData(
         context: Context,
-        binding: ItemAppBinding,
-        item: BindingItem<AppInfo, ItemAppBinding>,
+        binding: ItemAppStrokeBinding,
+        item: BindingItem<AppInfo, ItemAppStrokeBinding>,
         bindingAdapterPosition: Int,
         absoluteAdapterPosition: Int,
         data: AppInfo
     ) {
+        binding.appStrokeItemContentLayout.apply {
+            if (layoutParams.width != itemSize) {
+                updateLayoutParams<ViewGroup.LayoutParams> {
+                    width = itemSize
+                }
+            }
+        }
+        binding.appStrokeItemStrokeLayout.apply {
+            if (layoutParams.width != itemSize) {
+                updateLayoutParams<ViewGroup.LayoutParams> {
+                    width = itemSize
+                }
+            }
+        }
+        
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
-        binding.appItemIconImage.displayImage(appIconUri)
-        binding.appItemNameText.text = data.name
-        binding.appItemVersionText.text = "v${data.versionName}"
-        binding.appItemSizeText.text = Formatter.formatFileSize(context, data.apkSize)
+        binding.appStrokeItemIconImage.displayImage(appIconUri)
+        binding.appStrokeItemNameText.text = data.name
+        binding.appStrokeItemVersionText.text = "v${data.versionName}"
+        binding.appStrokeItemSizeText.text = Formatter.formatFileSize(context, data.apkSize)
     }
 }

@@ -27,7 +27,7 @@ import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.BaseBindingFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppGroupBinding
-import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class AppGroupFragment : BaseBindingFragment<FragmentAppGroupBinding>() {
@@ -52,7 +52,7 @@ class AppGroupFragment : BaseBindingFragment<FragmentAppGroupBinding>() {
             requireContext().getString(R.string.app_group_title, data?.title, data?.appList?.size)
         binding.appGroupRecycler.apply {
             adapter = AssemblyRecyclerAdapter<Any>(
-                listOf(AppCardGridItemFactory(requireActivity())),
+                listOf(AppGridItemFactory(requireActivity())),
                 data?.appList
             )
             layoutManager = GridLayoutManager(context, 3)

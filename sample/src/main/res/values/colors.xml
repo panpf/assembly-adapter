@@ -11,4 +11,5 @@
     <color name="sideDivider">#00B8D4</color>
     <color name="sideDivider_header">#8800B8D4</color>
     <color name="sideDivider_personalise">#00C853</color>
+    <color name="grid_item_stroke">#AA00FF</color>
 </resources>

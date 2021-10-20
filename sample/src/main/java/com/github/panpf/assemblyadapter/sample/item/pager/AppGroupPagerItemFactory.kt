@@ -27,7 +27,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerI
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentAppGroupBinding
-import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class AppGroupPagerItemFactory(private val activity: Activity) :
@@ -46,7 +46,7 @@ class AppGroupPagerItemFactory(private val activity: Activity) :
                 context.getString(R.string.app_group_title, data.title, data.appList.size)
             appGroupRecycler.apply {
                 adapter = AssemblyRecyclerAdapter<Any>(
-                    listOf(AppCardGridItemFactory(activity)),
+                    listOf(AppGridItemFactory(activity)),
                     data.appList
                 )
                 layoutManager = GridLayoutManager(context, 3)

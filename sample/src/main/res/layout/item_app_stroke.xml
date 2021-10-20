@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/appStrokeItemContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        android:background="#336E75A4">
+
+        <me.panpf.sketch.SketchImageView
+            android:id="@+id/appStrokeItemIconImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/appStrokeItemNameText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@android:color/black"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toTopOf="@id/appStrokeItemVersionText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/appStrokeItemIconImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="谷歌浏览器 " />
+
+        <TextView
+            android:id="@+id/appStrokeItemVersionText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toTopOf="@id/appStrokeItemSizeText"
+            app:layout_constraintEnd_toEndOf="@id/appStrokeItemNameText"
+            app:layout_constraintStart_toStartOf="@id/appStrokeItemNameText"
+            app:layout_constraintTop_toBottomOf="@id/appStrokeItemNameText"
+            tools:text="1.2.0" />
+
+        <TextView
+            android:id="@+id/appStrokeItemSizeText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/appStrokeItemNameText"
+            app:layout_constraintStart_toStartOf="@id/appStrokeItemNameText"
+            app:layout_constraintTop_toBottomOf="@id/appStrokeItemVersionText"
+            tools:text="100MB " />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/appStrokeItemStrokeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="84dp">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/grid_item_stroke" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grid_item_stroke" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|end"
+            android:background="@color/grid_item_stroke" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="@color/grid_item_stroke" />
+    </FrameLayout>
+</FrameLayout>

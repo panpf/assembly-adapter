@@ -15,29 +15,27 @@
  */
 package com.github.panpf.assemblyadapter.sample.ui.recycler
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.divider.AssemblyLinearDividerItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.Divider
-import com.github.panpf.assemblyadapter.recycler.divider.Insets
+import com.github.panpf.assemblyadapter.recycler.divider.*
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerVerBinding
-import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
-import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
-import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
-import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
+import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.util.ThreeCombineMediatorLiveData
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
@@ -45,11 +43,17 @@ class RecyclerLinearDividerVerFragment :
     ToolbarFragment<FragmentRecyclerDividerVerBinding>() {
 
     private val args: RecyclerLinearDividerVerFragmentArgs by navArgs()
-
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
 
-    private var openedInsets = false
-    private var thickDivider = true
+    private val dividerSizeDpData = MutableLiveData(5f)
+    private val dividerInsetsDpData = MutableLiveData(0f)
+    private val useSelfDividerItemDecoration = MutableLiveData(true)
+    private val dividerParamsData = ThreeCombineMediatorLiveData(
+        dividerSizeDpData,
+        dividerInsetsDpData,
+        useSelfDividerItemDecoration,
+        initValue = true
+    )
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -62,9 +66,52 @@ class RecyclerLinearDividerVerFragment :
         binding: FragmentRecyclerDividerVerBinding,
         savedInstanceState: Bundle?
     ) {
-        initMenu(toolbar, binding.recyclerDividerVerRecycler)
+        toolbar.menu.apply {
+            add(
+                0, 0, 0,
+                if (dividerSizeDpData.value!! >= 5f) "Small Divider" else "Big Divider"
+            ).apply {
+                setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                setOnMenuItemClickListener {
+                    val newDividerSize = if (dividerSizeDpData.value!! >= 5f) 2f else 5f
+                    dividerSizeDpData.postValue(newDividerSize)
+                    it.title =
+                        if (newDividerSize >= 5f) "Small Divider" else "Big Divider"
+                    true
+                }
+            }
+
+            add(
+                0, 1, 1,
+                if (dividerInsetsDpData.value!! > 0f) "Disable Insets" else "Enable Insets"
+            ).apply {
+                setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                setOnMenuItemClickListener {
+                    val newDividerInsets = if (dividerInsetsDpData.value!! > 0f) 0f else 2f
+                    dividerInsetsDpData.postValue(newDividerInsets)
+                    it.title =
+                        if (newDividerInsets > 0f) "Disable Insets" else "Enable Insets"
+                    true
+                }
+            }
+
+            add(
+                0, 2, 2,
+                if (useSelfDividerItemDecoration.value!!) "Use Other DividerItemDecoration" else "Use Self DividerItemDecoration"
+            ).apply {
+                setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                setOnMenuItemClickListener {
+                    val newValue = !useSelfDividerItemDecoration.value!!
+                    useSelfDividerItemDecoration.postValue(newValue)
+                    it.title =
+                        if (newValue) "Use Other DividerItemDecoration" else "Use Self DividerItemDecoration"
+                    true
+                }
+            }
+        }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onInitData(
         toolbar: Toolbar,
         binding: FragmentRecyclerDividerVerBinding,
@@ -77,7 +124,7 @@ class RecyclerLinearDividerVerFragment :
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
-                AppItemFactory(requireActivity(), showBg = true),
+                AppStrokeItemFactory(requireActivity(), viewLifecycleOwner, dividerSizeDpData, dividerInsetsDpData),
                 ListSeparatorItemFactory(requireActivity(), hideDivider = true)
             )
         )
@@ -86,7 +133,53 @@ class RecyclerLinearDividerVerFragment :
         binding.recyclerDividerVerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(buildItemDecoration())
+            dividerParamsData.observe(viewLifecycleOwner) {
+                it ?: return@observe
+                val dividerInsets = dividerInsetsDpData.value!!.dp2px
+                val dividerSize = dividerSizeDpData.value!!.dp2px
+                if (itemDecorationCount > 0) {
+                    removeItemDecorationAt(0)
+                }
+                if (useSelfDividerItemDecoration.value!!) {
+                    addAssemblyLinearDividerItemDecoration {
+                        val insets = Insets.allOf(dividerInsets)
+                        divider(Divider.colorRes(R.color.divider, dividerSize, insets)) {
+                            personaliseByItemFactoryClass(
+                                ListSeparatorItemFactory::class,
+                                Divider.colorRes(R.color.divider_personalise, dividerSize, insets)
+                            )
+                            disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                        }
+                        headerAndFooterDivider(
+                            Divider.colorRes(R.color.divider_header, dividerSize, insets)
+                        )
+
+                        sideHeaderAndFooterDivider(
+                            Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
+                        ) {
+                            personaliseByItemFactoryClass(
+                                ListSeparatorItemFactory::class,
+                                Divider.colorRes(
+                                    R.color.sideDivider_personalise,
+                                    dividerSize,
+                                    insets
+                                )
+                            )
+                            disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                        }
+                    }
+                } else {
+                    addItemDecoration(requireContext().dividerBuilder().apply {
+                        colorRes(R.color.divider)
+                        size(dividerSize)
+                        showFirstDivider()
+                        showLastDivider()
+                        showSideDividers()
+                        insets(dividerInsets, dividerInsets)
+                    }.build())
+                }
+                adapter?.notifyDataSetChanged() // The item width needs to be recalculated and refreshed to take effect
+            }
         }
 
         viewModel.appsOverviewData.observe(viewLifecycleOwner) {
@@ -96,57 +189,5 @@ class RecyclerLinearDividerVerFragment :
             recyclerAdapter.submitList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }
-    }
-
-    private fun initMenu(toolbar: Toolbar, recyclerView: RecyclerView) {
-        toolbar.menu.add(
-            0, 1, 0,
-            if (openedInsets) "Disable Insets" else "Enable Insets"
-        ).apply {
-            setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-        }.setOnMenuItemClickListener {
-            openedInsets = !openedInsets
-            recyclerView.removeItemDecorationAt(0)
-            recyclerView.addItemDecoration(buildItemDecoration())
-            it.title =
-                if (openedInsets) "Disable Insets" else "Enable Insets"
-            true
-        }
-
-        toolbar.menu.add(
-            0, 2, 1,
-            if (thickDivider) "Thin Divider" else "Thick Divider"
-        ).apply {
-            setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-        }.setOnMenuItemClickListener {
-            thickDivider = !thickDivider
-            recyclerView.removeItemDecorationAt(0)
-            recyclerView.addItemDecoration(buildItemDecoration())
-            it.title = if (thickDivider) "Thin Divider" else "Thick Divider"
-            true
-        }
-    }
-
-    private fun buildItemDecoration(): RecyclerView.ItemDecoration {
-        return AssemblyLinearDividerItemDecoration.Builder(requireContext()).apply {
-            val insets = Insets.allOf((if (openedInsets) 2.5f else 0f).dp2px)
-            val size = if (thickDivider) 5.dp2px else 1.dp2px
-            divider(Divider.colorRes(R.color.divider, size, insets)) {
-                personaliseByItemFactoryClass(
-                    ListSeparatorItemFactory::class,
-                    Divider.colorRes(R.color.divider_personalise, size, insets)
-                )
-                disableByItemFactoryClass(AppsOverviewItemFactory::class)
-            }
-            headerAndFooterDivider(Divider.colorRes(R.color.divider_header, size, insets))
-
-            sideHeaderAndFooterDivider(Divider.colorRes(R.color.sideDivider_header, size, insets)) {
-                personaliseByItemFactoryClass(
-                    ListSeparatorItemFactory::class,
-                    Divider.colorRes(R.color.sideDivider_personalise, size, insets)
-                )
-                disableByItemFactoryClass(AppsOverviewItemFactory::class)
-            }
-        }.build()
     }
 }

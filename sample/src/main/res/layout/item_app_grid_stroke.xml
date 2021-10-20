@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/appGridStrokeItemContentLayout"
+        android:layout_width="160dp"
+        android:layout_height="120dp"
+        android:background="#336E75A4"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <me.panpf.sketch.SketchImageView
+            android:id="@+id/appGridStrokeItemIconImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/appGridStrokeItemNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:text="发顺丰就撒娇发牢骚 " />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/appGridStrokeItemStrokeLayout"
+        android:layout_width="160dp"
+        android:layout_height="120dp">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/grid_item_stroke" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grid_item_stroke" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|end"
+            android:background="@color/grid_item_stroke" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="@color/grid_item_stroke" />
+    </FrameLayout>
+</FrameLayout>
