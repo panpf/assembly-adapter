@@ -108,8 +108,7 @@ class DividerExtensionsTest {
             Assert.assertNotNull(itemDividerProvider.dividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderAndFooterDividerConfig)
         }
 
         recyclerView.newGridDividerItemDecoration {
@@ -118,8 +117,7 @@ class DividerExtensionsTest {
             Assert.assertNotNull(itemDividerProvider.dividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(itemDividerProvider.sideHeaderAndFooterDividerConfig)
         }
 
         recyclerView.addGridDividerItemDecoration()
@@ -127,8 +125,7 @@ class DividerExtensionsTest {
             Assert.assertNotNull(itemDividerProvider.dividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNull(itemDividerProvider.sideHeaderAndFooterDividerConfig)
         }
         recyclerView.removeItemDecorationAt(0)
 
@@ -139,8 +136,7 @@ class DividerExtensionsTest {
             Assert.assertNotNull(itemDividerProvider.dividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(itemDividerProvider.sideHeaderAndFooterDividerConfig)
         }
         recyclerView.removeItemDecorationAt(0)
 
@@ -153,8 +149,7 @@ class DividerExtensionsTest {
             Assert.assertNotNull(itemDividerProvider.dividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(itemDividerProvider.sideHeaderAndFooterDividerConfig)
         }
         recyclerView.addGridDividerItemDecoration(0) {
             sideFooterDivider(Divider.space(20))
@@ -163,15 +158,13 @@ class DividerExtensionsTest {
             Assert.assertNotNull(itemDividerProvider.dividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(itemDividerProvider.sideHeaderAndFooterDividerConfig)
         }
         (recyclerView.getItemDecorationAt(1) as GridDividerItemDecoration).apply {
             Assert.assertNotNull(itemDividerProvider.dividerConfig)
             Assert.assertNull(itemDividerProvider.headerDividerConfig)
             Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(itemDividerProvider.sideHeaderAndFooterDividerConfig)
         }
     }
 

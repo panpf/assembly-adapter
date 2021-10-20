@@ -64,17 +64,79 @@ class GridDividerItemDecorationHelper(val itemDividerProvider: GridItemDividerPr
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
             isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.BOTTOM
         )
-        val startItemDividerSize = startItemDivider?.widthSize ?: 0
-        val topItemDividerSize = topItemDivider?.heightSize ?: 0
-        val endItemDividerSize = endItemDivider?.widthSize ?: 0
-        val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
 
-        outRect.set(
-            startItemDividerSize,
-            topItemDividerSize,
-            endItemDividerSize,
-            bottomItemDividerSize
-        )
+        if (isVerticalOrientation) {
+            val sideDividerSize = startItemDivider?.widthSize ?: endItemDivider?.widthSize
+            val showHeaderAndFooterSideDivider =
+                itemDividerProvider.sideHeaderAndFooterDividerConfig != null
+            val startItemDividerSize =
+                when {
+                    sideDividerSize == null -> 0
+                    isFirstSpan -> sideDividerSize
+                    else -> normalizedOffsetFromSize(
+                        ItemDivider.Type.START,
+                        sideDividerSize,
+                        spanCount,
+                        spanIndex + spanSize - 1,
+                        showHeaderAndFooterSideDivider
+                    )
+                }
+            val endItemDividerSize = when {
+                sideDividerSize == null -> 0
+                isLastSpan -> sideDividerSize
+                else -> normalizedOffsetFromSize(
+                    ItemDivider.Type.END,
+                    sideDividerSize,
+                    spanCount,
+                    spanIndex + spanSize - 1,
+                    showHeaderAndFooterSideDivider
+                )
+            }
+            val topItemDividerSize = topItemDivider?.heightSize ?: 0
+            val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
+
+            outRect.set(
+                startItemDividerSize,
+                topItemDividerSize,
+                endItemDividerSize,
+                bottomItemDividerSize
+            )
+        } else {
+            val sideDividerSize = topItemDivider?.heightSize ?: bottomItemDivider?.heightSize
+            val showHeaderAndFooterSideDivider =
+                itemDividerProvider.sideHeaderAndFooterDividerConfig != null
+            val topItemDividerSize = when {
+                sideDividerSize == null -> 0
+                isFirstSpan -> sideDividerSize
+                else -> normalizedOffsetFromSize(
+                    ItemDivider.Type.TOP,
+                    sideDividerSize,
+                    spanCount,
+                    spanIndex + spanSize - 1,
+                    showHeaderAndFooterSideDivider
+                )
+            }
+            val bottomItemDividerSize = when {
+                sideDividerSize == null -> 0
+                isLastSpan -> sideDividerSize
+                else -> normalizedOffsetFromSize(
+                    ItemDivider.Type.BOTTOM,
+                    sideDividerSize,
+                    spanCount,
+                    spanIndex + spanSize - 1,
+                    showHeaderAndFooterSideDivider
+                )
+            }
+            val startItemDividerSize = startItemDivider?.widthSize ?: 0
+            val endItemDividerSize = endItemDivider?.widthSize ?: 0
+
+            outRect.set(
+                startItemDividerSize,
+                topItemDividerSize,
+                endItemDividerSize,
+                bottomItemDividerSize
+            )
+        }
     }
 
     fun drawItem(

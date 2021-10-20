@@ -27,7 +27,7 @@ import org.junit.Assert
 import org.junit.Test
 
 class GridDividerItemDecorationHelperTest {
-
+    // todo fix test error
     @Test
     fun testGetItemOffsets() {
         val context = InstrumentationRegistry.getInstrumentation().context
@@ -43,9 +43,7 @@ class GridDividerItemDecorationHelperTest {
                 .toItemDividerConfig(context),
             sideDividerConfig = DividerConfig.Builder(Divider.space(20)).build()
                 .toItemDividerConfig(context),
-            sideHeaderDividerConfig = DividerConfig.Builder(Divider.space(25)).build()
-                .toItemDividerConfig(context),
-            sideFooterDividerConfig = DividerConfig.Builder(Divider.space(30)).build()
+            sideHeaderAndFooterDividerConfig = DividerConfig.Builder(Divider.space(25)).build()
                 .toItemDividerConfig(context),
         )
         val helper = GridDividerItemDecorationHelper(provider)

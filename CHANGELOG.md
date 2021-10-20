@@ -1,3 +1,7 @@
+# new
+
+* fix: GridDividerItemDecoration is divided evenly when the width of the item is the width of the parent container minus all dividers（`val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount`），because the offset of the first item is too large, the width of the first item will be forced to become smaller
+
 # v4.0.1
 
 * fix: Fix the bug in Assembly\*DividerItemDecoration where position and spanIndex priority is lower than ItemFactory
