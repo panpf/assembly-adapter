@@ -134,6 +134,7 @@ open class GridDividerItemDecoration(
                 throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
             }
             // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
+            // todo side Does not support disable
 
             val finalDividerConfig =
                 dividerConfig ?: context.obtainStyledAttributes(

@@ -39,7 +39,7 @@ open class StaggeredGridDividerItemDecoration(
         StaggeredGridDividerItemDecorationHelper(itemDividerProvider)
 
     init {
-        if (itemDividerProvider.hasFirstOrFooterDivider() && isFullSpanByPosition == null) {
+        if (itemDividerProvider.hasHeaderOrFooterDivider() && isFullSpanByPosition == null) {
             throw IllegalArgumentException(
                 "Must be set the 'isFullSpanByPosition' property, because you configured 'headerDivider' or 'footerDivider'"
             )
@@ -166,10 +166,8 @@ open class StaggeredGridDividerItemDecoration(
         private var useDividerAsFooterDivider = false
 
         private var sideDividerConfig: DividerConfig? = null
-        private var sideHeaderDividerConfig: DividerConfig? = null
-        private var sideFooterDividerConfig: DividerConfig? = null
-        private var useSideDividerAsSideHeaderDivider = false
-        private var useSideDividerAsSideFooterDivider = false
+        private var sideHeaderAndFooterDividerConfig: DividerConfig? = null
+        private var useSideDividerAsSideHeaderAndFooterDivider = false
 
         private var isFullSpanByPosition: IsFullSpanByPosition? = null
 
@@ -181,9 +179,11 @@ open class StaggeredGridDividerItemDecoration(
         }
 
         private fun buildItemDividerProvider(): StaggeredGridItemDividerProvider {
-            if ((useSideDividerAsSideHeaderDivider || useSideDividerAsSideFooterDivider) && sideDividerConfig == null) {
+            if ((useSideDividerAsSideHeaderAndFooterDivider) && sideDividerConfig == null) {
                 throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
             }
+            // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
+            // todo side Does not support disable
 
             val finalDividerConfig =
                 dividerConfig ?: context.obtainStyledAttributes(
@@ -205,11 +205,8 @@ open class StaggeredGridDividerItemDecoration(
                     ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
                     ?.toItemDividerConfig(context),
                 sideDividerConfig = sideDividerConfig?.toItemDividerConfig(context),
-                sideHeaderDividerConfig = (sideHeaderDividerConfig
-                    ?: if (useSideDividerAsSideHeaderDivider) sideDividerConfig else null)
-                    ?.toItemDividerConfig(context),
-                sideFooterDividerConfig = (sideFooterDividerConfig
-                    ?: if (useSideDividerAsSideFooterDivider) sideDividerConfig else null)
+                sideHeaderAndFooterDividerConfig = (sideHeaderAndFooterDividerConfig
+                    ?: if (useSideDividerAsSideHeaderAndFooterDivider) sideDividerConfig else null)
                     ?.toItemDividerConfig(context),
             )
         }
@@ -391,22 +388,20 @@ open class StaggeredGridDividerItemDecoration(
          * Set the header divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
+        @Deprecated("Please use sideHeaderAndFooterDivider instead", ReplaceWith("sideHeaderAndFooterDivider"))
         fun sideHeaderDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.sideHeaderDividerConfig = DividerConfig.Builder(divider).apply {
-                configBlock?.invoke(this)
-            }.build()
-            return this
+            return sideHeaderAndFooterDivider(divider, configBlock)
         }
 
         /**
          * Set the header divider on the side of the item
          */
+        @Deprecated("Please use sideHeaderAndFooterDivider instead", ReplaceWith("sideHeaderAndFooterDivider"))
         fun sideHeaderDivider(config: DividerConfig): Builder {
-            this.sideHeaderDividerConfig = config
-            return this
+            return sideHeaderAndFooterDivider(config)
         }
 
 
@@ -414,22 +409,20 @@ open class StaggeredGridDividerItemDecoration(
          * Set the footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
+        @Deprecated("Please use sideHeaderAndFooterDivider instead", ReplaceWith("sideHeaderAndFooterDivider"))
         fun sideFooterDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.sideFooterDividerConfig = DividerConfig.Builder(divider).apply {
-                configBlock?.invoke(this)
-            }.build()
-            return this
+            return sideHeaderAndFooterDivider(divider, configBlock)
         }
 
         /**
          * Set the footer divider on the side of the item
          */
+        @Deprecated("Please use sideHeaderAndFooterDivider instead", ReplaceWith("sideHeaderAndFooterDivider"))
         fun sideFooterDivider(config: DividerConfig): Builder {
-            this.sideFooterDividerConfig = config
-            return this
+            return sideHeaderAndFooterDivider(config)
         }
 
 
@@ -441,10 +434,7 @@ open class StaggeredGridDividerItemDecoration(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.sideHeaderDividerConfig = DividerConfig.Builder(divider).apply {
-                configBlock?.invoke(this)
-            }.build()
-            this.sideFooterDividerConfig = DividerConfig.Builder(divider).apply {
+            this.sideHeaderAndFooterDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -454,8 +444,7 @@ open class StaggeredGridDividerItemDecoration(
          * Set the header and footer divider on the side of the item
          */
         fun sideHeaderAndFooterDivider(config: DividerConfig): Builder {
-            this.sideHeaderDividerConfig = config
-            this.sideFooterDividerConfig = config
+            this.sideHeaderAndFooterDividerConfig = config
             return this
         }
 
@@ -463,25 +452,24 @@ open class StaggeredGridDividerItemDecoration(
         /**
          * Use side divider as the header side divider
          */
+        @Deprecated("Please use useSideDividerAsSideHeaderAndFooterDivider instead", ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider"))
         fun useSideDividerAsSideHeaderDivider(use: Boolean = true): Builder {
-            this.useSideDividerAsSideHeaderDivider = use
-            return this
+            return useSideDividerAsSideHeaderAndFooterDivider(use)
         }
 
         /**
          * Use side divider as the footer side divider
          */
+        @Deprecated("Please use useSideDividerAsSideHeaderAndFooterDivider instead", ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider"))
         fun useSideDividerAsSideFooterDivider(use: Boolean = true): Builder {
-            this.useSideDividerAsSideFooterDivider = use
-            return this
+            return useSideDividerAsSideHeaderAndFooterDivider(use)
         }
 
         /**
          * Use side divider as the header and footer side divider
          */
         fun useSideDividerAsSideHeaderAndFooterDivider(use: Boolean = true): Builder {
-            this.useSideDividerAsSideHeaderDivider = use
-            this.useSideDividerAsSideFooterDivider = use
+            this.useSideDividerAsSideHeaderAndFooterDivider = use
             return this
         }
 

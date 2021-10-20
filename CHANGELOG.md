@@ -1,6 +1,6 @@
 # new
 
-* fix: GridDividerItemDecoration is divided evenly when the width of the item is the width of the parent container minus all dividers（`val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount`），because the offset of the first item is too large, the width of the first item will be forced to become smaller
+* fix: GridDividerItemDecoration and StaggeredGridDividerItemDecoration is divided evenly when the width of the item is the width of the parent container minus all dividers（`val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount`），because the offset of the first item is too large, the width of the first item will be forced to become smaller
 
 # v4.0.1
 

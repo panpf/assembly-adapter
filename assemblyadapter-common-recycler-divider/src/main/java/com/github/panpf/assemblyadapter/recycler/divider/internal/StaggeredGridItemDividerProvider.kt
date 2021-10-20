@@ -18,13 +18,12 @@ package com.github.panpf.assemblyadapter.recycler.divider.internal
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class StaggeredGridItemDividerProvider(
+class StaggeredGridItemDividerProvider constructor(
     val dividerConfig: ItemDividerConfig,
     val headerDividerConfig: ItemDividerConfig?,
     val footerDividerConfig: ItemDividerConfig?,
     val sideDividerConfig: ItemDividerConfig?,
-    val sideHeaderDividerConfig: ItemDividerConfig?,
-    val sideFooterDividerConfig: ItemDividerConfig?,
+    val sideHeaderAndFooterDividerConfig: ItemDividerConfig?,
 ) {
 
     fun getItemDivider(
@@ -41,25 +40,28 @@ class StaggeredGridItemDividerProvider(
         isColumnEnd: Boolean,
         isVerticalOrientation: Boolean,
         dividerType: ItemDivider.Type,
+        fromDraw: Boolean
     ): ItemDivider? {
+        // 由于在 StaggeredGridLayoutManager 中相邻两个 item 的高度可能不一样，
+        // 所以需要在绘制时让 item 的 start 和 end 都绘制 divider，这样相邻的且高度不一致的两个 item 中间始终会绘制一条较高的 divider
         return if (isVerticalOrientation) {
             when (dividerType) {
-                ItemDivider.Type.START -> if (isFirstSpan) sideHeaderDividerConfig else sideDividerConfig
+                ItemDivider.Type.START -> if (isFirstSpan) sideHeaderAndFooterDividerConfig else (if (fromDraw) sideDividerConfig else null)
                 ItemDivider.Type.TOP -> if (isColumnFirst) headerDividerConfig else null
-                ItemDivider.Type.END -> if (isLastSpan) sideFooterDividerConfig else sideDividerConfig
+                ItemDivider.Type.END -> if (isLastSpan) sideHeaderAndFooterDividerConfig else sideDividerConfig
                 ItemDivider.Type.BOTTOM -> if (isColumnEnd) footerDividerConfig else dividerConfig
             }
         } else {
             when (dividerType) {
                 ItemDivider.Type.START -> if (isColumnFirst) headerDividerConfig else null
-                ItemDivider.Type.TOP -> if (isFirstSpan) sideHeaderDividerConfig else sideDividerConfig
+                ItemDivider.Type.TOP -> if (isFirstSpan) sideHeaderAndFooterDividerConfig else (if (fromDraw) sideDividerConfig else null)
                 ItemDivider.Type.END -> if (isColumnEnd) footerDividerConfig else dividerConfig
-                ItemDivider.Type.BOTTOM -> if (isLastSpan) sideFooterDividerConfig else sideDividerConfig
+                ItemDivider.Type.BOTTOM -> if (isLastSpan) sideHeaderAndFooterDividerConfig else sideDividerConfig
             }
         }?.get(parent, position, spanIndex)
     }
 
-    fun hasFirstOrFooterDivider(): Boolean {
+    fun hasHeaderOrFooterDivider(): Boolean {
         return headerDividerConfig != null || footerDividerConfig != null
     }
 }
