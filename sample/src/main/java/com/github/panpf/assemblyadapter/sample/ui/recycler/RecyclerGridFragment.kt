@@ -35,14 +35,16 @@ import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppListViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class RecyclerGridFragment : ToolbarFragment<FragmentRecyclerBinding>() {
 
     private val args: RecyclerGridFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private val appsOverviewViewModel by viewModels<AppsOverviewViewModel>()
+    private val pinyinFlatAppListViewModel by viewModels<PinyinFlatAppListViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -93,18 +95,18 @@ class RecyclerGridFragment : ToolbarFragment<FragmentRecyclerBinding>() {
             }
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
-            viewModel.refresh()
+            pinyinFlatAppListViewModel.refresh()
         }
 
-        viewModel.loadingData.observe(viewLifecycleOwner) {
+        pinyinFlatAppListViewModel.loadingData.observe(viewLifecycleOwner) {
             binding.recyclerRefreshLayout.isRefreshing = it == true
         }
 
-        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+        appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
 
-        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+        pinyinFlatAppListViewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             recyclerAdapter.submitList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }

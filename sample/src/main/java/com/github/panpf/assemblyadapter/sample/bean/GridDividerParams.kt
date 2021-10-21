@@ -13,6 +13,7 @@ data class GridDividerParams(
     var isShowSideFooterDivider: Boolean = true,
     var isBigDivider: Boolean = true,
     var isShowDividerInsets: Boolean = false,
+    var isShowListSeparator: Boolean = true,
 ) {
 
     val dividerSize: Int

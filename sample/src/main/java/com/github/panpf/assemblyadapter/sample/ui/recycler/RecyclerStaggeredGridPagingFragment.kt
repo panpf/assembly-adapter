@@ -36,7 +36,8 @@ import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppListViewModel
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -45,7 +46,8 @@ class RecyclerStaggeredGridPagingFragment : ToolbarFragment<FragmentRecyclerBind
 
     private val args: RecyclerStaggeredGridPagingFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PinyinFlatPagingAppsViewModel>()
+    private val appsOverviewViewModel by viewModels<AppsOverviewViewModel>()
+    private val pinyinFlatPagingAppListViewModel by viewModels<PinyinFlatPagingAppListViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -95,7 +97,6 @@ class RecyclerStaggeredGridPagingFragment : ToolbarFragment<FragmentRecyclerBind
             }
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
-            viewModel.refresh()
             pagingDataAdapter.refresh()
         }
 
@@ -105,12 +106,12 @@ class RecyclerStaggeredGridPagingFragment : ToolbarFragment<FragmentRecyclerBind
             }
         }
 
-        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+        appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.pinyinFlatAppListDataFlow.collect {
+            pinyinFlatPagingAppListViewModel.pinyinFlatAppListDataFlow.collect {
                 pagingDataAdapter.submitData(it)
             }
         }

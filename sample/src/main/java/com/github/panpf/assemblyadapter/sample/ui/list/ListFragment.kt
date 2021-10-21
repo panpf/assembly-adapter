@@ -31,13 +31,15 @@ import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppListViewModel
 
 class ListFragment : ToolbarFragment<FragmentListBinding>() {
 
     private val args: ListFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private val appsOverviewViewModel by viewModels<AppsOverviewViewModel>()
+    private val pinyinFlatAppListViewModel by viewModels<PinyinFlatAppListViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -64,18 +66,18 @@ class ListFragment : ToolbarFragment<FragmentListBinding>() {
             ConcatListAdapter(appsOverviewAdapter, listAdapter, footerLoadStateAdapter)
 
         binding.listRefreshLayout.setOnRefreshListener {
-            viewModel.refresh()
+            pinyinFlatAppListViewModel.refresh()
         }
 
-        viewModel.loadingData.observe(viewLifecycleOwner) {
+        pinyinFlatAppListViewModel.loadingData.observe(viewLifecycleOwner) {
             binding.listRefreshLayout.isRefreshing = it == true
         }
 
-        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+        appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
 
-        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+        pinyinFlatAppListViewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
             listAdapter.submitList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
         }

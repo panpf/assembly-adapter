@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
@@ -32,20 +33,23 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
-import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyStaggeredGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
 import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.vm.AppListViewModel
+import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
 import com.github.panpf.assemblyadapter.sample.vm.GridDividerParamsViewModel
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppListViewModel
 
 class RecyclerStaggeredGridDividerHorFragment :
     ToolbarFragment<FragmentRecyclerDividerHorBinding>() {
 
     private val args: RecyclerStaggeredGridDividerHorFragmentArgs by navArgs()
-    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private val appListViewModel by viewModels<AppListViewModel>()
+    private val appsOverviewViewModel by viewModels<AppsOverviewViewModel>()
+    private val pinyinFlatAppListViewModel by viewModels<PinyinFlatAppListViewModel>()
     private val dividerParamsViewMode by viewModels<GridDividerParamsViewModel> {
         GridDividerParamsViewModel.Factory(
             requireActivity().application,
@@ -174,6 +178,19 @@ class RecyclerStaggeredGridDividerHorFragment :
                         true
                     }
                 }
+
+                add(
+                    2, 8, 8,
+                    if (dividerParams.isShowListSeparator)
+                        "Hide List Separator" else "Show List Separator"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isShowListSeparator = !dividerParams.isShowListSeparator
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
             }
         }
 
@@ -272,13 +289,27 @@ class RecyclerStaggeredGridDividerHorFragment :
             }
         }
 
-        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+        appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
 
-        viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+        val observer = Observer<List<Any>> {
             recyclerAdapter.submitList(it)
             footerLoadStateAdapter.data = LoadState.NotLoading(true)
+        }
+        dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+            dividerParams ?: return@observe
+            pinyinFlatAppListViewModel.pinyinFlatAppListData.removeObserver(observer)
+            appListViewModel.appListData.removeObserver(observer)
+
+            if (dividerParams.isShowListSeparator) {
+                pinyinFlatAppListViewModel.pinyinFlatAppListData.observe(
+                    viewLifecycleOwner,
+                    observer
+                )
+            } else {
+                appListViewModel.appListData.observe(viewLifecycleOwner, observer)
+            }
         }
     }
 }

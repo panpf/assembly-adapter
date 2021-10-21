@@ -16,47 +16,50 @@
 package com.github.panpf.assemblyadapter.sample.vm
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.github.panpf.assemblyadapter.sample.base.LifecycleAndroidViewModel
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
-import com.github.panpf.assemblyadapter.sample.util.PinyinFlatAppsHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PinyinFlatAppsViewModel(application: Application) : AndroidViewModel(application) {
-
-    val pinyinFlatAppListData = MutableLiveData<List<Any>>()
-    val loadingData = MutableLiveData<Boolean>()
+class AppsOverviewViewModel(application: Application) : LifecycleAndroidViewModel(application) {
 
     val appsOverviewData = MutableLiveData<AppsOverview>()
 
     init {
         refresh()
+        monitorAppChanged()
     }
 
     fun refresh() {
-        refreshAppsOverview()
-        refreshAppList()
-    }
-
-    private fun refreshAppList() {
-        viewModelScope.launch {
-            loadingData.postValue(true)
-            val list = withContext(Dispatchers.IO) {
-                PinyinFlatAppsHelper(getApplication()).getAll()
-            }
-            pinyinFlatAppListData.postValue(list)
-            loadingData.postValue(false)
-        }
-    }
-
-    private fun refreshAppsOverview() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 appsOverviewData.postValue(AppsOverview.build(getApplication()))
             }
+        }
+    }
+
+    private fun monitorAppChanged() {
+        val packageIntentFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_PACKAGE_ADDED)
+            addAction(Intent.ACTION_PACKAGE_REMOVED)
+            addAction(Intent.ACTION_PACKAGE_REPLACED)
+            addAction(Intent.ACTION_PACKAGE_CHANGED)
+        }
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                refresh()
+            }
+        }
+        application1.registerReceiver(receiver, packageIntentFilter)
+        addOnClearedListener {
+            application1.unregisterReceiver(receiver)
         }
     }
 }

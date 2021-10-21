@@ -17,23 +17,19 @@ package com.github.panpf.assemblyadapter.sample.vm
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
-import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
 import com.github.panpf.assemblyadapter.sample.ds.AppListPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PinyinFlatPagingAppsViewModel(application: Application) :
+class PinyinFlatPagingAppListViewModel(application: Application) :
     AndroidViewModel(application) {
 
     /**
@@ -66,22 +62,4 @@ class PinyinFlatPagingAppsViewModel(application: Application) :
                 }
             }
         }
-
-    val appsOverviewData = MutableLiveData<AppsOverview>()
-
-    init {
-        refresh()
-    }
-
-    fun refresh() {
-        refreshAppsOverview()
-    }
-
-    private fun refreshAppsOverview() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                appsOverviewData.postValue(AppsOverview.build(getApplication()))
-            }
-        }
-    }
 }

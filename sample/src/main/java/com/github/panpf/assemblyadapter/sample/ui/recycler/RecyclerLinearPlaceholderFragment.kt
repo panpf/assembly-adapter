@@ -30,13 +30,15 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.*
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppListViewModel
 
 class RecyclerLinearPlaceholderFragment : ToolbarFragment<FragmentRecyclerBinding>() {
 
     private val args: RecyclerLinearPlaceholderFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private val appsOverviewViewModel by viewModels<AppsOverviewViewModel>()
+    private val pinyinFlatAppListViewModel by viewModels<PinyinFlatAppListViewModel>()
     private var registered = false
 
     override fun createViewBinding(
@@ -75,20 +77,20 @@ class RecyclerLinearPlaceholderFragment : ToolbarFragment<FragmentRecyclerBindin
             if (!registered) {
                 registered = true
 
-                viewModel.loadingData.observe(viewLifecycleOwner) {
+                pinyinFlatAppListViewModel.loadingData.observe(viewLifecycleOwner) {
                     binding.recyclerRefreshLayout.isRefreshing = it == true
                 }
 
-                viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+                appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
                     appsOverviewAdapter.data = it
                 }
 
-                viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+                pinyinFlatAppListViewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
                     recyclerAdapter.submitList(it)
                     footerLoadStateAdapter.data = LoadState.NotLoading(true)
                 }
             }
-            viewModel.refresh()
+            pinyinFlatAppListViewModel.refresh()
         }
 
         Toast.makeText(

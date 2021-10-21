@@ -33,7 +33,8 @@ import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBindi
 import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatPagingAppListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -41,7 +42,8 @@ class RecyclerLinearPagingFragment : ToolbarFragment<FragmentRecyclerBinding>() 
 
     private val args: RecyclerLinearPagingFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PinyinFlatPagingAppsViewModel>()
+    private val appsOverviewViewModel by viewModels<AppsOverviewViewModel>()
+    private val pinyinFlatPagingAppListViewModel by viewModels<PinyinFlatPagingAppListViewModel>()
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -74,7 +76,6 @@ class RecyclerLinearPagingFragment : ToolbarFragment<FragmentRecyclerBinding>() 
             )
         }
         binding.recyclerRefreshLayout.setOnRefreshListener {
-            viewModel.refresh()
             pagingDataAdapter.refresh()
         }
 
@@ -84,12 +85,12 @@ class RecyclerLinearPagingFragment : ToolbarFragment<FragmentRecyclerBinding>() 
             }
         }
 
-        viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+        appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
             appsOverviewAdapter.data = it
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.pinyinFlatAppListDataFlow.collect {
+            pinyinFlatPagingAppListViewModel.pinyinFlatAppListDataFlow.collect {
                 pagingDataAdapter.submitData(it)
             }
         }

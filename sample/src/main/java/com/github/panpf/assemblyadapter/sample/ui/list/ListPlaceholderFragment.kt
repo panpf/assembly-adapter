@@ -29,13 +29,15 @@ import com.github.panpf.assemblyadapter.list.ConcatListAdapter
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentListBinding
 import com.github.panpf.assemblyadapter.sample.item.*
-import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
+import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
+import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppListViewModel
 
 class ListPlaceholderFragment : ToolbarFragment<FragmentListBinding>() {
 
     private val args: ListPlaceholderFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PinyinFlatAppsViewModel>()
+    private val appsOverviewViewModel by viewModels<AppsOverviewViewModel>()
+    private val pinyinFlatAppListViewModel by viewModels<PinyinFlatAppListViewModel>()
     private var registered = false
 
     override fun createViewBinding(
@@ -72,20 +74,20 @@ class ListPlaceholderFragment : ToolbarFragment<FragmentListBinding>() {
             if (!registered) {
                 registered = true
 
-                viewModel.loadingData.observe(viewLifecycleOwner) {
+                pinyinFlatAppListViewModel.loadingData.observe(viewLifecycleOwner) {
                     binding.listRefreshLayout.isRefreshing = it == true
                 }
 
-                viewModel.appsOverviewData.observe(viewLifecycleOwner) {
+                appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
                     appsOverviewAdapter.data = it
                 }
 
-                viewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
+                pinyinFlatAppListViewModel.pinyinFlatAppListData.observe(viewLifecycleOwner) {
                     listAdapter.submitList(it)
                     footerLoadStateAdapter.data = LoadState.NotLoading(true)
                 }
             }
-            viewModel.refresh()
+            pinyinFlatAppListViewModel.refresh()
         }
 
         Toast.makeText(
