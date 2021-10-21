@@ -218,6 +218,7 @@ class RecyclerStaggeredGridDividerVerFragment :
                 val size = dividerParams.dividerSize
                 val insets = Insets.allOf(dividerParams.dividerInsetsSize)
                 addAssemblyStaggeredGridDividerItemDecoration {
+                    disableDefaultDivider()
                     if (dividerParams.isShowDivider) {
                         divider(Divider.colorRes(R.color.divider, size, insets)) {
                             personaliseByItemFactoryClass(

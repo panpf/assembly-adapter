@@ -19,7 +19,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class GridItemDividerProvider constructor(
-    val dividerConfig: ItemDividerConfig,
+    val dividerConfig: ItemDividerConfig?,
     val headerDividerConfig: ItemDividerConfig?,
     val footerDividerConfig: ItemDividerConfig?,
     val sideDividerConfig: ItemDividerConfig?,

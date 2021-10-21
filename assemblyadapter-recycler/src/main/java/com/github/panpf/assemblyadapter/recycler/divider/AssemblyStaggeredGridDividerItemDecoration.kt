@@ -50,6 +50,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private var sideHeaderAndFooterDividerConfig: AssemblyDividerConfig? = null
         private var useSideDividerAsSideHeaderAndFooterDivider = false
 
+        private var disableDefaultDivider = false
         private var isFullSpanByPosition: IsFullSpanByPosition? = null
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
@@ -61,8 +62,9 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         }
 
         private fun buildItemDividerProvider(): StaggeredGridItemDividerProvider {
-            val finalDividerConfig =
-                dividerConfig ?: context.obtainStyledAttributes(
+            val finalDividerConfig = when {
+                dividerConfig != null -> dividerConfig
+                !disableDefaultDivider -> context.obtainStyledAttributes(
                     intArrayOf(android.R.attr.listDivider)
                 ).let { array ->
                     array.getDrawable(0).apply {
@@ -71,6 +73,8 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                 }!!.let {
                     AssemblyDividerConfig.Builder(Divider.drawable(it)).build()
                 }
+                else -> null
+            }
 
             val finalFindItemFactoryClassByPosition =
                 (findItemFactoryClassSupport ?: AssemblyFindItemFactoryClassSupport()).run {
@@ -79,7 +83,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
             return StaggeredGridItemDividerProvider(
                 dividerConfig = finalDividerConfig
-                    .toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 headerDividerConfig = (headerDividerConfig
                     ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
@@ -244,7 +248,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
          * Set the header divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        @Deprecated("Please use sideHeaderAndFooterDivider instead", ReplaceWith("sideHeaderAndFooterDivider"))
+        @Deprecated(
+            "Please use sideHeaderAndFooterDivider instead",
+            ReplaceWith("sideHeaderAndFooterDivider")
+        )
         fun sideHeaderDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -255,7 +262,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         /**
          * Set the header divider on the side of the item
          */
-        @Deprecated("Please use sideHeaderAndFooterDivider instead", ReplaceWith("sideHeaderAndFooterDivider"))
+        @Deprecated(
+            "Please use sideHeaderAndFooterDivider instead",
+            ReplaceWith("sideHeaderAndFooterDivider")
+        )
         fun sideHeaderDivider(config: AssemblyDividerConfig): Builder {
             return sideHeaderAndFooterDivider(config)
         }
@@ -265,7 +275,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
          * Set the footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        @Deprecated("Please use sideHeaderAndFooterDivider instead", ReplaceWith("sideHeaderAndFooterDivider"))
+        @Deprecated(
+            "Please use sideHeaderAndFooterDivider instead",
+            ReplaceWith("sideHeaderAndFooterDivider")
+        )
         fun sideFooterDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
@@ -276,7 +289,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         /**
          * Set the footer divider on the side of the item
          */
-        @Deprecated("Please use sideHeaderAndFooterDivider instead", ReplaceWith("sideHeaderAndFooterDivider"))
+        @Deprecated(
+            "Please use sideHeaderAndFooterDivider instead",
+            ReplaceWith("sideHeaderAndFooterDivider")
+        )
         fun sideFooterDivider(config: AssemblyDividerConfig): Builder {
             return sideHeaderAndFooterDivider(config)
         }
@@ -308,7 +324,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         /**
          * Use side divider as the header side divider
          */
-        @Deprecated("Please use useSideDividerAsSideHeaderAndFooterDivider instead", ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider"))
+        @Deprecated(
+            "Please use useSideDividerAsSideHeaderAndFooterDivider instead",
+            ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider")
+        )
         fun useSideDividerAsSideHeaderDivider(use: Boolean = true): Builder {
             return useSideDividerAsSideHeaderAndFooterDivider(use)
         }
@@ -316,7 +335,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         /**
          * Use side divider as the footer side divider
          */
-        @Deprecated("Please use useSideDividerAsSideHeaderAndFooterDivider instead", ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider"))
+        @Deprecated(
+            "Please use useSideDividerAsSideHeaderAndFooterDivider instead",
+            ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider")
+        )
         fun useSideDividerAsSideFooterDivider(use: Boolean = true): Builder {
             return useSideDividerAsSideHeaderAndFooterDivider(use)
         }
@@ -329,6 +351,14 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             return this
         }
 
+
+        /**
+         * Prohibit using the system default divider when no divider is specified
+         */
+        fun disableDefaultDivider(disableDefaultDivider: Boolean = true): Builder {
+            this.disableDefaultDivider = disableDefaultDivider
+            return this
+        }
 
         /**
          * Set the interface for determining FullSpan based on position.

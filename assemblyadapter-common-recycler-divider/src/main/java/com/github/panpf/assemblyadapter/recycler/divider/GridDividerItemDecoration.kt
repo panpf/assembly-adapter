@@ -127,6 +127,8 @@ open class GridDividerItemDecoration(
         private var useSideDividerAsSideHeaderDivider = false
         private var useSideDividerAsSideFooterDivider = false
 
+        private var disableDefaultDivider = false
+
         fun build(): GridDividerItemDecoration {
             return GridDividerItemDecoration(buildItemDividerProvider())
         }
@@ -138,8 +140,9 @@ open class GridDividerItemDecoration(
 
             // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
 
-            val finalDividerConfig =
-                dividerConfig ?: context.obtainStyledAttributes(
+            val finalDividerConfig = when {
+                dividerConfig != null -> dividerConfig
+                !disableDefaultDivider -> context.obtainStyledAttributes(
                     intArrayOf(android.R.attr.listDivider)
                 ).let { array ->
                     array.getDrawable(0).apply {
@@ -148,9 +151,11 @@ open class GridDividerItemDecoration(
                 }!!.let {
                     DividerConfig.Builder(Divider.drawable(it)).build()
                 }
+                else -> null
+            }
 
             return GridItemDividerProvider(
-                dividerConfig = finalDividerConfig.toItemDividerConfig(context),
+                dividerConfig = finalDividerConfig?.toItemDividerConfig(context),
                 headerDividerConfig = (headerDividerConfig
                     ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
                     ?.toItemDividerConfig(context),
@@ -408,6 +413,15 @@ open class GridDividerItemDecoration(
         fun useSideDividerAsSideHeaderAndFooterDivider(use: Boolean = true): Builder {
             this.useSideDividerAsSideHeaderDivider = use
             this.useSideDividerAsSideFooterDivider = use
+            return this
+        }
+
+
+        /**
+         * Prohibit using the system default divider when no divider is specified
+         */
+        fun disableDefaultDivider(disableDefaultDivider: Boolean = true): Builder {
+            this.disableDefaultDivider = disableDefaultDivider
             return this
         }
     }

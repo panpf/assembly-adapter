@@ -198,6 +198,7 @@ class RecyclerLinearDividerHorFragment :
                 val insets = Insets.allOf(dividerParams.dividerInsetsSize)
                 val dividerSize = dividerParams.dividerSize
                 addAssemblyLinearDividerItemDecoration {
+                    disableDefaultDivider()
                     if (dividerParams.isShowDivider) {
                         divider(Divider.colorRes(R.color.divider, dividerSize, insets)) {
                             personaliseByItemFactoryClass(

@@ -221,6 +221,7 @@ class RecyclerGridDividerVerFragment : ToolbarFragment<FragmentRecyclerDividerVe
                 val size = dividerParams.dividerSize
                 val insets = Insets.allOf(dividerParams.dividerInsetsSize)
                 addAssemblyGridDividerItemDecoration {
+                    disableDefaultDivider()
                     if (dividerParams.isShowDivider) {
                         divider(Divider.colorRes(R.color.divider, size, insets)) {
                             personaliseByItemFactoryClass(

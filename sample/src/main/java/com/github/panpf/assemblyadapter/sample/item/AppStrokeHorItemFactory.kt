@@ -94,7 +94,9 @@ class AppStrokeHorItemFactory(
                     appendLine()
                     append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
                     append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
-                    append("data: ${item.dataOrThrow.name}").appendLine().appendLine()
+                    append("data: ${item.dataOrThrow.name}").appendLine()
+                    append("contentSize: ${binding.appStrokeHorItemContentLayout.width}x${binding.appStrokeHorItemContentLayout.height}").appendLine()
+                    append("itemSize: ${binding.root.width}x${binding.root.height}")
                 })
             }.show()
             true

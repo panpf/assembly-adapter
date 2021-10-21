@@ -41,6 +41,7 @@ open class AssemblyLinearDividerItemDecoration(
         private var sideHeaderDividerConfig: AssemblyDividerConfig? = null
         private var sideFooterDividerConfig: AssemblyDividerConfig? = null
 
+        private var disableDefaultDivider = false
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
         fun build(): AssemblyLinearDividerItemDecoration {
@@ -48,8 +49,9 @@ open class AssemblyLinearDividerItemDecoration(
         }
 
         private fun buildItemDividerProvider(): LinearItemDividerProvider {
-            val finalDividerConfig =
-                dividerConfig ?: context.obtainStyledAttributes(
+            val finalDividerConfig = when {
+                dividerConfig != null -> dividerConfig
+                !disableDefaultDivider -> context.obtainStyledAttributes(
                     intArrayOf(android.R.attr.listDivider)
                 ).let { array ->
                     array.getDrawable(0).apply {
@@ -58,6 +60,8 @@ open class AssemblyLinearDividerItemDecoration(
                 }!!.let {
                     AssemblyDividerConfig.Builder(Divider.drawable(it)).build()
                 }
+                else -> null
+            }
 
             val finalFindItemFactoryClassByPosition =
                 (findItemFactoryClassSupport ?: AssemblyFindItemFactoryClassSupport()).run {
@@ -66,7 +70,7 @@ open class AssemblyLinearDividerItemDecoration(
 
             return LinearItemDividerProvider(
                 dividerConfig = finalDividerConfig
-                    .toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 headerDividerConfig = (headerDividerConfig
                     ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
@@ -275,6 +279,14 @@ open class AssemblyLinearDividerItemDecoration(
             return this
         }
 
+
+        /**
+         * Prohibit using the system default divider when no divider is specified
+         */
+        fun disableDefaultDivider(disableDefaultDivider: Boolean = true): Builder {
+            this.disableDefaultDivider = disableDefaultDivider
+            return this
+        }
 
         /**
          * Set up the interface to find ItemFactory class

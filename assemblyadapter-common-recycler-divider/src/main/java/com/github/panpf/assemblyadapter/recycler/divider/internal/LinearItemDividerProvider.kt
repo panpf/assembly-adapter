@@ -19,7 +19,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class LinearItemDividerProvider(
-    val dividerConfig: ItemDividerConfig,
+    val dividerConfig: ItemDividerConfig?,
     val headerDividerConfig: ItemDividerConfig?,
     val footerDividerConfig: ItemDividerConfig?,
     val sideHeaderDividerConfig: ItemDividerConfig?,

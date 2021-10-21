@@ -23,8 +23,8 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearDividerItemDecorationHelper
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
 
 /**
  * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、header and footer side divider
@@ -97,23 +97,29 @@ open class LinearDividerItemDecoration(
         private var sideHeaderDividerConfig: DividerConfig? = null
         private var sideFooterDividerConfig: DividerConfig? = null
 
+        private var disableDefaultDivider = false
+
         fun build(): LinearDividerItemDecoration {
             return LinearDividerItemDecoration(buildItemDividerProvider())
         }
 
         private fun buildItemDividerProvider(): LinearItemDividerProvider {
-            val finalDividerConfig = dividerConfig ?: context.obtainStyledAttributes(
-                intArrayOf(android.R.attr.listDivider)
-            ).let { array ->
-                array.getDrawable(0).apply {
-                    array.recycle()
+            val finalDividerConfig = when {
+                dividerConfig != null -> dividerConfig
+                !disableDefaultDivider -> context.obtainStyledAttributes(
+                    intArrayOf(android.R.attr.listDivider)
+                ).let { array ->
+                    array.getDrawable(0).apply {
+                        array.recycle()
+                    }
+                }!!.let {
+                    DividerConfig.Builder(Divider.drawable(it)).build()
                 }
-            }!!.let {
-                DividerConfig.Builder(Divider.drawable(it)).build()
+                else -> null
             }
 
             return LinearItemDividerProvider(
-                dividerConfig = finalDividerConfig.toItemDividerConfig(context),
+                dividerConfig = finalDividerConfig?.toItemDividerConfig(context),
                 headerDividerConfig = (headerDividerConfig
                     ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
                     ?.toItemDividerConfig(context),
@@ -317,6 +323,15 @@ open class LinearDividerItemDecoration(
         fun sideHeaderAndFooterDivider(config: DividerConfig): Builder {
             this.sideHeaderDividerConfig = config
             this.sideFooterDividerConfig = config
+            return this
+        }
+
+
+        /**
+         * Prohibit using the system default divider when no divider is specified
+         */
+        fun disableDefaultDivider(disableDefaultDivider: Boolean = true): Builder {
+            this.disableDefaultDivider = disableDefaultDivider
             return this
         }
     }

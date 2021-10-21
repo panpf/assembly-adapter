@@ -116,14 +116,8 @@ class AppGridStrokeItemFactory(
                     append("App（${data.name}）").appendLine()
                     append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
                     append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
-                    append(
-                        "imageViewSize: ${binding.root.getChildAt(0).width}x${
-                            binding.root.getChildAt(
-                                0
-                            ).height
-                        }"
-                    ).appendLine()
-                    append("rootViewSize: ${binding.root.width}x${binding.root.height}")
+                    append("contentSize: ${binding.appGridStrokeItemContentLayout.width}x${binding.appGridStrokeItemContentLayout.height}").appendLine()
+                    append("itemSize: ${binding.root.width}x${binding.root.height}")
                 })
             }.show()
             true
