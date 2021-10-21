@@ -28,7 +28,7 @@ android {
 }
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN")}")
     api(project(":assemblyadapter-common-core"))
 
     testImplementation("junit:junit:${property("JUNIT")}")

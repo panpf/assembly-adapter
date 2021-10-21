@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
@@ -33,11 +33,12 @@ import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutMana
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyStaggeredGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
-import com.github.panpf.assemblyadapter.sample.bean.GridDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
 import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.vm.GridDividerParamsViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
 class RecyclerStaggeredGridDividerHorFragment :
@@ -45,7 +46,12 @@ class RecyclerStaggeredGridDividerHorFragment :
 
     private val args: RecyclerStaggeredGridDividerHorFragmentArgs by navArgs()
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
-    private val dividerParamsData = MutableLiveData(GridDividerParams())
+    private val dividerParamsViewMode by viewModels<GridDividerParamsViewModel> {
+        GridDividerParamsViewModel.Factory(
+            requireActivity().application,
+            "RecyclerStaggeredGridDividerHorDividerParams"
+        )
+    }
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -59,7 +65,9 @@ class RecyclerStaggeredGridDividerHorFragment :
         savedInstanceState: Bundle?
     ) {
         toolbar.menu.apply {
-            dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+            MenuCompat.setGroupDividerEnabled(this, true)
+
+            dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 clear()
                 dividerParams ?: return@observe
 
@@ -70,7 +78,7 @@ class RecyclerStaggeredGridDividerHorFragment :
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowDivider = !dividerParams.isShowDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
@@ -83,7 +91,7 @@ class RecyclerStaggeredGridDividerHorFragment :
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowHeaderDivider = !dividerParams.isShowHeaderDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
@@ -96,26 +104,26 @@ class RecyclerStaggeredGridDividerHorFragment :
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowFooterDivider = !dividerParams.isShowFooterDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 3, 3,
+                    1, 3, 3,
                     if (dividerParams.isShowSideDivider)
                         "Hide Side Divider" else "Show Side Divider"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowSideDivider = !dividerParams.isShowSideDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 4, 4,
+                    1, 4, 4,
                     if (dividerParams.isShowSideHeaderDivider)
                         "Hide Side Header Divider" else "Show Side Header Divider"
                 ).apply {
@@ -123,13 +131,13 @@ class RecyclerStaggeredGridDividerHorFragment :
                     setOnMenuItemClickListener {
                         dividerParams.isShowSideHeaderDivider =
                             !dividerParams.isShowSideHeaderDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 5, 5,
+                    1, 5, 5,
                     if (dividerParams.isShowSideFooterDivider)
                         "Hide Side Footer Divider" else "Show Side Footer Divider"
                 ).apply {
@@ -137,32 +145,32 @@ class RecyclerStaggeredGridDividerHorFragment :
                     setOnMenuItemClickListener {
                         dividerParams.isShowSideFooterDivider =
                             !dividerParams.isShowSideFooterDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 6, 6,
+                    2, 6, 6,
                     if (dividerParams.isBigDivider) "Small Divider" else "Big Divider"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isBigDivider = !dividerParams.isBigDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 7, 7,
+                    2, 7, 7,
                     if (dividerParams.isShowDividerInsets)
                         "Hide Divider Insets" else "Show Divider Insets"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowDividerInsets = !dividerParams.isShowDividerInsets
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
@@ -187,7 +195,7 @@ class RecyclerStaggeredGridDividerHorFragment :
                 AppGridStrokeHorItemFactory(
                     requireActivity(),
                     viewLifecycleOwner,
-                    dividerParamsData
+                    dividerParamsViewMode.dividerParamsData
                 ),
                 ListSeparatorHorItemFactory(requireActivity(), hideDivider = true)
             )
@@ -205,14 +213,14 @@ class RecyclerStaggeredGridDividerHorFragment :
                     LoadStateHorItemFactory::class
                 )
             )
-            dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+            dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 dividerParams ?: return@observe
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)
                 }
                 val size = dividerParams.dividerSize
                 val insets = Insets.allOf(dividerParams.dividerInsetsSize)
-                addAssemblyGridDividerItemDecoration {
+                addAssemblyStaggeredGridDividerItemDecoration {
                     if (dividerParams.isShowDivider) {
                         divider(Divider.colorRes(R.color.divider, size, insets)) {
                             personaliseByItemFactoryClass(

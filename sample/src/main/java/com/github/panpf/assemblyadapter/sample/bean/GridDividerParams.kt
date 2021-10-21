@@ -1,7 +1,9 @@
 package com.github.panpf.assemblyadapter.sample.bean
 
 import com.github.panpf.tools4a.dimen.ktx.dp2px
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GridDividerParams(
     var isShowDivider: Boolean = true,
     var isShowHeaderDivider: Boolean = true,

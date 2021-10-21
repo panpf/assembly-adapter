@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN")}")
     api("androidx.annotation:annotation:${property("ANDROIDX_ANNOTATION")}")
     api("androidx.collection:collection:${property("ANDROIDX_COLLECTION")}")
 

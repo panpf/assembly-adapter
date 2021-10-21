@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN")}")
     api("androidx.paging:paging-runtime:${property("ANDROIDX_PAGING")}")
     api("androidx.paging:paging-common:${property("ANDROIDX_PAGING")}")
     api(project(":assemblyadapter-common-recycler"))

@@ -21,6 +21,7 @@ import android.content.Context
 import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -51,11 +52,11 @@ class AppChildItemFactory(private val activity: Activity, private val showBg: Bo
 
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
-            val launchIntent =
-                context.packageManager.getLaunchIntentForPackage(data.packageName)
-            if (launchIntent != null) {
-                context.startActivity(launchIntent)
-            }
+            Toast.makeText(
+                context,
+                context.getString(R.string.toast_opened_app, data.name),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding.root.setOnLongClickListener {

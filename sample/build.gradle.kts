@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-parcelize")
+    id("kotlinx-serialization")
     id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -33,8 +34,9 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN_VERSION")}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN")}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${property("KOTLINX_COROUTINES_ANDROID")}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${property("KOTLINX_SERIALIZATION_JSON")}")
     implementation("androidx.multidex:multidex:${property("ANDROIDX_MULTIDEX")}")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:${property("LEAK_CANARY")}")
 

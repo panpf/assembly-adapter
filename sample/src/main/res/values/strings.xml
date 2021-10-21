@@ -7,4 +7,5 @@
     <string name="load_error">Load failed, click to reload</string>
     <string name="load_end">THE END</string>
     <string name="app_group_title">%1$s - %2$d Apps</string>
+    <string name="toast_opened_app">Simulate open app \'%s\'</string>
 </resources>

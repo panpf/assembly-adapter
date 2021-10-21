@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
@@ -34,9 +34,9 @@ import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyLinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
-import com.github.panpf.assemblyadapter.sample.bean.LinearDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
 import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.vm.LinearDividerParamsViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
 
 class RecyclerLinearDividerHorFragment :
@@ -44,7 +44,12 @@ class RecyclerLinearDividerHorFragment :
 
     private val args: RecyclerLinearDividerHorFragmentArgs by navArgs()
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
-    private val dividerParamsData = MutableLiveData(LinearDividerParams())
+    private val dividerParamsViewMode by viewModels<LinearDividerParamsViewModel> {
+        LinearDividerParamsViewModel.Factory(
+            requireActivity().application,
+            "RecyclerLinearDividerHorDividerParams"
+        )
+    }
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -58,7 +63,9 @@ class RecyclerLinearDividerHorFragment :
         savedInstanceState: Bundle?
     ) {
         toolbar.menu.apply {
-            dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+            MenuCompat.setGroupDividerEnabled(this, true)
+
+            dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 clear()
                 dividerParams ?: return@observe
 
@@ -69,7 +76,7 @@ class RecyclerLinearDividerHorFragment :
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowDivider = !dividerParams.isShowDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
@@ -82,7 +89,7 @@ class RecyclerLinearDividerHorFragment :
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowHeaderDivider = !dividerParams.isShowHeaderDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
@@ -95,13 +102,13 @@ class RecyclerLinearDividerHorFragment :
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowFooterDivider = !dividerParams.isShowFooterDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 4, 4,
+                    1, 4, 4,
                     if (dividerParams.isShowSideHeaderDivider)
                         "Hide Side Header Divider" else "Show Side Header Divider"
                 ).apply {
@@ -109,13 +116,13 @@ class RecyclerLinearDividerHorFragment :
                     setOnMenuItemClickListener {
                         dividerParams.isShowSideHeaderDivider =
                             !dividerParams.isShowSideHeaderDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 5, 5,
+                    1, 5, 5,
                     if (dividerParams.isShowSideFooterDivider)
                         "Hide Side Footer Divider" else "Show Side Footer Divider"
                 ).apply {
@@ -123,32 +130,32 @@ class RecyclerLinearDividerHorFragment :
                     setOnMenuItemClickListener {
                         dividerParams.isShowSideFooterDivider =
                             !dividerParams.isShowSideFooterDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 6, 6,
+                    2, 6, 6,
                     if (dividerParams.isBigDivider) "Small Divider" else "Big Divider"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isBigDivider = !dividerParams.isBigDivider
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
 
                 add(
-                    0, 7, 7,
+                    2, 7, 7,
                     if (dividerParams.isShowDividerInsets)
                         "Hide Divider Insets" else "Show Divider Insets"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowDividerInsets = !dividerParams.isShowDividerInsets
-                        dividerParamsData.postValue(dividerParams)
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
                 }
@@ -169,7 +176,11 @@ class RecyclerLinearDividerHorFragment :
             AssemblySingleDataRecyclerAdapter(AppsOverviewHorItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
-                AppStrokeHorItemFactory(requireActivity(), viewLifecycleOwner, dividerParamsData),
+                AppStrokeHorItemFactory(
+                    requireActivity(),
+                    viewLifecycleOwner,
+                    dividerParamsViewMode.dividerParamsData
+                ),
                 ListSeparatorHorItemFactory(requireActivity(), hideDivider = true)
             )
         )
@@ -179,7 +190,7 @@ class RecyclerLinearDividerHorFragment :
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+            dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 dividerParams ?: return@observe
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)
