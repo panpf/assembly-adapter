@@ -50,24 +50,26 @@ class GridDividerItemDecorationHelper(private val provider: GridItemDividerProvi
             isFirstGroup, isLastGroup, isVerticalOrientation,
             if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END, true
         )
-        val topItemDivider = provider.getItemDivider(
-            view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-            isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.TOP, true
-        )
         val endItemDivider = provider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
             isFirstGroup, isLastGroup, isVerticalOrientation,
             if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START, true
         )
+        val topItemDivider = provider.getItemDivider(
+            view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+            isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
+            isFirstGroup, isLastGroup, isVerticalOrientation,
+            ItemDivider.Type.TOP, true
+        )
         val bottomItemDivider = provider.getItemDivider(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
             isFullSpan, isFirstSpan, isLastSpan, spanGroupCount, spanGroupIndex,
-            isFirstGroup, isLastGroup, isVerticalOrientation, ItemDivider.Type.BOTTOM, true
+            isFirstGroup, isLastGroup, isVerticalOrientation,
+            ItemDivider.Type.BOTTOM, true
         )
 
-        if (provider.isHaveSide && (provider.isHaveSideHeaderAndFooter)) {
+        if (provider.isHaveSide && provider.isHaveSideHeaderAndFooter) {
             // 当我们希望显示 sideDivider, sideHeaderAndFooterDivider 并且 item 的宽度是 parent 的宽度减去所有 divider 后除以 spanCount 时，
             // 如公式：'val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount'
             // 按照 GridItemDividerProvider 的逻辑，第一个 item 的 start 和 end 将都会有 divider 显示
@@ -75,92 +77,122 @@ class GridDividerItemDecorationHelper(private val provider: GridItemDividerProvi
             // 所以第一个 item 的宽度会因为加上 start 和 end 的 divider 后超过 GridLayoutManager 限制的最大宽度，
             // 这时 GridLayoutManager 会将 item 的宽度修改为最大宽度减去 start 和 end 的 divider，导致 item 最终的宽度不是我们希望的宽度
             // 所以以下的代码都是为了解决这个问题
-            val showHeaderAndFooterSideDivider = provider.isHaveSideHeaderAndFooter
-            if (isVerticalOrientation) {
-                val sideDividerSize =
-                    provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.widthSize
-                outRect.setKt(
-                    left = when {
-                        isFirstSpan -> sideDividerSize
-                        else -> normalizedOffsetFromSize(
-                            ItemDivider.Type.START, sideDividerSize, spanCount,
-                            spanIndex + spanSize - 1, showHeaderAndFooterSideDivider
-                        )
-                    },
-                    right = when {
-                        isLastSpan -> sideDividerSize
-                        else -> normalizedOffsetFromSize(
-                            ItemDivider.Type.END, sideDividerSize, spanCount,
-                            spanIndex + spanSize - 1, showHeaderAndFooterSideDivider
-                        )
-                    },
-                    top = topItemDivider?.heightSize ?: 0,
-                    bottom = bottomItemDivider?.heightSize ?: 0
-                )
-            } else {
-                val sideDividerSize =
-                    provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.heightSize
-                outRect.setKt(
-                    left = startItemDivider?.widthSize ?: 0,
-                    right = endItemDivider?.widthSize ?: 0,
-                    top = when {
-                        isFirstSpan -> sideDividerSize
-                        else -> normalizedOffsetFromSize(
-                            ItemDivider.Type.TOP, sideDividerSize, spanCount,
-                            spanIndex + spanSize - 1, showHeaderAndFooterSideDivider
-                        )
-                    },
-                    bottom = when {
-                        isLastSpan -> sideDividerSize
-                        else -> normalizedOffsetFromSize(
-                            ItemDivider.Type.BOTTOM, sideDividerSize, spanCount,
-                            spanIndex + spanSize - 1, showHeaderAndFooterSideDivider
-                        )
+            val columnIndex = spanIndex + spanSize - 1
+            when {
+                isFullSpan -> {
+                    val left = startItemDivider?.widthSize ?: 0
+                    val right = endItemDivider?.widthSize ?: 0
+                    val top = topItemDivider?.heightSize ?: 0
+                    val bottom = bottomItemDivider?.heightSize ?: 0
+                    outRect.set(left, top, right, bottom)
+                }
+                isVerticalOrientation -> {
+                    val sideDividerSize =
+                        provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.widthSize
+                    val multiplier = sideDividerSize / spanCount.toFloat()
+                    val left = if (isFirstSpan) {
+                        sideDividerSize
+                    } else {
+                        floor(multiplier * (spanCount - columnIndex)).toInt()
                     }
-                )
+                    val right = if (isLastSpan) {
+                        sideDividerSize
+                    } else {
+                        val cellSideOffset = multiplier * (spanCount + 1)
+                        ceil((cellSideOffset) - (multiplier * (spanCount - columnIndex))).toInt()
+                    }
+                    val top = topItemDivider?.heightSize ?: 0
+                    val bottom = bottomItemDivider?.heightSize ?: 0
+                    outRect.set(left, top, right, bottom)
+                }
+                else -> {
+                    val sideDividerSize =
+                        provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.heightSize
+                    val multiplier = sideDividerSize / spanCount.toFloat()
+                    val left = startItemDivider?.widthSize ?: 0
+                    val right = endItemDivider?.widthSize ?: 0
+                    val top = if (isFirstSpan) {
+                        sideDividerSize
+                    } else {
+                        floor(multiplier * (spanCount - columnIndex)).toInt()
+                    }
+                    val bottom = if (isLastSpan) {
+                        sideDividerSize
+                    } else {
+                        val cellSideOffset = multiplier * (spanCount + 1)
+                        ceil((cellSideOffset) - (multiplier * (spanCount - columnIndex))).toInt()
+                    }
+                    outRect.set(left, top, right, bottom)
+                }
             }
         } else if (provider.isHaveSide && provider.isNoSideHeaderAndFooter) {
             when {
                 isFullSpan -> {
-                    outRect.setKt(
-                        left = startItemDivider?.widthSize ?: 0,
-                        top = topItemDivider?.heightSize ?: 0,
-                        right = endItemDivider?.widthSize ?: 0,
-                        bottom = bottomItemDivider?.heightSize ?: 0
-                    )
+                    val left = startItemDivider?.widthSize ?: 0
+                    val right = endItemDivider?.widthSize ?: 0
+                    val top = topItemDivider?.heightSize ?: 0
+                    val bottom = bottomItemDivider?.heightSize ?: 0
+                    outRect.set(left, top, right, bottom)
                 }
                 isVerticalOrientation -> {
                     val sideDividerSize =
                         provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.widthSize
                     val multiplier = sideDividerSize / spanCount.toFloat()
                     val column = spanIndex + spanSize - 1
-                    outRect.setKt(
-                        left = ceil(column * multiplier).toInt(),
-                        right = floor(sideDividerSize - ((column + 1) * multiplier)).toInt(),
-                        top = topItemDivider?.heightSize ?: 0,
-                        bottom = bottomItemDivider?.heightSize ?: 0
-                    )
+                    val left = ceil(column * multiplier).toInt()
+                    val right = floor(sideDividerSize - ((column + 1) * multiplier)).toInt()
+                    val top = topItemDivider?.heightSize ?: 0
+                    val bottom = bottomItemDivider?.heightSize ?: 0
+                    outRect.set(left, top, right, bottom)
                 }
                 else -> {
                     val sideDividerSize =
                         provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.widthSize
                     val multiplier = sideDividerSize / spanCount.toFloat()
                     val column = spanIndex + spanSize - 1
-                    outRect.setKt(
-                        left = startItemDivider?.heightSize ?: 0,
-                        right = endItemDivider?.heightSize ?: 0,
-                        top = ceil(column * multiplier).toInt(),
-                        bottom = floor(sideDividerSize - ((column + 1) * multiplier)).toInt()
-                    )
+                    val left = startItemDivider?.heightSize ?: 0
+                    val right = endItemDivider?.heightSize ?: 0
+                    val top = ceil(column * multiplier).toInt()
+                    val bottom = floor(sideDividerSize - ((column + 1) * multiplier)).toInt()
+                    outRect.set(left, top, right, bottom)
                 }
             }
+//        } else if (provider.isHaveSide && provider.isOnlySideHeader) {
+//            val left = startItemDivider?.widthSize ?: 0
+//            val right = endItemDivider?.widthSize ?: 0
+//            val top = topItemDivider?.heightSize ?: 0
+//            val bottom = bottomItemDivider?.heightSize ?: 0
+//            outRect.set(left, top, right, bottom)
+//        } else if (provider.isHaveSide && provider.isOnlySideFooter) {
+//            val left = startItemDivider?.widthSize ?: 0
+//            val right = endItemDivider?.widthSize ?: 0
+//            val top = topItemDivider?.heightSize ?: 0
+//            val bottom = bottomItemDivider?.heightSize ?: 0
+//            outRect.set(left, top, right, bottom)
+//        } else if (provider.isNoSide && provider.isOnlySideHeader) {
+//            val left = startItemDivider?.widthSize ?: 0
+//            val right = endItemDivider?.widthSize ?: 0
+//            val top = topItemDivider?.heightSize ?: 0
+//            val bottom = bottomItemDivider?.heightSize ?: 0
+//            outRect.set(left, top, right, bottom)
+//        } else if (provider.isNoSide && provider.isOnlySideFooter) {
+//            val left = startItemDivider?.widthSize ?: 0
+//            val right = endItemDivider?.widthSize ?: 0
+//            val top = topItemDivider?.heightSize ?: 0
+//            val bottom = bottomItemDivider?.heightSize ?: 0
+//            outRect.set(left, top, right, bottom)
+//        } else if (provider.isNoSide && provider.isNoSideHeaderAndFooter) {
+//            val left = startItemDivider?.widthSize ?: 0
+//            val right = endItemDivider?.widthSize ?: 0
+//            val top = topItemDivider?.heightSize ?: 0
+//            val bottom = bottomItemDivider?.heightSize ?: 0
+//            outRect.set(left, top, right, bottom)
         } else {
-            outRect.setKt(
-                left = startItemDivider?.widthSize ?: 0,
-                top = topItemDivider?.heightSize ?: 0,
-                right = endItemDivider?.widthSize ?: 0,
-                bottom = bottomItemDivider?.heightSize ?: 0
-            )
+            val left = startItemDivider?.widthSize ?: 0
+            val right = endItemDivider?.widthSize ?: 0
+            val top = topItemDivider?.heightSize ?: 0
+            val bottom = bottomItemDivider?.heightSize ?: 0
+            outRect.set(left, top, right, bottom)
         }
     }
 
@@ -287,8 +319,4 @@ class GridDividerItemDecorationHelper(private val provider: GridItemDividerProvi
             }
         }
     }
-}
-
-fun Rect.setKt(left: Int, top: Int, right: Int, bottom: Int) {
-    set(left, top, right, bottom)
 }

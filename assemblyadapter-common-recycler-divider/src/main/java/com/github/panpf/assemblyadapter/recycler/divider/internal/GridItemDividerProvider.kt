@@ -83,6 +83,9 @@ class GridItemDividerProvider constructor(
     val isHaveSide: Boolean =
         sideDividerConfig != null
 
+    val isNoSide: Boolean =
+        sideDividerConfig == null
+
     val isOnlySideHeader: Boolean =
         sideHeaderDividerConfig != null && sideFooterDividerConfig == null
 
