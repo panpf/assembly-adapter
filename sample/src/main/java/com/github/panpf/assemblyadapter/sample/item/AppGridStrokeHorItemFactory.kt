@@ -28,11 +28,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.decorInsets
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.GridDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGridStrokeHorBinding
+import com.github.panpf.tools4k.lang.asOrNull
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
@@ -118,7 +120,8 @@ class AppGridStrokeHorItemFactory(
                     append("bindingAdapterPosition: ${item.bindingAdapterPosition}").appendLine()
                     append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
                     append("contentSize: ${binding.appGridStrokeHorItemContentLayout.width}x${binding.appGridStrokeHorItemContentLayout.height}").appendLine()
-                    append("itemSize: ${binding.root.width}x${binding.root.height}")
+                    append("itemSize: ${binding.root.width}x${binding.root.height}").appendLine()
+                    append("insets: ${binding.root.layoutParams.asOrNull<RecyclerView.LayoutParams>()?.decorInsets}")
                 })
             }.show()
             true

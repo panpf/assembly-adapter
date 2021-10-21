@@ -28,11 +28,13 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.decorInsets
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.LinearDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppStrokeHorBinding
+import com.github.panpf.tools4k.lang.asOrNull
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
@@ -96,7 +98,8 @@ class AppStrokeHorItemFactory(
                     append("absoluteAdapterPosition: ${item.absoluteAdapterPosition}").appendLine()
                     append("data: ${item.dataOrThrow.name}").appendLine()
                     append("contentSize: ${binding.appStrokeHorItemContentLayout.width}x${binding.appStrokeHorItemContentLayout.height}").appendLine()
-                    append("itemSize: ${binding.root.width}x${binding.root.height}")
+                    append("itemSize: ${binding.root.width}x${binding.root.height}").appendLine()
+                    append("insets: ${binding.root.layoutParams.asOrNull<RecyclerView.LayoutParams>()?.decorInsets}")
                 })
             }.show()
             true
