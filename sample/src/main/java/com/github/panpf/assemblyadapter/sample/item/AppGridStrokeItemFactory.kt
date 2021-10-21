@@ -37,6 +37,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGridStrokeBind
 import com.github.panpf.tools4k.lang.asOrNull
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
+import kotlin.math.roundToInt
 
 class AppGridStrokeItemFactory(
     private val activity: Activity,
@@ -83,8 +84,8 @@ class AppGridStrokeItemFactory(
                     else -> 0
                 }
             }
-            val dividerFinalSize = dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2)
-            itemSize = ((parentWidth - (dividerFinalSize * dividerCount)) / spanCount)
+            val dividerFinalSize = dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2f)
+            itemSize = ((parentWidth - (dividerFinalSize * dividerCount)) / spanCount).roundToInt()
         }
     }
 

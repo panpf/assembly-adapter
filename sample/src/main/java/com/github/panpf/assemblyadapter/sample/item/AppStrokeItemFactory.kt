@@ -37,6 +37,7 @@ import com.github.panpf.assemblyadapter.sample.databinding.ItemAppStrokeBinding
 import com.github.panpf.tools4k.lang.asOrNull
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
+import kotlin.math.roundToInt
 
 class AppStrokeItemFactory(
     private val activity: Activity,
@@ -58,11 +59,11 @@ class AppStrokeItemFactory(
 
     private fun resetItemSize(parent: RecyclerView, dividerParams: LinearDividerParams) {
         this.parent = parent
-        val dividerFinalSize = dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2)
+        val dividerFinalSize = dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2f)
         val dividerCount = dividerParams.run {
             (if (isShowSideHeaderDivider) 1 else 0) + (if (isShowSideFooterDivider) 1 else 0)
         }
-        itemSize = parent.width - (dividerFinalSize * dividerCount)
+        itemSize = parent.width - (dividerFinalSize * dividerCount).roundToInt()
     }
 
     override fun createItemViewBinding(
