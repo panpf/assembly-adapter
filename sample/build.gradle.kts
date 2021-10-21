@@ -55,7 +55,6 @@ dependencies {
     implementation("io.github.panpf.tools4a:tools4a-dimen-ktx:${property("TOOLS4A")}")
     implementation("io.github.panpf.liveevent:liveevent:${property("LIVEEVENT")}")
     implementation("com.github.promeg:tinypinyin:${property("TINYPINYIN")}")
-    implementation("com.github.fondesa:recycler-view-divider:3.5.0")
 
     implementation(project(":assemblyadapter"))
 }

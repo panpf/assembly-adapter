@@ -25,61 +25,56 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
+import com.github.panpf.assemblyadapter.sample.bean.LinearDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppStrokeBinding
-import com.github.panpf.assemblyadapter.sample.util.TwoCombineMediatorLiveData
-import com.github.panpf.tools4a.dimen.ktx.dp2px
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
 class AppStrokeItemFactory(
     private val activity: Activity,
     lifecycleOwner: LifecycleOwner,
-    private val dividerSizeDpData: LiveData<Float>,
-    private val dividerInsetsDpData: LiveData<Float>,
+    private val dividerParamsData: MutableLiveData<LinearDividerParams>
 ) : BindingItemFactory<AppInfo, ItemAppStrokeBinding>(AppInfo::class) {
-    
+
     private var itemSize: Int = 0
     private var parent: RecyclerView? = null
-    private val dividerParamsData = TwoCombineMediatorLiveData(
-        dividerSizeDpData,
-        dividerInsetsDpData,
-        initValue = true
-    )
 
     init {
-        dividerParamsData.observe(lifecycleOwner) {
+        dividerParamsData.observe(lifecycleOwner) { dividerParams ->
             val parent = parent
-            if (it != null && parent != null) {
-                resetItemSize(parent, it.t1!!.dp2px, it.t2!!.dp2px)
+            if (dividerParams != null && parent != null) {
+                resetItemSize(parent, dividerParams)
             }
         }
     }
 
-    private fun resetItemSize(parent: RecyclerView, dividerSize: Int, dividerInsets: Int) {
+    private fun resetItemSize(parent: RecyclerView, dividerParams: LinearDividerParams) {
         this.parent = parent
-        itemSize = parent.width - ((dividerSize + (dividerInsets * 2)) * 2)
+        val dividerFinalSize = dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2)
+        val dividerCount = dividerParams.run {
+            (if (isShowSideHeaderDivider) 1 else 0) + (if (isShowSideFooterDivider) 1 else 0)
+        }
+        itemSize = parent.width - (dividerFinalSize * dividerCount)
     }
 
     override fun createItemViewBinding(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemAppStrokeBinding {
         if (parent is RecyclerView) {
-            resetItemSize(
-                parent,
-                dividerSizeDpData.value!!.dp2px,
-                dividerInsetsDpData.value!!.dp2px
-            )
+            resetItemSize(parent, dividerParamsData.value!!)
         }
         return ItemAppStrokeBinding.inflate(inflater, parent, false)
     }
 
     override fun initItem(
-        context: Context, binding: ItemAppStrokeBinding, item: BindingItem<AppInfo, ItemAppStrokeBinding>
+        context: Context,
+        binding: ItemAppStrokeBinding,
+        item: BindingItem<AppInfo, ItemAppStrokeBinding>
     ) {
         binding.root.setOnClickListener {
             val data = item.dataOrThrow
@@ -130,7 +125,7 @@ class AppStrokeItemFactory(
                 }
             }
         }
-        
+
         val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
         binding.appStrokeItemIconImage.displayImage(appIconUri)
         binding.appStrokeItemNameText.text = data.name

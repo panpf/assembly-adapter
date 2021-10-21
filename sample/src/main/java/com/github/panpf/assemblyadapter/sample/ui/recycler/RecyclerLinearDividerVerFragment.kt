@@ -27,33 +27,22 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.divider.*
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
+import com.github.panpf.assemblyadapter.sample.bean.LinearDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerVerBinding
 import com.github.panpf.assemblyadapter.sample.item.*
-import com.github.panpf.assemblyadapter.sample.util.ThreeCombineMediatorLiveData
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppsViewModel
-import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class RecyclerLinearDividerVerFragment :
     ToolbarFragment<FragmentRecyclerDividerVerBinding>() {
 
     private val args: RecyclerLinearDividerVerFragmentArgs by navArgs()
     private val viewModel by viewModels<PinyinFlatAppsViewModel>()
-
-    private val dividerSizeDpData = MutableLiveData(5f)
-    private val dividerInsetsDpData = MutableLiveData(0f)
-    private val useSelfDividerItemDecoration = MutableLiveData(true)
-    private val dividerParamsData = ThreeCombineMediatorLiveData(
-        dividerSizeDpData,
-        dividerInsetsDpData,
-        useSelfDividerItemDecoration,
-        initValue = true
-    )
+    private val dividerParamsData = MutableLiveData(LinearDividerParams())
 
     override fun createViewBinding(
         inflater: LayoutInflater, parent: ViewGroup?
@@ -67,45 +56,99 @@ class RecyclerLinearDividerVerFragment :
         savedInstanceState: Bundle?
     ) {
         toolbar.menu.apply {
-            add(
-                0, 0, 0,
-                if (dividerSizeDpData.value!! >= 5f) "Small Divider" else "Big Divider"
-            ).apply {
-                setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-                setOnMenuItemClickListener {
-                    val newDividerSize = if (dividerSizeDpData.value!! >= 5f) 2f else 5f
-                    dividerSizeDpData.postValue(newDividerSize)
-                    it.title =
-                        if (newDividerSize >= 5f) "Small Divider" else "Big Divider"
-                    true
-                }
-            }
+            dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+                clear()
+                dividerParams ?: return@observe
 
-            add(
-                0, 1, 1,
-                if (dividerInsetsDpData.value!! > 0f) "Disable Divider Insets" else "Enable Divider Insets"
-            ).apply {
-                setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-                setOnMenuItemClickListener {
-                    val newDividerInsets = if (dividerInsetsDpData.value!! > 0f) 0f else 2f
-                    dividerInsetsDpData.postValue(newDividerInsets)
-                    it.title =
-                        if (newDividerInsets > 0f) "Disable Divider Insets" else "Enable Divider Insets"
-                    true
+                add(
+                    0, 0, 0,
+                    if (dividerParams.isShowDivider) "Hide Divider" else "Show Divider"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isShowDivider = !dividerParams.isShowDivider
+                        dividerParamsData.postValue(dividerParams)
+                        true
+                    }
                 }
-            }
 
-            add(
-                0, 2, 2,
-                if (useSelfDividerItemDecoration.value!!) "Use Other DividerItemDecoration" else "Use Self DividerItemDecoration"
-            ).apply {
-                setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-                setOnMenuItemClickListener {
-                    val newValue = !useSelfDividerItemDecoration.value!!
-                    useSelfDividerItemDecoration.postValue(newValue)
-                    it.title =
-                        if (newValue) "Use Other DividerItemDecoration" else "Use Self DividerItemDecoration"
-                    true
+                add(
+                    0, 1, 1,
+                    if (dividerParams.isShowHeaderDivider)
+                        "Hide Header Divider" else "Show Header Divider"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isShowHeaderDivider = !dividerParams.isShowHeaderDivider
+                        dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    0, 2, 2,
+                    if (dividerParams.isShowFooterDivider)
+                        "Hide Footer Divider" else "Show Footer Divider"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isShowFooterDivider = !dividerParams.isShowFooterDivider
+                        dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    0, 4, 4,
+                    if (dividerParams.isShowSideHeaderDivider)
+                        "Hide Side Header Divider" else "Show Side Header Divider"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isShowSideHeaderDivider =
+                            !dividerParams.isShowSideHeaderDivider
+                        dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    0, 5, 5,
+                    if (dividerParams.isShowSideFooterDivider)
+                        "Hide Side Footer Divider" else "Show Side Footer Divider"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isShowSideFooterDivider =
+                            !dividerParams.isShowSideFooterDivider
+                        dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    0, 6, 6,
+                    if (dividerParams.isBigDivider) "Small Divider" else "Big Divider"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isBigDivider = !dividerParams.isBigDivider
+                        dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    0, 7, 7,
+                    if (dividerParams.isShowDividerInsets)
+                        "Hide Divider Insets" else "Show Divider Insets"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isShowDividerInsets = !dividerParams.isShowDividerInsets
+                        dividerParamsData.postValue(dividerParams)
+                        true
+                    }
                 }
             }
         }
@@ -124,7 +167,7 @@ class RecyclerLinearDividerVerFragment :
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
-                AppStrokeItemFactory(requireActivity(), viewLifecycleOwner, dividerSizeDpData, dividerInsetsDpData),
+                AppStrokeItemFactory(requireActivity(), viewLifecycleOwner, dividerParamsData),
                 ListSeparatorItemFactory(requireActivity(), hideDivider = true)
             )
         )
@@ -133,16 +176,15 @@ class RecyclerLinearDividerVerFragment :
         binding.recyclerDividerVerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
             layoutManager = LinearLayoutManager(requireContext())
-            dividerParamsData.observe(viewLifecycleOwner) {
-                it ?: return@observe
-                val dividerInsets = dividerInsetsDpData.value!!.dp2px
-                val dividerSize = dividerSizeDpData.value!!.dp2px
+            dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+                dividerParams ?: return@observe
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)
                 }
-                if (useSelfDividerItemDecoration.value!!) {
-                    addAssemblyLinearDividerItemDecoration {
-                        val insets = Insets.allOf(dividerInsets)
+                val insets = Insets.allOf(dividerParams.dividerInsetsSize)
+                val dividerSize = dividerParams.dividerSize
+                addAssemblyLinearDividerItemDecoration {
+                    if (dividerParams.isShowDivider) {
                         divider(Divider.colorRes(R.color.divider, dividerSize, insets)) {
                             personaliseByItemFactoryClass(
                                 ListSeparatorItemFactory::class,
@@ -150,33 +192,45 @@ class RecyclerLinearDividerVerFragment :
                             )
                             disableByItemFactoryClass(AppsOverviewItemFactory::class)
                         }
-                        headerAndFooterDivider(
+                    }
+                    if (dividerParams.isShowHeaderDivider) {
+                        headerDivider(
                             Divider.colorRes(R.color.divider_header, dividerSize, insets)
                         )
+                    }
+                    if (dividerParams.isShowFooterDivider) {
+                        footerDivider(
+                            Divider.colorRes(R.color.divider_header, dividerSize, insets)
+                        )
+                    }
 
-                        sideHeaderAndFooterDivider(
+                    if (dividerParams.isShowSideHeaderDivider) {
+                        sideHeaderDivider(
                             Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
                         ) {
                             personaliseByItemFactoryClass(
                                 ListSeparatorItemFactory::class,
                                 Divider.colorRes(
-                                    R.color.sideDivider_personalise,
-                                    dividerSize,
-                                    insets
+                                    R.color.sideDivider_personalise, dividerSize, insets
                                 )
                             )
                             disableByItemFactoryClass(AppsOverviewItemFactory::class)
                         }
                     }
-                } else {
-                    addItemDecoration(requireContext().dividerBuilder().apply {
-                        colorRes(R.color.divider)
-                        size(dividerSize)
-                        showFirstDivider()
-                        showLastDivider()
-                        showSideDividers()
-                        insets(dividerInsets, dividerInsets)
-                    }.build())
+
+                    if (dividerParams.isShowSideFooterDivider) {
+                        sideFooterDivider(
+                            Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
+                        ) {
+                            personaliseByItemFactoryClass(
+                                ListSeparatorItemFactory::class,
+                                Divider.colorRes(
+                                    R.color.sideDivider_personalise, dividerSize, insets
+                                )
+                            )
+                            disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                        }
+                    }
                 }
                 adapter?.notifyDataSetChanged() // The item width needs to be recalculated and refreshed to take effect
             }

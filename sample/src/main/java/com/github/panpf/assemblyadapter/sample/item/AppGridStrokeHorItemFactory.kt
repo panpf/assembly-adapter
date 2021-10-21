@@ -23,54 +23,37 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
+import com.github.panpf.assemblyadapter.sample.bean.GridDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGridStrokeHorBinding
-import com.github.panpf.assemblyadapter.sample.util.FourCombineMediatorLiveData
-import com.github.panpf.tools4a.dimen.ktx.dp2px
 import me.panpf.sketch.shaper.RoundRectImageShaper
 import me.panpf.sketch.uri.AppIconUriModel
 
 class AppGridStrokeHorItemFactory(
     private val activity: Activity,
     lifecycleOwner: LifecycleOwner,
-    private val dividerSizeDpData: LiveData<Float>,
-    private val dividerInsetsDpData: LiveData<Float>,
-    private val sideHeaderDividerData: LiveData<Boolean>,
-    private val sideFooterDividerData: LiveData<Boolean>,
+    private val gridDividerParamsData: MutableLiveData<GridDividerParams>
 ) : BindingItemFactory<AppInfo, ItemAppGridStrokeHorBinding>(AppInfo::class) {
 
     private var itemSize: Int = 0
     private var parent: RecyclerView? = null
-    private val dividerParamsData = FourCombineMediatorLiveData(
-        dividerSizeDpData,
-        dividerInsetsDpData,
-        sideHeaderDividerData,
-        sideFooterDividerData,
-        initValue = true
-    )
 
     init {
-        dividerParamsData.observe(lifecycleOwner) {
+        gridDividerParamsData.observe(lifecycleOwner) { dividerParams ->
             val parent = parent
-            if (it != null && parent != null) {
-                resetItemSize(parent, it.t1!!.dp2px, it.t2!!.dp2px, it.t3!!, it.t4!!)
+            if (dividerParams != null && parent != null) {
+                resetItemSize(parent, dividerParams)
             }
         }
     }
 
-    private fun resetItemSize(
-        parent: RecyclerView,
-        dividerSize: Int,
-        dividerInsets: Int,
-        showSideHeaderDivider: Boolean,
-        showSideFooterDivider: Boolean
-    ) {
+    private fun resetItemSize(parent: RecyclerView, dividerParams: GridDividerParams) {
         this.parent = parent
         itemSize = -1
         val spanCount = when (val layoutManager = parent.layoutManager) {
@@ -80,18 +63,25 @@ class AppGridStrokeHorItemFactory(
         }
         if (spanCount > 1) {
             val parentHeight = parent.height
-            val dividerCount = when {
-                showSideHeaderDivider && showSideFooterDivider -> {
-                    spanCount + 1
+            val dividerCount = dividerParams.run {
+                when {
+                    isShowSideDivider && isShowSideHeaderDivider && isShowSideFooterDivider -> {
+                        spanCount + 1
+                    }
+                    isShowSideDivider && !isShowSideHeaderDivider && !isShowSideFooterDivider -> {
+                        spanCount - 1
+                    }
+                    isShowSideDivider && (isShowSideHeaderDivider || isShowSideFooterDivider) -> {
+                        spanCount
+                    }
+                    !isShowSideDivider && (isShowSideHeaderDivider || isShowSideFooterDivider) -> {
+                        1
+                    }
+                    else -> 0
                 }
-                !showSideHeaderDivider && !showSideFooterDivider -> {
-                    spanCount - 1
-                }
-                else -> spanCount
             }
-            val dividerFinalSize = dividerSize + (dividerInsets * 2)
-            itemSize =
-                ((parentHeight - (dividerFinalSize * dividerCount)) / spanCount)
+            val dividerFinalSize = dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2)
+            itemSize = ((parentHeight - (dividerFinalSize * dividerCount)) / spanCount)
         }
     }
 
@@ -99,13 +89,7 @@ class AppGridStrokeHorItemFactory(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemAppGridStrokeHorBinding {
         if (parent is RecyclerView) {
-            resetItemSize(
-                parent,
-                dividerSizeDpData.value!!.dp2px,
-                dividerInsetsDpData.value!!.dp2px,
-                sideHeaderDividerData.value!!,
-                sideFooterDividerData.value!!,
-            )
+            resetItemSize(parent, gridDividerParamsData.value!!)
         }
         return ItemAppGridStrokeHorBinding.inflate(inflater, parent, false)
     }
