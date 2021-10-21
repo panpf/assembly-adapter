@@ -19,6 +19,8 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.ceil
+import kotlin.math.floor
 
 class GridDividerItemDecorationHelper(private val provider: GridItemDividerProvider) {
 
@@ -130,11 +132,11 @@ class GridDividerItemDecorationHelper(private val provider: GridItemDividerProvi
                 isVerticalOrientation -> {
                     val sideDividerSize =
                         provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.widthSize
-                    val multiplier = sideDividerSize / 4
+                    val multiplier = sideDividerSize / spanCount.toFloat()
                     val column = spanIndex + spanSize - 1
                     outRect.setKt(
-                        left = column * multiplier,
-                        right = sideDividerSize - ((column + 1) * multiplier),
+                        left = ceil(column * multiplier).toInt(),
+                        right = floor(sideDividerSize - ((column + 1) * multiplier)).toInt(),
                         top = topItemDivider?.heightSize ?: 0,
                         bottom = bottomItemDivider?.heightSize ?: 0
                     )
@@ -142,13 +144,13 @@ class GridDividerItemDecorationHelper(private val provider: GridItemDividerProvi
                 else -> {
                     val sideDividerSize =
                         provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.widthSize
-                    val multiplier = sideDividerSize / 4
+                    val multiplier = sideDividerSize / spanCount.toFloat()
                     val column = spanIndex + spanSize - 1
                     outRect.setKt(
                         left = startItemDivider?.heightSize ?: 0,
                         right = endItemDivider?.heightSize ?: 0,
-                        top = column * multiplier,
-                        bottom = sideDividerSize - ((column + 1) * multiplier)
+                        top = ceil(column * multiplier).toInt(),
+                        bottom = floor(sideDividerSize - ((column + 1) * multiplier)).toInt()
                     )
                 }
             }
