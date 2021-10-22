@@ -23,17 +23,62 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerItemDecorationHelper
-import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDividerProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.*
 
 /**
  * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  */
 open class GridDividerItemDecoration(
-    val itemDividerProvider: GridItemDividerProvider,
+    provider: GridItemDividerProvider,
 ) : ItemDecoration() {
 
-    private val itemDecorationHelper = GridDividerItemDecorationHelper(itemDividerProvider)
+    private val itemDecorationHelper = GridDividerItemDecorationHelper(provider)
+    private val gridDividerHelper = when {
+        provider.sideDividerConfig != null && provider.sideHeaderDividerConfig != null && provider.sideFooterDividerConfig != null -> {
+            GridDividerSideAndHeaderFooterHelper(
+                provider.dividerConfig,
+                provider.headerDividerConfig,
+                provider.footerDividerConfig,
+                provider.sideDividerConfig,
+                provider.sideHeaderDividerConfig,
+                provider.sideFooterDividerConfig
+            )
+        }
+        provider.sideDividerConfig != null && provider.sideHeaderDividerConfig != null && provider.sideFooterDividerConfig == null -> {
+            GridDividerSideAndHeaderHelper(
+                provider.dividerConfig,
+                provider.headerDividerConfig,
+                provider.footerDividerConfig,
+                provider.sideDividerConfig,
+                provider.sideHeaderDividerConfig
+            )
+        }
+        provider.sideDividerConfig != null && provider.sideHeaderDividerConfig == null && provider.sideFooterDividerConfig != null -> {
+            GridDividerSideAndFooterHelper(
+                provider.dividerConfig,
+                provider.headerDividerConfig,
+                provider.footerDividerConfig,
+                provider.sideDividerConfig,
+                provider.sideFooterDividerConfig
+            )
+        }
+        provider.sideDividerConfig != null && provider.sideHeaderDividerConfig == null && provider.sideFooterDividerConfig == null -> {
+            GridDividerOnlySideHelper(
+                provider.dividerConfig,
+                provider.headerDividerConfig,
+                provider.footerDividerConfig,
+                provider.sideDividerConfig
+            )
+        }
+        else -> {
+            GridDividerNoSideHelper(
+                provider.dividerConfig,
+                provider.headerDividerConfig,
+                provider.footerDividerConfig
+            )
+        }
+    }
+    private var reusableItemParams: ItemParams? = null
 
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
@@ -56,20 +101,39 @@ open class GridDividerItemDecoration(
         val spanIndex = childLayoutParams.spanIndex
         val spanGroupCount = spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
         val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
-        itemDecorationHelper.getItemOffsets(
-            outRect,
-            view,
-            parent,
-            itemCount,
-            position,
-            spanCount,
-            spanSize,
-            spanIndex,
-            spanGroupCount,
-            spanGroupIndex,
-            isVerticalOrientation,
-            isLTRDirection
-        )
+        val isColumnFirst = spanGroupIndex == 0
+        val isColumnEnd = spanGroupIndex == spanGroupCount - 1
+        val isFullSpan = spanSize == spanCount
+        val isFirstSpan = isFullSpan || spanIndex == 0
+        val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
+//        itemDecorationHelper.getItemOffsets(
+//            outRect,
+//            view,
+//            parent,
+//            itemCount,
+//            position,
+//            spanCount,
+//            spanSize,
+//            spanIndex,
+//            spanGroupCount,
+//            spanGroupIndex,
+//            isVerticalOrientation,
+//            isLTRDirection
+//        )
+        val itemParams = this.reusableItemParams?.apply {
+            set(
+                view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+                isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                isVerticalOrientation, isLTRDirection
+            )
+        } ?: ItemParams(
+            view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+            isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+            isVerticalOrientation, isLTRDirection
+        ).apply {
+            this@GridDividerItemDecoration.reusableItemParams = this
+        }
+        gridDividerHelper.getItemOffsets(outRect, itemParams)
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -96,20 +160,40 @@ open class GridDividerItemDecoration(
             val spanSize = childLayoutParams.spanSize
             val spanIndex = childLayoutParams.spanIndex
             val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
-            itemDecorationHelper.drawItem(
-                canvas,
-                view,
-                parent,
-                itemCount,
-                position,
-                spanCount,
-                spanSize,
-                spanIndex,
-                spanGroupCount,
-                spanGroupIndex,
-                isVerticalOrientation,
-                isLTRDirection
-            )
+            val isColumnFirst = spanGroupIndex == 0
+            val isColumnEnd = spanGroupIndex == spanGroupCount - 1
+            val isFullSpan = spanSize == spanCount
+            val isFirstSpan = isFullSpan || spanIndex == 0
+            val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
+//            itemDecorationHelper.drawItem(
+//                canvas,
+//                view,
+//                parent,
+//                itemCount,
+//                position,
+//                spanCount,
+//                spanSize,
+//                spanIndex,
+//                spanGroupCount,
+//                spanGroupIndex,
+//                isVerticalOrientation,
+//                isLTRDirection
+//            )
+
+            val itemParams = this.reusableItemParams?.apply {
+                set(
+                    view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+                    isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                    isVerticalOrientation, isLTRDirection
+                )
+            } ?: ItemParams(
+                view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+                isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                isVerticalOrientation, isLTRDirection
+            ).apply {
+                this@GridDividerItemDecoration.reusableItemParams = this
+            }
+            gridDividerHelper.drawItem(canvas, itemParams)
         }
     }
 

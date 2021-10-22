@@ -147,7 +147,7 @@ class GridDividerItemDecorationHelper(private val provider: GridItemDividerProvi
                 }
                 else -> {
                     val sideDividerSize =
-                        provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.widthSize
+                        provider.sideDividerConfig!!.get(parent, position, spanIndex)!!.heightSize
                     val multiplier = sideDividerSize / spanCount.toFloat()
                     val column = spanIndex + spanSize - 1
                     val left = startItemDivider?.heightSize ?: 0
