@@ -21,12 +21,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.DividerConfig
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearDividerItemDecorationHelper
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
+import com.github.panpf.assemblyadapter.recycler.divider.LinearDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemParams
 import org.junit.Assert
 import org.junit.Test
 
-class LinearDividerItemDecorationHelperTest {
+class LinearDividerHelperTest {
 
     @Test
     fun testGetItemOffsets() {
@@ -34,7 +34,7 @@ class LinearDividerItemDecorationHelperTest {
         val parent = RecyclerView(context)
         val view = TextView(context)
 
-        val provider = LinearItemDividerProvider(
+        val provider = LinearDividerItemDecoration(
             dividerConfig = DividerConfig.Builder(Divider.space(5)).build()
                 .toItemDividerConfig(context),
             headerDividerConfig = DividerConfig.Builder(Divider.space(10)).build()
@@ -46,7 +46,7 @@ class LinearDividerItemDecorationHelperTest {
             sideFooterDividerConfig = DividerConfig.Builder(Divider.space(30)).build()
                 .toItemDividerConfig(context),
         )
-        val helper = LinearDividerItemDecorationHelper(provider)
+        val helper = provider.dividerHelper
 
         val itemCount = 5
         var isVerticalOrientation = true
@@ -54,8 +54,14 @@ class LinearDividerItemDecorationHelperTest {
         val outRect = Rect()
         val getItemOffsets: (position: Int) -> Rect = { position ->
             outRect.set(0, 0, 0, 0)
+            val isFirst = position == 0
+            val isLast = position == itemCount - 1
             helper.getItemOffsets(
-                outRect, view, parent, itemCount, position, isVerticalOrientation, isLTRDirection
+                outRect,
+                LinearItemParams(
+                    view, parent, itemCount, position, isFirst,
+                    isLast, isVerticalOrientation, isLTRDirection
+                )
             )
             outRect
         }

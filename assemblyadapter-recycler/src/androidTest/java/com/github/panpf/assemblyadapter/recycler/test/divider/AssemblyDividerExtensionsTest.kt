@@ -29,30 +29,30 @@ class AssemblyDividerExtensionsTest {
         val recyclerView = RecyclerView(context)
 
         recyclerView.newAssemblyLinearDividerItemDecoration().apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
 
         recyclerView.newAssemblyLinearDividerItemDecoration {
             sideHeaderAndFooterDivider(Divider.space(20))
         }.apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
 
         recyclerView.addAssemblyLinearDividerItemDecoration()
         (recyclerView.getItemDecorationAt(0) as AssemblyLinearDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
         recyclerView.removeItemDecorationAt(0)
 
@@ -60,11 +60,11 @@ class AssemblyDividerExtensionsTest {
             sideHeaderAndFooterDivider(Divider.space(20))
         }
         (recyclerView.getItemDecorationAt(0) as AssemblyLinearDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
         recyclerView.removeItemDecorationAt(0)
 
@@ -74,28 +74,28 @@ class AssemblyDividerExtensionsTest {
         }
         Assert.assertEquals(1, recyclerView.itemDecorationCount)
         (recyclerView.getItemDecorationAt(0) as AssemblyLinearDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
         recyclerView.addAssemblyLinearDividerItemDecoration(0) {
             sideFooterDivider(Divider.space(20))
         }
         (recyclerView.getItemDecorationAt(0) as AssemblyLinearDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
         (recyclerView.getItemDecorationAt(1) as AssemblyLinearDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
     }
 
@@ -105,30 +105,30 @@ class AssemblyDividerExtensionsTest {
         val recyclerView = RecyclerView(context)
 
         recyclerView.newAssemblyGridDividerItemDecoration().apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
 
         recyclerView.newAssemblyGridDividerItemDecoration {
             sideHeaderAndFooterDivider(Divider.space(20))
         }.apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
 
         recyclerView.addAssemblyGridDividerItemDecoration()
         (recyclerView.getItemDecorationAt(0) as AssemblyGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
         recyclerView.removeItemDecorationAt(0)
 
@@ -136,11 +136,11 @@ class AssemblyDividerExtensionsTest {
             sideHeaderAndFooterDivider(Divider.space(20))
         }
         (recyclerView.getItemDecorationAt(0) as AssemblyGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
         recyclerView.removeItemDecorationAt(0)
 
@@ -150,28 +150,28 @@ class AssemblyDividerExtensionsTest {
         }
         Assert.assertEquals(1, recyclerView.itemDecorationCount)
         (recyclerView.getItemDecorationAt(0) as AssemblyGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
         recyclerView.addAssemblyGridDividerItemDecoration(0) {
             sideFooterDivider(Divider.space(20))
         }
         (recyclerView.getItemDecorationAt(0) as AssemblyGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
         (recyclerView.getItemDecorationAt(1) as AssemblyGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
     }
 
@@ -181,30 +181,30 @@ class AssemblyDividerExtensionsTest {
         val recyclerView = RecyclerView(context)
 
         recyclerView.newAssemblyStaggeredGridDividerItemDecoration().apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
 
         recyclerView.newAssemblyStaggeredGridDividerItemDecoration {
             sideHeaderAndFooterDivider(Divider.space(20))
         }.apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
 
         recyclerView.addAssemblyStaggeredGridDividerItemDecoration()
         (recyclerView.getItemDecorationAt(0) as AssemblyStaggeredGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
         recyclerView.removeItemDecorationAt(0)
 
@@ -212,11 +212,11 @@ class AssemblyDividerExtensionsTest {
             sideHeaderAndFooterDivider(Divider.space(20))
         }
         (recyclerView.getItemDecorationAt(0) as AssemblyStaggeredGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
         recyclerView.removeItemDecorationAt(0)
 
@@ -226,28 +226,28 @@ class AssemblyDividerExtensionsTest {
         }
         Assert.assertEquals(1, recyclerView.itemDecorationCount)
         (recyclerView.getItemDecorationAt(0) as AssemblyStaggeredGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
         recyclerView.addAssemblyStaggeredGridDividerItemDecoration(0) {
             sideFooterDivider(Divider.space(20))
         }
         (recyclerView.getItemDecorationAt(0) as AssemblyStaggeredGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(sideHeaderDividerConfig)
+            Assert.assertNotNull(sideFooterDividerConfig)
         }
         (recyclerView.getItemDecorationAt(1) as AssemblyStaggeredGridDividerItemDecoration).apply {
-            Assert.assertNotNull(itemDividerProvider.dividerConfig)
-            Assert.assertNull(itemDividerProvider.headerDividerConfig)
-            Assert.assertNull(itemDividerProvider.footerDividerConfig)
-            Assert.assertNotNull(itemDividerProvider.sideHeaderDividerConfig)
-            Assert.assertNull(itemDividerProvider.sideFooterDividerConfig)
+            Assert.assertNotNull(dividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideHeaderDividerConfig)
+            Assert.assertNull(sideFooterDividerConfig)
         }
     }
 }

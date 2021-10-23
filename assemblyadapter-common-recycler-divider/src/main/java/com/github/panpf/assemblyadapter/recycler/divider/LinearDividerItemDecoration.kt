@@ -38,7 +38,7 @@ open class LinearDividerItemDecoration(
     val sideFooterDividerConfig: ItemDividerConfig?,
 ) : ItemDecoration() {
 
-    private val dividerHelper = LinearDividerHelper(
+    val dividerHelper = LinearDividerHelper(
         dividerConfig,
         headerDividerConfig,
         footerDividerConfig,

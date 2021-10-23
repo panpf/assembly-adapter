@@ -37,7 +37,7 @@ open class GridDividerItemDecoration(
     val sideFooterDividerConfig: ItemDividerConfig?,
 ) : ItemDecoration() {
 
-    private val dividerHelper = when {
+    val dividerHelper = when {
         sideDividerConfig != null && sideHeaderDividerConfig != null && sideFooterDividerConfig != null -> {
             GridDividerSideAndHeaderFooterHelper(
                 dividerConfig,
@@ -83,6 +83,12 @@ open class GridDividerItemDecoration(
         }
     }
     private var reusableItemParams: GridItemParams? = null
+
+    init {
+        // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
+        // todo When there is no sideDivider, there can be no sideHeader or sideFooter
+        // todo The dimensions of side, sideHeader, and sideFooter must be the same
+    }
 
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
@@ -189,9 +195,6 @@ open class GridDividerItemDecoration(
         private var disableDefaultDivider = false
 
         fun build(): GridDividerItemDecoration {
-            // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
-            // todo When there is no sideDivider, there can be no sideHeader or sideFooter
-            // todo The dimensions of side, sideHeader, and sideFooter must be the same
             // todo side cannot disable
             // todo side provide new api
 
