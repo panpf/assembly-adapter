@@ -21,19 +21,18 @@ import android.graphics.Rect
 abstract class GridDividerHelper {
 
     protected abstract fun getItemDivider(
-        params: ItemParams,
+        params: GridItemParams,
         dividerType: ItemDivider.Type,
         fromOffset: Boolean,
         fromStaggered: Boolean,
     ): ItemDivider?
 
-    abstract fun getItemOffsets(outRect: Rect, params: ItemParams, fromStaggered: Boolean)
+    abstract fun getItemOffsets(outRect: Rect, params: GridItemParams, fromStaggered: Boolean)
 
-    fun drawItem(canvas: Canvas, params: ItemParams, fromStaggered: Boolean) {
-        val isLTRDirection = params.isLTRDirection
+    fun drawItem(canvas: Canvas, params: GridItemParams, fromStaggered: Boolean) {
         val view = params.view
-        val startType = if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-        val endType = if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
+        val startType = if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
+        val endType = if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
         val startItemDivider = getItemDivider(params, startType, false, fromStaggered)
         val endItemDivider = getItemDivider(params, endType, false, fromStaggered)
         val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, false, fromStaggered)

@@ -27,7 +27,7 @@ class GridDividerSideAndHeaderFooterHelper(
 ) : GridDividerHelper() {
 
     override fun getItemDivider(
-        params: ItemParams,
+        params: GridItemParams,
         dividerType: ItemDivider.Type,
         fromOffset: Boolean,
         fromStaggered: Boolean,
@@ -54,15 +54,14 @@ class GridDividerSideAndHeaderFooterHelper(
             }
             ItemDivider.Type.END -> if (params.isLastSpan) sideFooterDividerConfig else sideDividerConfig
             ItemDivider.Type.TOP -> if (params.isColumnFirst) headerDividerConfig else null
-            ItemDivider.Type.BOTTOM -> if (params.isColumnEnd) footerDividerConfig else dividerConfig
+            ItemDivider.Type.BOTTOM -> if (params.isColumnLast) footerDividerConfig else dividerConfig
         }
         return dividerConfig?.get(params.parent, params.position, params.spanIndex)
     }
 
-    override fun getItemOffsets(outRect: Rect, params: ItemParams, fromStaggered: Boolean) {
-        val isLTRDirection = params.isLTRDirection
-        val startType = if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-        val endType = if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
+    override fun getItemOffsets(outRect: Rect, params: GridItemParams, fromStaggered: Boolean) {
+        val startType = if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
+        val endType = if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
         val startItemDivider = getItemDivider(params, startType, true, fromStaggered)
         val endItemDivider = getItemDivider(params, endType, true, fromStaggered)
         val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)

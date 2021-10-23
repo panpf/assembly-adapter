@@ -19,7 +19,7 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 
 /**
  * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、header and footer side divider
@@ -27,8 +27,18 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDivi
  * On the basis of [LinearDividerItemDecoration], the divider can be disabled or personalized according to the ItemFactory class
  */
 open class AssemblyLinearDividerItemDecoration(
-    itemDividerProvider: LinearItemDividerProvider
-) : LinearDividerItemDecoration(itemDividerProvider) {
+    dividerConfig: ItemDividerConfig?,
+    headerDividerConfig: ItemDividerConfig?,
+    footerDividerConfig: ItemDividerConfig?,
+    sideHeaderDividerConfig: ItemDividerConfig?,
+    sideFooterDividerConfig: ItemDividerConfig?,
+) : LinearDividerItemDecoration(
+    dividerConfig,
+    headerDividerConfig,
+    footerDividerConfig,
+    sideHeaderDividerConfig,
+    sideFooterDividerConfig
+) {
 
     class Builder(val context: Context) {
 
@@ -45,10 +55,6 @@ open class AssemblyLinearDividerItemDecoration(
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
         fun build(): AssemblyLinearDividerItemDecoration {
-            return AssemblyLinearDividerItemDecoration(buildItemDividerProvider())
-        }
-
-        private fun buildItemDividerProvider(): LinearItemDividerProvider {
             val finalDividerConfig = when {
                 dividerConfig != null -> dividerConfig
                 !disableDefaultDivider -> context.obtainStyledAttributes(
@@ -68,7 +74,7 @@ open class AssemblyLinearDividerItemDecoration(
                     ConcatFindItemFactoryClassSupport(this)
                 }
 
-            return LinearItemDividerProvider(
+            return AssemblyLinearDividerItemDecoration(
                 dividerConfig = finalDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 headerDividerConfig = (headerDividerConfig

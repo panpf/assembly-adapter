@@ -23,18 +23,29 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearDividerItemDecorationHelper
-import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemDividerProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearDividerHelper
+import com.github.panpf.assemblyadapter.recycler.divider.internal.LinearItemParams
 
 /**
  * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、header and footer side divider
  */
 open class LinearDividerItemDecoration(
-    val itemDividerProvider: LinearItemDividerProvider,
+    val dividerConfig: ItemDividerConfig?,
+    val headerDividerConfig: ItemDividerConfig?,
+    val footerDividerConfig: ItemDividerConfig?,
+    val sideHeaderDividerConfig: ItemDividerConfig?,
+    val sideFooterDividerConfig: ItemDividerConfig?,
 ) : ItemDecoration() {
 
-    private val itemDecorationHelper =
-        LinearDividerItemDecorationHelper(itemDividerProvider)
+    private val dividerHelper = LinearDividerHelper(
+        dividerConfig,
+        headerDividerConfig,
+        footerDividerConfig,
+        sideHeaderDividerConfig,
+        sideFooterDividerConfig
+    )
+    private var reusableItemParams: LinearItemParams? = null
 
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
@@ -48,16 +59,21 @@ open class LinearDividerItemDecoration(
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
         val isVerticalOrientation = layoutManager.orientation == LinearLayoutManager.VERTICAL
         val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
+        val isFirst = position == 0
+        val isLast = position == itemCount - 1
 
-        itemDecorationHelper.getItemOffsets(
-            outRect,
-            view,
-            parent,
-            itemCount,
-            position,
-            isVerticalOrientation,
-            isLTRDirection
-        )
+        val itemParams = this.reusableItemParams?.apply {
+            set(
+                view, parent, itemCount, position, isFirst, isLast,
+                isVerticalOrientation, isLTRDirection
+            )
+        } ?: LinearItemParams(
+            view, parent, itemCount, position, isFirst, isLast,
+            isVerticalOrientation, isLTRDirection
+        ).apply {
+            this@LinearDividerItemDecoration.reusableItemParams = this
+        }
+        dividerHelper.getItemOffsets(outRect, itemParams)
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -74,15 +90,20 @@ open class LinearDividerItemDecoration(
             val view = parent.getChildAt(index)
             val childLayoutParams = view.layoutParams as RecyclerView.LayoutParams
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
-            itemDecorationHelper.drawItem(
-                canvas,
-                view,
-                parent,
-                itemCount,
-                position,
-                isVerticalOrientation,
-                isLTRDirection
-            )
+            val isFirst = position == 0
+            val isLast = position == itemCount - 1
+            val itemParams = this.reusableItemParams?.apply {
+                set(
+                    view, parent, itemCount, position, isFirst, isLast,
+                    isVerticalOrientation, isLTRDirection
+                )
+            } ?: LinearItemParams(
+                view, parent, itemCount, position, isFirst, isLast,
+                isVerticalOrientation, isLTRDirection
+            ).apply {
+                this@LinearDividerItemDecoration.reusableItemParams = this
+            }
+            dividerHelper.drawItem(canvas, itemParams)
         }
     }
 
@@ -100,10 +121,6 @@ open class LinearDividerItemDecoration(
         private var disableDefaultDivider = false
 
         fun build(): LinearDividerItemDecoration {
-            return LinearDividerItemDecoration(buildItemDividerProvider())
-        }
-
-        private fun buildItemDividerProvider(): LinearItemDividerProvider {
             val finalDividerConfig = when {
                 dividerConfig != null -> dividerConfig
                 !disableDefaultDivider -> context.obtainStyledAttributes(
@@ -118,7 +135,7 @@ open class LinearDividerItemDecoration(
                 else -> null
             }
 
-            return LinearItemDividerProvider(
+            return LinearDividerItemDecoration(
                 dividerConfig = finalDividerConfig?.toItemDividerConfig(context),
                 headerDividerConfig = (headerDividerConfig
                     ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)

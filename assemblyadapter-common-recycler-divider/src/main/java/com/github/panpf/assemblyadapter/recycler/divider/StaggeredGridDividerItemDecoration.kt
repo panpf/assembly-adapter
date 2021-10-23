@@ -30,16 +30,16 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.*
  * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  */
 open class StaggeredGridDividerItemDecoration(
-    dividerConfig: ItemDividerConfig?,
-    headerDividerConfig: ItemDividerConfig?,
-    footerDividerConfig: ItemDividerConfig?,
-    sideDividerConfig: ItemDividerConfig?,
-    sideHeaderDividerConfig: ItemDividerConfig?,
-    sideFooterDividerConfig: ItemDividerConfig?,
+    val dividerConfig: ItemDividerConfig?,
+    val headerDividerConfig: ItemDividerConfig?,
+    val footerDividerConfig: ItemDividerConfig?,
+    val sideDividerConfig: ItemDividerConfig?,
+    val sideHeaderDividerConfig: ItemDividerConfig?,
+    val sideFooterDividerConfig: ItemDividerConfig?,
     val isFullSpanByPosition: IsFullSpanByPosition?,
 ) : ItemDecoration() {
 
-    private val gridDividerHelper = when {
+    private val dividerHelper = when {
         sideDividerConfig != null && sideHeaderDividerConfig != null && sideFooterDividerConfig != null -> {
             GridDividerSideAndHeaderFooterHelper(
                 dividerConfig,
@@ -84,7 +84,7 @@ open class StaggeredGridDividerItemDecoration(
             )
         }
     }
-    private var reusableItemParams: ItemParams? = null
+    private var reusableItemParams: GridItemParams? = null
 
     init {
         if ((headerDividerConfig != null || footerDividerConfig != null) && isFullSpanByPosition == null) {
@@ -123,7 +123,7 @@ open class StaggeredGridDividerItemDecoration(
         } else {
             false
         }
-        val isColumnEnd =
+        val isColumnLast =
             if (isFullSpanByPosition != null && position >= itemCount - spanCount) {
                 when {
                     isFullSpan -> position == itemCount - 1
@@ -138,17 +138,17 @@ open class StaggeredGridDividerItemDecoration(
         val itemParams = this.reusableItemParams?.apply {
             set(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnLast,
                 isVerticalOrientation, isLTRDirection
             )
-        } ?: ItemParams(
+        } ?: GridItemParams(
             view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-            isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+            isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnLast,
             isVerticalOrientation, isLTRDirection
         ).apply {
             this@StaggeredGridDividerItemDecoration.reusableItemParams = this
         }
-        gridDividerHelper.getItemOffsets(outRect, itemParams, true)
+        dividerHelper.getItemOffsets(outRect, itemParams, true)
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -182,7 +182,7 @@ open class StaggeredGridDividerItemDecoration(
             } else {
                 false
             }
-            val isColumnEnd =
+            val isColumnLast =
                 if (isFullSpanByPosition != null && position >= itemCount - spanCount) {
                     when {
                         isFullSpan -> position == itemCount - 1
@@ -197,17 +197,17 @@ open class StaggeredGridDividerItemDecoration(
             val itemParams = this.reusableItemParams?.apply {
                 set(
                     view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                    isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                    isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnLast,
                     isVerticalOrientation, isLTRDirection
                 )
-            } ?: ItemParams(
+            } ?: GridItemParams(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
-                isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnLast,
                 isVerticalOrientation, isLTRDirection
             ).apply {
                 this@StaggeredGridDividerItemDecoration.reusableItemParams = this
             }
-            gridDividerHelper.drawItem(canvas, itemParams, true)
+            dividerHelper.drawItem(canvas, itemParams, true)
         }
     }
 
