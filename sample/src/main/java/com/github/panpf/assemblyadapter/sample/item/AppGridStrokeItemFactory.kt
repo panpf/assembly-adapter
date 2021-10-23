@@ -60,11 +60,7 @@ class AppGridStrokeItemFactory(
     private fun resetItemSize(parent: RecyclerView, dividerParams: GridDividerParams) {
         this.parent = parent
         itemSize = -1
-        val spanCount = when (val layoutManager = parent.layoutManager) {
-            is GridLayoutManager -> layoutManager.spanCount
-            is StaggeredGridLayoutManager -> layoutManager.spanCount
-            else -> 1
-        }
+        val spanCount = dividerParams.getSpanCount(true)
         if (spanCount > 1) {
             val parentWidth = parent.width
             val dividerCount = dividerParams.run {

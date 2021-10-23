@@ -14,6 +14,7 @@ data class GridDividerParams(
     var isBigDivider: Boolean = true,
     var isShowDividerInsets: Boolean = false,
     var isShowListSeparator: Boolean = true,
+    var isLessSpanSeparator: Boolean = false,
 ) {
 
     val dividerSize: Int
@@ -21,4 +22,12 @@ data class GridDividerParams(
 
     val dividerInsetsSize: Int
         get() = if (isShowDividerInsets) 2f.dp2px else 0f.dp2px
+
+    fun getSpanCount(vertical: Boolean): Int {
+        return if (vertical) {
+            if (isLessSpanSeparator) 3 else 4
+        } else {
+            if (isLessSpanSeparator) 4 else 6
+        }
+    }
 }

@@ -180,13 +180,25 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
                 }
 
                 add(
-                    2, 8, 8,
+                    3, 8, 8,
                     if (dividerParams.isShowListSeparator)
                         "Hide List Separator" else "Show List Separator"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowListSeparator = !dividerParams.isShowListSeparator
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    3, 9, 9,
+                    if (dividerParams.isLessSpanSeparator) "Many Span" else "Less Span"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isLessSpanSeparator = !dividerParams.isLessSpanSeparator
                         dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
@@ -204,10 +216,9 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
         toolbar.title = args.title
         toolbar.subtitle = args.subtitle
 
-        val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(
-                AppsOverviewHorItemFactory(requireActivity())
-            )
+        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(
+            AppsOverviewHorItemFactory(requireActivity())
+        )
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
                 AppGridStrokeHorItemFactory(
@@ -222,16 +233,21 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
             AssemblySingleDataRecyclerAdapter(LoadStateHorItemFactory(requireActivity()))
         binding.recyclerDividerHorRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
-            layoutManager = AssemblyGridLayoutManager(
-                requireContext(), 6, RecyclerView.HORIZONTAL, false,
-                mapOf(
-                    AppsOverviewHorItemFactory::class to ItemSpan.fullSpan(),
-                    ListSeparatorHorItemFactory::class to ItemSpan.fullSpan(),
-                    LoadStateHorItemFactory::class to ItemSpan.fullSpan()
-                )
-            )
             dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 dividerParams ?: return@observe
+
+                layoutManager = AssemblyGridLayoutManager(
+                    requireContext(),
+                    dividerParams.getSpanCount(false),
+                    RecyclerView.HORIZONTAL,
+                    false,
+                    mapOf(
+                        AppsOverviewHorItemFactory::class to ItemSpan.fullSpan(),
+                        ListSeparatorHorItemFactory::class to ItemSpan.fullSpan(),
+                        LoadStateHorItemFactory::class to ItemSpan.fullSpan()
+                    )
+                )
+
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)
                 }

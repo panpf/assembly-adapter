@@ -180,13 +180,25 @@ class RecyclerStaggeredGridDividerVerFragment :
                 }
 
                 add(
-                    2, 8, 8,
+                    3, 8, 8,
                     if (dividerParams.isShowListSeparator)
                         "Hide List Separator" else "Show List Separator"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowListSeparator = !dividerParams.isShowListSeparator
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    3, 9, 9,
+                    if (dividerParams.isLessSpanSeparator) "Many Span" else "Less Span"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isLessSpanSeparator = !dividerParams.isLessSpanSeparator
                         dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
@@ -219,17 +231,18 @@ class RecyclerStaggeredGridDividerVerFragment :
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerDividerVerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
-            layoutManager =
-                AssemblyStaggeredGridLayoutManager(
-                    4,
+            dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+                dividerParams ?: return@observe
+
+                layoutManager = AssemblyStaggeredGridLayoutManager(
+                    dividerParams.getSpanCount(true),
                     listOf(
                         AppsOverviewItemFactory::class,
                         ListSeparatorItemFactory::class,
                         LoadStateItemFactory::class
                     )
                 )
-            dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
-                dividerParams ?: return@observe
+
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)
                 }

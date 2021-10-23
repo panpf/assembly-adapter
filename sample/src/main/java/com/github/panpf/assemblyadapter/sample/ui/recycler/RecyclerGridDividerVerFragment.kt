@@ -182,13 +182,25 @@ class RecyclerGridDividerVerFragment : ToolbarFragment<FragmentRecyclerDividerVe
                 }
 
                 add(
-                    2, 8, 8,
+                    3, 8, 8,
                     if (dividerParams.isShowListSeparator)
                         "Hide List Separator" else "Show List Separator"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
                         dividerParams.isShowListSeparator = !dividerParams.isShowListSeparator
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    3, 9, 9,
+                    if (dividerParams.isLessSpanSeparator) "Many Span" else "Less Span"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isLessSpanSeparator = !dividerParams.isLessSpanSeparator
                         dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
@@ -206,8 +218,9 @@ class RecyclerGridDividerVerFragment : ToolbarFragment<FragmentRecyclerDividerVe
         toolbar.title = args.title
         toolbar.subtitle = args.subtitle
 
-        val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
+        val appsOverviewAdapter = AssemblySingleDataRecyclerAdapter(
+            AppsOverviewItemFactory(requireActivity())
+        )
         val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
             listOf(
                 AppGridStrokeItemFactory(
@@ -222,17 +235,19 @@ class RecyclerGridDividerVerFragment : ToolbarFragment<FragmentRecyclerDividerVe
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerDividerVerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
-            layoutManager = AssemblyGridLayoutManager(
-                requireContext(),
-                4,
-                mapOf(
-                    AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
-                    ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
-                    LoadStateItemFactory::class to ItemSpan.fullSpan()
-                )
-            )
             dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 dividerParams ?: return@observe
+
+                layoutManager = AssemblyGridLayoutManager(
+                    requireContext(),
+                    dividerParams.getSpanCount(true),
+                    mapOf(
+                        AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
+                        ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
+                        LoadStateItemFactory::class to ItemSpan.fullSpan()
+                    )
+                )
+
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)
                 }
