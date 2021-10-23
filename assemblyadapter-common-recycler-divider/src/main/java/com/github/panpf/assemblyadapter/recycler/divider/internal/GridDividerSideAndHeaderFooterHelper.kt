@@ -23,17 +23,50 @@ class GridDividerSideAndHeaderFooterHelper(
     val footerDividerConfig: ItemDividerConfig?,
     val sideDividerConfig: ItemDividerConfig,
     val sideHeaderDividerConfig: ItemDividerConfig,
-    val sideFooterDividerConfig: ItemDividerConfig
+    val sideFooterDividerConfig: ItemDividerConfig,
 ) : GridDividerHelper() {
 
-    override fun getItemOffsets(outRect: Rect, params: ItemParams) {
+    override fun getItemDivider(
+        params: ItemParams,
+        dividerType: ItemDivider.Type,
+        fromOffset: Boolean,
+        fromStaggered: Boolean,
+    ): ItemDivider? {
+        val finalDividerType = if (params.isVerticalOrientation) {
+            dividerType
+        } else {
+            when (dividerType) {
+                ItemDivider.Type.START -> ItemDivider.Type.TOP
+                ItemDivider.Type.END -> ItemDivider.Type.BOTTOM
+                ItemDivider.Type.TOP -> ItemDivider.Type.START
+                ItemDivider.Type.BOTTOM -> ItemDivider.Type.END
+            }
+        }
+        // fromStaggered && !fromOffset:
+        // Since the height of two adjacent items in StaggeredGridLayoutManager may be different,
+        // Therefore, it is necessary to draw dividers for both the start and end of the item when drawing,
+        // so that two adjacent items with inconsistent heights will always draw a higher divider.
+        val dividerConfig = when (finalDividerType) {
+            ItemDivider.Type.START -> when {
+                params.isFirstSpan -> sideHeaderDividerConfig
+                fromStaggered && !fromOffset -> sideDividerConfig
+                else -> null
+            }
+            ItemDivider.Type.END -> if (params.isLastSpan) sideFooterDividerConfig else sideDividerConfig
+            ItemDivider.Type.TOP -> if (params.isColumnFirst) headerDividerConfig else null
+            ItemDivider.Type.BOTTOM -> if (params.isColumnEnd) footerDividerConfig else dividerConfig
+        }
+        return dividerConfig?.get(params.parent, params.position, params.spanIndex)
+    }
+
+    override fun getItemOffsets(outRect: Rect, params: ItemParams, fromStaggered: Boolean) {
         val isLTRDirection = params.isLTRDirection
         val startType = if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
         val endType = if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
-        val startItemDivider = getItemDivider(params, startType, true)
-        val endItemDivider = getItemDivider(params, endType, true)
-        val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, true)
-        val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, true)
+        val startItemDivider = getItemDivider(params, startType, true, fromStaggered)
+        val endItemDivider = getItemDivider(params, endType, true, fromStaggered)
+        val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
+        val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
 
 // 当我们希望显示 sideDivider, sideHeaderAndFooterDivider 并且 item 的宽度是 parent 的宽度减去所有 divider 后除以 spanCount 时，
         // 如公式：'val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount'
@@ -100,27 +133,5 @@ class GridDividerSideAndHeaderFooterHelper(
                 outRect.set(left, top, right, bottom)
             }
         }
-    }
-
-    override fun getItemDivider(
-        params: ItemParams, dividerType: ItemDivider.Type, fromOffset: Boolean
-    ): ItemDivider? {
-        val finalDividerType = if (params.isVerticalOrientation) {
-            dividerType
-        } else {
-            when (dividerType) {
-                ItemDivider.Type.START -> ItemDivider.Type.TOP
-                ItemDivider.Type.END -> ItemDivider.Type.BOTTOM
-                ItemDivider.Type.TOP -> ItemDivider.Type.START
-                ItemDivider.Type.BOTTOM -> ItemDivider.Type.END
-            }
-        }
-        val dividerConfig = when (finalDividerType) {
-            ItemDivider.Type.START -> if (params.isFirstSpan) sideHeaderDividerConfig else null
-            ItemDivider.Type.END -> if (params.isLastSpan) sideFooterDividerConfig else sideDividerConfig
-            ItemDivider.Type.TOP -> if (params.isColumnFirst) headerDividerConfig else null
-            ItemDivider.Type.BOTTOM -> if (params.isColumnEnd) footerDividerConfig else dividerConfig
-        }
-        return dividerConfig?.get(params.parent, params.position, params.spanIndex)
     }
 }

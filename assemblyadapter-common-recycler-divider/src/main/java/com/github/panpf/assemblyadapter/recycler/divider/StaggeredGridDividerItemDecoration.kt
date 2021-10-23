@@ -24,22 +24,70 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridDividerItemDecorationHelper
-import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDividerProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.*
 
 /**
  * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  */
 open class StaggeredGridDividerItemDecoration(
-    val itemDividerProvider: StaggeredGridItemDividerProvider,
+    dividerConfig: ItemDividerConfig?,
+    headerDividerConfig: ItemDividerConfig?,
+    footerDividerConfig: ItemDividerConfig?,
+    sideDividerConfig: ItemDividerConfig?,
+    sideHeaderDividerConfig: ItemDividerConfig?,
+    sideFooterDividerConfig: ItemDividerConfig?,
     val isFullSpanByPosition: IsFullSpanByPosition?,
 ) : ItemDecoration() {
 
-    private val itemDecorationHelper =
-        StaggeredGridDividerItemDecorationHelper(itemDividerProvider)
+    private val gridDividerHelper = when {
+        sideDividerConfig != null && sideHeaderDividerConfig != null && sideFooterDividerConfig != null -> {
+            GridDividerSideAndHeaderFooterHelper(
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig,
+                sideDividerConfig,
+                sideHeaderDividerConfig,
+                sideFooterDividerConfig
+            )
+        }
+        sideDividerConfig != null && sideHeaderDividerConfig != null && sideFooterDividerConfig == null -> {
+            GridDividerSideAndHeaderHelper(
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig,
+                sideDividerConfig,
+                sideHeaderDividerConfig
+            )
+        }
+        sideDividerConfig != null && sideHeaderDividerConfig == null && sideFooterDividerConfig != null -> {
+            GridDividerSideAndFooterHelper(
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig,
+                sideDividerConfig,
+                sideFooterDividerConfig
+            )
+        }
+        sideDividerConfig != null && sideHeaderDividerConfig == null && sideFooterDividerConfig == null -> {
+            GridDividerOnlySideHelper(
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig,
+                sideDividerConfig
+            )
+        }
+        else -> {
+            GridDividerNoSideHelper(
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig
+            )
+        }
+    }
+    private var reusableItemParams: ItemParams? = null
 
     init {
-        if (itemDividerProvider.hasHeaderOrFooterDivider() && isFullSpanByPosition == null) {
+        if ((headerDividerConfig != null || footerDividerConfig != null) && isFullSpanByPosition == null) {
             throw IllegalArgumentException(
                 "Must be set the 'isFullSpanByPosition' property, because you configured 'headerDivider' or 'footerDivider'"
             )
@@ -61,6 +109,9 @@ open class StaggeredGridDividerItemDecoration(
         val spanCount = layoutManager.spanCount
         val spanIndex = childLayoutParams.spanIndex
         val isFullSpan = childLayoutParams.isFullSpan
+        val isFirstSpan = isFullSpan || spanIndex == 0
+        val isLastSpan = isFullSpan || spanIndex == spanCount - 1
+        val spanSize = if (isFullSpan) spanCount else 1
         val isColumnFirst = if (isFullSpanByPosition != null && position < spanCount) {
             when {
                 isFullSpan -> position == 0
@@ -84,20 +135,20 @@ open class StaggeredGridDividerItemDecoration(
             } else {
                 false
             }
-        itemDecorationHelper.getItemOffsets(
-            outRect,
-            view,
-            parent,
-            itemCount,
-            position,
-            spanCount,
-            isFullSpan,
-            spanIndex,
-            isColumnFirst,
-            isColumnEnd,
-            isVerticalOrientation,
-            isLTRDirection
-        )
+        val itemParams = this.reusableItemParams?.apply {
+            set(
+                view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+                isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                isVerticalOrientation, isLTRDirection
+            )
+        } ?: ItemParams(
+            view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+            isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+            isVerticalOrientation, isLTRDirection
+        ).apply {
+            this@StaggeredGridDividerItemDecoration.reusableItemParams = this
+        }
+        gridDividerHelper.getItemOffsets(outRect, itemParams, true)
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -117,6 +168,9 @@ open class StaggeredGridDividerItemDecoration(
             val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: continue
             val spanIndex = childLayoutParams.spanIndex
             val isFullSpan = childLayoutParams.isFullSpan
+            val isFirstSpan = isFullSpan || spanIndex == 0
+            val isLastSpan = isFullSpan || spanIndex == spanCount - 1
+            val spanSize = if (isFullSpan) spanCount else 1
             val isColumnFirst = if (isFullSpanByPosition != null && position < spanCount) {
                 when {
                     isFullSpan -> position == 0
@@ -140,20 +194,20 @@ open class StaggeredGridDividerItemDecoration(
                 } else {
                     false
                 }
-            itemDecorationHelper.drawItem(
-                canvas,
-                view,
-                parent,
-                itemCount,
-                position,
-                spanCount,
-                isFullSpan,
-                spanIndex,
-                isColumnFirst,
-                isColumnEnd,
-                isVerticalOrientation,
-                isLTRDirection
-            )
+            val itemParams = this.reusableItemParams?.apply {
+                set(
+                    view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+                    isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                    isVerticalOrientation, isLTRDirection
+                )
+            } ?: ItemParams(
+                view, parent, itemCount, position, spanCount, spanSize, spanIndex,
+                isFullSpan, isFirstSpan, isLastSpan, isColumnFirst, isColumnEnd,
+                isVerticalOrientation, isLTRDirection
+            ).apply {
+                this@StaggeredGridDividerItemDecoration.reusableItemParams = this
+            }
+            gridDividerHelper.drawItem(canvas, itemParams, true)
         }
     }
 
@@ -166,25 +220,20 @@ open class StaggeredGridDividerItemDecoration(
         private var useDividerAsFooterDivider = false
 
         private var sideDividerConfig: DividerConfig? = null
-        private var sideHeaderAndFooterDividerConfig: DividerConfig? = null
-        private var useSideDividerAsSideHeaderAndFooterDivider = false
+        private var sideHeaderDividerConfig: DividerConfig? = null
+        private var sideFooterDividerConfig: DividerConfig? = null
+        private var useSideDividerAsSideHeaderDivider = false
+        private var useSideDividerAsSideFooterDivider = false
 
         private var disableDefaultDivider = false
         private var isFullSpanByPosition: IsFullSpanByPosition? = null
 
         fun build(): StaggeredGridDividerItemDecoration {
-            return StaggeredGridDividerItemDecoration(
-                buildItemDividerProvider(),
-                isFullSpanByPosition
-            )
-        }
-
-        private fun buildItemDividerProvider(): StaggeredGridItemDividerProvider {
-            if ((useSideDividerAsSideHeaderAndFooterDivider) && sideDividerConfig == null) {
-                throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
-            }
             // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
-            // todo side Does not support disable
+            // todo When there is no sideDivider, there can be no sideHeader or sideFooter
+            // todo The dimensions of side, sideHeader, and sideFooter must be the same
+            // todo side cannot disable
+            // todo side provide new api
 
             val finalDividerConfig = when {
                 dividerConfig != null -> dividerConfig
@@ -200,7 +249,7 @@ open class StaggeredGridDividerItemDecoration(
                 else -> null
             }
 
-            return StaggeredGridItemDividerProvider(
+            return StaggeredGridDividerItemDecoration(
                 dividerConfig = finalDividerConfig?.toItemDividerConfig(context),
                 headerDividerConfig = (headerDividerConfig
                     ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
@@ -209,9 +258,13 @@ open class StaggeredGridDividerItemDecoration(
                     ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
                     ?.toItemDividerConfig(context),
                 sideDividerConfig = sideDividerConfig?.toItemDividerConfig(context),
-                sideHeaderAndFooterDividerConfig = (sideHeaderAndFooterDividerConfig
-                    ?: if (useSideDividerAsSideHeaderAndFooterDivider) sideDividerConfig else null)
+                sideHeaderDividerConfig = (sideHeaderDividerConfig
+                    ?: if (useSideDividerAsSideHeaderDivider) sideDividerConfig else null)
                     ?.toItemDividerConfig(context),
+                sideFooterDividerConfig = (sideFooterDividerConfig
+                    ?: if (useSideDividerAsSideFooterDivider) sideDividerConfig else null)
+                    ?.toItemDividerConfig(context),
+                isFullSpanByPosition
             )
         }
 
@@ -392,26 +445,22 @@ open class StaggeredGridDividerItemDecoration(
          * Set the header divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        @Deprecated(
-            "Please use sideHeaderAndFooterDivider instead",
-            ReplaceWith("sideHeaderAndFooterDivider")
-        )
         fun sideHeaderDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            return sideHeaderAndFooterDivider(divider, configBlock)
+            this.sideHeaderDividerConfig = DividerConfig.Builder(divider).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
         }
 
         /**
          * Set the header divider on the side of the item
          */
-        @Deprecated(
-            "Please use sideHeaderAndFooterDivider instead",
-            ReplaceWith("sideHeaderAndFooterDivider")
-        )
         fun sideHeaderDivider(config: DividerConfig): Builder {
-            return sideHeaderAndFooterDivider(config)
+            this.sideHeaderDividerConfig = config
+            return this
         }
 
 
@@ -419,26 +468,22 @@ open class StaggeredGridDividerItemDecoration(
          * Set the footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        @Deprecated(
-            "Please use sideHeaderAndFooterDivider instead",
-            ReplaceWith("sideHeaderAndFooterDivider")
-        )
         fun sideFooterDivider(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            return sideHeaderAndFooterDivider(divider, configBlock)
+            this.sideFooterDividerConfig = DividerConfig.Builder(divider).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
         }
 
         /**
          * Set the footer divider on the side of the item
          */
-        @Deprecated(
-            "Please use sideHeaderAndFooterDivider instead",
-            ReplaceWith("sideHeaderAndFooterDivider")
-        )
         fun sideFooterDivider(config: DividerConfig): Builder {
-            return sideHeaderAndFooterDivider(config)
+            this.sideFooterDividerConfig = config
+            return this
         }
 
 
@@ -450,7 +495,10 @@ open class StaggeredGridDividerItemDecoration(
             divider: Divider,
             configBlock: (DividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.sideHeaderAndFooterDividerConfig = DividerConfig.Builder(divider).apply {
+            this.sideHeaderDividerConfig = DividerConfig.Builder(divider).apply {
+                configBlock?.invoke(this)
+            }.build()
+            this.sideFooterDividerConfig = DividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -460,7 +508,8 @@ open class StaggeredGridDividerItemDecoration(
          * Set the header and footer divider on the side of the item
          */
         fun sideHeaderAndFooterDivider(config: DividerConfig): Builder {
-            this.sideHeaderAndFooterDividerConfig = config
+            this.sideHeaderDividerConfig = config
+            this.sideFooterDividerConfig = config
             return this
         }
 
@@ -468,30 +517,25 @@ open class StaggeredGridDividerItemDecoration(
         /**
          * Use side divider as the header side divider
          */
-        @Deprecated(
-            "Please use useSideDividerAsSideHeaderAndFooterDivider instead",
-            ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider")
-        )
         fun useSideDividerAsSideHeaderDivider(use: Boolean = true): Builder {
-            return useSideDividerAsSideHeaderAndFooterDivider(use)
+            this.useSideDividerAsSideHeaderDivider = use
+            return this
         }
 
         /**
          * Use side divider as the footer side divider
          */
-        @Deprecated(
-            "Please use useSideDividerAsSideHeaderAndFooterDivider instead",
-            ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider")
-        )
         fun useSideDividerAsSideFooterDivider(use: Boolean = true): Builder {
-            return useSideDividerAsSideHeaderAndFooterDivider(use)
+            this.useSideDividerAsSideFooterDivider = use
+            return this
         }
 
         /**
          * Use side divider as the header and footer side divider
          */
         fun useSideDividerAsSideHeaderAndFooterDivider(use: Boolean = true): Builder {
-            this.useSideDividerAsSideHeaderAndFooterDivider = use
+            this.useSideDividerAsSideHeaderDivider = use
+            this.useSideDividerAsSideFooterDivider = use
             return this
         }
 

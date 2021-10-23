@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
-import com.github.panpf.assemblyadapter.recycler.divider.internal.StaggeredGridItemDividerProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
 
 /**
@@ -32,10 +32,21 @@ import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
  * On the basis of [StaggeredGridDividerItemDecoration], the divider can be disabled or personalized according to the ItemFactory class
  */
 open class AssemblyStaggeredGridDividerItemDecoration(
-    itemDividerProvider: StaggeredGridItemDividerProvider,
+    dividerConfig: ItemDividerConfig?,
+    headerDividerConfig: ItemDividerConfig?,
+    footerDividerConfig: ItemDividerConfig?,
+    sideDividerConfig: ItemDividerConfig?,
+    sideHeaderDividerConfig: ItemDividerConfig?,
+    sideFooterDividerConfig: ItemDividerConfig?,
     isFullSpanByPosition: IsFullSpanByPosition
 ) : StaggeredGridDividerItemDecoration(
-    itemDividerProvider, isFullSpanByPosition
+    dividerConfig,
+    headerDividerConfig,
+    footerDividerConfig,
+    sideDividerConfig,
+    sideHeaderDividerConfig,
+    sideFooterDividerConfig,
+    isFullSpanByPosition
 ) {
 
     class Builder(val context: Context) {
@@ -47,21 +58,16 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private var useDividerAsFooterDivider = false
 
         private var sideDividerConfig: AssemblyDividerConfig? = null
-        private var sideHeaderAndFooterDividerConfig: AssemblyDividerConfig? = null
-        private var useSideDividerAsSideHeaderAndFooterDivider = false
+        private var sideHeaderDividerConfig: AssemblyDividerConfig? = null
+        private var sideFooterDividerConfig: AssemblyDividerConfig? = null
+        private var useSideDividerAsSideHeaderDivider = false
+        private var useSideDividerAsSideFooterDivider = false
 
         private var disableDefaultDivider = false
         private var isFullSpanByPosition: IsFullSpanByPosition? = null
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
         fun build(): AssemblyStaggeredGridDividerItemDecoration {
-            return AssemblyStaggeredGridDividerItemDecoration(
-                buildItemDividerProvider(),
-                isFullSpanByPosition ?: AssemblyIsFullSpanByPosition()
-            )
-        }
-
-        private fun buildItemDividerProvider(): StaggeredGridItemDividerProvider {
             val finalDividerConfig = when {
                 dividerConfig != null -> dividerConfig
                 !disableDefaultDivider -> context.obtainStyledAttributes(
@@ -81,7 +87,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                     ConcatFindItemFactoryClassSupport(this)
                 }
 
-            return StaggeredGridItemDividerProvider(
+            return AssemblyStaggeredGridDividerItemDecoration(
                 dividerConfig = finalDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 headerDividerConfig = (headerDividerConfig
@@ -92,9 +98,13 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 sideDividerConfig = sideDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                sideHeaderAndFooterDividerConfig = (sideHeaderAndFooterDividerConfig
-                    ?: if (useSideDividerAsSideHeaderAndFooterDivider) sideDividerConfig else null)
+                sideHeaderDividerConfig = (sideHeaderDividerConfig
+                    ?: if (useSideDividerAsSideHeaderDivider) sideDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                sideFooterDividerConfig = (sideFooterDividerConfig
+                    ?: if (useSideDividerAsSideFooterDivider) sideDividerConfig else null)
+                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                isFullSpanByPosition ?: AssemblyIsFullSpanByPosition()
             )
         }
 
@@ -248,26 +258,22 @@ open class AssemblyStaggeredGridDividerItemDecoration(
          * Set the header divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        @Deprecated(
-            "Please use sideHeaderAndFooterDivider instead",
-            ReplaceWith("sideHeaderAndFooterDivider")
-        )
         fun sideHeaderDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            return sideHeaderAndFooterDivider(divider, configBlock)
+            this.sideHeaderDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
         }
 
         /**
          * Set the header divider on the side of the item
          */
-        @Deprecated(
-            "Please use sideHeaderAndFooterDivider instead",
-            ReplaceWith("sideHeaderAndFooterDivider")
-        )
         fun sideHeaderDivider(config: AssemblyDividerConfig): Builder {
-            return sideHeaderAndFooterDivider(config)
+            this.sideHeaderDividerConfig = config
+            return this
         }
 
 
@@ -275,26 +281,22 @@ open class AssemblyStaggeredGridDividerItemDecoration(
          * Set the footer divider on the side of the item. You can configure to disable the divider or
          * provide a personalized divider in some cases through the [configBlock] function
          */
-        @Deprecated(
-            "Please use sideHeaderAndFooterDivider instead",
-            ReplaceWith("sideHeaderAndFooterDivider")
-        )
         fun sideFooterDivider(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            return sideHeaderAndFooterDivider(divider, configBlock)
+            this.sideFooterDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+                configBlock?.invoke(this)
+            }.build()
+            return this
         }
 
         /**
          * Set the footer divider on the side of the item
          */
-        @Deprecated(
-            "Please use sideHeaderAndFooterDivider instead",
-            ReplaceWith("sideHeaderAndFooterDivider")
-        )
         fun sideFooterDivider(config: AssemblyDividerConfig): Builder {
-            return sideHeaderAndFooterDivider(config)
+            this.sideFooterDividerConfig = config
+            return this
         }
 
 
@@ -306,7 +308,10 @@ open class AssemblyStaggeredGridDividerItemDecoration(
             divider: Divider,
             configBlock: (AssemblyDividerConfig.Builder.() -> Unit)? = null
         ): Builder {
-            this.sideHeaderAndFooterDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+            this.sideHeaderDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
+                configBlock?.invoke(this)
+            }.build()
+            this.sideFooterDividerConfig = AssemblyDividerConfig.Builder(divider).apply {
                 configBlock?.invoke(this)
             }.build()
             return this
@@ -316,7 +321,8 @@ open class AssemblyStaggeredGridDividerItemDecoration(
          * Set the header and footer divider on the side of the item
          */
         fun sideHeaderAndFooterDivider(config: AssemblyDividerConfig): Builder {
-            this.sideHeaderAndFooterDividerConfig = config
+            this.sideHeaderDividerConfig = config
+            this.sideFooterDividerConfig = config
             return this
         }
 
@@ -324,30 +330,25 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         /**
          * Use side divider as the header side divider
          */
-        @Deprecated(
-            "Please use useSideDividerAsSideHeaderAndFooterDivider instead",
-            ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider")
-        )
         fun useSideDividerAsSideHeaderDivider(use: Boolean = true): Builder {
-            return useSideDividerAsSideHeaderAndFooterDivider(use)
+            this.useSideDividerAsSideHeaderDivider = use
+            return this
         }
 
         /**
          * Use side divider as the footer side divider
          */
-        @Deprecated(
-            "Please use useSideDividerAsSideHeaderAndFooterDivider instead",
-            ReplaceWith("useSideDividerAsSideHeaderAndFooterDivider")
-        )
         fun useSideDividerAsSideFooterDivider(use: Boolean = true): Builder {
-            return useSideDividerAsSideHeaderAndFooterDivider(use)
+            this.useSideDividerAsSideFooterDivider = use
+            return this
         }
 
         /**
          * Use side divider as the header and footer side divider
          */
         fun useSideDividerAsSideHeaderAndFooterDivider(use: Boolean = true): Builder {
-            this.useSideDividerAsSideHeaderAndFooterDivider = use
+            this.useSideDividerAsSideHeaderDivider = use
+            this.useSideDividerAsSideFooterDivider = use
             return this
         }
 

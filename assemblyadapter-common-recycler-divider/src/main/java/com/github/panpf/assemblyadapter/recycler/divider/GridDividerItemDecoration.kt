@@ -29,12 +29,12 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.*
  * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  */
 open class GridDividerItemDecoration(
-    dividerConfig: ItemDividerConfig?,
-    headerDividerConfig: ItemDividerConfig?,
-    footerDividerConfig: ItemDividerConfig?,
-    sideDividerConfig: ItemDividerConfig?,
-    sideHeaderDividerConfig: ItemDividerConfig?,
-    sideFooterDividerConfig: ItemDividerConfig?,
+    val dividerConfig: ItemDividerConfig?,
+    val headerDividerConfig: ItemDividerConfig?,
+    val footerDividerConfig: ItemDividerConfig?,
+    val sideDividerConfig: ItemDividerConfig?,
+    val sideHeaderDividerConfig: ItemDividerConfig?,
+    val sideFooterDividerConfig: ItemDividerConfig?,
 ) : ItemDecoration() {
 
     private val gridDividerHelper = when {
@@ -123,7 +123,7 @@ open class GridDividerItemDecoration(
         ).apply {
             this@GridDividerItemDecoration.reusableItemParams = this
         }
-        gridDividerHelper.getItemOffsets(outRect, itemParams)
+        gridDividerHelper.getItemOffsets(outRect, itemParams, false)
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -168,7 +168,7 @@ open class GridDividerItemDecoration(
             ).apply {
                 this@GridDividerItemDecoration.reusableItemParams = this
             }
-            gridDividerHelper.drawItem(canvas, itemParams)
+            gridDividerHelper.drawItem(canvas, itemParams, false)
         }
     }
 
@@ -189,10 +189,6 @@ open class GridDividerItemDecoration(
         private var disableDefaultDivider = false
 
         fun build(): GridDividerItemDecoration {
-            if ((useSideDividerAsSideHeaderDivider || useSideDividerAsSideFooterDivider) && sideDividerConfig == null) {
-                throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
-            }
-
             // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
             // todo When there is no sideDivider, there can be no sideHeader or sideFooter
             // todo The dimensions of side, sideHeader, and sideFooter must be the same

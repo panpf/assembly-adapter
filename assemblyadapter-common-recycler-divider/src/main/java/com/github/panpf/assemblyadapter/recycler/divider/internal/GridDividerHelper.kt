@@ -21,20 +21,23 @@ import android.graphics.Rect
 abstract class GridDividerHelper {
 
     protected abstract fun getItemDivider(
-        params: ItemParams, dividerType: ItemDivider.Type, fromOffset: Boolean
+        params: ItemParams,
+        dividerType: ItemDivider.Type,
+        fromOffset: Boolean,
+        fromStaggered: Boolean,
     ): ItemDivider?
 
-    abstract fun getItemOffsets(outRect: Rect, params: ItemParams)
+    abstract fun getItemOffsets(outRect: Rect, params: ItemParams, fromStaggered: Boolean)
 
-    fun drawItem(canvas: Canvas, params: ItemParams) {
+    fun drawItem(canvas: Canvas, params: ItemParams, fromStaggered: Boolean) {
         val isLTRDirection = params.isLTRDirection
         val view = params.view
         val startType = if (isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
         val endType = if (isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
-        val startItemDivider = getItemDivider(params, startType, false)
-        val endItemDivider = getItemDivider(params, endType, false)
-        val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, false)
-        val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, false)
+        val startItemDivider = getItemDivider(params, startType, false, fromStaggered)
+        val endItemDivider = getItemDivider(params, endType, false, fromStaggered)
+        val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, false, fromStaggered)
+        val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, false, fromStaggered)
         val startItemDividerSize = startItemDivider?.widthSize ?: 0
         val endItemDividerSize = endItemDivider?.widthSize ?: 0
         val topItemDividerSize = topItemDivider?.heightSize ?: 0
