@@ -29,52 +29,56 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.*
  * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
  */
 open class GridDividerItemDecoration(
-    provider: GridItemDividerProvider,
+    dividerConfig: ItemDividerConfig?,
+    headerDividerConfig: ItemDividerConfig?,
+    footerDividerConfig: ItemDividerConfig?,
+    sideDividerConfig: ItemDividerConfig?,
+    sideHeaderDividerConfig: ItemDividerConfig?,
+    sideFooterDividerConfig: ItemDividerConfig?,
 ) : ItemDecoration() {
 
-    private val itemDecorationHelper = GridDividerItemDecorationHelper(provider)
     private val gridDividerHelper = when {
-        provider.sideDividerConfig != null && provider.sideHeaderDividerConfig != null && provider.sideFooterDividerConfig != null -> {
+        sideDividerConfig != null && sideHeaderDividerConfig != null && sideFooterDividerConfig != null -> {
             GridDividerSideAndHeaderFooterHelper(
-                provider.dividerConfig,
-                provider.headerDividerConfig,
-                provider.footerDividerConfig,
-                provider.sideDividerConfig,
-                provider.sideHeaderDividerConfig,
-                provider.sideFooterDividerConfig
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig,
+                sideDividerConfig,
+                sideHeaderDividerConfig,
+                sideFooterDividerConfig
             )
         }
-        provider.sideDividerConfig != null && provider.sideHeaderDividerConfig != null && provider.sideFooterDividerConfig == null -> {
+        sideDividerConfig != null && sideHeaderDividerConfig != null && sideFooterDividerConfig == null -> {
             GridDividerSideAndHeaderHelper(
-                provider.dividerConfig,
-                provider.headerDividerConfig,
-                provider.footerDividerConfig,
-                provider.sideDividerConfig,
-                provider.sideHeaderDividerConfig
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig,
+                sideDividerConfig,
+                sideHeaderDividerConfig
             )
         }
-        provider.sideDividerConfig != null && provider.sideHeaderDividerConfig == null && provider.sideFooterDividerConfig != null -> {
+        sideDividerConfig != null && sideHeaderDividerConfig == null && sideFooterDividerConfig != null -> {
             GridDividerSideAndFooterHelper(
-                provider.dividerConfig,
-                provider.headerDividerConfig,
-                provider.footerDividerConfig,
-                provider.sideDividerConfig,
-                provider.sideFooterDividerConfig
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig,
+                sideDividerConfig,
+                sideFooterDividerConfig
             )
         }
-        provider.sideDividerConfig != null && provider.sideHeaderDividerConfig == null && provider.sideFooterDividerConfig == null -> {
+        sideDividerConfig != null && sideHeaderDividerConfig == null && sideFooterDividerConfig == null -> {
             GridDividerOnlySideHelper(
-                provider.dividerConfig,
-                provider.headerDividerConfig,
-                provider.footerDividerConfig,
-                provider.sideDividerConfig
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig,
+                sideDividerConfig
             )
         }
         else -> {
             GridDividerNoSideHelper(
-                provider.dividerConfig,
-                provider.headerDividerConfig,
-                provider.footerDividerConfig
+                dividerConfig,
+                headerDividerConfig,
+                footerDividerConfig
             )
         }
     }
@@ -106,20 +110,6 @@ open class GridDividerItemDecoration(
         val isFullSpan = spanSize == spanCount
         val isFirstSpan = isFullSpan || spanIndex == 0
         val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
-//        itemDecorationHelper.getItemOffsets(
-//            outRect,
-//            view,
-//            parent,
-//            itemCount,
-//            position,
-//            spanCount,
-//            spanSize,
-//            spanIndex,
-//            spanGroupCount,
-//            spanGroupIndex,
-//            isVerticalOrientation,
-//            isLTRDirection
-//        )
         val itemParams = this.reusableItemParams?.apply {
             set(
                 view, parent, itemCount, position, spanCount, spanSize, spanIndex,
@@ -165,21 +155,6 @@ open class GridDividerItemDecoration(
             val isFullSpan = spanSize == spanCount
             val isFirstSpan = isFullSpan || spanIndex == 0
             val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
-//            itemDecorationHelper.drawItem(
-//                canvas,
-//                view,
-//                parent,
-//                itemCount,
-//                position,
-//                spanCount,
-//                spanSize,
-//                spanIndex,
-//                spanGroupCount,
-//                spanGroupIndex,
-//                isVerticalOrientation,
-//                isLTRDirection
-//            )
-
             val itemParams = this.reusableItemParams?.apply {
                 set(
                     view, parent, itemCount, position, spanCount, spanSize, spanIndex,
@@ -214,15 +189,15 @@ open class GridDividerItemDecoration(
         private var disableDefaultDivider = false
 
         fun build(): GridDividerItemDecoration {
-            return GridDividerItemDecoration(buildItemDividerProvider())
-        }
-
-        private fun buildItemDividerProvider(): GridItemDividerProvider {
             if ((useSideDividerAsSideHeaderDivider || useSideDividerAsSideFooterDivider) && sideDividerConfig == null) {
                 throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
             }
 
             // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
+            // todo When there is no sideDivider, there can be no sideHeader or sideFooter
+            // todo The dimensions of side, sideHeader, and sideFooter must be the same
+            // todo side cannot disable
+            // todo side provide new api
 
             val finalDividerConfig = when {
                 dividerConfig != null -> dividerConfig
@@ -238,7 +213,7 @@ open class GridDividerItemDecoration(
                 else -> null
             }
 
-            return GridItemDividerProvider(
+            return GridDividerItemDecoration(
                 dividerConfig = finalDividerConfig?.toItemDividerConfig(context),
                 headerDividerConfig = (headerDividerConfig
                     ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)

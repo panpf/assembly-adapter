@@ -19,7 +19,7 @@ import android.content.Context
 import androidx.recyclerview.widget.GridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
-import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDividerProvider
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 
 /**
  * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider.
@@ -27,8 +27,20 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemDivide
  * On the basis of [GridDividerItemDecoration], the divider can be disabled or personalized according to the ItemFactory class
  */
 open class AssemblyGridDividerItemDecoration(
-    itemDividerProvider: GridItemDividerProvider
-) : GridDividerItemDecoration(itemDividerProvider) {
+    dividerConfig: ItemDividerConfig?,
+    headerDividerConfig: ItemDividerConfig?,
+    footerDividerConfig: ItemDividerConfig?,
+    sideDividerConfig: ItemDividerConfig?,
+    sideHeaderDividerConfig: ItemDividerConfig?,
+    sideFooterDividerConfig: ItemDividerConfig?,
+) : GridDividerItemDecoration(
+    dividerConfig,
+    headerDividerConfig,
+    footerDividerConfig,
+    sideDividerConfig,
+    sideHeaderDividerConfig,
+    sideFooterDividerConfig
+) {
 
     class Builder(val context: Context) {
 
@@ -48,10 +60,6 @@ open class AssemblyGridDividerItemDecoration(
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
         fun build(): AssemblyGridDividerItemDecoration {
-            return AssemblyGridDividerItemDecoration(buildItemDividerProvider())
-        }
-
-        private fun buildItemDividerProvider(): GridItemDividerProvider {
             val finalDividerConfig = when {
                 dividerConfig != null -> dividerConfig
                 !disableDefaultDivider -> context.obtainStyledAttributes(
@@ -71,7 +79,7 @@ open class AssemblyGridDividerItemDecoration(
                     ConcatFindItemFactoryClassSupport(this)
                 }
 
-            return GridItemDividerProvider(
+            return AssemblyGridDividerItemDecoration(
                 dividerConfig = finalDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 headerDividerConfig = (headerDividerConfig
