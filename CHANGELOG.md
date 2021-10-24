@@ -7,6 +7,7 @@
 * change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration will throw an exception when there is sideHeaderDivider or sideFooter but no sideDivider
 * change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer allow sideHeaderDivider or sideFooterDivider and sideDivider to have different sizes and insets
 * change: Now the personalized configuration of sideDivider, sideHeaderDivider, and sideFooterDivider of GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer allows different sizes and insets
+* new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize according to position
 
 # v4.0.1
 

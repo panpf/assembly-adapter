@@ -15,8 +15,6 @@
  */
 package com.github.panpf.assemblyadapter.recycler.internal
 
-import com.github.panpf.assemblyadapter.ItemFactory
-
-interface FullSpanSupport {
-    fun isFullSpanByItemFactoryClass(itemFactoryClass: Class<out ItemFactory<out Any>>): Boolean
+interface FullSpanSupportByPosition {
+    fun isFullSpanByPosition(position: Int): Boolean
 }

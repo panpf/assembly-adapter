@@ -17,6 +17,7 @@ package com.github.panpf.assemblyadapter.recycler
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.SparseArray
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
@@ -29,7 +30,8 @@ import kotlin.reflect.KClass
 class AssemblyGridLayoutManager : GridLayoutManager {
 
     private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
-    private val gridLayoutItemSpanMap: Map<Class<out ItemFactory<out Any>>, ItemSpan>
+    private val itemSpanByPositionSparseArray: SparseArray<ItemSpan>?
+    private val itemSpanByItemFactoryMap: Map<Class<out ItemFactory<out Any>>, ItemSpan>?
     private val spanSizeLookup = object : SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             return getSpanSizeImpl(position)
@@ -43,7 +45,8 @@ class AssemblyGridLayoutManager : GridLayoutManager {
      * "layoutManager". If spanCount is not specified in the XML, it defaults to a
      * single column.
      *
-     * @param gridLayoutItemSpanMap Map of spanSize corresponding to [ItemFactory]
+     * @param itemSpanByPositionMap Map of spanSize corresponding to position
+     * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
      * @see androidx.recyclerview.R.attr.spanCount
      */
     constructor(
@@ -51,9 +54,39 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         attrs: AttributeSet?,
         defStyleAttr: Int,
         defStyleRes: Int,
-        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
+        itemSpanByPositionMap: Map<Int, ItemSpan>?,
+        itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>?
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
-        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
+        this.itemSpanByPositionSparseArray = itemSpanByPositionMap?.let { map ->
+            SparseArray<ItemSpan>().apply {
+                map.entries.forEach { mapItem ->
+                    put(mapItem.key, mapItem.value)
+                }
+            }
+        }
+        this.itemSpanByItemFactoryMap =
+            itemSpanByItemFactoryMap?.map { it.key.java to it.value }?.toMap()
+        super.setSpanSizeLookup(spanSizeLookup)
+    }
+
+    /**
+     * Constructor used when layout manager is set in XML by RecyclerView attribute
+     * "layoutManager". If spanCount is not specified in the XML, it defaults to a
+     * single column.
+     *
+     * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
+     * @see androidx.recyclerview.R.attr.spanCount
+     */
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int,
+        itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
+    ) : super(context, attrs, defStyleAttr, defStyleRes) {
+        this.itemSpanByPositionSparseArray = null
+        this.itemSpanByItemFactoryMap =
+            itemSpanByItemFactoryMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
     }
 
@@ -64,16 +97,48 @@ class AssemblyGridLayoutManager : GridLayoutManager {
      * @param spanCount The number of columns or rows in the grid
      * @param orientation Layout orientation. Should be [GridLayoutManager.HORIZONTAL] or [GridLayoutManager.VERTICAL].
      * @param reverseLayout When set to true, layouts from end to start.
-     * @param gridLayoutItemSpanMap Map of spanSize corresponding to [ItemFactory]
+     * @param itemSpanByPositionMap Map of spanSize corresponding to position
+     * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
      */
     constructor(
         context: Context,
         spanCount: Int,
         orientation: Int,
         reverseLayout: Boolean,
-        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
+        itemSpanByPositionMap: Map<Int, ItemSpan>?,
+        itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>?,
     ) : super(context, spanCount, orientation, reverseLayout) {
-        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
+        this.itemSpanByPositionSparseArray = itemSpanByPositionMap?.let { map ->
+            SparseArray<ItemSpan>().apply {
+                map.entries.forEach { mapItem ->
+                    put(mapItem.key, mapItem.value)
+                }
+            }
+        }
+        this.itemSpanByItemFactoryMap =
+            itemSpanByItemFactoryMap?.map { it.key.java to it.value }?.toMap()
+        super.setSpanSizeLookup(spanSizeLookup)
+    }
+
+    /**
+     * Creates a GridLayoutManager
+     *
+     * @param context Current context, will be used to access resources.
+     * @param spanCount The number of columns or rows in the grid
+     * @param orientation Layout orientation. Should be [GridLayoutManager.HORIZONTAL] or [GridLayoutManager.VERTICAL].
+     * @param reverseLayout When set to true, layouts from end to start.
+     * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
+     */
+    constructor(
+        context: Context,
+        spanCount: Int,
+        orientation: Int,
+        reverseLayout: Boolean,
+        itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>,
+    ) : super(context, spanCount, orientation, reverseLayout) {
+        this.itemSpanByPositionSparseArray = null
+        this.itemSpanByItemFactoryMap =
+            itemSpanByItemFactoryMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
     }
 
@@ -83,14 +148,42 @@ class AssemblyGridLayoutManager : GridLayoutManager {
      *
      * @param context Current context, will be used to access resources.
      * @param spanCount The number of columns in the grid
-     * @param gridLayoutItemSpanMap Map of spanSize corresponding to [ItemFactory]
+     * @param itemSpanByPositionMap Map of spanSize corresponding to position
+     * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
      */
     constructor(
         context: Context,
         spanCount: Int,
-        gridLayoutItemSpanMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
+        itemSpanByPositionMap: Map<Int, ItemSpan>?,
+        itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>?
     ) : super(context, spanCount) {
-        this.gridLayoutItemSpanMap = gridLayoutItemSpanMap.map { it.key.java to it.value }.toMap()
+        this.itemSpanByPositionSparseArray = itemSpanByPositionMap?.let { map ->
+            SparseArray<ItemSpan>().apply {
+                map.entries.forEach { mapItem ->
+                    put(mapItem.key, mapItem.value)
+                }
+            }
+        }
+        this.itemSpanByItemFactoryMap =
+            itemSpanByItemFactoryMap?.map { it.key.java to it.value }?.toMap()
+        super.setSpanSizeLookup(spanSizeLookup)
+    }
+
+    /**
+     * Creates a vertical GridLayoutManager
+     *
+     * @param context Current context, will be used to access resources.
+     * @param spanCount The number of columns in the grid
+     * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
+     */
+    constructor(
+        context: Context,
+        spanCount: Int,
+        itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
+    ) : super(context, spanCount) {
+        this.itemSpanByPositionSparseArray = null
+        this.itemSpanByItemFactoryMap =
+            itemSpanByItemFactoryMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
     }
 
@@ -118,22 +211,37 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     }
 
     private fun getSpanSizeImpl(position: Int): Int {
-        val adapter = recyclerView?.adapter
-        return if (adapter != null && position >= 0 && position < adapter.itemCount) {
-            val itemFactory = findItemFactory(adapter, position)
-            val itemSpan = gridLayoutItemSpanMap[itemFactory.javaClass]
+        val itemSpanByPosition = itemSpanByPositionSparseArray
+        if (itemSpanByPosition != null) {
+            val itemSpan = itemSpanByPosition[position]
             if (itemSpan != null) {
-                if (itemSpan.isFullSpan()) {
+                return if (itemSpan.isFullSpan()) {
                     spanCount
                 } else {
                     itemSpan.size.coerceAtLeast(1).coerceAtMost(spanCount)
                 }
-            } else {
-                1
             }
-        } else {
-            1
         }
+
+        val itemSpanByItemFactoryMap = itemSpanByItemFactoryMap
+        val adapter = recyclerView?.adapter
+        if (itemSpanByItemFactoryMap != null
+            && adapter != null
+            && position >= 0
+            && position < adapter.itemCount
+        ) {
+            val itemFactory = findItemFactory(adapter, position)
+            val itemSpan = itemSpanByItemFactoryMap[itemFactory.javaClass]
+            if (itemSpan != null) {
+                return if (itemSpan.isFullSpan()) {
+                    spanCount
+                } else {
+                    itemSpan.size.coerceAtLeast(1).coerceAtMost(spanCount)
+                }
+            }
+        }
+
+        return 1
     }
 
     private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<Any> {

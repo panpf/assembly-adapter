@@ -54,7 +54,7 @@ class AssemblyGridLayoutManagerTest {
             spanCount = 3,
             orientation = RecyclerView.HORIZONTAL,
             reverseLayout = true,
-            gridLayoutItemSpanMap = mapOf()
+            itemSpanByItemFactoryMap = mapOf()
         ).apply {
             Assert.assertEquals(3, spanCount)
             Assert.assertEquals(RecyclerView.HORIZONTAL, orientation)
@@ -64,7 +64,7 @@ class AssemblyGridLayoutManagerTest {
         AssemblyGridLayoutManager(
             context = context,
             spanCount = 3,
-            gridLayoutItemSpanMap = mapOf()
+            itemSpanByItemFactoryMap = mapOf()
         ).apply {
             Assert.assertEquals(3, spanCount)
             Assert.assertEquals(RecyclerView.VERTICAL, orientation)

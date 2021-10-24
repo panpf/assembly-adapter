@@ -18,14 +18,10 @@ package com.github.panpf.assemblyadapter.recycler.divider
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.AssemblyAdapter
-import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupportByPosition
 
 /**
  * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
@@ -420,18 +416,12 @@ open class AssemblyStaggeredGridDividerItemDecoration(
 
         private class AssemblyIsFullSpanByPosition : IsFullSpanByPosition {
 
-            private val concatAdapterLocalHelper by lazy { ConcatAdapterLocalHelper() }
-
             override fun isFullSpan(parent: RecyclerView, position: Int): Boolean {
                 val adapter = parent.adapter
                 return if (adapter != null) {
                     val layoutManager = parent.layoutManager
-                    val (localAdapter, localPosition) = concatAdapterLocalHelper
-                        .findLocalAdapterAndPosition(adapter, position)
-                    if (localAdapter is AssemblyAdapter<*, *> && layoutManager is FullSpanSupport) {
-                        layoutManager.isFullSpanByItemFactoryClass(
-                            (localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<Any>).javaClass
-                        )
+                    if (layoutManager is FullSpanSupportByPosition) {
+                        layoutManager.isFullSpanByPosition(position)
                     } else {
                         false
                     }

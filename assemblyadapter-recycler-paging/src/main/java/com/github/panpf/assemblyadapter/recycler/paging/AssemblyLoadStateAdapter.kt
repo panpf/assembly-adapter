@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupportByPosition
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
 /**
@@ -42,6 +42,8 @@ open class AssemblyLoadStateAdapter(
         listOf(itemFactory), "ItemFactory", "AssemblyLoadStateAdapter", "itemFactory"
     )
 
+    private var parent: RecyclerView? = null
+
     fun getItemData(position: Int): LoadState {
         val count = itemCount
         if (position < 0 || position >= count) {
@@ -55,14 +57,7 @@ open class AssemblyLoadStateAdapter(
     ): RecyclerView.ViewHolder {
         val itemFactory = itemFactoryStorage.getItemFactoryByData(loadState)
         val item = itemFactory.dispatchCreateItem(parent)
-        return RecyclerViewHolderWrapper(item).apply {
-            val layoutManager =
-                (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
-            if (layoutManager is StaggeredGridLayoutManager && layoutManager is FullSpanSupport) {
-                (itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
-                    .isFullSpan = layoutManager.isFullSpanByItemFactoryClass(itemFactory.javaClass)
-            }
-        }
+        return RecyclerViewHolderWrapper(item)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, loadState: LoadState) {
@@ -72,6 +67,14 @@ open class AssemblyLoadStateAdapter(
             val absoluteAdapterPosition =
                 holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
             item.dispatchBindData(0, absoluteAdapterPosition, loadState)
+
+            val layoutManager = parent?.layoutManager
+            if (layoutManager is StaggeredGridLayoutManager
+                && layoutManager is FullSpanSupportByPosition
+            ) {
+                (holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
+                    .isFullSpan = layoutManager.isFullSpanByPosition(absoluteAdapterPosition)
+            }
         } else {
             throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }
@@ -95,5 +98,15 @@ open class AssemblyLoadStateAdapter(
 
     override fun <T : ItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
         return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        parent = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        parent = null
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 }

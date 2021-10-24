@@ -22,7 +22,7 @@ import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
+import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupportByPosition
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
 /**
@@ -36,6 +36,8 @@ open class AssemblyRecyclerListAdapter<DATA>
     : ListAdapter<DATA, RecyclerView.ViewHolder>, AssemblyAdapter<DATA, ItemFactory<out Any>> {
 
     private val itemFactoryStorage: ItemFactoryStorage<ItemFactory<out Any>>
+
+    private var parent: RecyclerView? = null
 
     /**
      * Create an AssemblyRecyclerListAdapter that provides DiffUtil.ItemCallback externally
@@ -134,14 +136,7 @@ open class AssemblyRecyclerListAdapter<DATA>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemFactory = itemFactoryStorage.getItemFactoryByItemType(viewType)
         val item = itemFactory.dispatchCreateItem(parent)
-        return RecyclerViewHolderWrapper(item).apply {
-            val layoutManager =
-                (parent.takeIf { it is RecyclerView } as RecyclerView?)?.layoutManager
-            if (layoutManager is StaggeredGridLayoutManager && layoutManager is FullSpanSupport) {
-                (itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
-                    .isFullSpan = layoutManager.isFullSpanByItemFactoryClass(itemFactory.javaClass)
-            }
-        }
+        return RecyclerViewHolderWrapper(item)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -152,6 +147,14 @@ open class AssemblyRecyclerListAdapter<DATA>
             val absoluteAdapterPosition =
                 holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
             item.dispatchBindData(position, absoluteAdapterPosition, data)
+
+            val layoutManager = parent?.layoutManager
+            if (layoutManager is StaggeredGridLayoutManager
+                && layoutManager is FullSpanSupportByPosition
+            ) {
+                (holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
+                    .isFullSpan = layoutManager.isFullSpanByPosition(absoluteAdapterPosition)
+            }
         } else {
             throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")
         }
@@ -169,5 +172,15 @@ open class AssemblyRecyclerListAdapter<DATA>
 
     override fun <T : ItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {
         return itemFactoryStorage.getItemFactoryByClass(itemFactoryClass)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        parent = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        parent = null
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 }
