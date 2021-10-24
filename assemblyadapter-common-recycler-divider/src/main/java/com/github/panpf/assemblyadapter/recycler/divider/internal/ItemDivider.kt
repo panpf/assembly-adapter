@@ -53,4 +53,13 @@ data class ItemDivider(
     enum class Type {
         START, TOP, END, BOTTOM
     }
+
+    fun compareSizeAndInsets(other: ItemDivider): Boolean {
+        return drawableWidthSize == other.drawableWidthSize
+                && drawableHeightSize == other.drawableHeightSize
+                && insetStart == other.insetStart
+                && insetTop == other.insetTop
+                && insetEnd == other.insetEnd
+                && insetBottom == other.insetBottom
+    }
 }

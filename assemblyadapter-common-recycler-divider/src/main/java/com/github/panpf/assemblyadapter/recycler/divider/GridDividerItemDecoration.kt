@@ -88,8 +88,18 @@ open class GridDividerItemDecoration(
         if ((sideHeaderDividerConfig != null || sideFooterDividerConfig != null) && sideDividerConfig == null) {
             throw IllegalArgumentException("When sideHeaderDivider or sideFooterDivider exists, sideDivider cannot be null")
         }
-        // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
-        // todo The dimensions of side, sideHeader, and sideFooter must be the same
+        if (sideDividerConfig != null) {
+            if (sideHeaderDividerConfig != null
+                && !sideDividerConfig.itemDivider.compareSizeAndInsets(sideHeaderDividerConfig.itemDivider)
+            ) {
+                throw IllegalArgumentException("The size and insets of sideHeaderDivider must be the same as sideDivider")
+            }
+            if (sideFooterDividerConfig != null
+                && !sideDividerConfig.itemDivider.compareSizeAndInsets(sideFooterDividerConfig.itemDivider)
+            ) {
+                throw IllegalArgumentException("The size and insets of sideHeaderDivider must be the same as sideDivider")
+            }
+        }
     }
 
     override fun getItemOffsets(

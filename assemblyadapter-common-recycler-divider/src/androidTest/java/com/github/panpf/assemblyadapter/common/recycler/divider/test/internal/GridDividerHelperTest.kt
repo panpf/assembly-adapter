@@ -43,9 +43,9 @@ class GridDividerHelperTest {
                 .toItemDividerConfig(context),
             sideDividerConfig = DividerConfig.Builder(Divider.space(20)).build()
                 .toItemDividerConfig(context),
-            sideHeaderDividerConfig = DividerConfig.Builder(Divider.space(25)).build()
+            sideHeaderDividerConfig = DividerConfig.Builder(Divider.space(20)).build()
                 .toItemDividerConfig(context),
-            sideFooterDividerConfig = DividerConfig.Builder(Divider.space(30)).build()
+            sideFooterDividerConfig = DividerConfig.Builder(Divider.space(20)).build()
                 .toItemDividerConfig(context),
         )
         val helper = provider.dividerHelper

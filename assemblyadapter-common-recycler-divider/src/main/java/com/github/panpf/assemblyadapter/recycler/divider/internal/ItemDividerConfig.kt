@@ -19,11 +19,11 @@ import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 
 open class ItemDividerConfig(
-    private val itemDivider: ItemDivider,
-    private val disableByPositionArray: SparseArrayCompat<Boolean>?,
-    private val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
-    private val personaliseByPositionArray: SparseArrayCompat<ItemDivider>?,
-    private val personaliseBySpanIndexArray: SparseArrayCompat<ItemDivider>?,
+    val itemDivider: ItemDivider,
+    val disableByPositionArray: SparseArrayCompat<Boolean>?,
+    val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
+    val personaliseByPositionArray: SparseArrayCompat<ItemDivider>?,
+    val personaliseBySpanIndexArray: SparseArrayCompat<ItemDivider>?,
 ) {
 
     open fun get(parent: RecyclerView, position: Int, spanIndex: Int): ItemDivider? {

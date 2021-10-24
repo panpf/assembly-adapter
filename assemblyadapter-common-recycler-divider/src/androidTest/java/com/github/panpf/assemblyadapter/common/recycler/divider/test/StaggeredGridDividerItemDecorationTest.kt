@@ -19,9 +19,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
-import com.github.panpf.assemblyadapter.recycler.divider.Divider
-import com.github.panpf.assemblyadapter.recycler.divider.DividerConfig
-import com.github.panpf.assemblyadapter.recycler.divider.StaggeredGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.*
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 import com.github.panpf.tools4j.test.ktx.assertNoThrow
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -150,6 +148,74 @@ class StaggeredStaggeredGridDividerItemDecorationTest {
                 ),
                 sideFooterDividerConfig = ItemDividerConfig(
                     Divider.space(2).toItemDivider(context), null, null, null, null
+                ),
+                isFullSpanByPosition = {_, _ -> false}
+            )
+        }
+
+        /*
+         * sideHeaderDivider size 异常
+         */
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration(
+                dividerConfig = null,
+                headerDividerConfig = null,
+                footerDividerConfig = null,
+                sideDividerConfig = ItemDividerConfig(
+                    Divider.space(2).toItemDivider(context), null, null, null, null
+                ),
+                sideHeaderDividerConfig = ItemDividerConfig(
+                    Divider.space(3).toItemDivider(context), null, null, null, null
+                ),
+                sideFooterDividerConfig = null,
+                isFullSpanByPosition = {_, _ -> false}
+            )
+        }
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration(
+                dividerConfig = null,
+                headerDividerConfig = null,
+                footerDividerConfig = null,
+                sideDividerConfig = ItemDividerConfig(
+                    Divider.space(2, Insets.allOf(5)).toItemDivider(context), null, null, null, null
+                ),
+                sideHeaderDividerConfig = ItemDividerConfig(
+                    Divider.space(2, Insets.allOf(3)).toItemDivider(context), null, null, null, null
+                ),
+                sideFooterDividerConfig = null,
+                isFullSpanByPosition = {_, _ -> false}
+            )
+        }
+
+        /*
+         * sideFooterDivider size 异常
+         */
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration(
+                dividerConfig = null,
+                headerDividerConfig = null,
+                footerDividerConfig = null,
+                sideDividerConfig = ItemDividerConfig(
+                    Divider.space(2).toItemDivider(context), null, null, null, null
+                ),
+                sideHeaderDividerConfig = null,
+                sideFooterDividerConfig = ItemDividerConfig(
+                    Divider.space(3).toItemDivider(context), null, null, null, null
+                ),
+                isFullSpanByPosition = {_, _ -> false}
+            )
+        }
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration(
+                dividerConfig = null,
+                headerDividerConfig = null,
+                footerDividerConfig = null,
+                sideDividerConfig = ItemDividerConfig(
+                    Divider.space(2, Insets.allOf(5)).toItemDivider(context), null, null, null, null
+                ),
+                sideHeaderDividerConfig = null,
+                sideFooterDividerConfig = ItemDividerConfig(
+                    Divider.space(2, Insets.allOf(3)).toItemDivider(context), null, null, null, null
                 ),
                 isFullSpanByPosition = {_, _ -> false}
             )

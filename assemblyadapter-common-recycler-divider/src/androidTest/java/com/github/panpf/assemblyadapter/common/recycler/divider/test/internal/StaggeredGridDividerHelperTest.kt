@@ -29,7 +29,7 @@ import org.junit.Test
 class StaggeredGridDividerHelperTest {
 
     @Test
-    fun test() {
+    fun testGetItemOffsets() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val parent = RecyclerView(context)
         val view = TextView(context)
@@ -43,9 +43,9 @@ class StaggeredGridDividerHelperTest {
                 .toItemDividerConfig(context),
             sideDividerConfig = DividerConfig.Builder(Divider.space(20)).build()
                 .toItemDividerConfig(context),
-            sideHeaderDividerConfig = DividerConfig.Builder(Divider.space(25)).build()
+            sideHeaderDividerConfig = DividerConfig.Builder(Divider.space(20)).build()
                 .toItemDividerConfig(context),
-            sideFooterDividerConfig = DividerConfig.Builder(Divider.space(30)).build()
+            sideFooterDividerConfig = DividerConfig.Builder(Divider.space(20)).build()
                 .toItemDividerConfig(context)
         ) { parent, position ->
             false

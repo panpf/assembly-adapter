@@ -22,6 +22,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.DividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.GridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
@@ -142,6 +143,70 @@ class GridDividerItemDecorationTest {
                 ),
                 sideFooterDividerConfig = ItemDividerConfig(
                     Divider.space(2).toItemDivider(context), null, null, null, null
+                )
+            )
+        }
+
+        /*
+         * sideHeaderDivider size 异常
+         */
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration(
+                dividerConfig = null,
+                headerDividerConfig = null,
+                footerDividerConfig = null,
+                sideDividerConfig = ItemDividerConfig(
+                    Divider.space(2).toItemDivider(context), null, null, null, null
+                ),
+                sideHeaderDividerConfig = ItemDividerConfig(
+                    Divider.space(3).toItemDivider(context), null, null, null, null
+                ),
+                sideFooterDividerConfig = null
+            )
+        }
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration(
+                dividerConfig = null,
+                headerDividerConfig = null,
+                footerDividerConfig = null,
+                sideDividerConfig = ItemDividerConfig(
+                    Divider.space(2, Insets.allOf(5)).toItemDivider(context), null, null, null, null
+                ),
+                sideHeaderDividerConfig = ItemDividerConfig(
+                    Divider.space(2, Insets.allOf(3)).toItemDivider(context), null, null, null, null
+                ),
+                sideFooterDividerConfig = null
+            )
+        }
+
+        /*
+         * sideFooterDivider size 异常
+         */
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration(
+                dividerConfig = null,
+                headerDividerConfig = null,
+                footerDividerConfig = null,
+                sideDividerConfig = ItemDividerConfig(
+                    Divider.space(2).toItemDivider(context), null, null, null, null
+                ),
+                sideHeaderDividerConfig = null,
+                sideFooterDividerConfig = ItemDividerConfig(
+                    Divider.space(3).toItemDivider(context), null, null, null, null
+                )
+            )
+        }
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration(
+                dividerConfig = null,
+                headerDividerConfig = null,
+                footerDividerConfig = null,
+                sideDividerConfig = ItemDividerConfig(
+                    Divider.space(2, Insets.allOf(5)).toItemDivider(context), null, null, null, null
+                ),
+                sideHeaderDividerConfig = null,
+                sideFooterDividerConfig = ItemDividerConfig(
+                    Divider.space(2, Insets.allOf(3)).toItemDivider(context), null, null, null, null
                 )
             )
         }
