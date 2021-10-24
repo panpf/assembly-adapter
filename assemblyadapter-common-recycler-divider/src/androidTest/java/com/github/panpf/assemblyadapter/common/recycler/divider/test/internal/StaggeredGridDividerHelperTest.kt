@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemParams
 import org.junit.Assert
 import org.junit.Test
 
-class StaggeredGridDividerItemDecorationHelperTest {
+class StaggeredGridDividerHelperTest {
 
     @Test
     fun test() {

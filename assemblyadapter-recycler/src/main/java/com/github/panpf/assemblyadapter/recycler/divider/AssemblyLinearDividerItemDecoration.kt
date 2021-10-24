@@ -68,6 +68,9 @@ open class AssemblyLinearDividerItemDecoration(
                 }
                 else -> null
             }
+            if ((useDividerAsHeaderDivider || useDividerAsFooterDivider) && finalDividerConfig == null) {
+                throw IllegalArgumentException("Must call the divider() method to configure the divider")
+            }
 
             val finalFindItemFactoryClassByPosition =
                 (findItemFactoryClassSupport ?: AssemblyFindItemFactoryClassSupport()).run {

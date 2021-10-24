@@ -60,6 +60,9 @@ open class AssemblyGridDividerItemDecoration(
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
         fun build(): AssemblyGridDividerItemDecoration {
+            if ((useSideDividerAsSideHeaderDivider || useSideDividerAsSideFooterDivider) && sideDividerConfig == null) {
+                throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
+            }
             val finalDividerConfig = when {
                 dividerConfig != null -> dividerConfig
                 !disableDefaultDivider -> context.obtainStyledAttributes(
@@ -72,6 +75,9 @@ open class AssemblyGridDividerItemDecoration(
                     AssemblyDividerConfig.Builder(Divider.drawable(it)).build()
                 }
                 else -> null
+            }
+            if ((useDividerAsHeaderDivider || useDividerAsFooterDivider) && finalDividerConfig == null) {
+                throw IllegalArgumentException("Must call the divider() method to configure the divider")
             }
 
             val finalFindItemFactoryClassByPosition =

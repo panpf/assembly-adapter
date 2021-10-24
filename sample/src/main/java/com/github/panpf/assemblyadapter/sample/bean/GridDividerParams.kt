@@ -23,6 +23,32 @@ data class GridDividerParams(
     val dividerInsetsSize: Int
         get() = if (isShowDividerInsets) 2f.dp2px else 0f.dp2px
 
+    fun setShowSideDividerLinkage(isShowSideDivider: Boolean) {
+        this.isShowSideDivider = isShowSideDivider
+        if (!isShowSideDivider) {
+            isShowSideHeaderDivider = false
+            isShowSideFooterDivider = false
+        }
+    }
+
+    fun setShowSideHeaderDividerLinkage(isShowSideHeaderDivider: Boolean): Boolean {
+        return if (isShowSideDivider) {
+            this.isShowSideHeaderDivider = isShowSideHeaderDivider
+            true
+        } else {
+            false
+        }
+    }
+
+    fun setShowSideFooterDividerLinkage(isShowSideFooterDivider: Boolean): Boolean {
+        return if (isShowSideDivider) {
+            this.isShowSideFooterDivider = isShowSideFooterDivider
+            true
+        } else {
+            false
+        }
+    }
+
     fun getSpanCount(vertical: Boolean): Int {
         return if (vertical) {
             if (isLessSpanSeparator) 3 else 4

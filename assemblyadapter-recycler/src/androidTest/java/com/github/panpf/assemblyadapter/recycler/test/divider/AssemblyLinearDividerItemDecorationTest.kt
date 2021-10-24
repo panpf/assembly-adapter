@@ -22,6 +22,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyLinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyDividerConfig
+import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
@@ -277,6 +278,13 @@ class AssemblyLinearDividerItemDecorationTest {
         /**
          * useDividerAsHeaderDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyLinearDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsHeaderDivider()
+            }.build()
+        }
+
         AssemblyLinearDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsHeaderDivider()
@@ -296,6 +304,13 @@ class AssemblyLinearDividerItemDecorationTest {
         /**
          * useDividerAsFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyLinearDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsFooterDivider()
+            }.build()
+        }
+
         AssemblyLinearDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsFooterDivider()
@@ -315,6 +330,13 @@ class AssemblyLinearDividerItemDecorationTest {
         /**
          * useDividerAsHeaderAndFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyLinearDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsHeaderAndFooterDivider()
+            }.build()
+        }
+
         AssemblyLinearDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsHeaderAndFooterDivider()

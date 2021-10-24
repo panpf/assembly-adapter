@@ -60,14 +60,7 @@ class GridDividerSideAndHeaderFooterHelper(
     }
 
     override fun getItemOffsets(outRect: Rect, params: GridItemParams, fromStaggered: Boolean) {
-        val startType = if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-        val endType = if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
-        val startItemDivider = getItemDivider(params, startType, true, fromStaggered)
-        val endItemDivider = getItemDivider(params, endType, true, fromStaggered)
-        val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
-        val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
-
-// 当我们希望显示 sideDivider, sideHeaderAndFooterDivider 并且 item 的宽度是 parent 的宽度减去所有 divider 后除以 spanCount 时，
+        // 当我们希望显示 sideDivider, sideHeaderAndFooterDivider 并且 item 的宽度是 parent 的宽度减去所有 divider 后除以 spanCount 时，
         // 如公式：'val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount'
         // 按照 GridItemDividerProvider 的逻辑，第一个 item 的 start 和 end 将都会有 divider 显示
         // 因为 GridLayoutManager 强制每个 item 的最大宽度为 parentWidth/spanCount，
@@ -77,6 +70,16 @@ class GridDividerSideAndHeaderFooterHelper(
         val column = params.spanIndex + params.spanSize - 1
         when {
             params.isFullSpan -> {
+                val startType =
+                    if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
+                val endType =
+                    if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
+                val startItemDivider = getItemDivider(params, startType, true, fromStaggered)
+                val endItemDivider = getItemDivider(params, endType, true, fromStaggered)
+                val topItemDivider =
+                    getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
+                val bottomItemDivider =
+                    getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
                 val left = startItemDivider?.widthSize ?: 0
                 val right = endItemDivider?.widthSize ?: 0
                 val top = topItemDivider?.heightSize ?: 0
@@ -103,17 +106,27 @@ class GridDividerSideAndHeaderFooterHelper(
 //                    ceil((cellSideOffset) - (multiplier * (params.spanCount - column))).toInt()
                     ((cellSideOffset) - (multiplier * (params.spanCount - column))).toInt()
                 }
+                val topItemDivider =
+                    getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
+                val bottomItemDivider =
+                    getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
                 val top = topItemDivider?.heightSize ?: 0
                 val bottom = bottomItemDivider?.heightSize ?: 0
                 outRect.set(left, top, right, bottom)
             }
             else -> {
+                val startType =
+                    if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
+                val endType =
+                    if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
+                val startItemDivider = getItemDivider(params, startType, true, fromStaggered)
+                val endItemDivider = getItemDivider(params, endType, true, fromStaggered)
+                val left = startItemDivider?.widthSize ?: 0
+                val right = endItemDivider?.widthSize ?: 0
                 val sideDivider =
                     sideDividerConfig.get(params.parent, params.position, params.spanIndex)!!
                 val sideDividerSize = sideDivider.heightSize
                 val multiplier = sideDividerSize / params.spanCount.toFloat()
-                val left = startItemDivider?.widthSize ?: 0
-                val right = endItemDivider?.widthSize ?: 0
                 val top = if (params.isFirstSpan) {
                     sideDividerSize
                 } else {

@@ -3,6 +3,8 @@
 * fix: GridDividerItemDecoration and StaggeredGridDividerItemDecoration is divided evenly when the width of the item is the width of the parent container minus all dividers（`val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount`），because the offset of the first item is too large, the width of the first item will be forced to become smaller
 * new: All DividerItemDecoration adds the `disableDefaultDivider(Boolean)` method, which can disable the function of using the system default divider when no divider is specified
 * fix: Fix the bug that there will be white space on the edge of the item when there is only sideDivider in GridDividerItemDecoration
+* change: Now \*DividerItemDecoration useDividerAs\*Divider is true but an exception will be thrown when the corresponding divider is null
+* change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration will throw an exception when there is sideHeaderDivider or sideFooter but no sideDivider
 
 # v4.0.1
 

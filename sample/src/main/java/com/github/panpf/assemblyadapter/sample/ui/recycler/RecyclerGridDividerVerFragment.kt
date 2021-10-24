@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.viewModels
@@ -122,7 +123,7 @@ class RecyclerGridDividerVerFragment : ToolbarFragment<FragmentRecyclerDividerVe
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
-                        dividerParams.isShowSideDivider = !dividerParams.isShowSideDivider
+                        dividerParams.setShowSideDividerLinkage(!dividerParams.isShowSideDivider)
                         dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
                         true
                     }
@@ -135,9 +136,15 @@ class RecyclerGridDividerVerFragment : ToolbarFragment<FragmentRecyclerDividerVe
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
-                        dividerParams.isShowSideHeaderDivider =
-                            !dividerParams.isShowSideHeaderDivider
-                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        if (dividerParams.setShowSideHeaderDividerLinkage(!dividerParams.isShowSideHeaderDivider)) {
+                            dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Side Divider must be displayed first",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                         true
                     }
                 }
@@ -149,9 +156,15 @@ class RecyclerGridDividerVerFragment : ToolbarFragment<FragmentRecyclerDividerVe
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                     setOnMenuItemClickListener {
-                        dividerParams.isShowSideFooterDivider =
-                            !dividerParams.isShowSideFooterDivider
-                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        if (dividerParams.setShowSideFooterDividerLinkage(!dividerParams.isShowSideFooterDivider)) {
+                            dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Side Divider must be displayed first",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                         true
                     }
                 }
@@ -277,27 +290,27 @@ class RecyclerGridDividerVerFragment : ToolbarFragment<FragmentRecyclerDividerVe
 
                     if (dividerParams.isShowSideDivider) {
                         sideDivider(Divider.colorRes(R.color.sideDivider, size, insets))
-                    }
-                    if (dividerParams.isShowSideHeaderDivider) {
-                        sideHeaderDivider(
-                            Divider.colorRes(R.color.sideDivider_header, size, insets)
-                        ) {
-                            personaliseByItemFactoryClass(
-                                ListSeparatorItemFactory::class,
-                                Divider.colorRes(R.color.sideDivider_personalise, size, insets)
-                            )
-                            disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                        if (dividerParams.isShowSideHeaderDivider) {
+                            sideHeaderDivider(
+                                Divider.colorRes(R.color.sideDivider_header, size, insets)
+                            ) {
+                                personaliseByItemFactoryClass(
+                                    ListSeparatorItemFactory::class,
+                                    Divider.colorRes(R.color.sideDivider_personalise, size, insets)
+                                )
+                                disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                            }
                         }
-                    }
-                    if (dividerParams.isShowSideFooterDivider) {
-                        sideFooterDivider(
-                            Divider.colorRes(R.color.sideDivider_header, size, insets)
-                        ) {
-                            personaliseByItemFactoryClass(
-                                ListSeparatorItemFactory::class,
-                                Divider.colorRes(R.color.sideDivider_personalise, size, insets)
-                            )
-                            disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                        if (dividerParams.isShowSideFooterDivider) {
+                            sideFooterDivider(
+                                Divider.colorRes(R.color.sideDivider_header, size, insets)
+                            ) {
+                                personaliseByItemFactoryClass(
+                                    ListSeparatorItemFactory::class,
+                                    Divider.colorRes(R.color.sideDivider_personalise, size, insets)
+                                )
+                                disableByItemFactoryClass(AppsOverviewItemFactory::class)
+                            }
                         }
                     }
                 }

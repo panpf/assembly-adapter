@@ -92,8 +92,10 @@ open class StaggeredGridDividerItemDecoration(
                 "Must be set the 'isFullSpanByPosition' property, because you configured 'headerDivider' or 'footerDivider'"
             )
         }
+        if ((sideHeaderDividerConfig != null || sideFooterDividerConfig != null) && sideDividerConfig == null) {
+            throw IllegalArgumentException("When sideHeaderDivider or sideFooterDivider exists, sideDivider cannot be null")
+        }
         // todo Ensure that the size of sideDividerConfig is consistent with the size of sideHeaderAndFooterDividerConfig
-        // todo When there is no sideDivider, there can be no sideHeader or sideFooter
         // todo The dimensions of side, sideHeader, and sideFooter must be the same
     }
 
@@ -234,6 +236,9 @@ open class StaggeredGridDividerItemDecoration(
         fun build(): StaggeredGridDividerItemDecoration {
             // todo side cannot disable
             // todo side provide new api
+            if ((useSideDividerAsSideHeaderDivider || useSideDividerAsSideFooterDivider) && sideDividerConfig == null) {
+                throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
+            }
 
             val finalDividerConfig = when {
                 dividerConfig != null -> dividerConfig
@@ -247,6 +252,9 @@ open class StaggeredGridDividerItemDecoration(
                     DividerConfig.Builder(Divider.drawable(it)).build()
                 }
                 else -> null
+            }
+            if ((useDividerAsHeaderDivider || useDividerAsFooterDivider) && finalDividerConfig == null) {
+                throw IllegalArgumentException("Must call the divider() method to configure the divider")
             }
 
             return StaggeredGridDividerItemDecoration(

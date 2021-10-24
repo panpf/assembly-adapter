@@ -22,6 +22,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.DividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.LinearDividerItemDecoration
+import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
@@ -277,6 +278,13 @@ class LinearDividerItemDecorationTest {
         /**
          * useDividerAsHeaderDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            LinearDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsHeaderDivider()
+            }.build()
+        }
+
         LinearDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsHeaderDivider()
@@ -296,6 +304,13 @@ class LinearDividerItemDecorationTest {
         /**
          * useDividerAsFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            LinearDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsFooterDivider()
+            }.build()
+        }
+
         LinearDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsFooterDivider()
@@ -315,6 +330,13 @@ class LinearDividerItemDecorationTest {
         /**
          * useDividerAsHeaderAndFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            LinearDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsHeaderAndFooterDivider()
+            }.build()
+        }
+
         LinearDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsHeaderAndFooterDivider()

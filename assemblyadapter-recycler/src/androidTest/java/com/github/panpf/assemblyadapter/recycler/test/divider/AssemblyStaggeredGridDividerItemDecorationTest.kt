@@ -23,6 +23,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.AssemblyDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyStaggeredGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.tools4j.test.ktx.assertNoThrow
+import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
@@ -339,6 +340,14 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * useDividerAsHeaderDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsHeaderDivider()
+                isFullSpanByPosition { _, _ -> true }
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsHeaderDivider()
@@ -360,6 +369,14 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * useDividerAsFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsFooterDivider()
+                isFullSpanByPosition { _, _ -> true }
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsFooterDivider()
@@ -381,6 +398,14 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * useDividerAsHeaderAndFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                disableDefaultDivider()
+                useDividerAsHeaderAndFooterDivider()
+                isFullSpanByPosition { _, _ -> true }
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
             divider(Divider.space(10))
             useDividerAsHeaderAndFooterDivider()
@@ -462,12 +487,19 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * side header divider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideHeaderDivider(Divider.space(10))
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideHeaderDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(headerDividerConfig)
             Assert.assertNull(footerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
@@ -479,13 +511,14 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         }
 
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideHeaderDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(headerDividerConfig)
             Assert.assertNull(footerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
@@ -497,11 +530,12 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         }
 
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideHeaderDivider(AssemblyDividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(footerDividerConfig)
             Assert.assertNull(headerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
@@ -515,12 +549,19 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * side footer divider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideFooterDivider(Divider.space(10))
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideFooterDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(headerDividerConfig)
             Assert.assertNull(footerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             Assert.assertNull(sideHeaderDividerConfig)
             sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
@@ -532,13 +573,14 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         }
 
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideFooterDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(headerDividerConfig)
             Assert.assertNull(footerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             Assert.assertNull(sideHeaderDividerConfig)
             sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
@@ -550,11 +592,12 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         }
 
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideFooterDivider(AssemblyDividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(headerDividerConfig)
             Assert.assertNull(footerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             Assert.assertNull(sideHeaderDividerConfig)
             sideFooterDividerConfig!!.apply {
                 Assert.assertEquals(
@@ -568,12 +611,19 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * sideHeaderAndFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideHeaderAndFooterDivider(Divider.space(10))
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideHeaderAndFooterDivider(Divider.space(10))
         }.build().apply {
             Assert.assertNull(headerDividerConfig)
             Assert.assertNull(footerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
@@ -591,13 +641,14 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         }
 
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideHeaderAndFooterDivider(Divider.space(10)) {
                 disableByPosition(1)
             }
         }.build().apply {
             Assert.assertNull(headerDividerConfig)
             Assert.assertNull(footerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
@@ -615,11 +666,12 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         }
 
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
             sideHeaderAndFooterDivider(AssemblyDividerConfig.Builder(Divider.space(10)).build())
         }.build().apply {
             Assert.assertNull(headerDividerConfig)
             Assert.assertNull(footerDividerConfig)
-            Assert.assertNull(sideDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
             sideHeaderDividerConfig!!.apply {
                 Assert.assertEquals(
                     Color.TRANSPARENT,
@@ -639,6 +691,12 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * useSideDividerAsSideHeaderDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                useSideDividerAsSideHeaderDivider()
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
             sideDivider(Divider.space(10))
             useSideDividerAsSideHeaderDivider()
@@ -659,6 +717,12 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * useSideDividerAsSideFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                useSideDividerAsSideFooterDivider()
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
             sideDivider(Divider.space(10))
             useSideDividerAsSideFooterDivider()
@@ -679,6 +743,12 @@ class AssemblyStaggeredGridDividerItemDecorationTest {
         /**
          * useSideDividerAsSideHeaderAndFooterDivider
          */
+        assertThrow(IllegalArgumentException::class) {
+            AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
+                useSideDividerAsSideHeaderAndFooterDivider()
+            }.build()
+        }
+
         AssemblyStaggeredGridDividerItemDecoration.Builder(context).apply {
             sideDivider(Divider.space(10))
             useSideDividerAsSideHeaderAndFooterDivider()
