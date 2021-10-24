@@ -86,7 +86,7 @@ open class GridDividerItemDecoration(
 
     init {
         if ((sideHeaderDividerConfig != null || sideFooterDividerConfig != null) && sideDividerConfig == null) {
-            throw IllegalArgumentException("When sideHeaderDivider or sideFooterDivider exists, sideDivider cannot be null")
+            throw IllegalArgumentException("When sideHeaderDivider or sideFooterDivider not null, sideDivider cannot be null")
         }
         if (sideDividerConfig != null) {
             if (sideHeaderDividerConfig != null
@@ -98,6 +98,60 @@ open class GridDividerItemDecoration(
                 && !sideDividerConfig.itemDivider.compareSizeAndInsets(sideFooterDividerConfig.itemDivider)
             ) {
                 throw IllegalArgumentException("The size and insets of sideHeaderDivider must be the same as sideDivider")
+            }
+        }
+        sideDividerConfig?.run {
+            if (personaliseByPositionArray != null) {
+                val allSame = (0 until personaliseByPositionArray.size()).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByPositionArray.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personalizedByPosition divider of the sideDivider must be the same as the sideDivider ")
+                }
+            }
+            if (personaliseBySpanIndexArray != null) {
+                val allSame = (0 until personaliseBySpanIndexArray.size()).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseBySpanIndexArray.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personalizedBySpanIndex divider of the sideDivider must be the same as the sideDivider ")
+                }
+            }
+        }
+        sideHeaderDividerConfig?.run {
+            if (personaliseByPositionArray != null) {
+                val allSame = (0 until personaliseByPositionArray.size()).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByPositionArray.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personalizedByPosition divider of the sideHeaderDivider must be the same as the sideHeaderDivider ")
+                }
+            }
+            if (personaliseBySpanIndexArray != null) {
+                val allSame = (0 until personaliseBySpanIndexArray.size()).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseBySpanIndexArray.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personalizedBySpanIndex divider of the sideHeaderDivider must be the same as the sideHeaderDivider ")
+                }
+            }
+        }
+        sideFooterDividerConfig?.run {
+            if (personaliseByPositionArray != null) {
+                val allSame = (0 until personaliseByPositionArray.size()).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByPositionArray.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personalizedByPosition divider of the sideFooterDivider must be the same as the sideFooterDivider ")
+                }
+            }
+            if (personaliseBySpanIndexArray != null) {
+                val allSame = (0 until personaliseBySpanIndexArray.size()).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseBySpanIndexArray.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personalizedBySpanIndex divider of the sideFooterDivider must be the same as the sideFooterDivider ")
+                }
             }
         }
     }

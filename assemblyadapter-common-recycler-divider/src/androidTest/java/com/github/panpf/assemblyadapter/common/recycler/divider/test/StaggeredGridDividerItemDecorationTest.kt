@@ -26,7 +26,7 @@ import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
-class StaggeredStaggeredGridDividerItemDecorationTest {
+class StaggeredGridDividerItemDecorationTest {
 
     @Test
     fun testConstructor() {
@@ -154,7 +154,7 @@ class StaggeredStaggeredGridDividerItemDecorationTest {
         }
 
         /*
-         * sideHeaderDivider size 异常
+         * sideHeaderDivider size exception
          */
         assertThrow(IllegalArgumentException::class) {
             StaggeredGridDividerItemDecoration(
@@ -188,7 +188,7 @@ class StaggeredStaggeredGridDividerItemDecorationTest {
         }
 
         /*
-         * sideFooterDivider size 异常
+         * sideFooterDivider size exception
          */
         assertThrow(IllegalArgumentException::class) {
             StaggeredGridDividerItemDecoration(
@@ -219,6 +219,144 @@ class StaggeredStaggeredGridDividerItemDecorationTest {
                 ),
                 isFullSpanByPosition = {_, _ -> false}
             )
+        }
+
+        /*
+         * sideDivider personalise size exception
+         */
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseByPosition(1, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+
+        /*
+         * sideHeaderDivider personalise size exception
+         */
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2)))
+            sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseByPosition(1, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2)))
+            sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+
+        /*
+         * sideFooterDivider personalise size exception
+         */
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2)))
+            sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseByPosition(1, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2)))
+            sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            StaggeredGridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
         }
     }
 

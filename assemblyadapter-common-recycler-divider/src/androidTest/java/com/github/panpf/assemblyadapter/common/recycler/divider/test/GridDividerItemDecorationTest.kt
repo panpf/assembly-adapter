@@ -148,7 +148,7 @@ class GridDividerItemDecorationTest {
         }
 
         /*
-         * sideHeaderDivider size 异常
+         * sideHeaderDivider size exception
          */
         assertThrow(IllegalArgumentException::class) {
             GridDividerItemDecoration(
@@ -180,7 +180,7 @@ class GridDividerItemDecorationTest {
         }
 
         /*
-         * sideFooterDivider size 异常
+         * sideFooterDivider size exception
          */
         assertThrow(IllegalArgumentException::class) {
             GridDividerItemDecoration(
@@ -209,6 +209,144 @@ class GridDividerItemDecorationTest {
                     Divider.space(2, Insets.allOf(3)).toItemDivider(context), null, null, null, null
                 )
             )
+        }
+
+        /*
+         * sideDivider personalise size exception
+         */
+        GridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseByPosition(1, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+        GridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+
+        /*
+         * sideHeaderDivider personalise size exception
+         */
+        GridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2)))
+            sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseByPosition(1, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+        GridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2)))
+            sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+
+        /*
+         * sideFooterDivider personalise size exception
+         */
+        GridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2)))
+            sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseByPosition(1, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseByPosition(1, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
+        }
+        GridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(5, Insets.allOf(2)))
+            sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(2)))
+            }
+        }.build()
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(4, Insets.allOf(2)))
+                }
+            }.build()
+        }
+        assertThrow(IllegalArgumentException::class) {
+            GridDividerItemDecoration.Builder(context).apply {
+                sideDivider(Divider.space(5, Insets.allOf(2)))
+                sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
+                    personaliseBySpanIndex(2, Divider.space(5, Insets.allOf(3)))
+                }
+            }.build()
         }
     }
 

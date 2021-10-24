@@ -21,14 +21,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.divider.FindItemFactoryClassSupport
 
 class AssemblyItemDividerConfig(
-    private val itemDivider: ItemDivider,
-    private val disableByPositionArray: SparseArrayCompat<Boolean>?,
-    private val disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
-    private val disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>?,
-    private val personaliseByPositionArray: SparseArrayCompat<ItemDivider>?,
-    private val personaliseBySpanIndexArray: SparseArrayCompat<ItemDivider>?,
-    private val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, ItemDivider>?,
-    private val findItemFactoryClassSupport: FindItemFactoryClassSupport,
+    itemDivider: ItemDivider,
+    disableByPositionArray: SparseArrayCompat<Boolean>?,
+    disableBySpanIndexArray: SparseArrayCompat<Boolean>?,
+    val disableByItemFactoryClassMap: ArrayMap<Class<*>, Boolean>?,
+    personaliseByPositionArray: SparseArrayCompat<ItemDivider>?,
+    personaliseBySpanIndexArray: SparseArrayCompat<ItemDivider>?,
+    val personaliseByItemFactoryClassMap: ArrayMap<Class<*>, ItemDivider>?,
+    val findItemFactoryClassSupport: FindItemFactoryClassSupport,
 ) : ItemDividerConfig(
     itemDivider,
     disableByPositionArray,

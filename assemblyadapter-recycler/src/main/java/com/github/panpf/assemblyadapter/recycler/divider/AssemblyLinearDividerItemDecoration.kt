@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.recycler.divider
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 
@@ -27,11 +28,11 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerCon
  * On the basis of [LinearDividerItemDecoration], the divider can be disabled or personalized according to the ItemFactory class
  */
 open class AssemblyLinearDividerItemDecoration(
-    dividerConfig: ItemDividerConfig?,
-    headerDividerConfig: ItemDividerConfig?,
-    footerDividerConfig: ItemDividerConfig?,
-    sideHeaderDividerConfig: ItemDividerConfig?,
-    sideFooterDividerConfig: ItemDividerConfig?,
+    dividerConfig: AssemblyItemDividerConfig?,
+    headerDividerConfig: AssemblyItemDividerConfig?,
+    footerDividerConfig: AssemblyItemDividerConfig?,
+    sideHeaderDividerConfig: AssemblyItemDividerConfig?,
+    sideFooterDividerConfig: AssemblyItemDividerConfig?,
 ) : LinearDividerItemDecoration(
     dividerConfig,
     headerDividerConfig,

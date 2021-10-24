@@ -22,6 +22,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.recycler.ConcatAdapterLocalHelper
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
@@ -32,12 +33,12 @@ import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupport
  * On the basis of [StaggeredGridDividerItemDecoration], the divider can be disabled or personalized according to the ItemFactory class
  */
 open class AssemblyStaggeredGridDividerItemDecoration(
-    dividerConfig: ItemDividerConfig?,
-    headerDividerConfig: ItemDividerConfig?,
-    footerDividerConfig: ItemDividerConfig?,
-    sideDividerConfig: ItemDividerConfig?,
-    sideHeaderDividerConfig: ItemDividerConfig?,
-    sideFooterDividerConfig: ItemDividerConfig?,
+    dividerConfig: AssemblyItemDividerConfig?,
+    headerDividerConfig: AssemblyItemDividerConfig?,
+    footerDividerConfig: AssemblyItemDividerConfig?,
+    sideDividerConfig: AssemblyItemDividerConfig?,
+    sideHeaderDividerConfig: AssemblyItemDividerConfig?,
+    sideFooterDividerConfig: AssemblyItemDividerConfig?,
     isFullSpanByPosition: IsFullSpanByPosition
 ) : StaggeredGridDividerItemDecoration(
     dividerConfig,
@@ -48,6 +49,39 @@ open class AssemblyStaggeredGridDividerItemDecoration(
     sideFooterDividerConfig,
     isFullSpanByPosition
 ) {
+
+    init {
+        sideDividerConfig?.run {
+            if (personaliseByItemFactoryClassMap != null) {
+                val allSame = (0 until personaliseByItemFactoryClassMap.size).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByItemFactoryClassMap.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personaliseByItemFactory divider of the sideDivider must be the same as the sideDivider ")
+                }
+            }
+        }
+        sideHeaderDividerConfig?.run {
+            if (personaliseByItemFactoryClassMap != null) {
+                val allSame = (0 until personaliseByItemFactoryClassMap.size).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByItemFactoryClassMap.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personaliseByItemFactory divider of the sideHeaderDivider must be the same as the sideHeaderDivider ")
+                }
+            }
+        }
+        sideFooterDividerConfig?.run {
+            if (personaliseByItemFactoryClassMap != null) {
+                val allSame = (0 until personaliseByItemFactoryClassMap.size).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByItemFactoryClassMap.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personaliseByItemFactory divider of the sideFooterDivider must be the same as the sideFooterDivider ")
+                }
+            }
+        }
+    }
 
     class Builder(val context: Context) {
 

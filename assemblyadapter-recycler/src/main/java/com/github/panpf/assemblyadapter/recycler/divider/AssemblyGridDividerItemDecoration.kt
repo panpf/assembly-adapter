@@ -18,8 +18,8 @@ package com.github.panpf.assemblyadapter.recycler.divider
 import android.content.Context
 import androidx.recyclerview.widget.GridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
+import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 
 /**
  * [GridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider.
@@ -27,12 +27,12 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerCon
  * On the basis of [GridDividerItemDecoration], the divider can be disabled or personalized according to the ItemFactory class
  */
 open class AssemblyGridDividerItemDecoration(
-    dividerConfig: ItemDividerConfig?,
-    headerDividerConfig: ItemDividerConfig?,
-    footerDividerConfig: ItemDividerConfig?,
-    sideDividerConfig: ItemDividerConfig?,
-    sideHeaderDividerConfig: ItemDividerConfig?,
-    sideFooterDividerConfig: ItemDividerConfig?,
+    dividerConfig: AssemblyItemDividerConfig?,
+    headerDividerConfig: AssemblyItemDividerConfig?,
+    footerDividerConfig: AssemblyItemDividerConfig?,
+    sideDividerConfig: AssemblyItemDividerConfig?,
+    sideHeaderDividerConfig: AssemblyItemDividerConfig?,
+    sideFooterDividerConfig: AssemblyItemDividerConfig?,
 ) : GridDividerItemDecoration(
     dividerConfig,
     headerDividerConfig,
@@ -41,6 +41,39 @@ open class AssemblyGridDividerItemDecoration(
     sideHeaderDividerConfig,
     sideFooterDividerConfig
 ) {
+
+    init {
+        sideDividerConfig?.run {
+            if (personaliseByItemFactoryClassMap != null) {
+                val allSame = (0 until personaliseByItemFactoryClassMap.size).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByItemFactoryClassMap.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personaliseByItemFactory divider of the sideDivider must be the same as the sideDivider ")
+                }
+            }
+        }
+        sideHeaderDividerConfig?.run {
+            if (personaliseByItemFactoryClassMap != null) {
+                val allSame = (0 until personaliseByItemFactoryClassMap.size).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByItemFactoryClassMap.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personaliseByItemFactory divider of the sideHeaderDivider must be the same as the sideHeaderDivider ")
+                }
+            }
+        }
+        sideFooterDividerConfig?.run {
+            if (personaliseByItemFactoryClassMap != null) {
+                val allSame = (0 until personaliseByItemFactoryClassMap.size).all { index ->
+                    itemDivider.compareSizeAndInsets(personaliseByItemFactoryClassMap.valueAt(index))
+                }
+                if (!allSame) {
+                    throw IllegalArgumentException("The size and insets of the personaliseByItemFactory divider of the sideFooterDivider must be the same as the sideFooterDivider ")
+                }
+            }
+        }
+    }
 
     class Builder(val context: Context) {
 
