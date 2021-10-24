@@ -25,9 +25,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.decorInsets
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
@@ -42,14 +40,14 @@ import kotlin.math.roundToInt
 class AppGridStrokeHorItemFactory(
     private val activity: Activity,
     lifecycleOwner: LifecycleOwner,
-    private val gridDividerParamsData: MutableLiveData<GridDividerParams>
+    private val dividerParamsData: MutableLiveData<GridDividerParams>
 ) : BindingItemFactory<AppInfo, ItemAppGridStrokeHorBinding>(AppInfo::class) {
 
     private var itemSize: Int = 0
     private var parent: RecyclerView? = null
 
     init {
-        gridDividerParamsData.observe(lifecycleOwner) { dividerParams ->
+        dividerParamsData.observe(lifecycleOwner) { dividerParams ->
             val parent = parent
             if (dividerParams != null && parent != null) {
                 resetItemSize(parent, dividerParams)
@@ -80,7 +78,8 @@ class AppGridStrokeHorItemFactory(
                     else -> 0
                 }
             }
-            val dividerFinalSize = dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2f)
+            val dividerFinalSize =
+                dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2f)
             itemSize = ((parentHeight - (dividerFinalSize * dividerCount)) / spanCount).roundToInt()
         }
     }
@@ -89,7 +88,7 @@ class AppGridStrokeHorItemFactory(
         context: Context, inflater: LayoutInflater, parent: ViewGroup
     ): ItemAppGridStrokeHorBinding {
         if (parent is RecyclerView) {
-            resetItemSize(parent, gridDividerParamsData.value!!)
+            resetItemSize(parent, dividerParamsData.value!!)
         }
         return ItemAppGridStrokeHorBinding.inflate(inflater, parent, false)
     }
@@ -142,10 +141,15 @@ class AppGridStrokeHorItemFactory(
         absoluteAdapterPosition: Int,
         data: AppInfo
     ) {
+        val itemHeight = if (dividerParamsData.value?.compactMode != true) {
+            itemSize
+        } else {
+            ViewGroup.LayoutParams.MATCH_PARENT
+        }
         binding.appGridStrokeHorItemContentLayout.apply {
-            if (layoutParams.height != itemSize) {
+            if (layoutParams.height != itemHeight) {
                 updateLayoutParams<ViewGroup.LayoutParams> {
-                    height = itemSize
+                    height = itemHeight
                 }
             }
         }

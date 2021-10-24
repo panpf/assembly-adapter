@@ -22,20 +22,23 @@ class GridDividerParamsViewModel(application: Application, private val name: Str
     }
 
     val dividerParamsData = MutableLiveData<GridDividerParams>()
+    private val json = Json {
+        ignoreUnknownKeys = true
+    }
 
     init {
         val preference = PreferenceManager.getDefaultSharedPreferences(application)
 
         val dividerParams = preference.getString(name, null)
             ?.let { paramsJson ->
-                Json.decodeFromString<GridDividerParams>(paramsJson)
+                json.decodeFromString<GridDividerParams>(paramsJson)
             }
             ?: GridDividerParams()
         dividerParamsData.postValue(dividerParams)
 
         dividerParamsData.observe(this) { newDividerParams ->
             if (newDividerParams != null) {
-                preference.edit().putString(name, Json.encodeToString(newDividerParams)).apply()
+                preference.edit().putString(name, json.encodeToString(newDividerParams)).apply()
             } else {
                 preference.edit().remove(name).apply()
             }

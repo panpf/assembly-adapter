@@ -28,13 +28,15 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
-import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyLinearDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.newAssemblyLinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
+import com.github.panpf.assemblyadapter.sample.bean.LinearDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
 import com.github.panpf.assemblyadapter.sample.item.*
 import com.github.panpf.assemblyadapter.sample.vm.AppListViewModel
@@ -67,6 +69,126 @@ class RecyclerLinearDividerHorFragment :
         binding: FragmentRecyclerDividerHorBinding,
         savedInstanceState: Bundle?
     ) {
+        initMenu(toolbar)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onInitData(
+        toolbar: Toolbar,
+        binding: FragmentRecyclerDividerHorBinding,
+        savedInstanceState: Bundle?
+    ) {
+        toolbar.title = args.title
+        toolbar.subtitle = args.subtitle
+
+        val appsOverviewAdapter =
+            AssemblySingleDataRecyclerAdapter(AppsOverviewHorItemFactory(requireActivity()))
+        val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
+            listOf(
+                AppStrokeHorItemFactory(
+                    requireActivity(),
+                    viewLifecycleOwner,
+                    dividerParamsViewMode.dividerParamsData
+                ),
+                ListSeparatorHorItemFactory(requireActivity(), hideDivider = true)
+            )
+        )
+        val footerLoadStateAdapter =
+            AssemblySingleDataRecyclerAdapter(LoadStateHorItemFactory(requireActivity()))
+        binding.recyclerDividerHorRecycler.apply {
+            adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+                dividerParams ?: return@observe
+                if (itemDecorationCount > 0) {
+                    removeItemDecorationAt(0)
+                }
+                addItemDecoration(buildDividerItemDecoration(dividerParams))
+                adapter?.notifyDataSetChanged() // The item width needs to be recalculated and refreshed to take effect
+            }
+        }
+
+        appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
+            appsOverviewAdapter.data = it
+        }
+
+        val observer = Observer<List<Any>> {
+            recyclerAdapter.submitList(it)
+            footerLoadStateAdapter.data = LoadState.NotLoading(true)
+        }
+        dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
+            dividerParams ?: return@observe
+            pinyinFlatAppListViewModel.pinyinFlatAppListData.removeObserver(observer)
+            appListViewModel.appListData.removeObserver(observer)
+
+            if (dividerParams.isShowListSeparator) {
+                pinyinFlatAppListViewModel.pinyinFlatAppListData.observe(
+                    viewLifecycleOwner,
+                    observer
+                )
+            } else {
+                appListViewModel.appListData.observe(viewLifecycleOwner, observer)
+            }
+        }
+    }
+
+    private fun buildDividerItemDecoration(dividerParams: LinearDividerParams): RecyclerView.ItemDecoration {
+        val insets = Insets.allOf(dividerParams.dividerInsetsSize)
+        val dividerSize = dividerParams.dividerSize
+        return requireContext().newAssemblyLinearDividerItemDecoration {
+            disableDefaultDivider()
+            if (dividerParams.isShowDivider) {
+                divider(Divider.colorRes(R.color.divider, dividerSize, insets)) {
+                    personaliseByItemFactoryClass(
+                        ListSeparatorHorItemFactory::class,
+                        Divider.colorRes(R.color.divider_personalise, dividerSize, insets)
+                    )
+                    disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
+                }
+            }
+            if (dividerParams.isShowHeaderDivider) {
+                headerDivider(
+                    Divider.colorRes(R.color.divider_header, dividerSize, insets)
+                )
+            }
+            if (dividerParams.isShowFooterDivider) {
+                footerDivider(
+                    Divider.colorRes(R.color.divider_header, dividerSize, insets)
+                )
+            }
+
+            if (dividerParams.isShowSideHeaderDivider) {
+                sideHeaderDivider(
+                    Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
+                ) {
+                    personaliseByItemFactoryClass(
+                        ListSeparatorHorItemFactory::class,
+                        Divider.colorRes(
+                            R.color.sideDivider_personalise, dividerSize, insets
+                        )
+                    )
+                    disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
+                }
+            }
+
+            if (dividerParams.isShowSideFooterDivider) {
+                sideFooterDivider(
+                    Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
+                ) {
+                    personaliseByItemFactoryClass(
+                        ListSeparatorHorItemFactory::class,
+                        Divider.colorRes(
+                            R.color.sideDivider_personalise, dividerSize, insets
+                        )
+                    )
+                    disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
+                }
+            }
+        }
+    }
+
+    private fun initMenu(toolbar: Toolbar) {
         toolbar.menu.apply {
             MenuCompat.setGroupDividerEnabled(this, true)
 
@@ -177,118 +299,6 @@ class RecyclerLinearDividerHorFragment :
                         true
                     }
                 }
-            }
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onInitData(
-        toolbar: Toolbar,
-        binding: FragmentRecyclerDividerHorBinding,
-        savedInstanceState: Bundle?
-    ) {
-        toolbar.title = args.title
-        toolbar.subtitle = args.subtitle
-
-        val appsOverviewAdapter =
-            AssemblySingleDataRecyclerAdapter(AppsOverviewHorItemFactory(requireActivity()))
-        val recyclerAdapter = AssemblyRecyclerAdapter<Any>(
-            listOf(
-                AppStrokeHorItemFactory(
-                    requireActivity(),
-                    viewLifecycleOwner,
-                    dividerParamsViewMode.dividerParamsData
-                ),
-                ListSeparatorHorItemFactory(requireActivity(), hideDivider = true)
-            )
-        )
-        val footerLoadStateAdapter =
-            AssemblySingleDataRecyclerAdapter(LoadStateHorItemFactory(requireActivity()))
-        binding.recyclerDividerHorRecycler.apply {
-            adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
-                dividerParams ?: return@observe
-                if (itemDecorationCount > 0) {
-                    removeItemDecorationAt(0)
-                }
-                val insets = Insets.allOf(dividerParams.dividerInsetsSize)
-                val dividerSize = dividerParams.dividerSize
-                addAssemblyLinearDividerItemDecoration {
-                    disableDefaultDivider()
-                    if (dividerParams.isShowDivider) {
-                        divider(Divider.colorRes(R.color.divider, dividerSize, insets)) {
-                            personaliseByItemFactoryClass(
-                                ListSeparatorHorItemFactory::class,
-                                Divider.colorRes(R.color.divider_personalise, dividerSize, insets)
-                            )
-                            disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
-                        }
-                    }
-                    if (dividerParams.isShowHeaderDivider) {
-                        headerDivider(
-                            Divider.colorRes(R.color.divider_header, dividerSize, insets)
-                        )
-                    }
-                    if (dividerParams.isShowFooterDivider) {
-                        footerDivider(
-                            Divider.colorRes(R.color.divider_header, dividerSize, insets)
-                        )
-                    }
-
-                    if (dividerParams.isShowSideHeaderDivider) {
-                        sideHeaderDivider(
-                            Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
-                        ) {
-                            personaliseByItemFactoryClass(
-                                ListSeparatorHorItemFactory::class,
-                                Divider.colorRes(
-                                    R.color.sideDivider_personalise, dividerSize, insets
-                                )
-                            )
-                            disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
-                        }
-                    }
-
-                    if (dividerParams.isShowSideFooterDivider) {
-                        sideFooterDivider(
-                            Divider.colorRes(R.color.sideDivider_header, dividerSize, insets)
-                        ) {
-                            personaliseByItemFactoryClass(
-                                ListSeparatorHorItemFactory::class,
-                                Divider.colorRes(
-                                    R.color.sideDivider_personalise, dividerSize, insets
-                                )
-                            )
-                            disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
-                        }
-                    }
-                }
-                adapter?.notifyDataSetChanged() // The item width needs to be recalculated and refreshed to take effect
-            }
-        }
-
-        appsOverviewViewModel.appsOverviewData.observe(viewLifecycleOwner) {
-            appsOverviewAdapter.data = it
-        }
-
-        val observer = Observer<List<Any>> {
-            recyclerAdapter.submitList(it)
-            footerLoadStateAdapter.data = LoadState.NotLoading(true)
-        }
-        dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
-            dividerParams ?: return@observe
-            pinyinFlatAppListViewModel.pinyinFlatAppListData.removeObserver(observer)
-            appListViewModel.appListData.removeObserver(observer)
-
-            if (dividerParams.isShowListSeparator) {
-                pinyinFlatAppListViewModel.pinyinFlatAppListData.observe(
-                    viewLifecycleOwner,
-                    observer
-                )
-            } else {
-                appListViewModel.appListData.observe(viewLifecycleOwner, observer)
             }
         }
     }

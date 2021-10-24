@@ -25,9 +25,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.decorInsets
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
@@ -80,7 +78,8 @@ class AppGridStrokeItemFactory(
                     else -> 0
                 }
             }
-            val dividerFinalSize = dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2f)
+            val dividerFinalSize =
+                dividerParams.dividerSize + (dividerParams.dividerInsetsSize * 2f)
             itemSize = ((parentWidth - (dividerFinalSize * dividerCount)) / spanCount).roundToInt()
         }
     }
@@ -141,10 +140,15 @@ class AppGridStrokeItemFactory(
         absoluteAdapterPosition: Int,
         data: AppInfo
     ) {
+        val itemWidth = if (dividerParamsData.value?.compactMode != true) {
+            itemSize
+        } else {
+            ViewGroup.LayoutParams.MATCH_PARENT
+        }
         binding.appGridStrokeItemContentLayout.apply {
-            if (layoutParams.width != itemSize) {
+            if (layoutParams.width != itemWidth) {
                 updateLayoutParams<ViewGroup.LayoutParams> {
-                    width = itemSize
+                    width = itemWidth
                 }
             }
         }

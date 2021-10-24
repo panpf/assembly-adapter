@@ -1,21 +1,79 @@
 package com.github.panpf.assemblyadapter.sample.bean
 
+import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.tools4a.dimen.ktx.dp2px
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GridDividerParams(
-    var isShowDivider: Boolean = true,
-    var isShowHeaderDivider: Boolean = true,
-    var isShowFooterDivider: Boolean = true,
-    var isShowSideDivider: Boolean = true,
-    var isShowSideHeaderDivider: Boolean = true,
-    var isShowSideFooterDivider: Boolean = true,
-    var isBigDivider: Boolean = true,
-    var isShowDividerInsets: Boolean = false,
-    var isShowListSeparator: Boolean = true,
-    var isLessSpanSeparator: Boolean = false,
-) {
+class GridDividerParams {
+
+    private var _isShowDivider: Boolean = true
+    private var _isShowHeaderDivider: Boolean = true
+    private var _isShowFooterDivider: Boolean = true
+    private var _isShowSideDivider: Boolean = true
+    private var _isShowSideHeaderDivider: Boolean = true
+    private var _isShowSideFooterDivider: Boolean = true
+    private var _isBigDivider: Boolean = true
+    private var _isShowDividerInsets: Boolean = false
+    private var _isShowListSeparator: Boolean = true
+    private var _isLessSpan: Boolean = false
+    private var _compactMode: Boolean = false
+
+    var isShowDivider: Boolean
+        get() = _isShowDivider
+        set(value) {
+            _isShowDivider = value
+        }
+    var isShowHeaderDivider: Boolean
+        get() = _isShowHeaderDivider
+        set(value) {
+            _isShowHeaderDivider = value
+        }
+    var isShowFooterDivider: Boolean
+        get() = _isShowFooterDivider
+        set(value) {
+            _isShowFooterDivider = value
+        }
+    var isShowSideDivider: Boolean
+        get() = _isShowSideDivider
+        set(value) {
+            _isShowSideDivider = value
+        }
+    var isShowSideHeaderDivider: Boolean
+        get() = _isShowSideHeaderDivider && _isShowSideDivider
+        set(value) {
+            _isShowSideHeaderDivider = value
+        }
+    var isShowSideFooterDivider: Boolean
+        get() = _isShowSideFooterDivider && _isShowSideDivider
+        set(value) {
+            _isShowSideFooterDivider = value
+        }
+    var isBigDivider: Boolean
+        get() = _isBigDivider
+        set(value) {
+            _isBigDivider = value
+        }
+    var isShowDividerInsets: Boolean
+        get() = _isShowDividerInsets
+        set(value) {
+            _isShowDividerInsets = value
+        }
+    var isShowListSeparator: Boolean
+        get() = _isShowListSeparator && !compactMode
+        set(value) {
+            _isShowListSeparator = value
+        }
+    var isLessSpan: Boolean
+        get() = _isLessSpan
+        set(value) {
+            _isLessSpan = value
+        }
+    var compactMode: Boolean
+        get() = _compactMode
+        set(value) {
+            _compactMode = value
+        }
 
     val dividerSize: Int
         get() = if (isBigDivider) 5f.dp2px else 2f.dp2px
@@ -23,37 +81,28 @@ data class GridDividerParams(
     val dividerInsetsSize: Int
         get() = if (isShowDividerInsets) 2f.dp2px else 0f.dp2px
 
-    fun setShowSideDividerLinkage(isShowSideDivider: Boolean) {
-        this.isShowSideDivider = isShowSideDivider
-        if (!isShowSideDivider) {
-            isShowSideHeaderDivider = false
-            isShowSideFooterDivider = false
-        }
-    }
+    val isShowAppsOverview: Boolean
+        get() = !compactMode
 
-    fun setShowSideHeaderDividerLinkage(isShowSideHeaderDivider: Boolean): Boolean {
-        return if (isShowSideDivider) {
-            this.isShowSideHeaderDivider = isShowSideHeaderDivider
-            true
+    val spanSizeByPosition: Map<Int, ItemSpan>?
+        get() = if (compactMode) {
+            HashMap<Int, ItemSpan>().apply {
+                put(4, ItemSpan.span(2))
+                put(8, ItemSpan.span(2))
+                put(12, ItemSpan.span(2))
+                put(13, ItemSpan.span(3))
+                put(16, ItemSpan.span(3))
+                put(17, ItemSpan.fullSpan())
+            }
         } else {
-            false
+            null
         }
-    }
-
-    fun setShowSideFooterDividerLinkage(isShowSideFooterDivider: Boolean): Boolean {
-        return if (isShowSideDivider) {
-            this.isShowSideFooterDivider = isShowSideFooterDivider
-            true
-        } else {
-            false
-        }
-    }
 
     fun getSpanCount(vertical: Boolean): Int {
-        return if (vertical) {
-            if (isLessSpanSeparator) 3 else 4
-        } else {
-            if (isLessSpanSeparator) 4 else 6
+        return when {
+            compactMode -> 4
+            vertical -> if (isLessSpan) 3 else 4
+            else -> if (isLessSpan) 4 else 6
         }
     }
 }

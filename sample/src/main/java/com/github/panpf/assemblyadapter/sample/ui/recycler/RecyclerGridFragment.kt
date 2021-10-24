@@ -75,7 +75,7 @@ class RecyclerGridFragment : ToolbarFragment<FragmentRecyclerBinding>() {
             layoutManager = AssemblyGridLayoutManager(
                 context = requireContext(),
                 spanCount = 3,
-                gridLayoutItemSpanMap = mapOf(
+                itemSpanByItemFactoryMap = mapOf(
                     AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
                     ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
                     LoadStateItemFactory::class to ItemSpan.fullSpan()
