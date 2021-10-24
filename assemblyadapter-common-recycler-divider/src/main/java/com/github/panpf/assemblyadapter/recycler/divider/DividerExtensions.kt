@@ -15,8 +15,20 @@
  */
 package com.github.panpf.assemblyadapter.recycler.divider
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 
+
+/**
+ * Create a [LinearDividerItemDecoration]. You can also configure divider through the [block] function
+ */
+fun Context.newLinearDividerItemDecoration(
+    block: (LinearDividerItemDecoration.Builder.() -> Unit)? = null
+): LinearDividerItemDecoration {
+    return LinearDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
 
 /**
  * Create a [LinearDividerItemDecoration]. You can also configure divider through the [block] function
@@ -49,6 +61,17 @@ fun RecyclerView.addLinearDividerItemDecoration(
 /**
  * Create a [GridDividerItemDecoration]. You can also configure divider through the [block] function
  */
+fun Context.newGridDividerItemDecoration(
+    block: (GridDividerItemDecoration.Builder.() -> Unit)? = null
+): GridDividerItemDecoration {
+    return GridDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+/**
+ * Create a [GridDividerItemDecoration]. You can also configure divider through the [block] function
+ */
 fun RecyclerView.newGridDividerItemDecoration(
     block: (GridDividerItemDecoration.Builder.() -> Unit)? = null
 ): GridDividerItemDecoration {
@@ -73,6 +96,17 @@ fun RecyclerView.addGridDividerItemDecoration(
     )
 }
 
+
+/**
+ * Create a [StaggeredGridDividerItemDecoration]. You can also configure divider through the [block] function
+ */
+fun Context.newStaggeredGridDividerItemDecoration(
+    block: (StaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null
+): StaggeredGridDividerItemDecoration {
+    return StaggeredGridDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
 
 /**
  * Create a [StaggeredGridDividerItemDecoration]. You can also configure divider through the [block] function

@@ -8,6 +8,7 @@
 * change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer allow sideHeaderDivider or sideFooterDivider and sideDivider to have different sizes and insets
 * change: Now the personalized configuration of sideDivider, sideHeaderDivider, and sideFooterDivider of GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer allows different sizes and insets
 * new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize according to position
+* new: Added Context.new\*DividerItemDecoration() series extension methods
 
 # v4.0.1
 

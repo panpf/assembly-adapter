@@ -1,7 +1,19 @@
 package com.github.panpf.assemblyadapter.recycler.divider
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 
+
+/**
+ * Create a [AssemblyLinearDividerItemDecoration]. You can also configure divider through the [block] function
+ */
+fun Context.newAssemblyLinearDividerItemDecoration(
+    block: (AssemblyLinearDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyLinearDividerItemDecoration {
+    return AssemblyLinearDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
 
 /**
  * Create a [AssemblyLinearDividerItemDecoration]. You can also configure divider through the [block] function
@@ -34,6 +46,17 @@ fun RecyclerView.addAssemblyLinearDividerItemDecoration(
 /**
  * Create a [AssemblyGridDividerItemDecoration]. You can also configure divider through the [block] function
  */
+fun Context.newAssemblyGridDividerItemDecoration(
+    block: (AssemblyGridDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyGridDividerItemDecoration {
+    return AssemblyGridDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
+
+/**
+ * Create a [AssemblyGridDividerItemDecoration]. You can also configure divider through the [block] function
+ */
 fun RecyclerView.newAssemblyGridDividerItemDecoration(
     block: (AssemblyGridDividerItemDecoration.Builder.() -> Unit)? = null
 ): AssemblyGridDividerItemDecoration {
@@ -58,6 +81,17 @@ fun RecyclerView.addAssemblyGridDividerItemDecoration(
     )
 }
 
+
+/**
+ * Create a [AssemblyStaggeredGridDividerItemDecoration]. You can also configure divider through the [block] function
+ */
+fun Context.newAssemblyStaggeredGridDividerItemDecoration(
+    block: (AssemblyStaggeredGridDividerItemDecoration.Builder.() -> Unit)? = null
+): AssemblyStaggeredGridDividerItemDecoration {
+    return AssemblyStaggeredGridDividerItemDecoration.Builder(this).apply {
+        block?.invoke(this)
+    }.build()
+}
 
 /**
  * Create a [AssemblyStaggeredGridDividerItemDecoration]. You can also configure divider through the [block] function
