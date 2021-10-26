@@ -78,12 +78,17 @@ class GridDividerOnlySideHelper(
                     sideDividerConfig.get(params.parent, params.position, params.spanIndex)!!
                 val sideDividerSize = sideDivider.widthSize
                 val multiplier = sideDividerSize / params.spanCount.toFloat()
-                val column = params.spanIndex + params.spanSize - 1
+                val columnStart = if (params.spanSize > 1) {
+                    params.spanIndex
+                } else {
+                    params.spanIndex + params.spanSize - 1
+                }
+                val columnEnd = params.spanIndex + params.spanSize - 1
                 // This method allows the divider to always display enough width, but it will squeeze the display space of the item
-//                val left = ceil(column * multiplier).toInt()
-//                val right = floor(sideDividerSize - ((column + 1) * multiplier)).toInt()
-                val left = (column * multiplier).toInt()
-                val right = (sideDividerSize - ((column + 1) * multiplier)).toInt()
+//                val left = ceil(columnStart * multiplier).toInt()
+//                val right = floor(sideDividerSize - ((columnEnd + 1) * multiplier)).toInt()
+                val left = (columnStart * multiplier).toInt()
+                val right = (sideDividerSize - ((columnEnd + 1) * multiplier)).toInt()
                 val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
                 val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
                 val top = topItemDivider?.heightSize ?: 0
@@ -101,12 +106,17 @@ class GridDividerOnlySideHelper(
                     sideDividerConfig.get(params.parent, params.position, params.spanIndex)!!
                 val sideDividerSize = sideDivider.heightSize
                 val multiplier = sideDividerSize / params.spanCount.toFloat()
-                val column = params.spanIndex + params.spanSize - 1
+                val columnStart = if (params.spanSize > 1) {
+                    params.spanIndex
+                } else {
+                    params.spanIndex + params.spanSize - 1
+                }
+                val columnEnd = params.spanIndex + params.spanSize - 1
                 // This method allows the divider to always display enough width, but it will squeeze the display space of the item
-//                val top = ceil(column * multiplier).toInt()
-//                val bottom = floor(sideDividerSize - ((column + 1) * multiplier)).toInt()
-                val top = (column * multiplier).toInt()
-                val bottom = (sideDividerSize - ((column + 1) * multiplier)).toInt()
+//                val top = ceil(columnStart * multiplier).toInt()
+//                val bottom = floor(sideDividerSize - ((columnEnd + 1) * multiplier)).toInt()
+                val top = (columnStart * multiplier).toInt()
+                val bottom = (sideDividerSize - ((columnEnd + 1) * multiplier)).toInt()
                 outRect.set(left, top, right, bottom)
             }
         }

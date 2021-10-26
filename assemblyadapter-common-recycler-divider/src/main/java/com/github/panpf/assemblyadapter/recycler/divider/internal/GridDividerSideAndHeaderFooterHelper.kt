@@ -67,7 +67,6 @@ class GridDividerSideAndHeaderFooterHelper(
         // 所以第一个 item 的宽度会因为加上 start 和 end 的 divider 后超过 GridLayoutManager 限制的最大宽度，
         // 这时 GridLayoutManager 会将 item 的宽度修改为最大宽度减去 start 和 end 的 divider，导致 item 最终的宽度不是我们希望的宽度
         // 所以以下的代码都是为了解决这个问题
-        val column = params.spanIndex + params.spanSize - 1
         when {
             params.isFullSpan -> {
                 val startType =
@@ -91,20 +90,26 @@ class GridDividerSideAndHeaderFooterHelper(
                     sideDividerConfig.get(params.parent, params.position, params.spanIndex)!!
                 val sideDividerSize = sideDivider.widthSize
                 val multiplier = sideDividerSize / params.spanCount.toFloat()
+                val columnStart = if (params.spanSize > 1) {
+                    params.spanIndex
+                } else {
+                    params.spanIndex + params.spanSize - 1
+                }
+                val columnEnd = params.spanIndex + params.spanSize - 1
                 val left = if (params.isFirstSpan) {
                     sideDividerSize
                 } else {
                     // This method allows the divider to always display enough width, but it will squeeze the display space of the item
-//                    floor(multiplier * (params.spanCount - column)).toInt()
-                    (multiplier * (params.spanCount - column)).toInt()
+//                    floor(multiplier * (params.spanCount - columnStart)).toInt()
+                    (multiplier * (params.spanCount - columnStart)).toInt()
                 }
                 val right = if (params.isLastSpan) {
                     sideDividerSize
                 } else {
                     val cellSideOffset = multiplier * (params.spanCount + 1)
                     // This method allows the divider to always display enough width, but it will squeeze the display space of the item
-//                    ceil((cellSideOffset) - (multiplier * (params.spanCount - column))).toInt()
-                    ((cellSideOffset) - (multiplier * (params.spanCount - column))).toInt()
+//                    ceil((cellSideOffset) - (multiplier * (params.spanCount - columnEnd))).toInt()
+                    ((cellSideOffset) - (multiplier * (params.spanCount - columnEnd))).toInt()
                 }
                 val topItemDivider =
                     getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
@@ -127,20 +132,26 @@ class GridDividerSideAndHeaderFooterHelper(
                     sideDividerConfig.get(params.parent, params.position, params.spanIndex)!!
                 val sideDividerSize = sideDivider.heightSize
                 val multiplier = sideDividerSize / params.spanCount.toFloat()
+                val columnStart = if (params.spanSize > 1) {
+                    params.spanIndex
+                } else {
+                    params.spanIndex + params.spanSize - 1
+                }
+                val columnEnd = params.spanIndex + params.spanSize - 1
                 val top = if (params.isFirstSpan) {
                     sideDividerSize
                 } else {
                     // This method allows the divider to always display enough width, but it will squeeze the display space of the item
-//                    floor(multiplier * (params.spanCount - column)).toInt()
-                    (multiplier * (params.spanCount - column)).toInt()
+//                    floor(multiplier * (params.spanCount - columnStart)).toInt()
+                    (multiplier * (params.spanCount - columnStart)).toInt()
                 }
                 val bottom = if (params.isLastSpan) {
                     sideDividerSize
                 } else {
                     // This method allows the divider to always display enough width, but it will squeeze the display space of the item
                     val cellSideOffset = multiplier * (params.spanCount + 1)
-//                    ceil((cellSideOffset) - (multiplier * (params.spanCount - column))).toInt()
-                    ((cellSideOffset) - (multiplier * (params.spanCount - column))).toInt()
+//                    ceil((cellSideOffset) - (multiplier * (params.spanCount - columnEnd))).toInt()
+                    ((cellSideOffset) - (multiplier * (params.spanCount - columnEnd))).toInt()
                 }
                 outRect.set(left, top, right, bottom)
             }
