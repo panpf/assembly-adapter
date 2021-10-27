@@ -74,6 +74,7 @@ class AssemblyGridLayoutManagerTest {
 
     @Test
     fun testGetSpanSize() {
+        // todo add test by position and itemType
         val context = InstrumentationRegistry.getInstrumentation().context
         val recyclerView = RecyclerView(context).apply {
             adapter = AssemblyRecyclerAdapter(

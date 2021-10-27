@@ -29,10 +29,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.ItemSpan
+import com.github.panpf.assemblyadapter.recycler.*
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.recycler.divider.newAssemblyGridDividerItemDecoration
@@ -103,18 +100,15 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
             dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 dividerParams ?: return@observe
 
-                layoutManager = AssemblyGridLayoutManager(
-                    requireContext(),
-                    dividerParams.getSpanCount(false),
-                    RecyclerView.HORIZONTAL,
-                    false,
-                    dividerParams.spanSizeByPosition,
-                    mapOf(
+                layoutManager = newAssemblyGridLayoutManager(dividerParams.getSpanCount(false)) {
+                    orientation(RecyclerView.HORIZONTAL)
+                    itemSpanByPosition(dividerParams.spanSizeByPosition ?: emptyMap())
+                    itemSpanByItemFactory(
                         AppsOverviewHorItemFactory::class to ItemSpan.fullSpan(),
                         ListSeparatorHorItemFactory::class to ItemSpan.fullSpan(),
                         LoadStateHorItemFactory::class to ItemSpan.fullSpan()
                     )
-                )
+                }
 
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)

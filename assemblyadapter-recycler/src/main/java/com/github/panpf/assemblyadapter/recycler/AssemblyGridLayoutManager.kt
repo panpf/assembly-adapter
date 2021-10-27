@@ -25,12 +25,13 @@ import com.github.panpf.assemblyadapter.ItemFactory
 import kotlin.reflect.KClass
 
 /**
- * An implementation of [GridLayoutManager]. Set the spanSize of [GridLayoutManager] according to [ItemFactory] as the identifier
+ * An implementation of [GridLayoutManager]. Set the spanSize of [GridLayoutManager] according to position and itemType and [ItemFactory] as the identifier
  */
 class AssemblyGridLayoutManager : GridLayoutManager {
 
     private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
     private val itemSpanByPositionSparseArray: SparseArray<ItemSpan>?
+    private val itemSpanByItemTypeSparseArray: SparseArray<ItemSpan>?
     private val itemSpanByItemFactoryMap: Map<Class<out ItemFactory<out Any>>, ItemSpan>?
     private val spanSizeLookup = object : SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
@@ -46,6 +47,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
      * single column.
      *
      * @param itemSpanByPositionMap Map of spanSize corresponding to position
+     * @param itemSpanByItemTypeMap Map of spanSize corresponding to itemType
      * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
      * @see androidx.recyclerview.R.attr.spanCount
      */
@@ -55,9 +57,17 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         defStyleAttr: Int,
         defStyleRes: Int,
         itemSpanByPositionMap: Map<Int, ItemSpan>?,
+        itemSpanByItemTypeMap: Map<Int, ItemSpan>?,
         itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>?
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         this.itemSpanByPositionSparseArray = itemSpanByPositionMap?.let { map ->
+            SparseArray<ItemSpan>().apply {
+                map.entries.forEach { mapItem ->
+                    put(mapItem.key, mapItem.value)
+                }
+            }
+        }
+        this.itemSpanByItemTypeSparseArray = itemSpanByItemTypeMap?.let { map ->
             SparseArray<ItemSpan>().apply {
                 map.entries.forEach { mapItem ->
                     put(mapItem.key, mapItem.value)
@@ -85,6 +95,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         this.itemSpanByPositionSparseArray = null
+        this.itemSpanByItemTypeSparseArray = null
         this.itemSpanByItemFactoryMap =
             itemSpanByItemFactoryMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
@@ -98,6 +109,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
      * @param orientation Layout orientation. Should be [GridLayoutManager.HORIZONTAL] or [GridLayoutManager.VERTICAL].
      * @param reverseLayout When set to true, layouts from end to start.
      * @param itemSpanByPositionMap Map of spanSize corresponding to position
+     * @param itemSpanByItemTypeMap Map of spanSize corresponding to itemType
      * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
      */
     constructor(
@@ -106,9 +118,17 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         orientation: Int,
         reverseLayout: Boolean,
         itemSpanByPositionMap: Map<Int, ItemSpan>?,
+        itemSpanByItemTypeMap: Map<Int, ItemSpan>?,
         itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>?,
     ) : super(context, spanCount, orientation, reverseLayout) {
         this.itemSpanByPositionSparseArray = itemSpanByPositionMap?.let { map ->
+            SparseArray<ItemSpan>().apply {
+                map.entries.forEach { mapItem ->
+                    put(mapItem.key, mapItem.value)
+                }
+            }
+        }
+        this.itemSpanByItemTypeSparseArray = itemSpanByItemTypeMap?.let { map ->
             SparseArray<ItemSpan>().apply {
                 map.entries.forEach { mapItem ->
                     put(mapItem.key, mapItem.value)
@@ -137,6 +157,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>,
     ) : super(context, spanCount, orientation, reverseLayout) {
         this.itemSpanByPositionSparseArray = null
+        this.itemSpanByItemTypeSparseArray = null
         this.itemSpanByItemFactoryMap =
             itemSpanByItemFactoryMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
@@ -149,15 +170,24 @@ class AssemblyGridLayoutManager : GridLayoutManager {
      * @param context Current context, will be used to access resources.
      * @param spanCount The number of columns in the grid
      * @param itemSpanByPositionMap Map of spanSize corresponding to position
+     * @param itemSpanByItemTypeMap Map of spanSize corresponding to itemType
      * @param itemSpanByItemFactoryMap Map of spanSize corresponding to [ItemFactory]
      */
     constructor(
         context: Context,
         spanCount: Int,
         itemSpanByPositionMap: Map<Int, ItemSpan>?,
+        itemSpanByItemTypeMap: Map<Int, ItemSpan>?,
         itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>?
     ) : super(context, spanCount) {
         this.itemSpanByPositionSparseArray = itemSpanByPositionMap?.let { map ->
+            SparseArray<ItemSpan>().apply {
+                map.entries.forEach { mapItem ->
+                    put(mapItem.key, mapItem.value)
+                }
+            }
+        }
+        this.itemSpanByItemTypeSparseArray = itemSpanByItemTypeMap?.let { map ->
             SparseArray<ItemSpan>().apply {
                 map.entries.forEach { mapItem ->
                     put(mapItem.key, mapItem.value)
@@ -182,6 +212,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>
     ) : super(context, spanCount) {
         this.itemSpanByPositionSparseArray = null
+        this.itemSpanByItemTypeSparseArray = null
         this.itemSpanByItemFactoryMap =
             itemSpanByItemFactoryMap.map { it.key.java to it.value }.toMap()
         super.setSpanSizeLookup(spanSizeLookup)
@@ -211,9 +242,9 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     }
 
     private fun getSpanSizeImpl(position: Int): Int {
-        val itemSpanByPosition = itemSpanByPositionSparseArray
-        if (itemSpanByPosition != null) {
-            val itemSpan = itemSpanByPosition[position]
+        val itemSpanByPositionSparseArray = itemSpanByPositionSparseArray
+        if (itemSpanByPositionSparseArray != null) {
+            val itemSpan = itemSpanByPositionSparseArray[position]
             if (itemSpan != null) {
                 return if (itemSpan.isFullSpan()) {
                     spanCount
@@ -223,20 +254,42 @@ class AssemblyGridLayoutManager : GridLayoutManager {
             }
         }
 
+        val itemSpanByItemTypeSparseArray = itemSpanByItemTypeSparseArray
         val itemSpanByItemFactoryMap = itemSpanByItemFactoryMap
         val adapter = recyclerView?.adapter
-        if (itemSpanByItemFactoryMap != null
+        if ((itemSpanByItemTypeSparseArray != null || itemSpanByItemFactoryMap != null)
             && adapter != null
             && position >= 0
             && position < adapter.itemCount
         ) {
-            val itemFactory = findItemFactory(adapter, position)
-            val itemSpan = itemSpanByItemFactoryMap[itemFactory.javaClass]
-            if (itemSpan != null) {
-                return if (itemSpan.isFullSpan()) {
-                    spanCount
+            val (localAdapter, localPosition) =
+                concatAdapterLocalHelper.findLocalAdapterAndPosition(adapter, position)
+
+            if (itemSpanByItemTypeSparseArray != null) {
+                val itemType = localAdapter.getItemViewType(localPosition)
+                val itemSpan = itemSpanByItemTypeSparseArray[itemType]
+                if (itemSpan != null) {
+                    return if (itemSpan.isFullSpan()) {
+                        spanCount
+                    } else {
+                        itemSpan.size.coerceAtLeast(1).coerceAtMost(spanCount)
+                    }
+                }
+            }
+
+            if (itemSpanByItemFactoryMap != null) {
+                val itemFactory = if (localAdapter is AssemblyAdapter<*, *>) {
+                    localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<Any>
                 } else {
-                    itemSpan.size.coerceAtLeast(1).coerceAtMost(spanCount)
+                    throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
+                }
+                val itemSpan = itemSpanByItemFactoryMap[itemFactory.javaClass]
+                if (itemSpan != null) {
+                    return if (itemSpan.isFullSpan()) {
+                        spanCount
+                    } else {
+                        itemSpan.size.coerceAtLeast(1).coerceAtMost(spanCount)
+                    }
                 }
             }
         }
@@ -244,15 +297,275 @@ class AssemblyGridLayoutManager : GridLayoutManager {
         return 1
     }
 
-    private fun findItemFactory(adapter: RecyclerView.Adapter<*>, position: Int): ItemFactory<Any> {
-        val (localAdapter, localPosition) = concatAdapterLocalHelper.findLocalAdapterAndPosition(
-            adapter,
-            position
-        )
-        return if (localAdapter is AssemblyAdapter<*, *>) {
-            localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<Any>
-        } else {
-            throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
+
+    class Builder(val context: Context) {
+        private var attrs: AttributeSet? = null
+        private var defStyleAttr: Int? = null
+        private var defStyleRes: Int? = null
+
+        private var spanCount: Int? = null
+        private var orientation: Int? = null
+        private var reverseLayout: Boolean? = null
+        private var stackFromEnd: Boolean? = null
+
+        private var itemSpanByPositionMap: Map<Int, ItemSpan>? = null
+        private var itemSpanByItemTypeMap: Map<Int, ItemSpan>? = null
+        private var itemSpanByItemFactoryMap: Map<KClass<out ItemFactory<out Any>>, ItemSpan>? =
+            null
+
+        constructor(
+            context: Context,
+            attrs: AttributeSet?,
+            defStyleAttr: Int,
+            defStyleRes: Int
+        ) : this(context) {
+            this.attrs = attrs
+            this.defStyleAttr = defStyleAttr
+            this.defStyleRes = defStyleRes
+        }
+
+        constructor(
+            context: Context,
+            spanCount: Int,
+            orientation: Int? = null,
+            reverseLayout: Boolean? = null
+        ) : this(context) {
+            this.spanCount = spanCount
+            this.orientation = orientation
+            this.reverseLayout = reverseLayout
+        }
+
+        fun build(): AssemblyGridLayoutManager {
+            val defStyleAttr = defStyleAttr
+            val defStyleRes = defStyleRes
+            val spanCount = spanCount
+            val orientation = orientation
+            val reverseLayout = reverseLayout
+            return if (defStyleAttr != null && defStyleRes != null) {
+                AssemblyGridLayoutManager(
+                    context,
+                    attrs,
+                    defStyleAttr,
+                    defStyleRes,
+                    itemSpanByPositionMap,
+                    itemSpanByItemTypeMap,
+                    itemSpanByItemFactoryMap
+                )
+            } else if (spanCount != null && orientation != null && reverseLayout != null) {
+                AssemblyGridLayoutManager(
+                    context,
+                    spanCount,
+                    orientation,
+                    reverseLayout,
+                    itemSpanByPositionMap,
+                    itemSpanByItemTypeMap,
+                    itemSpanByItemFactoryMap
+                )
+            } else if (spanCount != null) {
+                AssemblyGridLayoutManager(
+                    context,
+                    spanCount,
+                    itemSpanByPositionMap,
+                    itemSpanByItemTypeMap,
+                    itemSpanByItemFactoryMap
+                )
+            } else {
+                throw  IllegalArgumentException("Unable to create AssemblyGridLayoutManager")
+            }.apply {
+                val orientation1 = this@Builder.orientation
+                if (orientation1 != null) {
+                    this.orientation = orientation1
+                }
+                val reverseLayout1 = this@Builder.reverseLayout
+                if (reverseLayout1 != null) {
+                    this.reverseLayout = reverseLayout1
+                }
+                val stackFromEnd1 = this@Builder.stackFromEnd
+                if (stackFromEnd1 != null) {
+                    this.stackFromEnd = stackFromEnd1
+                }
+            }
+        }
+
+        fun spanCount(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int): Builder {
+            this.attrs = attrs
+            this.defStyleAttr = defStyleAttr
+            this.defStyleRes = defStyleRes
+            return this
+        }
+
+        fun spanCount(spanCount: Int): Builder {
+            this.spanCount = spanCount
+            return this
+        }
+
+        fun orientation(orientation: Int): Builder {
+            this.orientation = orientation
+            return this
+        }
+
+        fun orientation(reverseLayout: Boolean): Builder {
+            this.reverseLayout = reverseLayout
+            return this
+        }
+
+        fun stackFromEnd(stackFromEnd: Boolean): Builder {
+            this.stackFromEnd = stackFromEnd
+            return this
+        }
+
+        fun itemSpanByPosition(position: Int, itemSpan: ItemSpan): Builder {
+            itemSpanByPositionMap ?: HashMap<Int, ItemSpan>().apply {
+                this@Builder.itemSpanByPositionMap = this
+            }.put(position, itemSpan)
+            return this
+        }
+
+        fun itemSpanByPosition(map: Map<Int, ItemSpan>): Builder {
+            itemSpanByPositionMap ?: HashMap<Int, ItemSpan>().apply {
+                this@Builder.itemSpanByPositionMap = this
+            }.putAll(map)
+            return this
+        }
+
+        fun itemSpanByPosition(vararg pair: Pair<Int, ItemSpan>): Builder {
+            itemSpanByPositionMap ?: HashMap<Int, ItemSpan>().apply {
+                this@Builder.itemSpanByPositionMap = this
+            }.apply {
+                pair.forEach {
+                    put(it.first, it.second)
+                }
+            }
+            return this
+        }
+
+        fun itemSpanByItemType(itemType: Int, itemSpan: ItemSpan): Builder {
+            itemSpanByItemTypeMap ?: HashMap<Int, ItemSpan>().apply {
+                this@Builder.itemSpanByItemTypeMap = this
+            }.put(itemType, itemSpan)
+            return this
+        }
+
+        fun itemSpanByItemType(map: Map<Int, ItemSpan>): Builder {
+            itemSpanByItemTypeMap ?: HashMap<Int, ItemSpan>().apply {
+                this@Builder.itemSpanByItemTypeMap = this
+            }.putAll(map)
+            return this
+        }
+
+        fun itemSpanByItemType(vararg pair: Pair<Int, ItemSpan>): Builder {
+            itemSpanByItemTypeMap ?: HashMap<Int, ItemSpan>().apply {
+                this@Builder.itemSpanByItemTypeMap = this
+            }.apply {
+                pair.forEach {
+                    put(it.first, it.second)
+                }
+            }
+            return this
+        }
+
+        fun itemSpanByItemFactory(
+            itemFactory: KClass<out ItemFactory<out Any>>,
+            itemSpan: ItemSpan
+        ): Builder {
+            itemSpanByItemFactoryMap
+                ?: HashMap<KClass<out ItemFactory<out Any>>, ItemSpan>().apply {
+                    this@Builder.itemSpanByItemFactoryMap = this
+                }.put(itemFactory, itemSpan)
+            return this
+        }
+
+        fun itemSpanByItemFactory(map: Map<KClass<out ItemFactory<out Any>>, ItemSpan>): Builder {
+            itemSpanByItemFactoryMap
+                ?: HashMap<KClass<out ItemFactory<out Any>>, ItemSpan>().apply {
+                    this@Builder.itemSpanByItemFactoryMap = this
+                }.putAll(map)
+            return this
+        }
+
+        fun itemSpanByItemFactory(vararg pair: Pair<KClass<out ItemFactory<out Any>>, ItemSpan>): Builder {
+            itemSpanByItemFactoryMap
+                ?: HashMap<KClass<out ItemFactory<out Any>>, ItemSpan>().apply {
+                    this@Builder.itemSpanByItemFactoryMap = this
+                }.apply {
+                    pair.forEach {
+                        put(it.first, it.second)
+                    }
+                }
+            return this
         }
     }
+}
+
+
+fun Context.newAssemblyGridLayoutManager(
+    attrs: AttributeSet?,
+    defStyleAttr: Int,
+    defStyleRes: Int,
+    block: AssemblyGridLayoutManager.Builder.() -> Unit
+): AssemblyGridLayoutManager {
+    return AssemblyGridLayoutManager
+        .Builder(this, attrs, defStyleAttr, defStyleRes)
+        .apply(block)
+        .build()
+}
+
+fun RecyclerView.newAssemblyGridLayoutManager(
+    attrs: AttributeSet?,
+    defStyleAttr: Int,
+    defStyleRes: Int,
+    block: AssemblyGridLayoutManager.Builder.() -> Unit
+): AssemblyGridLayoutManager {
+    return AssemblyGridLayoutManager
+        .Builder(context, attrs, defStyleAttr, defStyleRes)
+        .apply(block)
+        .build()
+}
+
+fun RecyclerView.setupAssemblyGridLayoutManager(
+    attrs: AttributeSet?,
+    defStyleAttr: Int,
+    defStyleRes: Int,
+    block: AssemblyGridLayoutManager.Builder.() -> Unit
+) {
+    layoutManager = AssemblyGridLayoutManager
+        .Builder(context, attrs, defStyleAttr, defStyleRes)
+        .apply(block)
+        .build()
+}
+
+fun Context.newAssemblyGridLayoutManager(
+    spanCount: Int,
+    orientation: Int? = null,
+    reverseLayout: Boolean? = null,
+    block: AssemblyGridLayoutManager.Builder.() -> Unit
+): AssemblyGridLayoutManager {
+    return AssemblyGridLayoutManager
+        .Builder(this, spanCount, orientation, reverseLayout)
+        .apply(block)
+        .build()
+}
+
+fun RecyclerView.newAssemblyGridLayoutManager(
+    spanCount: Int,
+    orientation: Int? = null,
+    reverseLayout: Boolean? = null,
+    block: AssemblyGridLayoutManager.Builder.() -> Unit
+): AssemblyGridLayoutManager {
+    return AssemblyGridLayoutManager
+        .Builder(context, spanCount, orientation, reverseLayout)
+        .apply(block)
+        .build()
+}
+
+fun RecyclerView.setupAssemblyGridLayoutManager(
+    spanCount: Int,
+    orientation: Int? = null,
+    reverseLayout: Boolean? = null,
+    block: AssemblyGridLayoutManager.Builder.() -> Unit
+) {
+    layoutManager = AssemblyGridLayoutManager
+        .Builder(context, spanCount, orientation, reverseLayout)
+        .apply(block)
+        .build()
 }
