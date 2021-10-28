@@ -161,15 +161,15 @@ class AssemblyPagingDataAdapterTest {
             Assert.assertEquals("", currentList.joinToString())
 
             fragment.submitList(listOf(Text("hello")))
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals("Text(text=hello)", currentList.joinToString())
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals("Text(text=hello), Text(text=world)", currentList.joinToString())
 
             fragment.submitList(null)
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals("", currentList.joinToString())
         }
     }
@@ -183,15 +183,15 @@ class AssemblyPagingDataAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             fragment.submitList(listOf(Text("hello")))
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals(1, itemCount)
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals(2, itemCount)
 
             fragment.submitList(null)
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals(0, itemCount)
         }
     }
@@ -213,7 +213,7 @@ class AssemblyPagingDataAdapterTest {
             }
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals(Text("hello"), getItemData(0))
             Assert.assertEquals(Text("world"), getItemData(1))
         }
@@ -242,7 +242,7 @@ class AssemblyPagingDataAdapterTest {
             Assert.assertEquals(-1L, getItemId(1))
 
             fragment.submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(-1L, getItemId(0))
             Assert.assertEquals(-1L, getItemId(1))
@@ -267,7 +267,7 @@ class AssemblyPagingDataAdapterTest {
             }
 
             fragment.submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals(1, getItemViewType(0))
             Assert.assertEquals(0, getItemViewType(1))
         }
@@ -282,7 +282,7 @@ class AssemblyPagingDataAdapterTest {
         val pagingDataAdapter: AssemblyPagingDataAdapter<Any> = fragment.pagingDataAdapter
         pagingDataAdapter.apply {
             fragment.submitList(listOf(Text("hello"), Image(android.R.drawable.alert_dark_frame)))
-            Thread.sleep(50)
+            Thread.sleep(100)
 
             assertThrow(IllegalArgumentException::class) {
                 onCreateViewHolder(parent, -1)
@@ -315,7 +315,7 @@ class AssemblyPagingDataAdapterTest {
             }
 
             fragment.submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(50)
+            Thread.sleep(100)
             Assert.assertEquals(ImageItemFactory::class, getItemFactoryByPosition(0)::class)
             Assert.assertEquals(TextItemFactory::class, getItemFactoryByPosition(1)::class)
         }
