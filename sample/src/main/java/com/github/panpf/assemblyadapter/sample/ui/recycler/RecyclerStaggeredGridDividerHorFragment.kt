@@ -32,10 +32,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.recycler.divider.newAssemblyStaggeredGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.setupAssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
@@ -103,15 +103,16 @@ class RecyclerStaggeredGridDividerHorFragment :
             dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 dividerParams ?: return@observe
 
-                layoutManager = AssemblyStaggeredGridLayoutManager(
+                setupAssemblyStaggeredGridLayoutManager(
                     dividerParams.getSpanCount(false),
                     StaggeredGridLayoutManager.HORIZONTAL,
-                    listOf(
+                ) {
+                    fullSpanByItemFactory(
                         AppsOverviewHorItemFactory::class,
                         ListSeparatorHorItemFactory::class,
                         LoadStateHorItemFactory::class
                     )
-                )
+                }
 
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)

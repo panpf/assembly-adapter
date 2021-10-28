@@ -100,8 +100,7 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
             dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 dividerParams ?: return@observe
 
-                layoutManager = newAssemblyGridLayoutManager(dividerParams.getSpanCount(false)) {
-                    orientation(RecyclerView.HORIZONTAL)
+                setupAssemblyGridLayoutManager(dividerParams.getSpanCount(false), RecyclerView.HORIZONTAL) {
                     itemSpanByPosition(dividerParams.spanSizeByPosition ?: emptyMap())
                     itemSpanByItemFactory(
                         AppsOverviewHorItemFactory::class to ItemSpan.fullSpan(),

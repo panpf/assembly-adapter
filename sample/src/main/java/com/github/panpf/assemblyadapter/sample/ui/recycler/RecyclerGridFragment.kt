@@ -23,10 +23,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.ItemSpan
+import com.github.panpf.assemblyadapter.recycler.*
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
@@ -72,15 +69,13 @@ class RecyclerGridFragment : ToolbarFragment<FragmentRecyclerBinding>() {
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
-            layoutManager = AssemblyGridLayoutManager(
-                context = requireContext(),
-                spanCount = 3,
-                itemSpanByItemFactoryMap = mapOf(
+            setupAssemblyGridLayoutManager(spanCount = 3) {
+                itemSpanByItemFactory(
                     AppsOverviewItemFactory::class to ItemSpan.fullSpan(),
                     ListSeparatorItemFactory::class to ItemSpan.fullSpan(),
                     LoadStateItemFactory::class to ItemSpan.fullSpan()
                 )
-            )
+            }
             addAssemblyGridDividerItemDecoration {
                 divider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(AppsOverviewItemFactory::class)

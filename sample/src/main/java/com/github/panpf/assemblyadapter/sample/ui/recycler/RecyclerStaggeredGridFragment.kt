@@ -25,9 +25,9 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.AssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.addAssemblyStaggeredGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.setupAssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
 import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
@@ -71,15 +71,13 @@ class RecyclerStaggeredGridFragment : ToolbarFragment<FragmentRecyclerBinding>()
             AssemblySingleDataRecyclerAdapter(LoadStateItemFactory(requireActivity()))
         binding.recyclerRecycler.apply {
             adapter = ConcatAdapter(appsOverviewAdapter, recyclerAdapter, footerLoadStateAdapter)
-            layoutManager =
-                AssemblyStaggeredGridLayoutManager(
-                    spanCount = 3,
-                    fullSpanItemFactoryList = listOf(
-                        AppsOverviewItemFactory::class,
-                        ListSeparatorItemFactory::class,
-                        LoadStateItemFactory::class
-                    )
+            setupAssemblyStaggeredGridLayoutManager(3) {
+                fullSpanByItemFactory(
+                    AppsOverviewItemFactory::class,
+                    ListSeparatorItemFactory::class,
+                    LoadStateItemFactory::class
                 )
+            }
             addAssemblyStaggeredGridDividerItemDecoration {
                 divider(Divider.space(20.dp2px)) {
                     disableByItemFactoryClass(AppsOverviewItemFactory::class)

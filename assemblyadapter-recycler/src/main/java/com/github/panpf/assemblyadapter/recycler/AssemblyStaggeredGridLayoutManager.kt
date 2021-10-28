@@ -18,6 +18,7 @@ package com.github.panpf.assemblyadapter.recycler
 import android.content.Context
 import android.util.AttributeSet
 import android.util.SparseBooleanArray
+import androidx.collection.ArrayMap
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
@@ -30,9 +31,9 @@ import kotlin.reflect.KClass
  */
 class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanSupportByPosition {
 
-    private val fullSpanPositionSparseArray: SparseBooleanArray?
-    private val fullSpanItemTypeSparseArray: SparseBooleanArray?
-    private val fullSpanItemFactoryMap: Map<Class<out ItemFactory<out Any>>, Boolean>?
+    private val fullSpanByPositionSparseArray: SparseBooleanArray?
+    private val fullSpanByItemTypeSparseArray: SparseBooleanArray?
+    private val fullSpanByItemFactoryMap: Map<Class<out ItemFactory<out Any>>, Boolean>?
     private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
 
     private var recyclerView: RecyclerView? = null
@@ -41,40 +42,43 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
      * Constructor used when layout manager is set in XML by RecyclerView attribute
      * "layoutManager". Defaults to single column and vertical.
      *
-     * @param fullSpanItemPositionList The position collection that needs to be set to fullSpan
-     * @param fullSpanItemTypeList The itemType collection that needs to be set to fullSpan
-     * @param fullSpanItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
+     * @param fullSpanByItemPositionList The position collection that needs to be set to fullSpan
+     * @param fullSpanByItemTypeList The itemType collection that needs to be set to fullSpan
+     * @param fullSpanByItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
      */
     constructor(
         context: Context,
         attrs: AttributeSet?,
         defStyleAttr: Int,
         defStyleRes: Int,
-        fullSpanItemPositionList: List<Int>?,
-        fullSpanItemTypeList: List<Int>?,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>?
+        fullSpanByItemPositionList: List<Int>?,
+        fullSpanByItemTypeList: List<Int>?,
+        fullSpanByItemFactoryList: List<KClass<out ItemFactory<out Any>>>?
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
-        this.fullSpanPositionSparseArray = fullSpanItemPositionList?.let { list ->
-            SparseBooleanArray().apply {
-                list.forEach { position ->
-                    put(position, true)
+        this.fullSpanByPositionSparseArray = fullSpanByItemPositionList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                SparseBooleanArray().apply {
+                    list.forEach { position ->
+                        put(position, true)
+                    }
                 }
             }
-        }
-        this.fullSpanItemTypeSparseArray = fullSpanItemTypeList?.let { list ->
-            SparseBooleanArray().apply {
-                list.forEach { position ->
-                    put(position, true)
+        this.fullSpanByItemTypeSparseArray = fullSpanByItemTypeList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                SparseBooleanArray().apply {
+                    list.forEach { position ->
+                        put(position, true)
+                    }
                 }
             }
-        }
-        this.fullSpanItemFactoryMap = fullSpanItemFactoryList?.let { list ->
-            HashMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
-                list.forEach {
-                    put(it.java, true)
+        this.fullSpanByItemFactoryMap = fullSpanByItemFactoryList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                ArrayMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
+                    list.forEach {
+                        put(it.java, true)
+                    }
                 }
             }
-        }
     }
 
     /**
@@ -88,17 +92,18 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
         attrs: AttributeSet?,
         defStyleAttr: Int,
         defStyleRes: Int,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>  // For compatibility reasons, the old parameter names are still maintained here
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
-        this.fullSpanPositionSparseArray = null
-        this.fullSpanItemTypeSparseArray = null
-        this.fullSpanItemFactoryMap = fullSpanItemFactoryList.let { list ->
-            HashMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
-                list.forEach {
-                    put(it.java, true)
+        this.fullSpanByPositionSparseArray = null
+        this.fullSpanByItemTypeSparseArray = null
+        this.fullSpanByItemFactoryMap = fullSpanItemFactoryList.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                ArrayMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
+                    list.forEach {
+                        put(it.java, true)
+                    }
                 }
             }
-        }
     }
 
     /**
@@ -106,38 +111,41 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
      *
      * @param spanCount If [orientation] is vertical, [spanCount] is number of columns. If [orientation] is horizontal, [spanCount] is number of rows.
      * @param orientation [StaggeredGridLayoutManager.VERTICAL] or [StaggeredGridLayoutManager.HORIZONTAL]
-     * @param fullSpanItemPositionList The position collection that needs to be set to fullSpan
-     * @param fullSpanItemTypeList The itemType collection that needs to be set to fullSpan
-     * @param fullSpanItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
+     * @param fullSpanByItemPositionList The position collection that needs to be set to fullSpan
+     * @param fullSpanByItemTypeList The itemType collection that needs to be set to fullSpan
+     * @param fullSpanByItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
      */
     constructor(
         spanCount: Int,
         orientation: Int,
-        fullSpanItemPositionList: List<Int>?,
-        fullSpanItemTypeList: List<Int>?,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>?
+        fullSpanByItemPositionList: List<Int>?,
+        fullSpanByItemTypeList: List<Int>?,
+        fullSpanByItemFactoryList: List<KClass<out ItemFactory<out Any>>>?
     ) : super(spanCount, orientation) {
-        this.fullSpanPositionSparseArray = fullSpanItemPositionList?.let { list ->
-            SparseBooleanArray().apply {
-                list.forEach { position ->
-                    put(position, true)
+        this.fullSpanByPositionSparseArray = fullSpanByItemPositionList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                SparseBooleanArray().apply {
+                    list.forEach { position ->
+                        put(position, true)
+                    }
                 }
             }
-        }
-        this.fullSpanItemTypeSparseArray = fullSpanItemTypeList?.let { list ->
-            SparseBooleanArray().apply {
-                list.forEach { position ->
-                    put(position, true)
+        this.fullSpanByItemTypeSparseArray = fullSpanByItemTypeList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                SparseBooleanArray().apply {
+                    list.forEach { position ->
+                        put(position, true)
+                    }
                 }
             }
-        }
-        this.fullSpanItemFactoryMap = fullSpanItemFactoryList?.let { list ->
-            HashMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
-                list.forEach {
-                    put(it.java, true)
+        this.fullSpanByItemFactoryMap = fullSpanByItemFactoryList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                ArrayMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
+                    list.forEach {
+                        put(it.java, true)
+                    }
                 }
             }
-        }
     }
 
     /**
@@ -150,54 +158,58 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
     constructor(
         spanCount: Int,
         orientation: Int,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>  // For compatibility reasons, the old parameter names are still maintained here
     ) : super(spanCount, orientation) {
-        this.fullSpanPositionSparseArray = null
-        this.fullSpanItemTypeSparseArray = null
-        this.fullSpanItemFactoryMap = fullSpanItemFactoryList.let { list ->
-            HashMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
-                list.forEach {
-                    put(it.java, true)
+        this.fullSpanByPositionSparseArray = null
+        this.fullSpanByItemTypeSparseArray = null
+        this.fullSpanByItemFactoryMap = fullSpanItemFactoryList.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                ArrayMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
+                    list.forEach {
+                        put(it.java, true)
+                    }
                 }
             }
-        }
     }
 
     /**
      * Creates a vertical StaggeredGridLayoutManager with given parameters.
      *
      * @param spanCount spanCount is number of columns.
-     * @param fullSpanItemPositionList The position collection that needs to be set to fullSpan
-     * @param fullSpanItemTypeList The itemType collection that needs to be set to fullSpan
-     * @param fullSpanItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
+     * @param fullSpanByItemPositionList The position collection that needs to be set to fullSpan
+     * @param fullSpanByItemTypeList The itemType collection that needs to be set to fullSpan
+     * @param fullSpanByItemFactoryList The [ItemFactory] collection that needs to be set to fullSpan
      */
     constructor(
         spanCount: Int,
-        fullSpanItemPositionList: List<Int>?,
-        fullSpanItemTypeList: List<Int>?,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>?
+        fullSpanByItemPositionList: List<Int>?,
+        fullSpanByItemTypeList: List<Int>?,
+        fullSpanByItemFactoryList: List<KClass<out ItemFactory<out Any>>>?
     ) : super(spanCount, VERTICAL) {
-        this.fullSpanPositionSparseArray = fullSpanItemPositionList?.let { list ->
-            SparseBooleanArray().apply {
-                list.forEach { position ->
-                    put(position, true)
+        this.fullSpanByPositionSparseArray = fullSpanByItemPositionList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                SparseBooleanArray().apply {
+                    list.forEach { position ->
+                        put(position, true)
+                    }
                 }
             }
-        }
-        this.fullSpanItemTypeSparseArray = fullSpanItemTypeList?.let { list ->
-            SparseBooleanArray().apply {
-                list.forEach { position ->
-                    put(position, true)
+        this.fullSpanByItemTypeSparseArray = fullSpanByItemTypeList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                SparseBooleanArray().apply {
+                    list.forEach { position ->
+                        put(position, true)
+                    }
                 }
             }
-        }
-        this.fullSpanItemFactoryMap = fullSpanItemFactoryList?.let { list ->
-            HashMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
-                list.forEach {
-                    put(it.java, true)
+        this.fullSpanByItemFactoryMap = fullSpanByItemFactoryList?.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                ArrayMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
+                    list.forEach {
+                        put(it.java, true)
+                    }
                 }
             }
-        }
     }
 
     /**
@@ -208,28 +220,29 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
      */
     constructor(
         spanCount: Int,
-        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>
+        fullSpanItemFactoryList: List<KClass<out ItemFactory<out Any>>>  // For compatibility reasons, the old parameter names are still maintained here
     ) : super(spanCount, VERTICAL) {
-        this.fullSpanPositionSparseArray = null
-        this.fullSpanItemTypeSparseArray = null
-        this.fullSpanItemFactoryMap = fullSpanItemFactoryList.let { list ->
-            HashMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
-                list.forEach {
-                    put(it.java, true)
+        this.fullSpanByPositionSparseArray = null
+        this.fullSpanByItemTypeSparseArray = null
+        this.fullSpanByItemFactoryMap = fullSpanItemFactoryList.takeIf { it.isNotEmpty() }
+            ?.let { list ->
+                ArrayMap<Class<out ItemFactory<out Any>>, Boolean>().apply {
+                    list.forEach {
+                        put(it.java, true)
+                    }
                 }
             }
-        }
     }
 
     override fun isFullSpanByPosition(position: Int): Boolean {
-        if (fullSpanPositionSparseArray?.get(position) == true) {
+        if (fullSpanByPositionSparseArray?.get(position) == true) {
             return true
         }
 
-        val fullSpanItemTypeSparseArray = fullSpanItemTypeSparseArray
-        val fullSpanItemFactoryMap = fullSpanItemFactoryMap
+        val fullSpanByItemTypeSparseArray = fullSpanByItemTypeSparseArray
+        val fullSpanByItemFactoryMap = fullSpanByItemFactoryMap
         val adapter = recyclerView?.adapter
-        if ((fullSpanItemTypeSparseArray != null || fullSpanItemFactoryMap != null)
+        if ((fullSpanByItemTypeSparseArray != null || fullSpanByItemFactoryMap != null)
             && adapter != null
             && position >= 0
             && position < adapter.itemCount
@@ -237,20 +250,20 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
             val (localAdapter, localPosition) =
                 concatAdapterLocalHelper.findLocalAdapterAndPosition(adapter, position)
 
-            if (fullSpanItemTypeSparseArray != null) {
+            if (fullSpanByItemTypeSparseArray != null) {
                 val itemType = localAdapter.getItemViewType(localPosition)
-                if (fullSpanItemTypeSparseArray.get(itemType)) {
+                if (fullSpanByItemTypeSparseArray.get(itemType)) {
                     return true
                 }
             }
 
-            if (fullSpanItemFactoryMap != null) {
+            if (fullSpanByItemFactoryMap != null) {
                 val itemFactory = if (localAdapter is AssemblyAdapter<*, *>) {
                     localAdapter.getItemFactoryByPosition(localPosition) as ItemFactory<Any>
                 } else {
                     throw IllegalArgumentException("RecyclerView.adapter must be ConcatAdapter or implement the interface AssemblyAdapter: ${adapter.javaClass.name}")
                 }
-                if (fullSpanItemFactoryMap[itemFactory.javaClass] == true) {
+                if (fullSpanByItemFactoryMap[itemFactory.javaClass] == true) {
                     return true
                 }
             }
@@ -280,11 +293,10 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
         private var spanCount: Int? = null
         private var orientation: Int? = null
         private var reverseLayout: Boolean? = null
-        private var stackFromEnd: Boolean? = null
 
-        private var itemSpanByPositionList: List<Int>? = null
-        private var itemSpanByItemTypeList: List<Int>? = null
-        private var itemSpanByItemFactoryList: List<KClass<out ItemFactory<out Any>>>? =
+        private var fullSpanByPositionList: MutableList<Int>? = null
+        private var fullSpanByItemTypeList: MutableList<Int>? = null
+        private var fullSpanByItemFactoryList: MutableList<KClass<out ItemFactory<out Any>>>? =
             null
 
         constructor(
@@ -302,9 +314,11 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
         constructor(
             spanCount: Int,
             orientation: Int? = null,
+            reverseLayout: Boolean? = null,
         ) {
             this.spanCount = spanCount
             this.orientation = orientation
+            this.reverseLayout = reverseLayout
         }
 
         fun build(): AssemblyStaggeredGridLayoutManager {
@@ -319,32 +333,21 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
                     attrs,
                     defStyleAttr,
                     defStyleRes,
-                    itemSpanByPositionList,
-                    itemSpanByItemTypeList,
-                    itemSpanByItemFactoryList
-                )
-            } else if (spanCount != null && orientation != null) {
-                AssemblyStaggeredGridLayoutManager(
-                    spanCount,
-                    orientation,
-                    itemSpanByPositionList,
-                    itemSpanByItemTypeList,
-                    itemSpanByItemFactoryList
+                    fullSpanByPositionList,
+                    fullSpanByItemTypeList,
+                    fullSpanByItemFactoryList
                 )
             } else if (spanCount != null) {
                 AssemblyStaggeredGridLayoutManager(
                     spanCount,
-                    itemSpanByPositionList,
-                    itemSpanByItemTypeList,
-                    itemSpanByItemFactoryList
+                    orientation ?: RecyclerView.VERTICAL,
+                    fullSpanByPositionList,
+                    fullSpanByItemTypeList,
+                    fullSpanByItemFactoryList
                 )
             } else {
                 throw  IllegalArgumentException("Unable to create AssemblyStaggeredGridLayoutManager")
             }.apply {
-                val orientation1 = this@Builder.orientation
-                if (orientation1 != null) {
-                    this.orientation = orientation1
-                }
                 val reverseLayout1 = this@Builder.reverseLayout
                 if (reverseLayout1 != null) {
                     this.reverseLayout = reverseLayout1
@@ -352,37 +355,10 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
             }
         }
 
-        fun spanCount(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int): Builder {
-            this.attrs = attrs
-            this.defStyleAttr = defStyleAttr
-            this.defStyleRes = defStyleRes
-            return this
-        }
-
-        fun spanCount(spanCount: Int): Builder {
-            this.spanCount = spanCount
-            return this
-        }
-
-        fun orientation(orientation: Int): Builder {
-            this.orientation = orientation
-            return this
-        }
-
-        fun orientation(reverseLayout: Boolean): Builder {
-            this.reverseLayout = reverseLayout
-            return this
-        }
-
-        fun stackFromEnd(stackFromEnd: Boolean): Builder {
-            this.stackFromEnd = stackFromEnd
-            return this
-        }
-
-        fun itemSpanByPosition(vararg positions: Int): Builder {
-            itemSpanByPositionList ?: ArrayList<Int>().apply {
-                this@Builder.itemSpanByPositionList = this
-            }.apply {
+        fun fullSpanByPosition(vararg positions: Int): Builder {
+            (fullSpanByPositionList ?: ArrayList<Int>().apply {
+                this@Builder.fullSpanByPositionList = this
+            }).apply {
                 positions.forEach {
                     add(it)
                 }
@@ -390,10 +366,10 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
             return this
         }
 
-        fun itemSpanByItemType(vararg itemTypes: Int): Builder {
-            itemSpanByItemTypeList ?: ArrayList<Int>().apply {
-                this@Builder.itemSpanByItemTypeList = this
-            }.apply {
+        fun fullSpanByItemType(vararg itemTypes: Int): Builder {
+            (fullSpanByItemTypeList ?: ArrayList<Int>().apply {
+                this@Builder.fullSpanByItemTypeList = this
+            }).apply {
                 itemTypes.forEach {
                     add(it)
                 }
@@ -401,15 +377,14 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
             return this
         }
 
-        fun itemSpanByItemFactory(vararg itemFactoryArray: KClass<out ItemFactory<out Any>>): Builder {
-            itemSpanByItemFactoryList
-                ?: ArrayList<KClass<out ItemFactory<out Any>>>().apply {
-                    this@Builder.itemSpanByItemFactoryList = this
-                }.apply {
-                    itemFactoryArray.forEach {
-                        add(it)
-                    }
+        fun fullSpanByItemFactory(vararg itemFactoryArray: KClass<out ItemFactory<out Any>>): Builder {
+            (fullSpanByItemFactoryList ?: ArrayList<KClass<out ItemFactory<out Any>>>().apply {
+                this@Builder.fullSpanByItemFactoryList = this
+            }).apply {
+                itemFactoryArray.forEach {
+                    add(it)
                 }
+            }
             return this
         }
     }
@@ -420,56 +395,58 @@ fun Context.newAssemblyStaggeredGridLayoutManager(
     attrs: AttributeSet?,
     defStyleAttr: Int,
     defStyleRes: Int,
-    block: AssemblyStaggeredGridLayoutManager.Builder.() -> Unit
+    block: (AssemblyStaggeredGridLayoutManager.Builder.() -> Unit)? = null
 ): AssemblyStaggeredGridLayoutManager {
     return AssemblyStaggeredGridLayoutManager
-        .Builder(this, attrs, defStyleAttr, defStyleRes)
-        .apply(block)
-        .build()
+        .Builder(this, attrs, defStyleAttr, defStyleRes).apply {
+            block?.invoke(this)
+        }.build()
 }
 
 fun RecyclerView.newAssemblyStaggeredGridLayoutManager(
     attrs: AttributeSet?,
     defStyleAttr: Int,
     defStyleRes: Int,
-    block: AssemblyStaggeredGridLayoutManager.Builder.() -> Unit
+    block: (AssemblyStaggeredGridLayoutManager.Builder.() -> Unit)? = null
 ): AssemblyStaggeredGridLayoutManager {
     return AssemblyStaggeredGridLayoutManager
-        .Builder(context, attrs, defStyleAttr, defStyleRes)
-        .apply(block)
-        .build()
+        .Builder(context, attrs, defStyleAttr, defStyleRes).apply {
+            block?.invoke(this)
+        }.build()
 }
 
 fun RecyclerView.setupAssemblyStaggeredGridLayoutManager(
     attrs: AttributeSet?,
     defStyleAttr: Int,
     defStyleRes: Int,
-    block: AssemblyStaggeredGridLayoutManager.Builder.() -> Unit
+    block: (AssemblyStaggeredGridLayoutManager.Builder.() -> Unit)? = null
 ) {
     layoutManager = AssemblyStaggeredGridLayoutManager
-        .Builder(context, attrs, defStyleAttr, defStyleRes)
-        .apply(block)
-        .build()
+        .Builder(context, attrs, defStyleAttr, defStyleRes).apply {
+            block?.invoke(this)
+        }.build()
 }
 
 fun newAssemblyStaggeredGridLayoutManager(
     spanCount: Int,
     orientation: Int? = null,
-    block: AssemblyStaggeredGridLayoutManager.Builder.() -> Unit
+    reverseLayout: Boolean? = null,
+    block: (AssemblyStaggeredGridLayoutManager.Builder.() -> Unit)? = null
 ): AssemblyStaggeredGridLayoutManager {
     return AssemblyStaggeredGridLayoutManager
-        .Builder(spanCount, orientation)
-        .apply(block)
-        .build()
+        .Builder(spanCount, orientation, reverseLayout).apply {
+            block?.invoke(this)
+        }.build()
 }
 
 fun RecyclerView.setupAssemblyStaggeredGridLayoutManager(
     spanCount: Int,
     orientation: Int? = null,
-    block: AssemblyStaggeredGridLayoutManager.Builder.() -> Unit
+    reverseLayout: Boolean? = null,
+    block: (AssemblyStaggeredGridLayoutManager.Builder.() -> Unit)? = null
 ) {
     layoutManager = AssemblyStaggeredGridLayoutManager
-        .Builder(spanCount, orientation)
-        .apply(block)
-        .build()
+        .Builder(spanCount, orientation, reverseLayout).apply {
+            block?.invoke(this)
+        }.build()
 }

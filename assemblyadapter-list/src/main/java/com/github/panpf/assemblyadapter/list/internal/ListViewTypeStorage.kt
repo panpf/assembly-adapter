@@ -15,8 +15,8 @@
  */
 package com.github.panpf.assemblyadapter.list.internal
 
-import android.util.SparseArray
 import android.util.SparseIntArray
+import androidx.collection.SparseArrayCompat
 import com.github.panpf.assemblyadapter.list.ConcatListAdapter
 import java.util.*
 
@@ -43,7 +43,7 @@ internal interface ListViewTypeStorage {
     class SharedIdRangeViewTypeStorage : ListViewTypeStorage {
         // we keep a list of nested wrappers here even though we only need 1 to create because
         // they might be removed.
-        var mGlobalTypeToWrapper = SparseArray<MutableList<NestedListAdapterWrapper>>()
+        var mGlobalTypeToWrapper = SparseArrayCompat<MutableList<NestedListAdapterWrapper>>()
         override fun getWrapperForGlobalType(globalViewType: Int): NestedListAdapterWrapper {
             val nestedAdapterWrappers: List<NestedListAdapterWrapper>? =
                 mGlobalTypeToWrapper[globalViewType]
@@ -97,7 +97,7 @@ internal interface ListViewTypeStorage {
 
     class IsolatedViewTypeStorage : ListViewTypeStorage {
 
-        private var mGlobalTypeToWrapper = SparseArray<NestedListAdapterWrapper>()
+        private var mGlobalTypeToWrapper = SparseArrayCompat<NestedListAdapterWrapper>()
         private var mNextViewType = 0
 
         fun obtainViewType(wrapper: NestedListAdapterWrapper): Int {
