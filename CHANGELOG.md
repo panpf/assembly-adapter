@@ -1,27 +1,48 @@
-# new
+# v4.0.1-alpha01
 
-* fix: GridDividerItemDecoration and StaggeredGridDividerItemDecoration is divided evenly when the width of the item is the width of the parent container minus all dividers（`val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount`），because the offset of the first item is too large, the width of the first item will be forced to become smaller
-* new: All DividerItemDecoration adds the `disableDefaultDivider(Boolean)` method, which can disable the function of using the system default divider when no divider is specified
-* fix: Fix the bug that there will be white space on the edge of the item when there is only sideDivider in GridDividerItemDecoration
-* change: Now \*DividerItemDecoration useDividerAs\*Divider is true but an exception will be thrown when the corresponding divider is null
-* change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration will throw an exception when there is sideHeaderDivider or sideFooter but no sideDivider
-* change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer allow sideHeaderDivider or sideFooterDivider and sideDivider to have different sizes and insets
-* change: Now the personalized configuration of sideDivider, sideHeaderDivider, and sideFooterDivider of GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer allows different sizes and insets
-* new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize according to position
+divider: 
+
+* fix: GridDividerItemDecoration and StaggeredGridDividerItemDecoration is divided evenly when the
+  width of the item is the width of the parent container minus all
+  dividers（`val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount`），because the
+  offset of the first item is too large, the width of the first item will be forced to become
+  smaller
+* fix: Fix the bug that there will be white space on the edge of the item when there is only
+  sideDivider in GridDividerItemDecoration
+* change: Now \*DividerItemDecoration useDividerAs\*Divider is true but an exception will be thrown
+  when the corresponding divider is null
+* change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration will throw an
+  exception when there is sideHeaderDivider or sideFooter but no sideDivider
+* change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer allow
+  sideHeaderDivider or sideFooterDivider and sideDivider to have different sizes and insets
+* change: Now the personalized configuration of sideDivider, sideHeaderDivider, and
+  sideFooterDivider of GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer
+  allows different sizes and insets
+* new: All DividerItemDecoration adds the `disableDefaultDivider(Boolean)` method, which can disable
+  the function of using the system default divider when no divider is specified
 * new: Added Context.new\*DividerItemDecoration() series extension methods
-* new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize according to itemType
+
+LayoutManager: 
+
+* new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize
+  according to position
+* new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize
+  according to itemType
 
 # v4.0.1
 
-* fix: Fix the bug in Assembly\*DividerItemDecoration where position and spanIndex priority is lower than ItemFactory
+* fix: Fix the bug in Assembly\*DividerItemDecoration where position and spanIndex priority is lower
+  than ItemFactory
 
 # v4.0.0 Stable
 
-A new version, a new start, version 4.0 and version 3.0 are completely incompatible, but the two can coexist
+A new version, a new start, version 4.0 and version 3.0 are completely incompatible, but the two can
+coexist
 
 For how to use the new version, please refer to [README.md](README.md)
 
-4.0 The version adopts the new maven group, don’t worry about it will be automatically upgraded to version 4.0
+4.0 The version adopts the new maven group, don’t worry about it will be automatically upgraded to
+version 4.0
 
 # 4.0.0-rc05
 
@@ -154,7 +175,8 @@ all:
 
 # v4.0.0-beta01
 
-A new version, a new start, version 4.0 and version 3.0 are completely incompatible, but the two can coexist
+A new version, a new start, version 4.0 and version 3.0 are completely incompatible, but the two can
+coexist
 
 For how to use the new version, please refer to [README.md](README.md)
 
