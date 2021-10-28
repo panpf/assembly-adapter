@@ -151,6 +151,30 @@ class AssemblyStaggeredGridLayoutManagerTest {
         }
 
         AssemblyStaggeredGridLayoutManager(
+            spanCount = 3,
+            orientation = RecyclerView.HORIZONTAL,
+            fullSpanItemFactoryList = listOf(),
+        ).apply {
+            Assert.assertEquals(3, spanCount)
+            Assert.assertEquals(RecyclerView.HORIZONTAL, orientation)
+            Assert.assertNull(getFieldValue("fullSpanByPositionSparseArray"))
+            Assert.assertNull(getFieldValue("fullSpanByItemTypeSparseArray"))
+            Assert.assertNull(getFieldValue("fullSpanByItemFactoryMap"))
+        }
+        AssemblyStaggeredGridLayoutManager(
+            spanCount = 3,
+            orientation = RecyclerView.HORIZONTAL,
+            fullSpanItemFactoryList = listOf(TextItemFactory::class)
+        ).apply {
+            Assert.assertNull(getFieldValue("fullSpanByPositionSparseArray"))
+            Assert.assertNull(getFieldValue("fullSpanByItemTypeSparseArray"))
+            Assert.assertEquals(
+                "{${TextItemFactory::class.java}=true}",
+                getFieldValue<Map<Class<out ItemFactory<out Any>>, ItemSpan>>("fullSpanByItemFactoryMap").toString()
+            )
+        }
+
+        AssemblyStaggeredGridLayoutManager(
             spanCount = 4,
             fullSpanByItemPositionList = null,
             fullSpanByItemTypeList = null,

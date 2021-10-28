@@ -155,6 +155,35 @@ class AssemblyGridLayoutManagerTest {
 
         AssemblyGridLayoutManager(
             context = context,
+            spanCount = 3,
+            orientation = RecyclerView.HORIZONTAL,
+            reverseLayout = true,
+            gridLayoutItemSpanMap = mapOf()
+        ).apply {
+            Assert.assertEquals(3, spanCount)
+            Assert.assertEquals(RecyclerView.HORIZONTAL, orientation)
+            Assert.assertEquals(true, reverseLayout)
+            Assert.assertNull(getFieldValue("itemSpanByPositionSparseArray"))
+            Assert.assertNull(getFieldValue("itemSpanByItemTypeSparseArray"))
+            Assert.assertNull(getFieldValue("itemSpanByItemFactoryMap"))
+        }
+        AssemblyGridLayoutManager(
+            context = context,
+            spanCount = 3,
+            orientation = RecyclerView.HORIZONTAL,
+            reverseLayout = true,
+            gridLayoutItemSpanMap = mapOf(TextItemFactory::class to ItemSpan.span(3))
+        ).apply {
+            Assert.assertNull(getFieldValue("itemSpanByPositionSparseArray"))
+            Assert.assertNull(getFieldValue("itemSpanByItemTypeSparseArray"))
+            Assert.assertEquals(
+                "{${TextItemFactory::class.java}=ItemSpan(size=3)}",
+                getFieldValue<Map<Class<out ItemFactory<out Any>>, ItemSpan>>("itemSpanByItemFactoryMap").toString()
+            )
+        }
+
+        AssemblyGridLayoutManager(
+            context = context,
             spanCount = 4,
             itemSpanByPositionMap = null,
             itemSpanByItemTypeMap = null,
