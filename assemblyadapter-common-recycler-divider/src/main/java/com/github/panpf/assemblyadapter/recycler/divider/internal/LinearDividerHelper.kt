@@ -28,35 +28,38 @@ class LinearDividerHelper(
 
     private fun getItemDivider(
         params: LinearItemParams,
-        dividerType: ItemDivider.Type
-    ): ItemDivider? {
+        dividerType: DividerSide
+    ): ItemDividerWrapper? {
         return if (params.isVerticalOrientation) {
             when (dividerType) {
-                ItemDivider.Type.START -> sideHeaderDividerConfig
-                ItemDivider.Type.TOP -> if (params.isFirst) headerDividerConfig else null
-                ItemDivider.Type.END -> sideFooterDividerConfig
-                ItemDivider.Type.BOTTOM -> if (params.isLast) footerDividerConfig else dividerConfig
+                DividerSide.START -> sideHeaderDividerConfig
+                DividerSide.TOP -> if (params.isFirst) headerDividerConfig else null
+                DividerSide.END -> sideFooterDividerConfig
+                DividerSide.BOTTOM -> if (params.isLast) footerDividerConfig else dividerConfig
             }
         } else {
             when (dividerType) {
-                ItemDivider.Type.START -> if (params.isFirst) headerDividerConfig else null
-                ItemDivider.Type.TOP -> sideHeaderDividerConfig
-                ItemDivider.Type.END -> if (params.isLast) footerDividerConfig else dividerConfig
-                ItemDivider.Type.BOTTOM -> sideFooterDividerConfig
+                DividerSide.START -> if (params.isFirst) headerDividerConfig else null
+                DividerSide.TOP -> sideHeaderDividerConfig
+                DividerSide.END -> if (params.isLast) footerDividerConfig else dividerConfig
+                DividerSide.BOTTOM -> sideFooterDividerConfig
             }
         }?.get(params.parent, params.position, 0)
+            ?.let {
+                ItemDividerWrapper(it, dividerType)
+            }
     }
 
     fun getItemOffsets(outRect: Rect, params: LinearItemParams) {
-        val startType = if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-        val endType = if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
+        val startType = if (params.isLTRDirection) DividerSide.START else DividerSide.END
+        val endType = if (params.isLTRDirection) DividerSide.END else DividerSide.START
         val startItemDivider = getItemDivider(params, startType)
         val endItemDivider = getItemDivider(params, endType)
-        val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP)
-        val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM)
+        val topItemDivider = getItemDivider(params, DividerSide.TOP)
+        val bottomItemDivider = getItemDivider(params, DividerSide.BOTTOM)
         val startItemDividerSize = startItemDivider?.widthSize ?: 0
-        val topItemDividerSize = topItemDivider?.heightSize ?: 0
         val endItemDividerSize = endItemDivider?.widthSize ?: 0
+        val topItemDividerSize = topItemDivider?.heightSize ?: 0
         val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
         outRect.set(
             startItemDividerSize,
@@ -68,15 +71,15 @@ class LinearDividerHelper(
 
     fun drawItem(canvas: Canvas, params: LinearItemParams) {
         val view = params.view
-        val startType = if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-        val endType = if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
+        val startType = if (params.isLTRDirection) DividerSide.START else DividerSide.END
+        val endType = if (params.isLTRDirection) DividerSide.END else DividerSide.START
         val startItemDivider = getItemDivider(params, startType)
         val endItemDivider = getItemDivider(params, endType)
-        val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP)
-        val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM)
+        val topItemDivider = getItemDivider(params, DividerSide.TOP)
+        val bottomItemDivider = getItemDivider(params, DividerSide.BOTTOM)
         val startItemDividerSize = startItemDivider?.widthSize ?: 0
-        val topItemDividerSize = topItemDivider?.heightSize ?: 0
         val endItemDividerSize = endItemDivider?.widthSize ?: 0
+        val topItemDividerSize = topItemDivider?.heightSize ?: 0
         val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
 
         if (params.isVerticalOrientation) {
@@ -108,13 +111,27 @@ class LinearDividerHelper(
                 )
             }
             bottomItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.left + insetStart,
-                    view.bottom + insetTop,
-                    view.right - insetEnd,
-                    view.bottom + insetTop + drawableHeightSize
-                )
+                // todo support shortDivider
+//                val drawableWidthSize = drawableWidthSize
+//                val drawableHeightSize = drawableHeightSize
+//                if (drawableWidthSize > 0) {
+//                    val left = view.left + ((view.width - drawableWidthSize) / 2)
+//                    draw(
+//                        canvas,
+//                        left.coerceAtLeast(view.left + insetStart),
+//                        view.bottom + insetTop,
+//                        (left + drawableWidthSize).coerceAtMost(view.right - insetEnd),
+//                        view.bottom + insetTop + drawableHeightSize
+//                    )
+//                } else {
+                    draw(
+                        canvas,
+                        view.left + insetStart,
+                        view.bottom + insetTop,
+                        view.right - insetEnd,
+                        view.bottom + insetTop + drawableHeightSize
+                    )
+//                }
             }
         } else {
             startItemDivider?.apply {

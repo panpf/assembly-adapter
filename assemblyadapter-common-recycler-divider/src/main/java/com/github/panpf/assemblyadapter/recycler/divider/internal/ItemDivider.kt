@@ -19,19 +19,21 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.annotation.Px
 
-data class ItemDivider(
+data class ItemDivider constructor(
     val drawable: Drawable,
-    @Px private val size: Int,
+    private val size: DividerSize,
     @Px val insetStart: Int,
     @Px val insetTop: Int,
     @Px val insetEnd: Int,
     @Px val insetBottom: Int,
 ) {
     @Px
-    val drawableWidthSize: Int = if (size != -1) size else drawable.intrinsicWidth
+    fun getDrawableWidthSize(isStartOrEnd: Boolean): Int =
+        size.getWidth(isStartOrEnd)
 
     @Px
-    val drawableHeightSize: Int = if (size != -1) size else drawable.intrinsicHeight
+    fun getDrawableHeightSize(isStartOrEnd: Boolean): Int =
+        size.getHeight(isStartOrEnd)
 
     @Px
     val insetWidthSize: Int = insetStart + insetEnd
@@ -40,23 +42,18 @@ data class ItemDivider(
     val insetHeightSize: Int = insetTop + insetBottom
 
     @Px
-    val widthSize: Int = drawableWidthSize + insetWidthSize
+    fun getWidthSize(isStartOrEnd: Boolean): Int = getDrawableWidthSize(isStartOrEnd) + insetWidthSize
 
     @Px
-    val heightSize: Int = drawableHeightSize + insetHeightSize
+    fun getHeightSize(isStartOrEnd: Boolean): Int = getDrawableHeightSize(isStartOrEnd) + insetHeightSize
 
     fun draw(canvas: Canvas, left: Int, top: Int, right: Int, bottom: Int) {
         drawable.setBounds(left, top, right, bottom)
         drawable.draw(canvas)
     }
 
-    enum class Type {
-        START, TOP, END, BOTTOM
-    }
-
     fun compareSizeAndInsets(other: ItemDivider): Boolean {
-        return drawableWidthSize == other.drawableWidthSize
-                && drawableHeightSize == other.drawableHeightSize
+        return size == other.size
                 && insetStart == other.insetStart
                 && insetTop == other.insetTop
                 && insetEnd == other.insetEnd
