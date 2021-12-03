@@ -1,6 +1,6 @@
 # v4.0.1-alpha01
 
-divider: 
+divider:
 
 * fix: GridDividerItemDecoration and StaggeredGridDividerItemDecoration is divided evenly when the
   width of the item is the width of the parent container minus all
@@ -22,7 +22,7 @@ divider:
   the function of using the system default divider when no divider is specified
 * new: Added Context.new\*DividerItemDecoration() series extension methods
 
-LayoutManager: 
+LayoutManager:
 
 * new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize
   according to position

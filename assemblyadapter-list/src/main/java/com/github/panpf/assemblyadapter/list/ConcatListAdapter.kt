@@ -21,7 +21,7 @@ import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.list.ConcatListAdapter.Config
 import com.github.panpf.assemblyadapter.list.ConcatListAdapter.Config.StableIdMode
 import com.github.panpf.assemblyadapter.list.internal.ConcatListAdapterController
-import java.util.*
+import java.util.Collections
 
 /**
  * An [BaseAdapter] implementation that presents the contents of multiple adapters in sequence.

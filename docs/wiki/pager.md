@@ -45,13 +45,13 @@ AssemblyAdapter 提供了以下 Adapter 来支持 ViewPager2：
 * [AssemblySingleDataFragmentStateAdapter]：单数据实现
 * [ArrayFragmentStateAdapter]: Fragment 数组实现
 * [FragmentStateListAdapter]：AsyncListDiffer 实现
-  * [AssemblyFragmentStateListAdapter]：多类型 AsyncListDiffer 实现
-  * [AssemblySingleDataFragmentStateListAdapter]：单数据 AsyncListDiffer 实现
-  * [ArrayFragmentStateListAdapter]：Fragment 数组 AsyncListDiffer 实现
+    * [AssemblyFragmentStateListAdapter]：多类型 AsyncListDiffer 实现
+    * [AssemblySingleDataFragmentStateListAdapter]：单数据 AsyncListDiffer 实现
+    * [ArrayFragmentStateListAdapter]：Fragment 数组 AsyncListDiffer 实现
 * [PagingDataFragmentStateAdapter]：Paging 实现
-  * [AssemblyPagingDataFragmentStateAdapter]：多类型 Paging 实现
+    * [AssemblyPagingDataFragmentStateAdapter]：多类型 Paging 实现
 * [LoadStateFragmentStateAdapter]：LoadState 实现
-  * [AssemblyLoadStateFragmentStateAdapter]：多类型 LoadState 实现
+    * [AssemblyLoadStateFragmentStateAdapter]：多类型 LoadState 实现
 
 ### Paging 支持
 

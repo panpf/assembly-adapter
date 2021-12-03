@@ -20,18 +20,18 @@ import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
 class AssemblyGridDividerItemDecorationTest {
-    
+
     @Test
-    fun testConstructor(){
+    fun testConstructor() {
         val context = InstrumentationRegistry.getInstrumentation().context
 
         /*
@@ -45,14 +45,20 @@ class AssemblyGridDividerItemDecorationTest {
         assertThrow(IllegalArgumentException::class) {
             AssemblyGridDividerItemDecoration.Builder(context).apply {
                 sideDivider(Divider.space(5, Insets.allOf(2))) {
-                    personaliseByItemFactoryClass(ItemFactory::class, Divider.space(4, Insets.allOf(2)))
+                    personaliseByItemFactoryClass(
+                        ItemFactory::class,
+                        Divider.space(4, Insets.allOf(2))
+                    )
                 }
             }.build()
         }
         assertThrow(IllegalArgumentException::class) {
             AssemblyGridDividerItemDecoration.Builder(context).apply {
                 sideDivider(Divider.space(5, Insets.allOf(2))) {
-                    personaliseByItemFactoryClass(ItemFactory::class, Divider.space(5, Insets.allOf(3)))
+                    personaliseByItemFactoryClass(
+                        ItemFactory::class,
+                        Divider.space(5, Insets.allOf(3))
+                    )
                 }
             }.build()
         }
@@ -70,7 +76,10 @@ class AssemblyGridDividerItemDecorationTest {
             AssemblyGridDividerItemDecoration.Builder(context).apply {
                 sideDivider(Divider.space(5, Insets.allOf(2)))
                 sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
-                    personaliseByItemFactoryClass(ItemFactory::class, Divider.space(4, Insets.allOf(2)))
+                    personaliseByItemFactoryClass(
+                        ItemFactory::class,
+                        Divider.space(4, Insets.allOf(2))
+                    )
                 }
             }.build()
         }
@@ -78,7 +87,10 @@ class AssemblyGridDividerItemDecorationTest {
             AssemblyGridDividerItemDecoration.Builder(context).apply {
                 sideDivider(Divider.space(5, Insets.allOf(2)))
                 sideHeaderDivider(Divider.space(5, Insets.allOf(2))) {
-                    personaliseByItemFactoryClass(ItemFactory::class, Divider.space(5, Insets.allOf(3)))
+                    personaliseByItemFactoryClass(
+                        ItemFactory::class,
+                        Divider.space(5, Insets.allOf(3))
+                    )
                 }
             }.build()
         }
@@ -96,7 +108,10 @@ class AssemblyGridDividerItemDecorationTest {
             AssemblyGridDividerItemDecoration.Builder(context).apply {
                 sideDivider(Divider.space(5, Insets.allOf(2)))
                 sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
-                    personaliseByItemFactoryClass(ItemFactory::class, Divider.space(4, Insets.allOf(2)))
+                    personaliseByItemFactoryClass(
+                        ItemFactory::class,
+                        Divider.space(4, Insets.allOf(2))
+                    )
                 }
             }.build()
         }
@@ -104,7 +119,10 @@ class AssemblyGridDividerItemDecorationTest {
             AssemblyGridDividerItemDecoration.Builder(context).apply {
                 sideDivider(Divider.space(5, Insets.allOf(2)))
                 sideFooterDivider(Divider.space(5, Insets.allOf(2))) {
-                    personaliseByItemFactoryClass(ItemFactory::class, Divider.space(5, Insets.allOf(3)))
+                    personaliseByItemFactoryClass(
+                        ItemFactory::class,
+                        Divider.space(5, Insets.allOf(3))
+                    )
                 }
             }.build()
         }

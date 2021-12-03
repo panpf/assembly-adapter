@@ -19,15 +19,15 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
+import com.github.panpf.assemblyadapter.recycler.divider.AssemblyDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.AssemblyLinearDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
-import com.github.panpf.assemblyadapter.recycler.divider.AssemblyDividerConfig
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 
 class AssemblyLinearDividerItemDecorationTest {
-    
+
     @Test
     fun testBuilder() {
         val context = InstrumentationRegistry.getInstrumentation().context

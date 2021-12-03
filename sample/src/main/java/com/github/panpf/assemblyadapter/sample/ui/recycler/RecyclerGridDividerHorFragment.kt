@@ -29,16 +29,22 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.recycler.*
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.recycler.divider.newAssemblyGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.setupAssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.bean.GridDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppGridStrokeHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateHorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.AppListViewModel
 import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
 import com.github.panpf.assemblyadapter.sample.vm.GridDividerParamsViewModel
@@ -100,7 +106,10 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
             dividerParamsViewMode.dividerParamsData.observe(viewLifecycleOwner) { dividerParams ->
                 dividerParams ?: return@observe
 
-                setupAssemblyGridLayoutManager(dividerParams.getSpanCount(false), RecyclerView.HORIZONTAL) {
+                setupAssemblyGridLayoutManager(
+                    dividerParams.getSpanCount(false),
+                    RecyclerView.HORIZONTAL
+                ) {
                     itemSpanByPosition(dividerParams.spanSizeByPosition ?: emptyMap())
                     itemSpanByItemFactory(
                         AppsOverviewHorItemFactory::class to ItemSpan.fullSpan(),

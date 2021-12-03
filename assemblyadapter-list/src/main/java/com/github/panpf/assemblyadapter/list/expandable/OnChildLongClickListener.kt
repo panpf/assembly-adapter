@@ -39,7 +39,7 @@ fun interface OnChildLongClickListener<GROUP_DATA : ExpandableGroup, CHILD_DATA 
      */
     fun onLongClick(
         context: Context,
-        view: View,groupBindingAdapterPosition: Int,
+        view: View, groupBindingAdapterPosition: Int,
         groupAbsoluteAdapterPosition: Int,
         groupData: GROUP_DATA,
         isLastChild: Boolean,

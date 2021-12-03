@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
+import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class AssemblyPagingDataAdapterTest {

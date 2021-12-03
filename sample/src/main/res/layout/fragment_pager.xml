@@ -9,14 +9,14 @@
         android:id="@+id/pagerTabLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tabTextColor="#88FFFFFF"
-        app:tabSelectedTextColor="#FFFFFFFF"
-        app:tabIndicatorColor="#FFFFFFFF"
         android:background="@color/colorPrimary"
-        app:tabMode="scrollable"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabIndicatorColor="#FFFFFFFF"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="#FFFFFFFF"
+        app:tabTextColor="#88FFFFFF" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pagerPager"

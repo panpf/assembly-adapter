@@ -28,7 +28,7 @@ import com.github.panpf.assemblyadapter.recycler.SimpleAdapterDataObserver
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 class AssemblyRecyclerAdapterTest {
 

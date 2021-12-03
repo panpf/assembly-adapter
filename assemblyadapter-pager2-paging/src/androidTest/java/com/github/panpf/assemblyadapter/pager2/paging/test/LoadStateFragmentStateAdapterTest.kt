@@ -23,7 +23,6 @@ import androidx.paging.LoadState
 import com.github.panpf.assemblyadapter.pager2.paging.LoadStateFragmentStateAdapter
 import com.github.panpf.tools4a.test.ktx.getFragmentSync
 import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
-import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
 

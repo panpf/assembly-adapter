@@ -18,7 +18,7 @@ package com.github.panpf.assemblyadapter.internal
 import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.OnClickListener
 import com.github.panpf.assemblyadapter.OnLongClickListener
-import java.util.*
+import java.util.LinkedList
 
 class ClickListenerStorage<DATA> {
 

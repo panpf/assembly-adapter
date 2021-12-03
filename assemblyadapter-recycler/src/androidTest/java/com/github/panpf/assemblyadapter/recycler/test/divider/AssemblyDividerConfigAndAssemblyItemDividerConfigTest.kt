@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 class AssemblyDividerConfigAndAssemblyItemDividerConfigTest {
 

@@ -19,7 +19,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.ListSeparator
-import java.util.*
 
 class PinyinFlatAppsHelper(private val context: Context) {
 

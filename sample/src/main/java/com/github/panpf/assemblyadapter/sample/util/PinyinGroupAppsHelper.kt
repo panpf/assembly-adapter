@@ -19,7 +19,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
-import java.util.*
 
 class PinyinGroupAppsHelper(private val context: Context) {
 

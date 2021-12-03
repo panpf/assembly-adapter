@@ -24,7 +24,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.recycler.divider.internal.*
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerNoSideHelper
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerOnlySideHelper
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerSideAndFooterHelper
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerSideAndHeaderFooterHelper
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerSideAndHeaderHelper
+import com.github.panpf.assemblyadapter.recycler.divider.internal.GridItemParams
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 
 /**
  * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider

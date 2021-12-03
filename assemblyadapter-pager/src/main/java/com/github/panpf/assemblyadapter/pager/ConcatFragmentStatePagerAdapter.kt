@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAd
 import com.github.panpf.assemblyadapter.pager.internal.ConcatFragmentStatePagerAdapterController
 import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.refreshable.PagerAdapterRefreshHelper
-import java.util.*
+import java.util.Collections
 
 /**
  * An [GetItemDataFragmentStatePagerAdapter] implementation that presents the contents of multiple adapters in sequence.

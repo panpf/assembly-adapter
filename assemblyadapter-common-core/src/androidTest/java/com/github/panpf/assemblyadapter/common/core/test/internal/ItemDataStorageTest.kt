@@ -29,16 +29,16 @@ class ItemDataStorageTest {
          * test initDataList property
          */
         Assert.assertEquals(0, ItemDataStorage<Int> { _, _ -> }.dataCount)
-        Assert.assertEquals(0, ItemDataStorage<Int>(listOf()) {_, _, -> }.dataCount)
-        Assert.assertEquals(1, ItemDataStorage<Int>(listOf(10)) {_, _, -> }.dataCount)
-        Assert.assertEquals(3, ItemDataStorage<Int>(listOf(10, 7, 8)) {_, _, -> }.dataCount)
+        Assert.assertEquals(0, ItemDataStorage<Int>(listOf()) { _, _ -> }.dataCount)
+        Assert.assertEquals(1, ItemDataStorage<Int>(listOf(10)) { _, _ -> }.dataCount)
+        Assert.assertEquals(3, ItemDataStorage<Int>(listOf(10, 7, 8)) { _, _ -> }.dataCount)
 
         /*
          * test onDataListChanged property
          */
         var onDataListChangedResult = ""
         var itemDataStorage: ItemDataStorage<Int>? = null
-        val onDataListChanged: ((List<Int>, List<Int>) -> Unit) = { _, _, ->
+        val onDataListChanged: ((List<Int>, List<Int>) -> Unit) = { _, _ ->
             onDataListChangedResult = itemDataStorage!!.readOnlyList
                 .joinToString { it.toString() }
         }
@@ -54,7 +54,7 @@ class ItemDataStorageTest {
 
     @Test
     fun testPropertyReadOnlyList() {
-        val itemDataStorage = ItemDataStorage<Int> { _, _, -> }
+        val itemDataStorage = ItemDataStorage<Int> { _, _ -> }
         Assert.assertEquals(
             "",
             itemDataStorage.readOnlyList.joinToString { it.toString() }
@@ -77,7 +77,7 @@ class ItemDataStorageTest {
 
     @Test
     fun testPropertyDatCount() {
-        val itemDataStorage = ItemDataStorage<Int> { _, _, -> }
+        val itemDataStorage = ItemDataStorage<Int> { _, _ -> }
         Assert.assertEquals(0, itemDataStorage.dataCount)
 
         itemDataStorage.submitList(listOf(6, 3, 0))
@@ -89,7 +89,7 @@ class ItemDataStorageTest {
 
     @Test
     fun testMethodGetData() {
-        val itemDataStorage = ItemDataStorage<Int> { _, _, -> }
+        val itemDataStorage = ItemDataStorage<Int> { _, _ -> }
         assertThrow(IndexOutOfBoundsException::class) {
             itemDataStorage.getData(0)
         }
@@ -108,7 +108,7 @@ class ItemDataStorageTest {
 
     @Test
     fun testMethodSubmitList() {
-        val itemDataStorage = ItemDataStorage<Int> { _, _, -> }
+        val itemDataStorage = ItemDataStorage<Int> { _, _ -> }
         Assert.assertEquals(
             "",
             itemDataStorage.readOnlyList.joinToString { it.toString() }

@@ -15,7 +15,7 @@
  */
 package com.github.panpf.assemblyadapter.internal
 
-import java.util.*
+import java.util.Collections
 
 /**
  * Responsible for managing data sets

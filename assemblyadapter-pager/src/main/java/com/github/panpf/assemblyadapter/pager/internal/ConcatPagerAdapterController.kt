@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import com.github.panpf.assemblyadapter.pager.ConcatPagerAdapter
 import com.github.panpf.assemblyadapter.pager.R
 import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataPagerAdapter
-import java.util.*
+import java.util.ArrayList
 
 /**
  * All logic for the [ConcatPagerAdapter] is here so that we can clearly see a separation

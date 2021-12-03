@@ -29,10 +29,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.recycler.*
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
 import com.github.panpf.assemblyadapter.recycler.divider.newAssemblyGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.newAssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview

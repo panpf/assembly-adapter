@@ -19,7 +19,6 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
-import com.github.panpf.assemblyadapter.common.pager.test.R
 import com.github.panpf.assemblyadapter.pager.ViewFragmentItemFactory
 import org.junit.Assert
 import org.junit.Test

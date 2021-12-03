@@ -21,7 +21,7 @@ import android.widget.BaseExpandableListAdapter
 import com.github.panpf.assemblyadapter.list.expandable.ConcatExpandableListAdapter.Config
 import com.github.panpf.assemblyadapter.list.expandable.ConcatExpandableListAdapter.Config.StableIdMode
 import com.github.panpf.assemblyadapter.list.expandable.internal.ConcatExpandableListAdapterController
-import java.util.*
+import java.util.Collections
 
 /**
  * An [BaseExpandableListAdapter] implementation that presents the contents of multiple adapters in sequence.

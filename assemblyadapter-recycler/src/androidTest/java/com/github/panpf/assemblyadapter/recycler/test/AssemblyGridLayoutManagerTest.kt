@@ -23,7 +23,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.ViewItemFactory
-import com.github.panpf.assemblyadapter.recycler.*
+import com.github.panpf.assemblyadapter.recycler.AssemblyGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
+import com.github.panpf.assemblyadapter.recycler.ItemSpan
+import com.github.panpf.assemblyadapter.recycler.newAssemblyGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.setupAssemblyGridLayoutManager
 import com.github.panpf.tools4j.reflect.ktx.getFieldValue
 import com.github.panpf.tools4k.lang.asOrThrow
 import org.junit.Assert

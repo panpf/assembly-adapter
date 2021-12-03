@@ -19,7 +19,10 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
-import com.github.panpf.assemblyadapter.recycler.divider.*
+import com.github.panpf.assemblyadapter.recycler.divider.Divider
+import com.github.panpf.assemblyadapter.recycler.divider.DividerConfig
+import com.github.panpf.assemblyadapter.recycler.divider.Insets
+import com.github.panpf.assemblyadapter.recycler.divider.StaggeredGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 import com.github.panpf.tools4j.test.ktx.assertNoThrow
 import com.github.panpf.tools4j.test.ktx.assertThrow
@@ -43,7 +46,7 @@ class StaggeredGridDividerItemDecorationTest {
             sideDividerConfig = null,
             sideHeaderDividerConfig = null,
             sideFooterDividerConfig = null,
-            isFullSpanByPosition = {_, _ -> false}
+            isFullSpanByPosition = { _, _ -> false }
         )
 
         StaggeredGridDividerItemDecoration(
@@ -65,7 +68,7 @@ class StaggeredGridDividerItemDecorationTest {
             sideFooterDividerConfig = ItemDividerConfig(
                 Divider.space(2).toItemDivider(context), null, null, null, null
             ),
-            isFullSpanByPosition = {_, _ -> false}
+            isFullSpanByPosition = { _, _ -> false }
         )
 
         StaggeredGridDividerItemDecoration(
@@ -79,7 +82,7 @@ class StaggeredGridDividerItemDecorationTest {
                 Divider.space(2).toItemDivider(context), null, null, null, null
             ),
             sideFooterDividerConfig = null,
-            isFullSpanByPosition = {_, _ -> false}
+            isFullSpanByPosition = { _, _ -> false }
         )
         assertThrow(IllegalArgumentException::class) {
             StaggeredGridDividerItemDecoration(
@@ -91,7 +94,7 @@ class StaggeredGridDividerItemDecorationTest {
                     Divider.space(2).toItemDivider(context), null, null, null, null
                 ),
                 sideFooterDividerConfig = null,
-                isFullSpanByPosition = {_, _ -> false}
+                isFullSpanByPosition = { _, _ -> false }
             )
         }
 
@@ -106,7 +109,7 @@ class StaggeredGridDividerItemDecorationTest {
             sideFooterDividerConfig = ItemDividerConfig(
                 Divider.space(2).toItemDivider(context), null, null, null, null
             ),
-            isFullSpanByPosition = {_, _ -> false}
+            isFullSpanByPosition = { _, _ -> false }
         )
         assertThrow(IllegalArgumentException::class) {
             StaggeredGridDividerItemDecoration(
@@ -118,7 +121,7 @@ class StaggeredGridDividerItemDecorationTest {
                 sideFooterDividerConfig = ItemDividerConfig(
                     Divider.space(2).toItemDivider(context), null, null, null, null
                 ),
-                isFullSpanByPosition = {_, _ -> false}
+                isFullSpanByPosition = { _, _ -> false }
             )
         }
 
@@ -135,7 +138,7 @@ class StaggeredGridDividerItemDecorationTest {
             sideFooterDividerConfig = ItemDividerConfig(
                 Divider.space(2).toItemDivider(context), null, null, null, null
             ),
-            isFullSpanByPosition = {_, _ -> false}
+            isFullSpanByPosition = { _, _ -> false }
         )
         assertThrow(IllegalArgumentException::class) {
             StaggeredGridDividerItemDecoration(
@@ -149,7 +152,7 @@ class StaggeredGridDividerItemDecorationTest {
                 sideFooterDividerConfig = ItemDividerConfig(
                     Divider.space(2).toItemDivider(context), null, null, null, null
                 ),
-                isFullSpanByPosition = {_, _ -> false}
+                isFullSpanByPosition = { _, _ -> false }
             )
         }
 
@@ -168,7 +171,7 @@ class StaggeredGridDividerItemDecorationTest {
                     Divider.space(3).toItemDivider(context), null, null, null, null
                 ),
                 sideFooterDividerConfig = null,
-                isFullSpanByPosition = {_, _ -> false}
+                isFullSpanByPosition = { _, _ -> false }
             )
         }
         assertThrow(IllegalArgumentException::class) {
@@ -183,7 +186,7 @@ class StaggeredGridDividerItemDecorationTest {
                     Divider.space(2, Insets.allOf(3)).toItemDivider(context), null, null, null, null
                 ),
                 sideFooterDividerConfig = null,
-                isFullSpanByPosition = {_, _ -> false}
+                isFullSpanByPosition = { _, _ -> false }
             )
         }
 
@@ -202,7 +205,7 @@ class StaggeredGridDividerItemDecorationTest {
                 sideFooterDividerConfig = ItemDividerConfig(
                     Divider.space(3).toItemDivider(context), null, null, null, null
                 ),
-                isFullSpanByPosition = {_, _ -> false}
+                isFullSpanByPosition = { _, _ -> false }
             )
         }
         assertThrow(IllegalArgumentException::class) {
@@ -217,7 +220,7 @@ class StaggeredGridDividerItemDecorationTest {
                 sideFooterDividerConfig = ItemDividerConfig(
                     Divider.space(2, Insets.allOf(3)).toItemDivider(context), null, null, null, null
                 ),
-                isFullSpanByPosition = {_, _ -> false}
+                isFullSpanByPosition = { _, _ -> false }
             )
         }
 
@@ -424,7 +427,7 @@ class StaggeredGridDividerItemDecorationTest {
             Assert.assertNull(sideFooterDividerConfig)
         }
 
-        StaggeredGridDividerItemDecoration.Builder(context).apply{
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
             disableDefaultDivider()
         }.build().apply {
             Assert.assertNull(dividerConfig)
@@ -827,58 +830,58 @@ class StaggeredGridDividerItemDecorationTest {
             }.build()
         }
 
-            StaggeredGridDividerItemDecoration.Builder(context).apply {
-                sideDivider(Divider.space(10))
-                sideHeaderDivider(Divider.space(10))
-            }.build().apply {
-                Assert.assertNull(headerDividerConfig)
-                Assert.assertNull(footerDividerConfig)
-                Assert.assertNotNull(sideDividerConfig)
-                sideHeaderDividerConfig!!.apply {
-                    Assert.assertEquals(
-                        Color.TRANSPARENT,
-                        (get(parent, 0, 0)!!.drawable as ColorDrawable).color
-                    )
-                    Assert.assertNotNull(get(parent, 1, 0))
-                }
-                Assert.assertNull(sideFooterDividerConfig)
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
+            sideHeaderDivider(Divider.space(10))
+        }.build().apply {
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
+            sideHeaderDividerConfig!!.apply {
+                Assert.assertEquals(
+                    Color.TRANSPARENT,
+                    (get(parent, 0, 0)!!.drawable as ColorDrawable).color
+                )
+                Assert.assertNotNull(get(parent, 1, 0))
             }
+            Assert.assertNull(sideFooterDividerConfig)
+        }
 
-            StaggeredGridDividerItemDecoration.Builder(context).apply {
-                sideDivider(Divider.space(10))
-                sideHeaderDivider(Divider.space(10)) {
-                    disableByPosition(1)
-                }
-            }.build().apply {
-                Assert.assertNull(headerDividerConfig)
-                Assert.assertNull(footerDividerConfig)
-                Assert.assertNotNull(sideDividerConfig)
-                sideHeaderDividerConfig!!.apply {
-                    Assert.assertEquals(
-                        Color.TRANSPARENT,
-                        (get(parent, 0, 0)!!.drawable as ColorDrawable).color
-                    )
-                    Assert.assertNull(get(parent, 1, 0))
-                }
-                Assert.assertNull(sideFooterDividerConfig)
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
+            sideHeaderDivider(Divider.space(10)) {
+                disableByPosition(1)
             }
+        }.build().apply {
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
+            sideHeaderDividerConfig!!.apply {
+                Assert.assertEquals(
+                    Color.TRANSPARENT,
+                    (get(parent, 0, 0)!!.drawable as ColorDrawable).color
+                )
+                Assert.assertNull(get(parent, 1, 0))
+            }
+            Assert.assertNull(sideFooterDividerConfig)
+        }
 
-            StaggeredGridDividerItemDecoration.Builder(context).apply {
-                sideDivider(Divider.space(10))
-                sideHeaderDivider(DividerConfig.Builder(Divider.space(10)).build())
-            }.build().apply {
-                Assert.assertNull(footerDividerConfig)
-                Assert.assertNull(headerDividerConfig)
-                Assert.assertNotNull(sideDividerConfig)
-                sideHeaderDividerConfig!!.apply {
-                    Assert.assertEquals(
-                        Color.TRANSPARENT,
-                        (get(parent, 0, 0)!!.drawable as ColorDrawable).color
-                    )
-                    Assert.assertNotNull(get(parent, 1, 0))
-                }
-                Assert.assertNull(sideFooterDividerConfig)
+        StaggeredGridDividerItemDecoration.Builder(context).apply {
+            sideDivider(Divider.space(10))
+            sideHeaderDivider(DividerConfig.Builder(Divider.space(10)).build())
+        }.build().apply {
+            Assert.assertNull(footerDividerConfig)
+            Assert.assertNull(headerDividerConfig)
+            Assert.assertNotNull(sideDividerConfig)
+            sideHeaderDividerConfig!!.apply {
+                Assert.assertEquals(
+                    Color.TRANSPARENT,
+                    (get(parent, 0, 0)!!.drawable as ColorDrawable).color
+                )
+                Assert.assertNotNull(get(parent, 1, 0))
             }
+            Assert.assertNull(sideFooterDividerConfig)
+        }
 
         /**
          * side footer divider

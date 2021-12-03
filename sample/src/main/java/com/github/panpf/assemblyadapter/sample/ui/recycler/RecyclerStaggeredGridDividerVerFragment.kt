@@ -31,7 +31,9 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.recycler.AssemblyRecyclerAdapter
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapter
-import com.github.panpf.assemblyadapter.recycler.divider.*
+import com.github.panpf.assemblyadapter.recycler.divider.Divider
+import com.github.panpf.assemblyadapter.recycler.divider.Insets
+import com.github.panpf.assemblyadapter.recycler.divider.newAssemblyStaggeredGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.setupAssemblyStaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment

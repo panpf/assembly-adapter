@@ -41,7 +41,10 @@ import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.bean.GridDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerDividerHorBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppGridStrokeHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorHorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateHorItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.AppListViewModel
 import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
 import com.github.panpf.assemblyadapter.sample.vm.GridDividerParamsViewModel

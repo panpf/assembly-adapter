@@ -19,7 +19,7 @@ import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import com.github.panpf.assemblyadapter.pager.ConcatFragmentStatePagerAdapter
 import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataFragmentStatePagerAdapter
-import java.util.*
+import java.util.ArrayList
 
 /**
  * All logic for the [ConcatFragmentStatePagerAdapter] is here so that we can clearly see a separation

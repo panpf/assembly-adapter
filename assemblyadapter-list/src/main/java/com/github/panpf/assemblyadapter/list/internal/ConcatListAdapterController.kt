@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.github.panpf.assemblyadapter.list.ConcatListAdapter
 import com.github.panpf.assemblyadapter.list.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * All logic for the [ConcatListAdapter] is here so that we can clearly see a separation

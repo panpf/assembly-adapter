@@ -18,7 +18,7 @@ package com.github.panpf.assemblyadapter.list.internal
 import android.util.SparseIntArray
 import androidx.collection.SparseArrayCompat
 import com.github.panpf.assemblyadapter.list.ConcatListAdapter
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Used by [ConcatListAdapter] to isolate view types between nested adapters, if necessary.

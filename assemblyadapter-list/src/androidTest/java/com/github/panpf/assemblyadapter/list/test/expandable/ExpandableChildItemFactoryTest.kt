@@ -26,7 +26,11 @@ import com.github.panpf.assemblyadapter.OnLongClickListener
 import com.github.panpf.assemblyadapter.common.item.R
 import com.github.panpf.assemblyadapter.internal.ClickListenerWrapper
 import com.github.panpf.assemblyadapter.internal.LongClickListenerWrapper
-import com.github.panpf.assemblyadapter.list.expandable.*
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItem
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableChildItemFactory
+import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
+import com.github.panpf.assemblyadapter.list.expandable.OnChildClickListener
+import com.github.panpf.assemblyadapter.list.expandable.OnChildLongClickListener
 import com.github.panpf.assemblyadapter.list.expandable.internal.ChildClickListenerWrapper
 import com.github.panpf.assemblyadapter.list.expandable.internal.ChildLongClickListenerWrapper
 import com.github.panpf.tools4j.reflect.ktx.callMethod
@@ -127,13 +131,13 @@ class ExpandableChildItemFactoryTest {
             setOnChildItemClickListener { _, _, _, _, _, _, _, _, _ ->
 
             }
-            setOnChildItemLongClickListener{ _, _, _, _, _, _, _, _, _ ->
+            setOnChildItemLongClickListener { _, _, _, _, _, _, _, _, _ ->
                 false
             }
-            setOnChildViewClickListener(R.id.aa_tag_clickBindItem){ _, _, _, _, _, _, _, _, _ ->
+            setOnChildViewClickListener(R.id.aa_tag_clickBindItem) { _, _, _, _, _, _, _, _, _ ->
 
             }
-            setOnChildViewLongClickListener(R.id.aa_tag_clickBindItem){ _, _, _, _, _, _, _, _, _ ->
+            setOnChildViewLongClickListener(R.id.aa_tag_clickBindItem) { _, _, _, _, _, _, _, _, _ ->
                 false
             }
             val item = dispatchCreateItem(FrameLayout(context))

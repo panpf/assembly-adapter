@@ -61,12 +61,16 @@ class GridDividerOnlySideHelper(
     override fun getItemOffsets(outRect: Rect, params: GridItemParams, fromStaggered: Boolean) {
         when {
             params.isFullSpan -> {
-                val startType = if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-                val endType = if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
+                val startType =
+                    if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
+                val endType =
+                    if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
                 val startItemDivider = getItemDivider(params, startType, true, fromStaggered)
                 val endItemDivider = getItemDivider(params, endType, true, fromStaggered)
-                val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
-                val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
+                val topItemDivider =
+                    getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
+                val bottomItemDivider =
+                    getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
                 val left = startItemDivider?.widthSize ?: 0
                 val right = endItemDivider?.widthSize ?: 0
                 val top = topItemDivider?.heightSize ?: 0
@@ -89,15 +93,19 @@ class GridDividerOnlySideHelper(
 //                val right = floor(sideDividerSize - ((columnEnd + 1) * multiplier)).toInt()
                 val left = (columnStart * multiplier).toInt()
                 val right = (sideDividerSize - ((columnEnd + 1) * multiplier)).toInt()
-                val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
-                val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
+                val topItemDivider =
+                    getItemDivider(params, ItemDivider.Type.TOP, true, fromStaggered)
+                val bottomItemDivider =
+                    getItemDivider(params, ItemDivider.Type.BOTTOM, true, fromStaggered)
                 val top = topItemDivider?.heightSize ?: 0
                 val bottom = bottomItemDivider?.heightSize ?: 0
                 outRect.set(left, top, right, bottom)
             }
             else -> {
-                val startType = if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
-                val endType = if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
+                val startType =
+                    if (params.isLTRDirection) ItemDivider.Type.START else ItemDivider.Type.END
+                val endType =
+                    if (params.isLTRDirection) ItemDivider.Type.END else ItemDivider.Type.START
                 val startItemDivider = getItemDivider(params, startType, true, fromStaggered)
                 val endItemDivider = getItemDivider(params, endType, true, fromStaggered)
                 val left = startItemDivider?.heightSize ?: 0

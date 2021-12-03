@@ -18,7 +18,11 @@ package com.github.panpf.assemblyadapter.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.github.panpf.assemblyadapter.*
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.ItemId
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupportByPosition

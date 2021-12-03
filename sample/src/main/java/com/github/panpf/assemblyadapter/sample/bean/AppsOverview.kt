@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.recycler.DiffKey
 import com.github.promeg.pinyinhelper.Pinyin
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.Locale
 
 @Parcelize
 data class AppsOverview(val count: Int, val userAppCount: Int, val groupCount: Int) :

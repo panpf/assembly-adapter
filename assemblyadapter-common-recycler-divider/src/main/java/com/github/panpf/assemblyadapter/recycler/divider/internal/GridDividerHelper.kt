@@ -36,7 +36,8 @@ abstract class GridDividerHelper {
         val startItemDivider = getItemDivider(params, startType, false, fromStaggered)
         val endItemDivider = getItemDivider(params, endType, false, fromStaggered)
         val topItemDivider = getItemDivider(params, ItemDivider.Type.TOP, false, fromStaggered)
-        val bottomItemDivider = getItemDivider(params, ItemDivider.Type.BOTTOM, false, fromStaggered)
+        val bottomItemDivider =
+            getItemDivider(params, ItemDivider.Type.BOTTOM, false, fromStaggered)
         val startItemDividerSize = startItemDivider?.widthSize ?: 0
         val endItemDividerSize = endItemDivider?.widthSize ?: 0
         val topItemDividerSize = topItemDivider?.heightSize ?: 0

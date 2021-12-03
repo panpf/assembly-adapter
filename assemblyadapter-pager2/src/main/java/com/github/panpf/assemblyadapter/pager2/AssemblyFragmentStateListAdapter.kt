@@ -219,7 +219,9 @@ open class AssemblyFragmentStateListAdapter<DATA> : FragmentStateListAdapter<DAT
     }
 
     override fun getItemFactoryByData(data: DATA): FragmentItemFactory<Any> {
-        return itemFactoryStorage.getItemFactoryByData(data ?: Placeholder) as FragmentItemFactory<Any>
+        return itemFactoryStorage.getItemFactoryByData(
+            data ?: Placeholder
+        ) as FragmentItemFactory<Any>
     }
 
     override fun <T : FragmentItemFactory<out Any>> getItemFactoryByClass(itemFactoryClass: Class<T>): T {

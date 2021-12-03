@@ -26,7 +26,7 @@ import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItem
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 class ConcatFindItemFactoryClassSupportTest {
     private data class Text(val text: String)

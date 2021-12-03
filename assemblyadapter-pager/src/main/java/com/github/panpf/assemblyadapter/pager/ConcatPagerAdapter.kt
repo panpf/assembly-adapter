@@ -22,7 +22,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.github.panpf.assemblyadapter.pager.internal.ConcatPagerAdapterController
 import com.github.panpf.assemblyadapter.pager.refreshable.GetItemDataPagerAdapter
 import com.github.panpf.assemblyadapter.pager.refreshable.PagerAdapterRefreshHelper
-import java.util.*
+import java.util.Collections
 
 /**
  * An [GetItemDataPagerAdapter] implementation that presents the contents of multiple adapters in sequence.

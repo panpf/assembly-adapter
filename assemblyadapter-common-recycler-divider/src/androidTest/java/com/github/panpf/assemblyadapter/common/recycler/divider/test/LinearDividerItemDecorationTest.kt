@@ -47,7 +47,7 @@ class LinearDividerItemDecorationTest {
             Assert.assertNull(sideFooterDividerConfig)
         }
 
-        LinearDividerItemDecoration.Builder(context).apply{
+        LinearDividerItemDecoration.Builder(context).apply {
             disableDefaultDivider()
         }.build().apply {
             Assert.assertNull(dividerConfig)

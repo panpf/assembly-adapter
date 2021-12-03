@@ -31,7 +31,11 @@ import com.github.panpf.assemblyadapter.sample.bean.AppGroup
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.AppsOverview
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentExpandableListBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppChildItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppGroupItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppGroupPlaceholderItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.PinyinGroupAppsViewModel
 
 class ExpandableListPlaceholderFragment : ToolbarFragment<FragmentExpandableListBinding>() {

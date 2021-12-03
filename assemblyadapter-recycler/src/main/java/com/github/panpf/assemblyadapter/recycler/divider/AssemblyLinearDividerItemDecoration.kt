@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDividerConfig
 
 /**
  * [LinearLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、header and footer side divider

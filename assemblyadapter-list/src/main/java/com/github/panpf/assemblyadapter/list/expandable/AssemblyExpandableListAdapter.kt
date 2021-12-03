@@ -19,7 +19,12 @@ import android.database.DataSetObserver
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import com.github.panpf.assemblyadapter.*
+import com.github.panpf.assemblyadapter.AssemblyAdapter
+import com.github.panpf.assemblyadapter.Item
+import com.github.panpf.assemblyadapter.ItemFactory
+import com.github.panpf.assemblyadapter.ItemId
+import com.github.panpf.assemblyadapter.NotFoundMatchedItemFactoryException
+import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.list.R
@@ -39,7 +44,7 @@ import com.github.panpf.assemblyadapter.list.internal.AdapterDataObservable
  * @see ExpandableGroupItemFactory
  * @see ExpandableChildItemFactory
  */
-open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA: Any>(
+open class AssemblyExpandableListAdapter<GROUP_DATA, CHILD_DATA : Any>(
     itemFactoryList: List<ItemFactory<out Any>>,
     initDataList: List<GROUP_DATA>? = null,
 ) : BaseExpandableListAdapter(), AssemblyAdapter<GROUP_DATA, ItemFactory<out Any>> {

@@ -25,7 +25,7 @@ import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.internal.AbsoluteAdapterPositionAdapter
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshableFragmentStatePagerAdapter
-import java.util.*
+import java.util.Collections
 
 /**
  * An implementation of [FragmentStatePagerAdapter], which implements multi-type adapters through standardized [FragmentItemFactory].

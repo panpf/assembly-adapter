@@ -16,7 +16,11 @@
 package com.github.panpf.assemblyadapter.recycler
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory

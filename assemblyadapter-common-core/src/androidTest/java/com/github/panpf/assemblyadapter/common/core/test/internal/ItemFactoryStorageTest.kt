@@ -23,7 +23,7 @@ import com.github.panpf.tools4j.test.ktx.assertNoThrow
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
+import java.util.Date
 import kotlin.reflect.KClass
 
 class ItemFactoryStorageTest {

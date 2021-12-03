@@ -24,7 +24,7 @@ import com.github.promeg.pinyinhelper.Pinyin
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.io.File
-import java.util.*
+import java.util.Locale
 
 @Parcelize
 data class AppInfo constructor(

@@ -30,7 +30,11 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerListAdapter
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.item.*
+import com.github.panpf.assemblyadapter.sample.item.AppItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppPlaceholderItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
+import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
+import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
 import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppListViewModel
 

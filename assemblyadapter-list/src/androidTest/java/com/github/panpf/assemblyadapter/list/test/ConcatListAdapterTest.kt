@@ -15,7 +15,11 @@
  */
 package com.github.panpf.assemblyadapter.list.test
 
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.ListView
+import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.panpf.assemblyadapter.Item

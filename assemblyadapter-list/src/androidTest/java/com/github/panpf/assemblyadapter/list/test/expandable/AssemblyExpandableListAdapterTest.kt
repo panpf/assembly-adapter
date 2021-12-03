@@ -30,7 +30,7 @@ import com.github.panpf.assemblyadapter.list.expandable.ViewExpandableGroupItemF
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 class AssemblyExpandableListAdapterTest {
 
@@ -448,7 +448,7 @@ class AssemblyExpandableListAdapterTest {
         val imageGroupItemFactory = ImageGroupItemFactory()
         val textItemFactory = TextItemFactory()
         val imageItemFactory = ImageItemFactory()
-        
+
         AssemblyExpandableListAdapter<Any, Any>(
             listOf(textGroupItemFactory, textItemFactory, imageGroupItemFactory, imageItemFactory)
         ).apply {

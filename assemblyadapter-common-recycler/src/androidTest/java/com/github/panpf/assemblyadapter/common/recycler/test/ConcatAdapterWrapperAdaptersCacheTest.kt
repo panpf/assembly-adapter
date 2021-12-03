@@ -95,7 +95,7 @@ class ConcatAdapterWrapperAdaptersCacheTest {
             parent: ViewGroup,
             viewType: Int
         ): RecyclerView.ViewHolder {
-            return object: RecyclerView.ViewHolder(TextView(parent.context)){}
+            return object : RecyclerView.ViewHolder(TextView(parent.context)) {}
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

@@ -17,7 +17,16 @@ package com.github.panpf.assemblyadapter.common.recycler.divider.test
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
-import com.github.panpf.assemblyadapter.recycler.divider.*
+import com.github.panpf.assemblyadapter.recycler.divider.Divider
+import com.github.panpf.assemblyadapter.recycler.divider.GridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.LinearDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.StaggeredGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.addGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.addLinearDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.addStaggeredGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.newGridDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.newLinearDividerItemDecoration
+import com.github.panpf.assemblyadapter.recycler.divider.newStaggeredGridDividerItemDecoration
 import org.junit.Assert
 import org.junit.Test
 

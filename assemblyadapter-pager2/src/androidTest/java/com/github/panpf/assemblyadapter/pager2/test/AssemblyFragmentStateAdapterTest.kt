@@ -26,7 +26,7 @@ import com.github.panpf.tools4a.test.ktx.launchFragmentInContainer
 import com.github.panpf.tools4j.test.ktx.assertThrow
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 class AssemblyFragmentStateAdapterTest {
 
@@ -56,7 +56,8 @@ class AssemblyFragmentStateAdapterTest {
 
     class TestFragment : Fragment()
 
-    class PlaceholderFragmentItemFactory : ViewFragmentItemFactory<Placeholder>(Placeholder::class, android.R.layout.test_list_item)
+    class PlaceholderFragmentItemFactory :
+        ViewFragmentItemFactory<Placeholder>(Placeholder::class, android.R.layout.test_list_item)
 
     @Test
     fun testConstructor() {
@@ -288,7 +289,10 @@ class AssemblyFragmentStateAdapterTest {
         val imageItemFactory = ImageFragmentItemFactory()
         val placeholderItemFactory = PlaceholderFragmentItemFactory()
 
-        AssemblyFragmentStateAdapter<Any>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
+        AssemblyFragmentStateAdapter<Any>(
+            fragment,
+            listOf(textItemFactory, imageItemFactory)
+        ).apply {
             Assert.assertSame(
                 imageItemFactory,
                 getItemFactoryByData(Image(android.R.drawable.alert_dark_frame))
@@ -299,7 +303,10 @@ class AssemblyFragmentStateAdapterTest {
             }
         }
 
-        AssemblyFragmentStateAdapter<Any?>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
+        AssemblyFragmentStateAdapter<Any?>(
+            fragment,
+            listOf(textItemFactory, imageItemFactory)
+        ).apply {
             assertThrow(NotFoundMatchedItemFactoryException::class) {
                 getItemFactoryByData(null)
             }
@@ -324,7 +331,10 @@ class AssemblyFragmentStateAdapterTest {
         val imageItemFactory = ImageFragmentItemFactory()
         val placeholderItemFactory = PlaceholderFragmentItemFactory()
 
-        AssemblyFragmentStateAdapter<Any>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
+        AssemblyFragmentStateAdapter<Any>(
+            fragment,
+            listOf(textItemFactory, imageItemFactory)
+        ).apply {
             Assert.assertSame(
                 imageItemFactory,
                 getItemFactoryByClass(ImageFragmentItemFactory::class.java)

@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
+import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class AssemblyPagingDataFragmentStateAdapterTest {
@@ -411,7 +411,10 @@ class AssemblyPagingDataFragmentStateAdapterTest {
         val textItemFactory = TextFragmentItemFactory()
         val imageItemFactory = ImageFragmentItemFactory()
 
-        AssemblyPagingDataFragmentStateAdapter<Any>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
+        AssemblyPagingDataFragmentStateAdapter<Any>(
+            fragment,
+            listOf(textItemFactory, imageItemFactory)
+        ).apply {
             Assert.assertSame(
                 imageItemFactory,
                 getItemFactoryByData(Image(android.R.drawable.alert_dark_frame))
@@ -430,7 +433,10 @@ class AssemblyPagingDataFragmentStateAdapterTest {
         val textItemFactory = TextFragmentItemFactory()
         val imageItemFactory = ImageFragmentItemFactory()
 
-        AssemblyPagingDataFragmentStateAdapter<Any>(fragment, listOf(textItemFactory, imageItemFactory)).apply {
+        AssemblyPagingDataFragmentStateAdapter<Any>(
+            fragment,
+            listOf(textItemFactory, imageItemFactory)
+        ).apply {
             Assert.assertSame(
                 imageItemFactory,
                 getItemFactoryByClass(ImageFragmentItemFactory::class.java)

@@ -18,7 +18,7 @@ package com.github.panpf.assemblyadapter.list.expandable.internal
 import android.util.SparseIntArray
 import androidx.collection.SparseArrayCompat
 import com.github.panpf.assemblyadapter.list.expandable.ConcatExpandableListAdapter
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Used by [ConcatExpandableListAdapter] to isolate view types between nested adapters, if necessary.
@@ -41,7 +41,9 @@ internal interface ExpandableListViewTypeStorage {
     class SharedIdRangeViewTypeStorage : ExpandableListViewTypeStorage {
         // we keep a list of nested wrappers here even though we only need 1 to create because
         // they might be removed.
-        var mGlobalTypeToWrapper = SparseArrayCompat<MutableList<NestedExpandableListAdapterWrapper>>()
+        var mGlobalTypeToWrapper =
+            SparseArrayCompat<MutableList<NestedExpandableListAdapterWrapper>>()
+
         override fun getWrapperForGlobalType(globalViewType: Int): NestedExpandableListAdapterWrapper {
             val nestedExpandableAdapterWrappers: List<NestedExpandableListAdapterWrapper>? =
                 mGlobalTypeToWrapper[globalViewType]

@@ -23,7 +23,7 @@ import com.github.panpf.assemblyadapter.Placeholder
 import com.github.panpf.assemblyadapter.internal.ItemDataStorage
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
 import com.github.panpf.assemblyadapter.pager.refreshable.RefreshablePagerAdapter
-import java.util.*
+import java.util.Collections
 
 /**
  * An implementation of [PagerAdapter], which implements multi-type adapters through standardized [PagerItemFactory].

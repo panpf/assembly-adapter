@@ -19,7 +19,7 @@ import androidx.annotation.IdRes
 import com.github.panpf.assemblyadapter.list.expandable.ExpandableGroup
 import com.github.panpf.assemblyadapter.list.expandable.OnChildClickListener
 import com.github.panpf.assemblyadapter.list.expandable.OnChildLongClickListener
-import java.util.*
+import java.util.LinkedList
 
 class ChildClickListenerStorage<GROUP_DATA : ExpandableGroup, CHILD_DATA : Any> {
 

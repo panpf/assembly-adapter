@@ -18,7 +18,6 @@ package com.github.panpf.assemblyadapter.sample.util
 import android.content.Context
 import android.content.pm.PackageManager
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
-import java.util.*
 
 class AppListHelper(private val context: Context) {
 

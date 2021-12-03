@@ -164,6 +164,7 @@ ViewItemFactory<String>(String::class) { context, inflater, parent ->
 默认的只要给定 data 是 dataClass 的实例就会认为是匹配的，可有时候我们需要根据 data 的某些属性来判定是否匹配，这时候可以重写 exactMatchData 方法来实现精确匹配
 
 如下我们根据 apk 大小是否大于 1GB 来分为大 App 和小 App：
+
 ```kotlin
 class BigAppInfoBindingItemFactory : BindingItemFactory<AppInfo, ItemAppInfoBinding>(AppInfo::class) {
 
@@ -235,10 +236,10 @@ ViewItemFactory<String>(String::class, android.R.layout.activity_list_item).appl
 }
 ```
 
-
 ### 保存变量到 Item 中
 
 有时候需要为每个 Item 定义单独的变量，当直接继承 [ItemFactory] 并实现自定义 Item 时这个需求很好实现，将变量定义在 Item 中即可，如下：
+
 ```kotlin
 class TestItemFactory : ItemFactory<String>(String::class) {
 
@@ -261,9 +262,11 @@ class TestItemFactory : ItemFactory<String>(String::class) {
 }
 ```
 
-但使用 BindingItemFactory 或 SimpleItemFactory 的时候不需要定义 Item 了，createNanoTimeString 就没有地方可以存放了，放在 ItemFactory 中的话所有 Item 就都使用同一个 createNanoTimeString 了，这样显然不可以
+但使用 BindingItemFactory 或 SimpleItemFactory 的时候不需要定义 Item 了，createNanoTimeString 就没有地方可以存放了，放在
+ItemFactory 中的话所有 Item 就都使用同一个 createNanoTimeString 了，这样显然不可以
 
 于是 BindingItem 和 SimpleItem 专门提供了 putExtra(String, Any?) 和 getExtra(String) 方法用来解决此问题，如下所示：
+
 ```kotlin
 class TestSimpleItemFactory : SimpleItemFactory<String>(String::class) {
 
