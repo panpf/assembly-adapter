@@ -314,7 +314,7 @@ class RecyclerLinearDividerVerFragment :
                 }
 
                 add(
-                    2, 9, 9,
+                    3, 9, 9,
                     if (dividerParams.isShowListSeparator)
                         "Hide List Separator" else "Show List Separator"
                 ).apply {

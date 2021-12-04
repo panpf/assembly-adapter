@@ -82,16 +82,16 @@ class GridDividerSideAndHeaderFooterHelper(
                     getItemDivider(params, DividerSide.TOP, true, fromStaggered)
                 val bottomItemDivider =
                     getItemDivider(params, DividerSide.BOTTOM, true, fromStaggered)
-                val left = startItemDivider?.widthSize ?: 0
-                val right = endItemDivider?.widthSize ?: 0
-                val top = topItemDivider?.heightSize ?: 0
-                val bottom = bottomItemDivider?.heightSize ?: 0
+                val left = startItemDivider?.width ?: 0
+                val right = endItemDivider?.width ?: 0
+                val top = topItemDivider?.height ?: 0
+                val bottom = bottomItemDivider?.height ?: 0
                 outRect.set(left, top, right, bottom)
             }
             params.isVerticalOrientation -> {
                 val sideDivider =
                     sideDividerConfig.get(params.parent, params.position, params.spanIndex)!!
-                val sideDividerSize = sideDivider.getWidthSize(true)
+                val sideDividerSize = sideDivider.getWidth(true)
                 val multiplier = sideDividerSize / params.spanCount.toFloat()
                 val columnStart = if (params.spanSize > 1) {
                     params.spanIndex
@@ -118,8 +118,8 @@ class GridDividerSideAndHeaderFooterHelper(
                     getItemDivider(params, DividerSide.TOP, true, fromStaggered)
                 val bottomItemDivider =
                     getItemDivider(params, DividerSide.BOTTOM, true, fromStaggered)
-                val top = topItemDivider?.heightSize ?: 0
-                val bottom = bottomItemDivider?.heightSize ?: 0
+                val top = topItemDivider?.height ?: 0
+                val bottom = bottomItemDivider?.height ?: 0
                 outRect.set(left, top, right, bottom)
             }
             else -> {
@@ -129,11 +129,11 @@ class GridDividerSideAndHeaderFooterHelper(
                     if (params.isLTRDirection) DividerSide.END else DividerSide.START
                 val startItemDivider = getItemDivider(params, startType, true, fromStaggered)
                 val endItemDivider = getItemDivider(params, endType, true, fromStaggered)
-                val left = startItemDivider?.widthSize ?: 0
-                val right = endItemDivider?.widthSize ?: 0
+                val left = startItemDivider?.width ?: 0
+                val right = endItemDivider?.width ?: 0
                 val sideDivider =
                     sideDividerConfig.get(params.parent, params.position, params.spanIndex)!!
-                val sideDividerSize = sideDivider.getHeightSize(false)
+                val sideDividerSize = sideDivider.getHeight(false)
                 val multiplier = sideDividerSize / params.spanCount.toFloat()
                 val columnStart = if (params.spanSize > 1) {
                     params.spanIndex

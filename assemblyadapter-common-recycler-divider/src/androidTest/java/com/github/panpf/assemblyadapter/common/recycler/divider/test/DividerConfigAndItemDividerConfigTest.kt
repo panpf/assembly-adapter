@@ -37,17 +37,17 @@ class DividerConfigAndItemDividerConfigTest {
             personaliseByPosition(7, Divider.space(7))
             personaliseBySpanIndex(3, Divider.space(3))
         }.build().toItemDividerConfig(context).apply {
-            Assert.assertEquals(0, get(recyclerView, position = 0, spanIndex = 0)?.widthSize ?: 0)
-            Assert.assertEquals(0, get(recyclerView, position = 1, spanIndex = 1)?.widthSize ?: 0)
-            Assert.assertEquals(10, get(recyclerView, position = 2, spanIndex = 2)?.widthSize ?: 0)
-            Assert.assertEquals(3, get(recyclerView, position = 3, spanIndex = 3)?.widthSize ?: 0)
-            Assert.assertEquals(10, get(recyclerView, position = 4, spanIndex = 4)?.widthSize ?: 0)
+            Assert.assertEquals(0, get(recyclerView, position = 0, spanIndex = 0)?.getWidth(true) ?: 0)
+            Assert.assertEquals(0, get(recyclerView, position = 1, spanIndex = 1)?.getWidth(true) ?: 0)
+            Assert.assertEquals(10, get(recyclerView, position = 2, spanIndex = 2)?.getWidth(true) ?: 0)
+            Assert.assertEquals(3, get(recyclerView, position = 3, spanIndex = 3)?.getWidth(true) ?: 0)
+            Assert.assertEquals(10, get(recyclerView, position = 4, spanIndex = 4)?.getWidth(true) ?: 0)
 
-            Assert.assertEquals(0, get(recyclerView, position = 5, spanIndex = 0)?.widthSize ?: 0)
-            Assert.assertEquals(0, get(recyclerView, position = 6, spanIndex = 1)?.widthSize ?: 0)
-            Assert.assertEquals(7, get(recyclerView, position = 7, spanIndex = 2)?.widthSize ?: 0)
-            Assert.assertEquals(3, get(recyclerView, position = 8, spanIndex = 3)?.widthSize ?: 0)
-            Assert.assertEquals(10, get(recyclerView, position = 9, spanIndex = 4)?.widthSize ?: 0)
+            Assert.assertEquals(0, get(recyclerView, position = 5, spanIndex = 0)?.getWidth(true) ?: 0)
+            Assert.assertEquals(0, get(recyclerView, position = 6, spanIndex = 1)?.getWidth(true) ?: 0)
+            Assert.assertEquals(7, get(recyclerView, position = 7, spanIndex = 2)?.getWidth(true) ?: 0)
+            Assert.assertEquals(3, get(recyclerView, position = 8, spanIndex = 3)?.getWidth(true) ?: 0)
+            Assert.assertEquals(10, get(recyclerView, position = 9, spanIndex = 4)?.getWidth(true) ?: 0)
         }
     }
 }

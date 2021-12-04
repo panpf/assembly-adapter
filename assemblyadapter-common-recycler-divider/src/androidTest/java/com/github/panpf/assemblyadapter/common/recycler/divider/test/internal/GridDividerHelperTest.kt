@@ -98,45 +98,43 @@ class GridDividerHelperTest {
             outRect
         }
 
-        // todo Fix test errors
-
-        Assert.assertEquals("Rect(25, 10 - 20, 5)", getItemOffsets(0).toString())
-        Assert.assertEquals("Rect(0, 10 - 30, 5)", getItemOffsets(1).toString())
-        Assert.assertEquals("Rect(25, 0 - 30, 5)", getItemOffsets(2).toString())
-        Assert.assertEquals("Rect(25, 0 - 20, 5)", getItemOffsets(3).toString())
-        Assert.assertEquals("Rect(0, 0 - 20, 5)", getItemOffsets(4).toString())
-        Assert.assertEquals("Rect(0, 0 - 30, 5)", getItemOffsets(5).toString())
-        Assert.assertEquals("Rect(25, 0 - 20, 15)", getItemOffsets(6).toString())
+        Assert.assertEquals("Rect(20, 10 - 6, 5)", getItemOffsets(0).toString())
+        Assert.assertEquals("Rect(13, 10 - 20, 5)", getItemOffsets(1).toString())
+        Assert.assertEquals("Rect(20, 0 - 20, 5)", getItemOffsets(2).toString())
+        Assert.assertEquals("Rect(20, 0 - 6, 5)", getItemOffsets(3).toString())
+        Assert.assertEquals("Rect(13, 0 - 13, 5)", getItemOffsets(4).toString())
+        Assert.assertEquals("Rect(6, 0 - 20, 5)", getItemOffsets(5).toString())
+        Assert.assertEquals("Rect(20, 0 - 6, 15)", getItemOffsets(6).toString())
 
         isVerticalOrientation = false
 
-        Assert.assertEquals("Rect(10, 25 - 5, 20)", getItemOffsets(0).toString())
-        Assert.assertEquals("Rect(10, 0 - 5, 30)", getItemOffsets(1).toString())
-        Assert.assertEquals("Rect(0, 25 - 5, 30)", getItemOffsets(2).toString())
-        Assert.assertEquals("Rect(0, 25 - 5, 20)", getItemOffsets(3).toString())
-        Assert.assertEquals("Rect(0, 0 - 5, 20)", getItemOffsets(4).toString())
-        Assert.assertEquals("Rect(0, 0 - 5, 30)", getItemOffsets(5).toString())
-        Assert.assertEquals("Rect(0, 25 - 15, 20)", getItemOffsets(6).toString())
+        Assert.assertEquals("Rect(10, 20 - 5, 6)", getItemOffsets(0).toString())
+        Assert.assertEquals("Rect(10, 13 - 5, 20)", getItemOffsets(1).toString())
+        Assert.assertEquals("Rect(0, 20 - 5, 20)", getItemOffsets(2).toString())
+        Assert.assertEquals("Rect(0, 20 - 5, 6)", getItemOffsets(3).toString())
+        Assert.assertEquals("Rect(0, 13 - 5, 13)", getItemOffsets(4).toString())
+        Assert.assertEquals("Rect(0, 6 - 5, 20)", getItemOffsets(5).toString())
+        Assert.assertEquals("Rect(0, 20 - 15, 6)", getItemOffsets(6).toString())
 
         isVerticalOrientation = true
         isLTRDirection = false
 
-        Assert.assertEquals("Rect(20, 10 - 25, 5)", getItemOffsets(0).toString())
-        Assert.assertEquals("Rect(30, 10 - 0, 5)", getItemOffsets(1).toString())
-        Assert.assertEquals("Rect(30, 0 - 25, 5)", getItemOffsets(2).toString())
-        Assert.assertEquals("Rect(20, 0 - 25, 5)", getItemOffsets(3).toString())
-        Assert.assertEquals("Rect(20, 0 - 0, 5)", getItemOffsets(4).toString())
-        Assert.assertEquals("Rect(30, 0 - 0, 5)", getItemOffsets(5).toString())
-        Assert.assertEquals("Rect(20, 0 - 25, 15)", getItemOffsets(6).toString())
+        Assert.assertEquals("Rect(20, 10 - 6, 5)", getItemOffsets(0).toString())
+        Assert.assertEquals("Rect(13, 10 - 20, 5)", getItemOffsets(1).toString())
+        Assert.assertEquals("Rect(20, 0 - 20, 5)", getItemOffsets(2).toString())
+        Assert.assertEquals("Rect(20, 0 - 6, 5)", getItemOffsets(3).toString())
+        Assert.assertEquals("Rect(13, 0 - 13, 5)", getItemOffsets(4).toString())
+        Assert.assertEquals("Rect(6, 0 - 20, 5)", getItemOffsets(5).toString())
+        Assert.assertEquals("Rect(20, 0 - 6, 15)", getItemOffsets(6).toString())
 
         isVerticalOrientation = false
 
-        Assert.assertEquals("Rect(5, 25 - 10, 20)", getItemOffsets(0).toString())
-        Assert.assertEquals("Rect(5, 0 - 10, 30)", getItemOffsets(1).toString())
-        Assert.assertEquals("Rect(5, 25 - 0, 30)", getItemOffsets(2).toString())
-        Assert.assertEquals("Rect(5, 25 - 0, 20)", getItemOffsets(3).toString())
-        Assert.assertEquals("Rect(5, 0 - 0, 20)", getItemOffsets(4).toString())
-        Assert.assertEquals("Rect(5, 0 - 0, 30)", getItemOffsets(5).toString())
-        Assert.assertEquals("Rect(15, 25 - 0, 20)", getItemOffsets(6).toString())
+        Assert.assertEquals("Rect(5, 20 - 10, 6)", getItemOffsets(0).toString())
+        Assert.assertEquals("Rect(5, 13 - 10, 20)", getItemOffsets(1).toString())
+        Assert.assertEquals("Rect(5, 20 - 0, 20)", getItemOffsets(2).toString())
+        Assert.assertEquals("Rect(5, 20 - 0, 6)", getItemOffsets(3).toString())
+        Assert.assertEquals("Rect(5, 13 - 0, 13)", getItemOffsets(4).toString())
+        Assert.assertEquals("Rect(5, 6 - 0, 20)", getItemOffsets(5).toString())
+        Assert.assertEquals("Rect(15, 20 - 0, 6)", getItemOffsets(6).toString())
     }
 }

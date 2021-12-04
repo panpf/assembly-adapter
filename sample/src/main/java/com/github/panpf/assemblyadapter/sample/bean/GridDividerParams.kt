@@ -14,6 +14,7 @@ class GridDividerParams {
     private var _isShowSideHeaderDivider: Boolean = true
     private var _isShowSideFooterDivider: Boolean = true
     private var _isBigDivider: Boolean = true
+    private var _isShortDivider: Boolean = false
     private var _isShowDividerInsets: Boolean = false
     private var _isShowListSeparator: Boolean = true
     private var _isLessSpan: Boolean = false
@@ -53,6 +54,11 @@ class GridDividerParams {
         get() = _isBigDivider
         set(value) {
             _isBigDivider = value
+        }
+    var isShortDivider: Boolean
+        get() = _isShortDivider
+        set(value) {
+            _isShortDivider = value
         }
     var isShowDividerInsets: Boolean
         get() = _isShowDividerInsets

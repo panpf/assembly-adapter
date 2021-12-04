@@ -16,20 +16,23 @@
 package com.github.panpf.assemblyadapter.recycler.divider.internal
 
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import androidx.annotation.Px
 
 data class ItemDividerWrapper constructor(
     private val itemDivider: ItemDivider,
     private val dividerSide: DividerSide,
 ) {
-    @get:Px
-    val drawableWidthSize: Int
-        get() = itemDivider.getDrawableWidthSize(dividerSide == DividerSide.START || dividerSide == DividerSide.END)
+    val drawable: Drawable
+        get() = itemDivider.drawable
 
     @get:Px
-    val drawableHeightSize: Int
-        get() = itemDivider.getDrawableHeightSize(dividerSide == DividerSide.START || dividerSide == DividerSide.END)
+    val drawableWidth: Int
+        get() = itemDivider.getDrawableWidth(dividerSide == DividerSide.START || dividerSide == DividerSide.END)
 
+    @get:Px
+    val drawableHeight: Int
+        get() = itemDivider.getDrawableHeight(dividerSide == DividerSide.START || dividerSide == DividerSide.END)
 
     @get:Px
     val insetStart: Int
@@ -48,20 +51,20 @@ data class ItemDividerWrapper constructor(
         get() = itemDivider.insetBottom
 
     @get:Px
-    val insetWidthSize: Int
-        get() = itemDivider.insetWidthSize
+    val insetWidth: Int
+        get() = itemDivider.insetWidth
 
     @get:Px
-    val insetHeightSize: Int
-        get() = itemDivider.insetHeightSize
+    val insetHeight: Int
+        get() = itemDivider.insetHeight
 
     @get:Px
-    val widthSize: Int
-        get() = itemDivider.getWidthSize(dividerSide == DividerSide.START || dividerSide == DividerSide.END)
+    val width: Int
+        get() = itemDivider.getWidth(dividerSide == DividerSide.START || dividerSide == DividerSide.END)
 
     @get:Px
-    val heightSize: Int
-        get() = itemDivider.getHeightSize(dividerSide == DividerSide.START || dividerSide == DividerSide.END)
+    val height: Int
+        get() = itemDivider.getHeight(dividerSide == DividerSide.START || dividerSide == DividerSide.END)
 
     fun draw(canvas: Canvas, left: Int, top: Int, right: Int, bottom: Int) {
         itemDivider.draw(canvas, left, top, right, bottom)

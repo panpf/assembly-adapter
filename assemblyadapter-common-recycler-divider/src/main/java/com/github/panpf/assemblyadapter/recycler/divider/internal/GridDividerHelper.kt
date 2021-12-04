@@ -38,84 +38,188 @@ abstract class GridDividerHelper {
         val topItemDivider = getItemDivider(params, DividerSide.TOP, false, fromStaggered)
         val bottomItemDivider =
             getItemDivider(params, DividerSide.BOTTOM, false, fromStaggered)
-        val startItemDividerSize = startItemDivider?.widthSize ?: 0
-        val endItemDividerSize = endItemDivider?.widthSize ?: 0
-        val topItemDividerSize = topItemDivider?.heightSize ?: 0
-        val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
+        val startItemDividerSize = startItemDivider?.width ?: 0
+        val endItemDividerSize = endItemDivider?.width ?: 0
+        val topItemDividerSize = topItemDivider?.height ?: 0
+        val bottomItemDividerSize = bottomItemDivider?.height ?: 0
 
         if (params.isVerticalOrientation) {
             startItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.left - insetEnd - drawableWidthSize,
-                    view.top - topItemDividerSize + insetTop,
-                    view.left - insetEnd,
-                    view.bottom + bottomItemDividerSize - insetBottom
-                )
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
+                if (drawableHeightSize > 0) {
+                    val top = view.top + ((view.height - drawableHeightSize) / 2)
+                    draw(
+                        canvas = canvas,
+                        left = view.left - insetEnd - drawableWidthSize,
+                        right = view.left - insetEnd,
+                        top = top.coerceAtLeast(view.top - topItemDividerSize + insetTop),
+                        bottom = (top + drawableHeightSize).coerceAtMost(view.bottom + bottomItemDividerSize - insetBottom)
+                    )
+                } else {
+                    draw(
+                        canvas = canvas,
+                        left = view.left - insetEnd - drawableWidthSize,
+                        right = view.left - insetEnd,
+                        top = view.top - topItemDividerSize + insetTop,
+                        bottom = view.bottom + bottomItemDividerSize - insetBottom
+                    )
+                }
             }
             endItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.right + insetStart,
-                    view.top - topItemDividerSize + insetTop,
-                    view.right + insetStart + drawableWidthSize,
-                    view.bottom + bottomItemDividerSize - insetBottom
-                )
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
+                if (drawableHeightSize > 0) {
+                    val top = view.top + ((view.height - drawableHeightSize) / 2)
+                    draw(
+                        canvas = canvas,
+                        left = view.right + insetStart,
+                        right = view.right + insetStart + drawableWidthSize,
+                        top = top.coerceAtLeast(view.top - topItemDividerSize + insetTop),
+                        bottom = (top + drawableHeightSize).coerceAtMost(view.bottom + bottomItemDividerSize - insetBottom)
+                    )
+                } else {
+                    draw(
+                        canvas = canvas,
+                        left = view.right + insetStart,
+                        right = view.right + insetStart + drawableWidthSize,
+                        top = view.top - topItemDividerSize + insetTop,
+                        bottom = view.bottom + bottomItemDividerSize - insetBottom
+                    )
+                }
             }
             topItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.left + insetStart,
-                    view.top - insetBottom - drawableHeightSize,
-                    view.right - insetEnd,
-                    view.top - insetBottom
-                )
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
+                if (drawableWidthSize > 0) {
+                    val left = view.left + ((view.width - drawableWidthSize) / 2)
+                    draw(
+                        canvas = canvas,
+                        left = left.coerceAtLeast(view.left + insetStart),
+                        right = (left + drawableWidthSize).coerceAtMost(view.right - insetEnd),
+                        top = view.top - insetBottom - drawableHeightSize,
+                        bottom = view.top - insetBottom
+                    )
+                } else {
+                    draw(
+                        canvas = canvas,
+                        left = view.left + insetStart,
+                        right = view.right - insetEnd,
+                        top = view.top - insetBottom - drawableHeightSize,
+                        bottom = view.top - insetBottom
+                    )
+                }
             }
             bottomItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.left + insetStart,
-                    view.bottom + insetTop,
-                    view.right - insetEnd,
-                    view.bottom + insetTop + drawableHeightSize
-                )
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
+                if (drawableWidthSize > 0) {
+                    val left = view.left + ((view.width - drawableWidthSize) / 2)
+                    draw(
+                        canvas = canvas,
+                        left = left.coerceAtLeast(view.left + insetStart),
+                        right = (left + drawableWidthSize).coerceAtMost(view.right - insetEnd),
+                        top = view.bottom + insetTop,
+                        bottom = view.bottom + insetTop + drawableHeightSize
+                    )
+                } else {
+                    draw(
+                        canvas = canvas,
+                        left = view.left + insetStart,
+                        right = view.right - insetEnd,
+                        top = view.bottom + insetTop,
+                        bottom = view.bottom + insetTop + drawableHeightSize
+                    )
+                }
             }
         } else {
             startItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.left - insetEnd - drawableWidthSize,
-                    view.top + insetTop,
-                    view.left - insetEnd,
-                    view.bottom - insetBottom
-                )
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
+                if (drawableHeightSize > 0) {
+                    val top = view.top + ((view.height - drawableHeightSize) / 2)
+                    draw(
+                        canvas = canvas,
+                        left = view.left - insetEnd - drawableWidthSize,
+                        right = view.left - insetEnd,
+                        top = top.coerceAtLeast(view.top + insetTop),
+                        bottom = (top + drawableHeightSize).coerceAtMost(view.bottom - insetBottom)
+                    )
+                } else {
+                    draw(
+                        canvas = canvas,
+                        left = view.left - insetEnd - drawableWidthSize,
+                        right = view.left - insetEnd,
+                        top = view.top + insetTop,
+                        bottom = view.bottom - insetBottom
+                    )
+                }
             }
             endItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.right + insetStart,
-                    view.top + insetTop,
-                    view.right + insetStart + drawableWidthSize,
-                    view.bottom - insetBottom
-                )
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
+                if (drawableHeightSize > 0) {
+                    val top = view.top + ((view.height - drawableHeightSize) / 2)
+                    draw(
+                        canvas = canvas,
+                        left = view.right + insetStart,
+                        right = view.right + insetStart + drawableWidthSize,
+                        top = top.coerceAtLeast(view.top + insetTop),
+                        bottom = (top + drawableHeightSize).coerceAtMost(view.bottom - insetBottom)
+                    )
+                } else {
+                    draw(
+                        canvas = canvas,
+                        left = view.right + insetStart,
+                        right = view.right + insetStart + drawableWidthSize,
+                        top = view.top + insetTop,
+                        bottom = view.bottom - insetBottom
+                    )
+                }
             }
             topItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.left - startItemDividerSize + insetStart,
-                    view.top - insetBottom - drawableHeightSize,
-                    view.right + endItemDividerSize - insetEnd,
-                    view.top - insetBottom
-                )
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
+                if (drawableWidthSize > 0) {
+                    val left = view.left + ((view.width - drawableWidthSize) / 2)
+                    draw(
+                        canvas = canvas,
+                        left = left.coerceAtLeast(view.left - startItemDividerSize + insetStart),
+                        right = (left + drawableWidthSize).coerceAtMost(view.right + endItemDividerSize - insetEnd),
+                        top = view.top - insetBottom - drawableHeightSize,
+                        bottom = view.top - insetBottom
+                    )
+                } else {
+                    draw(
+                        canvas = canvas,
+                        left = view.left - startItemDividerSize + insetStart,
+                        right = view.right + endItemDividerSize - insetEnd,
+                        top = view.top - insetBottom - drawableHeightSize,
+                        bottom = view.top - insetBottom
+                    )
+                }
             }
             bottomItemDivider?.apply {
-                draw(
-                    canvas,
-                    view.left - startItemDividerSize + insetStart,
-                    view.bottom + insetTop,
-                    view.right + endItemDividerSize - insetEnd,
-                    view.bottom + insetTop + drawableHeightSize
-                )
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
+                if (drawableWidthSize > 0) {
+                    val left = view.left + ((view.width - drawableWidthSize) / 2)
+                    draw(
+                        canvas = canvas,
+                        left = left.coerceAtLeast(view.left - startItemDividerSize + insetStart),
+                        right = (left + drawableWidthSize).coerceAtMost(view.right + endItemDividerSize - insetEnd),
+                        top = view.bottom + insetTop,
+                        bottom = view.bottom + insetTop + drawableHeightSize
+                    )
+                } else {
+                    draw(
+                        canvas = canvas,
+                        left = view.left - startItemDividerSize + insetStart,
+                        right = view.right + endItemDividerSize - insetEnd,
+                        top = view.bottom + insetTop,
+                        bottom = view.bottom + insetTop + drawableHeightSize
+                    )
+                }
             }
         }
     }

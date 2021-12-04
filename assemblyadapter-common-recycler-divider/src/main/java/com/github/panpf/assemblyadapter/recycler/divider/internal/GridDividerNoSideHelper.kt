@@ -60,10 +60,10 @@ class GridDividerNoSideHelper(
         val topItemDivider = getItemDivider(params, DividerSide.TOP, true, fromStaggered)
         val bottomItemDivider = getItemDivider(params, DividerSide.BOTTOM, true, fromStaggered)
 
-        val left = startItemDivider?.widthSize ?: 0
-        val right = endItemDivider?.widthSize ?: 0
-        val top = topItemDivider?.heightSize ?: 0
-        val bottom = bottomItemDivider?.heightSize ?: 0
+        val left = startItemDivider?.width ?: 0
+        val right = endItemDivider?.width ?: 0
+        val top = topItemDivider?.height ?: 0
+        val bottom = bottomItemDivider?.height ?: 0
         outRect.set(left, top, right, bottom)
     }
 }

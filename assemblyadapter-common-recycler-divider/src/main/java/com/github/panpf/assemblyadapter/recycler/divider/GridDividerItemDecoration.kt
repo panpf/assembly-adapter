@@ -267,8 +267,6 @@ open class GridDividerItemDecoration(
         private var disableDefaultDivider = false
 
         fun build(): GridDividerItemDecoration {
-            // todo side cannot disable
-            // todo side provide new api
             if ((useSideDividerAsSideHeaderDivider || useSideDividerAsSideFooterDivider) && sideDividerConfig == null) {
                 throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
             }

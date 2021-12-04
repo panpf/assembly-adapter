@@ -57,10 +57,10 @@ class LinearDividerHelper(
         val endItemDivider = getItemDivider(params, endType)
         val topItemDivider = getItemDivider(params, DividerSide.TOP)
         val bottomItemDivider = getItemDivider(params, DividerSide.BOTTOM)
-        val startItemDividerSize = startItemDivider?.widthSize ?: 0
-        val endItemDividerSize = endItemDivider?.widthSize ?: 0
-        val topItemDividerSize = topItemDivider?.heightSize ?: 0
-        val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
+        val startItemDividerSize = startItemDivider?.width ?: 0
+        val endItemDividerSize = endItemDivider?.width ?: 0
+        val topItemDividerSize = topItemDivider?.height ?: 0
+        val bottomItemDividerSize = bottomItemDivider?.height ?: 0
         outRect.set(
             startItemDividerSize,
             topItemDividerSize,
@@ -77,15 +77,15 @@ class LinearDividerHelper(
         val endItemDivider = getItemDivider(params, endType)
         val topItemDivider = getItemDivider(params, DividerSide.TOP)
         val bottomItemDivider = getItemDivider(params, DividerSide.BOTTOM)
-        val startItemDividerSize = startItemDivider?.widthSize ?: 0
-        val endItemDividerSize = endItemDivider?.widthSize ?: 0
-        val topItemDividerSize = topItemDivider?.heightSize ?: 0
-        val bottomItemDividerSize = bottomItemDivider?.heightSize ?: 0
+        val startItemDividerSize = startItemDivider?.width ?: 0
+        val endItemDividerSize = endItemDivider?.width ?: 0
+        val topItemDividerSize = topItemDivider?.height ?: 0
+        val bottomItemDividerSize = bottomItemDivider?.height ?: 0
 
         if (params.isVerticalOrientation) {
             startItemDivider?.apply {
-                val drawableWidthSize = drawableWidthSize
-                val drawableHeightSize = drawableHeightSize
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
                 if (drawableHeightSize > 0) {
                     val top = view.top + ((view.height - drawableHeightSize) / 2)
                     draw(
@@ -106,8 +106,8 @@ class LinearDividerHelper(
                 }
             }
             endItemDivider?.apply {
-                val drawableWidthSize = drawableWidthSize
-                val drawableHeightSize = drawableHeightSize
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
                 if (drawableHeightSize > 0) {
                     val top = view.top + ((view.height - drawableHeightSize) / 2)
                     draw(
@@ -128,8 +128,8 @@ class LinearDividerHelper(
                 }
             }
             topItemDivider?.apply {
-                val drawableWidthSize = drawableWidthSize
-                val drawableHeightSize = drawableHeightSize
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
                 if (drawableWidthSize > 0) {
                     val left = view.left + ((view.width - drawableWidthSize) / 2)
                     draw(
@@ -150,8 +150,8 @@ class LinearDividerHelper(
                 }
             }
             bottomItemDivider?.apply {
-                val drawableWidthSize = drawableWidthSize
-                val drawableHeightSize = drawableHeightSize
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
                 if (drawableWidthSize > 0) {
                     val left = view.left + ((view.width - drawableWidthSize) / 2)
                     draw(
@@ -173,8 +173,8 @@ class LinearDividerHelper(
             }
         } else {
             startItemDivider?.apply {
-                val drawableWidthSize = drawableWidthSize
-                val drawableHeightSize = drawableHeightSize
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
                 if (drawableHeightSize > 0) {
                     val top = view.top + ((view.height - drawableHeightSize) / 2)
                     draw(
@@ -195,8 +195,8 @@ class LinearDividerHelper(
                 }
             }
             endItemDivider?.apply {
-                val drawableWidthSize = drawableWidthSize
-                val drawableHeightSize = drawableHeightSize
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
                 if (drawableHeightSize > 0) {
                     val top = view.top + ((view.height - drawableHeightSize) / 2)
                     draw(
@@ -217,8 +217,8 @@ class LinearDividerHelper(
                 }
             }
             topItemDivider?.apply {
-                val drawableWidthSize = drawableWidthSize
-                val drawableHeightSize = drawableHeightSize
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
                 if (drawableWidthSize > 0) {
                     val left = view.left + ((view.width - drawableWidthSize) / 2)
                     draw(
@@ -239,8 +239,8 @@ class LinearDividerHelper(
                 }
             }
             bottomItemDivider?.apply {
-                val drawableWidthSize = drawableWidthSize
-                val drawableHeightSize = drawableHeightSize
+                val drawableWidthSize = drawableWidth
+                val drawableHeightSize = drawableHeight
                 if (drawableWidthSize > 0) {
                     val left = view.left + ((view.width - drawableWidthSize) / 2)
                     draw(

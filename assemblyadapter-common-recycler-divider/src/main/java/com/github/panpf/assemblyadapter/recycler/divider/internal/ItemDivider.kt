@@ -28,24 +28,24 @@ data class ItemDivider constructor(
     @Px val insetBottom: Int,
 ) {
     @Px
-    fun getDrawableWidthSize(isStartOrEnd: Boolean): Int =
+    fun getDrawableWidth(isStartOrEnd: Boolean): Int =
         size.getWidth(isStartOrEnd)
 
     @Px
-    fun getDrawableHeightSize(isStartOrEnd: Boolean): Int =
+    fun getDrawableHeight(isStartOrEnd: Boolean): Int =
         size.getHeight(isStartOrEnd)
 
     @Px
-    val insetWidthSize: Int = insetStart + insetEnd
+    val insetWidth: Int = insetStart + insetEnd
 
     @Px
-    val insetHeightSize: Int = insetTop + insetBottom
+    val insetHeight: Int = insetTop + insetBottom
 
     @Px
-    fun getWidthSize(isStartOrEnd: Boolean): Int = getDrawableWidthSize(isStartOrEnd) + insetWidthSize
+    fun getWidth(isStartOrEnd: Boolean): Int = getDrawableWidth(isStartOrEnd) + insetWidth
 
     @Px
-    fun getHeightSize(isStartOrEnd: Boolean): Int = getDrawableHeightSize(isStartOrEnd) + insetHeightSize
+    fun getHeight(isStartOrEnd: Boolean): Int = getDrawableHeight(isStartOrEnd) + insetHeight
 
     fun draw(canvas: Canvas, left: Int, top: Int, right: Int, bottom: Int) {
         drawable.setBounds(left, top, right, bottom)

@@ -305,8 +305,6 @@ open class StaggeredGridDividerItemDecoration(
         private var isFullSpanByPosition: IsFullSpanByPosition? = null
 
         fun build(): StaggeredGridDividerItemDecoration {
-            // todo side cannot disable
-            // todo side provide new api
             if ((useSideDividerAsSideHeaderDivider || useSideDividerAsSideFooterDivider) && sideDividerConfig == null) {
                 throw IllegalArgumentException("Must call the sideDivider() method to configure the sideDivider")
             }

@@ -34,6 +34,7 @@ import com.github.panpf.assemblyadapter.recycler.AssemblySingleDataRecyclerAdapt
 import com.github.panpf.assemblyadapter.recycler.ItemSpan
 import com.github.panpf.assemblyadapter.recycler.divider.Divider
 import com.github.panpf.assemblyadapter.recycler.divider.Insets
+import com.github.panpf.assemblyadapter.recycler.divider.internal.DividerSize
 import com.github.panpf.assemblyadapter.recycler.divider.newAssemblyGridDividerItemDecoration
 import com.github.panpf.assemblyadapter.recycler.setupAssemblyGridLayoutManager
 import com.github.panpf.assemblyadapter.sample.R
@@ -49,6 +50,7 @@ import com.github.panpf.assemblyadapter.sample.vm.AppListViewModel
 import com.github.panpf.assemblyadapter.sample.vm.AppsOverviewViewModel
 import com.github.panpf.assemblyadapter.sample.vm.GridDividerParamsViewModel
 import com.github.panpf.assemblyadapter.sample.vm.PinyinFlatAppListViewModel
+import com.github.panpf.tools4a.dimen.ktx.dp2px
 
 class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHorBinding>() {
 
@@ -158,50 +160,59 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
     }
 
     private fun buildDividerItemDecoration(dividerParams: GridDividerParams): RecyclerView.ItemDecoration {
-        val size = dividerParams.dividerSize
         val insets = Insets.allOf(dividerParams.dividerInsetsSize)
+        val dividerSize = if (dividerParams.isShortDivider) {
+            DividerSize.clearly(dividerParams.dividerSize, 15.dp2px)
+        } else {
+            DividerSize.vague(dividerParams.dividerSize)
+        }
+        val sideDividerSize = if (dividerParams.isShortDivider) {
+            DividerSize.clearly(25.dp2px, dividerParams.dividerSize)
+        } else {
+            DividerSize.vague(dividerParams.dividerSize)
+        }
         return requireContext().newAssemblyGridDividerItemDecoration {
             disableDefaultDivider()
             if (dividerParams.isShowDivider) {
-                divider(Divider.colorRes(R.color.divider, size, insets)) {
+                divider(Divider.colorResWithSize(R.color.divider, dividerSize, insets)) {
                     personaliseByItemFactoryClass(
                         ListSeparatorHorItemFactory::class,
-                        Divider.colorRes(R.color.divider_personalise, size, insets)
+                        Divider.colorResWithSize(R.color.divider_personalise, dividerSize, insets)
                     )
                     disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
                 }
             }
             if (dividerParams.isShowHeaderDivider) {
                 headerDivider(
-                    Divider.colorRes(R.color.divider_header, size, insets)
+                    Divider.colorResWithSize(R.color.divider_header, dividerSize, insets)
                 )
             }
             if (dividerParams.isShowFooterDivider) {
                 footerDivider(
-                    Divider.colorRes(R.color.divider_header, size, insets)
+                    Divider.colorResWithSize(R.color.divider_header, dividerSize, insets)
                 )
             }
 
             if (dividerParams.isShowSideDivider) {
-                sideDivider(Divider.colorRes(R.color.sideDivider, size, insets))
+                sideDivider(Divider.colorResWithSize(R.color.sideDivider, sideDividerSize, insets))
                 if (dividerParams.isShowSideHeaderDivider) {
                     sideHeaderDivider(
-                        Divider.colorRes(R.color.sideDivider_header, size, insets)
+                        Divider.colorResWithSize(R.color.sideDivider_header, sideDividerSize, insets)
                     ) {
                         personaliseByItemFactoryClass(
                             ListSeparatorHorItemFactory::class,
-                            Divider.colorRes(R.color.sideDivider_personalise, size, insets)
+                            Divider.colorResWithSize(R.color.sideDivider_personalise, sideDividerSize, insets)
                         )
                         disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
                     }
                 }
                 if (dividerParams.isShowSideFooterDivider) {
                     sideFooterDivider(
-                        Divider.colorRes(R.color.sideDivider_header, size, insets)
+                        Divider.colorResWithSize(R.color.sideDivider_header, sideDividerSize, insets)
                     ) {
                         personaliseByItemFactoryClass(
                             ListSeparatorHorItemFactory::class,
-                            Divider.colorRes(R.color.sideDivider_personalise, size, insets)
+                            Divider.colorResWithSize(R.color.sideDivider_personalise, sideDividerSize, insets)
                         )
                         disableByItemFactoryClass(AppsOverviewHorItemFactory::class)
                     }
@@ -327,6 +338,18 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
 
                 add(
                     2, 7, 7,
+                    if (dividerParams.isShortDivider) "Long Divider" else "Short Divider"
+                ).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                    setOnMenuItemClickListener {
+                        dividerParams.isShortDivider = !dividerParams.isShortDivider
+                        dividerParamsViewMode.dividerParamsData.postValue(dividerParams)
+                        true
+                    }
+                }
+
+                add(
+                    2, 8, 8,
                     if (dividerParams.isShowDividerInsets)
                         "Hide Divider Insets" else "Show Divider Insets"
                 ).apply {
@@ -339,7 +362,7 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
                 }
 
                 add(
-                    3, 8, 8,
+                    3, 9, 9,
                     if (dividerParams.isShowListSeparator)
                         "Hide List Separator" else "Show List Separator"
                 ).apply {
@@ -360,7 +383,7 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
                 }
 
                 add(
-                    3, 9, 9,
+                    3, 10, 10,
                     if (dividerParams.isLessSpan) "Many Span" else "Less Span"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
@@ -380,7 +403,7 @@ class RecyclerGridDividerHorFragment : ToolbarFragment<FragmentRecyclerDividerHo
                 }
 
                 add(
-                    3, 10, 10,
+                    3, 11, 11,
                     if (dividerParams.compactMode) "Close Compact Mode" else "Open Compact Mode"
                 ).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
