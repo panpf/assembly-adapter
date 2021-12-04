@@ -11,10 +11,10 @@ data class LinearDividerParams(
     var isShowSideHeaderDivider: Boolean = true,
     var isShowSideFooterDivider: Boolean = true,
     var isBigDivider: Boolean = true,
+    var isShortDivider: Boolean = false,
     var isShowDividerInsets: Boolean = false,
     var isShowListSeparator: Boolean = true,
 ) {
-    // todo add shortDivider options
     val dividerSize: Int
         get() = if (isBigDivider) 5f.dp2px else 2f.dp2px
 

@@ -24,9 +24,9 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.Px
 import androidx.core.content.res.ResourcesCompat
+import com.github.panpf.assemblyadapter.recycler.divider.internal.ClearlyDividerSize
 import com.github.panpf.assemblyadapter.recycler.divider.internal.DividerSize
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ItemDivider
-import com.github.panpf.assemblyadapter.recycler.divider.internal.ClearlyDividerSize
 import com.github.panpf.assemblyadapter.recycler.divider.internal.VagueDividerSize
 
 /**
@@ -43,15 +43,41 @@ interface Divider {
         /**
          * Create a [Divider] with the specified Drawable
          *
-         * @param size Define the size of the divider. The default is -1, which means that
+         * @param vagueSize Define the size of the divider. The default is -1, which means that
          * the intrinsicWidth and intrinsicHeight of the drawable is used as the divider width and height
          * @param insets Define the spacing around Divider
          */
         fun drawable(
-            drawable: Drawable,
-            @Px size: Int = -1,
+            dividerDrawable: Drawable,
+            @Px vagueSize: Int = -1,
             insets: Insets? = null,
-        ): Divider = DrawableDivider(drawable, size, insets)
+        ): Divider = DividerImpl(
+            { dividerDrawable },
+            { drawable ->
+                if (vagueSize > 0) {
+                    VagueDividerSize(vagueSize)
+                } else {
+                    ClearlyDividerSize(drawable.intrinsicWidth, drawable.intrinsicHeight)
+                }
+            },
+            insets
+        )
+
+        /**
+         * Create a [Divider] with the specified Drawable
+         *
+         * @param size Define the size of the divider
+         * @param insets Define the spacing around Divider
+         */
+        fun drawableWithSize(
+            dividerDrawable: Drawable,
+            size: DividerSize,
+            insets: Insets? = null,
+        ): Divider = DividerImpl(
+            { dividerDrawable },
+            { size },
+            insets
+        )
 
         /**
          * Create a [Divider] with the specified Drawable
@@ -62,25 +88,64 @@ interface Divider {
          * the intrinsicHeight of the drawable is used as the divider height
          * @param insets Define the spacing around Divider
          */
-        fun drawableClearlySize(
-            drawable: Drawable,
+        fun drawableWithClearlySize(
+            dividerDrawable: Drawable,
             @Px width: Int = -1,
             @Px height: Int = -1,
             insets: Insets? = null,
-        ): Divider = DrawableDivider2(drawable, width, height, insets)
+        ): Divider = DividerImpl(
+            { dividerDrawable },
+            { drawable ->
+                ClearlyDividerSize(
+                    width.takeIf { it > 0 } ?: drawable.intrinsicWidth,
+                    height.takeIf { it > 0 } ?: drawable.intrinsicHeight
+                )
+            },
+            insets
+        )
 
         /**
          * Create a [Divider] with the specified Drawable resource ID
          *
-         * @param size Define the size of the divider. The default is -1, which means that
+         * @param vagueSize Define the size of the divider. The default is -1, which means that
          * the intrinsicWidth and intrinsicHeight of the drawable is used as the divider width and height
          * @param insets Define the spacing around Divider
          */
         fun drawableRes(
             @DrawableRes drawableResId: Int,
-            @Px size: Int = -1,
+            @Px vagueSize: Int = -1,
             insets: Insets? = null,
-        ): Divider = DrawableResDivider(drawableResId, size, insets)
+        ): Divider = DividerImpl(
+            { context ->
+                ResourcesCompat.getDrawable(context.resources, drawableResId, null)!!
+            },
+            { drawable ->
+                if (vagueSize > 0) {
+                    VagueDividerSize(vagueSize)
+                } else {
+                    ClearlyDividerSize(drawable.intrinsicWidth, drawable.intrinsicHeight)
+                }
+            },
+            insets
+        )
+
+        /**
+         * Create a [Divider] with the specified Drawable resource ID
+         *
+         * @param size Define the size of the divider
+         * @param insets Define the spacing around Divider
+         */
+        fun drawableResWithSize(
+            @DrawableRes drawableResId: Int,
+            size: DividerSize,
+            insets: Insets? = null,
+        ): Divider = DividerImpl(
+            { context ->
+                ResourcesCompat.getDrawable(context.resources, drawableResId, null)!!
+            },
+            { size },
+            insets
+        )
 
         /**
          * Create a [Divider] with the specified Drawable resource ID
@@ -91,24 +156,55 @@ interface Divider {
          * the intrinsicHeight of the drawable is used as the divider height
          * @param insets Define the spacing around Divider
          */
-        fun drawableResClearlySize(
+        fun drawableResWithClearlySize(
             @DrawableRes drawableResId: Int,
             @Px width: Int = -1,
             @Px height: Int = -1,
             insets: Insets? = null,
-        ): Divider = DrawableResDivider2(drawableResId, width, height, insets)
+        ): Divider = DividerImpl(
+            { context ->
+                ResourcesCompat.getDrawable(context.resources, drawableResId, null)!!
+            },
+            { drawable ->
+                ClearlyDividerSize(
+                    width.takeIf { it > 0 } ?: drawable.intrinsicWidth,
+                    height.takeIf { it > 0 } ?: drawable.intrinsicHeight
+                )
+            },
+            insets
+        )
 
         /**
          * Create a [Divider] with the specified color
          *
-         * @param size Define divider size
+         * @param vagueSize Define divider size
          * @param insets Define the spacing around Divider
          */
         fun color(
             @ColorInt color: Int,
-            @Px size: Int,
+            @Px vagueSize: Int,
             insets: Insets? = null,
-        ): Divider = ColorDivider(color, VagueDividerSize(size), insets)
+        ): Divider = DividerImpl(
+            { ColorDrawable(color) },
+            { VagueDividerSize(vagueSize) },
+            insets
+        )
+
+        /**
+         * Create a [Divider] with the specified color
+         *
+         * @param size Define divider size
+         * @param insets Define the spacing around Divider
+         */
+        fun colorWithSize(
+            @ColorInt color: Int,
+            size: DividerSize,
+            insets: Insets? = null,
+        ): Divider = DividerImpl(
+            { ColorDrawable(color) },
+            { size },
+            insets
+        )
 
         /**
          * Create a [Divider] with the specified color
@@ -117,12 +213,34 @@ interface Divider {
          * @param height Define divider height
          * @param insets Define the spacing around Divider
          */
-        fun colorClearlySize(
+        fun colorWithClearlySize(
             @ColorInt color: Int,
             @Px width: Int,
             @Px height: Int,
             insets: Insets? = null,
-        ): Divider = ColorDivider(color, ClearlyDividerSize(width, height), insets)
+        ): Divider = DividerImpl(
+            { ColorDrawable(color) },
+            { ClearlyDividerSize(width, height) },
+            insets
+        )
+
+        /**
+         * Create a [Divider] with the specified color resource ID
+         *
+         * @param vagueSize Define divider size
+         * @param insets Define the spacing around Divider
+         */
+        fun colorRes(
+            @ColorRes colorResId: Int,
+            @Px vagueSize: Int,
+            insets: Insets? = null,
+        ): Divider = DividerImpl(
+            { context ->
+                ColorDrawable(ResourcesCompat.getColor(context.resources, colorResId, null))
+            },
+            { VagueDividerSize(vagueSize) },
+            insets
+        )
 
         /**
          * Create a [Divider] with the specified color resource ID
@@ -130,11 +248,17 @@ interface Divider {
          * @param size Define divider size
          * @param insets Define the spacing around Divider
          */
-        fun colorRes(
+        fun colorResWithSize(
             @ColorRes colorResId: Int,
-            @Px size: Int,
+            size: DividerSize,
             insets: Insets? = null,
-        ): Divider = ColorResDivider(colorResId, VagueDividerSize(size), insets)
+        ): Divider = DividerImpl(
+            { context ->
+                ColorDrawable(ResourcesCompat.getColor(context.resources, colorResId, null))
+            },
+            { size },
+            insets
+        )
 
         /**
          * Create a [Divider] with the specified color resource ID
@@ -143,139 +267,46 @@ interface Divider {
          * @param height Define divider height
          * @param insets Define the spacing around Divider
          */
-        fun colorResClearlySize(
+        fun colorResWithClearlySize(
             @ColorRes colorResId: Int,
             @Px width: Int,
             @Px height: Int,
             insets: Insets? = null,
-        ): Divider = ColorResDivider(colorResId, ClearlyDividerSize(width, height), insets)
+        ): Divider = DividerImpl(
+            { context ->
+                ColorDrawable(ResourcesCompat.getColor(context.resources, colorResId, null))
+            },
+            { ClearlyDividerSize(width, height) },
+            insets
+        )
 
         /**
          * Create a transparent blank [Divider]
          *
-         * @param size Define divider size
+         * @param vagueSize Define divider size
          * @param insets Define the spacing around Divider
          */
         fun space(
-            @Px size: Int,
+            @Px vagueSize: Int,
             insets: Insets? = null,
-        ): Divider = ColorDivider(Color.TRANSPARENT, VagueDividerSize(size), insets)
-    }
-
-    private class DrawableDivider(
-        private val drawable: Drawable,
-        @Px private val size: Int,
-        private val insets: Insets?,
-    ) : Divider {
-
-        override fun toItemDivider(context: Context): ItemDivider = ItemDivider(
-            drawable,
-            if (size > 0) {
-                VagueDividerSize(size)
-            } else {
-                ClearlyDividerSize(drawable.intrinsicWidth, drawable.intrinsicHeight)
-            },
-            insets?.start ?: 0,
-            insets?.top ?: 0,
-            insets?.end ?: 0,
-            insets?.bottom ?: 0
+        ): Divider = DividerImpl(
+            { ColorDrawable(Color.TRANSPARENT) },
+            { VagueDividerSize(vagueSize) },
+            insets
         )
     }
 
-    private class DrawableDivider2(
-        private val drawable: Drawable,
-        @Px private val width: Int,
-        @Px private val height: Int,
-        private val insets: Insets?,
-    ) : Divider {
-
-        override fun toItemDivider(context: Context): ItemDivider = ItemDivider(
-            drawable,
-            ClearlyDividerSize(
-                width.takeIf { it > 0 } ?: drawable.intrinsicWidth,
-                height.takeIf { it > 0 } ?: drawable.intrinsicHeight
-            ),
-            insets?.start ?: 0,
-            insets?.top ?: 0,
-            insets?.end ?: 0,
-            insets?.bottom ?: 0
-        )
-    }
-
-    private class DrawableResDivider(
-        @DrawableRes private val drawableResId: Int,
-        @Px private val size: Int,
+    private class DividerImpl(
+        private val createDrawable: (context: Context) -> Drawable,
+        private val createSize: (drawable: Drawable) -> DividerSize,
         private val insets: Insets?,
     ) : Divider {
 
         override fun toItemDivider(context: Context): ItemDivider {
-            val drawable = ResourcesCompat.getDrawable(context.resources, drawableResId, null)!!
+            val drawable = createDrawable(context)
+            val dividerSize = createSize(drawable)
             return ItemDivider(
                 drawable,
-                if (size > 0) {
-                    VagueDividerSize(size)
-                } else {
-                    ClearlyDividerSize(drawable.intrinsicWidth, drawable.intrinsicHeight)
-                },
-                insets?.start ?: 0,
-                insets?.top ?: 0,
-                insets?.end ?: 0,
-                insets?.bottom ?: 0
-            )
-        }
-    }
-
-    private class DrawableResDivider2(
-        @DrawableRes private val drawableResId: Int,
-        @Px private val width: Int,
-        @Px private val height: Int,
-        private val insets: Insets?,
-    ) : Divider {
-
-        override fun toItemDivider(context: Context): ItemDivider {
-            val drawable = ResourcesCompat.getDrawable(context.resources, drawableResId, null)!!
-            return ItemDivider(
-                drawable,
-                ClearlyDividerSize(
-                    width.takeIf { it > 0 } ?: drawable.intrinsicWidth,
-                    height.takeIf { it > 0 } ?: drawable.intrinsicHeight
-                ),
-                insets?.start ?: 0,
-                insets?.top ?: 0,
-                insets?.end ?: 0,
-                insets?.bottom ?: 0
-            )
-        }
-    }
-
-    private class ColorDivider(
-        @ColorInt private val color: Int,
-        private val dividerSize: DividerSize,
-        private val insets: Insets?,
-    ) : Divider {
-
-        override fun toItemDivider(context: Context): ItemDivider {
-            return ItemDivider(
-                ColorDrawable(color),
-                dividerSize,
-                insets?.start ?: 0,
-                insets?.top ?: 0,
-                insets?.end ?: 0,
-                insets?.bottom ?: 0
-            )
-        }
-    }
-
-    private class ColorResDivider(
-        @ColorRes private val colorResId: Int,
-        val dividerSize: DividerSize,
-        private val insets: Insets?,
-    ) : Divider {
-
-        override fun toItemDivider(context: Context): ItemDivider {
-            val color = ResourcesCompat.getColor(context.resources, colorResId, null)
-            return ItemDivider(
-                ColorDrawable(color),
                 dividerSize,
                 insets?.start ?: 0,
                 insets?.top ?: 0,

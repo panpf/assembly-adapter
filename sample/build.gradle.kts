@@ -55,6 +55,7 @@ dependencies {
     implementation("io.github.panpf.pagerindicator:pagerindicator:${property("PAGER_INDICATOR")}")
     implementation("io.github.panpf.sketch:sketch:${property("SKETCH_VERSION")}")
     implementation("io.github.panpf.tools4a:tools4a-dimen-ktx:${property("TOOLS4A")}")
+    implementation("io.github.panpf.tools4a:tools4a-display-ktx:${property("TOOLS4A")}")
     implementation("io.github.panpf.tools4k:tools4k:${property("TOOLS4K")}")
     implementation("io.github.panpf.liveevent:liveevent:${property("LIVEEVENT")}")
     implementation("com.github.promeg:tinypinyin:${property("TINYPINYIN")}")
