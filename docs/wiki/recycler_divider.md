@@ -45,6 +45,11 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 * sideHeaderDivider：显示在非滑动方向上第一个 item 的 left 边
 * sideFooterDivider：显示在非滑动方向上最后一个 item 的 right 边
 
+### Divider
+
+[Divider] 提供了 color、drawable、space 三个系列的方法来方便使用者配置 divider，并且每个系列都提供了不同方法来精确的指定 divider
+的尺寸，详细使用请参考 [Divider] 源码
+
 ### ItemFactory 支持
 
 [assemblyadapter-recycler] 模块还提供了支持通过 [ItemFactory] 个性化或禁用 divider 的 ItemDecoration，如下：
@@ -125,6 +130,8 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 [StaggeredGridDividerItemDecoration]: ../../assemblyadapter-common-recycler-divider/src/main/java/com/github/panpf/assemblyadapter/recycler/divider/StaggeredGridDividerItemDecoration.kt
 
 [DividerExtensions.kt]: ../../assemblyadapter-common-recycler-divider/src/main/java/com/github/panpf/assemblyadapter/recycler/divider/DividerExtensions.kt
+
+[Divider]: ../../assemblyadapter-common-recycler-divider/src/main/java/com/github/panpf/assemblyadapter/recycler/divider/Divider.kt
 
 [assemblyadapter-recycler]: ../../assemblyadapter-recycler
 

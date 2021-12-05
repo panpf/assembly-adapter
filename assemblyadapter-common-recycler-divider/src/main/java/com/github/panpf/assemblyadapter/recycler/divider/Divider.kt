@@ -42,9 +42,9 @@ interface Divider {
     companion object {
 
         /**
-         * Create a transparent blank [Divider]
+         * Create a transparent blank [Divider]. The size is specified by [vagueSize]
          *
-         * @param vagueSize Define divider size
+         * @param vagueSize Define divider size. Please refer to [VagueDividerSize] for specific functions
          * @param insets Define the spacing around Divider
          */
         fun space(
@@ -57,9 +57,9 @@ interface Divider {
         )
 
         /**
-         * Create a [Divider] with the specified color
+         * Create a [Divider] with the specified color. The size is specified by [vagueSize]
          *
-         * @param vagueSize Define divider size
+         * @param vagueSize Define divider size. Please refer to [VagueDividerSize] for specific functions
          * @param insets Define the spacing around Divider
          */
         fun color(
@@ -107,9 +107,9 @@ interface Divider {
         )
 
         /**
-         * Create a [Divider] with the specified color resource ID
+         * Create a [Divider] with the specified color resource ID. The size is specified by [vagueSize]
          *
-         * @param vagueSize Define divider size
+         * @param vagueSize Define divider size. Please refer to [VagueDividerSize] for specific functions
          * @param insets Define the spacing around Divider
          */
         fun colorRes(
@@ -163,10 +163,9 @@ interface Divider {
         )
 
         /**
-         * Create a [Divider] with the specified Drawable
+         * Create a [Divider] with the specified Drawable. The size is specified by [vagueSize]
          *
-         * @param vagueSize Define the size of the divider. The default is -1, which means that
-         * the intrinsicWidth and intrinsicHeight of the drawable is used as the divider width and height
+         * @param vagueSize Define divider size. Please refer to [VagueDividerSize] for specific functions
          * @param insets Define the spacing around Divider
          */
         fun drawable(
@@ -227,10 +226,9 @@ interface Divider {
         )
 
         /**
-         * Create a [Divider] with the specified Drawable resource ID
+         * Create a [Divider] with the specified Drawable resource ID. The size is specified by [vagueSize]
          *
-         * @param vagueSize Define the size of the divider. The default is -1, which means that
-         * the intrinsicWidth and intrinsicHeight of the drawable is used as the divider width and height
+         * @param vagueSize Define divider size. Please refer to [VagueDividerSize] for specific functions
          * @param insets Define the spacing around Divider
          */
         fun drawableRes(

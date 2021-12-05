@@ -1,4 +1,4 @@
-# new
+# v4.1.0-alpha02
 * new: LinearDividerItemDecoration, GridDividerItemDecoration, StaggeredGridDividerItemDecoration support short divide
 * new: Divider add drawableWithSize(), drawableWithClearlySize(), drawableResWithSize(), drawableResWithClearlySize(), colorWithSize(), colorWithClearlySize(), colorResWithSize(), colorResWithClearlySize() method. Now you can use these methods to implement a short divider
 
