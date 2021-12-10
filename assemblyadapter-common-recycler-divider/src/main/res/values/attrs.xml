@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DividerRecyclerView">
+        <attr name="drv_divider" format="reference|color" />
+        <attr name="drv_dividerSize" format="reference|dimension" />
+        <attr name="drv_dividerWidth" format="reference|dimension" />
+        <attr name="drv_dividerHeight" format="reference|dimension" />
+        <attr name="drv_headerDivider" format="reference|color" />
+        <attr name="drv_headerDividerSize" format="reference|dimension" />
+        <attr name="drv_headerDividerWidth" format="reference|dimension" />
+        <attr name="drv_headerDividerHeight" format="reference|dimension" />
+        <attr name="drv_footerDivider" format="reference|color" />
+        <attr name="drv_footerDividerSize" format="reference|dimension" />
+        <attr name="drv_footerDividerWidth" format="reference|dimension" />
+        <attr name="drv_footerDividerHeight" format="reference|dimension" />
+        <attr name="drv_useDividerAsHeaderDivider" format="reference|boolean" />
+        <attr name="drv_useDividerAsFooterDivider" format="reference|boolean" />
+        <attr name="drv_useDividerAsHeaderAndFooterDivider" format="reference|boolean" />
+        <attr name="drv_sideDivider" format="reference|color" />
+        <attr name="drv_sideDividerSize" format="reference|dimension" />
+        <attr name="drv_sideDividerWidth" format="reference|dimension" />
+        <attr name="drv_sideDividerHeight" format="reference|dimension" />
+        <attr name="drv_sideHeaderDivider" format="reference|color" />
+        <attr name="drv_sideHeaderDividerSize" format="reference|dimension" />
+        <attr name="drv_sideHeaderDividerWidth" format="reference|dimension" />
+        <attr name="drv_sideHeaderDividerHeight" format="reference|dimension" />
+        <attr name="drv_sideFooterDivider" format="reference|color" />
+        <attr name="drv_sideFooterDividerSize" format="reference|dimension" />
+        <attr name="drv_sideFooterDividerWidth" format="reference|dimension" />
+        <attr name="drv_sideFooterDividerHeight" format="reference|dimension" />
+        <attr name="drv_useSideDividerAsSideHeaderDivider" format="reference|boolean" />
+        <attr name="drv_useSideDividerAsSideFooterDivider" format="reference|boolean" />
+        <attr name="drv_useSideDividerAsSideHeaderAndFooterDivider" format="reference|boolean" />
+    </declare-styleable>
+</resources>

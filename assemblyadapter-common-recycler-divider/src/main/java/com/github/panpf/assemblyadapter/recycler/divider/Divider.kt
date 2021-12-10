@@ -16,6 +16,7 @@
 package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -48,7 +49,7 @@ interface Divider {
          * @param insets Define the spacing around Divider
          */
         fun space(
-            @Px vagueSize: Int,
+            @Px vagueSize: Int = (0.5f * Resources.getSystem().displayMetrics.density + 0.5f).toInt(),
             insets: Insets? = null,
         ): Divider = DividerImpl(
             { ColorDrawable(Color.TRANSPARENT) },
@@ -64,7 +65,7 @@ interface Divider {
          */
         fun color(
             @ColorInt color: Int,
-            @Px vagueSize: Int,
+            @Px vagueSize: Int = (0.5f * Resources.getSystem().displayMetrics.density + 0.5f).toInt(),
             insets: Insets? = null,
         ): Divider = DividerImpl(
             { ColorDrawable(color) },
@@ -114,7 +115,7 @@ interface Divider {
          */
         fun colorRes(
             @ColorRes colorResId: Int,
-            @Px vagueSize: Int,
+            @Px vagueSize: Int = (0.5f * Resources.getSystem().displayMetrics.density + 0.5f).toInt(),
             insets: Insets? = null,
         ): Divider = DividerImpl(
             { context ->
