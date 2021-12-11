@@ -32,7 +32,7 @@ import com.github.panpf.assemblyadapter.recycler.setupAssemblyStaggeredGridLayou
 import com.github.panpf.assemblyadapter.sample.base.MyLoadStateAdapter
 import com.github.panpf.assemblyadapter.sample.base.ToolbarFragment
 import com.github.panpf.assemblyadapter.sample.databinding.FragmentRecyclerBinding
-import com.github.panpf.assemblyadapter.sample.item.AppGridItemFactory
+import com.github.panpf.assemblyadapter.sample.item.AppCardGridItemFactory
 import com.github.panpf.assemblyadapter.sample.item.AppsOverviewItemFactory
 import com.github.panpf.assemblyadapter.sample.item.ListSeparatorItemFactory
 import com.github.panpf.assemblyadapter.sample.item.LoadStateItemFactory
@@ -67,7 +67,7 @@ class RecyclerStaggeredGridPagingFragment : ToolbarFragment<FragmentRecyclerBind
             AssemblySingleDataRecyclerAdapter(AppsOverviewItemFactory(requireActivity()))
         val pagingDataAdapter = AssemblyPagingDataAdapter<Any>(
             listOf(
-                AppGridItemFactory(requireActivity()),
+                AppCardGridItemFactory(requireActivity()),
                 ListSeparatorItemFactory(requireActivity())
             )
         )

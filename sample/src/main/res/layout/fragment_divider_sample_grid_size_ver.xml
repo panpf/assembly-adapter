@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical">
+
+    <com.github.panpf.assemblyadapter.recycler.divider.DividerRecyclerView
+        android:id="@+id/dividerSampleGridSizeVerRecycler1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:drv_divider="#FF0000"
+        app:drv_dividerSize="5dp"
+        app:drv_footerDivider="#03A9F4"
+        app:drv_footerDividerSize="7dp"
+        app:drv_headerDivider="#FF00FF"
+        app:drv_headerDividerSize="3dp"
+        app:drv_sideDivider="#3F51B5"
+        app:drv_sideDividerSize="4dp"
+        app:drv_sideFooterDivider="#0000FF"
+        app:drv_sideFooterDividerSize="4dp"
+        app:drv_sideHeaderDivider="#00FF00"
+        app:drv_sideHeaderDividerSize="4dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_app_grid" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#FFEB3B" />
+
+    <com.github.panpf.assemblyadapter.recycler.divider.DividerRecyclerView
+        android:id="@+id/dividerSampleGridSizeVerRecycler2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:drv_divider="#FF0000"
+        app:drv_dividerHeight="5dp"
+        app:drv_dividerWidth="50dp"
+        app:drv_footerDivider="#03A9F4"
+        app:drv_footerDividerHeight="7dp"
+        app:drv_footerDividerWidth="70dp"
+        app:drv_headerDivider="#FF00FF"
+        app:drv_headerDividerHeight="3dp"
+        app:drv_headerDividerWidth="30dp"
+        app:drv_sideDivider="#3F51B5"
+        app:drv_sideDividerHeight="40dp"
+        app:drv_sideDividerWidth="4dp"
+        app:drv_sideFooterDivider="#0000FF"
+        app:drv_sideFooterDividerHeight="40dp"
+        app:drv_sideFooterDividerWidth="4dp"
+        app:drv_sideHeaderDivider="#00FF00"
+        app:drv_sideHeaderDividerHeight="40dp"
+        app:drv_sideHeaderDividerWidth="4dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_app_grid" />
+</androidx.appcompat.widget.LinearLayoutCompat>

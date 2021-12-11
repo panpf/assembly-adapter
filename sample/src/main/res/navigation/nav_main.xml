@@ -264,6 +264,51 @@
             app:nullable="true" />
     </fragment>
     <fragment
+        android:id="@+id/recyclerDividerSampleGridFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerDividerSampleGridFragment"
+        android:label="RecyclerDividerSampleGridFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerDividerSampleStaggeredGridFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerDividerSampleStaggeredGridFragment"
+        android:label="RecyclerDividerSampleStaggeredGridFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerDividerSampleLinearFragment"
+        android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerDividerSampleLinearFragment"
+        android:label="RecyclerDividerSampleLinearFragment">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subtitle"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
         android:id="@+id/recyclerGridFragment"
         android:name="com.github.panpf.assemblyadapter.sample.ui.recycler.RecyclerGridFragment"
         android:label="RecyclerGridFragment">
@@ -566,6 +611,27 @@
     <action
         android:id="@+id/action_global_recyclerGridDividerHorFragment"
         app:destination="@id/recyclerGridDividerHorFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerDividerSampleGridFragment"
+        app:destination="@id/recyclerDividerSampleGridFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerDividerSampleStaggeredGridFragment"
+        app:destination="@id/recyclerDividerSampleStaggeredGridFragment"
+        app:enterAnim="@anim/nav_enter"
+        app:exitAnim="@anim/nav_exit"
+        app:popEnterAnim="@anim/nav_pop_enter"
+        app:popExitAnim="@anim/nav_pop_exit" />
+    <action
+        android:id="@+id/action_global_recyclerDividerSampleLinearFragment"
+        app:destination="@id/recyclerDividerSampleLinearFragment"
         app:enterAnim="@anim/nav_enter"
         app:exitAnim="@anim/nav_exit"
         app:popEnterAnim="@anim/nav_pop_enter"

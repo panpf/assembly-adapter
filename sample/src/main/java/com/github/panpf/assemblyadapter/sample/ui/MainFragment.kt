@@ -69,6 +69,13 @@ class MainFragment : ToolbarFragment<FragmentMainBinding>() {
                             "Linear - Divider - Horizontal"
                         )
                     ),
+                    Link(
+                        "RecyclerView - Linear - DividerRecyclerView",
+                        NavMainDirections.actionGlobalRecyclerDividerSampleLinearFragment(
+                            "RecyclerView",
+                            "Linear - DividerRecyclerView"
+                        )
+                    ),
 
                     ListSeparator("RecyclerView - Grid"),
                     Link(
@@ -94,6 +101,13 @@ class MainFragment : ToolbarFragment<FragmentMainBinding>() {
                         NavMainDirections.actionGlobalRecyclerGridDividerHorFragment(
                             "RecyclerView",
                             "Grid - Divider - Horizontal"
+                        )
+                    ),
+                    Link(
+                        "RecyclerView - Grid - DividerRecyclerView",
+                        NavMainDirections.actionGlobalRecyclerDividerSampleGridFragment(
+                            "RecyclerView",
+                            "Grid - DividerRecyclerView"
                         )
                     ),
 
@@ -124,6 +138,13 @@ class MainFragment : ToolbarFragment<FragmentMainBinding>() {
                         NavMainDirections.actionGlobalRecyclerStaggeredGridDividerHorFragment(
                             "RecyclerView",
                             "StaggeredGrid - Divider - Horizontal"
+                        )
+                    ),
+                    Link(
+                        "RecyclerView - StaggeredGrid - DividerRecyclerView",
+                        NavMainDirections.actionGlobalRecyclerDividerSampleStaggeredGridFragment(
+                            "RecyclerView",
+                            "StaggeredGrid - DividerRecyclerView"
                         )
                     ),
 

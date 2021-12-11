@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical">
+
+    <com.github.panpf.assemblyadapter.recycler.divider.DividerRecyclerView
+        android:id="@+id/dividerSampleStaggeredGridDrawableHorRecycler1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        app:drv_divider="@drawable/divider_long_hor"
+        app:drv_footerDivider="@drawable/divider_long_hor"
+        app:drv_headerDivider="@drawable/divider_long_hor"
+        app:drv_sideDivider="@drawable/divider_long"
+        app:drv_sideFooterDivider="@drawable/divider_long"
+        app:drv_sideHeaderDivider="@drawable/divider_long"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:spanCount="4"
+        tools:listitem="@layout/item_app_grid_hor" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#FFEB3B" />
+
+    <com.github.panpf.assemblyadapter.recycler.divider.DividerRecyclerView
+        android:id="@+id/dividerSampleStaggeredGridDrawableHorRecycler2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        app:drv_divider="@drawable/divider_short_hor"
+        app:drv_footerDivider="@drawable/divider_short_hor"
+        app:drv_headerDivider="@drawable/divider_short_hor"
+        app:drv_sideDivider="@drawable/divider_short"
+        app:drv_sideFooterDivider="@drawable/divider_short"
+        app:drv_sideHeaderDivider="@drawable/divider_short"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:spanCount="4"
+        tools:listitem="@layout/item_app_grid_hor" />
+</androidx.appcompat.widget.LinearLayoutCompat>

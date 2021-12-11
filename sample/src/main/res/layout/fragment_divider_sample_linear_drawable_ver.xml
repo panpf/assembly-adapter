@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical">
+
+    <com.github.panpf.assemblyadapter.recycler.divider.DividerRecyclerView
+        android:id="@+id/dividerSampleLinearDrawableVerRecycler1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:drv_divider="@drawable/divider_long"
+        app:drv_footerDivider="@drawable/divider_long"
+        app:drv_headerDivider="@drawable/divider_long"
+        app:drv_sideFooterDivider="@drawable/divider_long_hor"
+        app:drv_sideHeaderDivider="@drawable/divider_long_hor"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_app" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#FFEB3B" />
+
+    <com.github.panpf.assemblyadapter.recycler.divider.DividerRecyclerView
+        android:id="@+id/dividerSampleLinearDrawableVerRecycler2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:drv_divider="@drawable/divider_short"
+        app:drv_footerDivider="@drawable/divider_short"
+        app:drv_headerDivider="@drawable/divider_short"
+        app:drv_sideFooterDivider="@drawable/divider_short_hor"
+        app:drv_sideHeaderDivider="@drawable/divider_short_hor"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_app" />
+</androidx.appcompat.widget.LinearLayoutCompat>

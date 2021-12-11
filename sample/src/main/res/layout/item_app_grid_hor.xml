@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:padding="12dp">
 
     <me.panpf.sketch.SketchImageView
-        android:id="@+id/appGridItemIconImage"
+        android:id="@+id/appGridHorItemIconImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:contentDescription="@string/app_name"
@@ -17,9 +17,10 @@
         tools:src="@mipmap/ic_launcher" />
 
     <TextView
-        android:id="@+id/appGridItemNameText"
+        android:id="@+id/appGridHorItemNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         tools:text="发顺丰就撒娇发牢骚 " />
 </LinearLayout>

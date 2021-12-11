@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        android:groupIndicator="@null"
-        android:scrollbars="vertical" />
+        android:groupIndicator="@null"/>
 
     <TextView
         android:id="@+id/pager2PageNumberText"
