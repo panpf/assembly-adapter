@@ -23,8 +23,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.FragmentContainerActivity" />
-
         <meta-data
             android:name="android.max_aspect"
             android:value="2.056" />
