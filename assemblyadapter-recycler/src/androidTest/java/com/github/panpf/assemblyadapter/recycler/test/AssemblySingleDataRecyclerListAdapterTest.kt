@@ -193,17 +193,17 @@ class AssemblySingleDataRecyclerListAdapterTest {
             Assert.assertEquals(0, currentList.size)
 
             data = Text("hello")
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), data)
             Assert.assertEquals(1, currentList.size)
 
             data = Text("world")
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("world"), data)
             Assert.assertEquals(1, currentList.size)
 
             data = null
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertNull(data)
             Assert.assertEquals(0, currentList.size)
         }
@@ -246,11 +246,11 @@ class AssemblySingleDataRecyclerListAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             data = Text("hello")
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, itemCount)
 
             data = null
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, itemCount)
         }
     }
@@ -269,7 +269,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), getItemData(0))
         }
     }
@@ -311,7 +311,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, getItemViewType(0))
         }
     }
@@ -324,7 +324,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
         }
         AssemblySingleDataRecyclerListAdapter(TextItemFactory()).apply {
             data = Text("hello")
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
 
             assertThrow(IllegalArgumentException::class) {
                 onCreateViewHolder(parent, -1)
@@ -353,7 +353,7 @@ class AssemblySingleDataRecyclerListAdapterTest {
             }
 
             data = Text("hello")
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertSame(itemFactory, getItemFactoryByPosition(0))
         }
     }

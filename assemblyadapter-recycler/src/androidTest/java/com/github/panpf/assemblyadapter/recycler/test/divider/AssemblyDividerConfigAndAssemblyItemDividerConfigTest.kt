@@ -74,61 +74,61 @@ class AssemblyDividerConfigAndAssemblyItemDividerConfigTest {
             .apply {
                 Assert.assertEquals(
                     0,
-                    get(recyclerView, position = 0, spanIndex = 0)?.widthSize ?: 0
+                    get(recyclerView, position = 0, spanIndex = 0)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     0,
-                    get(recyclerView, position = 1, spanIndex = 1)?.widthSize ?: 0
+                    get(recyclerView, position = 1, spanIndex = 1)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     10,
-                    get(recyclerView, position = 2, spanIndex = 2)?.widthSize ?: 0
+                    get(recyclerView, position = 2, spanIndex = 2)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     3,
-                    get(recyclerView, position = 3, spanIndex = 3)?.widthSize ?: 0
+                    get(recyclerView, position = 3, spanIndex = 3)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     10,
-                    get(recyclerView, position = 4, spanIndex = 4)?.widthSize ?: 0
+                    get(recyclerView, position = 4, spanIndex = 4)?.getWidth(true) ?: 0
                 )
 
                 Assert.assertEquals(
                     0,
-                    get(recyclerView, position = 5, spanIndex = 0)?.widthSize ?: 0
+                    get(recyclerView, position = 5, spanIndex = 0)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     0,
-                    get(recyclerView, position = 6, spanIndex = 1)?.widthSize ?: 0
+                    get(recyclerView, position = 6, spanIndex = 1)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     7,
-                    get(recyclerView, position = 7, spanIndex = 2)?.widthSize ?: 0
+                    get(recyclerView, position = 7, spanIndex = 2)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     3,
-                    get(recyclerView, position = 8, spanIndex = 3)?.widthSize ?: 0
+                    get(recyclerView, position = 8, spanIndex = 3)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     10,
-                    get(recyclerView, position = 9, spanIndex = 4)?.widthSize ?: 0
+                    get(recyclerView, position = 9, spanIndex = 4)?.getWidth(true) ?: 0
                 )
 
                 Assert.assertEquals(
                     0,
-                    get(recyclerView, position = 10, spanIndex = 0)?.widthSize ?: 0
+                    get(recyclerView, position = 10, spanIndex = 0)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     0,
-                    get(recyclerView, position = 11, spanIndex = 1)?.widthSize ?: 0
+                    get(recyclerView, position = 11, spanIndex = 1)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     20,
-                    get(recyclerView, position = 12, spanIndex = 2)?.widthSize ?: 0
+                    get(recyclerView, position = 12, spanIndex = 2)?.getWidth(true) ?: 0
                 )
                 Assert.assertEquals(
                     3,
-                    get(recyclerView, position = 13, spanIndex = 3)?.widthSize ?: 0
+                    get(recyclerView, position = 13, spanIndex = 3)?.getWidth(true) ?: 0
                 )
             }
     }
@@ -155,7 +155,7 @@ class AssemblyDividerConfigAndAssemblyItemDividerConfigTest {
             .apply {
                 Assert.assertEquals(
                     9,
-                    get(recyclerView, position = 9, spanIndex = 4)?.widthSize ?: 0
+                    get(recyclerView, position = 9, spanIndex = 4)?.getWidth(true) ?: 0
                 )
             }
     }

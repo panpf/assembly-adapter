@@ -219,15 +219,15 @@ class AssemblyFragmentStateListAdapterTest {
             Assert.assertEquals("", currentList.joinToString())
 
             submitList(listOf(Text("hello")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals("Text(text=hello)", currentList.joinToString())
 
             submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals("Text(text=hello), Text(text=world)", currentList.joinToString())
 
             submitList(null)
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals("", currentList.joinToString())
         }
     }
@@ -242,15 +242,15 @@ class AssemblyFragmentStateListAdapterTest {
             Assert.assertEquals(0, itemCount)
 
             submitList(listOf(Text("hello")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, itemCount)
 
             submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(2, itemCount)
 
             submitList(null)
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(0, itemCount)
         }
     }
@@ -273,7 +273,7 @@ class AssemblyFragmentStateListAdapterTest {
             }
 
             submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(Text("hello"), getItemData(0))
             Assert.assertEquals(Text("world"), getItemData(1))
         }
@@ -307,7 +307,7 @@ class AssemblyFragmentStateListAdapterTest {
             Assert.assertEquals(1L, getItemId(1))
 
             submitList(listOf(Text("hello"), Text("world")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(-1L, getItemId(-1))
             Assert.assertEquals(0L, getItemId(0))
             Assert.assertEquals(1L, getItemId(1))
@@ -333,7 +333,7 @@ class AssemblyFragmentStateListAdapterTest {
             }
 
             submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(1, getItemViewType(0))
             Assert.assertEquals(0, getItemViewType(1))
         }
@@ -347,7 +347,7 @@ class AssemblyFragmentStateListAdapterTest {
             fragment, listOf(TextFragmentItemFactory(), ImageFragmentItemFactory())
         ).apply {
             submitList(listOf(Text("hello"), Image(android.R.drawable.alert_dark_frame)))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
 
             Assert.assertTrue(createFragment(0) is TextFragment)
             Assert.assertTrue(createFragment(1) is ImageFragment)
@@ -372,7 +372,7 @@ class AssemblyFragmentStateListAdapterTest {
             }
 
             submitList(listOf(Image(android.R.drawable.alert_dark_frame), Text("hello")))
-            Thread.sleep(50)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
+            Thread.sleep(100)    // ListAdapter internal asynchronous thread updates data, it takes a while to take effect
             Assert.assertEquals(ImageFragmentItemFactory::class, getItemFactoryByPosition(0)::class)
             Assert.assertEquals(TextFragmentItemFactory::class, getItemFactoryByPosition(1)::class)
         }

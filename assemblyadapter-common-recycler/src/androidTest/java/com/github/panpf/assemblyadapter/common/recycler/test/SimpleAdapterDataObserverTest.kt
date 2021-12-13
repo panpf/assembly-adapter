@@ -52,7 +52,7 @@ class SimpleAdapterDataObserverTest {
         }
 
         listAdapter.submitList(listOf(1, 2, 3))
-        Thread.sleep(50)
+        Thread.sleep(100)
         Assert.assertEquals(
             "RangeInserted(positionStart=0, itemCount=3)",
             changeTypeList.joinToString { it.toString() }
@@ -60,7 +60,7 @@ class SimpleAdapterDataObserverTest {
         changeTypeList.clear()
 
         listAdapter.submitList(listOf(1, 2, 3, 4, 6, 7, 8))
-        Thread.sleep(50)
+        Thread.sleep(100)
         Assert.assertEquals(
             "RangeInserted(positionStart=3, itemCount=4)",
             changeTypeList.joinToString { it.toString() }
@@ -68,7 +68,7 @@ class SimpleAdapterDataObserverTest {
         changeTypeList.clear()
 
         listAdapter.submitList(listOf(1, 2, 0, 9, 5, 7, 8))
-        Thread.sleep(50)
+        Thread.sleep(100)
         Assert.assertEquals(
             "RangeRemoved(positionStart=2, itemCount=3), RangeInserted(positionStart=2, itemCount=3)",
             changeTypeList.joinToString { it.toString() }
@@ -76,7 +76,7 @@ class SimpleAdapterDataObserverTest {
         changeTypeList.clear()
 
         listAdapter.submitList(listOf(1, 2, 7, 8, 0, 9, 5))
-        Thread.sleep(50)
+        Thread.sleep(100)
         Assert.assertEquals(
             "RangeMoved(fromPosition=6, toPosition=2, itemCount=1), RangeMoved(fromPosition=6, toPosition=2, itemCount=1)",
             changeTypeList.joinToString { it.toString() }
@@ -84,7 +84,7 @@ class SimpleAdapterDataObserverTest {
         changeTypeList.clear()
 
         listAdapter.submitList(listOf(1, 3, 7, 8, 0, 9, 5))
-        Thread.sleep(50)
+        Thread.sleep(100)
         Assert.assertEquals(
             "RangeRemoved(positionStart=1, itemCount=1), RangeInserted(positionStart=1, itemCount=1)",
             changeTypeList.joinToString { it.toString() }
