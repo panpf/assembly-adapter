@@ -24,7 +24,7 @@ import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.Item
 import com.github.panpf.assemblyadapter.ItemFactory
 import com.github.panpf.assemblyadapter.internal.ItemFactoryStorage
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupportByPosition
+import com.github.panpf.assemblyadapter.recycler.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.internal.RecyclerViewHolderWrapper
 
 /**
@@ -68,12 +68,12 @@ open class AssemblyLoadStateAdapter(
                 holder.absoluteAdapterPosition.takeIf { it != -1 } ?: holder.position
             item.dispatchBindData(0, absoluteAdapterPosition, loadState)
 
+            val parent = parent
             val layoutManager = parent?.layoutManager
-            if (layoutManager is StaggeredGridLayoutManager
-                && layoutManager is FullSpanSupportByPosition
-            ) {
-                (holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
-                    .isFullSpan = layoutManager.isFullSpanByPosition(absoluteAdapterPosition)
+            if (layoutManager is StaggeredGridLayoutManager && layoutManager is FullSpanSupport) {
+                val layoutParams =
+                    holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+                layoutParams.isFullSpan = layoutManager.isFullSpan(parent, absoluteAdapterPosition)
             }
         } else {
             throw IllegalArgumentException("holder must be RecyclerViewHolderWrapper")

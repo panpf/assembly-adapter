@@ -32,7 +32,7 @@
         app:drv_sideHeaderDividerInsets="4dp"
         app:drv_sideHeaderDividerSize="5dp"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        app:spanCount="4"
+        app:spanCount="3"
         tools:listitem="@layout/item_app_grid_hor" />
 
     <View
@@ -83,6 +83,6 @@
         app:drv_sideHeaderDividerInsetTop="2dp"
         app:drv_sideHeaderDividerSize="5dp"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        app:spanCount="4"
+        app:spanCount="3"
         tools:listitem="@layout/item_app_grid_hor" />
 </androidx.appcompat.widget.LinearLayoutCompat>

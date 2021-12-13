@@ -98,6 +98,30 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 * RecyclerView.addAssemblyGridDividerItemDecoration()
 * RecyclerView.addAssemblyStaggeredGridDividerItemDecoration()
 
+### DividerRecyclerView
+
+[assemblyadapter-common-recycler-divider] 提供了 [DividerRecyclerView] 可以在布局中配置
+divider，支持的属性及示例请参考以下布局：
+
+* [fragment_divider_sample_grid_drawable_hor.xml]
+* [fragment_divider_sample_grid_drawable_ver.xml]
+* [fragment_divider_sample_grid_insets_hor.xml]
+* [fragment_divider_sample_grid_insets_ver.xml]
+* [fragment_divider_sample_grid_size_hor.xml]
+* [fragment_divider_sample_grid_size_ver.xml]
+* [fragment_divider_sample_linear_drawable_hor.xml]
+* [fragment_divider_sample_linear_drawable_ver.xml]
+* [fragment_divider_sample_linear_insets_hor.xml]
+* [fragment_divider_sample_linear_insets_ver.xml]
+* [fragment_divider_sample_linear_size_hor.xml]
+* [fragment_divider_sample_linear_size_ver.xml]
+* [fragment_divider_sample_staggered_grid_drawable_hor.xml]
+* [fragment_divider_sample_staggered_grid_drawable_ver.xml]
+* [fragment_divider_sample_staggered_grid_insets_hor.xml]
+* [fragment_divider_sample_staggered_grid_insets_ver.xml]
+* [fragment_divider_sample_staggered_grid_size_hor.xml]
+* [fragment_divider_sample_staggered_grid_size_ver.xml]
+
 ### 更多示例
 
 * [RecyclerLinearDividerHorFragment]
@@ -133,6 +157,8 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 
 [Divider]: ../../assemblyadapter-common-recycler-divider/src/main/java/com/github/panpf/assemblyadapter/recycler/divider/Divider.kt
 
+[DividerRecyclerView]: ../../assemblyadapter-common-recycler-divider/src/main/java/com/github/panpf/assemblyadapter/recycler/divider/DividerRecyclerView.kt
+
 [assemblyadapter-recycler]: ../../assemblyadapter-recycler
 
 [AssemblyLinearDividerItemDecoration]: ../../assemblyadapter-recycler/src/main/java/com/github/panpf/assemblyadapter/recycler/divider/AssemblyLinearDividerItemDecoration.kt
@@ -152,3 +178,39 @@ recyclerView.addItemDecoration(linearDividerItemDecoration)
 [StaggeredGridLayoutManager]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/StaggeredGridLayoutManager
 
 [ItemDecoration]: https://developer.android.google.cn/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration
+
+[fragment_divider_sample_grid_drawable_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_grid_drawable_hor.xml
+
+[fragment_divider_sample_grid_drawable_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_grid_drawable_ver.xml
+
+[fragment_divider_sample_grid_insets_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_grid_insets_hor.xml
+
+[fragment_divider_sample_grid_insets_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_grid_insets_ver.xml
+
+[fragment_divider_sample_grid_size_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_grid_size_hor.xml
+
+[fragment_divider_sample_grid_size_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_grid_size_ver.xml
+
+[fragment_divider_sample_linear_drawable_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_linear_drawable_hor.xml
+
+[fragment_divider_sample_linear_drawable_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_linear_drawable_ver.xml
+
+[fragment_divider_sample_linear_insets_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_linear_insets_hor.xml
+
+[fragment_divider_sample_linear_insets_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_linear_insets_ver.xml
+
+[fragment_divider_sample_linear_size_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_linear_size_hor.xml
+
+[fragment_divider_sample_linear_size_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_linear_size_ver.xml
+
+[fragment_divider_sample_staggered_grid_drawable_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_staggered_grid_drawable_hor.xml
+
+[fragment_divider_sample_staggered_grid_drawable_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_staggered_grid_drawable_ver.xml
+
+[fragment_divider_sample_staggered_grid_insets_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_staggered_grid_insets_hor.xml
+
+[fragment_divider_sample_staggered_grid_insets_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_staggered_grid_insets_ver.xml
+
+[fragment_divider_sample_staggered_grid_size_hor.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_staggered_grid_size_hor.xml
+
+[fragment_divider_sample_staggered_grid_size_ver.xml]: ../../sample/src/main/res/layout/fragment_divider_sample_staggered_grid_size_ver.xml

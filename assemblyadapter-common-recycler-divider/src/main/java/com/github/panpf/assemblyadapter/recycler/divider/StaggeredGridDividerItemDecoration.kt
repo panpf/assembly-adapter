@@ -326,14 +326,18 @@ open class StaggeredGridDividerItemDecoration(
                 throw IllegalArgumentException("Must call the divider() method to configure the divider")
             }
 
+            val headerDividerConfig = (headerDividerConfig
+                ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
+                ?.toItemDividerConfig(context)
+            val footerDividerConfig = (footerDividerConfig
+                ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
+                ?.toItemDividerConfig(context)
+            val isFullSpanByPosition = isFullSpanByPosition
+                ?: (if (headerDividerConfig != null || footerDividerConfig != null) IsFullSpanByPositionImpl() else null)
             return StaggeredGridDividerItemDecoration(
                 dividerConfig = finalDividerConfig?.toItemDividerConfig(context),
-                headerDividerConfig = (headerDividerConfig
-                    ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
-                    ?.toItemDividerConfig(context),
-                footerDividerConfig = (footerDividerConfig
-                    ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
-                    ?.toItemDividerConfig(context),
+                headerDividerConfig = headerDividerConfig,
+                footerDividerConfig = footerDividerConfig,
                 sideDividerConfig = sideDividerConfig?.toItemDividerConfig(context),
                 sideHeaderDividerConfig = (sideHeaderDividerConfig
                     ?: if (useSideDividerAsSideHeaderDivider) sideDividerConfig else null)
@@ -341,7 +345,7 @@ open class StaggeredGridDividerItemDecoration(
                 sideFooterDividerConfig = (sideFooterDividerConfig
                     ?: if (useSideDividerAsSideFooterDivider) sideDividerConfig else null)
                     ?.toItemDividerConfig(context),
-                isFullSpanByPosition
+                isFullSpanByPosition = isFullSpanByPosition
             )
         }
 

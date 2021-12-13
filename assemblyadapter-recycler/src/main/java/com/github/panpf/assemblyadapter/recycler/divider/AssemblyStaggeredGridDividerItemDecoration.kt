@@ -16,12 +16,10 @@
 package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupportByPosition
 
 /**
  * [StaggeredGridLayoutManager] dedicated divider ItemDecoration. Support divider、header and footer divider、side divider、header and footer side divider
@@ -35,7 +33,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
     sideDividerConfig: AssemblyItemDividerConfig?,
     sideHeaderDividerConfig: AssemblyItemDividerConfig?,
     sideFooterDividerConfig: AssemblyItemDividerConfig?,
-    isFullSpanByPosition: IsFullSpanByPosition
+    isFullSpanByPosition: IsFullSpanByPosition?
 ) : StaggeredGridDividerItemDecoration(
     dividerConfig,
     headerDividerConfig,
@@ -123,15 +121,19 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                     ConcatFindItemFactoryClassSupport(this)
                 }
 
+            val headerDividerConfig = (headerDividerConfig
+                ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
+                ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition)
+            val footerDividerConfig = (footerDividerConfig
+                ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
+                ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition)
+            val isFullSpanByPosition = isFullSpanByPosition
+                ?: (if (headerDividerConfig != null || footerDividerConfig != null) IsFullSpanByPositionImpl() else null)
             return AssemblyStaggeredGridDividerItemDecoration(
                 dividerConfig = finalDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                headerDividerConfig = (headerDividerConfig
-                    ?: if (useDividerAsHeaderDivider) finalDividerConfig else null)
-                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                footerDividerConfig = (footerDividerConfig
-                    ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
-                    ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
+                headerDividerConfig = headerDividerConfig,
+                footerDividerConfig = footerDividerConfig,
                 sideDividerConfig = sideDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
                 sideHeaderDividerConfig = (sideHeaderDividerConfig
@@ -140,7 +142,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                 sideFooterDividerConfig = (sideFooterDividerConfig
                     ?: if (useSideDividerAsSideFooterDivider) sideDividerConfig else null)
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
-                isFullSpanByPosition ?: AssemblyIsFullSpanByPosition()
+                isFullSpanByPosition = isFullSpanByPosition
             )
         }
 
@@ -411,24 +413,6 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         fun findItemFactoryClassSupport(findItemFactoryClassSupport: FindItemFactoryClassSupport?): Builder {
             this.findItemFactoryClassSupport = findItemFactoryClassSupport
             return this
-        }
-
-
-        private class AssemblyIsFullSpanByPosition : IsFullSpanByPosition {
-
-            override fun isFullSpan(parent: RecyclerView, position: Int): Boolean {
-                val adapter = parent.adapter
-                return if (adapter != null) {
-                    val layoutManager = parent.layoutManager
-                    if (layoutManager is FullSpanSupportByPosition) {
-                        layoutManager.isFullSpanByPosition(position)
-                    } else {
-                        false
-                    }
-                } else {
-                    false
-                }
-            }
         }
     }
 }

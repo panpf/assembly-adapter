@@ -26,6 +26,7 @@ android {
 dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${property("KOTLIN")}")
     api("androidx.recyclerview:recyclerview:${property("ANDROIDX_RECYCLERVIEW")}")
+    api(project(":assemblyadapter-common-recycler"))
 
     testImplementation("junit:junit:${property("JUNIT")}")
     androidTestImplementation("androidx.test:runner:${property("ANDROIDX_TEST_RUNNER")}")

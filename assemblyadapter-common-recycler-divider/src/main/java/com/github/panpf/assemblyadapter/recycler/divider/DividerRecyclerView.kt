@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.common.recycler.divider.R
 import com.github.panpf.assemblyadapter.recycler.divider.internal.DividerSize
 
-class DividerRecyclerView @JvmOverloads constructor(
+open class DividerRecyclerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.recyclerViewStyle
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
@@ -577,7 +577,7 @@ class DividerRecyclerView @JvmOverloads constructor(
                     }
                 }
 
-                if (headerDividerDrawable != null && isFullSpanByPosition != null) {
+                if (headerDividerDrawable != null) {
                     val headerDividerSize =
                         if (headerDividerWidth != null && headerDividerHeight != null) {
                             DividerSize.clearly(headerDividerWidth, headerDividerHeight)
@@ -610,7 +610,7 @@ class DividerRecyclerView @JvmOverloads constructor(
                     }
                 }
 
-                if (footerDividerDrawable != null && isFullSpanByPosition != null) {
+                if (footerDividerDrawable != null) {
                     val footerDividerSize =
                         if (footerDividerWidth != null && footerDividerHeight != null) {
                             DividerSize.clearly(footerDividerWidth, footerDividerHeight)

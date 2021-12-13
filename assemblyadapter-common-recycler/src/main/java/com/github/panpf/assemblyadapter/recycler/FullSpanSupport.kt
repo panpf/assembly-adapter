@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.panpf.assemblyadapter.recycler.internal
+package com.github.panpf.assemblyadapter.recycler
 
-interface FullSpanSupportByPosition {
-    fun isFullSpanByPosition(position: Int): Boolean
+import androidx.recyclerview.widget.RecyclerView
+
+/**
+ * Determining FullSpan based on position.
+ */
+fun interface FullSpanSupport {
+    fun isFullSpan(parent: RecyclerView, position: Int): Boolean
 }

@@ -23,21 +23,18 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
-import com.github.panpf.assemblyadapter.recycler.internal.FullSpanSupportByPosition
 import kotlin.reflect.KClass
 
 /**
  * An implementation of [AssemblyStaggeredGridLayoutManager]. Set the full span of [AssemblyStaggeredGridLayoutManager] according to position and itemType and [ItemFactory] as the identifier
  */
-class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanSupportByPosition {
+class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanSupport {
 
     private val fullSpanByPositionSparseArray: SparseBooleanArray?
     private val fullSpanByItemTypeSparseArray: SparseBooleanArray?
     private val fullSpanByItemFactoryMap: Map<Class<out ItemFactory<out Any>>, Boolean>?
     private val concatAdapterLocalHelper = ConcatAdapterLocalHelper()
 
-    private var recyclerView: RecyclerView? = null
-
     /**
      * Constructor used when layout manager is set in XML by RecyclerView attribute
      * "layoutManager". Defaults to single column and vertical.
@@ -234,14 +231,14 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
             }
     }
 
-    override fun isFullSpanByPosition(position: Int): Boolean {
+    override fun isFullSpan(parent: RecyclerView, position: Int): Boolean {
         if (fullSpanByPositionSparseArray?.get(position) == true) {
             return true
         }
 
         val fullSpanByItemTypeSparseArray = fullSpanByItemTypeSparseArray
         val fullSpanByItemFactoryMap = fullSpanByItemFactoryMap
-        val adapter = recyclerView?.adapter
+        val adapter = parent.adapter
         if ((fullSpanByItemTypeSparseArray != null || fullSpanByItemFactoryMap != null)
             && adapter != null
             && position >= 0
@@ -274,7 +271,6 @@ class AssemblyStaggeredGridLayoutManager : StaggeredGridLayoutManager, FullSpanS
 
     override fun onAttachedToWindow(view: RecyclerView) {
         super.onAttachedToWindow(view)
-        recyclerView = view
         concatAdapterLocalHelper.reset()
     }
 

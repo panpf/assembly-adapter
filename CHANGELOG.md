@@ -1,3 +1,7 @@
+# new
+
+* improve: Now DividerRecyclerView can preview headerDivider and footerDivider under StaggeredGridLayoutManager
+
 # v4.1.0-beta01
 
 * new: The `assemblyadapter-common-recycler-divider` module adds DividerRecyclerView, which allows you to configure the divider in the layout

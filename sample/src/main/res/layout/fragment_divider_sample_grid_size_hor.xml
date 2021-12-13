@@ -26,7 +26,7 @@
         app:drv_sideHeaderDivider="#00FF00"
         app:drv_sideHeaderDividerSize="4dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="4"
+        app:spanCount="3"
         tools:listitem="@layout/item_app_grid_hor" />
 
     <View
@@ -59,6 +59,6 @@
         app:drv_sideHeaderDividerHeight="4dp"
         app:drv_sideHeaderDividerWidth="40dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="4"
+        app:spanCount="3"
         tools:listitem="@layout/item_app_grid_hor" />
 </androidx.appcompat.widget.LinearLayoutCompat>
