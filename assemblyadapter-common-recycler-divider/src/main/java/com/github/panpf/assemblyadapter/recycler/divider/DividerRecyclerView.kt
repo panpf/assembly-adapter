@@ -967,7 +967,7 @@ class DividerRecyclerView @JvmOverloads constructor(
         }
     }
 
-    class ItemDecorationWrapper(private val itemDecoration: ItemDecoration) : ItemDecoration() {
+    private class ItemDecorationWrapper(private val itemDecoration: ItemDecoration) : ItemDecoration() {
         override fun onDraw(c: Canvas, parent: RecyclerView, state: State) {
             itemDecoration.onDraw(c, parent, state)
         }
