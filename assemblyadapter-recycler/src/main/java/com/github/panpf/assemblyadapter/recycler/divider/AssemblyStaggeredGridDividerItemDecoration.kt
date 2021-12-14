@@ -17,6 +17,8 @@ package com.github.panpf.assemblyadapter.recycler.divider
 
 import android.content.Context
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.FullSpanSupport
+import com.github.panpf.assemblyadapter.recycler.FullSpanSupportFromLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyFindItemFactoryClassSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.AssemblyItemDividerConfig
 import com.github.panpf.assemblyadapter.recycler.divider.internal.ConcatFindItemFactoryClassSupport
@@ -33,7 +35,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
     sideDividerConfig: AssemblyItemDividerConfig?,
     sideHeaderDividerConfig: AssemblyItemDividerConfig?,
     sideFooterDividerConfig: AssemblyItemDividerConfig?,
-    isFullSpanByPosition: IsFullSpanByPosition?
+    isFullSpanByPosition: FullSpanSupport?
 ) : StaggeredGridDividerItemDecoration(
     dividerConfig,
     headerDividerConfig,
@@ -92,7 +94,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         private var useSideDividerAsSideFooterDivider = false
 
         private var disableDefaultDivider = false
-        private var isFullSpanByPosition: IsFullSpanByPosition? = null
+        private var isFullSpanByPosition: FullSpanSupport? = null
         private var findItemFactoryClassSupport: FindItemFactoryClassSupport? = null
 
         fun build(): AssemblyStaggeredGridDividerItemDecoration {
@@ -128,7 +130,7 @@ open class AssemblyStaggeredGridDividerItemDecoration(
                 ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
                 ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition)
             val isFullSpanByPosition = isFullSpanByPosition
-                ?: (if (headerDividerConfig != null || footerDividerConfig != null) IsFullSpanByPositionImpl() else null)
+                ?: (if (headerDividerConfig != null || footerDividerConfig != null) FullSpanSupportFromLayoutManager() else null)
             return AssemblyStaggeredGridDividerItemDecoration(
                 dividerConfig = finalDividerConfig
                     ?.toAssemblyItemDividerConfig(context, finalFindItemFactoryClassByPosition),
@@ -402,7 +404,16 @@ open class AssemblyStaggeredGridDividerItemDecoration(
         /**
          * Set the interface for determining FullSpan based on position.
          */
+        @Deprecated(message= "Please use isFullSpanByPosition(FullSpanSupport?) instead")
         fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
+            this.isFullSpanByPosition = isFullSpanByPosition
+            return this
+        }
+
+        /**
+         * Set the interface for determining FullSpan based on position.
+         */
+        fun isFullSpanByPosition(isFullSpanByPosition: FullSpanSupport?): Builder {
             this.isFullSpanByPosition = isFullSpanByPosition
             return this
         }

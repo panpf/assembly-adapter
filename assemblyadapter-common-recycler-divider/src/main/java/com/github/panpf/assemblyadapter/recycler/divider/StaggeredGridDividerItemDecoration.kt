@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.github.panpf.assemblyadapter.recycler.FullSpanSupport
+import com.github.panpf.assemblyadapter.recycler.FullSpanSupportFromLayoutManager
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerNoSideHelper
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerOnlySideHelper
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerSideAndFooterHelper
@@ -42,7 +44,7 @@ open class StaggeredGridDividerItemDecoration(
     val sideDividerConfig: ItemDividerConfig?,
     val sideHeaderDividerConfig: ItemDividerConfig?,
     val sideFooterDividerConfig: ItemDividerConfig?,
-    val isFullSpanByPosition: IsFullSpanByPosition?,
+    val isFullSpanByPosition: FullSpanSupport?,
 ) : ItemDecoration() {
 
     val dividerHelper = when {
@@ -302,7 +304,7 @@ open class StaggeredGridDividerItemDecoration(
         private var useSideDividerAsSideFooterDivider = false
 
         private var disableDefaultDivider = false
-        private var isFullSpanByPosition: IsFullSpanByPosition? = null
+        private var isFullSpanByPosition: FullSpanSupport? = null
 
         fun build(): StaggeredGridDividerItemDecoration {
             if ((useSideDividerAsSideHeaderDivider || useSideDividerAsSideFooterDivider) && sideDividerConfig == null) {
@@ -333,7 +335,7 @@ open class StaggeredGridDividerItemDecoration(
                 ?: if (useDividerAsFooterDivider) finalDividerConfig else null)
                 ?.toItemDividerConfig(context)
             val isFullSpanByPosition = isFullSpanByPosition
-                ?: (if (headerDividerConfig != null || footerDividerConfig != null) IsFullSpanByPositionImpl() else null)
+                ?: (if (headerDividerConfig != null || footerDividerConfig != null) FullSpanSupportFromLayoutManager() else null)
             return StaggeredGridDividerItemDecoration(
                 dividerConfig = finalDividerConfig?.toItemDividerConfig(context),
                 headerDividerConfig = headerDividerConfig,
@@ -642,7 +644,26 @@ open class StaggeredGridDividerItemDecoration(
          * @see useDividerAsFooterDivider
          * @see useDividerAsHeaderAndFooterDivider
          */
+        @Deprecated(message= "Please use isFullSpanByPosition(FullSpanSupport?) instead")
         fun isFullSpanByPosition(isFullSpanByPosition: IsFullSpanByPosition?): Builder {
+            this.isFullSpanByPosition = isFullSpanByPosition
+            return this
+        }
+
+        /**
+         * Set the interface for determining FullSpan based on position.
+         * If you use [headerDivider], [footerDivider], [headerAndFooterDivider], [useDividerAsHeaderDivider],
+         * [useDividerAsFooterDivider], [useDividerAsHeaderAndFooterDivider] then you must set this interface,
+         * otherwise an exception will be thrown
+         *
+         * @see headerDivider
+         * @see footerDivider
+         * @see headerAndFooterDivider
+         * @see useDividerAsHeaderDivider
+         * @see useDividerAsFooterDivider
+         * @see useDividerAsHeaderAndFooterDivider
+         */
+        fun isFullSpanByPosition(isFullSpanByPosition: FullSpanSupport?): Builder {
             this.isFullSpanByPosition = isFullSpanByPosition
             return this
         }

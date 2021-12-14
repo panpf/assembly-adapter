@@ -1,9 +1,8 @@
-package com.github.panpf.assemblyadapter.recycler.divider
+package com.github.panpf.assemblyadapter.recycler
 
 import androidx.recyclerview.widget.RecyclerView
-import com.github.panpf.assemblyadapter.recycler.FullSpanSupport
 
-class IsFullSpanByPositionImpl : IsFullSpanByPosition {
+class FullSpanSupportFromLayoutManager : FullSpanSupport {
 
     override fun isFullSpan(parent: RecyclerView, position: Int): Boolean {
         val adapter = parent.adapter

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.panpf.assemblyadapter.common.recycler.divider.R
+import com.github.panpf.assemblyadapter.recycler.FullSpanSupport
 import com.github.panpf.assemblyadapter.recycler.divider.internal.DividerSize
 
 open class DividerRecyclerView @JvmOverloads constructor(
@@ -20,7 +21,7 @@ open class DividerRecyclerView @JvmOverloads constructor(
 
     private val dividerParams: DividerParams?
 
-    var isFullSpanByPosition: IsFullSpanByPosition? = null
+    var isFullSpanByPosition: FullSpanSupport? = null
         set(value) {
             field = value
             resetDivider(layoutManager)
@@ -537,7 +538,7 @@ open class DividerRecyclerView @JvmOverloads constructor(
 
         fun createStaggeredGridDividerItemDecoration(
             recyclerView: RecyclerView,
-            isFullSpanByPosition: IsFullSpanByPosition?
+            isFullSpanByPosition: FullSpanSupport?
         ): StaggeredGridDividerItemDecoration? {
             if (dividerDrawable == null
                 && headerDividerDrawable == null
