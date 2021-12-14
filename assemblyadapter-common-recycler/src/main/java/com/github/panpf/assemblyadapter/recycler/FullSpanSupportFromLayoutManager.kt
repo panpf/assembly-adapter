@@ -5,14 +5,10 @@ import androidx.recyclerview.widget.RecyclerView
 class FullSpanSupportFromLayoutManager : FullSpanSupport {
 
     override fun isFullSpan(parent: RecyclerView, position: Int): Boolean {
-        val adapter = parent.adapter
-        return if (adapter != null) {
-            val layoutManager = parent.layoutManager
-            if (layoutManager is FullSpanSupport) {
-                layoutManager.isFullSpan(parent, position)
-            } else {
-                false
-            }
+        parent.adapter ?: return false
+        val layoutManager = parent.layoutManager
+        return if (layoutManager is FullSpanSupport) {
+            layoutManager.isFullSpan(parent, position)
         } else {
             false
         }
