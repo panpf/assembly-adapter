@@ -23,6 +23,7 @@ import android.content.IntentFilter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.panpf.assemblyadapter.sample.base.LifecycleAndroidViewModel
+import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.util.PinyinFlatAppsHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,7 +44,13 @@ class PinyinFlatAppListViewModel(application: Application) :
         viewModelScope.launch {
             loadingData.postValue(true)
             val list = withContext(Dispatchers.IO) {
-                PinyinFlatAppsHelper(getApplication()).getAll()
+                val appList = PinyinFlatAppsHelper(getApplication()).getAll()
+                // Large amounts of data are used to test the divider's performance
+                ArrayList<Any>().apply {
+                    repeat(30) {
+                        addAll(appList)
+                    }
+                }
             }
             pinyinFlatAppListData.postValue(list)
             loadingData.postValue(false)

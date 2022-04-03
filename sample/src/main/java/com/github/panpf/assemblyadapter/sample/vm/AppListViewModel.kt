@@ -19,6 +19,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.util.AppListHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +38,13 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             loadingData.postValue(true)
             val list = withContext(Dispatchers.IO) {
-                AppListHelper(getApplication()).getAll()
+                val appList = AppListHelper(getApplication()).getAll()
+                // Large amounts of data are used to test the divider's performance
+                ArrayList<AppInfo>().apply {
+                    repeat(30) {
+                        addAll(appList)
+                    }
+                }
             }
             appListData.postValue(list)
             loadingData.postValue(false)

@@ -21,6 +21,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.HighPerformanceSpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.github.panpf.assemblyadapter.recycler.divider.internal.GridDividerNoSideHelper
@@ -174,17 +175,31 @@ open class GridDividerItemDecoration(
         val position = childLayoutParams.absoluteAdapterPosition.takeIf { it != -1 } ?: return
         val isVerticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
-        val spanSizeLookup = layoutManager.spanSizeLookup
+        var spanSizeLookup = layoutManager.spanSizeLookup
+        if (spanSizeLookup !is HighPerformanceSpanSizeLookup) {
+            // 'HighPerformanceSpanSizeLookup' can still keep high performance under large amounts of data
+            spanSizeLookup = HighPerformanceSpanSizeLookup(spanSizeLookup)
+            layoutManager.spanSizeLookup = spanSizeLookup
+        }
         if (!spanSizeLookup.isSpanGroupIndexCacheEnabled) {
             spanSizeLookup.isSpanGroupIndexCacheEnabled = true
+        }
+        if (!spanSizeLookup.isSpanIndexCacheEnabled) {
+            spanSizeLookup.isSpanIndexCacheEnabled = true
         }
         val spanCount = layoutManager.spanCount
         val spanSize = childLayoutParams.spanSize
         val spanIndex = childLayoutParams.spanIndex
-        val spanGroupCount = spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
         val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
         val isColumnFirst = spanGroupIndex == 0
-        val isColumnLast = spanGroupIndex == spanGroupCount - 1
+        // getSpanGroupIndex() takes time to pass in 'itemCount-1', so counting only the last few items improves performance
+        val isColumnLast = if (position >= itemCount - spanCount) {
+            val spanGroupCount = spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
+            spanGroupIndex == spanGroupCount - 1
+        } else {
+            false
+        }
+
         val isFullSpan = spanSize == spanCount
         val isFirstSpan = isFullSpan || spanIndex == 0
         val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount
@@ -213,13 +228,14 @@ open class GridDividerItemDecoration(
         val childCount = parent.childCount.takeIf { it != 0 } ?: return
         val isVerticalOrientation = layoutManager.orientation == GridLayoutManager.VERTICAL
         val isLTRDirection = layoutManager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR
-        val spanSizeLookup = layoutManager.spanSizeLookup
-        if (!spanSizeLookup.isSpanGroupIndexCacheEnabled) {
-            spanSizeLookup.isSpanGroupIndexCacheEnabled = true
+        var spanSizeLookup = layoutManager.spanSizeLookup
+        if (spanSizeLookup !is HighPerformanceSpanSizeLookup) {
+            // 'HighPerformanceSpanSizeLookup' can still keep high performance under large amounts of data
+            spanSizeLookup = HighPerformanceSpanSizeLookup(spanSizeLookup)
+            layoutManager.spanSizeLookup = spanSizeLookup
         }
         val spanCount = layoutManager.spanCount
-        val spanGroupCount =
-            layoutManager.spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
+        var spanGroupCount = -1
 
         for (index in 0 until childCount) {
             val view = parent.getChildAt(index)
@@ -229,7 +245,15 @@ open class GridDividerItemDecoration(
             val spanIndex = childLayoutParams.spanIndex
             val spanGroupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount)
             val isColumnFirst = spanGroupIndex == 0
-            val isColumnLast = spanGroupIndex == spanGroupCount - 1
+            // getSpanGroupIndex() takes time to pass in 'itemCount-1', so counting only the last few items improves performance
+            val isColumnLast = if (position >= itemCount - spanCount) {
+                if (spanGroupCount == -1) {
+                    spanGroupCount = spanSizeLookup.getSpanGroupIndex(itemCount - 1, spanCount) + 1
+                }
+                spanGroupIndex == spanGroupCount - 1
+            } else {
+                false
+            }
             val isFullSpan = spanSize == spanCount
             val isFirstSpan = isFullSpan || spanIndex == 0
             val isLastSpan = isFullSpan || (spanIndex + spanSize) == spanCount

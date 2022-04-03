@@ -20,6 +20,7 @@ import android.util.AttributeSet
 import androidx.collection.ArrayMap
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.HighPerformanceSpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.panpf.assemblyadapter.AssemblyAdapter
 import com.github.panpf.assemblyadapter.ItemFactory
@@ -34,11 +35,11 @@ class AssemblyGridLayoutManager : GridLayoutManager {
     private val itemSpanByPositionSparseArray: SparseArrayCompat<ItemSpan>?
     private val itemSpanByItemTypeSparseArray: SparseArrayCompat<ItemSpan>?
     private val itemSpanByItemFactoryMap: Map<Class<out ItemFactory<out Any>>, ItemSpan>?
-    private val spanSizeLookup = object : SpanSizeLookup() {
+    private val spanSizeLookup = HighPerformanceSpanSizeLookup(object : SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             return getSpanSizeImpl(position)
         }
-    }
+    })
 
     private var recyclerView: RecyclerView? = null
 
@@ -257,7 +258,7 @@ class AssemblyGridLayoutManager : GridLayoutManager {
 
     override fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
 //        super.setSpanSizeLookup(spanSizeLookup)
-        throw UnsupportedOperationException("AssemblyGridLayoutManager does not support setSpanSizeLookup() method")
+        throw UnsupportedOperationException("AssemblyGridLayoutManager does not support modify spanSizeLookup")
     }
 
     override fun onAttachedToWindow(view: RecyclerView) {
