@@ -1,6 +1,7 @@
-# new
+# v4.1.0-rc01
 
 * improve: Now DividerRecyclerView can preview headerDivider and footerDivider under StaggeredGridLayoutManager
+* fix: Repair GridDividerItemDecoration in the case of a large amount of data causes RecyclerView dropped frame of bugs
 
 # v4.1.0-beta01
 
