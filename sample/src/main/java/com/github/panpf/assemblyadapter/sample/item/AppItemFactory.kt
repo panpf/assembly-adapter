@@ -23,13 +23,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.res.ResourcesCompat
 import com.github.panpf.assemblyadapter.BindingItemFactory
 import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppBinding
-import me.panpf.sketch.shaper.RoundRectImageShaper
-import me.panpf.sketch.uri.AppIconUriModel
+import com.github.panpf.sketch.displayImage
+import com.github.panpf.sketch.fetch.newAppIconUri
 
 class AppItemFactory(private val activity: Activity) :
     BindingItemFactory<AppInfo, ItemAppBinding>(AppInfo::class) {
@@ -65,15 +64,6 @@ class AppItemFactory(private val activity: Activity) :
             }.show()
             true
         }
-
-        binding.appItemIconImage.options.shaper = RoundRectImageShaper(
-            context.resources.getDimension(R.dimen.app_icon_corner_radius)
-        ).apply {
-            setStroke(
-                ResourcesCompat.getColor(context.resources, R.color.app_icon_stroke, null),
-                context.resources.getDimensionPixelSize(R.dimen.app_icon_stroke_width)
-            )
-        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -85,7 +75,7 @@ class AppItemFactory(private val activity: Activity) :
         absoluteAdapterPosition: Int,
         data: AppInfo
     ) {
-        val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
+        val appIconUri = newAppIconUri(data.packageName, data.versionCode)
         binding.appItemIconImage.displayImage(appIconUri)
         binding.appItemNameText.text = data.name
         binding.appItemVersionText.text = "v${data.versionName}"

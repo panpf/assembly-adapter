@@ -53,7 +53,8 @@ dependencies {
 
     implementation("com.google.android.material:material:${property("GOOGLE_MATERIAL")}")
     implementation("io.github.panpf.pagerindicator:pagerindicator:${property("PAGER_INDICATOR")}")
-    implementation("io.github.panpf.sketch:sketch:${property("SKETCH_VERSION")}")
+    implementation("io.github.panpf.sketch3:sketch:${property("SKETCH_VERSION")}")
+    implementation("io.github.panpf.sketch3:sketch-extensions:${property("SKETCH_VERSION")}")
     implementation("io.github.panpf.tools4a:tools4a-dimen-ktx:${property("TOOLS4A")}")
     implementation("io.github.panpf.tools4a:tools4a-display-ktx:${property("TOOLS4A")}")
     implementation("io.github.panpf.tools4k:tools4k:${property("TOOLS4K")}")

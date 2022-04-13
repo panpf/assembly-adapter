@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <me.panpf.sketch.SketchImageView
+        <ImageView
             android:id="@+id/appCardGridItemIconImage"
             android:layout_width="60dp"
             android:layout_height="60dp"

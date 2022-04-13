@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -32,9 +31,9 @@ import com.github.panpf.assemblyadapter.sample.R
 import com.github.panpf.assemblyadapter.sample.bean.AppInfo
 import com.github.panpf.assemblyadapter.sample.bean.GridDividerParams
 import com.github.panpf.assemblyadapter.sample.databinding.ItemAppGridStrokeHorBinding
+import com.github.panpf.sketch.displayImage
+import com.github.panpf.sketch.fetch.newAppIconUri
 import com.github.panpf.tools4k.lang.asOrNull
-import me.panpf.sketch.shaper.RoundRectImageShaper
-import me.panpf.sketch.uri.AppIconUriModel
 import kotlin.math.roundToInt
 
 class AppGridStrokeHorItemFactory(
@@ -122,15 +121,6 @@ class AppGridStrokeHorItemFactory(
             }.show()
             true
         }
-
-        binding.appGridStrokeHorItemIconImage.options.shaper = RoundRectImageShaper(
-            context.resources.getDimension(R.dimen.app_icon_corner_radius)
-        ).apply {
-            setStroke(
-                ResourcesCompat.getColor(context.resources, R.color.app_icon_stroke, null),
-                context.resources.getDimensionPixelSize(R.dimen.app_icon_stroke_width)
-            )
-        }
     }
 
     override fun bindItemData(
@@ -154,7 +144,7 @@ class AppGridStrokeHorItemFactory(
             }
         }
 
-        val appIconUri = AppIconUriModel.makeUri(data.packageName, data.versionCode)
+        val appIconUri = newAppIconUri(data.packageName, data.versionCode)
         binding.appGridStrokeHorItemIconImage.displayImage(appIconUri)
         binding.appGridStrokeHorItemNameText.text = data.name
     }

@@ -6,7 +6,7 @@
     android:background="?android:windowBackground"
     android:layout_height="wrap_content">
 
-    <me.panpf.sketch.SketchImageView
+    <ImageView
         android:id="@+id/appItemIconImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
