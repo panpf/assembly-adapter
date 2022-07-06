@@ -1,11 +1,51 @@
+# v4.1.0 stable
+
+* fix: Repair GridDividerItemDecoration in the case of a large amount of data causes RecyclerView
+  dropped frame of bugs
+* fix: GridDividerItemDecoration and StaggeredGridDividerItemDecoration is divided evenly when the
+  width of the item is the width of the parent container minus all
+  dividers（`val itemSize=(parentWidth - (dividerSize * (spanCount+1))) / spanCount`），because the
+  offset of the first item is too large, the width of the first item will be forced to become
+  smaller
+* fix: Fix the bug that there will be white space on the edge of the item when there is only
+  sideDivider in GridDividerItemDecoration
+* change: Now \*DividerItemDecoration useDividerAs\*Divider is true but an exception will be thrown
+  when the corresponding divider is null
+* change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration will throw an
+  exception when there is sideHeaderDivider or sideFooter but no sideDivider
+* change: Now GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer allow
+  sideHeaderDivider or sideFooterDivider and sideDivider to have different sizes and insets
+* change: Now the personalized configuration of sideDivider, sideHeaderDivider, and
+  sideFooterDivider of GridDividerItemDecoration and StaggeredGridDividerItemDecoration no longer
+  allows different sizes and insets
+* improve: Now DividerRecyclerView can preview headerDivider and footerDivider under
+  StaggeredGridLayoutManager
+* new: All DividerItemDecoration adds the `disableDefaultDivider(Boolean)` method, which can disable
+  the function of using the system default divider when no divider is specified
+* new: Added Context.new\*DividerItemDecoration() series extension methods
+* new: The `assemblyadapter-common-recycler-divider` module adds DividerRecyclerView, which allows
+  you to configure the divider in the layout
+* new: LinearDividerItemDecoration, GridDividerItemDecoration, StaggeredGridDividerItemDecoration
+  support short divide
+* new: Divider add drawableWithSize(), drawableWithClearlySize(), drawableResWithSize(),
+  drawableResWithClearlySize(), colorWithSize(), colorWithClearlySize(), colorResWithSize(),
+  colorResWithClearlySize() method. Now you can use these methods to implement a short divider
+* new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize
+  according to position
+* new: AssemblyGridLayoutManager and AssemblyStaggeredGridLayoutManager support specifying spanSize
+  according to itemType
+
 # v4.1.0-rc01
 
-* improve: Now DividerRecyclerView can preview headerDivider and footerDivider under StaggeredGridLayoutManager
-* fix: Repair GridDividerItemDecoration in the case of a large amount of data causes RecyclerView dropped frame of bugs
+* improve: Now DividerRecyclerView can preview headerDivider and footerDivider under
+  StaggeredGridLayoutManager
+* fix: Repair GridDividerItemDecoration in the case of a large amount of data causes RecyclerView
+  dropped frame of bugs
 
 # v4.1.0-beta01
 
-* new: The `assemblyadapter-common-recycler-divider` module adds DividerRecyclerView, which allows you to configure the divider in the layout
+* new: The `assemblyadapter-common-recycler-divider` module adds DividerRecyclerView, which allows
+  you to configure the divider in the layout
 
 # v4.1.0-alpha02
 
